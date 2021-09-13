@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #0e4194;
+  border-color: #0e4194;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #316cbe;
+  border-color: #2f66b3;
+}
+
+.btn-primary:focus,
+.btn-primary.focus {
+  box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.5);
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+  color: #fff;
+  background-color: #0e4194;
+  border-color: #0e4194;
+}
+
+.card-table tr td:first-child, .card-table tr th:first-child {
+  /* Fix tabler-react padding on first table column */
+  padding-left: 11px;
+}

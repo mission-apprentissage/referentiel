@@ -1,0 +1,10 @@
+node_modules/
+.clinic/
+.idea/
+*.log
+.local/*
+!.local/.keep
+*.iml
+.local/
+lib/
+.coverage/

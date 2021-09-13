@@ -1,0 +1,57 @@
+version: "2.4"
+services:
+
+  reverse_proxy:
+    image: annuaire_reverse_proxy
+    container_name: annuaire_reverse_proxy
+    build:
+      context: reverse_proxy
+    mem_limit: 256m
+    restart: unless-stopped
+    ports:
+      - 80:80
+    networks:
+      - annuaire_network
+    depends_on:
+      - server
+      - ui
+
+  ui:
+    image: annuaire_ui
+    container_name: annuaire_ui
+    build:
+      context: ui
+    mem_limit: 256m
+    networks:
+      - annuaire_network
+    depends_on:
+      - server
+
+  server:
+    image: annuaire_server
+    container_name: annuaire_server
+    build:
+      context: server
+    mem_limit: 1g
+    restart: unless-stopped
+    networks:
+      - annuaire_network
+    depends_on:
+      - mongodb
+    environment:
+      - ANNUAIRE_MONGODB_URI=mongodb://mongodb:27017/annuaire?retryWrites=true&w=majority
+      - ANNUAIRE_LOG_DESTINATIONS=stdout,mongodb
+      - ANNUAIRE_OUTPUT_DIR=/data
+
+  mongodb:
+    image: mongo:5.0.2-focal
+    container_name: annuaire_mongodb
+    command: --wiredTigerCacheSizeGB 1 --port 27017
+    mem_limit: 1g
+    restart: unless-stopped
+    networks:
+      - annuaire_network
+
+networks:
+  annuaire_network:
+    name: annuaire_network

@@ -1,0 +1,273 @@
+<html lang="fr">
+<body style="font-size: 12px;">
+<div id="wrap">
+    <div id="main" class="container">
+
+
+        <div class="row">
+            <div class="span12">
+                <div class="row">
+                    <div class="span6">
+                        <img src="views/themes/default/img/logo.jpeg"
+                             alt="Ministère de l'éducation nationale de la jeunnesse"
+                             title="Ministère de l'éducation nationale et de la jeunesse">
+                    </div>
+                    <div class="span6 text-center">
+                        <h1>Application de consultation et cartographie des établissements du système éducatif
+                            français</h1>
+                    </div>
+                </div>
+                <div class="row headerinfo">
+                    <div class="span7"><span id="avertissement">&nbsp;</span></div>
+                    <div class="span4 user">
+                        <ul></ul>
+                    </div>
+                    <div class="span1 rgaa"><a href="#" onclick="rgaaClick(1);"><img
+                            src="views/themes/default/img//a-moins.png" alt="Réduire la police"
+                            title="Réduire la police"></a>
+                        <a href="#" onclick="rgaaClick(1);"><img src="views/themes/default/img//a-plus.png"
+                                                                 alt="Agrandir la police"
+                                                                 title="Agrandir la police"></a>
+                        <form class="hidden" id="rgaa_form" method="POST" action="">
+                            <input type="hidden" id="rgaa_taille" name="rgaa_taille" value="">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form id="uai_form" action="uai.php" method="GET">
+                <input type="hidden" id="uai_ndx" name="uai_ndx" value="">
+                <input type="hidden" id="uai_mode" name="uai_mode" value="list">
+            </form>
+            <div class="uai_form clearfix">
+                <div class="form1">
+
+                    <div class="row">
+                        <div class="span3">
+                            <a href="#" class=" btn bnt-disabled" disabled="" title="Etablissement précédent"
+                               onclick="return checkValidity(123);">Précédent</a>
+                            <a href="uai.php?uai_mode=list&amp;uai_ndx=2&amp;t=1618496499" class="actioncheck btn"
+                               title="Etablissement suivant" onclick="return checkValidity(123);">Suivant</a>
+                        </div>
+                        <div class="span1"></div>
+                        <div class="span3">
+                            <a href="uai.php?uai_mode=list&amp;mode_print=1&amp;uai_ndx=1&amp;t=1618496499"
+                               id="uai_print" class="actioncheck btn" title="Version imprimable"
+                               onclick="return checkValidity(123);">Version imprimable</a>
+                        </div>
+                        <div class="span1">
+                            <a href="#" class="btn btn-primary" onclick="window.close();" title="Fermer">Fermer</a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="span3">
+				<span style="margin-left:10px;">Etablissement : 1 / 88994				<span>
+			</span></span></div>
+                        <div class="span9"></div>
+                    </div>
+                    <div class="section">
+
+                        <h1>Centre de Formation d'Apprentis transport et logistique - 0511972S</h1>
+                        <div><span class="colcentre">16  RUE DU VAL CLAIR&nbsp;&nbsp;-&nbsp;&nbsp;Reims</span>
+                        </div>
+                        <div><span class="colcentre">Académie : Reims</span>
+                        </div>
+                        <div><span class="colgauche">Tél : 01 23 45 67 89</span>
+                            <span class="coldroite">Fax : 01 23 45 67 80</span>
+                        </div>
+                        <div><span class="colgauche">Mèl : email@organisme.com</span>
+                        </div>
+                        <div><span class="colgauche">Site WEB : http://www.organisme.com/</span>
+                        </div>
+
+                        <h2>&nbsp;</h2>
+                        <div><span class="colcentre">Données de l’établissement mises à jour le 01/12/2020</span>
+                        </div>
+                        <div><span class="colcentre separateur">&nbsp;</span>
+                        </div>
+                        <div><span class="coldebut">Etat : Ouvert</span>
+                            <span class="colmilieu">Date d’ouverture : 10/05/1993</span>
+                            <span class="colfin">&nbsp;</span>
+                        </div>
+                        <div><span class="colgauche">Tutelle : ministère de l'éducation nationale</span>
+                            <span class="coldroite">Secteur : Privé</span>
+                        </div>
+                        <div><span class="colgauche">&nbsp;</span>
+                            <span class="coldroite">&nbsp;</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="data_current" class="form2">
+                    <div class="section">
+
+                        <h1>Dénominations</h1>
+                        <div><span class="colliste"><span class="intro">Sigle</span><span
+                                class="corps">ANT CFA</span></span>
+                        </div>
+                        <div><span class="colliste"><span class="intro">Dénomination principale</span><span
+                                class="corps">ANTENNE DE CFA</span></span>
+                        </div>
+                        <div><span class="colliste"><span class="intro">Patronyme</span><span class="corps">TRANSPORT LOGISTIQUE</span></span>
+                        </div>
+
+                        <h1>Localisation</h1>
+                        <div></div>
+                        <div><span class="colliste"><span class="intro">Adresse</span><span class="corps">16  RUE DU VAL CLAIR</span></span>
+                        </div>
+                        <div></div>
+                        <div><span class="colliste"><span class="intro">Acheminement</span><span class="corps">BP53 - 51683 REIMS CEDEX 2</span></span>
+                        </div>
+
+                        <h1>Administration</h1>
+                        <div><span class="colliste"><span class="intro">Nature</span><span class="corps">Antenne de centre de formation d'apprentis</span></span>
+                        </div>
+                        <div><span class="colliste"><span class="intro">Niveau</span><span
+                                class="corps">UAI fille</span></span>
+                        </div>
+                        <div><span class="colliste"><span class="intro">Catégorie juridique</span><span class="corps">Sans personnalité juridique</span></span>
+                        </div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+
+                        <h1>Zones</h1>
+                        <table class="table moyenne" summary="Informations sur l'établissement">
+                            <caption>Informations sur l'établissement</caption>
+                            <thead>
+                            <tr>
+                                <th class="tab1_type_zone_uai">Type de zone</th>
+                                <th class="tab1_zone">Zone</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Agglomération urbaine</td>
+                                <td>REIMS</td>
+                            </tr>
+                            <tr>
+                                <td class="even">Bassin de formation</td>
+                                <td class="even">REIMS</td>
+                            </tr>
+                            <tr>
+                                <td>Canton</td>
+                                <td>REIMS NON PRECISE</td>
+                            </tr>
+                            <tr>
+                                <td class="even">Commune</td>
+                                <td class="even">REIMS</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <h1>Spécificités</h1>
+                        <div>
+                            <span class="collistesimple">
+                                <span class="intro"></span><span class="corps">Aucune spécificité</span>
+                            </span>
+                        </div>
+
+                        <h1>Rattachements</h1>
+
+                        <h3>Mère</h3>
+                        <table class="table grande" summary="Informations sur l'établissement">
+                            <caption>Informations sur l'établissement</caption>
+                            <thead>
+                            <tr>
+                                <th class="tab2_numero_uai">N° UAI</th>
+                                <th class="tab2_sigle_uai">Sigle</th>
+                                <th class="tab2_patronyme_uai">Patronyme</th>
+                                <th class="tab2_nature_uai_libe">Nature</th>
+                                <th class="tab2_commune_libe">Commune</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <a href="uai.php?uai=S%253C2%25DB%259C%25C7%25B8%25B0%25F9%25FC%25C5%25AC%25E6%25DCa%252C"
+                                       target="_blank">0541958K</a></td>
+                                <td>CFA</td>
+                                <td>TRANSPORT ET LOGISTIQUE</td>
+                                <td>Centre de formation d'apprentis, sous convention régionale</td>
+                                <td>Jarville-la-Malgrange</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <h3>Fille</h3>
+                        <div><span class="collistesimple"><span class="intro"></span><span class="corps">Aucun rattachement</span></span>
+                        </div>
+                        <h1>Géolocalisation</h1>
+                        <div class="map">
+                            <span class="collistesimple"><span class="intro"></span><span class="corps">Données de géolocalisation non disponibles</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <ul class="legals pull-right">
+                        <li><a href="ACCE_Notes_de_version_2020.pdf" title="Note de version" target="help">Note de
+                            version</a></li>
+                        <li><a href="#modal-contact" id="cmd-modal-contact" title="Contact">Contact</a></li>
+                        <li><a href="legals.php?from=uai" title="Mentions légales">Mentions légales</a></li>
+                        <li><a href="ACCE_Aide_2020.pdf" title="Aide au format PDF (55Ko)" target="help">Aide</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-contact" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal-contact"
+             aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Fermer">×</button>
+                <h3 id="modal-contact-2">Contact</h3>
+            </div>
+            <div class="modal-body">
+                <form id="form_contact">
+                    <div class="row-fluid form-horizontal clearfix">
+                        <div class="control-group" title="from">
+                            <label for="modal-contact-from" class="control-label">Votre adresse mail</label>
+                            <input type="text" name="modal-contact-from" id="modal-contact-from" value=""
+                                   placeholder="Renseignez votre adresse mail pour la réponse">
+                        </div>
+                        <div class="control-group" title="Motif">
+                            <label for="modal-contact-subject" class="control-label">Motif</label>
+                            <select name="modal-contact-subject" id="modal-contact-subject">
+                                <option value="modif">Demande de modification d'une UAI</option>
+                                <option value="autre">Autre demande</option>
+                            </select>
+                        </div>
+                        <div class="control-group" title="UAI">
+                            <label for="modal-contact-uai" class="control-label">UAI</label>
+                            <input type="text" name="modal-contact-uai" id="modal-contact-uai" value="">
+                        </div>
+                        <div class="control-group" title="Votre demande">
+                            <label for="modal-contact-msg" class="control-label">Votre demande</label>
+                            <textarea name="modal-contact-msg" id="modal-contact-msg" class="input-xxlarge"></textarea>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" style="width:120px">Saisir le texte affiché dans
+                                l'image</label>
+                            <input type="text" name="captcha_code" size="12" maxlength="6" style="width:90px">
+                            <img id="captcha" src="captcha_show.php" alt="CAPTCHA Image">
+                            <a href="#"
+                               onclick="document.getElementById('captcha').src = 'captcha_show.php?' + Math.random(); document.forms['compte_form'].elements['captcha_code'].value = ''; return false">[Nouvelle
+                                Image]</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <span id="modal-contact-status-msg"></span>
+                <button id="modal-contact-validate" class="btn" title="Envoyer">Envoyer</button>
+                <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true" title="Fermer">Fermer</button>
+            </div>
+        </div>
+
+    </div><!-- /.container -->
+</div><!-- /.wrap -->
+<script type="text/javascript">
+</script>
+</body>
+</html>

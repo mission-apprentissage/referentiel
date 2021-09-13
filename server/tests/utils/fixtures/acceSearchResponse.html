@@ -1,0 +1,1515 @@
+<!DOCTYPE HTML>
+<html lang="fr">
+<head>
+    <title>Application de consultation et cartographie des établissements du système éducatif français -
+        recherche</title>
+    <meta name="description" content="Site de recherche des établissements du système éducatif Français">
+    <meta name="author" content="education.gouv.fr">
+    <meta property="og:title" content="MEN"/>
+    <meta property="og:description" content="Site de recherche des établissements du système éducatif Français"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="http://www.education.gouv.fr/bce/"/>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Cache" content="no store"/>
+    <meta http-equiv="Expires" content="0"/>
+
+    <meta name="robots" content="index, nofollow"/>
+</head>
+
+<body>
+<div id="wrap">
+    <div id="main" class="container">
+
+
+        <div class="row">
+            <div class="span12">
+                <div class='row'>
+                    <div class='span6'>
+                        <img src="views/themes/default/img/logo.jpeg"
+                             alt="Ministère de l&#039;éducation nationale de la jeunnesse"
+                             title="Ministère de l&#039;éducation nationale et de la jeunesse">
+                    </div>
+                    <div class="span6 text-center">
+                        <h1>Application de consultation et cartographie des établissements du système éducatif
+                            français</h1>
+                    </div>
+                </div>
+                <div class="row headerinfo">
+                    <form class="hidden" id="breadcrumb_form" method="POST" action="index.php">
+                        <input type="hidden" id="crumb_action" name="crumb_action" value=""/>
+                        <input type="hidden" id="mode" name="mode" value=""/>
+                    </form>
+                    <div class="span7">
+                        <ul class="breadcrumb">
+                            <li>Accueil</li>
+                            <li></li>
+                            <span class="divider"> > </span>
+                            <li>Recherche</li>
+                        </ul>
+                    </div>
+                    <div class="span4 user">
+                        <ul></ul>
+                    </div>
+                    <div class="span1 rgaa"><a href='#' onclick='rgaaClick("-1");'><img
+                            src="views/themes/default/img//a-moins.png" alt="Réduire la police"
+                            title="Réduire la police"></a>
+                        <a href='#' onclick='rgaaClick("1");'><img src="views/themes/default/img//a-plus.png"
+                                                                   alt="Agrandir la police" title="Agrandir la police"></a>
+                        <form class="hidden" id="rgaa_form" method="POST" action="">
+                            <input type="hidden" id="rgaa_taille" name="rgaa_taille" value=""/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form id="uai_form" action="uai.php" method="GET" target="_blank">
+            <input type="hidden" id="uai_ndx" name="uai_ndx" value=""/>
+            <input type="hidden" id="uai" name="uai" value=""/>
+            <input type="hidden" id="uai_mode" name="uai_mode" value=""/>
+        </form>
+        <div class="row">
+            <ul id="mnu_recherche" class="nav nav-tabs span12">
+                <li class="active"><a href="search.php?mode=simple" title="Recherche simple">Recherche simple</a></li>
+                <li><a href="search.php?mode=advanced" title="Recherche avancée">Recherche avancée</a></li>
+            </ul>
+            <form id="search_form" action="search.php" method="POST" autocomplete="off">
+                <input type="hidden" id="action" name="action" value="search"/>
+                <input type="hidden" id="sub_action" name="sub_action" value="query"/>
+                <input type="hidden" id="page" name="page" value="1"/>
+                <input type="hidden" id="sort" name="sort" value=""/>
+                <input type='hidden' id='list_mode' name='list_mode' value='list'/><input type='hidden' id='pt_NE_x'
+                                                                                          name='pt_NE_x'
+                                                                                          value=''/><input type='hidden'
+                                                                                                           id='pt_NE_y'
+                                                                                                           name='pt_NE_y'
+                                                                                                           value=''/><input
+                    type='hidden' id='pt_SW_x' name='pt_SW_x' value=''/><input type='hidden' id='pt_SW_y' name='pt_SW_y'
+                                                                               value=''/><input type='hidden'
+                                                                                                id='pt_NE_x_save'
+                                                                                                name='pt_NE_x_save'
+                                                                                                value=''/><input
+                    type='hidden' id='pt_NE_y_save' name='pt_NE_y_save' value=''/><input type='hidden' id='pt_SW_x_save'
+                                                                                         name='pt_SW_x_save'
+                                                                                         value=''/><input type='hidden'
+                                                                                                          id='pt_SW_y_save'
+                                                                                                          name='pt_SW_y_save'
+                                                                                                          value=''/>
+                <div class="search_form clearfix">
+
+                    <input type='hidden' id='mode' name='mode' value='simple'/>
+                    <div class='row-fluid form-horizontal'>
+                        <label>Votre recherche :</label>
+                        <div class='form-simple1'>
+                            <div title="Saisir librement votre recherche (Nom de l&#039;établissement, numéro de l&#039;établissement, nature, tutelle...)"
+                                 class="control-group"><label class="control-label" for="simple_public">Quoi ?</label>
+                                <div class="controls" id="simple_public_container">
+
+                                    <input multiple
+                                           placeholder="Nom de l&#039;établissement, numéro de l&#039;établissement, nature, tutelle..."
+                                           type="text" id="simple_public" name="simple_public"
+                                           class="input-advanced sanitize" autocomplete="off" value="">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-simple2'>
+                            <div title="Sélectionner la localisation de l&#039;établissement" id="grp_localisation"
+                                 class="control-group">
+                                <label for="localisation" id="label_localisation" class="control-label">Où ?</label>
+                                <div class="controls">
+                                    <input multiple type="hidden" id="localisation" name="localisation"
+                                           placeholder="Adresse, commune, département, académie, région, pays"
+                                           class="input-advanced" autocomplete="off" value=""
+                                           style="width: 100%;"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row-fluid'>
+                        <div class='span12 text-right'>
+                            <span id="messErreur_form" class="message_erreur"></span>
+                            <button id="search_do" class="btn" title="Rechercher">Rechercher</button>
+                            <a href="?mode=simple" class="btn" title="Nouvelle recherche">Nouvelle recherche</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id='search_results' class='search_results clearfix'>
+                    <div class='span12'><a name='results'></a></div>
+                    <div class='row-fluid'>
+                        <div class='span3 filters'>
+                            <div class='myfilters' style='display:block'>
+                                <h3>Mes filtres</h3>
+                                <div style="display:none" class="facet_container"
+                                     id="facet_container_secteur_public_prive_a">
+                                    <span style="display:none">&nbsp;</span>
+                                    <h4 title="Cliquer pour cacher/montrer">
+                                        <a href="#facet_label_secteur_public_prive_a"
+                                           id="facet_label_secteur_public_prive_a" class="hand">Secteur</a>
+                                        <input class="facet_container grpfacet" id="facet_group_secteur_public_prive"
+                                               name="facet_group_secteur_public_prive" type="checkbox"
+                                               checked="checked">
+
+                                    </h4>
+                                    <fieldset>
+
+
+                                        <div id="facet_secteur_public_prive_a" class="facet_scroll ">
+                                            <table id="facet_table_secteur_public_prive" class="table table-facet"
+                                                   summary="Facette Secteur">
+                                                <caption>Facette Secteur</caption>
+                                                <tbody id="facet_tbody_secteur_public_prive"></tbody>
+                                            </table>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="facet_container" id="facet_container_pays_a">
+                                    <span style="display:none">&nbsp;</span>
+                                    <h4 title="Cliquer pour cacher/montrer">
+                                        <a href="#facet_label_pays_a" id="facet_label_pays_a" class="hand">Pays</a>
+                                        <input class="facet_container grpfacet" id="facet_group_pays"
+                                               name="facet_group_pays" type="checkbox" checked="checked">
+
+                                    </h4>
+                                    <fieldset>
+
+
+                                        <div id="facet_pays_a" class="facet_scroll ">
+                                            <table id="facet_table_pays" class="table table-facet"
+                                                   summary="Facette Pays">
+                                                <caption>Facette Pays</caption>
+                                                <tbody id="facet_tbody_pays">
+                                                <tr>
+                                                    <td><input class="myfacet" name="mf_pays[]" type="checkbox"
+                                                               value="Afrique du Sud" checked="checked"></td>
+                                                    <td class="facet_filter_txt">Afrique du Sud</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                </div>
+                                <div style="display:none" class="facet_container"
+                                     id="facet_container_etat_etablissement_a">
+                                    <span style="display:none">&nbsp;</span>
+                                    <h4 title="Cliquer pour cacher/montrer">
+                                        <a href="#facet_label_etat_etablissement_a"
+                                           id="facet_label_etat_etablissement_a" class="hand">Etat</a>
+                                        <input class="facet_container grpfacet" id="facet_group_etat_etablissement"
+                                               name="facet_group_etat_etablissement" type="checkbox" checked="checked">
+
+                                    </h4>
+                                    <fieldset>
+
+
+                                        <div id="facet_etat_etablissement_a" class="facet_scroll ">
+                                            <table id="facet_table_etat_etablissement" class="table table-facet"
+                                                   summary="Facette Etat">
+                                                <caption>Facette Etat</caption>
+                                                <tbody id="facet_tbody_etat_etablissement"></tbody>
+                                            </table>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div style="display:none" class="facet_container"
+                                     id="facet_container_ministere_tutelle_a">
+                                    <span style="display:none">&nbsp;</span>
+                                    <h4 title="Cliquer pour cacher/montrer">
+                                        <a href="#facet_label_ministere_tutelle_a" id="facet_label_ministere_tutelle_a"
+                                           class="hand">Tutelle</a>
+                                        <input class="facet_container grpfacet" id="facet_group_ministere_tutelle"
+                                               name="facet_group_ministere_tutelle" type="checkbox" checked="checked">
+
+                                    </h4>
+                                    <fieldset>
+
+
+                                        <div id="facet_ministere_tutelle_a" class="facet_scroll ">
+                                            <table id="facet_table_ministere_tutelle" class="table table-facet"
+                                                   summary="Facette Tutelle">
+                                                <caption>Facette Tutelle</caption>
+                                                <tbody id="facet_tbody_ministere_tutelle"></tbody>
+                                            </table>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div style="display:none" class="facet_container" id="facet_container_nature_uai_a">
+                                    <span style="display:none">&nbsp;</span>
+                                    <h4 title="Cliquer pour cacher/montrer">
+                                        <a href="#facet_label_nature_uai_a" id="facet_label_nature_uai_a" class="hand">Nature</a>
+                                        <input class="facet_container grpfacet" id="facet_group_nature_uai"
+                                               name="facet_group_nature_uai" type="checkbox" checked="checked">
+
+                                    </h4>
+                                    <fieldset>
+
+
+                                        <div id="facet_nature_uai_a" class="facet_scroll ">
+                                            <table id="facet_table_nature_uai" class="table table-facet"
+                                                   summary="Facette Nature">
+                                                <caption>Facette Nature</caption>
+                                                <tbody id="facet_tbody_nature_uai"></tbody>
+                                            </table>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div style="display:none" class="facet_container" id="facet_container_niveau_uai_a">
+                                    <span style="display:none">&nbsp;</span>
+                                    <h4 title="Cliquer pour cacher/montrer">
+                                        <a href="#facet_label_niveau_uai_a" id="facet_label_niveau_uai_a" class="hand">Niveau</a>
+                                        <input class="facet_container grpfacet" id="facet_group_niveau_uai"
+                                               name="facet_group_niveau_uai" type="checkbox" checked="checked">
+
+                                    </h4>
+                                    <fieldset>
+
+
+                                        <div id="facet_niveau_uai_a" class="facet_scroll ">
+                                            <table id="facet_table_niveau_uai" class="table table-facet"
+                                                   summary="Facette Niveau">
+                                                <caption>Facette Niveau</caption>
+                                                <tbody id="facet_tbody_niveau_uai"></tbody>
+                                            </table>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                                <div class="facet_container">
+                                    <h4 id="facet_map" name="facet_map" style='display:none'>
+                                        <a href="#facet_map_a" id="facet_map_a" class="hand">Filtrage par la carte</a>
+                                        <input class="facet_map grpfacet" id="facet_group_map" name="facet_group_map"
+                                               type="checkbox" value="0" checked="checked">
+                                    </h4>
+                                </div>
+                            </div>
+                            <div>
+                                <!--h3>Filtres</h3-->
+                                <div class="facet_container" id="facet_container_pays">
+                                    <span style="display:none">&nbsp;</span>
+                                    <h4 title="Cliquer pour cacher/montrer">
+                                        <a href="#facet_label_pays" id="facet_label_pays" class="hand">Pays</a>
+
+                                    </h4>
+                                    <fieldset>
+
+                                        <div class='control-group'>
+                                            <div class='control-box one-col tous-aucun'>
+                                                <a href="javascript:void(0)"
+                                                   style='cursor: pointer; text-decoration:underline;' title=''
+                                                   name="pays" id="all_pays" class="facet_all">Tous</a>
+                                                <span>/</span>
+                                                <a href="javascript:void(0)"
+                                                   style='cursor: pointer; text-decoration:underline;' title=''
+                                                   name="pays" id="none_pays" class="facet_none">Aucun</a>
+                                            </div>
+                                        </div>
+                                        <div id="facet_pays" class="facet_scroll ">
+                                            <table id="facet_table_pays" class="table table-facet"
+                                                   summary="Facette Pays">
+                                                <caption>Facette Pays</caption>
+                                                <tbody id="facet_tbody_pays">
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Afrique du Sud" checked="checked"></td>
+                                                    <td class="facet_filter_txt">Afrique du Sud</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Albanie"></td>
+                                                    <td class="facet_filter_txt">Albanie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Algérie"></td>
+                                                    <td class="facet_filter_txt">Algérie</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Allemagne"></td>
+                                                    <td class="facet_filter_txt">Allemagne</td>
+                                                    <td>22</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Allemagne (RFA)"></td>
+                                                    <td class="facet_filter_txt">Allemagne (RFA)</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Andorre"></td>
+                                                    <td class="facet_filter_txt">Andorre</td>
+                                                    <td>14</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Angola"></td>
+                                                    <td class="facet_filter_txt">Angola</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Arabie saoudite"></td>
+                                                    <td class="facet_filter_txt">Arabie saoudite</td>
+                                                    <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Argentine"></td>
+                                                    <td class="facet_filter_txt">Argentine</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Arménie"></td>
+                                                    <td class="facet_filter_txt">Arménie</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Australie"></td>
+                                                    <td class="facet_filter_txt">Australie</td>
+                                                    <td>6</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Autriche"></td>
+                                                    <td class="facet_filter_txt">Autriche</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Azerbaidjan"></td>
+                                                    <td class="facet_filter_txt">Azerbaidjan</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Bahrein"></td>
+                                                    <td class="facet_filter_txt">Bahrein</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Bangladesh"></td>
+                                                    <td class="facet_filter_txt">Bangladesh</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Belgique"></td>
+                                                    <td class="facet_filter_txt">Belgique</td>
+                                                    <td>8</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Birmanie"></td>
+                                                    <td class="facet_filter_txt">Birmanie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Bolivie"></td>
+                                                    <td class="facet_filter_txt">Bolivie</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Bosnie-Herzégovine"></td>
+                                                    <td class="facet_filter_txt">Bosnie-Herzégovine</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Brésil"></td>
+                                                    <td class="facet_filter_txt">Brésil</td>
+                                                    <td>4</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Bulgarie"></td>
+                                                    <td class="facet_filter_txt">Bulgarie</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Burkina Faso"></td>
+                                                    <td class="facet_filter_txt">Burkina Faso</td>
+                                                    <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Burundi"></td>
+                                                    <td class="facet_filter_txt">Burundi</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Bénin"></td>
+                                                    <td class="facet_filter_txt">Bénin</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Cambodge"></td>
+                                                    <td class="facet_filter_txt">Cambodge</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Cameroun"></td>
+                                                    <td class="facet_filter_txt">Cameroun</td>
+                                                    <td>5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Canada"></td>
+                                                    <td class="facet_filter_txt">Canada</td>
+                                                    <td>7</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Cap-vert"></td>
+                                                    <td class="facet_filter_txt">Cap-vert</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Centrafrique"></td>
+                                                    <td class="facet_filter_txt">Centrafrique</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Chili"></td>
+                                                    <td class="facet_filter_txt">Chili</td>
+                                                    <td>5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Chine"></td>
+                                                    <td class="facet_filter_txt">Chine</td>
+                                                    <td>9</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Chypre"></td>
+                                                    <td class="facet_filter_txt">Chypre</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Colombie"></td>
+                                                    <td class="facet_filter_txt">Colombie</td>
+                                                    <td>4</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Comores"></td>
+                                                    <td class="facet_filter_txt">Comores</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Congo ( République du Congo)"></td>
+                                                    <td class="facet_filter_txt">Congo ( République du Congo)</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Congo ( République démocratique du Congo)"></td>
+                                                    <td class="facet_filter_txt">Congo ( République démocratique du
+                                                        Congo)
+                                                    </td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Corée du Sud"></td>
+                                                    <td class="facet_filter_txt">Corée du Sud</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Costa Rica"></td>
+                                                    <td class="facet_filter_txt">Costa Rica</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Croatie"></td>
+                                                    <td class="facet_filter_txt">Croatie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Cuba"></td>
+                                                    <td class="facet_filter_txt">Cuba</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Côte d'Ivoire"></td>
+                                                    <td class="facet_filter_txt">Côte d'Ivoire</td>
+                                                    <td>10</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Danemark"></td>
+                                                    <td class="facet_filter_txt">Danemark</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Djibouti"></td>
+                                                    <td class="facet_filter_txt">Djibouti</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Egypte"></td>
+                                                    <td class="facet_filter_txt">Egypte</td>
+                                                    <td>13</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Emirats Arabes Unis"></td>
+                                                    <td class="facet_filter_txt">Emirats Arabes Unis</td>
+                                                    <td>7</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Equateur"></td>
+                                                    <td class="facet_filter_txt">Equateur</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Espagne"></td>
+                                                    <td class="facet_filter_txt">Espagne</td>
+                                                    <td>29</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Etats-Unis d'Amérique"></td>
+                                                    <td class="facet_filter_txt">Etats-Unis d'Amérique</td>
+                                                    <td>55</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Ethiopie"></td>
+                                                    <td class="facet_filter_txt">Ethiopie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Finlande"></td>
+                                                    <td class="facet_filter_txt">Finlande</td>
+                                                    <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="France"></td>
+                                                    <td class="facet_filter_txt">France</td>
+                                                    <td>88345</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Gabon"></td>
+                                                    <td class="facet_filter_txt">Gabon</td>
+                                                    <td>12</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Gambie"></td>
+                                                    <td class="facet_filter_txt">Gambie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Ghana"></td>
+                                                    <td class="facet_filter_txt">Ghana</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Grèce"></td>
+                                                    <td class="facet_filter_txt">Grèce</td>
+                                                    <td>4</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Guatemala"></td>
+                                                    <td class="facet_filter_txt">Guatemala</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Guinée"></td>
+                                                    <td class="facet_filter_txt">Guinée</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Guinée équatoriale"></td>
+                                                    <td class="facet_filter_txt">Guinée équatoriale</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Géorgie"></td>
+                                                    <td class="facet_filter_txt">Géorgie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Haiti"></td>
+                                                    <td class="facet_filter_txt">Haiti</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Honduras"></td>
+                                                    <td class="facet_filter_txt">Honduras</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Hongrie"></td>
+                                                    <td class="facet_filter_txt">Hongrie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Inde"></td>
+                                                    <td class="facet_filter_txt">Inde</td>
+                                                    <td>5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Indonésie"></td>
+                                                    <td class="facet_filter_txt">Indonésie</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Iran"></td>
+                                                    <td class="facet_filter_txt">Iran</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Iraq"></td>
+                                                    <td class="facet_filter_txt">Iraq</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Irlande"></td>
+                                                    <td class="facet_filter_txt">Irlande</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Israel"></td>
+                                                    <td class="facet_filter_txt">Israel</td>
+                                                    <td>6</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Italie"></td>
+                                                    <td class="facet_filter_txt">Italie</td>
+                                                    <td>15</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Japon"></td>
+                                                    <td class="facet_filter_txt">Japon</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Jordanie"></td>
+                                                    <td class="facet_filter_txt">Jordanie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Kazakhstan"></td>
+                                                    <td class="facet_filter_txt">Kazakhstan</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Kenya"></td>
+                                                    <td class="facet_filter_txt">Kenya</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Kosovo (République du Kosovo)"></td>
+                                                    <td class="facet_filter_txt">Kosovo (République du Kosovo)</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Koweit"></td>
+                                                    <td class="facet_filter_txt">Koweit</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Laos"></td>
+                                                    <td class="facet_filter_txt">Laos</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Lettonie"></td>
+                                                    <td class="facet_filter_txt">Lettonie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Liban"></td>
+                                                    <td class="facet_filter_txt">Liban</td>
+                                                    <td>60</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Lituanie"></td>
+                                                    <td class="facet_filter_txt">Lituanie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Luxembourg"></td>
+                                                    <td class="facet_filter_txt">Luxembourg</td>
+                                                    <td>4</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Lybie"></td>
+                                                    <td class="facet_filter_txt">Lybie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Macédoine du nord"></td>
+                                                    <td class="facet_filter_txt">Macédoine du nord</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Madagascar"></td>
+                                                    <td class="facet_filter_txt">Madagascar</td>
+                                                    <td>26</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Malaisie"></td>
+                                                    <td class="facet_filter_txt">Malaisie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Mali"></td>
+                                                    <td class="facet_filter_txt">Mali</td>
+                                                    <td>6</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Maroc"></td>
+                                                    <td class="facet_filter_txt">Maroc</td>
+                                                    <td>47</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Maurice "></td>
+                                                    <td class="facet_filter_txt">Maurice</td>
+                                                    <td>5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Mauritanie"></td>
+                                                    <td class="facet_filter_txt">Mauritanie</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Mexique"></td>
+                                                    <td class="facet_filter_txt">Mexique</td>
+                                                    <td>5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Monaco"></td>
+                                                    <td class="facet_filter_txt">Monaco</td>
+                                                    <td>15</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Mongolie"></td>
+                                                    <td class="facet_filter_txt">Mongolie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Mozambique"></td>
+                                                    <td class="facet_filter_txt">Mozambique</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Nicaragua"></td>
+                                                    <td class="facet_filter_txt">Nicaragua</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Niger"></td>
+                                                    <td class="facet_filter_txt">Niger</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Nigeria"></td>
+                                                    <td class="facet_filter_txt">Nigeria</td>
+                                                    <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Norvège"></td>
+                                                    <td class="facet_filter_txt">Norvège</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Népal"></td>
+                                                    <td class="facet_filter_txt">Népal</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Oman"></td>
+                                                    <td class="facet_filter_txt">Oman</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Ouganda"></td>
+                                                    <td class="facet_filter_txt">Ouganda</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Ouzbekistan"></td>
+                                                    <td class="facet_filter_txt">Ouzbekistan</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Palestine"></td>
+                                                    <td class="facet_filter_txt">Palestine</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Panama"></td>
+                                                    <td class="facet_filter_txt">Panama</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Paraguay"></td>
+                                                    <td class="facet_filter_txt">Paraguay</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Pays-Bas"></td>
+                                                    <td class="facet_filter_txt">Pays-Bas</td>
+                                                    <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Philippines"></td>
+                                                    <td class="facet_filter_txt">Philippines</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Pologne"></td>
+                                                    <td class="facet_filter_txt">Pologne</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Portugal"></td>
+                                                    <td class="facet_filter_txt">Portugal</td>
+                                                    <td>4</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Pérou"></td>
+                                                    <td class="facet_filter_txt">Pérou</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Qatar"></td>
+                                                    <td class="facet_filter_txt">Qatar</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Roumanie"></td>
+                                                    <td class="facet_filter_txt">Roumanie</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Royaume-Uni"></td>
+                                                    <td class="facet_filter_txt">Royaume-Uni</td>
+                                                    <td>17</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Russie"></td>
+                                                    <td class="facet_filter_txt">Russie</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Rwanda"></td>
+                                                    <td class="facet_filter_txt">Rwanda</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="République dominicaine"></td>
+                                                    <td class="facet_filter_txt">République dominicaine</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Salvador"></td>
+                                                    <td class="facet_filter_txt">Salvador</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Serbie et Monténégro"></td>
+                                                    <td class="facet_filter_txt">Serbie et Monténégro</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Seychelles"></td>
+                                                    <td class="facet_filter_txt">Seychelles</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Singapour"></td>
+                                                    <td class="facet_filter_txt">Singapour</td>
+                                                    <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Slovaquie"></td>
+                                                    <td class="facet_filter_txt">Slovaquie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Slovénie"></td>
+                                                    <td class="facet_filter_txt">Slovénie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Soudan"></td>
+                                                    <td class="facet_filter_txt">Soudan</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Sri Lanka"></td>
+                                                    <td class="facet_filter_txt">Sri Lanka</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Suisse"></td>
+                                                    <td class="facet_filter_txt">Suisse</td>
+                                                    <td>26</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Suède"></td>
+                                                    <td class="facet_filter_txt">Suède</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Syrie"></td>
+                                                    <td class="facet_filter_txt">Syrie</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Sénégal"></td>
+                                                    <td class="facet_filter_txt">Sénégal</td>
+                                                    <td>14</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Taiwan"></td>
+                                                    <td class="facet_filter_txt">Taiwan</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Tanzanie"></td>
+                                                    <td class="facet_filter_txt">Tanzanie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Tchad"></td>
+                                                    <td class="facet_filter_txt">Tchad</td>
+                                                    <td>2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Tchèque (République tchèque)"></td>
+                                                    <td class="facet_filter_txt">Tchèque (République tchèque)</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Thailande"></td>
+                                                    <td class="facet_filter_txt">Thailande</td>
+                                                    <td>5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Togo"></td>
+                                                    <td class="facet_filter_txt">Togo</td>
+                                                    <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Tunisie"></td>
+                                                    <td class="facet_filter_txt">Tunisie</td>
+                                                    <td>21</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Turkmenistan"></td>
+                                                    <td class="facet_filter_txt">Turkmenistan</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Turquie"></td>
+                                                    <td class="facet_filter_txt">Turquie</td>
+                                                    <td>4</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Ukraine"></td>
+                                                    <td class="facet_filter_txt">Ukraine</td>
+                                                    <td>3</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Uruguay"></td>
+                                                    <td class="facet_filter_txt">Uruguay</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Vanuatu"></td>
+                                                    <td class="facet_filter_txt">Vanuatu</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Venezuela"></td>
+                                                    <td class="facet_filter_txt">Venezuela</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Viet Nam"></td>
+                                                    <td class="facet_filter_txt">Viet Nam</td>
+                                                    <td>5</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Zambie"></td>
+                                                    <td class="facet_filter_txt">Zambie</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><input class="facet" name="f_pays[]" type="checkbox"
+                                                               value="Zimbabwe"></td>
+                                                    <td class="facet_filter_txt">Zimbabwe</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='span9'>
+                            <!--div-->
+                            <ul id="mnu_listmap" class="nav nav-tabs">
+                                <li class="active"><a href="javascript:void(0)" onclick='doList();'
+                                                      title='Liste'>Liste</a></li>
+                                <li><a href="javascript:void(0)" onclick='doMap();' title='Carte'>Carte</a></li>
+                            </ul>
+                            <!--/div-->
+                            <div class='row-fluid results'>
+                                <div class='span12'>
+                                    <div class='row-fluid'>
+                                        <div class='span6'>
+                                            <span id='numfoundall'><span id='numfound'>1</span> établissements sélectionnés</span>
+                                        </div>
+                                        <div class='span6 text-right'>
+                                            Etablissements par page <select id='page_size' name='page_size'
+                                                                            title='Etablissements par page'>
+                                            <option value='10'>10</option>
+                                            <option value='20'>20</option>
+                                            <option value='50'>50</option>
+                                            <option value='100' selected>100</option>
+                                            <option value='200'>200</option>
+                                            <option value='500'>500</option>
+                                        </select></div>
+                                    </div>
+                                    <div class='row-fluid'>
+                                        <div class='span4'></div>
+                                        <div class='span6'></div>
+                                        <div class='span2'></div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped men_table" summary="Liste des établissements">
+                                    <caption>Liste des établissements</caption>
+                                    <thead>
+                                    <tr>
+                                        <th id='th_numero_uai' class='' title='UAI'
+                                            onclick='return doSort("numero_uai");'><a href='javascript:void(0)'
+                                                                                      onkeypress='return doSort("numero_uai");'>UAI</a>
+                                        </th>
+                                        <th id='th_appellation_officielle' class='' title='Appellation officielle'
+                                            onclick='return doSort("appellation_officielle");'><a
+                                                href='javascript:void(0)'
+                                                onkeypress='return doSort("appellation_officielle");'>Appellation
+                                            officielle</a></th>
+                                        <th id='th_nature_uai' class='' title='Nature'
+                                            onclick='return doSort("nature_uai_libe");'><a href='javascript:void(0)'
+                                                                                           onkeypress='return doSort("nature_uai_libe");'>Nature</a>
+                                        </th>
+                                        <th id='th_localite_acheminement_uai' class=''
+                                            title='Localité d&#039;acheminement'
+                                            onclick='return doSort("localite_acheminement_uai");'><a
+                                                href='javascript:void(0)'
+                                                onkeypress='return doSort("localite_acheminement_uai");'>Localité d&#039;acheminement</a>
+                                        </th>
+                                        <th id='th_ministere_tutelle' class='' title='Tutelle'
+                                            onclick='return doSort("ministere_tutelle_libe");'><a
+                                                href='javascript:void(0)'
+                                                onkeypress='return doSort("ministere_tutelle_libe");'>Tutelle</a></th>
+                                        <th id='th_secteur_public_prive' class='' title='Secteur'
+                                            onclick='return doSort("secteur_public_prive_libe");'><a
+                                                href='javascript:void(0)'
+                                                onkeypress='return doSort("secteur_public_prive_libe");'>Secteur</a>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr id="1">
+                                        <td headers="th_numero_uai"><a class="linkaction"
+                                                                       href="uai.php?uai_mode=list&uai_ndx=1"
+                                                                       target="_blank">3030002F</a></td>
+                                        <td headers="th_appellation_officielle" class="link hand">Lycée français Jules
+                                            Verne et son annexe Miriam Makeba -Prétoria - de Johannesbourg
+                                        </td>
+                                        <td headers="th_nature_uai_libe" class="link hand">Lycée français à l'étranger
+                                        </td>
+                                        <td headers="th_localite_acheminement_uai" class="link hand">JOHANNESBURG</td>
+                                        <td headers="th_ministere_tutelle_libe" class="link hand">ministère des
+                                            relations extérieures
+                                        </td>
+                                        <td headers="th_secteur_public_prive_libe" class="link hand">Privé</td>
+                                    </tr>
+                                    <tr id="2">
+                                        <td headers="th_numero_uai"><a class="linkaction"
+                                                                       href="uai.php?uai_mode=list&uai_ndx=2"
+                                                                       target="_blank">3030008M</a></td>
+                                        <td headers="th_appellation_officielle" class="link hand">Lycée français du Cap
+                                            François le Vaillant
+                                        </td>
+                                        <td headers="th_nature_uai_libe" class="link hand">Lycée français à l'étranger
+                                        </td>
+                                        <td headers="th_localite_acheminement_uai" class="link hand">LE CAP</td>
+                                        <td headers="th_ministere_tutelle_libe" class="link hand">ministère des
+                                            relations extérieures
+                                        </td>
+                                        <td headers="th_secteur_public_prive_libe" class="link hand">Privé</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <div class='text-center'></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='span12'>
+                            <ul class="legals pull-right">
+                                <li><a href='ACCE_Notes_de_version_2020.pdf' title='Note de version' target='help'>Note
+                                    de version</a></li>
+                                <li><a href='#modal-contact' id='cmd-modal-contact' title='Contact'>Contact</a></li>
+                                <li><a href='legals.php' title='Mentions légales'>Mentions légales</a></li>
+                                <li><a href='ACCE_Aide_2020.pdf#page1' title='Aide au format PDF (55Ko)' target='help'>Aide</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='span12'></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+
+        <div id="modal-options" class="modal hide fade" tabindex="-1" role="dialog"
+             aria-labelledby="modal-options-title" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Fermer">×</button>
+                <h3 id="modal-options-title">Choisir les données à afficher</h3>
+            </div>
+            <div class="modal-body">
+                <form id='form_options'>
+                    <div>
+                        <div style='width:36%; float:left;' title='Choisir les données à afficher'>
+                            <h5>Données disponibles</h5>
+                            <select id='modal-option-available' name='modal-option-available'
+                                    style='width:190px; height:102px;' multiple>
+                                <option value="denomination_principale_uai">Dénomination</option>
+                                <option value="patronyme_uai">Patronyme</option>
+                                <option value="adresse_uai">Adresse</option>
+                                <option value="commune">Commune (code)</option>
+                                <option value="commune_libe">Commune</option>
+                                <option value="commune_dept_libe">Commune et département</option>
+                                <option value="type_uai_libe">Type</option>
+                                <option value="etat_etablissement">Etat (code)</option>
+                                <option value="etat_etablissement_libe">Etat</option>
+                                <option value="ministere_tutelle">Tutelle (code)</option>
+                                <option value="secteur_public_prive">Secteur (code)</option>
+                                <option value="sigle_uai_libe">Sigle</option>
+                                <option value="contrat_etablissement">Contrat (code)</option>
+                                <option value="contrat_etablissement_libe">Contrat</option>
+                                <option value="situation_comptable">Situation comptable (code)</option>
+                                <option value="situation_comptable_libe">Situation comptable</option>
+                                <option value="niveau_uai_libe">Niveau</option>
+                                <option value="academie">Académie (code)</option>
+                                <option value="academie_libe">Académie</option>
+                                <option value="pays_libe">Pays</option>
+                                <option value="hebergement_etablissement_libe">Hébergement</option>
+                                <option value="categorie_juridique">Catégorie juridique (code)</option>
+                                <option value="categorie_juridique_libe">Catégorie juridique</option>
+                                <option value="categorie_financiere">Catégorie financière (code)</option>
+                                <option value="categorie_financiere_libe">Catégorie financière</option>
+                                <option value="nature_uai">Nature (code)</option>
+                                <option value="numero_siren_siret_uai">SIRET</option>
+                                <option value="numero_finess_uai">FINESS</option>
+                                <option value="date_ouverture">Date ouverture</option>
+                                <option value="date_fermeture">Date fermeture</option>
+                                <option value="date_derniere_mise_a_jour">Date mise à jour</option>
+                                <option value="departement_insee_3">Département (code)</option>
+                                <option value="departement_insee_3_libe">Département</option>
+                                <option value="lieu_dit_uai">Lieu dit</option>
+                                <option value="boite_postale_uai">Boite postale</option>
+                                <option value="code_postal_uai">Code postal</option>
+                                <option value="etat_sirad_uai">Etat sirad</option>
+                                <option value="pays_etranger_acheminement">Pays étranger d&#039;acheminement</option>
+                                <option value="mention_distribution">Mention de distribution</option>
+                                <option value="mel_uai">Mail</option>
+                                <option value="site_web">Site WEB</option>
+                            </select>
+                        </div>
+                        <div style='width:22%; height:100%; float:left; text-align:center; vertical-align:middle;'>
+                            <br/><br/><br/>
+                            <button id="modal-option-add" style="width: 106px" class="btn" title="Ajouter">Ajouter &gt;&gt;&gt;</button>
+                            <br/>
+                            <button id="modal-option-remove" style="width: 106px" class="btn" title="Enlever">&lt;&lt;&lt;
+                                Enlever
+                            </button>
+                        </div>
+                        <div style='width:38%; float:left;' title='Données sélectionnées'>
+                            <h5>Données sélectionnées</h5>
+                            <select id='modal-option-selected' name='modal-option-selected'
+                                    style='width:190px; height:102px;' multiple>
+                                <option value="numero_uai" disabled>UAI</option>
+                                <option value="appellation_officielle">Appellation officielle</option>
+                                <option value="nature_uai_libe">Nature</option>
+                                <option value="localite_acheminement_uai">Localité d&#039;acheminement</option>
+                                <option value="ministere_tutelle_libe">Tutelle</option>
+                                <option value="secteur_public_prive_libe">Secteur</option>
+                            </select>
+                            <input type='hidden' name='option_selected' id='option_selected' value=''>
+                        </div>
+                        <div style='width:4%; float:right;'>
+                            <br/><br/><br/>
+                            <img id="modal-option-selected-up" src="views/themes/default/img//arrow_up.png"
+                                 title="remonter" alt="remonter">
+                            <br/>
+                            <img id="modal-option-selected-down" src="views/themes/default/img//arrow_down.png"
+                                 title="descendre" alt="descendre">
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div>
+                        <h5>Données complémentaires</h5>
+                        <div class="control-group" title="Types de zone">
+                            <div style="padding-left:5px; width: 100px; float: left">
+                                <label for="type_zone_uai" class="control-label">Types de zone</label>
+                            </div>
+                            <div class="controls" style="width: 400px; float: right;">
+                                <input multiple type="hidden" id="option_type_zone_uai" name="option_type_zone_uai"
+                                       placeholder="" class="input-xlarge" autocomplete="off" value="">
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="control-group" title="Spécificités">
+                            <div style="padding-left:5px; width: 100px; float: left">
+                                <label for="specificite_uai" class="control-label">Spécificités</label>
+                            </div>
+                            <div class="controls" style="width: 400px; float: right;">
+                                <input multiple type="hidden" id="option_specificite_uai" name="option_specificite_uai"
+                                       placeholder="" class="input-xlarge" autocomplete="off" value="">
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-option-validate" class="btn" title="Valider">Valider</button>
+                <button id="modal-option-close" class="btn btn-primary" title="Fermer">Fermer</button>
+            </div>
+        </div>
+        <div id="modal-confirm-map" class="modal hide fade" tabindex="-1" role="dialog"
+             aria-labelledby="modal-confirm-map" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Fermer">×</button>
+                <h3 id="modal-confirm-map">Actualiser la liste</h3>
+            </div>
+            <div class="modal-body">
+                Voulez-vous actualiser la liste des établissements à partir de la zone sélectionnée sur la carte ?
+            </div>
+            <div class="modal-body">
+                Vous pourrez revenir ensuite à la liste initiale en décochant la case «FILTRAGE PAR LA CARTE» dans «MES
+                FILTRES».
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="modal-confirm-map-no" class="btn btn-primary" data-dismiss="modal" aria-hidden="true"
+                   title="Non">Non</a>
+                <a href="#" id="modal-confirm-map-yes" class="btn" data-dismiss="modal" aria-hidden="true" title="Oui">Oui</a>
+            </div>
+        </div>
+        <div id="modal-save-query" class="modal hide fade" tabindex="-1" role="dialog"
+             aria-labelledby="modal-save-title" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Fermer">×</button>
+                <h3 id="modal-save-title">Enregistrer la recherche</h3>
+            </div>
+            <div class="modal-body">
+                <form id='form_save_query'>
+                    <input type="hidden" name="modal-save-mode" id="modal-save-mode" value="add">
+                    <input type="hidden" name="modal-save-id" id="modal-save-id">
+                    <input type="hidden" name="modal-save-id-import" id="modal-save-id-import">
+                    <input type="hidden" name="modal-save-extract-param" id="modal-save-extract-param">
+                    <div class="row-fluid form-horizontal clearfix">
+                        <div class="control-group" title="Libellé">
+                            <label for="modal-save-label" class="control-label">Libellé</label>
+                            <input type="text" name="modal-save-label" id="modal-save-label" value=''>
+                        </div>
+                        <div class="control-group" title="Description">
+                            <label for="modal-save-description" class="control-label">Description</label>
+                            <textarea name="modal-save-description" id="modal-save-description"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <span id="modal-save-status-message"></span>
+                <button id="modal-save-query-validate" class="btn" title="Enregistrer">Enregistrer</button>
+                <button id="modal-save-query-close" class="btn btn-primary" title="Fermer">Fermer</button>
+            </div>
+        </div>
+        <div id="modal-contact" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal-contact"
+             aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" title="Fermer">×</button>
+                <h3 id="modal-contact">Contact</h3>
+            </div>
+            <div class="modal-body">
+                <form id='form_contact'>
+                    <div class="row-fluid form-horizontal clearfix">
+                        <div class="control-group" title="from">
+                            <label for="modal-contact-from" class="control-label">Votre adresse mail</label>
+                            <input type='text' name='modal-contact-from' id='modal-contact-from' value=''
+                                   placeholder="Renseignez votre adresse mail pour la réponse">
+                        </div>
+                        <div class="control-group" title="Motif">
+                            <label for="modal-contact-subject" class="control-label">Motif</label>
+                            <select name="modal-contact-subject" id="modal-contact-subject">
+                                <option value="modif">Demande de modification d&#039;une UAI</option>
+                                <option value="autre">Autre demande</option>
+                            </select>
+                        </div>
+                        <div class="control-group" title="UAI">
+                            <label for="modal-contact-uai" class="control-label">UAI</label>
+                            <input type='text' name='modal-contact-uai' id='modal-contact-uai' value=''>
+                        </div>
+                        <div class="control-group" title="Votre demande">
+                            <label for="modal-contact-msg" class="control-label">Votre demande</label>
+                            <textarea name="modal-contact-msg" id="modal-contact-msg" class="input-xxlarge"></textarea>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" style="width:120px">Saisir le texte affiché dans
+                                l'image</label>
+                            <input type="text" name="captcha_code" size="12" maxlength="6" style="width:90px"/>
+                            <img id="captcha" src="captcha_show.php" alt="CAPTCHA Image"/>
+                            <a href="#"
+                               onclick="document.getElementById('captcha').src = 'captcha_show.php?' + Math.random(); document.forms['compte_form'].elements['captcha_code'].value = ''; return false">[Nouvelle
+                                Image]</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <span id="modal-contact-status-msg"></span>
+                <button id="modal-contact-validate" class="btn" title="Envoyer">Envoyer</button>
+                <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true" title="Fermer">Fermer</button>
+            </div>
+        </div>
+    </div><!-- /.container -->
+</div><!-- /.wrap -->
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+</body>
+</html>

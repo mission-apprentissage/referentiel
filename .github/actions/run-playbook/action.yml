@@ -1,0 +1,35 @@
+name: Run task
+description: "Lance une tache via la CLI"
+inputs:
+  playbook:
+    required: true
+    description: "Commande à executer"
+  envName:
+    required: true
+    description: "Nom de l'environnement"
+  gitRevision:
+    required: true
+    description: "Nom de la branche à déployer"
+  sshPrivateKey:
+    required: true
+    description: "Clé ssh permettant de se connecter à l'environnement"
+  sshPublicKey:
+    required: true
+    description: "Clé ssh permettant de se connecter à l'environnement"
+  knownHosts:
+    required: true
+    description: "Liste des known hosts"
+runs:
+  using: "composite"
+  steps:
+    - name: "Configure SSH key"
+      run: |
+        mkdir -p ${HOME}/.ssh && \
+        echo '${{ inputs.sshPrivateKey }}' > ${HOME}/.ssh/id_rsa && \
+        chmod 400 ${HOME}/.ssh/id_rsa && \
+        echo '${{ inputs.knownHosts }}' > ${HOME}/.ssh/known_hosts
+      shell: bash
+
+    - name: "Run playbook ${{ inputs.playbook }}"
+      run: "bash .infra/scripts/${{ inputs.playbook }}.sh ${{ inputs.envName }} --user devops --extra-vars='git_revision=${{ inputs.gitRevision }}'"
+      shell: bash
