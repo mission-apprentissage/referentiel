@@ -1,4 +1,4 @@
-const { jsonSchemaTypes, documentBuilder } = require("../../utils/jsonSchema");
+const { jsonSchemaTypes, withDefaultsBuilder } = require("../../utils/jsonSchema");
 
 const acceSchema = (options = {}) => {
   let { object, objectId, string, number, integer, arrayOf, date } = jsonSchemaTypes(options);
@@ -89,5 +89,5 @@ const acceSchema = (options = {}) => {
 
 module.exports = {
   acceSchema,
-  build: documentBuilder(acceSchema()),
+  withDefaults: withDefaultsBuilder(acceSchema()),
 };

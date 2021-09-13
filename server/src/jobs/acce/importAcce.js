@@ -105,7 +105,7 @@ async function importAcce(options = {}) {
       let res = await getCollection("acce").updateOne(
         { uai: data.uai },
         {
-          $set: acceSchema.build({
+          $set: acceSchema.withDefaults({
             ...data,
             _search: {
               searchIndex: index,
