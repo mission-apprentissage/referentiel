@@ -10,7 +10,7 @@ const { stringList } = require("../utils/validators");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { getAcademies } = require("../../common/academies");
 const { getRegions } = require("../../common/regions");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 
 module.exports = () => {
   const router = express.Router();
@@ -119,7 +119,7 @@ module.exports = () => {
 
       let projection = buildProjection(champs);
       let { cursor, pagination } = await paginateAggregationWithCursor(
-        getCollection("annuaire"),
+        dbCollection("annuaire"),
         [
           {
             $match: {
@@ -215,7 +215,7 @@ module.exports = () => {
       }).validateAsync({ ...req.params, ...req.query }, { abortEarly: false });
 
       let projection = buildProjection(champs);
-      let etablissement = await getCollection("annuaire").findOne({ siret }, { projection });
+      let etablissement = await dbCollection("annuaire").findOne({ siret }, { projection });
 
       if (!etablissement) {
         throw Boom.notFound("Siret inconnu");
@@ -236,7 +236,7 @@ module.exports = () => {
       }).validateAsync(req.query, { abortEarly: false });
 
       let { find, pagination } = await paginate(
-        getCollection("annuaireStats"),
+        dbCollection("annuaireStats"),
         {},
         { page, limit, projection: { _id: 0 }, sort: { created_at: -1 } }
       );

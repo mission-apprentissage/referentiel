@@ -2,7 +2,7 @@ const Boom = require("boom");
 const express = require("express");
 const logger = require("../../common/logger");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 
 module.exports = () => {
   const router = express.Router();
@@ -11,7 +11,7 @@ module.exports = () => {
     "/api/v1/healthcheck",
     tryCatch(async (req, res) => {
       let mongodbStatus;
-      await getCollection("acce")
+      await dbCollection("acce")
         .stats()
         .then(() => {
           mongodbStatus = true;

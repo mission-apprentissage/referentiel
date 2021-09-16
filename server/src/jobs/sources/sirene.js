@@ -4,7 +4,7 @@ const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const datagouv = require("../referentiels/datagouv");
 const adresses = require("../../common/adresses");
 const categoriesJuridiques = require("../../common/categoriesJuridiques");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 
 function getEtablissementName(e, uniteLegale) {
   return (
@@ -59,7 +59,7 @@ module.exports = (options = {}) => {
       let organismes = options.organismes || (await loadOrganismeDeFormations());
 
       return oleoduc(
-        getCollection("annuaire").find(filters, { siret: 1 }).stream(),
+        dbCollection("annuaire").find(filters, { siret: 1 }).stream(),
         transformData(
           async ({ siret }) => {
             try {

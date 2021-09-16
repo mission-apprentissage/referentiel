@@ -1,9 +1,9 @@
 const logger = require("../common/logger");
-const { getCollection } = require("../common/db/mongodb");
+const { dbCollection } = require("../common/db/mongodb");
 
 async function clear() {
   logger.warn("Suppresion de tous les établissements de l'annuaire...");
-  let res = await getCollection("annuaire").deleteMany({});
+  let res = await dbCollection("annuaire").deleteMany({});
   return { deleted: res.deletedCount };
 }
 

@@ -1,5 +1,5 @@
 const assert = require("assert");
-const { getCollection } = require("../../../src/common/db/mongodb");
+const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/tasks/collectSources");
 const { createStream } = require("../../utils/testUtils");
@@ -19,9 +19,9 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.conformite_reglementaire.certificateur, "datadock");
-    found = await getCollection("annuaire").findOne({ siret: "22222222200002" }, { _id: 0 });
+    found = await dbCollection("annuaire").findOne({ siret: "22222222200002" }, { _id: 0 });
     assert.strictEqual(found.conformite_reglementaire.certificateur, undefined);
 
     assert.deepStrictEqual(stats, {
@@ -50,7 +50,7 @@ describe(__filename, () => {
 
     await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.conformite_reglementaire.conventionne, true);
   });
 });

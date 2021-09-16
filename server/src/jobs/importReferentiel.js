@@ -1,7 +1,7 @@
 const { oleoduc, writeData } = require("oleoduc");
 const { isEmpty } = require("lodash");
 const logger = require("../common/logger");
-const { getCollection } = require("../common/db/mongodb");
+const { dbCollection } = require("../common/db/mongodb");
 
 module.exports = async (referentiel) => {
   let stats = {
@@ -22,7 +22,7 @@ module.exports = async (referentiel) => {
       }
 
       try {
-        let res = await getCollection("annuaire").updateOne(
+        let res = await dbCollection("annuaire").updateOne(
           { siret },
           {
             $set: {

@@ -1,6 +1,6 @@
 const { program: cli } = require("commander");
 const { oleoduc, transformData, writeToStdout } = require("oleoduc");
-const { getCollection } = require("../../common/db/mongodb.js");
+const { dbCollection } = require("../../common/db/mongodb.js");
 const importAcce = require("./importAcce");
 const patchAcce = require("./patchAcce");
 const runScript = require("../runScript");
@@ -28,7 +28,7 @@ cli
   .action(() => {
     runScript(() => {
       return oleoduc(
-        getCollection("acce").find({}, { _search: 0 }).stream(),
+        dbCollection("acce").find({}, { _search: 0 }).stream(),
         transformData((etablissement) => {
           return `${JSON.stringify(etablissement)}\n`;
         }),

@@ -1,6 +1,6 @@
 const AcceApi = require("../../common/apis/AcceApi");
 const logger = require("../../common/logger");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 const { merge } = require("lodash");
 
 const natures = [
@@ -102,7 +102,7 @@ async function importAcce(options = {}) {
     try {
       let data = await api.getEtablissement(session, index);
 
-      let res = await getCollection("acce").updateOne(
+      let res = await dbCollection("acce").updateOne(
         { uai: data.uai },
         {
           $set: {

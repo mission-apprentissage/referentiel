@@ -1,7 +1,7 @@
 const assert = require("assert");
 const { omit } = require("lodash");
 const { Readable } = require("stream");
-const { getCollection } = require("../../src/common/db/mongodb");
+const { dbCollection } = require("../../src/common/db/mongodb");
 const importReferentiel = require("../../src/jobs/importReferentiel");
 
 function createTestReferentiel(array) {
@@ -19,7 +19,7 @@ describe(__filename, () => {
 
     let results = await importReferentiel(referentiel);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
     assert.deepStrictEqual(omit(found, ["_meta"]), {
       siret: "11111111100006",
       referentiels: ["test"],
@@ -46,7 +46,7 @@ describe(__filename, () => {
 
     let results = await importReferentiel(referentiel);
 
-    await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(results, {
       total: 2,
       created: 1,
@@ -64,7 +64,7 @@ describe(__filename, () => {
 
     let results = await importReferentiel(referentiel);
 
-    let count = await getCollection("annuaire").countDocuments({ siret: "11111111100006" });
+    let count = await dbCollection("annuaire").countDocuments({ siret: "11111111100006" });
     assert.strictEqual(count, 0);
     assert.deepStrictEqual(results, {
       total: 1,

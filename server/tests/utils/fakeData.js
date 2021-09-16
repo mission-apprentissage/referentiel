@@ -1,10 +1,10 @@
 const { merge } = require("lodash");
-const { getCollection } = require("../../src/common/db/mongodb");
+const { dbCollection } = require("../../src/common/db/mongodb");
 const faker = require("faker");
 
 module.exports = {
   insertAnnuaireStats(custom) {
-    return getCollection("annuaireStats").insertOne(
+    return dbCollection("annuaireStats").insertOne(
       merge(
         {},
         {
@@ -130,7 +130,7 @@ module.exports = {
     );
   },
   insertAnnuaire(custom) {
-    return getCollection("annuaire").insertOne(
+    return dbCollection("annuaire").insertOne(
       merge(
         {},
         {
@@ -183,7 +183,7 @@ module.exports = {
     );
   },
   insertEtablissement(custom) {
-    return getCollection("etablissements").insertOne(
+    return dbCollection("etablissements").insertOne(
       merge(
         {},
         {
@@ -197,7 +197,7 @@ module.exports = {
     );
   },
   insertCFD(custom) {
-    return getCollection("cfd").insertOne(
+    return dbCollection("cfd").insertOne(
       merge(
         {},
         {
@@ -210,7 +210,7 @@ module.exports = {
     );
   },
   insertAcce: async (custom = {}) => {
-    return getCollection("acce").insertOne(
+    return dbCollection("acce").insertOne(
       merge(
         {},
         {

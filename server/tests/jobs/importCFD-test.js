@@ -2,7 +2,7 @@ const { omit } = require("lodash");
 const assert = require("assert");
 const { createStream } = require("../utils/testUtils");
 const importCFD = require("../../src/jobs/importCFD");
-const { getCollection } = require("../../src/common/db/mongodb");
+const { dbCollection } = require("../../src/common/db/mongodb");
 
 let getNFormationDiplomeCsvStream = (content) => {
   return createStream(
@@ -29,7 +29,7 @@ describe(__filename, () => {
       vFormationDiplomeCsvStream: getVFormationDiplomeCsvStream(),
     });
 
-    const results = await getCollection("cfd").find().toArray();
+    const results = await dbCollection("cfd").find().toArray();
     assert.strictEqual(results.length, 2);
     assert.deepStrictEqual(omit(results[0], ["_id", "__v"]), {
       FORMATION_DIPLOME: "46031099",
@@ -51,7 +51,7 @@ describe(__filename, () => {
 `),
     });
 
-    const results = await getCollection("cfd").find().toArray();
+    const results = await dbCollection("cfd").find().toArray();
     assert.strictEqual(results.length, 1);
     assert.deepStrictEqual(results[0].FORMATION_DIPLOME, "46031099");
     assert.deepStrictEqual(stats, {

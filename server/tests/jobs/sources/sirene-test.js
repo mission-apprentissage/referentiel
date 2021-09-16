@@ -1,6 +1,6 @@
 const assert = require("assert");
 const { omit } = require("lodash");
-const { getCollection } = require("../../../src/common/db/mongodb");
+const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/tasks/collectSources");
 const { importReferentiel } = require("../../utils/testUtils");
@@ -27,7 +27,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.raison_sociale, "NOMAYO");
     assert.strictEqual(found.siege_social, true);
     assert.strictEqual(found.statut, "actif");
@@ -77,7 +77,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.adresse, {
       geojson: {
         type: "Feature",
@@ -150,7 +150,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.relations, [
       {
         siret: "11111111122222",
@@ -228,7 +228,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.relations.length, 1);
     assert.deepStrictEqual(found.relations[0].siret, "2222222222222222");
     assert.deepStrictEqual(stats, {
@@ -280,7 +280,7 @@ describe(__filename, () => {
 
     await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.relations, []);
   });
 
@@ -294,7 +294,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" });
     assert.deepStrictEqual(found._meta.anomalies[0].details, "[Api Sirene] Request failed with status code 500");
     assert.deepStrictEqual(stats, {
       sirene: {
@@ -316,7 +316,7 @@ describe(__filename, () => {
 
     await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" });
     assert.deepStrictEqual(found._meta.anomalies[0].details, "Etablissement inconnu pour l'entreprise 111111111");
   });
 
@@ -330,7 +330,7 @@ describe(__filename, () => {
 
     await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" });
     assert.deepStrictEqual(found._meta.anomalies[0].details, "Entreprise inconnue");
   });
 
@@ -349,7 +349,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
       job: "collect",
@@ -382,7 +382,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
       job: "collect",

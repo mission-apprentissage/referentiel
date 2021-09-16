@@ -3,7 +3,7 @@ const { Readable } = require("stream");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/tasks/collectSources");
 const { importReferentiel } = require("../../utils/testUtils");
-const { getCollection } = require("../../../src/common/db/mongodb");
+const { dbCollection } = require("../../../src/common/db/mongodb");
 
 function createAcceSource(array = {}) {
   let ndjson = array.map((i) => `${JSON.stringify(i)}\n`);
@@ -47,7 +47,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.relations, [
       {
         sources: ["acce"],
@@ -87,7 +87,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await getCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.contacts, [
       {
         email: "robert@formation.fr",

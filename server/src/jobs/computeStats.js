@@ -5,7 +5,7 @@ const logger = require("../common/logger");
 const SireneApi = require("../common/apis/SireneApi");
 const Cache = require("../common/apis/Cache");
 const { validateUAI } = require("../common/utils/uaiUtils");
-const { getCollection } = require("../common/db/mongodb");
+const { dbCollection } = require("../common/db/mongodb");
 
 // eslint-disable-next-line no-unused-vars
 async function validateSiretWithApi(siret, cache, sireneApi) {
@@ -32,7 +32,7 @@ async function validateSiretWithApi(siret, cache, sireneApi) {
 
 // eslint-disable-next-line no-unused-vars
 async function validateSiret(siret) {
-  let found = await getCollection("sirene").findOne({ siret });
+  let found = await dbCollection("sirene").findOne({ siret });
   if (!luhn(siret) || !found) {
     return { isValid: false, category: "invalides" };
   }
@@ -208,7 +208,7 @@ async function computeStats(sources, options) {
   };
 
   if (options.save) {
-    await getCollection("annuaireStats").insertOne({
+    await dbCollection("annuaireStats").insertOne({
       created_at: new Date(),
       ...stats,
     });

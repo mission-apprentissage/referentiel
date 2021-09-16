@@ -1,5 +1,5 @@
 const assert = require("assert");
-const { getCollection } = require("../../../src/common/db/mongodb");
+const { dbCollection } = require("../../../src/common/db/mongodb");
 const importReferentiel = require("../../../src/jobs/importReferentiel");
 const { createReferentiel } = require("../../../src/jobs/referentiels/referentiels");
 const { createStream } = require("../../utils/testUtils");
@@ -14,7 +14,7 @@ describe(__filename, () => {
 
     let results = await importReferentiel(referentiel);
 
-    let docs = await getCollection("annuaire").find({}).toArray();
+    let docs = await dbCollection("annuaire").find({}).toArray();
     assert.strictEqual(docs.length, 1);
     assert.deepStrictEqual(docs[0].referentiels, ["datagouv"]);
     assert.deepStrictEqual(results, {

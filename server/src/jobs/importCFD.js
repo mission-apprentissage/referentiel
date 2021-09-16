@@ -2,7 +2,7 @@ const logger = require("../common/logger");
 const { getFileAsStream } = require("../common/utils/httpUtils");
 const { oleoduc, writeData } = require("oleoduc");
 const { pick } = require("lodash");
-const { getCollection } = require("../common/db/mongodb");
+const { dbCollection } = require("../common/db/mongodb");
 const { parseCsv } = require("../common/utils/csvUtils");
 
 async function importCsv(csvStream) {
@@ -17,7 +17,7 @@ async function importCsv(csvStream) {
     writeData(async (data) => {
       try {
         stats.total++;
-        let res = await getCollection("cfd").updateOne(
+        let res = await dbCollection("cfd").updateOne(
           {
             FORMATION_DIPLOME: data.FORMATION_DIPLOME,
           },

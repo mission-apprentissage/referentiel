@@ -3,7 +3,7 @@ const { oleoduc, transformData } = require("oleoduc");
 const CatalogueApi = require("../../common/apis/CatalogueApi");
 const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 
 async function getFormations(api, siret, options = {}) {
   let res = await api.getFormations(
@@ -67,7 +67,7 @@ async function buildDiplomes(siret, formations) {
     formations
       .filter((f) => f.cfd && siret === f.etablissement_formateur_siret)
       .map(async (f) => {
-        let bcn = await getCollection("cfd").findOne({ FORMATION_DIPLOME: f.cfd });
+        let bcn = await dbCollection("cfd").findOne({ FORMATION_DIPLOME: f.cfd });
         return {
           code: f.cfd,
           type: "cfd",
@@ -155,7 +155,7 @@ module.exports = (custom = {}) => {
       let filters = options.filters || {};
 
       return oleoduc(
-        getCollection("annuaire").find(filters, { siret: 1 }).stream(),
+        dbCollection("annuaire").find(filters, { siret: 1 }).stream(),
         transformData(
           async ({ siret }) => {
             try {

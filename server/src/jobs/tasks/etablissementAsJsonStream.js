@@ -1,13 +1,13 @@
 const { pick } = require("lodash");
 const { oleoduc, transformData, transformIntoJSON } = require("oleoduc");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 
 function etablissementAsJsonStream(options = {}) {
   let filter = options.filter || {};
   let limit = options.limit || Number.MAX_SAFE_INTEGER;
 
   return oleoduc(
-    getCollection("annuaire").find(filter).limit(limit).cursor(),
+    dbCollection("annuaire").find(filter).limit(limit).cursor(),
     transformData((data) => {
       return {
         siret: data.siret,

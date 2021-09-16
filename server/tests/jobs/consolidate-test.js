@@ -1,5 +1,5 @@
 const assert = require("assert");
-const { getCollection } = require("../../src/common/db/mongodb");
+const { dbCollection } = require("../../src/common/db/mongodb");
 const { insertAnnuaire } = require("../utils/fakeData");
 const consolidate = require("../../src/jobs/tasks/consolidate");
 const { omit } = require("lodash");
@@ -19,7 +19,7 @@ describe(__filename, () => {
 
     let stats = await consolidate();
 
-    let found = await getCollection("annuaire").findOne();
+    let found = await dbCollection("annuaire").findOne();
     assert.deepStrictEqual(found.uai, "0111111Y");
     assert.deepStrictEqual(stats, {
       validateUAI: {
@@ -43,7 +43,7 @@ describe(__filename, () => {
 
     await consolidate();
 
-    let found = await getCollection("annuaire").findOne();
+    let found = await dbCollection("annuaire").findOne();
     assert.deepStrictEqual(found.uai, "0111111Y");
   });
 
@@ -66,7 +66,7 @@ describe(__filename, () => {
 
     await consolidate();
 
-    let found = await getCollection("annuaire").findOne();
+    let found = await dbCollection("annuaire").findOne();
     assert.deepStrictEqual(found.uai, undefined);
   });
 
@@ -89,7 +89,7 @@ describe(__filename, () => {
 
     await consolidate();
 
-    let found = await getCollection("annuaire").findOne();
+    let found = await dbCollection("annuaire").findOne();
     assert.deepStrictEqual(found.uai, "0222222W");
   });
 
@@ -121,7 +121,7 @@ describe(__filename, () => {
 
     let stats = await consolidate();
 
-    let found = await getCollection("annuaire").findOne({ siret: "22222222200022" });
+    let found = await dbCollection("annuaire").findOne({ siret: "22222222200022" });
     assert.ok(!found.uai);
     assert.deepStrictEqual(
       found._meta.anomalies.map((a) => omit(a, ["date"])),
@@ -156,7 +156,7 @@ describe(__filename, () => {
 
     let stats = await consolidate();
 
-    let found = await getCollection("annuaire").findOne();
+    let found = await dbCollection("annuaire").findOne();
     assert.ok(!found.uai);
     assert.deepStrictEqual(stats, {
       validateUAI: {

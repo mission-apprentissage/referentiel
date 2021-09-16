@@ -3,7 +3,7 @@ const { uniq, isEmpty } = require("lodash");
 const { flattenObject, isError } = require("../../common/utils/objectUtils");
 const { validateUAI } = require("../../common/utils/uaiUtils");
 const logger = require("../../common/logger");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 
 function buildQuery(selector) {
   if (isEmpty(selector)) {
@@ -40,7 +40,7 @@ async function mergeRelations(from, etablissement, relations) {
 
   return Promise.all(
     [...updated, ...previous].map(async (r) => {
-      let count = await getCollection("annuaire").countDocuments({ siret: r.siret });
+      let count = await dbCollection("annuaire").countDocuments({ siret: r.siret });
       return {
         ...r,
         annuaire: count > 0,
@@ -73,7 +73,7 @@ function handleAnomalies(from, etablissement, anomalies) {
     `[Collect][${from}] Erreur lors de la collecte pour l'établissement ${etablissement.siret}.`
   );
 
-  return getCollection("annuaire").updateOne(
+  return dbCollection("annuaire").updateOne(
     { siret: etablissement.siret },
     {
       $push: {
@@ -127,7 +127,7 @@ module.exports = async (array, options = {}) => {
       let { from, selector, uais = [], contacts = [], relations = [], reseaux = [], data = {}, anomalies = [] } = res;
       stats[from].total++;
       let query = buildQuery(selector);
-      let etablissement = await getCollection("annuaire").findOne(query);
+      let etablissement = await dbCollection("annuaire").findOne(query);
       if (!etablissement) {
         stats[from].ignored++;
         return;
@@ -139,7 +139,7 @@ module.exports = async (array, options = {}) => {
           await handleAnomalies(from, etablissement, anomalies);
         }
 
-        let res = await getCollection("annuaire").updateOne(
+        let res = await dbCollection("annuaire").updateOne(
           query,
           {
             $set: {

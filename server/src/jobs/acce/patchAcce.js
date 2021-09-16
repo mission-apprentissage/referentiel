@@ -1,15 +1,15 @@
 const logger = require("../../common/logger");
 const { oleoduc, writeData, filterData } = require("oleoduc");
 const sifaRamsese = require("./streams/sifaRamsese");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 
 async function updateRattachements(uai, siret) {
-  let { modifiedCount: fille } = await getCollection("acce").updateMany(
+  let { modifiedCount: fille } = await dbCollection("acce").updateMany(
     { "rattachements.fille.uai": uai },
     { $set: { "rattachements.fille.$.siret": siret } }
   );
 
-  let { modifiedCount: mere } = await getCollection("acce").updateMany(
+  let { modifiedCount: mere } = await dbCollection("acce").updateMany(
     { "rattachements.mere.uai": uai },
     { $set: { "rattachements.mere.$.siret": siret } }
   );
@@ -36,7 +36,7 @@ async function patchAcce(options = {}) {
     writeData(async ({ uai, siret }) => {
       stats.total++;
       try {
-        let { modifiedCount: updated } = await getCollection("acce").updateOne({ uai }, { $set: { siret } });
+        let { modifiedCount: updated } = await dbCollection("acce").updateOne({ uai }, { $set: { siret } });
 
         if (updated) {
           logger.debug(`Ajout du siret ${siret} pour l'UAI ${uai}...`);

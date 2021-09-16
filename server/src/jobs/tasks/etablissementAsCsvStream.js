@@ -1,5 +1,5 @@
 const { oleoduc, transformIntoCSV, transformData } = require("oleoduc");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 
 function getUAI(source, etablissement) {
   let uais = etablissement.uais.filter((u) => u.sources.includes(source));
@@ -67,7 +67,7 @@ function etablissementAsCsvStream(options = {}) {
   let limit = options.limit || Number.MAX_SAFE_INTEGER;
 
   return oleoduc(
-    getCollection("annuaire").find(filter).limit(limit).cursor(),
+    dbCollection("annuaire").find(filter).limit(limit).cursor(),
     transformData((etablissement) => {
       let correspondance = computeCorrespondance(etablissement);
       let gestionnaire = `${etablissement.gestionnaire ? "gestionnaire" : ""}`;

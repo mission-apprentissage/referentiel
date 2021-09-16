@@ -1,5 +1,5 @@
 const { oleoduc, transformData } = require("oleoduc");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 
 module.exports = () => {
   let name = "catalogue";
@@ -8,7 +8,7 @@ module.exports = () => {
     name,
     stream() {
       return oleoduc(
-        getCollection("etablissements").find({}, { siret: 1, uai: 1 }).stream(),
+        dbCollection("etablissements").find({}, { siret: 1, uai: 1 }).stream(),
         transformData((etablissement) => {
           return {
             from: name,

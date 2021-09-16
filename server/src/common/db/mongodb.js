@@ -33,7 +33,7 @@ function getDatabase() {
   return clientHolder.db();
 }
 
-function getCollection(name) {
+function dbCollection(name) {
   ensureInitialization();
   return clientHolder.db().collection(name);
 }
@@ -47,11 +47,11 @@ async function configureIndexes(collection, options = {}) {
   }
 
   logger.info(`Configuring indexes for collection ${collection.name} (drop:${shouldDropIndexes})...`);
-  let dbCollection = getCollection(collection.name);
+  let col = dbCollection(collection.name);
   if (shouldDropIndexes) {
-    await dbCollection.dropIndexes();
+    await col.dropIndexes();
   }
-  return collection.createIndexes(dbCollection);
+  return collection.createIndexes(col);
 }
 
 async function configureValidation(collection) {
@@ -87,6 +87,6 @@ module.exports = {
     );
   },
   getDatabase,
-  getCollection,
+  dbCollection,
   closeMongodbConnection,
 };

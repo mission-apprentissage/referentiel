@@ -3,7 +3,7 @@ const { Readable } = require("stream");
 const { oleoduc } = require("oleoduc");
 const { insertAcce } = require("../../utils/fakeData");
 const patchAcce = require("../../../src/jobs/acce/patchAcce");
-const { getCollection } = require("../../../src/common/db/mongodb");
+const { dbCollection } = require("../../../src/common/db/mongodb");
 
 function createTestSource(array) {
   let name = "dummy";
@@ -25,7 +25,7 @@ describe(__filename, () => {
       sifaRamsese: createTestSource([{ siret: "11111111100006", uai: "0111111Y" }]),
     });
 
-    let found = await getCollection("acce").findOne();
+    let found = await dbCollection("acce").findOne();
     assert.deepStrictEqual(found.siret, "11111111100006");
     assert.deepStrictEqual(stats, {
       total: 1,
@@ -71,7 +71,7 @@ describe(__filename, () => {
       ]),
     });
 
-    let found = await getCollection("acce").findOne();
+    let found = await dbCollection("acce").findOne();
     assert.deepStrictEqual(found.rattachements.fille[0].siret, "22222222200002");
     assert.deepStrictEqual(found.rattachements.mere[0].siret, "33333333300003");
     assert.deepStrictEqual(stats, {

@@ -1,9 +1,9 @@
 const logger = require("../../common/logger");
-const { getCollection } = require("../../common/db/mongodb");
+const { dbCollection } = require("../../common/db/mongodb");
 const { oleoduc, writeData } = require("oleoduc");
 
 async function validateUAI() {
-  let collection = getCollection("annuaire");
+  let collection = dbCollection("annuaire");
   let stats = {
     validated: 0,
     conflicted: 0,
