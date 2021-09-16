@@ -11,10 +11,14 @@ RUN yarn install --frozen-lockfile && \
 COPY . ./
 ARG ANNUAIRE_SENTRY_DSN
 ARG ANNUAIRE_ENV
+ARG ANNUAIRE_NO_BUILD
 ENV REACT_APP_ANNUAIRE_ENV=$ANNUAIRE_ENV
 ENV REACT_APP_ANNUAIRE_SENTRY_DSN=$ANNUAIRE_SENTRY_DSN
-RUN INLINE_RUNTIME_CHUNK=false yarn build && \
-    mv /app/build /site
+RUN if [ -z "$ANNUAIRE_NO_BUILD" ] ; then \
+      INLINE_RUNTIME_CHUNK=false yarn build && mv /app/build /site ; \
+    else \
+      echo "No Build" ; \
+    fi
 
 EXPOSE 3000
 CMD ws --port 3000 -d /site --log.format dev --spa index.html

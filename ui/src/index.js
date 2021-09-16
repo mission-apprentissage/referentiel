@@ -1,15 +1,8 @@
-import "react-app-polyfill/ie11";
-import "react-app-polyfill/stable";
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
-import * as Sentry from "./common/sentry";
-import * as serviceWorker from "./serviceWorker";
-import "./common/utils/setYupLocale";
-import "tabler-react/dist/Tabler.css";
 import "./index.css";
-
-Sentry.initialize();
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>

@@ -16,7 +16,6 @@ export function useFetch(url, initialState = null) {
       setLoading(false);
     } catch (error) {
       setError(error);
-      setLoading(false);
     }
   }, [url]);
 
@@ -27,5 +26,5 @@ export function useFetch(url, initialState = null) {
     fetchData();
   }, [url, _fetch]);
 
-  return [response, loading, error, setResponse];
+  return [response, loading, error];
 }

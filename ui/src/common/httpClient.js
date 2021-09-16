@@ -1,5 +1,5 @@
 import EventEmitter from "events";
-import { getAuth } from "./auth";
+import * as queryString from "querystring";
 
 class AuthError extends Error {
   constructor(json, statusCode) {
@@ -20,34 +20,36 @@ class HTTPError extends Error {
 }
 
 const emitter = new EventEmitter();
-const handleResponse = async (path, response) => {
-  let statusCode = response.status;
-  let json = await response.json();
 
+function handleResponse(path, response) {
+  let statusCode = response.status;
   if (statusCode >= 400 && statusCode < 600) {
     emitter.emit("http:error", response);
 
     if (statusCode === 401 || statusCode === 403) {
-      throw new AuthError(json, statusCode);
+      throw new AuthError(response.json(), statusCode);
     } else {
-      throw new HTTPError(`Server returned ${statusCode} when requesting resource ${path}`, json, statusCode);
+      throw new HTTPError(
+        `Server returned ${statusCode} when requesting resource ${path}`,
+        response.json(),
+        statusCode
+      );
     }
   }
-  return json;
-};
+  return response.json();
+}
 
-const getHeaders = () => {
-  let auth = getAuth();
-
+function getHeaders() {
   return {
     Accept: "application/json",
-    ...(auth.sub !== "anonymous" ? { Authorization: `Bearer ${auth.token}` } : {}),
     "Content-Type": "application/json",
   };
-};
+}
 
-export const _get = (path) => {
-  return fetch(`${path}`, {
+export const _get = (path, parmeters = {}) => {
+  let params = queryString.stringify(parmeters, { skipNull: true });
+
+  return fetch(`${path}${params ? `?${params}` : ""}`, {
     method: "GET",
     headers: getHeaders(),
   }).then((res) => handleResponse(path, res));
@@ -74,15 +76,6 @@ export const _delete = (path) => {
     method: "DELETE",
     headers: getHeaders(),
   }).then((res) => handleResponse(path, res));
-};
-
-export const buildLink = (path) => {
-  let auth = getAuth();
-  if (auth.sub !== "anonymous") {
-    //TODO better handle params
-    return `${path}?token=${auth.token}`;
-  }
-  return path;
 };
 
 export const subscribeToHttpEvent = (eventName, callback) => emitter.on(eventName, callback);
