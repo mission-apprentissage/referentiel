@@ -1,5 +1,4 @@
 const axios = require("axios");
-const ApiError = require("./ApiError");
 const RateLimitedApi = require("./RateLimitedApi");
 const { URLSearchParams } = require("url");
 const acceHtmlParser = require("../../jobs/acce/acceHtmlParser");
@@ -14,10 +13,9 @@ function omitNull(obj) {
 
 class AcceApi extends RateLimitedApi {
   constructor(options = {}) {
+    super("AcceApi", options);
     let client = options.axios || axios.create({ timeout: 10000 });
     client.defaults.headers.common["User-Agent"] = CHROME_USER_AGENT;
-
-    super("AcceApi", client, options);
     this.client = client;
   }
 
@@ -82,27 +80,23 @@ class AcceApi extends RateLimitedApi {
     };
   }
   getEtablissement(session, id) {
-    return this.execute(async (client) => {
-      try {
-        let { data } = await client.get(
-          `https://www.education.gouv.fr/acce_public/uai.php?uai_mode=list&uai_ndx=${id}`,
-          {
-            headers: {
-              ...session,
-            },
-          }
-        );
+    return this.execute(async () => {
+      let { data } = await this.client.get(
+        `https://www.education.gouv.fr/acce_public/uai.php?uai_mode=list&uai_ndx=${id}`,
+        {
+          headers: {
+            ...session,
+          },
+        }
+      );
 
-        let { etablissementPage } = acceHtmlParser(data);
+      let { etablissementPage } = acceHtmlParser(data);
 
-        return omitNull({
-          ...etablissementPage.getForm1Properties(),
-          ...etablissementPage.getForm2Properties(),
-          geojson: etablissementPage.getCoordinates(),
-        });
-      } catch (e) {
-        throw new ApiError("Api ACCE", e.message, e);
-      }
+      return omitNull({
+        ...etablissementPage.getForm1Properties(),
+        ...etablissementPage.getForm2Properties(),
+        geojson: etablissementPage.getCoordinates(),
+      });
     });
   }
 }

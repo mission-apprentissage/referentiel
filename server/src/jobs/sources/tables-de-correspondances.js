@@ -1,19 +1,23 @@
 const { oleoduc, transformData } = require("oleoduc");
-const { dbCollection } = require("../../common/db/mongodb");
+const TcoApi = require("../../common/apis/TcoApi");
 
-module.exports = () => {
+module.exports = (custom = {}) => {
   let name = "tables-de-correspondances";
+  let api = custom.tcoAPI || new TcoApi();
 
   return {
     name,
-    stream() {
+    async stream() {
+      let etablissementsStream = await api.getEtablissements({});
+
       return oleoduc(
-        dbCollection("etablissements").find({}, { siret: 1, uai: 1 }).stream(),
-        transformData((etablissement) => {
+        etablissementsStream,
+        transformData((data) => {
+          let json = JSON.parse(data);
           return {
             from: name,
-            selector: etablissement.siret.trim(),
-            uais: [etablissement.uai || undefined],
+            selector: json.siret.trim(),
+            uais: json.uai ? [json.uai] : [],
           };
         }),
         { promisify: false }

@@ -1,5 +1,6 @@
 const logger = require("../logger");
 const RateLimiter = require("./RateLimiter");
+const ApiError = require("./ApiError");
 
 class RateLimitedApi {
   constructor(name, client, options = {}) {
@@ -16,8 +17,12 @@ class RateLimitedApi {
     });
   }
 
-  execute(callback) {
-    return this.rateLimiter.execute(callback);
+  async execute(callback) {
+    try {
+      return await this.rateLimiter.execute(callback);
+    } catch (e) {
+      throw new ApiError(this.name, e.message, e.code || e.response.status);
+    }
   }
 }
 

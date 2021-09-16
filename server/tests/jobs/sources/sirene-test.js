@@ -295,7 +295,7 @@ describe(__filename, () => {
     let stats = await collectSources(source);
 
     let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found._meta.anomalies[0].details, "[Api Sirene] Request failed with status code 500");
+    assert.deepStrictEqual(found._meta.anomalies[0].details, "[SireneApi] Request failed with status code 500");
     assert.deepStrictEqual(stats, {
       sirene: {
         total: 1,

@@ -2,12 +2,11 @@ const { RateLimiterMemory, RateLimiterQueue } = require("rate-limiter-flexible")
 const { EventEmitter } = require("events");
 
 class RateLimiter extends EventEmitter {
-  constructor(name, client, options = {}) {
+  constructor(name, options = {}) {
     super();
     this.name = name;
     this.maxQueueSize = options.maxQueueSize || 25;
     this.options = options;
-    this.client = client;
 
     let memoryRateLimiter = new RateLimiterMemory({
       keyPrefix: name,
@@ -24,7 +23,7 @@ class RateLimiter extends EventEmitter {
       queueSize: this.queue._queueLimiters.limiter._queue.length,
       maxQueueSize: this.maxQueueSize,
     });
-    return callback(this.client);
+    return callback();
   }
 }
 

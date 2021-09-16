@@ -182,20 +182,6 @@ module.exports = {
       )
     );
   },
-  insertEtablissement(custom) {
-    return dbCollection("etablissements").insertOne(
-      merge(
-        {},
-        {
-          siret: faker.helpers.replaceSymbols("#########00015"),
-
-          uai: "0010856A",
-          tags: ["2020", "2021"],
-        },
-        custom
-      )
-    );
-  },
   insertCFD(custom) {
     return dbCollection("cfd").insertOne(
       merge(
