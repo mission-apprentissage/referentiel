@@ -9,7 +9,7 @@ class TcoApi extends RateLimitedApi {
   }
 
   static get baseApiUrl() {
-    return "https://tables-correspondances.apprentissage.beta.gouv.fr/api";
+    return "https://tables-correspondances-recette.apprentissage.beta.gouv.fr/api";
   }
 
   getEtablissements(query, options = {}) {

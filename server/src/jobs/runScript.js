@@ -39,7 +39,6 @@ const exit = async (rawError) => {
   process.exitCode = error ? 1 : 0;
 };
 
-
 async function runScript(job) {
   try {
     const timer = createTimer();

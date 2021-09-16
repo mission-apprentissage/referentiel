@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { oleoduc, transformData, readLineByLine } = require("oleoduc");
 const TcoApi = require("../../common/apis/TcoApi");
 
 module.exports = (custom = {}) => {
@@ -12,6 +12,7 @@ module.exports = (custom = {}) => {
 
       return oleoduc(
         etablissementsStream,
+        readLineByLine(),
         transformData((data) => {
           let json = JSON.parse(data);
           return {
