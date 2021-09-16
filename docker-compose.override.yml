@@ -24,7 +24,6 @@ services:
     volumes:
       - ./server/src:/app/src #Allows source folders to be watched
       - .local/server:/data
-      - .local/dne:/dne
     environment:
       - ANNUAIRE_ENV=dev
       - ANNUAIRE_LOG_LEVEL=debug

@@ -1,12 +1,12 @@
-const { stopMongod, dropDatabase, startMongod } = require("./mongoMemoryServer");
+const { stopMongod, removeAll, startMongod } = require("./mongoMemoryServer");
 
 exports.mochaGlobalSetup = function () {
   return startMongod();
 };
 
 exports.mochaHooks = {
-  afterEach: function () {
-    return dropDatabase();
+  afterEach: async function () {
+    return removeAll();
   },
 };
 

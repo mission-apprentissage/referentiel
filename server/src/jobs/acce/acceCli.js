@@ -8,8 +8,8 @@ const runScript = require("../runScript");
 cli
   .command("import")
   .option("--uai <uai>", "Force une recherche pour un UAI donné")
-  .option("--start <start>", "Index du premier établissement à importer")
-  .option("--end <end>", "Index du dernier établissement à importer")
+  .option("--start <start>", "Index du premier établissement à importer", parseInt)
+  .option("--end <end>", "Index du dernier établissement à importer", parseInt)
   .action((options) => {
     runScript(() => {
       return importAcce(options);

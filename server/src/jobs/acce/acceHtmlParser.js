@@ -134,6 +134,11 @@ module.exports = function (html) {
             return acc;
           }
 
+          if (rubrique === "geolocalisation") {
+            //ignore the map parsed in getCoordinates()
+            return acc;
+          }
+
           if (rubrique === "rattachements") {
             if (el.tagName === "H3") {
               sousRubrique = sanitize(el.textContent);

@@ -1,5 +1,4 @@
 const _ = require("lodash");
-const logger = require("../../common/logger");
 const config = require("../../config");
 const { init, captureException, configureScope } = require("@sentry/node");
 
@@ -31,8 +30,6 @@ module.exports = () => {
           });
         }
         captureException(e);
-      } else {
-        logger.error(e, "[SENTRY] An error occurred", options);
       }
     },
   };

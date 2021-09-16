@@ -8,7 +8,7 @@ module.exports = () => {
   const router = express.Router();
 
   router.get(
-    "/api/healthcheck",
+    "/api/v1/healthcheck",
     tryCatch(async (req, res) => {
       let mongodbStatus;
       await getCollection("acce")
@@ -18,7 +18,7 @@ module.exports = () => {
         })
         .catch((e) => {
           mongodbStatus = false;
-          logger.error("Healthcheck failed", e);
+          logger.error(e, "Healthcheck failed");
         });
 
       return res.json({
@@ -28,7 +28,7 @@ module.exports = () => {
   );
 
   router.get(
-    "/api/healthcheck/error",
+    "/api/v1/healthcheck/error",
     tryCatch(() => {
       throw Boom.internal();
     })

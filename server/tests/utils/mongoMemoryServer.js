@@ -5,7 +5,11 @@ let mongodHolder;
 
 module.exports = {
   async startMongod() {
-    mongodHolder = await MongoMemoryServer.create();
+    mongodHolder = await MongoMemoryServer.create({
+      binary: {
+        version: "5.0.2",
+      },
+    });
     let uri = mongodHolder.getUri();
     let client = await connectToMongodb(uri);
     await prepareDatabase();
@@ -14,7 +18,8 @@ module.exports = {
   stopMongod() {
     return mongodHolder.stop();
   },
-  async dropDatabase() {
-    return getDatabase().dropDatabase();
+  async removeAll() {
+    let collections = await getDatabase().collections();
+    return Promise.all(collections.map((c) => c.deleteMany({})));
   },
 };

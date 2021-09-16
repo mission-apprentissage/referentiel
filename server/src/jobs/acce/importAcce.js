@@ -1,7 +1,7 @@
 const AcceApi = require("../../common/apis/AcceApi");
 const logger = require("../../common/logger");
 const { getCollection } = require("../../common/db/mongodb");
-const { acceSchema } = require("../../common/db/schemas");
+const { merge } = require("lodash");
 
 const natures = [
   "Annexe d'un organisme de formation - Centre de formation d'apprentis",
@@ -94,8 +94,8 @@ async function importAcce(options = {}) {
   let { nbResults, session, searchParams } = await api.search({
     ...(options.uai ? { uai: options.uai } : { natures }),
   });
-
   let end = options.end || nbResults;
+
   logger.info(`Import de ${end} établissements pour la session de recherche ${session.Cookie}...`);
   for (let index = options.start || 1; index <= end && index <= nbResults; index++) {
     stats.total++;
@@ -105,13 +105,13 @@ async function importAcce(options = {}) {
       let res = await getCollection("acce").updateOne(
         { uai: data.uai },
         {
-          $set: acceSchema.withDefaults({
-            ...data,
+          $set: {
+            ...merge({ rattachements: { fille: [], mere: [] }, specificites: [] }, data),
             _search: {
               searchIndex: index,
               searchParams: searchParams.toString(),
             },
-          }),
+          },
         },
         { upsert: true }
       );
@@ -119,9 +119,8 @@ async function importAcce(options = {}) {
       stats.updated += res.modifiedCount;
       stats.created += res.upsertedCount;
       logger.info(`Etablissement ${index} importé`);
-      logger.debug(data);
     } catch (e) {
-      logger.error(`Impossible d'importer l'établissement ${index} `, e);
+      logger.error(e, `Impossible d'importer l'établissement ${index}`);
       stats.failed++;
     }
   }

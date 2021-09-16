@@ -1,0 +1,21 @@
+const assert = require("assert");
+const { findRegionByUai, findRegionByName, findRegionByCodeInsee } = require("../../src/common/regions");
+
+describe(__filename, () => {
+  it("Permet de trouver une région avec son UAI", () => {
+    assert.deepStrictEqual(findRegionByUai("0751234J").nom, "Île-de-France");
+    assert.deepStrictEqual(findRegionByUai("6200001G").nom, "Corse");
+    assert.deepStrictEqual(findRegionByUai("9871234J").nom, "Collectivités d'outre-mer");
+    assert.deepStrictEqual(findRegionByUai("UNKNOWN"), null);
+  });
+
+  it("Permet de trouver une région à partir d'un code INSEE", () => {
+    assert.deepStrictEqual(findRegionByCodeInsee("97416").nom, "La Réunion");
+    assert.deepStrictEqual(findRegionByCodeInsee("2B042").nom, "Corse");
+    assert.deepStrictEqual(findRegionByCodeInsee("75001").nom, "Île-de-France");
+  });
+
+  it("Permet de trouver une région avec son nom", () => {
+    assert.deepStrictEqual(findRegionByName("Île-de-France").code, "11");
+  });
+});

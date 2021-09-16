@@ -40,8 +40,7 @@ services:
       - mongodb
     environment:
       - ANNUAIRE_MONGODB_URI=mongodb://mongodb:27017/annuaire?retryWrites=true&w=majority
-      - ANNUAIRE_LOG_DESTINATIONS=stdout,mongodb
-      - ANNUAIRE_OUTPUT_DIR=/data
+      - ANNUAIRE_LOG_DESTINATIONS=stdout
 
   mongodb:
     image: mongo:5.0.2-focal

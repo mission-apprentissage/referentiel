@@ -1,6 +1,11 @@
 const env = require("env-var");
 
 module.exports = {
+  log: {
+    level: env.get("ANNUAIRE_LOG_LEVEL").default("info").asString(),
+    format: env.get("ANNUAIRE_LOG_FORMAT").default("pretty").asString(),
+    destinations: env.get("ANNUAIRE_LOG_DESTINATIONS").default("stdout").asString(),
+  },
   mongodb: {
     uri: env
       .get("ANNUAIRE_MONGODB_URI")

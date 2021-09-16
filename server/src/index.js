@@ -1,8 +1,9 @@
+require("dotenv").config();
 const server = require("./http/server");
 const logger = require("./common/logger");
 
-process.on("unhandledRejection", (e) => logger.error("An unexpected error occurred", e));
-process.on("uncaughtException", (e) => logger.error("An unexpected error occurred", e));
+process.on("unhandledRejection", (e) => logger.error(e, "An unexpected error occurred"));
+process.on("uncaughtException", (e) => logger.error(e, "An unexpected error occurred"));
 
 (async function () {
   const http = await server();

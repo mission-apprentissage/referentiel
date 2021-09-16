@@ -43,14 +43,14 @@ async function patchAcce(options = {}) {
           stats.updated += updated;
         }
       } catch (e) {
-        logger.error(`Impossible d'ajouter le siret pour l'UAI ${uai} `, e);
+        logger.error(e, `Impossible d'ajouter le siret pour l'UAI ${uai} `);
         stats.failed++;
       }
 
       try {
         stats.rattachements.updated += await updateRattachements(uai, siret);
       } catch (e) {
-        logger.error(`Impossible d'ajouter le siret pour le rattachement avec l'UAI ${uai} `, e);
+        logger.error(e, `Impossible d'ajouter le siret pour le rattachement avec l'UAI ${uai} `);
         stats.rattachements.failed++;
       }
     })

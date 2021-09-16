@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 const config = require("../../config");
-const schemas = require("./schemas");
-const indexes = require("./indexes");
+const collections = require("./collections");
+const logger = require("../logger");
 
 let clientHolder;
 
@@ -38,37 +38,52 @@ function getCollection(name) {
   return clientHolder.db().collection(name);
 }
 
-async function configureValidation(collectionName, getSchema) {
+async function configureIndexes(collection, options = {}) {
   ensureInitialization();
+  let shouldDropIndexes = options.dropIndexes || false;
+
+  if (!collection.createIndexes) {
+    return;
+  }
+
+  logger.info(`Configuring indexes for collection ${collection.name} (drop:${shouldDropIndexes})...`);
+  let dbCollection = getCollection(collection.name);
+  if (shouldDropIndexes) {
+    await dbCollection.dropIndexes();
+  }
+  return collection.createIndexes(dbCollection);
+}
+
+async function configureValidation(collection) {
+  ensureInitialization();
+  logger.info(`Configuring validation for collection ${collection.name}...`);
   let db = getDatabase();
   return db.command({
-    collMod: collectionName,
+    collMod: collection.name,
     validationLevel: "strict",
     validationAction: "error",
     validator: {
-      $jsonSchema: getSchema({ bson: true }),
+      $jsonSchema: collection.schema(),
     },
   });
 }
 
-async function configureIndexes(collectionName, getIndexes, options = {}) {
-  ensureInitialization();
-  let collection = getCollection(collectionName);
-  if (options.dropIndexes) {
-    await collection.dropIndexes();
+async function createCollectionIfNeeded(name) {
+  let db = getDatabase();
+  let collections = await db.listCollections().toArray();
+  if (!collections.find((c) => c.name === name)) {
+    await db.createCollection(name);
   }
-  return Promise.all(getIndexes(collection));
 }
 
 module.exports = {
   connectToMongodb,
   prepareDatabase: async (options) => {
     await Promise.all(
-      Object.keys(indexes).map((key) => configureIndexes(key, indexes[key])),
-      options
-    );
-    await Promise.all(
-      Object.keys(schemas).map((key) => configureValidation(key.replace(/Schema/g, ""), schemas[key].acceSchema))
+      Object.values(collections).map(async (col) => {
+        await createCollectionIfNeeded(col.name);
+        return Promise.all([configureIndexes(col, options), configureValidation(col, options)]);
+      })
     );
   },
   getDatabase,

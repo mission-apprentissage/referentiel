@@ -1,9 +1,9 @@
 const assert = require("assert");
-const { insertAcce } = require("./utils/fakeData");
-const patchAcce = require("../src/jobs/acce/patchAcce");
 const { Readable } = require("stream");
 const { oleoduc } = require("oleoduc");
-const { getCollection } = require("../src/common/db/mongodb");
+const { insertAcce } = require("../../utils/fakeData");
+const patchAcce = require("../../../src/jobs/acce/patchAcce");
+const { getCollection } = require("../../../src/common/db/mongodb");
 
 function createTestSource(array) {
   let name = "dummy";

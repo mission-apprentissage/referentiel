@@ -1,8 +1,8 @@
 const { omit } = require("lodash");
 const assert = require("assert");
-const { getMockedAcceApi } = require("./utils/apiMocks");
-const importAcce = require("../src/jobs/acce/importAcce");
-const { getCollection } = require("../src/common/db/mongodb");
+const { getMockedAcceApi } = require("../../utils/apiMocks");
+const importAcce = require("../../../src/jobs/acce/importAcce");
+const { getCollection } = require("../../../src/common/db/mongodb");
 
 describe(__filename, () => {
   it("Vérifie qu'on peut scrapper et importer un etablissement", async () => {
@@ -16,7 +16,7 @@ describe(__filename, () => {
 
     let stats = await importAcce({ acceApi: api });
 
-    let found = await getCollection("acce").findOne({}, { __v: 0 });
+    let found = await getCollection("acce").findOne({});
     assert.deepStrictEqual(omit(found, ["_id"]), {
       nom: "Centre de Formation d'Apprentis transport et logistique",
       uai: "0511972S",
@@ -53,6 +53,7 @@ describe(__filename, () => {
       },
       specificites: [],
       rattachements: {
+        fille: [],
         mere: [
           {
             uai: "0541958K",
@@ -62,7 +63,6 @@ describe(__filename, () => {
             commune: "Jarville-la-Malgrange",
           },
         ],
-        fille: [],
       },
       geojson: {
         type: "Feature",
@@ -96,7 +96,7 @@ describe(__filename, () => {
 
     await importAcce({ acceApi: api });
 
-    let found = await getCollection("acce").findOne({}, { __v: 0 });
+    let found = await getCollection("acce").findOne({});
     assert.ok(found.geoloc === undefined);
   });
 
