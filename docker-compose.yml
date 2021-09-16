@@ -6,7 +6,7 @@ services:
     container_name: annuaire_reverse_proxy
     build:
       context: reverse_proxy
-    mem_limit: 256m
+    mem_limit: 96m
     restart: unless-stopped
     ports:
       - 80:80
@@ -21,7 +21,7 @@ services:
     container_name: annuaire_ui
     build:
       context: ui
-    mem_limit: 256m
+    mem_limit: 96m
     networks:
       - annuaire_network
     depends_on:
@@ -32,7 +32,7 @@ services:
     container_name: annuaire_server
     build:
       context: server
-    mem_limit: 1g
+    mem_limit: 512m
     restart: unless-stopped
     networks:
       - annuaire_network
@@ -45,8 +45,8 @@ services:
   mongodb:
     image: mongo:5.0.2-focal
     container_name: annuaire_mongodb
-    command: --wiredTigerCacheSizeGB 1 --port 27017
-    mem_limit: 1g
+    command: --wiredTigerCacheSizeGB 3 --port 27017
+    mem_limit: 3g
     restart: unless-stopped
     networks:
       - annuaire_network

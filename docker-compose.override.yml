@@ -12,6 +12,7 @@ services:
     build:
       args:
         - ANNUAIRE_ENV=dev
+        - ANNUAIRE_NO_BUILD=true
     environment:
       - FAST_REFRESH=false
     volumes:
