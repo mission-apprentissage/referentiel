@@ -107,7 +107,7 @@ cli
   .option("--save", "Sauvegarde les résultats dans les stats")
   .action((options) => {
     runScript(async () => {
-      let sourceNames = ["deca", "catalogue", "sifa-ramsese"];
+      let sourceNames = ["deca", "tables-de-correspondances", "sifa-ramsese"];
       let sources = sourceNames.map((name) => createSource(name));
       return computeStats(sources, options);
     });

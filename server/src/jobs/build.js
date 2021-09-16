@@ -23,7 +23,7 @@ async function build(options = {}) {
     "anasup",
     "compagnons-du-devoir",
     "deca",
-    "catalogue",
+    "tables-de-correspondances",
     "gesti",
     //"ideo2",
     "opcoep",
@@ -37,7 +37,7 @@ async function build(options = {}) {
   ]);
 
   await collectAll(["onisep", "onisep-structure"]);
-  await collectAll(["sirene", "catalogue-formations"], { geoAdresseApi });
+  await collectAll(["sirene", "catalogue"], { geoAdresseApi });
 
   await consolidate().then((res) => stats.push({ consolidation: res }));
 

@@ -21,7 +21,7 @@ function computeCorrespondance(etablissement) {
   let sources = {
     deca: getUAI("deca", etablissement),
     sifa_ramsese: getUAI("sifa-ramsese", etablissement),
-    catalogue: getUAI("catalogue", etablissement),
+    catalogue: getUAI("tables-de-correspondances", etablissement),
   };
 
   if (!etablissement.statut || etablissement.statut === "fermé") {
@@ -40,7 +40,9 @@ function computeCorrespondance(etablissement) {
   }
 
   let uaiAExpertiser = etablissement.uais.find((u) => {
-    let sources = u.sources.filter((s) => s.includes("deca") || s.includes("sifa-ramsese") || s.includes("catalogue"));
+    let sources = u.sources.filter(
+      (s) => s.includes("deca") || s.includes("sifa-ramsese") || s.includes("tables-de-correspondances")
+    );
     return sources.length > 1;
   })?.uai;
 

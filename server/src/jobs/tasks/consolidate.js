@@ -13,10 +13,14 @@ async function validateUAI() {
     let uaiFilter = uai ? { uai } : {};
     return {
       $or: [
-        { uais: { $elemMatch: { sources: { $all: ["deca", "sifa-ramsese", "catalogue"] }, ...uaiFilter } } },
+        {
+          uais: {
+            $elemMatch: { sources: { $all: ["deca", "sifa-ramsese", "tables-de-correspondances"] }, ...uaiFilter },
+          },
+        },
         {
           uais: { $elemMatch: { sources: { $all: ["deca", "sifa-ramsese"] }, ...uaiFilter } },
-          "uais.sources": { $ne: "catalogue" },
+          "uais.sources": { $ne: "tables-de-correspondances" },
         },
       ],
     };
@@ -60,7 +64,8 @@ async function validateUAI() {
       .stream(),
     writeData(async (etablissement) => {
       let mostPopularUAI = etablissement.uais.reduce((acc, u) => {
-        let filterSources = (array) => array.filter((s) => ["deca", "sifa-ramsese", "catalogue"].includes(s));
+        let filterSources = (array) =>
+          array.filter((s) => ["deca", "sifa-ramsese", "tables-de-correspondances"].includes(s));
         return filterSources(acc.sources).length < filterSources(u.sources).length ? u : acc;
       }).uai;
 

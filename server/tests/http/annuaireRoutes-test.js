@@ -240,7 +240,7 @@ describe(__filename, () => {
         siret: "11111111100001",
         uais: [
           {
-            sources: ["catalogue-formations"],
+            sources: ["catalogue"],
             uai: "1111111S",
             valide: true,
           },
@@ -250,12 +250,12 @@ describe(__filename, () => {
         siret: "33333333300008",
         uais: [
           {
-            sources: ["catalogue-formations"],
+            sources: ["catalogue"],
             uai: "1111111S",
             valide: true,
           },
           {
-            sources: ["catalogue-formations"],
+            sources: ["catalogue"],
             uai: "2222222S",
             valide: true,
           },
