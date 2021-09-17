@@ -590,7 +590,7 @@ describe(__filename, () => {
         email: "robert@formation.fr",
         confirmé: false,
         sources: ["catalogue"],
-        _extra: { catalogue: ["01_GE107880|01_GE339324|01_GE520062|76930"] },
+        _extras: { catalogue: ["01_GE107880|01_GE339324|01_GE520062|76930"] },
       },
     ]);
     assert.deepStrictEqual(stats, {

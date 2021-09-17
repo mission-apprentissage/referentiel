@@ -352,14 +352,14 @@ describe(__filename, () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        contacts: [{ email: "jacques@dupont.fr", confirmé: false, _extra: { aSource: "some-data-to-store" } }],
+        contacts: [{ email: "jacques@dupont.fr", confirmé: false, _extras: { aSource: "some-data-to-store" } }],
       },
     ]);
 
     await collectSources(source);
 
     let found = await dbCollection("annuaire").findOne({}, { _id: 0 });
-    assert.deepStrictEqual(found.contacts[0]._extra, { dummy: { aSource: "some-data-to-store" } });
+    assert.deepStrictEqual(found.contacts[0]._extras, { dummy: { aSource: "some-data-to-store" } });
   });
 
   it("Vérifie qu'on peut collecter des relations", async () => {

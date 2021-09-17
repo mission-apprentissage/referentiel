@@ -47,11 +47,11 @@ module.exports = async (referentiel) => {
         );
 
         if (res.upsertedCount) {
-          logger.debug(`[Annuaire][Referentiel] Etablissement ${siret} created`);
+          logger.info(`[Annuaire][Referentiel] Etablissement ${siret} created`);
           stats.created += res.upsertedCount;
         } else if (res.modifiedCount) {
           stats.updated += res.modifiedCount;
-          logger.debug(`[Annuaire][Referentiel] Etablissement ${siret} updated`);
+          logger.info(`[Annuaire][Referentiel] Etablissement ${siret} updated`);
         }
       } catch (e) {
         stats.failed++;

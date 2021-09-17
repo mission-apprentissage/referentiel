@@ -55,7 +55,7 @@ module.exports = {
               email: string(),
               confirmé: boolean(),
               sources: arrayOf(string()),
-              _extra: object({}, { additionalProperties: true }),
+              _extras: object({}, { additionalProperties: true }),
             },
             { required: ["email", "confirmé", "sources"] }
           )

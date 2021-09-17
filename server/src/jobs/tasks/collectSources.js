@@ -57,7 +57,7 @@ async function mergeContacts(from, etablissement, contacts) {
       ...contact,
       confirmé: contact.confirmé || false,
       sources: uniq([...(found.sources || []), from]),
-      ...(contact._extra ? { _extra: { ...(found._extra || {}), [from]: contact._extra } } : {}),
+      ...(contact._extras ? { _extras: { ...(found._extras || {}), [from]: contact._extras } } : {}),
     });
     return acc;
   }, []);
@@ -160,7 +160,7 @@ module.exports = async (array, options = {}) => {
         let nbModifiedDocuments = res.modifiedCount;
         if (nbModifiedDocuments) {
           stats[from].updated += nbModifiedDocuments;
-          logger.debug(`[Annuaire][Collect][${from}] Etablissement ${etablissement.siret} updated`);
+          logger.info(`[Annuaire][Collect][${from}] Etablissement ${etablissement.siret} updated`);
         }
       } catch (e) {
         stats[from].failed++;

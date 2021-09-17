@@ -46,7 +46,7 @@ async function buildRelations(siret, formations) {
 
       return {
         siret: relationSiret,
-        label,
+        ...(label ? { label } : {}),
         type: isFormateurType ? "formateur" : "gestionnaire",
       };
     });
@@ -85,8 +85,8 @@ async function buildCertifications(siret, formations) {
       .map(async (f) => {
         return {
           code: f.rncp_code,
-          label: f.rncp_intitule,
           type: "rncp",
+          ...(f.rncp_intitule ? { label: f.rncp_intitule } : {}),
         };
       })
   );
@@ -132,10 +132,10 @@ function buildContacts(formations) {
         acc.push({
           email: f.email,
           confirmé: false,
-          _extra: [f.id_rco_formation],
+          _extras: [f.id_rco_formation],
         });
       } else {
-        found._extra = uniq([...found._extra, f.id_rco_formation]);
+        found._extras = uniq([...found._extras, f.id_rco_formation]);
       }
 
       return acc;
