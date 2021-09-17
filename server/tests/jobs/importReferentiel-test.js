@@ -14,12 +14,12 @@ function createTestReferentiel(array) {
 }
 
 describe(__filename, () => {
-  it("Vérifie qu'on peut initialiser un annuaire à partir d'un référentiel", async () => {
+  it("Vérifie qu'on peut importer un référentiel", async () => {
     let referentiel = createTestReferentiel([{ siret: "11111111100006" }]);
 
     let results = await importReferentiel(referentiel);
 
-    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
+    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
     assert.deepStrictEqual(omit(found, ["_meta"]), {
       siret: "11111111100006",
       referentiels: ["test"],
@@ -46,7 +46,7 @@ describe(__filename, () => {
 
     let results = await importReferentiel(referentiel);
 
-    await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(results, {
       total: 2,
       created: 1,
@@ -64,7 +64,7 @@ describe(__filename, () => {
 
     let results = await importReferentiel(referentiel);
 
-    let count = await dbCollection("annuaire").countDocuments({ siret: "11111111100006" });
+    let count = await dbCollection("etablissements").countDocuments({ siret: "11111111100006" });
     assert.strictEqual(count, 0);
     assert.deepStrictEqual(results, {
       total: 1,

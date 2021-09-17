@@ -2,7 +2,7 @@ const { object, objectId, string, boolean, arrayOf, date } = require("./schemas/
 const adresseSchema = require("./schemas/adresseSchema");
 
 module.exports = {
-  name: "annuaire",
+  name: "etablissements",
   schema: () => {
     let required = [
       "siret",

@@ -1,5 +1,5 @@
 module.exports = {
-  annuaire: require("./annuaire"),
+  etablissements: require("./etablissements"),
   acce: require("./acce"),
   cfd: require("./cfd"),
 };

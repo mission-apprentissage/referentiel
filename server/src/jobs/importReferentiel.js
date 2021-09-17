@@ -22,7 +22,7 @@ module.exports = async (referentiel) => {
       }
 
       try {
-        let res = await dbCollection("annuaire").updateOne(
+        let res = await dbCollection("etablissements").updateOne(
           { siret },
           {
             $set: {
@@ -47,15 +47,15 @@ module.exports = async (referentiel) => {
         );
 
         if (res.upsertedCount) {
-          logger.info(`[Annuaire][Referentiel] Etablissement ${siret} created`);
+          logger.info(`[Referentiel] Etablissement ${siret} created`);
           stats.created += res.upsertedCount;
         } else if (res.modifiedCount) {
           stats.updated += res.modifiedCount;
-          logger.info(`[Annuaire][Referentiel] Etablissement ${siret} updated`);
+          logger.info(`[Referentiel] Etablissement ${siret} updated`);
         }
       } catch (e) {
         stats.failed++;
-        logger.error(e, `[Referentiel] Impossible d'ajouter le document avec le siret ${siret} dans l'annuaire`);
+        logger.error(e, `[Referentiel] Impossible d'ajouter le document avec le siret ${siret}`);
       }
     })
   );

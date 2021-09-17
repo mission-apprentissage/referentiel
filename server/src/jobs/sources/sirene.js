@@ -59,7 +59,7 @@ module.exports = (options = {}) => {
       let organismes = options.organismes || (await loadOrganismeDeFormations());
 
       return oleoduc(
-        dbCollection("annuaire").find(filters, { siret: 1 }).stream(),
+        dbCollection("etablissements").find(filters, { siret: 1 }).stream(),
         transformData(
           async ({ siret }) => {
             try {

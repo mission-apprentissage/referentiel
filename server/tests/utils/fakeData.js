@@ -3,8 +3,8 @@ const { dbCollection } = require("../../src/common/db/mongodb");
 const faker = require("faker");
 
 module.exports = {
-  insertAnnuaireStats(custom) {
-    return dbCollection("annuaireStats").insertOne(
+  insertStats(custom) {
+    return dbCollection("stats").insertOne(
       merge(
         {},
         {
@@ -129,8 +129,8 @@ module.exports = {
       )
     );
   },
-  insertAnnuaire(custom) {
-    return dbCollection("annuaire").insertOne(
+  insertEtablissement(custom) {
+    return dbCollection("etablissements").insertOne(
       merge(
         {},
         {

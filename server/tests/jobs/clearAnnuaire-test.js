@@ -1,15 +1,15 @@
 const assert = require("assert");
 const { dbCollection } = require("../../src/common/db/mongodb");
-const cleanAll = require("../../src/jobs/clear");
-const { insertAnnuaire } = require("../utils/fakeData");
+const cleanAll = require("../../src/jobs/clearAll");
+const { insertEtablissement } = require("../utils/fakeData");
 
 describe(__filename, () => {
-  it("Vérifie qu'on peut supprimer un annuaire", async () => {
-    await insertAnnuaire();
+  it("Vérifie qu'on peut supprimer les établissements", async () => {
+    await insertEtablissement();
 
     let stats = await cleanAll();
 
-    let count = await dbCollection("annuaire").countDocuments();
+    let count = await dbCollection("etablissements").countDocuments();
     assert.strictEqual(count, 0);
     assert.deepStrictEqual(stats, {
       deleted: 1,

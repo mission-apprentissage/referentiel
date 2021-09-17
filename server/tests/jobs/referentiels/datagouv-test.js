@@ -14,7 +14,7 @@ describe(__filename, () => {
 
     let results = await importReferentiel(referentiel);
 
-    let docs = await dbCollection("annuaire").find({}).toArray();
+    let docs = await dbCollection("etablissements").find({}).toArray();
     assert.strictEqual(docs.length, 1);
     assert.deepStrictEqual(docs[0].referentiels, ["datagouv"]);
     assert.deepStrictEqual(results, {

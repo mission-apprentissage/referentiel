@@ -208,7 +208,7 @@ async function computeStats(sources, options) {
   };
 
   if (options.save) {
-    await dbCollection("annuaireStats").insertOne({
+    await dbCollection("stats").insertOne({
       created_at: new Date(),
       ...stats,
     });

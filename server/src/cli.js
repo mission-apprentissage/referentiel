@@ -11,7 +11,7 @@ const collectSources = require("./jobs/tasks/collectSources");
 const consolidate = require("./jobs/tasks/consolidate");
 const etablissementAsCsvStream = require("./jobs/tasks/etablissementAsCsvStream");
 const etablissementAsJsonStream = require("./jobs/tasks/etablissementAsJsonStream");
-const clear = require("./jobs/clear");
+const clear = require("./jobs/clearAll");
 const computeStats = require("./jobs/computeStats");
 const importCFD = require("./jobs/importCFD");
 const importReferentiel = require("./jobs/importReferentiel");
@@ -79,7 +79,7 @@ cli
 
 cli
   .command("export")
-  .description("Exporte l'annuaire")
+  .description("Exporte les établissements")
   .option("--filter <filter>", "Filtre au format json", JSON.parse)
   .option("--limit <limit>", "Nombre maximum d'éléments à exporter", parseInt)
   .option("--json", "Exporte les données au format json")

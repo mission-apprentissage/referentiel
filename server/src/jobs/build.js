@@ -4,7 +4,7 @@ const collectSources = require("./tasks/collectSources");
 const consolidate = require("./tasks/consolidate");
 const importReferentiel = require("./importReferentiel");
 const { createReferentiel } = require("./referentiels/referentiels");
-const clearAnnuaire = require("./clear");
+const clearAll = require("./clearAll");
 
 async function build(options = {}) {
   let geoAdresseApi = new GeoAdresseApi(); //Allow all sources to share the same api instance (ie. rate limit)
@@ -14,7 +14,7 @@ async function build(options = {}) {
     return collectSources(sources, options).then((res) => stats.push({ collect: res }));
   };
 
-  await clearAnnuaire().then((res) => stats.push({ clean: res }));
+  await clearAll().then((res) => stats.push({ clean: res }));
 
   await importReferentiel(createReferentiel("gof")).then((res) => stats.push({ referentiel: res }));
 

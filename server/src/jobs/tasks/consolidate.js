@@ -3,7 +3,7 @@ const { dbCollection } = require("../../common/db/mongodb");
 const { oleoduc, writeData } = require("oleoduc");
 
 async function validateUAI() {
-  let collection = dbCollection("annuaire");
+  let collection = dbCollection("etablissements");
   let stats = {
     validated: 0,
     conflicted: 0,

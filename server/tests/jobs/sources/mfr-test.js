@@ -3,11 +3,11 @@ const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/tasks/collectSources");
 const { createStream } = require("../../utils/testUtils");
-const { insertAnnuaire } = require("../../utils/fakeData");
+const { insertEtablissement } = require("../../utils/fakeData");
 
 describe(__filename, () => {
   it("Vérifie qu'on peut collecter des informations du fichier mfr avec le siret", async () => {
-    await insertAnnuaire({ siret: "11111111100006" });
+    await insertEtablissement({ siret: "11111111100006" });
     let source = createSource("mfr", {
       input: createStream(
         `uai;uai_code_educnationale;siret
@@ -17,7 +17,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["mfr"]);
     assert.deepStrictEqual(found.uais, [
       {
@@ -42,7 +42,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut collecter des informations du fichier mfr avec un uai", async () => {
-    await insertAnnuaire({
+    await insertEtablissement({
       uai: "0111111Y",
       siret: "11111111100006",
     });
@@ -55,7 +55,7 @@ describe(__filename, () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["mfr"]);
     assert.deepStrictEqual(found.uais[1], {
       sources: ["mfr"],
@@ -65,7 +65,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut collecter des informations du fichier mfr avec un uai_code_educnationale", async () => {
-    await insertAnnuaire({
+    await insertEtablissement({
       uai: "0011073X",
       siret: "11111111100006",
     });
@@ -78,7 +78,7 @@ describe(__filename, () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("annuaire").findOne({ "uais.uai": "0011073X" });
+    let found = await dbCollection("etablissements").findOne({ "uais.uai": "0011073X" });
     assert.deepStrictEqual(found.reseaux, ["mfr"]);
     assert.deepStrictEqual(found.uais[0], {
       sources: ["mfr"],

@@ -1,11 +1,11 @@
 const { strictEqual, deepStrictEqual, ok } = require("assert");
-const { insertAnnuaire, insertAnnuaireStats } = require("../utils/fakeData");
+const { insertEtablissement, insertStats } = require("../utils/fakeData");
 const { startServer } = require("../utils/testUtils");
 
 describe(__filename, () => {
   it("Vérifie qu'on peut lister des établissements", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100001",
       raison_sociale: "Centre de formation",
       _meta: {
@@ -76,8 +76,8 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut rechercher des établissements à partir d'un uai", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire();
-    await insertAnnuaire({
+    await insertEtablissement();
+    await insertEtablissement({
       uai: "0010856A",
     });
 
@@ -89,8 +89,8 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut rechercher des établissements à partir d'un siret", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire();
-    await insertAnnuaire({
+    await insertEtablissement();
+    await insertEtablissement({
       siret: "11111111100001",
     });
 
@@ -102,8 +102,8 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut rechercher des établissements à partir d'un siren", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire();
-    await insertAnnuaire({
+    await insertEtablissement();
+    await insertEtablissement({
       siret: "11111111100001",
     });
 
@@ -115,8 +115,8 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut rechercher des établissements à partir d'un uai (fulltext)", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire();
-    await insertAnnuaire({
+    await insertEtablissement();
+    await insertEtablissement({
       uais: [
         {
           sources: ["dummy"],
@@ -134,8 +134,8 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut rechercher des établissements à partir d'un siret (fulltext)", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire();
-    await insertAnnuaire({
+    await insertEtablissement();
+    await insertEtablissement({
       siret: "11111111100001",
     });
 
@@ -147,13 +147,13 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut rechercher des établissements à partir d'une académie", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100001",
       adresse: {
         academie: { code: "01", nom: "Paris" },
       },
     });
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "22222222200002",
       adresse: {
         academie: { code: "02", nom: "Aix-Marseille" },
@@ -169,13 +169,13 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut rechercher des établissements à partir d'une région", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100001",
       adresse: {
         region: { code: "11", nom: "Île-de-France" },
       },
     });
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "22222222200002",
       adresse: {
         region: { code: "93", nom: "Provence-Alpes-Côte d'Azur" },
@@ -192,7 +192,7 @@ describe(__filename, () => {
   it("Vérifie qu'on peut trier les établissements par nombre de relations", async () => {
     const { httpClient } = await startServer();
     await Promise.all([
-      insertAnnuaire({
+      insertEtablissement({
         siret: "11111111100001",
         relations: [
           {
@@ -203,7 +203,7 @@ describe(__filename, () => {
           },
         ],
       }),
-      insertAnnuaire({
+      insertEtablissement({
         siret: "33333333300008",
         relations: [
           {
@@ -236,7 +236,7 @@ describe(__filename, () => {
   it("Vérifie qu'on peut trier les établissements par nombre d'uais secondaires", async () => {
     const { httpClient } = await startServer();
     await Promise.all([
-      insertAnnuaire({
+      insertEtablissement({
         siret: "11111111100001",
         uais: [
           {
@@ -246,7 +246,7 @@ describe(__filename, () => {
           },
         ],
       }),
-      insertAnnuaire({
+      insertEtablissement({
         siret: "33333333300008",
         uais: [
           {
@@ -276,7 +276,7 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut limiter les champs renvoyés pour la liste des établissements", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100001",
       raison_sociale: "Centre de formation",
       _meta: {
@@ -306,9 +306,9 @@ describe(__filename, () => {
   it("Vérifie qu'on peut peut limiter le établissement par page", async () => {
     const { httpClient } = await startServer();
     await Promise.all([
-      insertAnnuaire({ siret: "11111111100001" }),
-      insertAnnuaire({ siret: "22222222200002" }),
-      insertAnnuaire({ siret: "33333333300008" }),
+      insertEtablissement({ siret: "11111111100001" }),
+      insertEtablissement({ siret: "22222222200002" }),
+      insertEtablissement({ siret: "33333333300008" }),
     ]);
 
     let response = await httpClient.get("/api/v1/etablissements?items_par_page=1&page=1");
@@ -323,7 +323,7 @@ describe(__filename, () => {
   it("Vérifie qu'on peut filtrer les établissements avec des anomalies", async () => {
     const { httpClient } = await startServer();
     await Promise.all([
-      insertAnnuaire({
+      insertEtablissement({
         siret: "11111111100001",
         _meta: {
           anomalies: [
@@ -335,7 +335,7 @@ describe(__filename, () => {
           ],
         },
       }),
-      insertAnnuaire({
+      insertEtablissement({
         siret: "333333333000083",
       }),
     ]);
@@ -390,7 +390,7 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut obtenir un établissement", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100001",
       raison_sociale: "Centre de formation",
     });
@@ -443,7 +443,7 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut limiter les champs renvoyés pour un établissement", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100001",
       raison_sociale: "Centre de formation",
       _meta: {
@@ -462,7 +462,7 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut exclure des champs renvoyés pour un établissement", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100001",
       raison_sociale: "Centre de formation",
       _meta: {
@@ -493,8 +493,8 @@ describe(__filename, () => {
 
   it("Vérifie qu'on peut lister les stats", async () => {
     const { httpClient } = await startServer();
-    await insertAnnuaire({ siret: "11111111100001" });
-    await insertAnnuaireStats();
+    await insertEtablissement({ siret: "11111111100001" });
+    await insertStats();
 
     let response = await httpClient.get("/api/v1/stats");
 

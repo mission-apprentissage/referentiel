@@ -3,11 +3,11 @@ const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/tasks/collectSources");
 const { createStream } = require("../../utils/testUtils");
-const { insertAnnuaire } = require("../../utils/fakeData");
+const { insertEtablissement } = require("../../utils/fakeData");
 
 describe(__filename, () => {
   it("Vérifie qu'on peut collecter des emails à partir du fichier des voeux-affelnet", async () => {
-    await insertAnnuaire({ siret: "11111111100006", uai: "0111111Y" });
+    await insertEtablissement({ siret: "11111111100006", uai: "0111111Y" });
     let source = await createSource("voeux-affelnet", {
       input: createStream(
         `email;uai
@@ -17,7 +17,7 @@ describe(__filename, () => {
 
     let stats = await collectSources(source);
 
-    let found = await dbCollection("annuaire").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.contacts, [
       {
         email: "robert@formation.fr",

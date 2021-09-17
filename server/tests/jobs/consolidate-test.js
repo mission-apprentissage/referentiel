@@ -1,12 +1,12 @@
 const assert = require("assert");
 const { dbCollection } = require("../../src/common/db/mongodb");
-const { insertAnnuaire } = require("../utils/fakeData");
+const { insertEtablissement } = require("../utils/fakeData");
 const consolidate = require("../../src/jobs/tasks/consolidate");
 const { omit } = require("lodash");
 
 describe(__filename, () => {
   it("Vérifie qu'on peut valider un UAI", async () => {
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100006",
       uais: [
         {
@@ -19,7 +19,7 @@ describe(__filename, () => {
 
     let stats = await consolidate();
 
-    let found = await dbCollection("annuaire").findOne();
+    let found = await dbCollection("etablissements").findOne();
     assert.deepStrictEqual(found.uai, "0111111Y");
     assert.deepStrictEqual(stats, {
       validateUAI: {
@@ -30,7 +30,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut valider un UAI (+catalogue)", async () => {
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100006",
       uais: [
         {
@@ -43,12 +43,12 @@ describe(__filename, () => {
 
     await consolidate();
 
-    let found = await dbCollection("annuaire").findOne();
+    let found = await dbCollection("etablissements").findOne();
     assert.deepStrictEqual(found.uai, "0111111Y");
   });
 
   it("Vérifie qu'on ne valide pas un UAI quand l'UAI du catalogue est différent", async () => {
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100006",
       uais: [
         {
@@ -66,12 +66,12 @@ describe(__filename, () => {
 
     await consolidate();
 
-    let found = await dbCollection("annuaire").findOne();
+    let found = await dbCollection("etablissements").findOne();
     assert.deepStrictEqual(found.uai, undefined);
   });
 
   it("Vérifie qu'on valide l'UAI le plus populaire", async () => {
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100006",
       uais: [
         {
@@ -89,13 +89,13 @@ describe(__filename, () => {
 
     await consolidate();
 
-    let found = await dbCollection("annuaire").findOne();
+    let found = await dbCollection("etablissements").findOne();
     assert.deepStrictEqual(found.uai, "0222222W");
   });
 
   it("Vérifie qu'on détecte un UAI en conflict", async () => {
     await Promise.all([
-      insertAnnuaire(
+      insertEtablissement(
         {
           siret: "11111111100006",
           uais: [
@@ -106,7 +106,7 @@ describe(__filename, () => {
             },
           ],
         },
-        insertAnnuaire({
+        insertEtablissement({
           siret: "22222222200022",
           uais: [
             {
@@ -121,7 +121,7 @@ describe(__filename, () => {
 
     let stats = await consolidate();
 
-    let found = await dbCollection("annuaire").findOne({ siret: "22222222200022" });
+    let found = await dbCollection("etablissements").findOne({ siret: "22222222200022" });
     assert.ok(!found.uai);
     assert.deepStrictEqual(
       found._meta.anomalies.map((a) => omit(a, ["date"])),
@@ -143,7 +143,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut ignorer les établissements qui ne peuvent pas être validé", async () => {
-    await insertAnnuaire({
+    await insertEtablissement({
       siret: "11111111100006",
       uais: [
         {
@@ -156,7 +156,7 @@ describe(__filename, () => {
 
     let stats = await consolidate();
 
-    let found = await dbCollection("annuaire").findOne();
+    let found = await dbCollection("etablissements").findOne();
     assert.ok(!found.uai);
     assert.deepStrictEqual(stats, {
       validateUAI: {

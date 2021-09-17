@@ -18,9 +18,9 @@ module.exports = () => {
   /**
    * @swagger
    *
-   * /annuaire/etablissements:
+   * /api/v1/etablissements:
    *   get:
-   *     summary: Récupérer la liste des établissements de l'annuaire
+   *     summary: Récupérer la liste des établissements
    *     parameters:
    *       - in: query
    *         name: siret
@@ -119,7 +119,7 @@ module.exports = () => {
 
       let projection = buildProjection(champs);
       let { cursor, pagination } = await paginateAggregationWithCursor(
-        dbCollection("annuaire"),
+        dbCollection("etablissements"),
         [
           {
             $match: {
@@ -173,7 +173,7 @@ module.exports = () => {
   /**
    * @swagger
    *
-   * /annuaire/etablissements/{siret}:
+   * /api/v1/etablissements/{siret}:
    *   get:
    *     summary: Récupérer les informations d'un établissement
    *     parameters:
@@ -215,7 +215,7 @@ module.exports = () => {
       }).validateAsync({ ...req.params, ...req.query }, { abortEarly: false });
 
       let projection = buildProjection(champs);
-      let etablissement = await dbCollection("annuaire").findOne({ siret }, { projection });
+      let etablissement = await dbCollection("etablissements").findOne({ siret }, { projection });
 
       if (!etablissement) {
         throw Boom.notFound("Siret inconnu");
@@ -236,7 +236,7 @@ module.exports = () => {
       }).validateAsync(req.query, { abortEarly: false });
 
       let { find, pagination } = await paginate(
-        dbCollection("annuaireStats"),
+        dbCollection("stats"),
         {},
         { page, limit, projection: { _id: 0 }, sort: { created_at: -1 } }
       );

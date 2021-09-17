@@ -155,7 +155,7 @@ module.exports = (custom = {}) => {
       let filters = options.filters || {};
 
       return oleoduc(
-        dbCollection("annuaire").find(filters, { siret: 1 }).stream(),
+        dbCollection("etablissements").find(filters, { siret: 1 }).stream(),
         transformData(
           async ({ siret }) => {
             try {

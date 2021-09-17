@@ -7,7 +7,7 @@ function etablissementAsJsonStream(options = {}) {
   let limit = options.limit || Number.MAX_SAFE_INTEGER;
 
   return oleoduc(
-    dbCollection("annuaire").find(filter).limit(limit).cursor(),
+    dbCollection("etablissements").find(filter).limit(limit).cursor(),
     transformData((data) => {
       return {
         siret: data.siret,
