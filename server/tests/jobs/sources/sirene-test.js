@@ -5,6 +5,7 @@ const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
 const { importEtablissements } = require("../../utils/testUtils");
 const { getMockedSireneApi, getMockedGeoAddresseApi } = require("../../utils/apiMocks");
+const { DateTime } = require("luxon");
 
 function createSireneSource(custom = {}) {
   return createSource("sirene", {
@@ -396,5 +397,17 @@ describe(__filename, () => {
         failed: 1,
       },
     });
+  });
+
+  it("Vérifie qu'on met en cache les données de l'API sirene", async () => {
+    await importEtablissements();
+    let source = createSireneSource();
+
+    await collectSources(source);
+
+    let found = await dbCollection("cache").findOne({ _id: "sirene_111111111" });
+    assert.deepStrictEqual(found._id, "sirene_111111111");
+    assert.ok(found.expires_at > DateTime.now().plus({ hour: 24 }).toJSDate());
+    assert.ok(found.value);
   });
 });

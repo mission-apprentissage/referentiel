@@ -1,6 +1,6 @@
-const logger = require("../../common/logger");
+const logger = require("./logger");
 
-class Cache {
+class InMemoryCache {
   constructor(cacheName) {
     this.name = cacheName;
     this.cache = {};
@@ -34,4 +34,4 @@ class Cache {
   }
 }
 
-module.exports = Cache;
+module.exports = InMemoryCache;

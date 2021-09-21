@@ -3,7 +3,7 @@ const luhn = require("fast-luhn");
 const { intersection, union, range, uniq } = require("lodash");
 const logger = require("../common/logger");
 const SireneApi = require("../common/apis/SireneApi");
-const Cache = require("../common/apis/Cache");
+const InMemoryCache = require("../common/InMemoryCache");
 const { validateUAI } = require("../common/utils/uaiUtils");
 const { dbCollection } = require("../common/db/mongodb");
 
@@ -96,7 +96,7 @@ function buildRecoupement(valides, field, mapValues = (values) => values) {
 
 async function validateSources(sources) {
   let sireneApi = new SireneApi();
-  let cache = new Cache("siret");
+  let cache = new InMemoryCache("siret");
   let validation = {};
   let valides = {};
   let createSourceUniques = () => ({ uais: new Set(), sirets: new Set(), uais_sirets: new Set() });

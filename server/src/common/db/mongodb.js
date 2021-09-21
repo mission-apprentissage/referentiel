@@ -51,14 +51,18 @@ async function configureIndexes(collection, options = {}) {
   if (shouldDropIndexes) {
     await col.dropIndexes();
   }
-  return collection.createIndexes(col);
+  await collection.createIndexes(col);
 }
 
 async function configureValidation(collection) {
   ensureInitialization();
+  if (!collection.schema) {
+    return;
+  }
+
   logger.info(`Configuring validation for collection ${collection.name}...`);
   let db = getDatabase();
-  return db.command({
+  await db.command({
     collMod: collection.name,
     validationLevel: "strict",
     validationAction: "error",
