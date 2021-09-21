@@ -44,10 +44,10 @@ function getCsvExport(name) {
 
 async function importFormationDiplomes(options = {}) {
   let stats = {};
-  let nFormationStream = options.nFormationDiplomeCsvStream || (await getCsvExport("N_FORMATION_DIPLOME"));
+  let nFormationStream = options.nFormationDiplomeCsvStream || getCsvExport("N_FORMATION_DIPLOME");
   stats.N_FORMATION_DIPLOME = await importCsv(nFormationStream);
 
-  let vFormationStream = options.vFormationDiplomeCsvStream || (await getCsvExport("V_FORMATION_DIPLOME"));
+  let vFormationStream = options.vFormationDiplomeCsvStream || getCsvExport("V_FORMATION_DIPLOME");
   stats.V_FORMATION_DIPLOME = await importCsv(vFormationStream);
 
   return stats;

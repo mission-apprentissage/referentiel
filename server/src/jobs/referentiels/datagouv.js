@@ -11,7 +11,7 @@ module.exports = (custom = {}) => {
   return {
     name,
     async stream() {
-      let input = custom.input || (await downloadFromDatagouv());
+      let input = custom.input || downloadFromDatagouv();
 
       return oleoduc(
         input,
