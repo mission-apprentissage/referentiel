@@ -4,7 +4,7 @@ const util = require("util");
 const chalk = require("chalk");
 const { Base, Spec } = Mocha.reporters;
 const { inherits } = require("util");
-const { Duration } = require("luxon");
+const ms = require("ms"); // eslint-disable-line node/no-unpublished-require
 const color = Base.color;
 const {
   EVENT_RUN_BEGIN,
@@ -109,7 +109,7 @@ function summary(stats) {
   log(
     color("bright pass", " ") + color("green", " %d passing") + color("light", " (%s)"),
     stats.passes || 0,
-    Duration.fromObject({ milliseconds: stats.duration }).toFormat("ss 'secondes'")
+    ms(stats.duration)
   );
 
   if (stats.pending) {
@@ -131,7 +131,7 @@ function epilogue(stats, failures) {
   summary(stats);
 }
 
-function SpecReporterWithErrorDetails(runner, options) {
+function MochaReporter(runner, options) {
   Base.call(this, runner, options);
   var self = this;
   var indents = 0;
@@ -143,6 +143,7 @@ function SpecReporterWithErrorDetails(runner, options) {
 
   runner.on(EVENT_RUN_BEGIN, function () {
     log();
+    log(indent() + "********** TESTS **********");
   });
 
   runner.on(EVENT_SUITE_BEGIN, function (suite) {
@@ -179,11 +180,12 @@ function SpecReporterWithErrorDetails(runner, options) {
   });
 
   runner.once(EVENT_RUN_END, function () {
+    log(indent() + "********** SUMMARY ********** ");
     epilogue(self.stats, self.failures);
   });
 }
 
-inherits(SpecReporterWithErrorDetails, Spec);
+inherits(MochaReporter, Spec);
 
-SpecReporterWithErrorDetails.description = "Same as spec but with all error properties";
-exports = module.exports = SpecReporterWithErrorDetails;
+MochaReporter.description = "Same as spec but with all error properties";
+exports = module.exports = MochaReporter;
