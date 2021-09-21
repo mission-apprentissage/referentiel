@@ -1,9 +1,9 @@
 const { oleoduc, writeData, filterData, mergeStreams } = require("oleoduc");
 const { uniq, isEmpty } = require("lodash");
-const { flattenObject, isError } = require("../../common/utils/objectUtils");
-const { validateUAI } = require("../../common/utils/uaiUtils");
-const logger = require("../../common/logger");
-const { dbCollection } = require("../../common/db/mongodb");
+const { flattenObject, isError } = require("../common/utils/objectUtils");
+const { validateUAI } = require("../common/utils/uaiUtils");
+const logger = require("../common/logger");
+const { dbCollection } = require("../common/db/mongodb");
 
 function buildQuery(selector) {
   if (isEmpty(selector)) {

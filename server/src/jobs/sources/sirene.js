@@ -1,10 +1,10 @@
-const { oleoduc, transformData, accumulateData, writeData } = require("oleoduc");
+const { oleoduc, transformData } = require("oleoduc");
 const SireneApi = require("../../common/apis/SireneApi");
 const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
-const datagouv = require("../referentiels/datagouv");
 const adresses = require("../../common/adresses");
 const categoriesJuridiques = require("../../common/categoriesJuridiques");
 const { dbCollection } = require("../../common/db/mongodb");
+const loadOrganismeDeFormations = require("../tasks/loadOrganismeDeFormations");
 
 function getEtablissementName(e, uniteLegale) {
   return (
@@ -31,20 +31,6 @@ function getRelationLabel(e, uniteLegale) {
   }
 
   return `${nom} ${localisation}`.replace(/ +/g, " ").trim();
-}
-
-async function loadOrganismeDeFormations() {
-  let organismes = [];
-  let referentiel = await datagouv();
-  let stream = await referentiel.stream();
-
-  await oleoduc(
-    stream,
-    accumulateData((acc, data) => [...acc, data.siret], { accumulator: [] }),
-    writeData((acc) => (organismes = acc))
-  );
-
-  return organismes;
 }
 
 module.exports = (options = {}) => {

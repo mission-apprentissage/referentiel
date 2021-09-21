@@ -1,9 +1,11 @@
-const { oleoduc, writeData } = require("oleoduc");
+const { oleoduc, writeData, mergeStreams, transformData } = require("oleoduc");
 const { isEmpty } = require("lodash");
 const logger = require("../common/logger");
 const { dbCollection } = require("../common/db/mongodb");
 
-module.exports = async (referentiel) => {
+module.exports = async (array) => {
+  let sources = Array.isArray(array) ? array : [array];
+  let streams = await Promise.all(sources.map((source) => source.stream()));
   let stats = {
     total: 0,
     created: 0,
@@ -12,12 +14,12 @@ module.exports = async (referentiel) => {
   };
 
   await oleoduc(
-    await referentiel.stream(),
-    writeData(async ({ from, siret }) => {
+    mergeStreams(streams),
+    writeData(async ({ from, selector: siret }) => {
       stats.total++;
       if (isEmpty(siret)) {
         stats.failed++;
-        logger.warn(`[Referentiel] Siret invalide pour l'établissement ${siret}`);
+        logger.debug(`[Referentiel] Siret invalide pour l'établissement ${siret}`);
         return;
       }
 
@@ -40,7 +42,7 @@ module.exports = async (referentiel) => {
               "_meta.anomalies": [],
             },
             $addToSet: {
-              referentiels: from || referentiel.name,
+              referentiels: from,
             },
           },
           { upsert: true }

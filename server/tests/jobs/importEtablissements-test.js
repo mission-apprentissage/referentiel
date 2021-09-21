@@ -2,27 +2,33 @@ const assert = require("assert");
 const { omit } = require("lodash");
 const { Readable } = require("stream");
 const { dbCollection } = require("../../src/common/db/mongodb");
-const importReferentiel = require("../../src/jobs/importReferentiel");
+const importReferentiel = require("../../src/jobs/importEtablissements");
+const { oleoduc, transformData } = require("oleoduc");
 
-function createTestReferentiel(array) {
+function createTestSource(array) {
+  let name = "dummy";
   return {
-    name: "test",
+    name,
     stream() {
-      return Readable.from(array.map((item) => ({ ...item, from: "test" })));
+      return oleoduc(
+        Readable.from(array),
+        transformData((d) => ({ from: name, ...d })),
+        { promisify: false }
+      );
     },
   };
 }
 
 describe(__filename, () => {
   it("Vérifie qu'on peut importer un référentiel", async () => {
-    let referentiel = createTestReferentiel([{ siret: "11111111100006" }]);
+    let source = createTestSource([{ selector: "11111111100006" }]);
 
-    let results = await importReferentiel(referentiel);
+    let results = await importReferentiel(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
     assert.deepStrictEqual(omit(found, ["_meta"]), {
       siret: "11111111100006",
-      referentiels: ["test"],
+      referentiels: ["dummy"],
       uais: [],
       reseaux: [],
       contacts: [],
@@ -42,9 +48,9 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on ignore les établissements en double", async () => {
-    let referentiel = createTestReferentiel([{ siret: "11111111100006" }, { siret: "11111111100006" }]);
+    let source = createTestSource([{ selector: "11111111100006" }, { selector: "11111111100006" }]);
 
-    let results = await importReferentiel(referentiel);
+    let results = await importReferentiel(source);
 
     await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(results, {
@@ -55,14 +61,14 @@ describe(__filename, () => {
     });
   });
 
-  it("Vérifie qu'on peut ignorer un établissement avec un siret vide", async () => {
-    let referentiel = createTestReferentiel([
+  it("Vérifie qu'on ignore un établissement avec un siret vide", async () => {
+    let source = createTestSource([
       {
-        siret: "",
+        selector: "",
       },
     ]);
 
-    let results = await importReferentiel(referentiel);
+    let results = await importReferentiel(source);
 
     let count = await dbCollection("etablissements").countDocuments({ siret: "11111111100006" });
     assert.strictEqual(count, 0);

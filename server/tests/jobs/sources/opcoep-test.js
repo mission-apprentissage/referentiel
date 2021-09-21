@@ -1,12 +1,12 @@
 const assert = require("assert");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
-const { importReferentiel, createStream } = require("../../utils/testUtils");
-const collectSources = require("../../../src/jobs/tasks/collectSources");
+const { importEtablissements, createStream } = require("../../utils/testUtils");
+const collectSources = require("../../../src/jobs/collectSources");
 
 describe(__filename, () => {
   it("Vérifie qu'on peut collecter des informations du fichier OPCO EP", async () => {
-    await importReferentiel();
+    await importEtablissements();
     let source = createSource("opcoep", {
       input: createStream(
         `SIRET CFA;N UAI CFA;Nom CFA

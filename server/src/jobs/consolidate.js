@@ -1,5 +1,5 @@
-const logger = require("../../common/logger");
-const { dbCollection } = require("../../common/db/mongodb");
+const logger = require("../common/logger");
+const { dbCollection } = require("../common/db/mongodb");
 const { oleoduc, writeData } = require("oleoduc");
 
 async function validateUAI() {

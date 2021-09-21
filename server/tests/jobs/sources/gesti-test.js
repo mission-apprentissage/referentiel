@@ -1,7 +1,7 @@
 const assert = require("assert");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
-const collectSources = require("../../../src/jobs/tasks/collectSources");
+const collectSources = require("../../../src/jobs/collectSources");
 const { createStream } = require("../../utils/testUtils");
 const { insertEtablissement } = require("../../utils/fakeData");
 

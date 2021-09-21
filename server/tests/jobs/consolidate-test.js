@@ -1,7 +1,7 @@
 const assert = require("assert");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const { insertEtablissement } = require("../utils/fakeData");
-const consolidate = require("../../src/jobs/tasks/consolidate");
+const consolidate = require("../../src/jobs/consolidate");
 const { omit } = require("lodash");
 
 describe(__filename, () => {

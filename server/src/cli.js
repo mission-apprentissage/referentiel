@@ -5,7 +5,6 @@ const { oleoduc, writeToStdout } = require("oleoduc");
 const { computeChecksum } = require("./common/utils/uaiUtils");
 const { createReadStream } = require("fs");
 const runScript = require("./jobs/runScript");
-const { createReferentiel } = require("./jobs/referentiels/referentiels");
 const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/tasks/collectSources");
 const consolidate = require("./jobs/tasks/consolidate");
@@ -14,8 +13,12 @@ const etablissementAsJsonStream = require("./jobs/tasks/etablissementAsJsonStrea
 const clear = require("./jobs/clearAll");
 const computeStats = require("./jobs/computeStats");
 const importCFD = require("./jobs/importCFD");
-const importReferentiel = require("./jobs/importReferentiel");
+const importEtablissements = require("./jobs/importEtablissements");
 const build = require("./jobs/build");
+
+cli.command("build").action(() => {
+  runScript(() => build());
+});
 
 cli
   .command("importCFD")
@@ -30,23 +33,19 @@ cli
     });
   });
 
-cli.command("build").action(() => {
-  runScript(() => build());
-});
-
 cli
-  .command("importReferentiel <names> [file]")
-  .description("Import les données contenues dans le ou les référentiels")
+  .command("importEtablissements <names> [file]")
+  .description("Importe les établissements contenus dans les sources")
   .action((names, file) => {
     runScript(async () => {
-      let referentielNames = names.split(",");
+      let mainSourceName = names.split(",");
       let input = file ? createReadStream(file) : null;
       let stats = [];
 
-      let referentiels = referentielNames.map((name) => createReferentiel(name, { input }));
-      for (let referentiel of referentiels) {
-        let results = await importReferentiel(referentiel);
-        stats.push({ [referentiel.name]: results });
+      let mainSources = mainSourceName.map((name) => createSource(name, { input }));
+      for (let source of mainSources) {
+        let results = await importEtablissements(source);
+        stats.push({ [source.name]: results });
       }
 
       return stats;

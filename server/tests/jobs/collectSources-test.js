@@ -4,7 +4,7 @@ const { oleoduc, transformData } = require("oleoduc");
 const { Readable } = require("stream");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const { insertEtablissement } = require("../utils/fakeData");
-const collectSources = require("../../src/jobs/tasks/collectSources");
+const collectSources = require("../../src/jobs/collectSources");
 
 describe(__filename, () => {
   function createTestSource(array) {

@@ -42,8 +42,9 @@ function getCsvExport(name) {
   return getFileAsStream(`https://infocentre.pleiade.education.fr/bcn/index.php/export/CSV?n=${name}&separator=%7C`);
 }
 
-async function importFormationDiplomes(options = {}) {
+async function importCFD(options = {}) {
   let stats = {};
+  logger.info("Import des CFD...");
   let nFormationStream = options.nFormationDiplomeCsvStream || getCsvExport("N_FORMATION_DIPLOME");
   stats.N_FORMATION_DIPLOME = await importCsv(nFormationStream);
 
@@ -52,4 +53,4 @@ async function importFormationDiplomes(options = {}) {
 
   return stats;
 }
-module.exports = importFormationDiplomes;
+module.exports = importCFD;

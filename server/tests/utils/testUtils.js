@@ -1,8 +1,8 @@
 const { Readable } = require("stream");
-const { createReferentiel } = require("../../src/jobs/referentiels/referentiels");
-const importReferentiel = require("../../src/jobs/importReferentiel");
+const importEtablissements = require("../../src/jobs/importEtablissements");
 const server = require("../../src/http/server");
-const axiosist = require("axiosist"); // eslint-disable-line node/no-unpublished-require
+const axiosist = require("axiosist");
+const { oleoduc, transformData } = require("oleoduc"); // eslint-disable-line node/no-unpublished-require
 
 let createStream = (content) => {
   let stream = new Readable({
@@ -28,15 +28,16 @@ async function startServer() {
 module.exports = {
   createStream,
   startServer,
-  importReferentiel: (content) => {
-    let referentiel = createReferentiel("datagouv", {
-      input: createStream(
-        content ||
-          `"siren";"num_etablissement";"cfa"
-"111111111";"00006";"Oui"`
-      ),
+  importEtablissements: (array = [{ siret: "11111111100006" }]) => {
+    return importEtablissements({
+      name: "test",
+      stream() {
+        return oleoduc(
+          Readable.from(array),
+          transformData((data) => ({ from: "test", selector: data.siret })),
+          { promisify: false }
+        );
+      },
     });
-
-    return importReferentiel(referentiel);
   },
 };

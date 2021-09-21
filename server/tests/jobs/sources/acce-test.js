@@ -1,8 +1,8 @@
 const assert = require("assert");
 const { Readable } = require("stream");
 const { createSource } = require("../../../src/jobs/sources/sources");
-const collectSources = require("../../../src/jobs/tasks/collectSources");
-const { importReferentiel } = require("../../utils/testUtils");
+const collectSources = require("../../../src/jobs/collectSources");
+const { importEtablissements } = require("../../utils/testUtils");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 
 function createAcceSource(array = {}) {
@@ -15,7 +15,7 @@ function createAcceSource(array = {}) {
 
 describe(__filename, () => {
   it("Vérifie qu'on peut collecter des relations (siret)", async () => {
-    await importReferentiel();
+    await importEtablissements();
     let source = createAcceSource([
       {
         uai: "0111111Y",
@@ -75,7 +75,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut collecter des contacts", async () => {
-    await importReferentiel();
+    await importEtablissements();
     let source = createAcceSource([
       {
         uai: "0111111Y",

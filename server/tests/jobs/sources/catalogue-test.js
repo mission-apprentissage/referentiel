@@ -2,8 +2,8 @@ const assert = require("assert");
 const { omit } = require("lodash");
 const ApiError = require("../../../src/common/apis/ApiError");
 const { createSource } = require("../../../src/jobs/sources/sources");
-const collectSources = require("../../../src/jobs/tasks/collectSources");
-const { importReferentiel } = require("../../utils/testUtils");
+const collectSources = require("../../../src/jobs/collectSources");
+const { importEtablissements } = require("../../utils/testUtils");
 const { getMockedGeoAddresseApi, getMockedCatalogueApi } = require("../../utils/apiMocks");
 const { insertEtablissement, insertCFD } = require("../../utils/fakeData");
 const { dbCollection } = require("../../../src/common/db/mongodb");
@@ -22,7 +22,7 @@ function createFormationsSource(custom = {}) {
 
 describe(__filename, () => {
   it("Vérifie qu'on peut collecter des relations (formateur)", async () => {
-    await importReferentiel();
+    await importEtablissements();
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -66,7 +66,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut collecter des relations (gestionnaire)", async () => {
-    await importReferentiel();
+    await importEtablissements();
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -102,7 +102,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on identifie un etablissement sans relations comme formateur et gestionnaire", async () => {
-    await importReferentiel();
+    await importEtablissements();
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -130,7 +130,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie que seuls les établissements avec au moins une formation active en 2021 sont formateurs", async () => {
-    await importReferentiel();
+    await importEtablissements();
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations(?!2021).*/).reply(
@@ -160,8 +160,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut collecter des diplômes (cfd)", async () => {
-    await importReferentiel(`"siren";"num_etablissement";"cfa"
-"222222222";"00002";"Oui"`);
+    await importEtablissements([{ siret: "22222222200002" }]);
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -205,8 +204,7 @@ describe(__filename, () => {
       NIVEAU_FORMATION_DIPLOME: "26C",
       LIBELLE_COURT: "FORMATION",
     });
-    await importReferentiel(`"siren";"num_etablissement";"cfa"
-"222222222";"00002";"Oui"`);
+    await importEtablissements([{ siret: "22222222200002" }]);
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -238,8 +236,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on ne collecte pas de diplômes pour les établissements gestionnaire", async () => {
-    await importReferentiel(`"siren";"num_etablissement";"cfa"
-"111111111";"00006";"Oui"`);
+    await importEtablissements([{ siret: "11111111100006" }]);
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -272,8 +269,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut collecter des certifications (rncp)", async () => {
-    await importReferentiel(`"siren";"num_etablissement";"cfa"
-"222222222";"00002";"Oui"`);
+    await importEtablissements([{ siret: "22222222200002" }]);
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -313,8 +309,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on ne collecte pas de certifications pour les établissements gestionnaire", async () => {
-    await importReferentiel(`"siren";"num_etablissement";"cfa"
-"111111111";"00006";"Oui"`);
+    await importEtablissements([{ siret: "11111111100006" }]);
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -348,8 +343,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut collecter des lieux de formation", async () => {
-    await importReferentiel(`"siren";"num_etablissement";"cfa"
-"222222222";"00002";"Oui"`);
+    await importEtablissements([{ siret: "22222222200002" }]);
     let source = createFormationsSource({
       geoAdresseApi: getMockedGeoAddresseApi((mock, responses) => {
         mock.onGet(/reverse.*/).reply(
@@ -426,8 +420,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on ne collecte pas des lieux de formation pour les établissements gestionnaire", async () => {
-    await importReferentiel(`"siren";"num_etablissement";"cfa"
-"111111111";"00006";"Oui"`);
+    await importEtablissements([{ siret: "11111111100006" }]);
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -461,8 +454,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on cherche une adresse quand ne peut pas reverse-geocoder un lieu de formation", async () => {
-    await importReferentiel(`"siren";"num_etablissement";"cfa"
-"222222222";"00002";"Oui"`);
+    await importEtablissements([{ siret: "22222222200002" }]);
     let source = createFormationsSource({
       geoAdresseApi: getMockedGeoAddresseApi((mock, responses) => {
         mock.onGet(/reverse.*/).reply(400, {});
@@ -520,8 +512,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on créer une anomalie quand on ne peut pas trouver l'adresse d'un lieu de formation", async () => {
-    await importReferentiel(`"siren";"num_etablissement";"cfa"
-"222222222";"00002";"Oui"`);
+    await importEtablissements([{ siret: "22222222200002" }]);
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -564,7 +555,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut collecter des contacts", async () => {
-    await importReferentiel();
+    await importEtablissements();
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
         mock.onGet(/.*formations.*/).reply(
@@ -622,7 +613,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on peut détecter des relations avec des établissements déjà présents", async () => {
-    await importReferentiel();
+    await importEtablissements();
     await insertEtablissement({ siret: "22222222200002", raison_sociale: "Mon centre de formation" });
     let source = createFormationsSource({
       catalogueAPI: getMockedCatalogueApi((mock, responses) => {
@@ -649,7 +640,7 @@ describe(__filename, () => {
   });
 
   it("Vérifie qu'on gère une erreur lors de la récupération des formations", async () => {
-    await importReferentiel();
+    await importEtablissements();
     let failingApi = {
       getFormations: () => {
         throw new ApiError("api", "HTTP error");

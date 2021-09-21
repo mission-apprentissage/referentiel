@@ -1,13 +1,13 @@
 const assert = require("assert");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
-const { importReferentiel } = require("../../utils/testUtils");
-const collectSources = require("../../../src/jobs/tasks/collectSources");
+const { importEtablissements } = require("../../utils/testUtils");
+const collectSources = require("../../../src/jobs/collectSources");
 const { mockTcoApi } = require("../../utils/apiMocks");
 
 describe(__filename, () => {
   it("Vérifie qu'on peut collecter des informations relatives aux établissements du catalogue", async () => {
-    await importReferentiel();
+    await importEtablissements();
     mockTcoApi((client, responses) => {
       client
         .get("/entity/etablissements.ndjson")
