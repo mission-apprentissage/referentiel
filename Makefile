@@ -25,7 +25,7 @@ clean:
 	docker-compose down
 
 dataset:
-	docker exec annuaire_server yarn --silent --cwd server cli misc injectDataset
+	docker exec referentiel_server yarn --silent --cwd server cli misc injectDataset
 
 
 ci: install-server lint start-mongodb test clean

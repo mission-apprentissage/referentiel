@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import AnnuairePage from "./pages/AnnuairePage";
+import EtablissementsPage from "./pages/EtablissementsPage";
 import EtablissementPage from "./pages/EtablissementPage";
 import "tabler-react/dist/Tabler.css";
 import AnomaliesPage from "./pages/AnomaliesPage";
@@ -13,7 +13,7 @@ function App() {
       <Router>
         <ScrollToTop />
         <Switch>
-          <Route exact path="/" component={AnnuairePage} />
+          <Route exact path="/" component={EtablissementsPage} />
           <Route exact path="/anomalies" component={AnomaliesPage} />
           <Route exact path="/stats" component={StatsPage} />
           <Route exact path="/etablissements/:siret" component={EtablissementPage} />

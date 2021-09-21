@@ -43,7 +43,7 @@ async function mergeRelations(from, etablissement, relations) {
       let count = await dbCollection("etablissements").countDocuments({ siret: r.siret });
       return {
         ...r,
-        annuaire: count > 0,
+        referentiel: count > 0,
       };
     })
   );

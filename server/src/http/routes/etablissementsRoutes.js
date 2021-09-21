@@ -74,7 +74,7 @@ module.exports = () => {
    *     produces:
    *      - application/json
    *     tags:
-   *       - Annuaire
+   *       - Referentiel
    *     responses:
    *       200:
    *         description: OK
@@ -86,7 +86,7 @@ module.exports = () => {
    *                  etablissements:
    *                    type: array
    *                    items:
-   *                      $ref: '#/components/schemas/annuaire'
+   *                      $ref: '#/components/schemas/referentiel'
    *                  pagination:
    *                    type: object
    *                    properties:
@@ -147,7 +147,6 @@ module.exports = () => {
               nb_uais: 0,
               nb_relations: 0,
               _id: 0,
-              __v: 0,
             },
           },
           ...(isEmpty(projection) ? [] : [{ $project: projection }]),
@@ -195,14 +194,14 @@ module.exports = () => {
    *     produces:
    *      - application/json
    *     tags:
-   *       - Annuaire
+   *       - Referentiel
    *     responses:
    *       200:
    *         description: OK
    *         content:
    *          application/json:
    *            schema:
-   *              $ref: '#/components/schemas/annuaire'
+   *              $ref: '#/components/schemas/referentiel'
    */
   router.get(
     "/api/v1/etablissements/:siret",
@@ -223,6 +222,7 @@ module.exports = () => {
 
       delete etablissement._id;
       delete etablissement._meta;
+      console.log(etablissement);
       return res.json(etablissement);
     })
   );

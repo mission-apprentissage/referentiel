@@ -1,7 +1,7 @@
 const GeoAdresseApi = require("../common/apis/GeoAdresseApi");
 const { createSource } = require("./sources/sources");
-const collectSources = require("./tasks/collectSources");
-const consolidate = require("./tasks/consolidate");
+const collectSources = require("./collectSources");
+const consolidate = require("./consolidate");
 const importEtablissements = require("./importEtablissements");
 const clearAll = require("./clearAll");
 const importCFD = require("./importCFD");

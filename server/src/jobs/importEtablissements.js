@@ -1,4 +1,4 @@
-const { oleoduc, writeData, mergeStreams, transformData } = require("oleoduc");
+const { oleoduc, writeData, mergeStreams } = require("oleoduc");
 const { isEmpty } = require("lodash");
 const logger = require("../common/logger");
 const { dbCollection } = require("../common/db/mongodb");

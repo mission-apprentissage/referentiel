@@ -1,4 +1,4 @@
-# Annuaire
+# Référentiel
 
 Ce repository permet de construire l'annuaire des établissements.
 

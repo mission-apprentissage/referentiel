@@ -50,7 +50,7 @@ describe(__filename, () => {
       {
         siret: "22222222200002",
         label: "Etablissement",
-        annuaire: false,
+        referentiel: false,
         type: "formateur",
         sources: ["catalogue"],
       },
@@ -94,7 +94,7 @@ describe(__filename, () => {
       {
         siret: "22222222200002",
         label: "Entreprise",
-        annuaire: false,
+        referentiel: false,
         type: "gestionnaire",
         sources: ["catalogue"],
       },
@@ -636,7 +636,7 @@ describe(__filename, () => {
     await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.strictEqual(found.relations[0].annuaire, true);
+    assert.strictEqual(found.relations[0].referentiel, true);
   });
 
   it("Vérifie qu'on gère une erreur lors de la récupération des formations", async () => {

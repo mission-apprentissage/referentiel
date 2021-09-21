@@ -1,7 +1,7 @@
 const { Readable } = require("stream");
 const importEtablissements = require("../../src/jobs/importEtablissements");
 const server = require("../../src/http/server");
-const axiosist = require("axiosist");
+const axiosist = require("axiosist"); // eslint-disable-line node/no-unpublished-require
 const { oleoduc, transformData } = require("oleoduc"); // eslint-disable-line node/no-unpublished-require
 
 let createStream = (content) => {

@@ -198,7 +198,7 @@ describe(__filename, () => {
           {
             siret: "22222222200002",
             label: "NOMAYO",
-            annuaire: true,
+            referentiel: true,
             sources: ["test"],
           },
         ],
@@ -209,13 +209,13 @@ describe(__filename, () => {
           {
             siret: "11111111100001",
             label: "NOMAYO",
-            annuaire: true,
+            referentiel: true,
             sources: ["test"],
           },
           {
             siret: "22222222200002",
             label: "NOMAYO",
-            annuaire: true,
+            referentiel: true,
             sources: ["test"],
           },
         ],

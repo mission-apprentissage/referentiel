@@ -40,7 +40,7 @@ async function validateUAI() {
             $each: [
               {
                 job: "consolidate",
-                source: "annuaire",
+                source: "referentiel",
                 date: new Date(),
                 code: "conflit_uai",
                 details: `UAI ${mostPopularUAI} en conflict avec ${nbConflicts} autres établissements`,

@@ -64,12 +64,12 @@ module.exports = {
           object(
             {
               siret: string(),
-              annuaire: boolean(),
+              referentiel: boolean(),
               sources: arrayOf(string()),
               label: string(),
               type: string({ enum: ["formateur", "gestionnaire", "fille", "mère"] }),
             },
-            { required: ["siret", "annuaire", "sources"] }
+            { required: ["siret", "referentiel", "sources"] }
           )
         ),
         lieux_de_formation: arrayOf(

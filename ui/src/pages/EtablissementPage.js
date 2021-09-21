@@ -52,7 +52,7 @@ export default () => {
       <Page.Main>
         <Page.Content>
           <Page.Header>
-            <Link to={`/`}>Annuaire</Link>&nbsp;>&nbsp;{siret}
+            <Link to={`/`}>Référentiel</Link>&nbsp;>&nbsp;{siret}
           </Page.Header>
           <Grid.Row>
             <Grid.Col>
@@ -148,7 +148,7 @@ export default () => {
                               return (
                                 <Table.Row key={index}>
                                   <Table.Col>
-                                    {item.annuaire ? (
+                                    {item.referentiel ? (
                                       <Link to={`/etablissements/${item.siret}`}>{item.siret}</Link>
                                     ) : (
                                       item.siret

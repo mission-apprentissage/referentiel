@@ -34,7 +34,7 @@ export default () => {
         <Page.Content>
           <Page.Header>
             <Header>
-              <Link to={`/`}>Annuaire</Link>
+              <Link to={`/`}>Referentiel</Link>
               <Buttons>
                 <Button color={"info"} onClick={() => history.push("/stats")}>
                   Stats

@@ -21,7 +21,7 @@ function getEtablissementsReseau(etablissements) {
     return [
       ...acc,
       ...e.relations
-        .filter((relation) => relation.annuaire && !!nodes.find((n) => n.id === relation.siret))
+        .filter((relation) => relation.referentiel && !!nodes.find((n) => n.id === relation.siret))
         .map((relation) => {
           return {
             source: e.siret,
@@ -71,7 +71,7 @@ export default () => {
       <Page.Main>
         <Page.Content>
           <Page.Header>
-            <Link to={`/`}>Annuaire</Link>> Réseaux
+            <Link to={`/`}>Référentiel</Link>> Réseaux
           </Page.Header>
           <Grid.Row>
             <Grid.Col>

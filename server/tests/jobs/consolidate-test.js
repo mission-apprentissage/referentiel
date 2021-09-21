@@ -130,7 +130,7 @@ describe(__filename, () => {
           code: "conflit_uai",
           details: "UAI 0111111Y en conflict avec 1 autres établissements",
           job: "consolidate",
-          source: "annuaire",
+          source: "referentiel",
         },
       ]
     );

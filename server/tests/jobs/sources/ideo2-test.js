@@ -22,14 +22,14 @@ describe(__filename, () => {
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(omit(found.relations[0], ["label"]), {
       siret: "22222222200002",
-      annuaire: true,
+      referentiel: true,
       type: "formateur",
       sources: ["ideo2"],
     });
     found = await dbCollection("etablissements").findOne({ siret: "22222222200002" }, { _id: 0 });
     assert.deepStrictEqual(omit(found.relations[0], ["label"]), {
       siret: "11111111100006",
-      annuaire: true,
+      referentiel: true,
       type: "gestionnaire",
       sources: ["ideo2"],
     });

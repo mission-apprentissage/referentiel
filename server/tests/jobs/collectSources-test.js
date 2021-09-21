@@ -337,7 +337,7 @@ describe(__filename, () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        relations: [{ siret: "22222222200002", annuaire: false, label: "test", type: "gestionnaire" }],
+        relations: [{ siret: "22222222200002", referentiel: false, label: "test", type: "gestionnaire" }],
       },
     ]);
 
@@ -367,7 +367,9 @@ describe(__filename, () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        relations: [{ siret: "22222222200002", annuaire: false, label: "Centre de formation", type: "gestionnaire" }],
+        relations: [
+          { siret: "22222222200002", referentiel: false, label: "Centre de formation", type: "gestionnaire" },
+        ],
       },
     ]);
 
@@ -377,7 +379,7 @@ describe(__filename, () => {
     assert.deepStrictEqual(found.relations, [
       {
         siret: "22222222200002",
-        annuaire: false,
+        referentiel: false,
         label: "Centre de formation",
         type: "gestionnaire",
         sources: ["dummy"],
@@ -391,7 +393,7 @@ describe(__filename, () => {
       relations: [
         {
           siret: "22222222200002",
-          annuaire: false,
+          referentiel: false,
           label: "Centre de formation",
           type: "gestionnaire",
           sources: ["other"],
@@ -417,7 +419,7 @@ describe(__filename, () => {
       relations: [
         {
           siret: "22222222200002",
-          annuaire: false,
+          referentiel: false,
           label: "test",
           type: "gestionnaire",
           sources: ["dummy"],
@@ -427,7 +429,7 @@ describe(__filename, () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        relations: [{ siret: "22222222200002", annuaire: false, label: "test", type: "gestionnaire" }],
+        relations: [{ siret: "22222222200002", referentiel: false, label: "test", type: "gestionnaire" }],
       },
     ]);
 
@@ -456,7 +458,7 @@ describe(__filename, () => {
       {
         siret: "22222222200002",
         label: "test",
-        annuaire: true,
+        referentiel: true,
         sources: ["dummy"],
       },
     ]);

@@ -54,14 +54,14 @@ describe(__filename, () => {
         label: "FILLE FORMATION",
         siret: "22222222200002",
         type: "fille",
-        annuaire: false,
+        referentiel: false,
       },
       {
         sources: ["acce"],
         siret: "33333333300003",
         label: "MERE FORMATION",
         type: "mère",
-        annuaire: false,
+        referentiel: false,
       },
     ]);
     assert.deepStrictEqual(stats, {

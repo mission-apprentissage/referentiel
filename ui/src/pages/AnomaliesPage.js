@@ -40,7 +40,7 @@ export default () => {
       <Page.Main>
         <Page.Content>
           <Page.Header>
-            <Link to={`/`}>Annuaire</Link>> Rapport d'anomalies
+            <Link to={`/`}>Référentiel</Link>> Rapport d'anomalies
           </Page.Header>
           <Grid.Row>
             <Grid.Col>

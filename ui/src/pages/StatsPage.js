@@ -154,7 +154,7 @@ function StatsPage() {
       <Page.Main>
         <Page.Content>
           <Page.Header>
-            <Link to={`/`}>Annuaire</Link>> Stats
+            <Link to={`/`}>Référentiel</Link>> Stats
           </Page.Header>
           {validation && (
             <>

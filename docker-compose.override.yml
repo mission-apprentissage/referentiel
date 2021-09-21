@@ -11,8 +11,8 @@ services:
     stdin_open: true
     build:
       args:
-        - ANNUAIRE_ENV=dev
-        - ANNUAIRE_NO_BUILD=true
+        - REFERENTIEL_ENV=dev
+        - REFERENTIEL_NO_BUILD=true
     environment:
       - FAST_REFRESH=false
     volumes:
@@ -26,8 +26,8 @@ services:
       - ./server/src:/app/src #Allows source folders to be watched
       - .local/server:/data
     environment:
-      - ANNUAIRE_ENV=dev
-      - ANNUAIRE_LOG_LEVEL=debug
+      - REFERENTIEL_ENV=dev
+      - REFERENTIEL_LOG_LEVEL=debug
 
   mongodb:
     ports:

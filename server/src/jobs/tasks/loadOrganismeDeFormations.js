@@ -8,7 +8,7 @@ function downloadFromDatagouv() {
 
 async function loadOrganismeDeFormations(options = {}) {
   let organismes = [];
-  let input = options.input || downloadFromDatagouv();
+  let input = options.input || (await downloadFromDatagouv());
 
   await oleoduc(
     input,

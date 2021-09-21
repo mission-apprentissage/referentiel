@@ -100,7 +100,7 @@ const createStreams = () => {
 };
 
 module.exports = bunyan.createLogger({
-  name: "annuaire",
+  name: "referentiel",
   serializers: bunyan.stdSerializers,
   streams: createStreams(),
 });

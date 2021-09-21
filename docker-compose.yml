@@ -2,8 +2,8 @@ version: "2.4"
 services:
 
   reverse_proxy:
-    image: annuaire_reverse_proxy
-    container_name: annuaire_reverse_proxy
+    image: referentiel_reverse_proxy
+    container_name: referentiel_reverse_proxy
     build:
       context: reverse_proxy
     mem_limit: 96m
@@ -11,46 +11,46 @@ services:
     ports:
       - 80:80
     networks:
-      - annuaire_network
+      - referentiel_network
     depends_on:
       - server
       - ui
 
   ui:
-    image: annuaire_ui
-    container_name: annuaire_ui
+    image: referentiel_ui
+    container_name: referentiel_ui
     build:
       context: ui
     mem_limit: 96m
     networks:
-      - annuaire_network
+      - referentiel_network
     depends_on:
       - server
 
   server:
-    image: annuaire_server
-    container_name: annuaire_server
+    image: referentiel_server
+    container_name: referentiel_server
     build:
       context: server
     mem_limit: 512m
     restart: unless-stopped
     networks:
-      - annuaire_network
+      - referentiel_network
     depends_on:
       - mongodb
     environment:
-      - ANNUAIRE_MONGODB_URI=mongodb://mongodb:27017/annuaire?retryWrites=true&w=majority
-      - ANNUAIRE_LOG_DESTINATIONS=stdout
+      - REFERENTIEL_MONGODB_URI=mongodb://mongodb:27017/referentiel?retryWrites=true&w=majority
+      - REFERENTIEL_LOG_DESTINATIONS=stdout
 
   mongodb:
     image: mongo:5.0.2-focal
-    container_name: annuaire_mongodb
+    container_name: referentiel_mongodb
     command: --wiredTigerCacheSizeGB 3 --port 27017
     mem_limit: 3g
     restart: unless-stopped
     networks:
-      - annuaire_network
+      - referentiel_network
 
 networks:
-  annuaire_network:
-    name: annuaire_network
+  referentiel_network:
+    name: referentiel_network
