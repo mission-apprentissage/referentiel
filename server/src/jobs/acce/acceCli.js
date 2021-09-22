@@ -2,7 +2,6 @@ const { program: cli } = require("commander");
 const { oleoduc, transformData, writeToStdout } = require("oleoduc");
 const { dbCollection } = require("../../common/db/mongodb.js");
 const importAcce = require("./importAcce");
-const patchAcce = require("./patchAcce");
 const runScript = require("../runScript");
 
 cli
@@ -15,12 +14,6 @@ cli
       return importAcce(options);
     });
   });
-
-cli.command("patch").action(() => {
-  runScript(() => {
-    return patchAcce();
-  });
-});
 
 cli
   .command("export")

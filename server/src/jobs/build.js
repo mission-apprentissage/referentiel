@@ -33,8 +33,6 @@ async function build() {
     "depp",
     "refea",
     "ymag",
-    "acce",
-    "voeux-affelnet",
   ]);
   await collectAll(["onisep", "onisep-structure", "ideo2"]);
   await collectAll(["sirene", "catalogue"], {
@@ -45,7 +43,7 @@ async function build() {
   await consolidate().then((res) => stats.push({ consolidation: res }));
 
   //Theses sources used uai as selector, so we need to consolidate UAI before running them
-  await collectAll(["ccca-btp", "cci-france", "cma"]);
+  await collectAll(["ccca-btp", "cci-france", "cma", "acce", "voeux-affelnet"]);
 
   return stats;
 }

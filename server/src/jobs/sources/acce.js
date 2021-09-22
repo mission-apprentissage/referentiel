@@ -1,29 +1,6 @@
 const { oleoduc, transformData, readLineByLine } = require("oleoduc");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 
-function buildRelations(rattachements) {
-  return [
-    ...(rattachements.fille || [])
-      .filter((f) => f.siret)
-      .map((fille) => {
-        return {
-          siret: fille.siret,
-          ...(fille.patronyme ? { label: fille.patronyme } : {}),
-          type: "fille",
-        };
-      }),
-    ...(rattachements.mere || [])
-      .filter((f) => f.siret)
-      .map((mere) => {
-        return {
-          siret: mere.siret,
-          ...(mere.patronyme ? { label: mere.patronyme } : {}),
-          type: "mère",
-        };
-      }),
-  ];
-}
-
 function buildContacts(email) {
   if (!email) {
     return [];
@@ -44,15 +21,14 @@ module.exports = (custom = {}) => {
         input,
         readLineByLine(),
         transformData((line) => {
-          let { siret, rattachements, email } = JSON.parse(line);
-          if (!siret) {
+          let { uai, email } = JSON.parse(line);
+          if (!uai) {
             return;
           }
 
           return {
             from: name,
-            selector: siret,
-            relations: buildRelations(rattachements),
+            selector: uai,
             contacts: buildContacts(email),
           };
         }),
