@@ -222,7 +222,6 @@ module.exports = () => {
 
       delete etablissement._id;
       delete etablissement._meta;
-      console.log(etablissement);
       return res.json(etablissement);
     })
   );

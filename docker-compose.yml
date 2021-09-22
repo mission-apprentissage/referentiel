@@ -40,7 +40,6 @@ services:
       - mongodb
     environment:
       - REFERENTIEL_MONGODB_URI=mongodb://mongodb:27017/referentiel?retryWrites=true&w=majority
-      - REFERENTIEL_LOG_DESTINATIONS=stdout
 
   mongodb:
     image: mongo:5.0.2-focal

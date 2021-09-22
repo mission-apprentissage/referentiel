@@ -28,6 +28,7 @@ services:
     environment:
       - REFERENTIEL_ENV=dev
       - REFERENTIEL_LOG_LEVEL=debug
+      - REFERENTIEL_LOG_DESTINATIONS=stdout,mongodb
 
   mongodb:
     ports:

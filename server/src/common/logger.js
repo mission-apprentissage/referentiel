@@ -96,7 +96,12 @@ const createStreams = () => {
     slack: () => slackStream(),
   };
 
-  return config.log.destinations.split(",").map((type) => availableDestinations[type]());
+  return config.log.destinations
+    .filter((type) => availableDestinations[type])
+    .map((type) => {
+      let createDestination = availableDestinations[type];
+      return createDestination();
+    });
 };
 
 module.exports = bunyan.createLogger({

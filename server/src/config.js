@@ -4,7 +4,7 @@ module.exports = {
   log: {
     level: env.get("REFERENTIEL_LOG_LEVEL").default("info").asString(),
     format: env.get("REFERENTIEL_LOG_FORMAT").default("pretty").asString(),
-    destinations: env.get("REFERENTIEL_LOG_DESTINATIONS").default("stdout").asString(),
+    destinations: env.get("REFERENTIEL_LOG_DESTINATIONS").default("stdout").asArray(),
   },
   mongodb: {
     uri: env

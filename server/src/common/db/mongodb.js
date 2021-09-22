@@ -2,6 +2,7 @@ const { MongoClient } = require("mongodb");
 const config = require("../../config");
 const collections = require("./collections");
 const logger = require("../logger");
+const { writeData } = require("oleoduc");
 
 let clientHolder;
 
@@ -20,7 +21,20 @@ async function connectToMongodb(uri = config.mongodb.uri) {
   await client.connect();
   clientHolder = client;
 
+  if (config.log.destinations.includes("mongodb")) {
+    storeLogsIntoMongodb();
+  }
+
   return client;
+}
+
+function storeLogsIntoMongodb() {
+  logger.addStream({
+    name: "mongodb",
+    type: "raw",
+    level: "info",
+    stream: writeData((data) => dbCollection("logs").insertOne(data)),
+  });
 }
 
 function closeMongodbConnection() {
@@ -62,6 +76,7 @@ async function configureValidation(collection) {
 
   logger.info(`Configuring validation for collection ${collection.name}...`);
   let db = getDatabase();
+
   await db.command({
     collMod: collection.name,
     validationLevel: "strict",
@@ -72,11 +87,12 @@ async function configureValidation(collection) {
   });
 }
 
-async function createCollectionIfNeeded(name) {
+async function createCollectionIfNeeded(collection) {
   let db = getDatabase();
   let collections = await db.listCollections().toArray();
-  if (!collections.find((c) => c.name === name)) {
-    await db.createCollection(name);
+
+  if (!collections.find((c) => c.name === collection.name)) {
+    await db.createCollection(collection.name).catch(() => {});
   }
 }
 
@@ -85,8 +101,10 @@ module.exports = {
   prepareDatabase: async (options) => {
     await Promise.all(
       Object.values(collections).map(async (col) => {
-        await createCollectionIfNeeded(col.name);
-        return Promise.all([configureIndexes(col, options), configureValidation(col, options)]);
+        //Force collection creation
+        await createCollectionIfNeeded(col);
+        await configureIndexes(col, options);
+        await configureValidation(col, options);
       })
     );
   },

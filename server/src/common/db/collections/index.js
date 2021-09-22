@@ -3,4 +3,5 @@ module.exports = {
   acce: require("./acce"),
   cfd: require("./cfd"),
   cache: require("./cache"),
+  logs: require("./logs"),
 };
