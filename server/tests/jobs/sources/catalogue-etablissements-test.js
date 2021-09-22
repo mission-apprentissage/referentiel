@@ -15,20 +15,20 @@ describe(__filename, () => {
         .reply(200, responses.etablissements('{"siret":"11111111100006","uai":"0111111Y"}\n'));
     });
 
-    let source = createSource("tables-de-correspondances");
+    let source = createSource("catalogue-etablissements");
 
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.uais, [
       {
-        sources: ["tables-de-correspondances"],
+        sources: ["catalogue-etablissements"],
         uai: "0111111Y",
         valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {
-      "tables-de-correspondances": {
+      "catalogue-etablissements": {
         total: 1,
         updated: 1,
         ignored: 0,

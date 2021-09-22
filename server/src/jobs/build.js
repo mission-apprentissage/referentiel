@@ -17,7 +17,7 @@ async function build() {
 
   await importCFD().then((res) => stats.push({ importCFD: res }));
 
-  let mainSources = ["deca", "tables-de-correspondances", "sifa-ramsese"].map((name) => createSource(name));
+  let mainSources = ["deca", "catalogue-etablissements", "sifa-ramsese"].map((name) => createSource(name));
   await importEtablissements(mainSources).then((res) => stats.push({ importEtablissements: res }));
 
   await collectAll([
@@ -25,7 +25,7 @@ async function build() {
     "anasup",
     "compagnons-du-devoir",
     "deca",
-    "tables-de-correspondances",
+    "catalogue-etablissements",
     "gesti",
     "opcoep",
     "promotrans",

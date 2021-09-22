@@ -34,7 +34,7 @@ describe(__filename, () => {
       siret: "11111111100006",
       uais: [
         {
-          sources: ["deca", "sifa-ramsese", "tables-de-correspondances"],
+          sources: ["deca", "sifa-ramsese", "catalogue-etablissements"],
           uai: "0111111Y",
           valide: true,
         },
@@ -57,7 +57,7 @@ describe(__filename, () => {
           valide: true,
         },
         {
-          sources: ["tables-de-correspondances"],
+          sources: ["catalogue-etablissements"],
           uai: "0222222W",
           valide: true,
         },
@@ -80,7 +80,7 @@ describe(__filename, () => {
           valide: true,
         },
         {
-          sources: ["deca", "sifa-ramsese", "tables-de-correspondances"],
+          sources: ["deca", "sifa-ramsese", "catalogue-etablissements"],
           uai: "0222222W",
           valide: true,
         },

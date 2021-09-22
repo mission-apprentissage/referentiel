@@ -2,7 +2,7 @@ const { oleoduc, transformData, readLineByLine } = require("oleoduc");
 const TcoApi = require("../../common/apis/TcoApi");
 
 module.exports = (custom = {}) => {
-  let name = "tables-de-correspondances";
+  let name = "catalogue-etablissements";
   let api = custom.tcoAPI || new TcoApi();
 
   return {
