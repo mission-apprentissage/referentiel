@@ -13,12 +13,12 @@
   },
   "author": "",
   "engines": {
-    "node": ">=14.15.0"
+    "node": ">=16"
   },
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "17.1.1",
-    "@sentry/node": "6.12.0",
+    "@sentry/node": "6.13.2",
     "axios": "0.21.4",
     "body-parser": "1.19.0",
     "boom": "7.3.0",
@@ -40,7 +40,7 @@
     "merge-stream": "2.0.0",
     "moment": "2.29.1",
     "mongodb": "4.1.2",
-    "mongodb-memory-server": "7.4.0",
+    "mongodb-memory-server": "7.4.1",
     "ms": "3.0.0-canary.1",
     "oleoduc": "0.5.10",
     "query-string": "7.0.1",

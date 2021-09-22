@@ -227,7 +227,7 @@ describe(__filename, () => {
     });
   });
 
-  it("Vérifie qu'on stocke une erreur survenue technique", async () => {
+  it("Vérifie qu'on stocke une erreur technique", async () => {
     await insertEtablissement({ siret: "11111111100006" });
     let source = createTestSource([
       {
@@ -242,7 +242,7 @@ describe(__filename, () => {
     let errors = found._meta.anomalies;
     assert.ok(errors[0].date);
     assert.deepStrictEqual(omit(errors[0], ["date"]), {
-      details: "Cannot read property 'filter' of null",
+      details: "Cannot read properties of null (reading 'filter')",
       source: "dummy",
       code: "erreur",
       job: "collect",
