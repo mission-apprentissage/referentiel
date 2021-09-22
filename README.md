@@ -1,6 +1,41 @@
 # Référentiel
 
-Ce repository permet de construire l'annuaire des établissements.
+Le référentiel regroupe les établissements qui dispensent des formations en apprentissage.
+
+Il se base sur trois listes d'établissements fournies par la DEPP, la DGEFP et la mission apprentissage. 
+Ces établissements sont importés dans l'annuaire au moyen de scripts.
+
+Pour chacun des établissements importés, des scripts vont ensuite collecter des informations dans les différentes
+sources dont la mission apprentissage dispose :
+
+- Fichiers réseaux
+- Datadock
+- Catalogue des formations
+- Fichiers ERP
+- ONISEP
+- REFEA
+- API Sirene
+
+![annuaire schéma](./misc/doc/annuaire.png)
+
+## API
+
+L'api permet de consulter les établissements issus des référentiels ainsi que les données collectées dans les sources.
+Cet API est actuellement composée de deux routes.
+
+### /api/v1/etablissements
+
+Permet de lister les établissements contenus dans l'annuaire
+
+Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/annuaire/etablissements
+
+### /api/v1/etablissements/:siret
+
+Permet d'obtenir les informations relatives à un établissement à partir de son numéro de SIRET
+
+Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/annuaire/etablissements/77928324100056
+
+## Développement
 
 ### Pré-requis
 
@@ -26,6 +61,5 @@ Il est possible de créer un jeu de données afin de pouvoir tester l'applicatio
 make dataset
 ```
 
-Une fois cette commande executée, des emails de création de compte seront disponibles à l'url [http://localhost/smtp](http://localhost/smtp)
 
 ![](https://avatars1.githubusercontent.com/u/63645182?s=200&v=4)
