@@ -31,6 +31,7 @@ function prettyPrintStream(outputName) {
         "msg",
         "src",
         //Error fields already serialized with https://github.com/trentm/node-bunyan#standard-serializers
+        "err.name",
         "err.stack",
         "err.message",
         "err.code",
@@ -48,17 +49,23 @@ function prettyPrintStream(outputName) {
   );
 }
 
-function consoleStream(outputName) {
+function sendLogsToConsole(outputName) {
   const { level, format } = config.log;
-  return {
-    type: "raw",
-    name: outputName,
-    level,
-    stream: format === "pretty" ? prettyPrintStream(outputName) : process[outputName],
-  };
+  return format === "pretty"
+    ? {
+        type: "raw",
+        name: outputName,
+        level,
+        stream: prettyPrintStream(outputName),
+      }
+    : {
+        name: outputName,
+        level,
+        stream: process[outputName],
+      };
 }
 
-function slackStream() {
+function sendLogsToSlack() {
   const stream = new BunyanSlack(
     {
       webhook_url: config.slackWebhookUrl,
@@ -91,9 +98,9 @@ function slackStream() {
 
 const createStreams = () => {
   let availableDestinations = {
-    stdout: () => consoleStream("stdout"),
-    stderr: () => consoleStream("stderr"),
-    slack: () => slackStream(),
+    stdout: () => sendLogsToConsole("stdout"),
+    stderr: () => sendLogsToConsole("stderr"),
+    slack: () => sendLogsToSlack(),
   };
 
   return config.log.destinations
@@ -106,6 +113,14 @@ const createStreams = () => {
 
 module.exports = bunyan.createLogger({
   name: "referentiel",
-  serializers: bunyan.stdSerializers,
+  serializers: {
+    ...bunyan.stdSerializers,
+    err: function (err) {
+      return {
+        ...bunyan.stdSerializers.err(err),
+        ...(err.errInfo ? { errInfo: err.errInfo } : {}),
+      };
+    },
+  },
   streams: createStreams(),
 });

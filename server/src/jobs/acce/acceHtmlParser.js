@@ -13,6 +13,11 @@ function sanitize(txt) {
   return txt
     .toLowerCase()
     .replace(/d'/g, "")
+    .replace(/l'/g, "")
+    .replace(/d’/g, "")
+    .replace(/l’/g, "")
+    .replace(/'/g, "")
+    .replace(/,/g, "")
     .replace(/n°/g, "")
     .trim()
     .replace(/ /g, "_")
@@ -37,10 +42,12 @@ function getTableRowsAProperties(tableEl) {
       ...acc,
       Array.from(tr.querySelectorAll("td")).reduce((obj, td, index) => {
         let value = td.textContent;
-        return {
+        let props = {
           ...obj,
           [sanitize(keys[index])]: value ? value.replace(/\n/g, "").trim() : null,
         };
+
+        return omitBy(props, isNull);
       }, {}),
     ];
   }, []);

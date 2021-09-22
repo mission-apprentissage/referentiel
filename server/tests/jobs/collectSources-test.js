@@ -22,12 +22,7 @@ describe(__filename, () => {
   }
 
   it("Vérifie qu'on peut collecter un uai", async () => {
-    try {
-      await insertEtablissement({ siret: "11111111100006" });
-    } catch (e) {
-      console.log(JSON.stringify(e.errInfo.details, null, 2));
-      throw e;
-    }
+    await insertEtablissement({ siret: "11111111100006" });
     let source = createTestSource([
       {
         selector: "11111111100006",
