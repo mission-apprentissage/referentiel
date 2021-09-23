@@ -4,7 +4,7 @@ const util = require("util");
 const chalk = require("chalk");
 const { Base, Spec } = Mocha.reporters;
 const { inherits } = require("util");
-const ms = require("ms"); // eslint-disable-line node/no-unpublished-require
+const prettyMilliseconds = require("pretty-ms"); // eslint-disable-line node/no-unpublished-require
 const color = Base.color;
 const {
   EVENT_RUN_BEGIN,
@@ -109,7 +109,7 @@ function summary(stats) {
   log(
     color("bright pass", " ") + color("green", " %d passing") + color("light", " (%s)"),
     stats.passes || 0,
-    ms(stats.duration)
+    prettyMilliseconds(stats.duration)
   );
 
   if (stats.pending) {

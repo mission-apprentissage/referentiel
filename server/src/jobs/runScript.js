@@ -1,6 +1,6 @@
 const logger = require("../common/logger");
 const { closeMongodbConnection, connectToMongodb, prepareDatabase } = require("../common/db/mongodb");
-const ms = require("ms");
+const prettyMilliseconds = require("pretty-ms");
 
 process.on("unhandledRejection", (e) => console.error(e));
 process.on("uncaughtException", (e) => console.error(e));
@@ -12,7 +12,7 @@ const createTimer = () => {
       launchTime = new Date().getTime();
     },
     stop: (results) => {
-      const duration = ms(new Date().getTime() - launchTime);
+      const duration = prettyMilliseconds(new Date().getTime() - launchTime);
       const data = results && results.toJSON ? results.toJSON() : results;
       logger.info(JSON.stringify(data || {}, null, 2));
       logger.info(`Completed in ${duration}`);

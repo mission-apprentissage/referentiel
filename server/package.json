@@ -40,8 +40,8 @@
     "moment": "2.29.1",
     "mongodb": "4.1.2",
     "mongodb-memory-server": "7.4.1",
-    "ms": "3.0.0-canary.1",
-    "oleoduc": "0.5.10",
+    "oleoduc": "0.5.11",
+    "pretty-ms": "7.0.1",
     "query-string": "7.0.1",
     "rate-limiter-flexible": "2.2.4"
   },
