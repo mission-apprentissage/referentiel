@@ -37,6 +37,8 @@ Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/annuaire/etablis
 
 ## Développement
 
+[![codecov](https://codecov.io/gh/mission-apprentissage/referentiel/branch/main/graph/badge.svg?token=CVNNCH0GYA)](https://codecov.io/gh/mission-apprentissage/referentiel)
+
 ### Pré-requis
 
 - Docker 19+

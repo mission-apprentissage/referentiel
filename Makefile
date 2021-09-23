@@ -18,6 +18,9 @@ stop:
 test:
 	yarn --cwd server test
 
+codecov:
+	yarn --cwd server codecov
+
 lint:
 	yarn --cwd server lint
 
@@ -28,4 +31,4 @@ dataset:
 	docker exec referentiel_server yarn --silent --cwd server cli misc injectDataset
 
 
-ci: install-server lint test
+ci: install-server lint codecov

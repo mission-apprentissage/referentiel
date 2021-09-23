@@ -9,3 +9,5 @@ jobs:
         with:
           node-version: '16'
       - run: make ci
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

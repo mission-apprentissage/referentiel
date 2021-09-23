@@ -9,6 +9,7 @@
     "cli": "REFERENTIEL_LOG_DESTINATIONS=stderr node src/cli.js",
     "test": "REFERENTIEL_LOG_LEVEL=fatal mocha tests/",
     "coverage": "nyc --reporter=html --temp-dir .coverage/.nyc_output --report-dir .coverage mocha tests/",
+    "codevoc": "nyc --reporter=lcov --temp-dir .coverage/.nyc_output --report-dir .coverage mocha tests/ && codecov",
     "lint": "eslint src/ tests/"
   },
   "author": "",
@@ -49,6 +50,7 @@
   "devDependencies": {
     "axios-mock-adapter": "1.20.0",
     "axiosist": "0.10.0",
+    "codecov": "3.8.3",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-mocha": "9.0.0",
@@ -57,6 +59,7 @@
     "mocha": "9.1.1",
     "nock": "13.1.3",
     "nodemon": "2.0.12",
+    "nyc": "15.1.0",
     "prettier": "2.4.1"
   },
   "prettier": {
