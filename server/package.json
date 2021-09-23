@@ -8,8 +8,7 @@
     "debug": "nodemon --inspect=0.0.0.0 --signal SIGINT --ignore tests/ src/index.js",
     "cli": "REFERENTIEL_LOG_DESTINATIONS=stderr node src/cli.js",
     "test": "REFERENTIEL_LOG_LEVEL=fatal mocha tests/",
-    "coverage": "nyc --reporter=html --temp-dir .coverage/.nyc_output --report-dir .coverage mocha tests/",
-    "codevoc": "nyc --reporter=lcov --temp-dir .coverage/.nyc_output --report-dir .coverage mocha tests/ && codecov",
+    "coverage": "nyc --temp-dir .coverage/.nyc_output --report-dir .coverage --reporter=lcov --reporter=html yarn test",
     "lint": "eslint src/ tests/"
   },
   "author": "",
