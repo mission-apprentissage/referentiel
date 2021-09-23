@@ -37,7 +37,9 @@ Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/annuaire/etablis
 
 ## Développement
 
-[![codecov](https://codecov.io/gh/mission-apprentissage/referentiel/branch/main/graph/badge.svg?token=CVNNCH0GYA)](https://codecov.io/gh/mission-apprentissage/referentiel)
+![codecov](https://codecov.io/gh/mission-apprentissage/referentiel/branch/main/graph/badge.svg?token=CVNNCH0GYA)
+![uptime](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmission-apprentissage%2Fupptime%2Fmaster%2Fapi%2Fapi-referentiel%2Fuptime.json)
+
 
 ### Pré-requis
 
