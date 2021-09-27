@@ -40,10 +40,12 @@ describe("importEtablissement", () => {
     assert.ok(found._meta.created_at);
     assert.deepStrictEqual(found._meta.anomalies, []);
     assert.deepStrictEqual(results, {
-      total: 1,
-      created: 1,
-      updated: 0,
-      failed: 0,
+      dummy: {
+        total: 1,
+        created: 1,
+        updated: 0,
+        failed: 0,
+      },
     });
   });
 
@@ -54,10 +56,12 @@ describe("importEtablissement", () => {
 
     await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(results, {
-      total: 2,
-      created: 1,
-      updated: 0,
-      failed: 0,
+      dummy: {
+        total: 2,
+        created: 1,
+        updated: 0,
+        failed: 0,
+      },
     });
   });
 
@@ -73,10 +77,12 @@ describe("importEtablissement", () => {
     let count = await dbCollection("etablissements").countDocuments({ siret: "11111111100006" });
     assert.strictEqual(count, 0);
     assert.deepStrictEqual(results, {
-      total: 1,
-      created: 0,
-      updated: 0,
-      failed: 1,
+      dummy: {
+        total: 1,
+        created: 0,
+        updated: 0,
+        failed: 1,
+      },
     });
   });
 });

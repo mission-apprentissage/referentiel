@@ -40,15 +40,9 @@ cli
     runScript(async () => {
       let mainSourceName = names.split(",");
       let input = file ? createReadStream(file) : null;
-      let stats = [];
 
       let mainSources = mainSourceName.map((name) => createSource(name, { input }));
-      for (let source of mainSources) {
-        let results = await importEtablissements(source);
-        stats.push({ [source.name]: results });
-      }
-
-      return stats;
+      return importEtablissements(mainSources);
     });
   });
 

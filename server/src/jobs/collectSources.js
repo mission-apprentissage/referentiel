@@ -111,12 +111,15 @@ function createStats(sources) {
   }, {});
 }
 
+async function getStreams(sources) {
+  return Promise.all(sources.map((source) => source.stream()));
+}
+
 module.exports = async (array, options = {}) => {
   let sources = Array.isArray(array) ? array : [array];
   let filters = options.filters || {};
   let stats = createStats(sources);
-
-  let streams = await Promise.all(sources.map((source) => source.stream({ filters })));
+  let streams = await getStreams(sources);
 
   await oleoduc(
     mergeStreams(streams),

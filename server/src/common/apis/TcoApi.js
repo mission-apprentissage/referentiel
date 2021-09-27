@@ -1,7 +1,7 @@
 const queryString = require("query-string");
 const logger = require("../logger");
 const RateLimitedApi = require("./RateLimitedApi");
-const got = require("got");
+const { getFileAsStream } = require("../utils/httpUtils");
 
 class TcoApi extends RateLimitedApi {
   constructor(options = {}) {
@@ -28,10 +28,8 @@ class TcoApi extends RateLimitedApi {
       );
 
       logger.debug(`[${this.name}] Fetching etablissements with params ${params}...`);
-      return got.stream(`${TcoApi.baseApiUrl}/entity/etablissements.ndjson`, {
-        searchParams: params,
+      return getFileAsStream(`${TcoApi.baseApiUrl}/entity/etablissements.ndjson?${params}`, {
         timeout: 5000,
-        responseType: "json",
       });
     });
   }

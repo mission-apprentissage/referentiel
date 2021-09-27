@@ -8,7 +8,7 @@ module.exports = (custom = {}) => {
   return {
     name,
     async stream() {
-      let etablissementsStream = await api.getEtablissements({});
+      let etablissementsStream = await api.getEtablissements({}, { limit: 100000 });
 
       return oleoduc(
         etablissementsStream,
