@@ -1,6 +1,8 @@
+const { pick } = require("lodash");
+const { DateTime } = require("luxon");
 const { findRegionByName } = require("./regions");
 const { findAcademieByCodeInsee } = require("./academies");
-const { pick } = require("lodash");
+const MongodbCache = require("../common/MongodbCache");
 const MIN_GEOCODE_SCORE = 0.6;
 
 class GeocodingError extends Error {
@@ -41,6 +43,8 @@ function selectBestResults(results, adresse) {
 }
 
 module.exports = (geoAdresseApi) => {
+  let cache = new MongodbCache("adresses", { ttl: DateTime.now().plus({ month: 1 }).toJSDate() });
+
   async function reverseGeocodingFallback(error, longitude, latitude, label) {
     let promise = label ? geoAdresseApi.search(label) : Promise.reject(error);
 
@@ -55,13 +59,13 @@ module.exports = (geoAdresseApi) => {
 
       return selectBestResults(results, label);
     },
-    async getAdresseFromCoordinates(longitude, latitude, options) {
-      let results;
-      try {
-        results = await geoAdresseApi.reverse(longitude, latitude);
-      } catch (e) {
-        results = await reverseGeocodingFallback(e, longitude, latitude, options.label);
-      }
+    async getAdresseFromCoordinates(longitude, latitude, options = {}) {
+      let key = `${longitude}_${latitude}`;
+      let results = await cache.memo(key, (e) => {
+        return geoAdresseApi
+          .reverse(longitude, latitude)
+          .catch(() => reverseGeocodingFallback(e, longitude, latitude, options.label));
+      });
 
       return selectBestResults(results, `[${longitude},${latitude}]`);
     },

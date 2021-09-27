@@ -4,29 +4,30 @@ const { dbCollection } = require("./db/mongodb");
 
 class MongodbCache {
   constructor(cacheName, options = {}) {
-    this.name = cacheName;
+    this.cacheName = cacheName;
     this.options = options;
     this.collection = dbCollection("cache");
   }
 
   async get(key) {
-    let res = await this.collection.findOne({ _id: `${this.name}_${key}` });
+    let res = await this.collection.findOne({ _id: `${this.cacheName}_${key}` });
     if (!res) {
       return null;
     }
 
-    logger.debug(`Value with key '${key}' retrieved from cache ${this.name}`);
+    logger.debug(`Value with key '${key}' retrieved from cache ${this.cacheName}`);
     return res.value;
   }
 
   async add(key, value) {
-    logger.debug(`Adding key '${key}' to cache ${this.name}...`);
+    logger.debug(`Adding key '${key}' to cache ${this.cacheName}...`);
     await this.collection.updateOne(
       {
-        _id: `${this.name}_${key}`,
+        _id: `${this.cacheName}_${key}`,
       },
       {
         $set: {
+          cacheName: this.cacheName,
           expires_at: this.options.ttl || DateTime.now().plus({ hour: 24 }).toJSDate(),
           value,
         },
