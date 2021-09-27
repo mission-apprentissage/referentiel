@@ -13,7 +13,7 @@ function createAcceSource(array = {}) {
   });
 }
 
-describe(__filename, () => {
+describe("acce", () => {
   it("Vérifie qu'on peut collecter des contacts", async () => {
     await insertEtablissement({ uai: "0111111Y", siret: "11111111100006" });
     let source = createAcceSource([

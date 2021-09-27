@@ -19,7 +19,7 @@ function createTestSource(array) {
   };
 }
 
-describe(__filename, () => {
+describe("importEtablissement", () => {
   it("Vérifie qu'on peut importer un référentiel", async () => {
     let source = createTestSource([{ selector: "11111111100006" }]);
 

@@ -6,7 +6,7 @@ const { dbCollection } = require("../../src/common/db/mongodb");
 const { insertEtablissement } = require("../utils/fakeData");
 const collectSources = require("../../src/jobs/collectSources");
 
-describe(__filename, () => {
+describe("collectSources", () => {
   function createTestSource(array) {
     let name = "dummy";
     return {

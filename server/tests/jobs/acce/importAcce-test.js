@@ -4,7 +4,7 @@ const { getMockedAcceApi } = require("../../utils/apiMocks");
 const importAcce = require("../../../src/jobs/acce/importAcce");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 
-describe(__filename, () => {
+describe("importAcce", () => {
   it("Vérifie qu'on peut scrapper et importer un etablissement", async () => {
     let api = getMockedAcceApi((mock, responses) => {
       mock.onGet(/.*index.php.*/).reply(200, responses.index(), {

@@ -4,7 +4,7 @@ const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
 const { importEtablissements, createStream } = require("../../utils/testUtils");
 
-describe(__filename, () => {
+describe("onisep-structure", () => {
   it("Vérifie qu'on peut collecter des informations du fichier ONISEP (structure)", async () => {
     await importEtablissements();
     let source = createSource("onisep-structure", {

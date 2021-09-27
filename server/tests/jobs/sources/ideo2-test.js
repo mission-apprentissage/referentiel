@@ -6,7 +6,7 @@ const collectSources = require("../../../src/jobs/collectSources");
 const { createStream } = require("../../utils/testUtils");
 const { insertEtablissement } = require("../../utils/fakeData");
 
-describe(__filename, () => {
+describe("ideo2", () => {
   it("Vérifie qu'on peut collecter des relations pour le fichier ideo2 de l'ONISEP", async () => {
     await insertEtablissement({ siret: "11111111100006" });
     await insertEtablissement({ siret: "22222222200002" });

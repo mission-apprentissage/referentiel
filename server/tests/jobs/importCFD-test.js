@@ -22,7 +22,7 @@ let getVFormationDiplomeCsvStream = (content) => {
   );
 };
 
-describe(__filename, () => {
+describe("importCFD", () => {
   it("Vérifie qu'on peut importer les formations diplomes", async () => {
     let stats = await importCFD({
       nFormationDiplomeCsvStream: getNFormationDiplomeCsvStream(),

@@ -5,7 +5,7 @@ const collectSources = require("../../../src/jobs/collectSources");
 const { createStream } = require("../../utils/testUtils");
 const { insertEtablissement } = require("../../utils/fakeData");
 
-describe(__filename, () => {
+describe("mfr", () => {
   it("Vérifie qu'on peut collecter des informations du fichier mfr avec le siret", async () => {
     await insertEtablissement({ siret: "11111111100006" });
     let source = createSource("mfr", {

@@ -4,7 +4,7 @@ const { createSource } = require("../../../src/jobs/sources/sources");
 const { importEtablissements, createStream } = require("../../utils/testUtils");
 const collectSources = require("../../../src/jobs/collectSources");
 
-describe(__filename, () => {
+describe("opcoep", () => {
   it("Vérifie qu'on peut collecter des informations du fichier OPCO EP", async () => {
     await importEtablissements();
     let source = createSource("opcoep", {

@@ -5,7 +5,7 @@ const { createStream } = require("../../utils/testUtils");
 const { insertEtablissement } = require("../../utils/fakeData");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 
-describe(__filename, () => {
+describe("agri", () => {
   it("Vérifie qu'on peut collecter des informations du fichier agri", async () => {
     await insertEtablissement({ siret: "11111111100006" });
     let source = createSource("agri", {

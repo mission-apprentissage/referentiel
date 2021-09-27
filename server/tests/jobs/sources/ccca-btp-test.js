@@ -5,7 +5,7 @@ const collectSources = require("../../../src/jobs/collectSources");
 const { createStream } = require("../../utils/testUtils");
 const { insertEtablissement } = require("../../utils/fakeData");
 
-describe(__filename, () => {
+describe("ccca-btp", () => {
   it("Vérifie qu'on peut collecter des informations du fichier ccca-btp", async () => {
     await insertEtablissement({
       uai: "0111111Y",

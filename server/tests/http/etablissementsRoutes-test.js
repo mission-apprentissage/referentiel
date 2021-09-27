@@ -2,7 +2,7 @@ const { strictEqual, deepStrictEqual, ok } = require("assert");
 const { insertEtablissement, insertStats } = require("../utils/fakeData");
 const { startServer } = require("../utils/testUtils");
 
-describe(__filename, () => {
+describe("etablissementsRoutes", () => {
   it("Vérifie qu'on peut lister des établissements", async () => {
     const { httpClient } = await startServer();
     await insertEtablissement({

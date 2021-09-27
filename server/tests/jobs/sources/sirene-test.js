@@ -21,7 +21,7 @@ function createSireneSource(custom = {}) {
   });
 }
 
-describe(__filename, () => {
+describe("sirene", () => {
   it("Vérifie qu'on peut collecter des informations de l'API Sirene", async () => {
     await importEtablissements();
     let source = createSireneSource();

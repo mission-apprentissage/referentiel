@@ -4,7 +4,7 @@ const { insertEtablissement } = require("../utils/fakeData");
 const consolidate = require("../../src/jobs/consolidate");
 const { omit } = require("lodash");
 
-describe(__filename, () => {
+describe("consolidate", () => {
   it("Vérifie qu'on peut valider un UAI", async () => {
     await insertEtablissement({
       siret: "11111111100006",

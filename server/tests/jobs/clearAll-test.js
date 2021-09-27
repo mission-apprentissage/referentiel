@@ -3,7 +3,7 @@ const { dbCollection } = require("../../src/common/db/mongodb");
 const cleanAll = require("../../src/jobs/clearAll");
 const { insertEtablissement, insertCFD } = require("../utils/fakeData");
 
-describe(__filename, () => {
+describe("clearAll", () => {
   it("Vérifie qu'on peut supprimer les établissements", async () => {
     await insertEtablissement();
     await insertCFD();

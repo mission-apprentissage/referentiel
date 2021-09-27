@@ -1,7 +1,7 @@
 const assert = require("assert");
 const { validateUAI } = require("../../src/common/utils/uaiUtils");
 
-describe(__filename, () => {
+describe("uaiUtils", () => {
   it("permet de valider un UAI", () => {
     assert.strictEqual(validateUAI("0010856A"), true);
     assert.strictEqual(validateUAI("0000856A"), false);

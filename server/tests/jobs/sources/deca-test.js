@@ -5,7 +5,7 @@ const collectSources = require("../../../src/jobs/collectSources");
 const { createStream } = require("../../utils/testUtils");
 const { insertEtablissement } = require("../../utils/fakeData");
 
-describe(__filename, () => {
+describe("deca", () => {
   it("Vérifie qu'on peut collecter l'uai", async () => {
     await insertEtablissement({ siret: "11111111100006" });
     let source = createSource("deca", {

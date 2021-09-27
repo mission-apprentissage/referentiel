@@ -1,7 +1,7 @@
 const assert = require("assert");
 const { findRegionByUai, findRegionByName, findRegionByCodeInsee } = require("../../src/common/regions");
 
-describe(__filename, () => {
+describe("regions", () => {
   it("Permet de trouver une région avec son UAI", () => {
     assert.deepStrictEqual(findRegionByUai("0751234J").nom, "Île-de-France");
     assert.deepStrictEqual(findRegionByUai("6200001G").nom, "Corse");

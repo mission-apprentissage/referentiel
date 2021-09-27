@@ -5,7 +5,7 @@ const { importEtablissements } = require("../../utils/testUtils");
 const collectSources = require("../../../src/jobs/collectSources");
 const { mockTcoApi } = require("../../utils/apiMocks");
 
-describe(__filename, () => {
+describe("catalogue-etablissements", () => {
   it("Vérifie qu'on peut collecter des informations relatives aux établissements du catalogue", async () => {
     await importEtablissements();
     mockTcoApi((client, responses) => {

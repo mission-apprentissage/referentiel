@@ -20,7 +20,7 @@ function createFormationsSource(custom = {}) {
   });
 }
 
-describe(__filename, () => {
+describe("catalogue", () => {
   it("Vérifie qu'on peut collecter des relations (formateur)", async () => {
     await importEtablissements();
     let source = createFormationsSource({

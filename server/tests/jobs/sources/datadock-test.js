@@ -5,7 +5,7 @@ const collectSources = require("../../../src/jobs/collectSources");
 const { createStream } = require("../../utils/testUtils");
 const { insertEtablissement } = require("../../utils/fakeData");
 
-describe(__filename, () => {
+describe("datadock", () => {
   it("Vérifie qu'on peut collecter des informations datadock", async () => {
     await insertEtablissement({ siret: "11111111100006" });
     await insertEtablissement({ siret: "22222222200002" });

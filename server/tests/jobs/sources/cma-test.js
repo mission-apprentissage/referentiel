@@ -5,7 +5,7 @@ const collectSources = require("../../../src/jobs/collectSources");
 const { createStream } = require("../../utils/testUtils");
 const { insertEtablissement } = require("../../utils/fakeData");
 
-describe(__filename, () => {
+describe("cma", () => {
   it("Vérifie qu'on peut collecter des informations du fichier cma", async () => {
     await insertEtablissement({
       uai: "0111111Y",

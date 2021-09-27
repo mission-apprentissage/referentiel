@@ -1,7 +1,7 @@
 const assert = require("assert");
 const { findAcademieByUai, findAcademieByName, findAcademieByCodeInsee } = require("../../src/common/academies");
 
-describe(__filename, () => {
+describe("academies", () => {
   it("Permet de trouver une académie à partir d'un UAI", () => {
     assert.deepStrictEqual(findAcademieByUai("0751234J").nom, "Paris");
     assert.deepStrictEqual(findAcademieByUai("6200001G").nom, "Corse");
