@@ -9,7 +9,6 @@ const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/collectSources");
 const consolidate = require("./jobs/consolidate");
 const etablissementAsCsvStream = require("./jobs/tasks/etablissementAsCsvStream");
-const etablissementAsJsonStream = require("./jobs/tasks/etablissementAsJsonStream");
 const clear = require("./jobs/clearAll");
 const computeStats = require("./jobs/computeStats");
 const importCFD = require("./jobs/importCFD");
@@ -75,14 +74,12 @@ cli
   .description("Exporte les établissements")
   .option("--filter <filter>", "Filtre au format json", JSON.parse)
   .option("--limit <limit>", "Nombre maximum d'éléments à exporter", parseInt)
-  .option("--json", "Exporte les données au format json")
   .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
-  .action(({ filter, limit, json, out }) => {
+  .action(({ filter, limit, out }) => {
     runScript(() => {
       let options = { filter, limit };
-      let input = json ? etablissementAsJsonStream(options) : etablissementAsCsvStream(options);
 
-      return oleoduc(input, out || writeToStdout());
+      return oleoduc(etablissementAsCsvStream(options), out || writeToStdout());
     });
   });
 
