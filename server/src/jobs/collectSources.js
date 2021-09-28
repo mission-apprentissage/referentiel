@@ -13,33 +13,44 @@ function buildQuery(selector) {
   return typeof selector === "object" ? selector : { $or: [{ siret: selector }, { uai: selector }] };
 }
 
-function mergeUAI(from, etablissement, uais) {
-  let updated = uais
-    .filter((uai) => uai && uai !== "NULL")
-    .reduce((acc, uai) => {
-      let found = etablissement.uais.find((u) => u.uai === uai) || {};
-      let sources = uniq([...(found.sources || []), from]);
-      acc.push({ ...found, uai, sources, valide: validateUAI(uai) });
-      return acc;
-    }, []);
-
-  let previous = etablissement.uais.filter((us) => !updated.map(({ uai }) => uai).includes(us.uai));
-
-  return [...updated, ...previous];
-}
-
-async function mergeRelations(from, etablissement, relations) {
-  let updated = relations.reduce((acc, relation) => {
-    let found = etablissement.relations.find((r) => r.siret === relation.siret) || {};
-    let sources = uniq([...(found.sources || []), from]);
-    acc.push({ ...found, ...relation, sources });
+function mergeArray(from, existingArray, discriminator, newArray, custom = () => ({})) {
+  let updated = newArray.reduce((acc, item) => {
+    let found = existingArray.find((c) => c[discriminator] === item[discriminator]) || {};
+    acc.push({
+      ...found,
+      ...item,
+      sources: uniq([...(found.sources || []), from]),
+      ...custom(found, item),
+    });
     return acc;
   }, []);
 
-  let previous = etablissement.relations.filter((r) => !updated.map(({ siret }) => siret).includes(r.siret));
+  let untouched = existingArray.filter((p) => {
+    return !updated.map((u) => u[discriminator]).includes(p[discriminator]);
+  });
+
+  return [...updated, ...untouched];
+}
+
+function mergeUAI(from, etablissement, uais) {
+  return mergeArray(
+    from,
+    etablissement.uais,
+    "uai",
+    uais.filter((uai) => uai && uai !== "NULL").map((uai) => ({ uai })),
+    (found, data) => {
+      return {
+        valide: validateUAI(data.uai),
+      };
+    }
+  );
+}
+
+async function mergeRelations(from, etablissement, relations) {
+  let res = mergeArray(from, etablissement.relations, "siret", relations);
 
   return Promise.all(
-    [...updated, ...previous].map(async (r) => {
+    res.map(async (r) => {
       let count = await dbCollection("etablissements").countDocuments({ siret: r.siret });
       return {
         ...r,
@@ -50,21 +61,12 @@ async function mergeRelations(from, etablissement, relations) {
 }
 
 async function mergeContacts(from, etablissement, contacts) {
-  let updated = contacts.reduce((acc, contact) => {
-    let found = etablissement.contacts.find((c) => c.email === contact.email) || {};
-    acc.push({
-      ...found,
-      ...contact,
+  return mergeArray(from, etablissement.contacts, "email", contacts, (found, contact) => {
+    return {
       confirmé: contact.confirmé || false,
-      sources: uniq([...(found.sources || []), from]),
       ...(contact._extras ? { _extras: { ...(found._extras || {}), [from]: contact._extras } } : {}),
-    });
-    return acc;
-  }, []);
-
-  let previous = etablissement.contacts.filter((r) => !updated.map(({ email }) => email).includes(r.email));
-
-  return [...updated, ...previous];
+    };
+  });
 }
 
 function handleAnomalies(from, etablissement, anomalies) {
