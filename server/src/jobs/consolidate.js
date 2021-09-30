@@ -1,8 +1,9 @@
 const logger = require("../common/logger");
 const { dbCollection } = require("../common/db/mongodb");
-const { oleoduc, writeData } = require("oleoduc");
+const { some } = require("lodash");
+const { oleoduc, filterData, writeData } = require("oleoduc");
 
-async function validateUAI() {
+async function selectUAI() {
   let collection = dbCollection("etablissements");
   let stats = {
     validated: 0,
@@ -55,42 +56,61 @@ async function validateUAI() {
     );
   }
 
-  await oleoduc(
-    collection
-      .find({
-        uai: { $exists: false },
-        ...withPopularUAIAndSources(),
-      })
-      .stream(),
-    writeData(async (etablissement) => {
-      let mostPopularUAI = etablissement.uais.reduce((acc, u) => {
-        let filterSources = (array) =>
-          array.filter((s) => ["deca", "sifa-ramsese", "catalogue-etablissements"].includes(s));
-        return filterSources(acc.sources).length < filterSources(u.sources).length ? u : acc;
-      }).uai;
+  let cursor = collection.find({ uai: { $exists: false }, ...withPopularUAIAndSources() }).stream();
+  for await (const etablissement of cursor) {
+    let mostPopularUAI = etablissement.uais.reduce((acc, u) => {
+      let filterSources = (array) => {
+        return array.filter((s) => ["deca", "sifa-ramsese", "catalogue-etablissements"].includes(s));
+      };
+      return filterSources(acc.sources).length < filterSources(u.sources).length ? u : acc;
+    }).uai;
 
-      let nbConflicts = await collection.count({
-        siret: { $ne: etablissement.siret },
-        ...withPopularUAIAndSources(mostPopularUAI),
-      });
+    let nbConflicts = await collection.count({
+      siret: { $ne: etablissement.siret },
+      ...withPopularUAIAndSources(mostPopularUAI),
+    });
 
-      if (nbConflicts === 0) {
-        logger.info(`UAI ${mostPopularUAI} validé pour l'établissement ${etablissement.siret}`);
-        await collection.updateMany({ siret: etablissement.siret }, { $set: { uai: mostPopularUAI } });
-        stats.validated++;
-      } else {
-        stats.conflicted++;
-        await handleAnomalies(etablissement, mostPopularUAI, nbConflicts);
-      }
-    })
-  );
+    if (nbConflicts === 0) {
+      logger.info(`UAI ${mostPopularUAI} validé pour l'établissement ${etablissement.siret}`);
+      await collection.updateMany({ siret: etablissement.siret }, { $set: { uai: mostPopularUAI } });
+      stats.validated++;
+    } else {
+      stats.conflicted++;
+      await handleAnomalies(etablissement, mostPopularUAI, nbConflicts);
+    }
+  }
 
   return stats;
 }
 
+async function markAsGestionnaireOrFormateur() {
+  let updated = 0;
+  let cursor = dbCollection("etablissements").find().stream();
+  await oleoduc(
+    cursor,
+    filterData((etablissement) => etablissement.diplomes.length > 0 || etablissement.relations.length > 0),
+    writeData(async (etablissement) => {
+      let hasDiplomes = etablissement.diplomes.length > 0;
+      let { modifiedCount } = await dbCollection("etablissements").updateOne(
+        { siret: etablissement.siret },
+        {
+          $set: {
+            formateur: hasDiplomes || some(etablissement.relations, (r) => r.type === "gestionnaire"),
+            gestionnaire: hasDiplomes || some(etablissement.relations, (r) => r.type === "formateur"),
+          },
+        }
+      );
+      updated += modifiedCount;
+    })
+  );
+
+  return { updated };
+}
+
 async function consolidate() {
   return {
-    validateUAI: await validateUAI(),
+    selectUAI: await selectUAI(),
+    markAsGestionnaireOrFormateur: await markAsGestionnaireOrFormateur(),
   };
 }
 

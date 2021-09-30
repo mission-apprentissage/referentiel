@@ -21,11 +21,9 @@ describe("consolidate", () => {
 
     let found = await dbCollection("etablissements").findOne();
     assert.deepStrictEqual(found.uai, "0111111Y");
-    assert.deepStrictEqual(stats, {
-      validateUAI: {
-        validated: 1,
-        conflicted: 0,
-      },
+    assert.deepStrictEqual(stats.selectUAI, {
+      validated: 1,
+      conflicted: 0,
     });
   });
 
@@ -134,11 +132,9 @@ describe("consolidate", () => {
         },
       ]
     );
-    assert.deepStrictEqual(stats, {
-      validateUAI: {
-        validated: 0,
-        conflicted: 2,
-      },
+    assert.deepStrictEqual(stats.selectUAI, {
+      validated: 0,
+      conflicted: 2,
     });
   });
 
@@ -158,11 +154,82 @@ describe("consolidate", () => {
 
     let found = await dbCollection("etablissements").findOne();
     assert.ok(!found.uai);
-    assert.deepStrictEqual(stats, {
-      validateUAI: {
-        validated: 0,
-        conflicted: 0,
-      },
+    assert.deepStrictEqual(stats.selectUAI, {
+      validated: 0,
+      conflicted: 0,
+    });
+  });
+
+  it("Vérifie qu'on peut identifier un établissement gestionnaire ", async () => {
+    await insertEtablissement({
+      siret: "11111111100006",
+      relations: [
+        {
+          siret: "22222222200002",
+          type: "formateur",
+          label: "UFA",
+          sources: ["catalogue"],
+          referentiel: true,
+        },
+      ],
+    });
+
+    let stats = await consolidate();
+
+    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
+    assert.ok(found.gestionnaire);
+    assert.ok(!found.formateur);
+    assert.deepStrictEqual(stats.markAsGestionnaireOrFormateur, {
+      updated: 1,
+    });
+  });
+
+  it("Vérifie qu'on peut identifier un établissement formateur ", async () => {
+    await insertEtablissement({
+      siret: "22222222200002",
+      relations: [
+        {
+          siret: "11111111100006",
+          type: "gestionnaire",
+          label: "UFA",
+          sources: ["catalogue"],
+          referentiel: true,
+        },
+      ],
+    });
+
+    let stats = await consolidate();
+
+    let found = await dbCollection("etablissements").findOne({ siret: "22222222200002" });
+    assert.ok(found.formateur);
+    assert.ok(!found.gestionnaire);
+    assert.deepStrictEqual(stats.markAsGestionnaireOrFormateur, {
+      updated: 1,
+    });
+  });
+
+  it("Vérifie qu'on peut identifier un établissement gestionnaire et formateur ", async () => {
+    await insertEtablissement({
+      siret: "22222222200002",
+      relations: [],
+      diplomes: [
+        {
+          type: "cfd",
+          code: "50033615",
+          niveau: "500",
+          label: "CAP",
+          sources: ["catalogue"],
+        },
+      ],
+    });
+
+    let stats = await consolidate();
+
+    let found = await dbCollection("etablissements").findOne({ siret: "22222222200002" });
+    assert.ok(found.formateur);
+    assert.ok(found.gestionnaire);
+    assert.deepStrictEqual(stats.markAsGestionnaireOrFormateur, {
+      updated: 1,
     });
   });
 });

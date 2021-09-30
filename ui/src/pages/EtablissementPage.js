@@ -41,6 +41,14 @@ const Title = styled.div`
   }
 `;
 
+function PrettyBoolean({ value }) {
+  if (value === null || value === undefined) {
+    return "inconnu";
+  }
+
+  return value ? "Oui" : "Non";
+}
+
 export default () => {
   let { siret } = useParams();
   let [etablissement, loading, error] = useFetch(`/api/v1/etablissements/${siret}`);
@@ -80,6 +88,18 @@ export default () => {
                       <Item>
                         <span>UAI</span>
                         <span>{etablissement.uai}</span>
+                      </Item>
+                      <Item>
+                        <span>Gestionnaire</span>
+                        <span>
+                          <PrettyBoolean value={etablissement.gestionnaire} />
+                        </span>
+                      </Item>
+                      <Item>
+                        <span>Formateur</span>
+                        <span>
+                          <PrettyBoolean value={etablissement.formateur} />
+                        </span>
                       </Item>
                       <Item>
                         <span>Forme juridique</span>
