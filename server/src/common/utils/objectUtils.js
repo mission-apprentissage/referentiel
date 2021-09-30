@@ -1,4 +1,8 @@
-const { mergeWith, isArray } = require("lodash");
+const { mergeWith, isArray, pickBy, isEmpty } = require("lodash");
+
+function omitEmpty(obj) {
+  return pickBy(obj, (v) => !isEmpty(v));
+}
 
 function flattenObject(obj, parent, res = {}) {
   for (let key in obj) {
@@ -26,6 +30,7 @@ function isError(obj) {
 
 module.exports = {
   flattenObject,
+  omitEmpty,
   mergeObjectsAndConcatArray,
   isError,
 };

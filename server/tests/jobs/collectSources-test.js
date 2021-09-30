@@ -342,19 +342,88 @@ describe("collectSources", () => {
     assert.strictEqual(found.contacts.length, 1);
   });
 
-  it("Vérifie qu'on peut ajouter des meta à un contact", async () => {
+  it("Vérifie qu'on peut collecter des diplomes", async () => {
     await insertEtablissement({ siret: "11111111100006" });
     let source = createTestSource([
       {
         selector: "11111111100006",
-        contacts: [{ email: "jacques@dupont.fr", confirmé: false, _extras: { aSource: "some-data-to-store" } }],
+        diplomes: [{ code: "13531445", type: "cfd", niveau: "135", label: "MASTER" }],
       },
     ]);
 
     await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
-    assert.deepStrictEqual(found.contacts[0]._extras, { dummy: { aSource: "some-data-to-store" } });
+    assert.deepStrictEqual(found.diplomes, [
+      {
+        code: "13531445",
+        type: "cfd",
+        niveau: "135",
+        label: "MASTER",
+        sources: ["dummy"],
+      },
+    ]);
+  });
+
+  it("Vérifie qu'on ne duplique pas les diplomes", async () => {
+    await insertEtablissement({
+      siret: "11111111100006",
+      diplomes: [{ code: "13531445", type: "cfd", niveau: "135", label: "MASTER", sources: ["other"] }],
+    });
+    let source = createTestSource([
+      {
+        selector: "11111111100006",
+        diplomes: [{ code: "13531445", type: "cfd", niveau: "135", label: "MASTER" }],
+      },
+    ]);
+
+    await collectSources(source);
+
+    let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
+    assert.strictEqual(found.diplomes.length, 1);
+    assert.deepStrictEqual(found.diplomes[0].sources, ["other", "dummy"]);
+    assert.strictEqual(found.diplomes[0].type, "cfd");
+  });
+
+  it("Vérifie qu'on peut collecter des certifications", async () => {
+    await insertEtablissement({ siret: "11111111100006" });
+    let source = createTestSource([
+      {
+        selector: "11111111100006",
+        certifications: [{ code: "RNCP29746", type: "rncp", label: "SOCIOLOGIE" }],
+      },
+    ]);
+
+    await collectSources(source);
+
+    let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
+    assert.deepStrictEqual(found.certifications, [
+      {
+        code: "RNCP29746",
+        type: "rncp",
+        label: "SOCIOLOGIE",
+        sources: ["dummy"],
+      },
+    ]);
+  });
+
+  it("Vérifie qu'on ne duplique pas les certifications", async () => {
+    await insertEtablissement({
+      siret: "11111111100006",
+      certifications: [{ code: "RNCP29746", type: "rncp", label: "SOCIOLOGIE", sources: ["other"] }],
+    });
+    let source = createTestSource([
+      {
+        selector: "11111111100006",
+        certifications: [{ code: "RNCP29746", type: "rncp", label: "SOCIOLOGIE" }],
+      },
+    ]);
+
+    await collectSources(source);
+
+    let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
+    assert.strictEqual(found.certifications.length, 1);
+    assert.deepStrictEqual(found.certifications[0].sources, ["other", "dummy"]);
   });
 
   it("Vérifie qu'on peut collecter des relations", async () => {
@@ -382,32 +451,6 @@ describe("collectSources", () => {
     ]);
   });
 
-  it("Vérifie qu'on peut fusionner une relation déjà collectée", async () => {
-    await insertEtablissement({
-      siret: "11111111100006",
-      relations: [
-        {
-          siret: "22222222200002",
-          referentiel: false,
-          label: "Centre de formation",
-          type: "gestionnaire",
-          sources: ["other"],
-        },
-      ],
-    });
-    let source = createTestSource([
-      {
-        selector: "11111111100006",
-        relations: [{ siret: "22222222200002", label: "Centre de formation", type: "gestionnaire" }],
-      },
-    ]);
-
-    await collectSources(source);
-
-    let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
-    assert.deepStrictEqual(found.relations[0].sources, ["other", "dummy"]);
-  });
-
   it("Vérifie qu'on ne duplique pas les relations", async () => {
     await insertEtablissement({
       siret: "11111111100006",
@@ -417,7 +460,7 @@ describe("collectSources", () => {
           referentiel: false,
           label: "test",
           type: "gestionnaire",
-          sources: ["dummy"],
+          sources: ["other"],
         },
       ],
     });
@@ -434,6 +477,7 @@ describe("collectSources", () => {
     assert.strictEqual(found.relations.length, 1);
     assert.strictEqual(found.relations[0].siret, "22222222200002");
     assert.strictEqual(found.relations[0].type, "gestionnaire");
+    assert.deepStrictEqual(found.relations[0].sources, ["other", "dummy"]);
   });
 
   it("Vérifie qu'on peut détecter des relations entre établissements", async () => {

@@ -22,13 +22,13 @@ describe("mfr", () => {
     assert.deepStrictEqual(found.uais, [
       {
         sources: ["mfr"],
-        uai: "0111111Y",
-        valide: true,
+        uai: "0011073X",
+        valide: false,
       },
       {
         sources: ["mfr"],
-        uai: "0011073X",
-        valide: false,
+        uai: "0111111Y",
+        valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -57,7 +57,7 @@ describe("mfr", () => {
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["mfr"]);
-    assert.deepStrictEqual(found.uais[1], {
+    assert.deepStrictEqual(found.uais[0], {
       sources: ["mfr"],
       uai: "0011073X",
       valide: false,
@@ -80,7 +80,7 @@ describe("mfr", () => {
 
     let found = await dbCollection("etablissements").findOne({ "uais.uai": "0011073X" });
     assert.deepStrictEqual(found.reseaux, ["mfr"]);
-    assert.deepStrictEqual(found.uais[0], {
+    assert.deepStrictEqual(found.uais[1], {
       sources: ["mfr"],
       uai: "0111111Y",
       valide: true,

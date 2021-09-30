@@ -20,23 +20,19 @@ const createTimer = () => {
   };
 };
 
-const exit = async (rawError) => {
-  let error = rawError;
-  if (rawError) {
-    logger.error(rawError.constructor.name === "EnvVarError" ? rawError.message : rawError);
+const exit = async (scriptError) => {
+  if (scriptError) {
+    logger.error(scriptError.constructor.name === "EnvVarError" ? scriptError.message : scriptError);
+    process.exitCode = 1;
   }
 
   setTimeout(() => {
     //Waiting logger to flush all logs (MongoDB)
-    closeMongodbConnection()
-      .then(() => {})
-      .catch((closeError) => {
-        error = closeError;
-        console.error(error);
-      });
+    closeMongodbConnection().catch((e) => {
+      console.error(e);
+      process.exitCode = 1;
+    });
   }, 250);
-
-  process.exitCode = error ? 1 : 0;
 };
 
 async function runScript(job) {

@@ -9,13 +9,13 @@ class InMemoryCache {
   get(key) {
     let value = this.cache[key];
     if (value) {
-      logger.debug(`Value with key '${key}' retrieved from cache ${this.name}`);
+      logger.trace(`Value with key '${key}' retrieved from cache ${this.name}`);
     }
     return value;
   }
 
   add(key, value) {
-    logger.debug(`Key '${key}' added to cache ${this.name}`);
+    logger.trace(`Key '${key}' added to cache ${this.name}`);
     this.cache[key] = value;
   }
 
@@ -29,7 +29,7 @@ class InMemoryCache {
   }
 
   flush() {
-    logger.debug(`Cache '${this.name} ' flushed`);
+    logger.trace(`Cache '${this.name} ' flushed`);
     this.cache = {};
   }
 }

@@ -407,7 +407,7 @@ describe("sirene", () => {
 
     let found = await dbCollection("cache").findOne({ _id: "sirene_111111111" });
     assert.deepStrictEqual(found._id, "sirene_111111111");
-    assert.ok(found.expires_at > DateTime.now().plus({ hour: 24 }).toJSDate());
+    assert.ok(found.expires_at > DateTime.now().plus({ hour: 1 }).toJSDate());
     assert.ok(found.value);
   });
 });

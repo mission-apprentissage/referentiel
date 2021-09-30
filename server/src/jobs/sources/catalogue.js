@@ -1,199 +1,224 @@
-const { uniqBy, chain, uniq } = require("lodash");
-const { oleoduc, transformData } = require("oleoduc");
+const { oleoduc, transformData, flattenArray, mergeStreams } = require("oleoduc");
 const CatalogueApi = require("../../common/apis/CatalogueApi");
 const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
 const { dbCollection } = require("../../common/db/mongodb");
+const { omitEmpty } = require("../../common/utils/objectUtils");
 
-async function getFormations(api, siret, options = {}) {
-  let res = await api.getFormations(
-    {
-      $or: [{ etablissement_formateur_siret: siret }, { etablissement_gestionnaire_siret: siret }],
-    },
-    {
-      select: {
-        etablissement_gestionnaire_siret: 1,
-        etablissement_gestionnaire_entreprise_raison_sociale: 1,
-        etablissement_formateur_siret: 1,
-        etablissement_formateur_entreprise_raison_sociale: 1,
-        lieu_formation_adresse: 1,
-        lieu_formation_siret: 1,
-        lieu_formation_geo_coordonnees: 1,
-        rncp_code: 1,
-        rncp_intitule: 1,
-        cfd: 1,
-        cfd_specialite: 1,
-        email: 1,
-        id_rco_formation: 1,
-      },
-      limit: 600, // no pagination needed for the moment
-      ...options,
-    }
-  );
+function fetchFormations(api, options = {}) {
+  let siret = options.siret;
+  let query = {
+    published: true,
+    ...(siret ? { $or: [{ etablissement_formateur_siret: siret }, { etablissement_gestionnaire_siret: siret }] } : {}),
+  };
 
-  return res.formations;
+  return api.streamFormations(query, {
+    limit: 1000000,
+    ...(options.annee
+      ? {
+          annee: options.annee,
+          select: {
+            etablissement_gestionnaire_siret: 1,
+            etablissement_gestionnaire_entreprise_raison_sociale: 1,
+            etablissement_formateur_siret: 1,
+            etablissement_formateur_entreprise_raison_sociale: 1,
+            lieu_formation_adresse: 1,
+            lieu_formation_siret: 1,
+            lieu_formation_geo_coordonnees: 1,
+            rncp_code: 1,
+            rncp_intitule: 1,
+            cfd: 1,
+            cfd_specialite: 1,
+            email: 1,
+            id_rco_formation: 1,
+            tags: 1,
+          },
+        }
+      : {}),
+  });
 }
 
-async function buildRelations(siret, formations) {
-  let relations = formations
-    .filter((f) => f.etablissement_gestionnaire_siret !== f.etablissement_formateur_siret)
-    .map((f) => {
-      let isFormateurType = siret === f.etablissement_gestionnaire_siret;
-      let relationSiret = isFormateurType ? f.etablissement_formateur_siret : f.etablissement_gestionnaire_siret;
-      let label = isFormateurType
-        ? f.etablissement_formateur_entreprise_raison_sociale
-        : f.etablissement_gestionnaire_entreprise_raison_sociale;
+function buildRelation(formation, types) {
+  if (formation.etablissement_gestionnaire_siret === formation.etablissement_formateur_siret) {
+    return null;
+  }
 
-      return {
-        siret: relationSiret,
-        ...(label ? { label } : {}),
-        type: isFormateurType ? "formateur" : "gestionnaire",
-      };
-    });
+  let isGestionnaire = types.includes("gestionnaire");
+  return omitEmpty({
+    type: isGestionnaire ? "formateur" : "gestionnaire",
+    siret: isGestionnaire ? formation.etablissement_formateur_siret : formation.etablissement_gestionnaire_siret,
+    label: isGestionnaire
+      ? formation.etablissement_formateur_entreprise_raison_sociale
+      : formation.etablissement_gestionnaire_entreprise_raison_sociale,
+  });
+}
 
+async function buildDiplome(formation) {
+  if (!formation.cfd) {
+    return null;
+  }
+
+  let bcn = await dbCollection("cfd").findOne({ FORMATION_DIPLOME: formation.cfd });
   return {
-    relations: uniqBy(relations, "siret"),
-    gestionnaire:
-      formations.some((f) => f.etablissement_gestionnaire_siret === f.etablissement_formateur_siret) ||
-      relations.some((r) => r.type === "formateur"),
-    formateur:
-      formations.some((f) => f.etablissement_gestionnaire_siret === f.etablissement_formateur_siret) ||
-      relations.some((r) => r.type === "gestionnaire"),
+    type: "cfd",
+    code: formation.cfd,
+    ...(bcn ? { niveau: bcn.NIVEAU_FORMATION_DIPLOME, label: bcn.LIBELLE_COURT } : {}),
   };
 }
 
-async function buildDiplomes(siret, formations) {
-  let diplomes = await Promise.all(
-    formations
-      .filter((f) => f.cfd && siret === f.etablissement_formateur_siret)
-      .map(async (f) => {
-        let bcn = await dbCollection("cfd").findOne({ FORMATION_DIPLOME: f.cfd });
-        return {
-          code: f.cfd,
-          type: "cfd",
-          ...(bcn ? { niveau: bcn.NIVEAU_FORMATION_DIPLOME, label: bcn.LIBELLE_COURT } : {}),
-        };
-      })
-  );
-  return { diplomes: uniqBy(diplomes, "code") };
+function buildCertification(formation) {
+  if (!formation.rncp_code) {
+    return null;
+  }
+
+  return {
+    type: "rncp",
+    code: formation.rncp_code,
+    ...(formation.rncp_intitule ? { label: formation.rncp_intitule } : {}),
+  };
 }
 
-async function buildCertifications(siret, formations) {
-  let certifications = await Promise.all(
-    formations
-      .filter((f) => f.rncp_code && siret === f.etablissement_formateur_siret)
-      .map(async (f) => {
-        return {
-          code: f.rncp_code,
-          type: "rncp",
-          ...(f.rncp_intitule ? { label: f.rncp_intitule } : {}),
-        };
-      })
-  );
-  return { certifications: uniqBy(certifications, "code") };
+async function buildLieuDeFormation(formation, getAdresseFromCoordinates) {
+  if (!formation.lieu_formation_geo_coordonnees) {
+    return {};
+  }
+
+  try {
+    let [latitude, longitude] = formation.lieu_formation_geo_coordonnees.split(",");
+    return {
+      lieu: {
+        code: `${longitude}_${latitude}`,
+        adresse: await getAdresseFromCoordinates(longitude, latitude, {
+          label: formation.lieu_formation_adresse,
+        }),
+        ...(formation.lieu_formation_siret ? { siret: formation.lieu_formation_siret } : {}),
+      },
+    };
+  } catch (e) {
+    return {
+      anomalie: {
+        code: "lieudeformation_geoloc_impossible",
+        message: `Lieu de formation inconnu : ${formation.lieu_formation_adresse}. ${e.message}`,
+      },
+    };
+  }
 }
 
-async function buildLieuxDeFormation(siret, formations, getAdresseFromCoordinates) {
-  let anomalies = [];
-  let lieux = await Promise.all(
-    chain(formations.filter((f) => f.lieu_formation_geo_coordonnees && siret === f.etablissement_formateur_siret))
-      .uniqBy("lieu_formation_geo_coordonnees")
-      .map(async (f) => {
-        let [latitude, longitude] = f.lieu_formation_geo_coordonnees.split(",");
+function buildContact(formation) {
+  if (!formation.email) {
+    return null;
+  }
 
-        let adresse = await getAdresseFromCoordinates(longitude, latitude, {
-          label: f.lieu_formation_adresse,
-        }).catch((e) => {
-          anomalies.push({
-            code: "lieudeformation_geoloc_impossible",
-            message: `Lieu de formation inconnu : ${f.lieu_formation_adresse}. ${e.message}`,
-          });
-        });
-
-        return adresse
-          ? {
-              adresse,
-              ...(f.lieu_formation_siret ? { siret: f.lieu_formation_siret } : {}),
-            }
-          : null;
-      })
-      .value()
-  );
-
-  return { lieux: lieux.filter((a) => a), anomalies };
-}
-
-function buildContacts(formations) {
-  let contacts = formations
-    .filter((f) => f.email && f.id_rco_formation)
-    .reduce((acc, f) => {
-      let found = acc.find((a) => a.email === f.email);
-      if (!found) {
-        acc.push({
-          email: f.email,
-          confirmé: false,
-          _extras: [f.id_rco_formation],
-        });
-      } else {
-        found._extras = uniq([...found._extras, f.id_rco_formation]);
-      }
-
-      return acc;
-    }, []);
-
-  return { contacts };
+  return {
+    email: formation.email,
+    confirmé: false,
+  };
 }
 
 module.exports = (custom = {}) => {
-  let name = "catalogue";
   let api = custom.catalogueAPI || new CatalogueApi();
   let { getAdresseFromCoordinates } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
+  async function computeData(formation, types) {
+    try {
+      let res = {
+        relations: [],
+        contacts: [],
+        diplomes: [],
+        certifications: [],
+        lieux_de_formation: [],
+        anomalies: [],
+      };
+
+      let contact = buildContact(formation);
+      if (contact) {
+        res.contacts.push(contact);
+      }
+
+      let relation = buildRelation(formation, types);
+      if (relation) {
+        res.relations.push(relation);
+      }
+
+      if (types.includes("formateur")) {
+        let diplome = await buildDiplome(formation);
+        if (diplome) {
+          res.diplomes.push(diplome);
+        }
+
+        let certification = buildCertification(formation);
+        if (certification) {
+          res.certifications.push(certification);
+        }
+
+        let { lieu, anomalie } = await buildLieuDeFormation(formation, getAdresseFromCoordinates);
+        if (lieu) {
+          res.lieux_de_formation.push(lieu);
+        }
+        if (anomalie) {
+          res.anomalies.push(anomalie);
+        }
+      }
+
+      return res;
+    } catch (e) {
+      return {
+        anomalies: [e],
+      };
+    }
+  }
+
   return {
-    name,
-    stream(options = {}) {
+    name: "catalogue",
+    async stream(options = {}) {
       let filters = options.filters || {};
+      let stream = await mergeStreams(
+        () => fetchFormations(api, filters),
+        () => fetchFormations(api, { ...filters, annee: 2021 }),
+        { sequential: true }
+      );
 
       return oleoduc(
-        dbCollection("etablissements").find(filters, { siret: 1 }).stream(),
-        transformData(
-          async ({ siret }) => {
-            try {
-              let [_2020, _2021] = await Promise.all([
-                getFormations(api, siret),
-                getFormations(api, siret, { annee: "2021" }),
-              ]);
+        stream,
+        transformData(async (formation) => {
+          let [formateur, gestionnaire] = await Promise.all([
+            dbCollection("etablissements").findOne({ siret: formation.etablissement_formateur_siret }, { siret: 1 }),
+            dbCollection("etablissements").findOne({ siret: formation.etablissement_gestionnaire_siret }, { siret: 1 }),
+          ]);
 
-              let formations = [..._2020, ..._2021];
-              let { relations, gestionnaire, formateur } = await buildRelations(siret, formations);
-              let { contacts } = buildContacts(formations);
-              let { diplomes } = await buildDiplomes(siret, formations);
-              let { certifications } = await buildCertifications(siret, formations);
-              let { lieux, anomalies } = await buildLieuxDeFormation(siret, formations, getAdresseFromCoordinates);
+          if (!formateur && !gestionnaire) {
+            return null;
+          }
 
-              return {
-                selector: siret,
-                relations,
-                contacts,
-                anomalies,
-                data: {
-                  lieux_de_formation: lieux,
-                  diplomes,
-                  certifications,
-                  gestionnaire,
-                  formateur: formateur && _2021.length > 0,
-                },
-              };
-            } catch (e) {
-              return {
-                selector: siret,
-                anomalies: [e],
-              };
+          if (formation.etablissement_formateur_siret === formation.etablissement_gestionnaire_siret) {
+            return [
+              {
+                from: "catalogue",
+                selector: formation.etablissement_formateur_siret,
+                ...(await computeData(formation, ["gestionnaire", "formateur"])),
+              },
+            ];
+          } else {
+            let array = [];
+            if (gestionnaire) {
+              array.push({
+                from: "catalogue",
+                selector: gestionnaire.siret,
+                ...(await computeData(formation, ["gestionnaire"])),
+              });
             }
-          },
-          { parallel: 5 }
-        ),
-        transformData((data) => ({ ...data, from: name })),
+
+            if (formateur) {
+              array.push({
+                from: "catalogue",
+                selector: formateur.siret,
+                ...(await computeData(formation, ["formateur"])),
+              });
+            }
+            return array;
+          }
+        }),
+        flattenArray(),
         { promisify: false }
       );
     },

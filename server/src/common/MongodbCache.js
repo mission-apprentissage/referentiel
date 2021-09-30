@@ -15,12 +15,12 @@ class MongodbCache {
       return null;
     }
 
-    logger.debug(`Value with key '${key}' retrieved from cache ${this.cacheName}`);
+    logger.trace(`Value with key '${key}' retrieved from cache ${this.cacheName}`);
     return res.value;
   }
 
   async add(key, value) {
-    logger.debug(`Adding key '${key}' to cache ${this.cacheName}...`);
+    logger.trace(`Adding key '${key}' to cache ${this.cacheName}...`);
     await this.collection.updateOne(
       {
         _id: `${this.cacheName}_${key}`,

@@ -2,6 +2,7 @@ const queryString = require("query-string");
 const logger = require("../logger");
 const RateLimitedApi = require("./RateLimitedApi");
 const { getFileAsStream } = require("../utils/httpUtils");
+const { oleoduc, readLineByLine, transformData } = require("oleoduc");
 
 class TcoApi extends RateLimitedApi {
   constructor(options = {}) {
@@ -12,7 +13,7 @@ class TcoApi extends RateLimitedApi {
     return "https://tables-correspondances-recette.apprentissage.beta.gouv.fr/api";
   }
 
-  getEtablissements(query, options = {}) {
+  streamEtablissements(query, options = {}) {
     return this.execute(async () => {
       let params = queryString.stringify(
         {
@@ -28,9 +29,16 @@ class TcoApi extends RateLimitedApi {
       );
 
       logger.debug(`[${this.name}] Fetching etablissements with params ${params}...`);
-      return getFileAsStream(`${TcoApi.baseApiUrl}/entity/etablissements.ndjson?${params}`, {
+      let response = await getFileAsStream(`${TcoApi.baseApiUrl}/entity/etablissements.ndjson?${params}`, {
         timeout: 5000,
       });
+
+      return oleoduc(
+        response,
+        readLineByLine(),
+        transformData((data) => JSON.parse(data)),
+        { promisify: false }
+      );
     });
   }
 }

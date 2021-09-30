@@ -62,11 +62,11 @@ module.exports = async (array) => {
         );
 
         if (res.upsertedCount) {
-          logger.info(`[Referentiel] Etablissement ${siret} created`);
+          logger.debug(`[Referentiel] Etablissement ${siret} créé`);
           stats[from].created += res.upsertedCount;
         } else if (res.modifiedCount) {
           stats[from].updated += res.modifiedCount;
-          logger.info(`[Referentiel] Etablissement ${siret} updated`);
+          logger.debug(`[Referentiel] Etablissement ${siret} mis à jour`);
         }
       } catch (e) {
         stats[from].failed++;

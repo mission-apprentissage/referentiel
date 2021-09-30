@@ -6,14 +6,18 @@ const RateLimitedApi = require("./RateLimitedApi");
 class GeoAdresseApi extends RateLimitedApi {
   constructor(options = {}) {
     super("GeoAdresseApi", { nbRequests: 25, durationInSeconds: 1, ...options });
-    this.client = options.axios || axios.create({ baseURL: "https://api-adresse.data.gouv.fr", timeout: 5000 });
+    this.client = options.axios || axios.create({ timeout: 5000 });
+  }
+
+  static get baseApiUrl() {
+    return "https://api-adresse.data.gouv.fr";
   }
 
   async search(q, options = {}) {
     return this.execute(async () => {
       let params = queryString.stringify({ q, ...options });
       logger.debug(`[${this.name}] Searching adresse with parameters ${params}...`);
-      const response = await this.client.get(`search/?${params}`);
+      const response = await this.client.get(`${GeoAdresseApi.baseApiUrl}/search?${params}`);
       return response.data;
     });
   }
@@ -22,19 +26,7 @@ class GeoAdresseApi extends RateLimitedApi {
     return this.execute(async () => {
       let params = queryString.stringify({ lon, lat, ...options });
       logger.debug(`[${this.name}] Reverse geocode with parameters ${params}...`);
-      const response = await this.client.get(`reverse/?${params}`);
-      return response.data;
-    });
-  }
-
-  async searchMunicipalityByCode(code, options = {}) {
-    return this.execute(async () => {
-      let query = `${options.isCityCode ? "citycode=" : ""}${code}`;
-      if (options.codeInsee) {
-        query = `${code}&citycode=${options.codeInsee}`;
-      }
-      logger.debug(`[${this.name}] Searching municipality with query ${query}...`);
-      const response = await this.client.get(`search/?limit=1&q=${query}&type=municipality`);
+      const response = await this.client.get(`${GeoAdresseApi.baseApiUrl}/reverse?${params}`);
       return response.data;
     });
   }

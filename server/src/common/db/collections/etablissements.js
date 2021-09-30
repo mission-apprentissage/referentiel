@@ -42,9 +42,9 @@ module.exports = {
         uais: arrayOf(
           object(
             {
-              sources: arrayOf(string()),
               uai: string(),
               valide: boolean(),
+              sources: arrayOf(string()),
             },
             { required: ["uai", "valide"] }
           )
@@ -65,9 +65,9 @@ module.exports = {
             {
               siret: string(),
               referentiel: boolean(),
-              sources: arrayOf(string()),
               label: string(),
               type: string({ enum: ["formateur", "gestionnaire", "fille", "mère"] }),
+              sources: arrayOf(string()),
             },
             { required: ["siret", "referentiel", "sources"] }
           )
@@ -75,10 +75,12 @@ module.exports = {
         lieux_de_formation: arrayOf(
           object(
             {
+              code: string(),
               siret: string(),
               adresse: adresseSchema,
+              sources: arrayOf(string()),
             },
-            { required: ["adresse"] }
+            { required: ["code", "adresse"] }
           )
         ),
         certifications: arrayOf(
@@ -87,6 +89,7 @@ module.exports = {
               code: string(),
               type: string({ enum: ["rncp"] }),
               label: string(),
+              sources: arrayOf(string()),
             },
             { required: ["code", "type"] }
           )
@@ -98,6 +101,7 @@ module.exports = {
               type: string({ enum: ["cfd"] }),
               niveau: string(),
               label: string(),
+              sources: arrayOf(string()),
             },
             { required: ["code", "type"] }
           )

@@ -54,11 +54,6 @@ module.exports = (geoAdresseApi) => {
   }
 
   return {
-    async getAdresseFromLabel(label, options) {
-      let results = await geoAdresseApi.search(label, options);
-
-      return selectBestResults(results, label);
-    },
     async getAdresseFromCoordinates(longitude, latitude, options = {}) {
       let key = `${longitude}_${latitude}`;
       let results = await cache.memo(key, (e) => {
