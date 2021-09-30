@@ -4,7 +4,7 @@ const bunyan = require("bunyan");
 const BunyanSlack = require("bunyan-slack");
 const config = require("../config");
 const chalk = require("chalk");
-const { oleoduc, writeData, transformData } = require("oleoduc");
+const { compose, writeData, transformData } = require("oleoduc");
 
 function prettyPrintStream(outputName) {
   let levels = {
@@ -16,7 +16,7 @@ function prettyPrintStream(outputName) {
     60: chalk.magenta.bold("FATAL"),
   };
 
-  return oleoduc(
+  return compose(
     transformData((raw) => {
       let stack = raw.err?.stack;
       let message = stack ? `${raw.msg}\n${stack}` : raw.msg;
@@ -44,8 +44,7 @@ function prettyPrintStream(outputName) {
       }
       return params;
     }),
-    writeData((data) => console[outputName === "stdout" ? "log" : "error"](...data)),
-    { promisify: false }
+    writeData((data) => console[outputName === "stdout" ? "log" : "error"](...data))
   );
 }
 

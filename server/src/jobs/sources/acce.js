@@ -1,4 +1,4 @@
-const { oleoduc, transformData, readLineByLine } = require("oleoduc");
+const { compose, transformData, readLineByLine } = require("oleoduc");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 
 function buildContacts(email) {
@@ -17,7 +17,7 @@ module.exports = (custom = {}) => {
     async stream() {
       let input = custom.input || (await getOvhFileAsStream("annuaire/acce-2021-09-02.ndjson"));
 
-      return oleoduc(
+      return compose(
         input,
         readLineByLine(),
         transformData((line) => {
@@ -31,8 +31,7 @@ module.exports = (custom = {}) => {
             selector: uai,
             contacts: buildContacts(email),
           };
-        }),
-        { promisify: false }
+        })
       );
     },
   };

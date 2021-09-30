@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const TcoApi = require("../../common/apis/TcoApi");
 
 module.exports = (custom = {}) => {
@@ -10,7 +10,7 @@ module.exports = (custom = {}) => {
     async stream() {
       let stream = await api.streamEtablissements({}, { limit: 100000 });
 
-      return oleoduc(
+      return compose(
         stream,
         transformData(({ uai, siret }) => {
           return {
@@ -18,8 +18,7 @@ module.exports = (custom = {}) => {
             selector: siret.trim(),
             uais: uai ? [uai] : [],
           };
-        }),
-        { promisify: false }
+        })
       );
     },
   };

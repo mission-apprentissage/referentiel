@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
 
@@ -10,7 +10,7 @@ module.exports = (custom = {}) => {
     async stream() {
       let input = custom.input || (await getOvhFileAsStream("annuaire/liste_etab_SIA_Dares.csv"));
 
-      return oleoduc(
+      return compose(
         input,
         parseCsv(),
         transformData((data) => {
@@ -19,8 +19,7 @@ module.exports = (custom = {}) => {
             selector: data.FORM_ETABSIRET,
             uais: [data.FORM_ETABUAI_R],
           };
-        }),
-        { promisify: false }
+        })
       );
     },
   };

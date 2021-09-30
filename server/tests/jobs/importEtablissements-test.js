@@ -3,17 +3,16 @@ const { omit } = require("lodash");
 const { Readable } = require("stream");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const importReferentiel = require("../../src/jobs/importEtablissements");
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 
 function createTestSource(array) {
   let name = "dummy";
   return {
     name,
     stream() {
-      return oleoduc(
+      return compose(
         Readable.from(array),
-        transformData((d) => ({ from: name, ...d })),
-        { promisify: false }
+        transformData((d) => ({ from: name, ...d }))
       );
     },
   };

@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const csv = require("csv-parse");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 
@@ -11,7 +11,7 @@ module.exports = (custom = {}) => {
         custom.input ||
         (await getOvhFileAsStream("cfas-clients-erps/referentielCfas_ymag.csv", { storage: "mna-flux" }));
 
-      return oleoduc(
+      return compose(
         input,
         csv({
           delimiter: ";",
@@ -24,8 +24,7 @@ module.exports = (custom = {}) => {
             selector: data["siret"].replace(/ /g, ""),
             uais: [data["uai"]],
           };
-        }),
-        { promisify: false }
+        })
       );
     },
   };

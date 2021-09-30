@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
 
@@ -11,7 +11,7 @@ module.exports = async (custom = {}) => {
   return {
     name,
     stream() {
-      return oleoduc(
+      return compose(
         input,
         parseCsv(),
         transformData(({ siret, uai }) => {
@@ -20,8 +20,7 @@ module.exports = async (custom = {}) => {
             selector: siret,
             uais: [uai],
           };
-        }),
-        { promisify: false }
+        })
       );
     },
   };

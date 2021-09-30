@@ -7,23 +7,38 @@ const { mockCatalogueApi, mockGeoAddresseApi } = require("../../utils/apiMocks")
 const { insertEtablissement, insertCFD } = require("../../utils/fakeData");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 
+function mockApis(custom = {}) {
+  mockCatalogueApi((client, responses) => {
+    client
+      .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
+      .query(() => true)
+      .reply(200, responses.formations(custom.formation));
+  });
+
+  mockGeoAddresseApi((client, responses) => {
+    client
+      .get((uri) => uri.includes("reverse"))
+      .query(() => true)
+      .reply(200, responses.reverse(custom.reverse));
+
+    client
+      .get((uri) => uri.includes("search"))
+      .query(() => true)
+      .reply(200, responses.search());
+  });
+}
+
 describe("catalogue", () => {
   it("Vérifie qu'on peut collecter des relations (formateur)", async () => {
     await importEtablissements();
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_gestionnaire_siret: "11111111100006",
-            etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-            etablissement_formateur_siret: "22222222200002",
-            etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-          })
-        );
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "11111111100006",
+        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+        etablissement_formateur_siret: "22222222200002",
+        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+      },
     });
 
     let stats = await collectSources(source);
@@ -51,19 +66,13 @@ describe("catalogue", () => {
   it("Vérifie qu'on peut collecter des relations (gestionnaire)", async () => {
     await importEtablissements();
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_gestionnaire_siret: "22222222200002",
-            etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-            etablissement_formateur_siret: "11111111100006",
-            etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-          })
-        );
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "22222222200002",
+        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+        etablissement_formateur_siret: "11111111100006",
+        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+      },
     });
 
     await collectSources(source);
@@ -83,19 +92,13 @@ describe("catalogue", () => {
   it("Vérifie qu'on peut ignore les relations quand l'établisssement est gestionnaire et formateur", async () => {
     await importEtablissements();
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_gestionnaire_siret: "11111111100006",
-            etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-            etablissement_formateur_siret: "11111111100006",
-            etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-          })
-        );
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "11111111100006",
+        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+        etablissement_formateur_siret: "11111111100006",
+        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+      },
     });
 
     await collectSources(source);
@@ -107,19 +110,13 @@ describe("catalogue", () => {
   it("Vérifie qu'on peut collecter des diplômes (cfd)", async () => {
     await importEtablissements([{ siret: "22222222200002" }]);
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_formateur_siret: "22222222200002",
-            etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-            cfd: "40030001",
-            cfd_specialite: null,
-          })
-        );
+    mockApis({
+      formation: {
+        etablissement_formateur_siret: "22222222200002",
+        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+        cfd: "40030001",
+        cfd_specialite: null,
+      },
     });
 
     let stats = await collectSources(source);
@@ -150,18 +147,10 @@ describe("catalogue", () => {
     });
     await importEtablissements([{ siret: "22222222200002" }]);
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_formateur_siret: "22222222200002",
-            etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-            cfd: "40030001",
-          })
-        );
+    mockApis({
+      etablissement_formateur_siret: "22222222200002",
+      etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+      cfd: "40030001",
     });
 
     await collectSources(source);
@@ -181,18 +170,12 @@ describe("catalogue", () => {
   it("Vérifie qu'on ne collecte pas de diplômes pour les établissements gestionnaire", async () => {
     await importEtablissements([{ siret: "11111111100006" }]);
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_gestionnaire_siret: "11111111100006",
-            etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-            cfd: "40030001",
-          })
-        );
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "11111111100006",
+        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+        cfd: "40030001",
+      },
     });
 
     let stats = await collectSources(source);
@@ -212,19 +195,13 @@ describe("catalogue", () => {
   it("Vérifie qu'on peut collecter des certifications (rncp)", async () => {
     await importEtablissements([{ siret: "22222222200002" }]);
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_formateur_siret: "22222222200002",
-            etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-            rncp_code: "RNCP28662",
-            rncp_intitule: "Gestionnaire de l'administration des ventes et de la relation commerciale",
-          })
-        );
+    mockApis({
+      formation: {
+        etablissement_formateur_siret: "22222222200002",
+        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+        rncp_code: "RNCP28662",
+        rncp_intitule: "Gestionnaire de l'administration des ventes et de la relation commerciale",
+      },
     });
 
     let stats = await collectSources(source);
@@ -251,19 +228,13 @@ describe("catalogue", () => {
   it("Vérifie qu'on ne collecte pas de certifications pour les établissements gestionnaire", async () => {
     await importEtablissements([{ siret: "11111111100006" }]);
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_gestionnaire_siret: "11111111100006",
-            etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-            rncp_code: "RNCP28662",
-            rncp_intitule: "Gestionnaire de l'administration des ventes et de la relation commerciale",
-          })
-        );
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "11111111100006",
+        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+        rncp_code: "RNCP28662",
+        rncp_intitule: "Gestionnaire de l'administration des ventes et de la relation commerciale",
+      },
     });
 
     let stats = await collectSources(source);
@@ -283,46 +254,30 @@ describe("catalogue", () => {
   it("Vérifie qu'on peut collecter des lieux de formation", async () => {
     await importEtablissements([{ siret: "22222222200002" }]);
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_formateur_siret: "22222222200002",
-            lieu_formation_siret: "33333333300008",
-            lieu_formation_geo_coordonnees: "48.879706,2.396444",
-          })
-        );
+    mockApis({
+      formation: {
+        etablissement_formateur_siret: "22222222200002",
+        lieu_formation_siret: "33333333300008",
+        lieu_formation_geo_coordonnees: "48.879706,2.396444",
+      },
+      reverse: {
+        features: [
+          {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [2.396444, 48.879706],
+            },
+            properties: {
+              label: "32 Rue des lilas 75019 Paris",
+              score: 0.88,
+              name: "32 Rue des Lilas",
+              city: "Paris",
+            },
+          },
+        ],
+      },
     });
-
-    mockGeoAddresseApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("reverse"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.reverse({
-            features: [
-              {
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: [2.396444, 48.879706],
-                },
-                properties: {
-                  label: "32 Rue des lilas 75019 Paris",
-                  score: 0.88,
-                  name: "32 Rue des Lilas",
-                  city: "Paris",
-                },
-              },
-            ],
-          })
-        );
-    });
-
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "22222222200002" }, { _id: 0 });
@@ -364,18 +319,12 @@ describe("catalogue", () => {
   it("Vérifie qu'on ne collecte pas des lieux de formation pour les établissements gestionnaire", async () => {
     await importEtablissements([{ siret: "11111111100006" }]);
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_gestionnaire_siret: "11111111100006",
-            lieu_formation_siret: "33333333300008",
-            lieu_formation_geo_coordonnees: "48.879706,2.396444",
-          })
-        );
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "11111111100006",
+        lieu_formation_siret: "33333333300008",
+        lieu_formation_geo_coordonnees: "48.879706,2.396444",
+      },
     });
 
     let stats = await collectSources(source);
@@ -511,18 +460,12 @@ describe("catalogue", () => {
   it("Vérifie qu'on peut collecter des contacts", async () => {
     await importEtablissements();
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            email: "robert@formation.fr",
-            id_rco_formation: "01_GE107880|01_GE339324|01_GE520062|76930",
-            etablissement_gestionnaire_siret: "11111111100006",
-          })
-        );
+    mockApis({
+      formation: {
+        email: "robert@formation.fr",
+        id_rco_formation: "01_GE107880|01_GE339324|01_GE520062|76930",
+        etablissement_gestionnaire_siret: "11111111100006",
+      },
     });
 
     let stats = await collectSources(source);
@@ -550,12 +493,7 @@ describe("catalogue", () => {
       siret: "11111111100000",
     });
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(200, responses.formations());
-    });
+    mockApis();
 
     let stats = await collectSources(source, { filters: { siret: "33333333300008" } });
 
@@ -573,19 +511,13 @@ describe("catalogue", () => {
     await importEtablissements();
     await insertEtablissement({ siret: "22222222200002", raison_sociale: "Mon centre de formation" });
     let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_gestionnaire_siret: "11111111100006",
-            etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-            etablissement_formateur_siret: "22222222200002",
-            etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-          })
-        );
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "11111111100006",
+        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+        etablissement_formateur_siret: "22222222200002",
+        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+      },
     });
 
     await collectSources(source);

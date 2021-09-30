@@ -1,4 +1,4 @@
-const { oleoduc, transformIntoCSV, transformData } = require("oleoduc");
+const { transformIntoCSV, transformData, compose } = require("oleoduc");
 const { dbCollection } = require("../../common/db/mongodb");
 
 function getUAI(source, etablissement) {
@@ -34,27 +34,27 @@ function computeCorrespondance(etablissement) {
   if (etablissement.uai) {
     return {
       uai: etablissement.uai,
-      task: "à confirmer",
+      task: "à valider",
       sources,
     };
   }
 
-  let uaiAExpertiser = etablissement.uais.find((u) => {
+  let uaiAValider = etablissement.uais.find((u) => {
     let sources = u.sources.filter(
       (s) => s.includes("deca") || s.includes("sifa-ramsese") || s.includes("catalogue-etablissements")
     );
     return sources.length > 1;
   })?.uai;
 
-  if (uaiAExpertiser) {
+  if (uaiAValider) {
     return {
-      uai: uaiAExpertiser,
-      task: "à expertiser",
+      uai: uaiAValider,
+      task: "à valider",
       sources,
     };
   } else {
     return {
-      task: "à expertiser v2",
+      task: "à expertiser",
       sources,
     };
   }
@@ -68,8 +68,8 @@ function etablissementAsCsvStream(options = {}) {
   let filter = options.filter || {};
   let limit = options.limit || Number.MAX_SAFE_INTEGER;
 
-  return oleoduc(
-    dbCollection("etablissements").find(filter).limit(limit).stream(),
+  return compose(
+    dbCollection("etablissements").find(filter).limit(limit).sort({ siret: 1 }).stream(),
     transformData((etablissement) => {
       let correspondance = computeCorrespondance(etablissement);
       let gestionnaire = `${etablissement.gestionnaire ? "gestionnaire" : ""}`;
@@ -94,8 +94,7 @@ function etablissementAsCsvStream(options = {}) {
         UAI: (a) => a.correspondance.uai,
         Tache: (a) => a.correspondance.task,
       },
-    }),
-    { promisify: false }
+    })
   );
 }
 

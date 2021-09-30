@@ -1,4 +1,4 @@
-const { oleoduc, transformData, flattenArray, mergeStreams } = require("oleoduc");
+const { compose, transformData, flattenArray, mergeStreams } = require("oleoduc");
 const CatalogueApi = require("../../common/apis/CatalogueApi");
 const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
@@ -178,7 +178,7 @@ module.exports = (custom = {}) => {
         { sequential: true }
       );
 
-      return oleoduc(
+      return compose(
         stream,
         transformData(async (formation) => {
           let [formateur, gestionnaire] = await Promise.all([
@@ -218,8 +218,7 @@ module.exports = (custom = {}) => {
             return array;
           }
         }),
-        flattenArray(),
-        { promisify: false }
+        flattenArray()
       );
     },
   };

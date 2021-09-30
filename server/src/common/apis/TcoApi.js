@@ -2,7 +2,7 @@ const queryString = require("query-string");
 const logger = require("../logger");
 const RateLimitedApi = require("./RateLimitedApi");
 const { getFileAsStream } = require("../utils/httpUtils");
-const { oleoduc, readLineByLine, transformData } = require("oleoduc");
+const { compose, readLineByLine, transformData } = require("oleoduc");
 
 class TcoApi extends RateLimitedApi {
   constructor(options = {}) {
@@ -33,11 +33,10 @@ class TcoApi extends RateLimitedApi {
         timeout: 5000,
       });
 
-      return oleoduc(
+      return compose(
         response,
         readLineByLine(),
-        transformData((data) => JSON.parse(data)),
-        { promisify: false }
+        transformData((data) => JSON.parse(data))
       );
     });
   }

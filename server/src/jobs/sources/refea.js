@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const csv = require("csv-parse");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 
@@ -10,7 +10,7 @@ module.exports = (custom = {}) => {
     async stream() {
       let input = custom.input || (await getOvhFileAsStream("annuaire/REFEA-liste-uai-avec-coordonnees.csv"));
 
-      return oleoduc(
+      return compose(
         input,
         csv({
           delimiter: ";",
@@ -24,8 +24,7 @@ module.exports = (custom = {}) => {
             selector: data["uai_code_siret"],
             uais: [data["uai_code_educnationale"]],
           };
-        }),
-        { promisify: false }
+        })
       );
     },
   };

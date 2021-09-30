@@ -1,9 +1,9 @@
-const { oleoduc, transformData, mergeStreams } = require("oleoduc");
+const { compose, transformData, mergeStreams } = require("oleoduc");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
 
 function readCSV(stream) {
-  return oleoduc(
+  return compose(
     stream,
     parseCsv({
       bom: true,
@@ -15,8 +15,7 @@ function readCSV(stream) {
         selector: data["n° SIRET"],
         uais: [data["code UAI"]],
       };
-    }),
-    { promisify: false }
+    })
   );
 }
 

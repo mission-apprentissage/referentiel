@@ -1,4 +1,4 @@
-const { oleoduc, transformData, flattenArray, filterData } = require("oleoduc");
+const { compose, transformData, flattenArray, filterData } = require("oleoduc");
 const { isEmpty } = require("lodash");
 const { decodeStream } = require("iconv-lite");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
@@ -13,7 +13,7 @@ module.exports = (custom = {}) => {
       let input = custom.input || (await getOvhFileAsStream("annuaire/ONISEP-Ideo2-T_Export_complet.csv"));
       let memory = [];
 
-      return oleoduc(
+      return compose(
         input,
         decodeStream("iso-8859-1"),
         parseCsv({
@@ -67,8 +67,7 @@ module.exports = (custom = {}) => {
             },
           ];
         }),
-        flattenArray(),
-        { promisify: false }
+        flattenArray()
       );
     },
   };

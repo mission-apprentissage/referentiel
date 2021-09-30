@@ -1,6 +1,6 @@
 const assert = require("assert");
 const { omit } = require("lodash");
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const { Readable } = require("stream");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const { insertEtablissement } = require("../utils/fakeData");
@@ -12,10 +12,9 @@ describe("collectSources", () => {
     return {
       name,
       stream() {
-        return oleoduc(
+        return compose(
           Readable.from(array),
-          transformData((d) => ({ from: name, ...d })),
-          { promisify: false }
+          transformData((d) => ({ from: name, ...d }))
         );
       },
     };

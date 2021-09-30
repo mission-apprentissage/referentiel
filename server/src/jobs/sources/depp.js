@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const csv = require("csv-parse");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 
@@ -10,7 +10,7 @@ module.exports = (custom = {}) => {
     async stream() {
       let input = custom.input || (await getOvhFileAsStream("annuaire/DEPP-CFASousConvRegionale_17122020_1.csv"));
 
-      return oleoduc(
+      return compose(
         input,
         csv({
           delimiter: ";",
@@ -29,8 +29,7 @@ module.exports = (custom = {}) => {
               },
             },
           };
-        }),
-        { promisify: false }
+        })
       );
     },
   };

@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const csv = require("csv-parse");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 
@@ -14,7 +14,7 @@ module.exports = (custom = {}) => {
           "annuaire/OPCO EP-20201202 OPCO EP - Jeunes sans contrat par CFA, région et formation au 26 nov.csv"
         ));
 
-      return oleoduc(
+      return compose(
         input,
         csv({
           delimiter: ";",
@@ -28,8 +28,7 @@ module.exports = (custom = {}) => {
             selector: data["SIRET CFA"],
             uais: [data["N UAI CFA"]],
           };
-        }),
-        { promisify: false }
+        })
       );
     },
   };

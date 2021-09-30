@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
 
@@ -12,7 +12,7 @@ module.exports = (custom = {}) => {
         custom.input ||
         (await getOvhFileAsStream("annuaire/voeux-affelnet-export-cfas-confirmes-actives-2021-09-03.csv"));
 
-      return oleoduc(
+      return compose(
         input,
         parseCsv(),
         transformData(({ uai, email }) => {
@@ -21,8 +21,7 @@ module.exports = (custom = {}) => {
             selector: uai,
             contacts: [{ email, confirmé: true }],
           };
-        }),
-        { promisify: false }
+        })
       );
     },
   };

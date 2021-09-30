@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const csv = require("csv-parse");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 
@@ -12,7 +12,7 @@ module.exports = (custom = {}) => {
         custom.input ||
         (await getOvhFileAsStream("cfas-reseaux/cfas-compagnons-du-devoir.csv", { storage: "mna-flux" }));
 
-      return oleoduc(
+      return compose(
         input,
         csv({
           delimiter: ";",
@@ -27,8 +27,7 @@ module.exports = (custom = {}) => {
             uais: [data["uai"]],
             reseaux: ["compagnons-du-devoir"],
           };
-        }),
-        { promisify: false }
+        })
       );
     },
   };

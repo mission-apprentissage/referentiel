@@ -1,4 +1,4 @@
-const { oleoduc, transformData } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const SireneApi = require("../../common/apis/SireneApi");
 const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
@@ -47,7 +47,7 @@ module.exports = (options = {}) => {
       let filters = opts.filters || {};
       let organismes = options.organismes || (await loadOrganismeDeFormations());
 
-      return oleoduc(
+      return compose(
         dbCollection("etablissements").find(filters, { siret: 1 }).stream(),
         transformData(
           async ({ siret }) => {
@@ -123,8 +123,7 @@ module.exports = (options = {}) => {
           },
           { parallel: 5 }
         ),
-        transformData((data) => ({ ...data, from: name })),
-        { promisify: false }
+        transformData((data) => ({ ...data, from: name }))
       );
     },
   };

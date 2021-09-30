@@ -10,8 +10,6 @@ const GeoAdresseApi = require("../../src/common/apis/GeoAdresseApi");
 const SireneApi = require("../../src/common/apis/SireneApi");
 const nock = require("nock"); // eslint-disable-line node/no-unpublished-require
 
-afterEach && afterEach(() => nock.cleanAll());
-
 function debug(instance) {
   instance.interceptors.request.use((request) => {
     console.log("Starting Request", JSON.stringify(request, null, 2));
