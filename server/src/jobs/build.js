@@ -3,8 +3,6 @@ const { createSource } = require("./sources/sources");
 const collectSources = require("./collectSources");
 const consolidate = require("./consolidate");
 const importEtablissements = require("./importEtablissements");
-const clearAll = require("./clearAll");
-const importCFD = require("./importCFD");
 
 async function build() {
   let stats = [];
@@ -13,12 +11,8 @@ async function build() {
     return collectSources(sources).then((res) => stats.push({ collect: res }));
   }
 
-  await clearAll().then((res) => stats.push({ clearAll: res }));
-
-  await importCFD().then((res) => stats.push({ importCFD: res }));
-
   let mainSources = ["deca", "catalogue-etablissements", "sifa-ramsese"].map((name) => createSource(name));
-  await importEtablissements(mainSources).then((res) => stats.push({ importEtablissements: res }));
+  await importEtablissements(mainSources, { removeAll: true }).then((res) => stats.push({ importEtablissements: res }));
 
   await collectAll([
     "agri",

@@ -96,6 +96,13 @@ async function createCollectionIfNeeded(collection) {
   }
 }
 
+function clearCollection(name) {
+  logger.warn(`Suppresion des données de la collection ${name}...`);
+  return dbCollection(name)
+    .deleteMany({})
+    .then((res) => res.deletedCount);
+}
+
 module.exports = {
   connectToMongodb,
   prepareDatabase: async (options) => {
@@ -111,4 +118,5 @@ module.exports = {
   getDatabase,
   dbCollection,
   closeMongodbConnection,
+  clearCollection,
 };

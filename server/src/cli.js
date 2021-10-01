@@ -9,7 +9,6 @@ const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/collectSources");
 const consolidate = require("./jobs/consolidate");
 const etablissementAsCsvStream = require("./jobs/tasks/etablissementAsCsvStream");
-const clear = require("./jobs/clearAll");
 const computeStats = require("./jobs/computeStats");
 const importCFD = require("./jobs/importCFD");
 const importEtablissements = require("./jobs/importEtablissements");
@@ -80,15 +79,6 @@ cli
       let options = { filter, limit };
 
       return oleoduc(etablissementAsCsvStream(options), out || writeToStdout());
-    });
-  });
-
-cli
-  .command("clear")
-  .description("Supprime tous les établissements")
-  .action(() => {
-    runScript(() => {
-      return clear();
     });
   });
 

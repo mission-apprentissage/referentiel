@@ -1,7 +1,7 @@
 const { oleoduc, mergeStreams, writeData } = require("oleoduc");
 const { isEmpty } = require("lodash");
 const logger = require("../common/logger");
-const { dbCollection } = require("../common/db/mongodb");
+const { dbCollection, clearCollection } = require("../common/db/mongodb");
 
 async function getStreams(sources) {
   return Promise.all(sources.map((source) => source.stream()));
@@ -21,10 +21,14 @@ function createStats(sources) {
   }, {});
 }
 
-module.exports = async (array) => {
+module.exports = async (array, options = {}) => {
   let sources = Array.isArray(array) ? array : [array];
   let streams = await getStreams(sources);
   let stats = createStats(sources);
+
+  if (options.removeAll) {
+    await clearCollection("etablissements");
+  }
 
   await oleoduc(
     mergeStreams(streams),
