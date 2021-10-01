@@ -49,6 +49,7 @@ module.exports = async (array) => {
               relations: [],
               lieux_de_formation: [],
               reseaux: [],
+              statuts: [],
               diplomes: [],
               certifications: [],
               "_meta.created_at": new Date(),

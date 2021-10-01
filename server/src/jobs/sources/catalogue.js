@@ -38,12 +38,12 @@ function fetchFormations(api, options = {}) {
   });
 }
 
-function buildRelation(formation, types) {
+function buildRelation(formation, statuts) {
   if (formation.etablissement_gestionnaire_siret === formation.etablissement_formateur_siret) {
     return null;
   }
 
-  let isGestionnaire = types.includes("gestionnaire");
+  let isGestionnaire = statuts.includes("gestionnaire");
   return omitEmpty({
     type: isGestionnaire ? "formateur" : "gestionnaire",
     siret: isGestionnaire ? formation.etablissement_formateur_siret : formation.etablissement_gestionnaire_siret,
@@ -119,7 +119,7 @@ module.exports = (custom = {}) => {
   let api = custom.catalogueAPI || new CatalogueApi();
   let { getAdresseFromCoordinates } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
-  async function computeData(formation, types) {
+  async function computeData(formation, statuts) {
     try {
       let res = {
         relations: [],
@@ -128,6 +128,7 @@ module.exports = (custom = {}) => {
         certifications: [],
         lieux_de_formation: [],
         anomalies: [],
+        statuts,
       };
 
       let contact = buildContact(formation);
@@ -135,12 +136,12 @@ module.exports = (custom = {}) => {
         res.contacts.push(contact);
       }
 
-      let relation = buildRelation(formation, types);
+      let relation = buildRelation(formation, statuts);
       if (relation) {
         res.relations.push(relation);
       }
 
-      if (types.includes("formateur")) {
+      if (statuts.includes("formateur")) {
         let diplome = await buildDiplome(formation);
         if (diplome) {
           res.diplomes.push(diplome);

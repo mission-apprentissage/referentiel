@@ -23,6 +23,7 @@ module.exports = {
         raison_sociale: string(),
         siege_social: boolean(),
         etatAdministratif: string({ enum: ["actif", "fermé"] }),
+        statuts: arrayOf(string({ enum: ["gestionnaire", "formateur"] })),
         adresse: adresseSchema,
         forme_juridique: object(
           {
@@ -31,8 +32,6 @@ module.exports = {
           },
           { required: ["code", "label"] }
         ),
-        gestionnaire: boolean(),
-        formateur: boolean(),
         referentiels: arrayOf(string()),
         reseaux: arrayOf(string()),
         conformite_reglementaire: object({

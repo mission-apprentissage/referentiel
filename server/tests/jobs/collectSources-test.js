@@ -535,6 +535,39 @@ describe("collectSources", () => {
     assert.deepStrictEqual(found.reseaux, ["test"]);
   });
 
+  it("Vérifie qu'on peut collecter des statuts", async () => {
+    await insertEtablissement({ siret: "11111111100006" });
+    let source = createTestSource([
+      {
+        selector: "11111111100006",
+        statuts: ["gestionnaire"],
+      },
+    ]);
+
+    await collectSources(source);
+
+    let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
+    assert.deepStrictEqual(found.statuts, ["gestionnaire"]);
+  });
+
+  it("Vérifie qu'on ne duplique pas les statuts", async () => {
+    await insertEtablissement({
+      siret: "11111111100006",
+      statuts: ["gestionnaire"],
+    });
+    let source = createTestSource([
+      {
+        selector: "11111111100006",
+        statuts: ["gestionnaire"],
+      },
+    ]);
+
+    await collectSources(source);
+
+    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
+    assert.deepStrictEqual(found.statuts, ["gestionnaire"]);
+  });
+
   it("Vérifie qu'on peut filter par siret", async () => {
     await insertEtablissement({ siret: "11111111100006" });
     let source = createTestSource([

@@ -141,6 +141,7 @@ module.exports = {
           relations: [],
           lieux_de_formation: [],
           reseaux: [],
+          statuts: [],
           diplomes: [],
           certifications: [],
           referentiels: ["test"],

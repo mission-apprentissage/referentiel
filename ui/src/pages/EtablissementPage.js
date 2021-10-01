@@ -94,13 +94,13 @@ export default () => {
                       <Item>
                         <span>Gestionnaire</span>
                         <span>
-                          <PrettyBoolean value={etablissement.gestionnaire} />
+                          <PrettyBoolean value={etablissement.statuts.includes("gestionnaire")} />
                         </span>
                       </Item>
                       <Item>
                         <span>Formateur</span>
                         <span>
-                          <PrettyBoolean value={etablissement.formateur} />
+                          <PrettyBoolean value={etablissement.statuts.includes("formateur")} />
                         </span>
                       </Item>
                       <Item>

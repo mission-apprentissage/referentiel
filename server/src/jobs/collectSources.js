@@ -136,6 +136,7 @@ module.exports = async (array, options = {}) => {
         certifications = [],
         lieux_de_formation = [],
         data = {},
+        statuts = [],
         anomalies = [],
       } = res;
 
@@ -167,6 +168,9 @@ module.exports = async (array, options = {}) => {
           $addToSet: {
             reseaux: {
               $each: reseaux,
+            },
+            statuts: {
+              $each: statuts,
             },
           },
         });

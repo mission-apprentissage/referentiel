@@ -29,8 +29,8 @@ function mockApis(custom = {}) {
 }
 
 describe("catalogue", () => {
-  it("Vérifie qu'on peut collecter des relations (formateur)", async () => {
-    await importEtablissements();
+  it("Vérifie qu'on peut collecter les statuts", async () => {
+    await importEtablissements([{ siret: "11111111100006" }, { siret: "22222222200002" }]);
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -44,6 +44,53 @@ describe("catalogue", () => {
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
+    assert.deepStrictEqual(found.statuts, ["gestionnaire"]);
+
+    found = await dbCollection("etablissements").findOne({ siret: "22222222200002" });
+    assert.deepStrictEqual(found.statuts, ["formateur"]);
+    assert.deepStrictEqual(stats, {
+      catalogue: {
+        total: 4,
+        updated: 2,
+        ignored: 0,
+        failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on peut collecter les statuts gestionnaire et formateur", async () => {
+    await importEtablissements();
+    let source = createSource("catalogue");
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "11111111100006",
+        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+        etablissement_formateur_siret: "11111111100006",
+        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+      },
+    });
+
+    await collectSources(source);
+
+    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
+    assert.deepStrictEqual(found.statuts, ["gestionnaire", "formateur"]);
+  });
+
+  it("Vérifie qu'on peut collecter des relations (formateur)", async () => {
+    await importEtablissements();
+    let source = createSource("catalogue");
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "11111111100006",
+        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+        etablissement_formateur_siret: "22222222200002",
+        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+      },
+    });
+
+    await collectSources(source);
+
+    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
     assert.deepStrictEqual(found.relations, [
       {
         siret: "22222222200002",
@@ -53,14 +100,6 @@ describe("catalogue", () => {
         sources: ["catalogue"],
       },
     ]);
-    assert.deepStrictEqual(stats, {
-      catalogue: {
-        total: 2,
-        updated: 1,
-        ignored: 0,
-        failed: 0,
-      },
-    });
   });
 
   it("Vérifie qu'on peut collecter des relations (gestionnaire)", async () => {

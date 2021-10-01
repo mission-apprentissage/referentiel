@@ -1,7 +1,5 @@
 const logger = require("../common/logger");
 const { dbCollection } = require("../common/db/mongodb");
-const { some } = require("lodash");
-const { oleoduc, filterData, writeData } = require("oleoduc");
 
 async function selectUAI() {
   let collection = dbCollection("etablissements");
@@ -83,34 +81,9 @@ async function selectUAI() {
   return stats;
 }
 
-async function markAsGestionnaireOrFormateur() {
-  let updated = 0;
-  let cursor = dbCollection("etablissements").find().stream();
-  await oleoduc(
-    cursor,
-    filterData((etablissement) => etablissement.diplomes.length > 0 || etablissement.relations.length > 0),
-    writeData(async (etablissement) => {
-      let hasDiplomes = etablissement.diplomes.length > 0;
-      let { modifiedCount } = await dbCollection("etablissements").updateOne(
-        { siret: etablissement.siret },
-        {
-          $set: {
-            formateur: hasDiplomes || some(etablissement.relations, (r) => r.type === "gestionnaire"),
-            gestionnaire: hasDiplomes || some(etablissement.relations, (r) => r.type === "formateur"),
-          },
-        }
-      );
-      updated += modifiedCount;
-    })
-  );
-
-  return { updated };
-}
-
 async function consolidate() {
   return {
     selectUAI: await selectUAI(),
-    markAsGestionnaireOrFormateur: await markAsGestionnaireOrFormateur(),
   };
 }
 

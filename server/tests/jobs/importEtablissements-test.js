@@ -30,6 +30,7 @@ describe("importEtablissement", () => {
       referentiels: ["dummy"],
       uais: [],
       reseaux: [],
+      statuts: [],
       contacts: [],
       relations: [],
       lieux_de_formation: [],
