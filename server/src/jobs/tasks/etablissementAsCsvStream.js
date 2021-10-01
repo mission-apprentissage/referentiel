@@ -24,7 +24,7 @@ function computeCorrespondance(etablissement) {
     catalogue: getUAI("catalogue-etablissements", etablissement),
   };
 
-  if (!etablissement.statut || etablissement.statut === "fermé") {
+  if (!etablissement.etatAdministratif || etablissement.etatAdministratif === "fermé") {
     return {
       task: "inconnu",
       sources,
@@ -77,7 +77,7 @@ function etablissementAsCsvStream(options = {}) {
 
       return {
         ...etablissement,
-        statut: `${gestionnaire} ${gestionnaire && formateur ? "et" : ""} ${formateur}`.trim(),
+        etatAdministratif: `${gestionnaire} ${gestionnaire && formateur ? "et" : ""} ${formateur}`.trim(),
         correspondance,
       };
     }),
@@ -87,7 +87,7 @@ function etablissementAsCsvStream(options = {}) {
         Académie: (a) => a.adresse?.academie.nom,
         Siret: (a) => a.siret,
         "Raison sociale": (a) => sanitize(a.raison_sociale),
-        Statut: (a) => a.statut,
+        "Etat administratif": (a) => a.etatAdministratif,
         DECA: (a) => a.correspondance.sources.deca,
         "SIFA RAMSESE": (a) => a.correspondance.sources.sifa_ramsese,
         Catalogue: (a) => a.correspondance.sources.catalogue,

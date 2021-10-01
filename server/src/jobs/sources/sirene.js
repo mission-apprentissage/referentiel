@@ -109,7 +109,7 @@ module.exports = (options = {}) => {
                 data: {
                   raison_sociale: getEtablissementName(data, uniteLegale),
                   siege_social: data.etablissement_siege === "true",
-                  statut: data.etat_administratif === "A" ? "actif" : "fermé",
+                  etatAdministratif: data.etat_administratif === "A" ? "actif" : "fermé",
                   ...(adresse ? { adresse } : {}),
                   ...(formeJuridique ? { forme_juridique: formeJuridique } : {}),
                 },

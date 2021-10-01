@@ -22,7 +22,7 @@ module.exports = {
         uai: string(),
         raison_sociale: string(),
         siege_social: boolean(),
-        statut: string({ enum: ["actif", "fermé"] }),
+        etatAdministratif: string({ enum: ["actif", "fermé"] }),
         adresse: adresseSchema,
         forme_juridique: object(
           {

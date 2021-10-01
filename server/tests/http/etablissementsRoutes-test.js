@@ -30,7 +30,7 @@ describe("etablissementsRoutes", () => {
           diplomes: [],
           certifications: [],
           siege_social: true,
-          statut: "actif",
+          etatAdministratif: "actif",
           referentiels: ["test"],
           conformite_reglementaire: {
             conventionne: true,
@@ -409,7 +409,7 @@ describe("etablissementsRoutes", () => {
       diplomes: [],
       certifications: [],
       siege_social: true,
-      statut: "actif",
+      etatAdministratif: "actif",
       referentiels: ["test"],
       conformite_reglementaire: {
         conventionne: true,

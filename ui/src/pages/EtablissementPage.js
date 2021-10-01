@@ -71,7 +71,9 @@ export default () => {
                     <Title>
                       <span>Etablissement</span>
                       <span>
-                        {etablissement.statut === "fermé" && <Badge color="danger">{etablissement.statut}</Badge>}
+                        {etablissement.etatAdministratif === "fermé" && (
+                          <Badge color="danger">{etablissement.etatAdministratif}</Badge>
+                        )}
                       </span>
                     </Title>
                   }
@@ -106,8 +108,8 @@ export default () => {
                         <span>{etablissement.forme_juridique ? etablissement.forme_juridique.label : "-"}</span>
                       </Item>
                       <Item>
-                        <span>Statut</span>
-                        <span>{etablissement.statut}</span>
+                        <span>Etat administratif</span>
+                        <span>{etablissement.etatAdministratif}</span>
                       </Item>
                       <Item>
                         <span>Siège social</span>
