@@ -38,7 +38,10 @@ function getRelationLabel(e, uniteLegale) {
 module.exports = (options = {}) => {
   let name = "sirene";
   let api = options.sireneApi || new SireneApi();
-  let cache = new MongodbCache(name, { ttl: DateTime.now().plus({ month: 1 }).startOf("month").toJSDate() });
+  let cache = new MongodbCache(name, {
+    ttl: DateTime.now().plus({ month: 1 }).startOf("month").toJSDate(),
+    cacheError: (apiError) => apiError.httpStatusCode <= 404,
+  });
   let { getAdresseFromCoordinates } = adresses(options.geoAdresseApi || new GeoAdresseApi());
 
   return {
@@ -117,7 +120,9 @@ module.exports = (options = {}) => {
             } catch (e) {
               return {
                 selector: siret,
-                anomalies: [e.reason === 404 ? { code: "entreprise_inconnue", message: `Entreprise inconnue` } : e],
+                anomalies: [
+                  e.httpStatusCode === 404 ? { code: "entreprise_inconnue", message: `Entreprise inconnue` } : e,
+                ],
               };
             }
           },

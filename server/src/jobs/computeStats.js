@@ -21,7 +21,7 @@ async function validateSiretWithApi(siret, cache, sireneApi) {
 
     return { isValid: true, category: etat_administratif === "A" ? "actifs" : "fermés" };
   } catch (e) {
-    if (e.reason === 404) {
+    if (e.httpStatusCode === 404) {
       return { isValid: false, category: "invalides" };
     }
 

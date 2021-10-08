@@ -180,7 +180,7 @@ module.exports = async (array, options = {}) => {
           stats[from].updated += nbModifiedDocuments;
           logger.debug(`[Collect][${from}] Etablissement ${etablissement.siret} mis à jour`);
         } else {
-          logger.trace(`[Collect][${from}] Etablissement ${etablissement.siret} déjà à jour`);
+          logger.trace(`[Collect][${from}] Etablissement ${etablissement.siret} à jour`);
         }
       } catch (e) {
         stats[from].failed++;

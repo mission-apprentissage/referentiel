@@ -29,9 +29,7 @@ class CatalogueApi extends RateLimitedApi {
 
     let version = `${annee || ""}`;
     logger.debug(`[${this.name}] Fetching formations ${version} with params ${params}...`);
-    let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations${version}.ndjson?${params}`, {
-      highWaterMark: 1048576 * 25, // 25MiB
-    });
+    let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations${version}.ndjson?${params}`);
 
     return compose(
       response,
