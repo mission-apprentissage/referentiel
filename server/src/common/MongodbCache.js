@@ -1,6 +1,7 @@
 const logger = require("./logger");
 const { DateTime } = require("luxon");
 const { dbCollection } = require("./db/mongodb");
+const { serializeError, deserializeError } = require("serialize-error");
 
 class MongodbCache {
   constructor(cacheName, options = {}) {
@@ -15,21 +16,27 @@ class MongodbCache {
       return null;
     }
 
+    if (res.type === "error") {
+      throw deserializeError(res.value);
+    }
+
     logger.trace(`Value with key '${key}' retrieved from cache ${this.cacheName}`);
     return res.value;
   }
 
   async add(key, value) {
     logger.trace(`Adding key '${key}' to cache ${this.cacheName}...`);
+    let isError = value instanceof Error;
     await this.collection.updateOne(
       {
         _id: `${this.cacheName}_${key}`,
+        ...(isError ? { type: "error" } : {}),
       },
       {
         $set: {
           cacheName: this.cacheName,
           expires_at: this.options.ttl || DateTime.now().plus({ hour: 24 }).toJSDate(),
-          value,
+          value: isError ? serializeError(value) : value,
         },
       },
       { upsert: true }
@@ -37,12 +44,23 @@ class MongodbCache {
   }
 
   async memo(key, callback) {
-    let value = await this.get(key);
-    if (!value) {
-      value = await callback();
-      await this.add(key, value);
+    let found = await this.get(key);
+    if (found) {
+      return found;
     }
-    return value;
+
+    return callback()
+      .then(async (value) => {
+        await this.add(key, value);
+        return value;
+      })
+      .catch(async (err) => {
+        let cacheError = this.options.cacheError;
+        if (cacheError && cacheError(err)) {
+          await this.add(key, err);
+        }
+        throw err;
+      });
   }
 }
 

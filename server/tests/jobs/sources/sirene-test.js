@@ -410,4 +410,34 @@ describe("sirene", () => {
     assert.ok(found.expires_at > DateTime.now().plus({ hour: 1 }).toJSDate());
     assert.ok(found.value);
   });
+
+  it("Vérifie qu'on met en cache les erreurs 4xx de l'API sirene", async () => {
+    await importEtablissements();
+    let source = createSireneSource({
+      sireneApi: getMockedSireneApi((mock) => {
+        mock.onGet(/unites_legales.*/).reply(404, {});
+      }),
+    });
+
+    await collectSources(source);
+
+    let found = await dbCollection("cache").findOne({ _id: "sirene_111111111" });
+    assert.deepStrictEqual(found._id, "sirene_111111111");
+    assert.strictEqual(found.type, "error");
+    assert.deepStrictEqual(found.value.message, "[SireneApi] Request failed with status code 404");
+  });
+
+  it("Vérifie qu'on ne met pas en cache les erreurs 5xx de l'API sirene", async () => {
+    await importEtablissements();
+    let source = createSireneSource({
+      sireneApi: getMockedSireneApi((mock) => {
+        mock.onGet(/unites_legales.*/).reply(500, {});
+      }),
+    });
+
+    await collectSources(source);
+
+    let found = await dbCollection("cache").findOne({ _id: "sirene_111111111" });
+    assert.deepStrictEqual(found, null);
+  });
 });
