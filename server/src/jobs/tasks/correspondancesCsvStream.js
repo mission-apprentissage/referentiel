@@ -33,24 +33,16 @@ function computeCorrespondance(etablissement) {
     };
   }
 
-  if (etablissement.uai) {
-    return {
-      uai: etablissement.uai,
-      task: "à valider",
-      sources,
-    };
-  }
-
-  let uaiAValider = etablissement.uais.find((u) => {
+  let aValider = etablissement.uais.find((u) => {
     let sources = u.sources.filter(
       (s) => s.includes("deca") || s.includes("sifa-ramsese") || s.includes("catalogue-etablissements")
     );
     return sources.length > 1;
   })?.uai;
 
-  if (uaiAValider) {
+  if (aValider) {
     return {
-      uai: uaiAValider,
+      uai: aValider,
       task: "à valider",
       sources,
     };
@@ -90,7 +82,7 @@ async function loadPrevious(streams) {
   return confirmed;
 }
 
-async function etablissementAsCsvStream(options = {}) {
+async function correspondancesCsvStream(options = {}) {
   let filter = options.filter || {};
   let limit = options.limit || Number.MAX_SAFE_INTEGER;
   let previous = options.previous ? await loadPrevious(options.previous) : [];
@@ -128,4 +120,4 @@ async function etablissementAsCsvStream(options = {}) {
   );
 }
 
-module.exports = etablissementAsCsvStream;
+module.exports = correspondancesCsvStream;

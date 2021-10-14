@@ -1,7 +1,6 @@
 const GeoAdresseApi = require("../common/apis/GeoAdresseApi");
 const { createSource } = require("./sources/sources");
 const collectSources = require("./collectSources");
-const consolidate = require("./consolidate");
 const importEtablissements = require("./importEtablissements");
 
 async function build() {
@@ -34,7 +33,7 @@ async function build() {
     geoAdresseApi: new GeoAdresseApi(),
   });
 
-  await consolidate().then((res) => stats.push({ consolidation: res }));
+  //await consolidate().then((res) => stats.push({ consolidation: res }));
 
   //Theses sources use uai as selector, so we need to consolidate UAI before running them
   await collectAll(["ccca-btp", "cci-france", "cma", "acce", "voeux-affelnet"]);

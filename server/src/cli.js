@@ -8,7 +8,7 @@ const runScript = require("./jobs/runScript");
 const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/collectSources");
 const consolidate = require("./jobs/consolidate");
-const etablissementAsCsvStream = require("./jobs/tasks/etablissementAsCsvStream");
+const correspondancesCsvStream = require("./jobs/tasks/correspondancesCsvStream");
 const computeStats = require("./jobs/computeStats");
 const importCFD = require("./jobs/importCFD");
 const importEtablissements = require("./jobs/importEtablissements");
@@ -69,8 +69,8 @@ cli
   });
 
 cli
-  .command("export")
-  .description("Exporte les établissements")
+  .command("exportCorrespondances")
+  .description("Exporte la liste des établissements à valider")
   .option("--filter <filter>", "Filtre au format json", JSON.parse)
   .option("--limit <limit>", "Nombre maximum d'éléments à exporter", parseInt)
   .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
@@ -80,7 +80,7 @@ cli
   .action(({ filter, limit, previous, out }) => {
     runScript(async () => {
       let options = { filter, limit, previous };
-      let stream = await etablissementAsCsvStream(options);
+      let stream = await correspondancesCsvStream(options);
       return oleoduc(stream, out || writeToStdout());
     });
   });
