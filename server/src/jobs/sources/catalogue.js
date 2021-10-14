@@ -1,4 +1,4 @@
-const { compose, transformData, flattenArray, mergeStreams } = require("oleoduc");
+const { compose, transformData, flattenArray } = require("oleoduc");
 const CatalogueApi = require("../../common/apis/CatalogueApi");
 const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
@@ -14,27 +14,22 @@ function fetchFormations(api, options = {}) {
 
   return api.streamFormations(query, {
     limit: 1000000,
-    ...(options.annee
-      ? {
-          annee: options.annee,
-          select: {
-            etablissement_gestionnaire_siret: 1,
-            etablissement_gestionnaire_entreprise_raison_sociale: 1,
-            etablissement_formateur_siret: 1,
-            etablissement_formateur_entreprise_raison_sociale: 1,
-            lieu_formation_adresse: 1,
-            lieu_formation_siret: 1,
-            lieu_formation_geo_coordonnees: 1,
-            rncp_code: 1,
-            rncp_intitule: 1,
-            cfd: 1,
-            cfd_specialite: 1,
-            email: 1,
-            id_rco_formation: 1,
-            tags: 1,
-          },
-        }
-      : {}),
+    select: {
+      etablissement_gestionnaire_siret: 1,
+      etablissement_gestionnaire_entreprise_raison_sociale: 1,
+      etablissement_formateur_siret: 1,
+      etablissement_formateur_entreprise_raison_sociale: 1,
+      lieu_formation_adresse: 1,
+      lieu_formation_siret: 1,
+      lieu_formation_geo_coordonnees: 1,
+      rncp_code: 1,
+      rncp_intitule: 1,
+      cfd: 1,
+      cfd_specialite: 1,
+      email: 1,
+      id_rco_formation: 1,
+      tags: 1,
+    },
   });
 }
 
@@ -172,15 +167,8 @@ module.exports = (custom = {}) => {
   return {
     name: "catalogue",
     async stream(options = {}) {
-      let filters = options.filters || {};
-      let stream = await mergeStreams(
-        () => fetchFormations(api, filters),
-        () => fetchFormations(api, { ...filters, annee: 2021 }),
-        { sequential: true }
-      );
-
       return compose(
-        stream,
+        fetchFormations(api, options.filters),
         transformData(async (formation) => {
           let [formateur, gestionnaire] = await Promise.all([
             dbCollection("etablissements").findOne({ siret: formation.etablissement_formateur_siret }, { siret: 1 }),

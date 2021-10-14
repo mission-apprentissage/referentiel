@@ -10,7 +10,7 @@ const { dbCollection } = require("../../../src/common/db/mongodb");
 function mockApis(custom = {}) {
   mockCatalogueApi((client, responses) => {
     client
-      .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
+      .get((uri) => uri.includes("formations2021.ndjson"))
       .query(() => true)
       .reply(200, responses.formations(custom.formation));
   });
@@ -50,7 +50,7 @@ describe("catalogue", () => {
     assert.deepStrictEqual(found.statuts, ["formateur"]);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 4,
+        total: 2,
         updated: 2,
         ignored: 0,
         failed: 0,
@@ -170,7 +170,7 @@ describe("catalogue", () => {
     ]);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 2,
+        total: 1,
         updated: 1,
         ignored: 0,
         failed: 0,
@@ -223,7 +223,7 @@ describe("catalogue", () => {
     assert.deepStrictEqual(found.diplomes, []);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 2,
+        total: 1,
         updated: 1,
         ignored: 0,
         failed: 0,
@@ -256,7 +256,7 @@ describe("catalogue", () => {
     ]);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 2,
+        total: 1,
         updated: 1,
         ignored: 0,
         failed: 0,
@@ -282,7 +282,7 @@ describe("catalogue", () => {
     assert.deepStrictEqual(found.certifications, []);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 2,
+        total: 1,
         updated: 1,
         ignored: 0,
         failed: 0,
@@ -347,7 +347,7 @@ describe("catalogue", () => {
     });
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 2,
+        total: 1,
         updated: 1,
         ignored: 0,
         failed: 0,
@@ -373,7 +373,7 @@ describe("catalogue", () => {
     assert.deepStrictEqual(found.lieux_de_formation, []);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 2,
+        total: 1,
         updated: 1,
         ignored: 0,
         failed: 0,
@@ -386,7 +386,7 @@ describe("catalogue", () => {
     let source = createSource("catalogue");
     mockCatalogueApi((client, responses) => {
       client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
+        .get((uri) => uri.includes("formations2021.ndjson"))
         .query(() => true)
         .reply(
           200,
@@ -440,7 +440,7 @@ describe("catalogue", () => {
     });
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 2,
+        total: 1,
         updated: 1,
         ignored: 0,
         failed: 0,
@@ -453,7 +453,7 @@ describe("catalogue", () => {
     let source = createSource("catalogue");
     mockCatalogueApi((client, responses) => {
       client
-        .get((uri) => uri.includes("formations.ndjson") || uri.includes("formations2021.ndjson"))
+        .get((uri) => uri.includes("formations2021.ndjson"))
         .query(() => true)
         .reply(
           200,
@@ -479,7 +479,7 @@ describe("catalogue", () => {
     let found = await dbCollection("etablissements").findOne({ siret: "22222222200002" }, { _id: 0 });
 
     assert.strictEqual(found.lieux_de_formation.length, 0);
-    assert.strictEqual(found._meta.anomalies.length, 2);
+    assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
       job: "collect",
       source: "catalogue",
@@ -488,10 +488,10 @@ describe("catalogue", () => {
     });
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 2,
+        total: 1,
         updated: 1,
         ignored: 0,
-        failed: 2,
+        failed: 1,
       },
     });
   });
@@ -519,7 +519,7 @@ describe("catalogue", () => {
     ]);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 2,
+        total: 1,
         updated: 1,
         ignored: 0,
         failed: 0,

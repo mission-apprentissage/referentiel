@@ -13,7 +13,7 @@ class CatalogueApi extends RateLimitedApi {
     return "https://catalogue.apprentissage.beta.gouv.fr/api";
   }
 
-  streamFormations(query, { annee, ...options }) {
+  streamFormations(query, options) {
     let params = queryString.stringify(
       {
         query: JSON.stringify(query),
@@ -27,9 +27,8 @@ class CatalogueApi extends RateLimitedApi {
       { encode: false }
     );
 
-    let version = `${annee || ""}`;
-    logger.debug(`[${this.name}] Fetching formations ${version} with params ${params}...`);
-    let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations${version}.ndjson?${params}`);
+    logger.debug(`[${this.name}] Fetching formations with params ${params}...`);
+    let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations2021.ndjson?${params}`);
 
     return compose(
       response,
