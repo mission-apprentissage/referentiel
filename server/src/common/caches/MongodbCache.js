@@ -1,6 +1,6 @@
-const logger = require("./logger");
+const logger = require("../logger");
 const { DateTime } = require("luxon");
-const { dbCollection } = require("./db/mongodb");
+const { dbCollection } = require("../db/mongodb");
 const { serializeError, deserializeError } = require("serialize-error");
 
 class MongodbCache {

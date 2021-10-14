@@ -3,7 +3,7 @@ const luhn = require("fast-luhn");
 const { intersection, union, range, uniq } = require("lodash");
 const logger = require("../common/logger");
 const SireneApi = require("../common/apis/SireneApi");
-const InMemoryCache = require("../common/InMemoryCache");
+const caches = require("../common/caches/caches");
 const { validateUAI } = require("../common/utils/uaiUtils");
 const { dbCollection } = require("../common/db/mongodb");
 
@@ -28,16 +28,6 @@ async function validateSiretWithApi(siret, cache, sireneApi) {
     logger.error(e);
     return { isValid: false, category: "erreurs" };
   }
-}
-
-// eslint-disable-next-line no-unused-vars
-async function validateSiret(siret) {
-  let found = await dbCollection("sirene").findOne({ siret });
-  if (!luhn(siret) || !found) {
-    return { isValid: false, category: "invalides" };
-  }
-
-  return { isValid: true, category: found.etatAdministratifEtablissement === "A" ? "actifs" : "fermés" };
 }
 
 function buildMatrice(valides, field, mapValues = (values) => values) {
@@ -96,7 +86,7 @@ function buildRecoupement(valides, field, mapValues = (values) => values) {
 
 async function validateSources(sources) {
   let sireneApi = new SireneApi();
-  let cache = new InMemoryCache("siret");
+  let cache = caches.sireneApiCache();
   let validation = {};
   let valides = {};
   let createSourceUniques = () => ({ uais: new Set(), sirets: new Set(), uais_sirets: new Set() });
@@ -120,10 +110,16 @@ async function validateSources(sources) {
     },
   });
 
-  let streams = await Promise.all(sources.map((source) => source.stream()));
+  let stream = mergeStreams(
+    sources.map((source) => {
+      //Create a factory to build streams lazily
+      return () => source.stream();
+    }),
+    { sequential: true }
+  );
 
   await oleoduc(
-    mergeStreams(streams),
+    stream,
     writeData(
       async ({ from, selector: siret, uais = [] }) => {
         let uai = uais[0];
@@ -216,4 +212,5 @@ async function computeStats(sources, options) {
 
   return stats;
 }
+
 module.exports = computeStats;

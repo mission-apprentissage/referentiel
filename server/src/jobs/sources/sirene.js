@@ -5,8 +5,7 @@ const adresses = require("../../common/adresses");
 const categoriesJuridiques = require("../../common/categoriesJuridiques");
 const { dbCollection } = require("../../common/db/mongodb");
 const loadOrganismeDeFormations = require("../tasks/loadOrganismeDeFormations");
-const MongodbCache = require("../../common/MongodbCache");
-const { DateTime } = require("luxon");
+const caches = require("../../common/caches/caches");
 
 function getEtablissementName(e, uniteLegale) {
   return (
@@ -38,10 +37,7 @@ function getRelationLabel(e, uniteLegale) {
 module.exports = (options = {}) => {
   let name = "sirene";
   let api = options.sireneApi || new SireneApi();
-  let cache = new MongodbCache(name, {
-    ttl: DateTime.now().plus({ month: 1 }).startOf("month").toJSDate(),
-    cacheError: (apiError) => apiError.httpStatusCode <= 404,
-  });
+  let cache = caches.sireneApiCache();
   let { getAdresseFromCoordinates } = adresses(options.geoAdresseApi || new GeoAdresseApi());
 
   return {
