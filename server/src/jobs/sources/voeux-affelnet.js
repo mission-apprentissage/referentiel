@@ -1,6 +1,7 @@
 const { compose, transformData } = require("oleoduc");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
+const { optionnalItem } = require("../../common/utils/objectUtils");
 
 module.exports = (custom = {}) => {
   let name = "voeux-affelnet";
@@ -15,10 +16,10 @@ module.exports = (custom = {}) => {
       return compose(
         input,
         parseCsv(),
-        transformData(({ uai, email }) => {
+        transformData(({ uai, siret, email }) => {
           return {
             from: name,
-            selector: uai,
+            selector: { $or: [...optionnalItem("siret", siret), ...optionnalItem("uai", uai)] },
             contacts: [{ email, confirmé: true }],
           };
         })

@@ -28,9 +28,19 @@ function isError(obj) {
   return obj && obj.stack && obj.message;
 }
 
+function optionnalItem(key, value) {
+  return value ? [{ [key]: value }] : [];
+}
+
+function optionnalObject(key, value) {
+  return value ? { [key]: value } : {};
+}
+
 module.exports = {
   flattenObject,
   omitEmpty,
   mergeObjectsAndConcatArray,
   isError,
+  optionnalItem,
+  optionnalObject,
 };
