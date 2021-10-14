@@ -74,11 +74,14 @@ cli
   .option("--filter <filter>", "Filtre au format json", JSON.parse)
   .option("--limit <limit>", "Nombre maximum d'éléments à exporter", parseInt)
   .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
-  .action(({ filter, limit, out }) => {
-    runScript(() => {
-      let options = { filter, limit };
-
-      return oleoduc(etablissementAsCsvStream(options), out || writeToStdout());
+  .option("--previous <previous>", "Des fichiers contenant des analyses précédentes", (v) => {
+    return v.split(",").map((f) => createReadStream(f));
+  })
+  .action(({ filter, limit, previous, out }) => {
+    runScript(async () => {
+      let options = { filter, limit, previous };
+      let stream = await etablissementAsCsvStream(options);
+      return oleoduc(stream, out || writeToStdout());
     });
   });
 

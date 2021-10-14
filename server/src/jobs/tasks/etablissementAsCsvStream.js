@@ -1,5 +1,7 @@
-const { transformIntoCSV, transformData, compose } = require("oleoduc");
+const { transformIntoCSV, transformData, compose, mergeStreams, writeData, oleoduc } = require("oleoduc");
 const { dbCollection } = require("../../common/db/mongodb");
+const { parseCsv } = require("../../common/utils/csvUtils");
+const { pick } = require("lodash");
 
 function getUAI(source, etablissement) {
   let uais = etablissement.uais.filter((u) => u.sources.includes(source));
@@ -64,16 +66,45 @@ function sanitize(value) {
   return value ? value.replace(/[.,;]/g, "") : "";
 }
 
-function etablissementAsCsvStream(options = {}) {
+async function loadPrevious(streams) {
+  function readCSV(stream) {
+    return compose(
+      stream,
+      parseCsv({
+        delimiter: ",",
+        trim: true,
+        columns: true,
+      }),
+      transformData((data) => {
+        return data.UAI ? pick(data, ["SIRET", "UAI"]) : null;
+      })
+    );
+  }
+
+  let confirmed = [];
+  await oleoduc(
+    mergeStreams(streams.map((s) => readCSV(s))),
+    writeData((data) => confirmed.push(pick(data, ["SIRET", "UAI"])))
+  );
+
+  return confirmed;
+}
+
+async function etablissementAsCsvStream(options = {}) {
   let filter = options.filter || {};
   let limit = options.limit || Number.MAX_SAFE_INTEGER;
+  let previous = options.previous ? await loadPrevious(options.previous) : [];
 
   return compose(
     dbCollection("etablissements").find(filter).limit(limit).sort({ siret: 1 }).stream(),
     transformData((etablissement) => {
+      let correspondance = computeCorrespondance(etablissement);
+      if (correspondance.task !== "à valider") {
+        return null;
+      }
       return {
         ...etablissement,
-        correspondance: computeCorrespondance(etablissement),
+        correspondance,
       };
     }),
     transformIntoCSV({
@@ -88,6 +119,10 @@ function etablissementAsCsvStream(options = {}) {
         Catalogue: (e) => e.correspondance.sources.catalogue,
         UAI: (e) => e.correspondance.uai,
         Tache: (e) => e.correspondance.task,
+        Précédent: (e) => {
+          let found = previous.find((p) => p.SIRET === e.siret);
+          return found ? found.UAI : "";
+        },
       },
     })
   );
