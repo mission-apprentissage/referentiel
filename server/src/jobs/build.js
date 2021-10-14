@@ -17,14 +17,17 @@ async function build() {
     "agri",
     "anasup",
     "compagnons-du-devoir",
+    "datadock",
     "deca",
     "catalogue-etablissements",
+    "tableau-de-bord",
     "gesti",
     "opcoep",
     "promotrans",
     "sifa-ramsese",
     "depp",
     "refea",
+    "uimm",
     "ymag",
   ]);
   await collectAll(["onisep", "onisep-structure", "ideo2"]);
@@ -36,7 +39,7 @@ async function build() {
   //await consolidate().then((res) => stats.push({ consolidation: res }));
 
   //Theses sources use uai as selector, so we need to consolidate UAI before running them
-  await collectAll(["ccca-btp", "cci-france", "cma", "acce", "voeux-affelnet"]);
+  await collectAll(["ccca-btp", "cci-france", "cma", "mfr", "acce", "voeux-affelnet"]);
 
   return stats;
 }
