@@ -1,4 +1,4 @@
-const { compose, transformData } = require("oleoduc");
+const { compose, transformData, filterData } = require("oleoduc");
 const csv = require("csv-parse");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 
@@ -19,10 +19,13 @@ module.exports = (custom = {}) => {
           bom: true,
           columns: true,
         }),
+        filterData((data) => data.uai),
         transformData((data) => {
+          let uai = data["uai"];
+
           return {
             from: name,
-            selector: data["uai"],
+            selector: { $or: [{ uai }, { "uais.uai": uai }] },
             reseaux: ["cci-france"],
           };
         })

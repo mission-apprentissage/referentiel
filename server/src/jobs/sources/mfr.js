@@ -19,11 +19,11 @@ module.exports = (custom = {}) => {
           columns: true,
         }),
         transformData((data) => {
-          let uais = [...new Set([data["uai"], data["uai_code_educnationale"]])];
+          let uais = [...new Set([data["uai"], data["uai_code_educnationale"]])].filter((u) => u);
           return {
             from: name,
             selector: {
-              $or: [{ siret: data["siret"] }, { uai: { $in: uais } }],
+              $or: [{ siret: data["siret"] }, { uai: { $in: uais } }, { "uais.uai": { $in: uais } }],
             },
             uais,
             reseaux: ["mfr"],

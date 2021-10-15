@@ -97,7 +97,7 @@ async function createCollectionIfNeeded(collection) {
 }
 
 function clearCollection(name) {
-  logger.warn(`Suppresion des données de la collection ${name}...`);
+  logger.warn(`Suppression des données de la collection ${name}...`);
   return dbCollection(name)
     .deleteMany({})
     .then((res) => res.deletedCount);

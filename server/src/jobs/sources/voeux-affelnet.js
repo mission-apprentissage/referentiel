@@ -19,7 +19,7 @@ module.exports = (custom = {}) => {
         transformData(({ uai, siret, email }) => {
           return {
             from: name,
-            selector: { $or: [...optionnalItem("siret", siret), ...optionnalItem("uai", uai)] },
+            selector: { $or: [...optionnalItem("siret", siret), ...(uai ? [{ uai }, { "uais.uai": uai }] : [])] },
             contacts: [{ email, confirmé: true }],
           };
         })
