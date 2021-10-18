@@ -28,11 +28,11 @@ function isError(obj) {
   return obj && obj.stack && obj.message;
 }
 
-function optionnalItem(key, value) {
+function optionalItem(key, value) {
   return value ? [{ [key]: value }] : [];
 }
 
-function optionnalObject(key, value) {
+function optionalObject(key, value) {
   return value ? { [key]: value } : {};
 }
 
@@ -41,6 +41,6 @@ module.exports = {
   omitEmpty,
   mergeObjectsAndConcatArray,
   isError,
-  optionnalItem,
-  optionnalObject,
+  optionalItem,
+  optionalObject,
 };
