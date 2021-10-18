@@ -146,7 +146,7 @@ module.exports = {
           certifications: [],
           referentiels: ["test"],
           siege_social: true,
-          etatAdministratif: "actif",
+          etat_administratif: "actif",
           conformite_reglementaire: {
             conventionne: true,
           },

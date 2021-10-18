@@ -71,8 +71,8 @@ export default () => {
                     <Title>
                       <span>Etablissement</span>
                       <span>
-                        {etablissement.etatAdministratif === "fermé" && (
-                          <Badge color="danger">{etablissement.etatAdministratif}</Badge>
+                        {etablissement.etat_administratif === "fermé" && (
+                          <Badge color="danger">{etablissement.etat_administratif}</Badge>
                         )}
                       </span>
                     </Title>
@@ -109,7 +109,7 @@ export default () => {
                       </Item>
                       <Item>
                         <span>Etat administratif</span>
-                        <span>{etablissement.etatAdministratif}</span>
+                        <span>{etablissement.etat_administratif}</span>
                       </Item>
                       <Item>
                         <span>Siège social</span>

@@ -26,7 +26,7 @@ function computeCorrespondance(etablissement) {
     catalogue: getUAI("catalogue-etablissements", etablissement),
   };
 
-  if (!etablissement.etatAdministratif || etablissement.etatAdministratif === "fermé") {
+  if (!etablissement.etat_administratif || etablissement.etat_administratif === "fermé") {
     return {
       task: "inconnu",
       sources,

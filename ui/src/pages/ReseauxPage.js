@@ -13,7 +13,7 @@ function getEtablissementsReseau(etablissements) {
       raison_sociale: e.raison_sociale,
       radius: 8,
       depth: 1,
-      color: e.etatAdministratif === "actif" ? "rgb(97, 205, 187)" : "rgb(205, 115, 97)",
+      color: e.etat_administratif === "actif" ? "rgb(97, 205, 187)" : "rgb(205, 115, 97)",
     };
   });
 
@@ -63,7 +63,7 @@ function Reseau({ etablissements }) {
 export default () => {
   let [{ data, loading, error }, search] = useSearch({
     items_par_page: 5000,
-    champs: "siret,etatAdministratif,raison_sociale,relations",
+    champs: "siret,etat_administratif,raison_sociale,relations",
   });
 
   return (

@@ -31,7 +31,7 @@ describe("sirene", () => {
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.raison_sociale, "NOMAYO");
     assert.strictEqual(found.siege_social, true);
-    assert.strictEqual(found.etatAdministratif, "actif");
+    assert.strictEqual(found.etat_administratif, "actif");
     assert.deepStrictEqual(found.forme_juridique, { code: "5710", label: "SAS, société par actions simplifiée" });
     assert.deepStrictEqual(found.adresse, {
       geojson: {
