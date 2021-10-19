@@ -27,13 +27,13 @@ Cet API est actuellement composée de deux routes.
 
 Permet de lister les établissements contenus dans l'annuaire
 
-Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/annuaire/etablissements
+Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/etablissements
 
 ### /api/v1/etablissements/:siret
 
 Permet d'obtenir les informations relatives à un établissement à partir de son numéro de SIRET
 
-Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/annuaire/etablissements/77928324100056
+Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/etablissements/77928324100056
 
 ## Développement
 
