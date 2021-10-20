@@ -14,9 +14,15 @@ const importCFD = require("./jobs/importCFD");
 const importEtablissements = require("./jobs/importEtablissements");
 const build = require("./jobs/build");
 
-cli.command("build").action(() => {
-  runScript(() => build());
-});
+cli
+  .command("build")
+  .argument("[names]", "La liste des sources servant de référence d'établissements")
+  .action((names) => {
+    runScript(() => {
+      let referentiels = names ? names.split(",") : null;
+      return build({ referentiels });
+    });
+  });
 
 cli
   .command("importCFD")
@@ -32,20 +38,25 @@ cli
   });
 
 cli
-  .command("importEtablissements <names> [file]")
+  .command("importEtablissements")
+  .argument("<names>", "la liste des sources à importer")
+  .argument("[file]", "Le nom du fichier utilisé par la source")
+  .option("--removeAll", "Supprimes tous les établissements avant import")
   .description("Importe les établissements contenus dans les sources")
-  .action((names, file) => {
+  .action((names, file, options) => {
     runScript(async () => {
       let mainSourceName = names.split(",");
       let input = file ? createReadStream(file) : null;
 
       let mainSources = mainSourceName.map((name) => createSource(name, { input }));
-      return importEtablissements(mainSources);
+      return importEtablissements(mainSources, options);
     });
   });
 
 cli
-  .command("collectSources <names> [file]")
+  .command("collectSources")
+  .argument("<names>", "la liste des sources à collecter")
+  .argument("[file]", "Le nom du fichier utilisé par la source")
   .option("--siret <siret>", "Limite la collecte pour le siret")
   .description("Parcourt la ou les sources pour trouver des données complémentaires")
   .action((names, file, { siret }) => {

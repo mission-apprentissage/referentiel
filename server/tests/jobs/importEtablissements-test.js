@@ -45,6 +45,7 @@ describe("importEtablissement", () => {
         total: 1,
         created: 1,
         updated: 0,
+        invalid: 0,
         failed: 0,
       },
     });
@@ -61,6 +62,7 @@ describe("importEtablissement", () => {
         total: 2,
         created: 1,
         updated: 0,
+        invalid: 0,
         failed: 0,
       },
     });
@@ -82,7 +84,8 @@ describe("importEtablissement", () => {
         total: 1,
         created: 0,
         updated: 0,
-        failed: 1,
+        invalid: 1,
+        failed: 0,
       },
     });
   });

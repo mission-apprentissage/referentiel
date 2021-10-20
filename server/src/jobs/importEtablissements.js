@@ -15,6 +15,7 @@ function createStats(sources) {
         total: 0,
         created: 0,
         updated: 0,
+        invalid: 0,
         failed: 0,
       },
     };
@@ -35,8 +36,8 @@ module.exports = async (array, options = {}) => {
     writeData(async ({ from, selector: siret }) => {
       stats[from].total++;
       if (isEmpty(siret)) {
-        stats[from].failed++;
-        logger.debug(`[Referentiel] Siret invalide pour l'établissement ${siret}`);
+        stats[from].invalid++;
+        logger.warn(`[Referentiel] Siret invalide pour l'établissement ${siret}`);
         return;
       }
 
