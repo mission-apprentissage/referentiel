@@ -90,6 +90,28 @@ describe("importEtablissement", () => {
     });
   });
 
+  it("Vérifie qu'on ignore un établissement avec un siret invalide", async () => {
+    let source = createTestSource([
+      {
+        selector: "",
+      },
+    ]);
+
+    let results = await importReferentiel(source);
+
+    let count = await dbCollection("etablissements").countDocuments({ siret: "7894766" });
+    assert.strictEqual(count, 0);
+    assert.deepStrictEqual(results, {
+      dummy: {
+        total: 1,
+        created: 0,
+        updated: 0,
+        invalid: 1,
+        failed: 0,
+      },
+    });
+  });
+
   it("Vérifie qu'on peut supprimer tous les établissements avant l'import", async () => {
     let source = createTestSource([{ selector: "11111111100006" }]);
     await insertEtablissement({ siret: "22222222200002" });

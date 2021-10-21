@@ -1,6 +1,7 @@
 const { oleoduc, mergeStreams, writeData } = require("oleoduc");
 const { isEmpty } = require("lodash");
 const logger = require("../common/logger");
+const luhn = require("fast-luhn");
 const { dbCollection, clearCollection } = require("../common/db/mongodb");
 
 async function getStreams(sources) {
@@ -35,7 +36,7 @@ module.exports = async (array, options = {}) => {
     mergeStreams(streams),
     writeData(async ({ from, selector: siret }) => {
       stats[from].total++;
-      if (isEmpty(siret)) {
+      if (isEmpty(siret) || !luhn(siret)) {
         stats[from].invalid++;
         logger.warn(`[Referentiel] Siret invalide pour l'établissement ${siret}`);
         return;
