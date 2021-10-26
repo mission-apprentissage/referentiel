@@ -36,6 +36,34 @@ class CatalogueApi extends RateLimitedApi {
       transformData((data) => JSON.parse(data))
     );
   }
+
+  streamEtablissements(query, options = {}) {
+    return this.execute(async () => {
+      let params = queryString.stringify(
+        {
+          query: JSON.stringify(query),
+          ...Object.keys(options).reduce((acc, key) => {
+            return {
+              ...acc,
+              [key]: JSON.stringify(options[key]),
+            };
+          }, {}),
+        },
+        { encode: false }
+      );
+
+      logger.debug(`[${this.name}] Fetching etablissements with params ${params}...`);
+      let response = await getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/etablissements.ndjson?${params}`, {
+        timeout: 5000,
+      });
+
+      return compose(
+        response,
+        readLineByLine(),
+        transformData((data) => JSON.parse(data))
+      );
+    });
+  }
 }
 
 module.exports = CatalogueApi;
