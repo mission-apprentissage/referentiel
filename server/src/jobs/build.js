@@ -3,8 +3,10 @@ const { createSource } = require("./sources/sources");
 const collectSources = require("./collectSources");
 const importEtablissements = require("./importEtablissements");
 
-async function build({ referentiels = ["deca", "catalogue-etablissements", "sifa-ramsese"] }) {
+async function build(options = {}) {
+  let referentiels = options.referentiels || ["deca", "catalogue-etablissements", "sifa-ramsese"];
   let stats = [];
+
   function collectAll(sourceNames, globalOptions = {}) {
     let sources = sourceNames.map((sourceName) => createSource(sourceName, globalOptions));
     return collectSources(sources).then((res) => stats.push({ collect: res }));
