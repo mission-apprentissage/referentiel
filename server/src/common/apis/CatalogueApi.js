@@ -28,7 +28,9 @@ class CatalogueApi extends RateLimitedApi {
     );
 
     logger.debug(`[${this.name}] Fetching formations with params ${params}...`);
-    let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations2021.ndjson?${params}`);
+    let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations2021.ndjson?${params}`, {
+      highWaterMark: 1048576 * 10, //MiB
+    });
 
     return compose(
       response,
