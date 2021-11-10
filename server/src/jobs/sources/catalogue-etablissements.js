@@ -1,9 +1,9 @@
 const { compose, transformData } = require("oleoduc");
-const TcoApi = require("../../common/apis/TcoApi");
+const CatalogueApi = require("../../common/apis/CatalogueApi");
 
 module.exports = (custom = {}) => {
   let name = "catalogue-etablissements";
-  let api = custom.tcoAPI || new TcoApi();
+  let api = custom.catalogueAPI || new CatalogueApi();
 
   return {
     name,
