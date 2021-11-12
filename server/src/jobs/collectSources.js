@@ -39,6 +39,7 @@ function mergeUAI(from, uais, newUAIs) {
     return {
       ...item,
       valide: validateUAI(item.uai),
+      confirmé: item.confirmé || false,
     };
   });
 }

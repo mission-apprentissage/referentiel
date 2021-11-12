@@ -37,6 +37,7 @@ describe("collectSources", () => {
         sources: ["dummy"],
         uai: "0111111Y",
         valide: true,
+        confirmé: false,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -65,6 +66,7 @@ describe("collectSources", () => {
       sources: ["dummy"],
       uai: "093XXXT",
       valide: false,
+      confirmé: false,
     });
     assert.deepStrictEqual(stats, {
       dummy: {
@@ -91,6 +93,7 @@ describe("collectSources", () => {
           sources: ["dummy"],
           uai: "0111111Y",
           valide: true,
+          confirmé: false,
         },
       ],
     });
@@ -103,6 +106,7 @@ describe("collectSources", () => {
         sources: ["dummy"],
         uai: "0111111Y",
         valide: true,
+        confirmé: false,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -123,6 +127,7 @@ describe("collectSources", () => {
           sources: ["other"],
           uai: "0111111Y",
           valide: true,
+          confirmé: true,
         },
       ],
     });
@@ -141,6 +146,7 @@ describe("collectSources", () => {
         sources: ["other", "dummy"],
         uai: "0111111Y",
         valide: true,
+        confirmé: true,
       },
     ]);
   });

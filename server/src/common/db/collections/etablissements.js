@@ -44,6 +44,7 @@ module.exports = {
               uai: string(),
               valide: boolean(),
               sources: arrayOf(string()),
+              confirmé: boolean(),
             },
             { required: ["uai", "valide"] }
           )

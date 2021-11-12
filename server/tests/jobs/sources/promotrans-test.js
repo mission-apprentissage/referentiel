@@ -24,6 +24,7 @@ describe("promotrans", () => {
         sources: ["promotrans"],
         uai: "0111111Y",
         valide: true,
+        confirmé: false,
       },
     ]);
     assert.deepStrictEqual(stats, {

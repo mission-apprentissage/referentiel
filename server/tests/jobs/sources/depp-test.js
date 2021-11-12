@@ -23,6 +23,7 @@ describe("depp", () => {
         sources: ["depp"],
         uai: "0011058V",
         valide: true,
+        confirmé: false,
       },
     ]);
     assert.deepStrictEqual(found.conformite_reglementaire, { conventionne: true });

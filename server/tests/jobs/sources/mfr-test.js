@@ -24,11 +24,13 @@ describe("mfr", () => {
         sources: ["mfr"],
         uai: "0011073X",
         valide: false,
+        confirmé: false,
       },
       {
         sources: ["mfr"],
         uai: "0111111Y",
         valide: true,
+        confirmé: false,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -61,6 +63,7 @@ describe("mfr", () => {
       sources: ["mfr"],
       uai: "0011073X",
       valide: false,
+      confirmé: false,
     });
   });
 
@@ -84,6 +87,7 @@ describe("mfr", () => {
       sources: ["mfr"],
       uai: "0111111Y",
       valide: true,
+      confirmé: false,
     });
   });
 });

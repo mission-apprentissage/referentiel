@@ -23,6 +23,7 @@ describe("tableau-de-bord", () => {
         sources: ["tableau-de-bord"],
         uai: "0111111Y",
         valide: true,
+        confirmé: false,
       },
     ]);
     assert.deepStrictEqual(stats, {
