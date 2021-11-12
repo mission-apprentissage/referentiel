@@ -1,13 +1,10 @@
 require("dotenv").config();
 const { program: cli } = require("commander");
-const { createWriteStream } = require("fs");
-const { oleoduc, writeToStdout } = require("oleoduc");
 const { computeChecksum } = require("./common/utils/uaiUtils");
 const { createReadStream } = require("fs");
 const runScript = require("./jobs/runScript");
 const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/collectSources");
-const correspondancesCsvStream = require("./jobs/tasks/correspondancesCsvStream");
 const computeStats = require("./jobs/computeStats");
 const importCFD = require("./jobs/importCFD");
 const importEtablissements = require("./jobs/importEtablissements");
@@ -69,22 +66,9 @@ cli
     });
   });
 
-cli
-  .command("exportCorrespondances")
-  .description("Exporte la liste des établissements à valider")
-  .option("--filter <filter>", "Filtre au format json", JSON.parse)
-  .option("--limit <limit>", "Nombre maximum d'éléments à exporter", parseInt)
-  .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
-  .option("--previous <previous>", "Des fichiers contenant des analyses précédentes", (v) => {
-    return v.split(",").map((f) => createReadStream(f));
-  })
-  .action(({ filter, limit, previous, out }) => {
-    runScript(async () => {
-      let options = { filter, limit, previous };
-      let stream = await correspondancesCsvStream(options);
-      return oleoduc(stream, out || writeToStdout());
-    });
-  });
+cli.command("experimentation", "Commandes qui concernent les expérimentations avec les régions tests", {
+  executableFile: "jobs/experimentation/experimentationCli.js",
+});
 
 cli
   .command("computeStats")

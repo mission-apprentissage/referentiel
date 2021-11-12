@@ -3,6 +3,20 @@ const { dbCollection } = require("../../common/db/mongodb");
 const { parseCsv } = require("../../common/utils/csvUtils");
 const { pick } = require("lodash");
 
+function findMostPopularUAI(etablissements) {
+  let uais = etablissements.uais.filter(({ sources }) => {
+    return sources.includes("deca") || sources.includes("sifa-ramsese") || sources.includes("catalogue-etablissements");
+  });
+
+  if (uais.length === 0) {
+    return null;
+  }
+
+  let found = uais.reduce((acc, u) => (acc.sources.length < u.sources.length ? u : acc));
+
+  return found.uai;
+}
+
 function getUAI(source, etablissement) {
   let uais = etablissement.uais.filter((u) => u.sources.includes(source));
 
@@ -19,39 +33,13 @@ function getUAI(source, etablissement) {
   }
 }
 
-function computeCorrespondance(etablissement) {
-  let sources = {
-    deca: getUAI("deca", etablissement),
-    sifa_ramsese: getUAI("sifa-ramsese", etablissement),
-    catalogue: getUAI("catalogue-etablissements", etablissement),
-  };
-
+function getTask(etablissement) {
   if (!etablissement.etat_administratif || etablissement.etat_administratif === "fermé") {
-    return {
-      task: "inconnu",
-      sources,
-    };
+    return "inconnu";
   }
 
-  let aValider = etablissement.uais.find((u) => {
-    let sources = u.sources.filter(
-      (s) => s.includes("deca") || s.includes("sifa-ramsese") || s.includes("catalogue-etablissements")
-    );
-    return sources.length > 1;
-  })?.uai;
-
-  if (aValider) {
-    return {
-      uai: aValider,
-      task: "à valider",
-      sources,
-    };
-  } else {
-    return {
-      task: "à expertiser",
-      sources,
-    };
-  }
+  let uai = findMostPopularUAI(etablissement);
+  return uai ? "à valider" : "à expertiser";
 }
 
 function sanitize(value) {
@@ -82,7 +70,7 @@ async function loadPrevious(streams) {
   return confirmed;
 }
 
-async function correspondancesCsvStream(options = {}) {
+async function experimentationCsvStream(options = {}) {
   let filter = options.filter || {};
   let limit = options.limit || Number.MAX_SAFE_INTEGER;
   let previous = options.previous ? await loadPrevious(options.previous) : [];
@@ -90,29 +78,29 @@ async function correspondancesCsvStream(options = {}) {
   return compose(
     dbCollection("etablissements").find(filter).limit(limit).sort({ siret: 1 }).stream(),
     transformData((etablissement) => {
-      let correspondance = computeCorrespondance(etablissement);
-      if (correspondance.task !== "à valider") {
+      let task = getTask(etablissement);
+      if (task !== "à valider") {
         return null;
       }
       return {
-        ...etablissement,
-        correspondance,
+        etablissement,
+        task,
       };
     }),
     transformIntoCSV({
       separator: ",",
       columns: {
-        Académie: (e) => e.adresse?.academie.nom,
-        Siret: (e) => e.siret,
+        Académie: ({ etablissement }) => etablissement.adresse?.nom,
+        Siret: ({ etablissement }) => etablissement.siret,
         "Raison sociale": (a) => sanitize(a.raison_sociale),
-        Statuts: (e) => e.statuts.sort().reverse().join(" et "),
-        DECA: (e) => e.correspondance.sources.deca,
-        "SIFA RAMSESE": (e) => e.correspondance.sources.sifa_ramsese,
-        Catalogue: (e) => e.correspondance.sources.catalogue,
-        UAI: (e) => e.correspondance.uai,
-        Tache: (e) => e.correspondance.task,
-        Précédent: (e) => {
-          let found = previous.find((p) => p.SIRET === e.siret);
+        Statuts: ({ etablissement }) => etablissement.statuts.sort().reverse().join(" et "),
+        DECA: ({ etablissement }) => getUAI("deca", etablissement),
+        "SIFA RAMSESE": ({ etablissement }) => getUAI("sifa-ramsese", etablissement),
+        Catalogue: ({ etablissement }) => getUAI("catalogue-etablissements", etablissement),
+        UAI: ({ etablissement }) => findMostPopularUAI(etablissement),
+        Tache: ({ task }) => task,
+        Précédent: ({ etablissement }) => {
+          let found = previous.find((p) => p.SIRET === etablissement.siret);
           return found ? found.UAI : "";
         },
       },
@@ -120,4 +108,4 @@ async function correspondancesCsvStream(options = {}) {
   );
 }
 
-module.exports = correspondancesCsvStream;
+module.exports = experimentationCsvStream;
