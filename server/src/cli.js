@@ -7,7 +7,6 @@ const { createReadStream } = require("fs");
 const runScript = require("./jobs/runScript");
 const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/collectSources");
-const consolidate = require("./jobs/consolidate");
 const correspondancesCsvStream = require("./jobs/tasks/correspondancesCsvStream");
 const computeStats = require("./jobs/computeStats");
 const importCFD = require("./jobs/importCFD");
@@ -67,15 +66,6 @@ cli
 
       let sources = sourceNames.map((name) => createSource(name, { input }));
       return collectSources(sources, options);
-    });
-  });
-
-cli
-  .command("consolidate")
-  .description("Consolide les données collectées")
-  .action(() => {
-    runScript(() => {
-      return consolidate();
     });
   });
 

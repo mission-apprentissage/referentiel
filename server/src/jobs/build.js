@@ -38,8 +38,6 @@ async function build(options = {}) {
     geoAdresseApi: new GeoAdresseApi(),
   });
 
-  //await consolidate().then((res) => stats.push({ consolidation: res }));
-
   //Theses sources use uai as selector, so we need to consolidate UAI before running them
   await collectAll(["ccca-btp", "cci-france", "cma", "mfr", "acce", "voeux-affelnet"]);
 
