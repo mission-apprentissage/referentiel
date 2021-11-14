@@ -133,8 +133,11 @@ module.exports = {
       dbCollection.createIndex({ siret: 1 }, { unique: true }),
       dbCollection.createIndex({ uai: 1 }, { sparse: true, unique: true }),
       dbCollection.createIndex({ "uais.uai": 1 }),
-      dbCollection.createIndex({ "$**": "text" }, { default_language: "french" }),
       dbCollection.createIndex({ "adresse.geojson.geometry": "2dsphere" }),
+      dbCollection.createIndex(
+        { siret: "text", uai: "text", "uais.uai": "text", raison_sociale: "text" },
+        { name: "fulltext", default_language: "french" }
+      ),
     ];
   },
 };
