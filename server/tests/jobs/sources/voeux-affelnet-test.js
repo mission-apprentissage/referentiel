@@ -7,7 +7,17 @@ const { insertEtablissement } = require("../../utils/fakeData");
 
 describe("voeux-affelnet", () => {
   it("Vérifie qu'on peut collecter des emails à partir du fichier des voeux-affelnet (uai)", async () => {
-    await insertEtablissement({ siret: "11111111100006", uai: "0111111Y" });
+    await insertEtablissement({
+      siret: "11111111100006",
+      uais: [
+        {
+          sources: ["dummy"],
+          uai: "0111111Y",
+          valide: true,
+          confirmé: true,
+        },
+      ],
+    });
     let source = await createSource("voeux-affelnet", {
       input: createStream(
         `email;uai
@@ -36,7 +46,7 @@ describe("voeux-affelnet", () => {
   });
 
   it("Vérifie qu'on peut collecter des emails à partir du fichier des voeux-affelnet (siret)", async () => {
-    await insertEtablissement({ siret: "11111111100006", uai: "0111111Y" });
+    await insertEtablissement({ siret: "11111111100006" });
     let source = await createSource("voeux-affelnet", {
       input: createStream(
         `email;uai;siret
@@ -57,7 +67,7 @@ describe("voeux-affelnet", () => {
   });
 
   it("Vérifie qu'on ne met pas à jour un établisement qu'on le siret est vide", async () => {
-    await insertEtablissement({ siret: "22222222200002", uai: "0751111A" });
+    await insertEtablissement({ siret: "22222222200002" });
     let source = await createSource("voeux-affelnet", {
       input: createStream(
         `email;uai

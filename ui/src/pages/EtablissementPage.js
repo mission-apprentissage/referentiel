@@ -89,7 +89,7 @@ export default () => {
                       </Item>
                       <Item>
                         <span>UAI</span>
-                        <span>{etablissement.uai}</span>
+                        <span>{etablissement.uais.find((i) => i.confirmé === true)}</span>
                       </Item>
                       <Item>
                         <span>Gestionnaire</span>

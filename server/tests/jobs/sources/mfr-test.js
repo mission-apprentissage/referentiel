@@ -45,8 +45,15 @@ describe("mfr", () => {
 
   it("Vérifie qu'on peut collecter des informations du fichier mfr avec un uai", async () => {
     await insertEtablissement({
-      uai: "0111111Y",
       siret: "11111111100006",
+      uais: [
+        {
+          sources: ["dummy"],
+          uai: "0111111Y",
+          valide: true,
+          confirmé: true,
+        },
+      ],
     });
     let source = createSource("mfr", {
       input: createStream(
@@ -69,8 +76,15 @@ describe("mfr", () => {
 
   it("Vérifie qu'on peut collecter des informations du fichier mfr avec un uai_code_educnationale", async () => {
     await insertEtablissement({
-      uai: "0011073X",
       siret: "11111111100006",
+      uais: [
+        {
+          sources: ["dummy"],
+          uai: "0011073X",
+          valide: true,
+          confirmé: true,
+        },
+      ],
     });
     let source = createSource("mfr", {
       input: createStream(

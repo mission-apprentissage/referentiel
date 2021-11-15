@@ -8,8 +8,15 @@ const { insertEtablissement } = require("../../utils/fakeData");
 describe("cma", () => {
   it("Vérifie qu'on peut collecter des informations du fichier cma", async () => {
     await insertEtablissement({
-      uai: "0111111Y",
       siret: "11111111100006",
+      uais: [
+        {
+          sources: ["dummy"],
+          uai: "0111111Y",
+          valide: true,
+          confirmé: true,
+        },
+      ],
     });
     let source = createSource("cma", {
       input: createStream(

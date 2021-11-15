@@ -19,7 +19,6 @@ module.exports = {
       {
         _id: objectId(),
         siret: string(),
-        uai: string(),
         raison_sociale: string(),
         siege_social: boolean(),
         etat_administratif: string({ enum: ["actif", "fermé"] }),

@@ -34,7 +34,6 @@ describe("confirmUAI", () => {
     );
 
     const found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
-    assert.strictEqual(found.uai, "0751234J");
     assert.deepStrictEqual(found.uais, [
       {
         sources: ["dummy"],

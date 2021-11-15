@@ -86,7 +86,6 @@ describe("collectSources", () => {
       },
     ]);
     await insertEtablissement({
-      uai: "0011058V",
       siret: "11111111100006",
       uais: [
         {
@@ -595,10 +594,17 @@ describe("collectSources", () => {
     });
   });
 
-  it("Vérifie qu'on peut collecter en se basant sur l'uai", async () => {
+  it("Vérifie qu'on peut collecter en se basant sur l'uai confirmé", async () => {
     await insertEtablissement({
-      uai: "0011073X",
       siret: "11111111100006",
+      uais: [
+        {
+          sources: ["dummy"],
+          uai: "0011073X",
+          valide: true,
+          confirmé: true,
+        },
+      ],
     });
     let source = createTestSource([
       {

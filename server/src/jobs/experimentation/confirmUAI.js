@@ -25,7 +25,6 @@ async function confirmUAI(csvStream) {
           },
           {
             $set: {
-              uai,
               "uais.$[q].confirmé": true,
             },
           },

@@ -20,11 +20,9 @@ module.exports = (custom = {}) => {
         }),
         filterData((data) => data.uai),
         transformData((data) => {
-          let uai = data["uai"];
-
           return {
             from: name,
-            selector: { $or: [{ uai }, { "uais.uai": uai }] },
+            selector: { uais: { $elemMatch: { uai: data["uai"], confirmé: true } } },
             reseaux: ["ccca-btp"],
           };
         })

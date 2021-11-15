@@ -124,7 +124,7 @@ module.exports = () => {
           {
             $match: {
               ...(siret ? { siret } : {}),
-              ...(uai ? { uai: uai } : {}),
+              ...(uai ? { uais: { $elemMatch: { uai, confirmé: true } } } : {}),
               ...(academie ? { "adresse.academie.code": academie } : {}),
               ...(region ? { "adresse.region.code": region } : {}),
               ...(text ? { $text: { $search: text } } : {}),

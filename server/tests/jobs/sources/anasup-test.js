@@ -7,7 +7,7 @@ const { dbCollection } = require("../../../src/common/db/mongodb");
 
 describe("anasup", () => {
   it("Vérifie qu'on peut collecter des informations du fichier anasup", async () => {
-    await insertEtablissement({ siret: "11111111100006", uai: "1111111A" });
+    await insertEtablissement({ siret: "11111111100006" });
     let source = createSource("anasup", {
       input: createStream(
         `siret;uai

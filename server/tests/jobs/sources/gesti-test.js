@@ -7,7 +7,7 @@ const { insertEtablissement } = require("../../utils/fakeData");
 
 describe("gesti", () => {
   it("Vérifie qu'on peut collecter des informations du fichier gesti", async () => {
-    await insertEtablissement({ siret: "11111111100006", uai: "1111111A" });
+    await insertEtablissement({ siret: "11111111100006" });
     let source = createSource("gesti", {
       input: createStream(
         `uai_code_educnationale;siret
