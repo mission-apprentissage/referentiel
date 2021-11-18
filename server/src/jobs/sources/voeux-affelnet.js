@@ -20,10 +20,7 @@ module.exports = (custom = {}) => {
           return {
             from: name,
             selector: {
-              $or: [
-                ...optionalItem("siret", siret),
-                ...(uai ? [{ uais: { $elemMatch: { uai, confirmé: true } } }] : []),
-              ],
+              $or: [...optionalItem("siret", siret), ...optionalItem("uai", uai)],
             },
             contacts: [{ email, confirmé: true }],
           };

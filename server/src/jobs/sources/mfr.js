@@ -23,7 +23,7 @@ module.exports = (custom = {}) => {
           return {
             from: name,
             selector: {
-              $or: [{ siret: data["siret"] }, { uais: { $elemMatch: { uai: { $in: uais }, confirmé: true } } }],
+              $or: [{ siret: data["siret"] }, { uai: { $in: uais } }],
             },
             uais,
             reseaux: ["mfr"],

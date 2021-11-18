@@ -21,7 +21,6 @@ describe("deca", () => {
         sources: ["deca"],
         uai: "0111111Y",
         valide: true,
-        confirmé: false,
       },
     ]);
     assert.deepStrictEqual(found.conformite_reglementaire, { conventionne: true });

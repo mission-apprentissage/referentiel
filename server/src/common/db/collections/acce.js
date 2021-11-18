@@ -107,4 +107,7 @@ module.exports = {
       { required }
     );
   },
+  createIndexes: (dbCollection) => {
+    return [dbCollection.createIndex({ uai: 1 })];
+  },
 };

@@ -24,13 +24,11 @@ describe("mfr", () => {
         sources: ["mfr"],
         uai: "0011073X",
         valide: false,
-        confirmé: false,
       },
       {
         sources: ["mfr"],
         uai: "0111111Y",
         valide: true,
-        confirmé: false,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -44,17 +42,7 @@ describe("mfr", () => {
   });
 
   it("Vérifie qu'on peut collecter des informations du fichier mfr avec un uai", async () => {
-    await insertEtablissement({
-      siret: "11111111100006",
-      uais: [
-        {
-          sources: ["dummy"],
-          uai: "0111111Y",
-          valide: true,
-          confirmé: true,
-        },
-      ],
-    });
+    await insertEtablissement({ siret: "11111111100006", uai: "0111111Y" });
     let source = createSource("mfr", {
       input: createStream(
         `uai;uai_code_educnationale;siret
@@ -70,22 +58,11 @@ describe("mfr", () => {
       sources: ["mfr"],
       uai: "0011073X",
       valide: false,
-      confirmé: false,
     });
   });
 
   it("Vérifie qu'on peut collecter des informations du fichier mfr avec un uai_code_educnationale", async () => {
-    await insertEtablissement({
-      siret: "11111111100006",
-      uais: [
-        {
-          sources: ["dummy"],
-          uai: "0011073X",
-          valide: true,
-          confirmé: true,
-        },
-      ],
-    });
+    await insertEtablissement({ siret: "11111111100006", uai: "0011073X" });
     let source = createSource("mfr", {
       input: createStream(
         `uai;uai_code_educnationale;siret
@@ -101,7 +78,6 @@ describe("mfr", () => {
       sources: ["mfr"],
       uai: "0111111Y",
       valide: true,
-      confirmé: false,
     });
   });
 });

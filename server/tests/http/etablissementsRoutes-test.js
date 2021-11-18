@@ -78,19 +78,9 @@ describe("etablissementsRoutes", () => {
   it("Vérifie qu'on peut rechercher des établissements à partir d'un uai confirmé", async () => {
     const { httpClient } = await startServer();
     await insertEtablissement();
-    await insertEtablissement({
-      siret: "11111111111111",
-      uais: [
-        {
-          sources: ["dummy"],
-          uai: "0010856A",
-          valide: true,
-          confirmé: true,
-        },
-      ],
-    });
+    await insertEtablissement({ siret: "11111111111111", uai: "0751234J" });
 
-    let response = await httpClient.get("/api/v1/etablissements?uai=0010856A");
+    let response = await httpClient.get("/api/v1/etablissements?uai=0751234J");
 
     strictEqual(response.status, 200);
     ok(response.data.etablissements.every((e) => e.siret === "11111111111111"));

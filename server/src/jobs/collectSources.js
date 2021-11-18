@@ -11,9 +11,7 @@ function buildQuery(selector) {
     return { not: "matching" };
   }
 
-  return typeof selector === "object"
-    ? selector
-    : { $or: [{ siret: selector }, { uais: { $elemMatch: { uai: selector, confirmé: true } } }] };
+  return typeof selector === "object" ? selector : { $or: [{ siret: selector }, { uai: selector }] };
 }
 
 function mergeArray(from, existingArray, discriminator, newArray, custom = () => ({})) {
@@ -41,7 +39,6 @@ function mergeUAI(from, uais, newUAIs) {
     return {
       ...item,
       valide: validateUAI(item.uai),
-      confirmé: item.confirmé || false,
     };
   });
 }

@@ -19,6 +19,7 @@ module.exports = {
       {
         _id: objectId(),
         siret: string(),
+        uai: string(),
         raison_sociale: string(),
         siege_social: boolean(),
         etat_administratif: string({ enum: ["actif", "fermé"] }),
@@ -43,7 +44,6 @@ module.exports = {
               uai: string(),
               valide: boolean(),
               sources: arrayOf(string()),
-              confirmé: boolean(),
             },
             { required: ["uai", "valide"] }
           )
@@ -130,7 +130,7 @@ module.exports = {
   createIndexes: (dbCollection) => {
     return [
       dbCollection.createIndex({ siret: 1 }, { unique: true }),
-      dbCollection.createIndex({ uai: 1 }, { sparse: true, unique: true }),
+      dbCollection.createIndex({ uai: 1 }),
       dbCollection.createIndex({ "uais.uai": 1 }),
       dbCollection.createIndex({ "adresse.geojson.geometry": "2dsphere" }),
       dbCollection.createIndex(

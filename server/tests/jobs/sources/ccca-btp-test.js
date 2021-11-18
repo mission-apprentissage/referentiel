@@ -9,14 +9,7 @@ describe("ccca-btp", () => {
   it("Vérifie qu'on peut collecter des informations du fichier ccca-btp", async () => {
     await insertEtablissement({
       siret: "11111111100006",
-      uais: [
-        {
-          sources: ["dummy"],
-          uai: "0111111Y",
-          valide: true,
-          confirmé: true,
-        },
-      ],
+      uai: "0111111Y",
     });
     let source = createSource("ccca-btp", {
       input: createStream(

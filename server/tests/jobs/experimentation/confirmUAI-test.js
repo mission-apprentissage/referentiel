@@ -22,7 +22,6 @@ describe("confirmUAI", () => {
           sources: ["dummy"],
           uai: "0751234J",
           valide: true,
-          confirmé: false,
         },
       ],
     });
@@ -34,14 +33,7 @@ describe("confirmUAI", () => {
     );
 
     const found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found.uais, [
-      {
-        sources: ["dummy"],
-        uai: "0751234J",
-        valide: true,
-        confirmé: true,
-      },
-    ]);
+    assert.strictEqual(found.uai, "0751234J");
     assert.deepStrictEqual(stats, {
       total: 1,
       updated: 1,
@@ -58,7 +50,6 @@ describe("confirmUAI", () => {
           sources: ["dummy"],
           uai: "0751234J",
           valide: true,
-          confirmé: false,
         },
       ],
     });
@@ -71,14 +62,34 @@ describe("confirmUAI", () => {
 
     const found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
     assert.ok(!found.uai);
-    assert.deepStrictEqual(found.uais, [
-      {
-        sources: ["dummy"],
-        uai: "0751234J",
-        valide: true,
-        confirmé: false,
-      },
-    ]);
+    assert.deepStrictEqual(stats, {
+      total: 1,
+      updated: 0,
+      ignored: 1,
+      failed: 0,
+    });
+  });
+
+  it("Vérifie qu'on génère une erreur si l'uai a déjà été validé", async () => {
+    await insertEtablissement({
+      siret: "11111111100006",
+      uais: [
+        {
+          sources: ["dummy"],
+          uai: "0751234J",
+          valide: true,
+        },
+      ],
+    });
+
+    let stats = await confirmUAI(
+      getCsvStream(`siret;uai
+11111111100006;
+`)
+    );
+
+    const found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
+    assert.ok(!found.uai);
     assert.deepStrictEqual(stats, {
       total: 1,
       updated: 0,

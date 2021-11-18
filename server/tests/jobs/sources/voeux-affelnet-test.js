@@ -9,14 +9,7 @@ describe("voeux-affelnet", () => {
   it("Vérifie qu'on peut collecter des emails à partir du fichier des voeux-affelnet (uai)", async () => {
     await insertEtablissement({
       siret: "11111111100006",
-      uais: [
-        {
-          sources: ["dummy"],
-          uai: "0111111Y",
-          valide: true,
-          confirmé: true,
-        },
-      ],
+      uai: "0111111Y",
     });
     let source = await createSource("voeux-affelnet", {
       input: createStream(

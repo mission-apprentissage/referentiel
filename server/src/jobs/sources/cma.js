@@ -22,7 +22,7 @@ module.exports = (custom = {}) => {
         transformData((data) => {
           return {
             from: name,
-            selector: { uais: { $elemMatch: { uai: data["uai"], confirmé: true } } },
+            selector: { uai: data["uai"] },
             reseaux: ["cma"],
           };
         })

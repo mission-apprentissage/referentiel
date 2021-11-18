@@ -37,7 +37,6 @@ describe("collectSources", () => {
         sources: ["dummy"],
         uai: "0111111Y",
         valide: true,
-        confirmé: false,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -66,7 +65,6 @@ describe("collectSources", () => {
       sources: ["dummy"],
       uai: "093XXXT",
       valide: false,
-      confirmé: false,
     });
     assert.deepStrictEqual(stats, {
       dummy: {
@@ -92,7 +90,6 @@ describe("collectSources", () => {
           sources: ["dummy"],
           uai: "0111111Y",
           valide: true,
-          confirmé: false,
         },
       ],
     });
@@ -105,7 +102,6 @@ describe("collectSources", () => {
         sources: ["dummy"],
         uai: "0111111Y",
         valide: true,
-        confirmé: false,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -126,7 +122,6 @@ describe("collectSources", () => {
           sources: ["other"],
           uai: "0111111Y",
           valide: true,
-          confirmé: true,
         },
       ],
     });
@@ -145,7 +140,6 @@ describe("collectSources", () => {
         sources: ["other", "dummy"],
         uai: "0111111Y",
         valide: true,
-        confirmé: true,
       },
     ]);
   });
@@ -597,14 +591,7 @@ describe("collectSources", () => {
   it("Vérifie qu'on peut collecter en se basant sur l'uai confirmé", async () => {
     await insertEtablissement({
       siret: "11111111100006",
-      uais: [
-        {
-          sources: ["dummy"],
-          uai: "0011073X",
-          valide: true,
-          confirmé: true,
-        },
-      ],
+      uai: "0011073X",
     });
     let source = createTestSource([
       {
