@@ -3,9 +3,12 @@ const { dbCollection } = require("../../common/db/mongodb");
 const { parseCsv } = require("../../common/utils/csvUtils");
 const { pick } = require("lodash");
 
-function findMostPopularUAI(etablissements) {
-  let uais = etablissements.uais.filter(({ sources }) => {
-    return sources.includes("deca") || sources.includes("sifa-ramsese") || sources.includes("catalogue-etablissements");
+function findMostPopularUAI(etablissement) {
+  let uais = etablissement.uais.filter((item) => {
+    let sources = item.sources.filter(
+      (s) => s.includes("deca") || s.includes("sifa-ramsese") || s.includes("catalogue-etablissements")
+    );
+    return sources.length > 1;
   });
 
   if (uais.length === 0) {
@@ -90,9 +93,9 @@ async function experimentationCsvStream(options = {}) {
     transformIntoCSV({
       separator: ",",
       columns: {
-        Académie: ({ etablissement }) => etablissement.adresse?.nom,
+        Académie: ({ etablissement }) => etablissement.adresse?.academie.nom,
         Siret: ({ etablissement }) => etablissement.siret,
-        "Raison sociale": (a) => sanitize(a.raison_sociale),
+        "Raison sociale": ({ etablissement }) => sanitize(etablissement.raison_sociale),
         Statuts: ({ etablissement }) => etablissement.statuts.sort().reverse().join(" et "),
         DECA: ({ etablissement }) => getUAI("deca", etablissement),
         "SIFA RAMSESE": ({ etablissement }) => getUAI("sifa-ramsese", etablissement),
