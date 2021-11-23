@@ -5,10 +5,8 @@ const { pick } = require("lodash");
 
 function findMostPopularUAI(etablissement) {
   let uais = etablissement.uais.filter((item) => {
-    let sources = item.sources.filter(
-      (s) => s.includes("deca") || s.includes("sifa-ramsese") || s.includes("catalogue-etablissements")
-    );
-    return sources.length > 1;
+    let sources = item.sources.filter((s) => s.includes("sifa-ramsese") || s.includes("catalogue-etablissements"));
+    return sources.length >= 1;
   });
 
   if (uais.length === 0) {
@@ -79,7 +77,11 @@ async function experimentationCsvStream(options = {}) {
   let previous = options.previous ? await loadPrevious(options.previous) : [];
 
   return compose(
-    dbCollection("etablissements").find(filter).limit(limit).sort({ siret: 1 }).stream(),
+    dbCollection("etablissements")
+      .find({ uai: { $exists: false }, ...filter })
+      .limit(limit)
+      .sort({ siret: 1 })
+      .stream(),
     transformData((etablissement) => {
       let task = getTask(etablissement);
       if (task !== "à valider") {
