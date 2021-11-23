@@ -16,7 +16,7 @@ module.exports = {
       { required: ["time"], additionalProperties: true }
     );
   },
-  createIndexes: (dbCollection) => {
-    return dbCollection.createIndex({ time: 1 });
+  indexes: () => {
+    return [[{ time: 1 }]];
   },
 };

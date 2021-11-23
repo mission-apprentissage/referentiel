@@ -127,16 +127,16 @@ module.exports = {
       { required }
     );
   },
-  createIndexes: (dbCollection) => {
+  indexes: () => {
     return [
-      dbCollection.createIndex({ siret: 1 }, { unique: true }),
-      dbCollection.createIndex({ uai: 1 }),
-      dbCollection.createIndex({ "uais.uai": 1 }),
-      dbCollection.createIndex({ "adresse.geojson.geometry": "2dsphere" }),
-      dbCollection.createIndex(
+      [{ siret: 1 }, { unique: true }],
+      [{ uai: 1 }],
+      [{ "uais.uai": 1 }],
+      [{ "adresse.geojson.geometry": "2dsphere" }],
+      [
         { siret: "text", uai: "text", "uais.uai": "text", raison_sociale: "text" },
-        { name: "fulltext", default_language: "french" }
-      ),
+        { name: "fulltext", default_language: "french" },
+      ],
     ];
   },
 };

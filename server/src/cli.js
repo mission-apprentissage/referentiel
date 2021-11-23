@@ -9,6 +9,7 @@ const computeStats = require("./jobs/computeStats");
 const importCFD = require("./jobs/importCFD");
 const importEtablissements = require("./jobs/importEtablissements");
 const build = require("./jobs/build");
+const migrate = require("./jobs/migrate");
 
 cli
   .command("build")
@@ -78,6 +79,16 @@ cli
       let sourceNames = ["deca", "catalogue-etablissements", "sifa-ramsese"];
       let sources = sourceNames.map((name) => createSource(name));
       return computeStats(sources, options);
+    });
+  });
+
+cli
+  .command("migrate")
+  .option("--dropIndexes", "Supprime les anciens indexes")
+  .description("Migre les données de la base")
+  .action((options) => {
+    runScript(() => {
+      return migrate(options);
     });
   });
 

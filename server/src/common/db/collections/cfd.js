@@ -13,7 +13,7 @@ module.exports = {
       { required: ["FORMATION_DIPLOME", "NIVEAU_FORMATION_DIPLOME", "LIBELLE_COURT"] }
     );
   },
-  createIndexes: (dbCollection) => {
-    return dbCollection.createIndex({ FORMATION_DIPLOME: 1 });
+  indexes: () => {
+    return [[{ FORMATION_DIPLOME: 1 }]];
   },
 };

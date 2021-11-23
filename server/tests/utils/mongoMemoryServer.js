@@ -1,5 +1,5 @@
 let { MongoMemoryServer } = require("mongodb-memory-server");
-const { connectToMongodb, getDatabase, prepareDatabase } = require("../../src/common/db/mongodb");
+const { connectToMongodb, getDatabase, configureValidation, configureIndexes } = require("../../src/common/db/mongodb");
 
 let mongodHolder;
 
@@ -12,7 +12,8 @@ module.exports = {
     });
     let uri = mongodHolder.getUri();
     let client = await connectToMongodb(uri);
-    await prepareDatabase();
+    await configureIndexes();
+    await configureValidation();
     return client;
   },
   stopMongod() {

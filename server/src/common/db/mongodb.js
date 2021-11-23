@@ -52,41 +52,6 @@ function dbCollection(name) {
   return clientHolder.db().collection(name);
 }
 
-async function configureIndexes(collection, options = {}) {
-  ensureInitialization();
-  let shouldDropIndexes = options.dropIndexes || false;
-
-  if (!collection.createIndexes) {
-    return;
-  }
-
-  logger.info(`Configuring indexes for collection ${collection.name} (drop:${shouldDropIndexes})...`);
-  let col = dbCollection(collection.name);
-  if (shouldDropIndexes) {
-    await col.dropIndexes();
-  }
-  await collection.createIndexes(col);
-}
-
-async function configureValidation(collection) {
-  ensureInitialization();
-  if (!collection.schema) {
-    return;
-  }
-
-  logger.info(`Configuring validation for collection ${collection.name}...`);
-  let db = getDatabase();
-
-  await db.command({
-    collMod: collection.name,
-    validationLevel: "strict",
-    validationAction: "error",
-    validator: {
-      $jsonSchema: collection.schema(),
-    },
-  });
-}
-
 async function createCollectionIfNeeded(collection) {
   let db = getDatabase();
   let collections = await db.listCollections().toArray();
@@ -103,18 +68,60 @@ function clearCollection(name) {
     .then((res) => res.deletedCount);
 }
 
+async function configureIndexes(options = {}) {
+  await ensureInitialization();
+  await Promise.all(
+    Object.values(collections).map(async (collection) => {
+      let shouldDropIndexes = options.dropIndexes || false;
+      let dbCol = dbCollection(collection.name);
+
+      logger.info(`Configuring indexes for collection ${collection.name} (drop:${shouldDropIndexes})...`);
+      if (shouldDropIndexes) {
+        await dbCol.dropIndexes({ background: false });
+      }
+
+      if (!collection.indexes) {
+        return;
+      }
+
+      let indexes = collection.indexes();
+      await Promise.all(
+        indexes.map(([index, options]) => {
+          return dbCol.createIndex(index, options);
+        })
+      );
+    })
+  );
+}
+
+async function configureValidation() {
+  await ensureInitialization();
+  await Promise.all(
+    Object.values(collections).map(async (collection) => {
+      await createCollectionIfNeeded(collection);
+
+      if (!collection.schema) {
+        return;
+      }
+
+      logger.info(`Configuring validation for collection ${collection.name}...`);
+      let db = getDatabase();
+      await db.command({
+        collMod: collection.name,
+        validationLevel: "strict",
+        validationAction: "error",
+        validator: {
+          $jsonSchema: collection.schema(),
+        },
+      });
+    })
+  );
+}
+
 module.exports = {
   connectToMongodb,
-  prepareDatabase: async (options) => {
-    await Promise.all(
-      Object.values(collections).map(async (col) => {
-        //Force collection creation
-        await createCollectionIfNeeded(col);
-        await configureIndexes(col, options);
-        await configureValidation(col, options);
-      })
-    );
-  },
+  configureIndexes,
+  configureValidation,
   getDatabase,
   dbCollection,
   closeMongodbConnection,

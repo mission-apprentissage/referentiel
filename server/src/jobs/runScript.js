@@ -1,5 +1,5 @@
 const logger = require("../common/logger");
-const { closeMongodbConnection, connectToMongodb, prepareDatabase } = require("../common/db/mongodb");
+const { closeMongodbConnection, connectToMongodb, configureValidation } = require("../common/db/mongodb");
 const prettyMilliseconds = require("pretty-ms");
 const { isEmpty } = require("lodash");
 
@@ -44,7 +44,7 @@ async function runScript(job) {
     timer.start();
 
     await connectToMongodb();
-    await prepareDatabase();
+    await configureValidation();
 
     const results = await job();
 
