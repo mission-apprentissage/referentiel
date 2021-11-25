@@ -37,6 +37,7 @@ module.exports = {
           acheminement: string(),
           lieu_dit: string(),
           complement_adresse: string(),
+          pays_etranger_acheminement: string(),
         }),
         administration: object({
           nature: string(),

@@ -1,0 +1,33 @@
+import { classNames, elementId } from "../common/utils";
+import React from "react";
+
+export default function Modal({ title, modal, children, modifiers, className, ...rest }) {
+  let clazz = classNames("fr-modal", { modifiers, className });
+  let contentId = elementId("modal-content");
+
+  return (
+    <dialog id={modal.id} ref={modal.ref} aria-labelledby={contentId} role="dialog" className={clazz} {...rest}>
+      <div className="fr-container fr-container--fluid fr-container-md">
+        <div className="fr-grid-row fr-grid-row--center">
+          <div className="fr-col-12 fr-col-md-8 fr-col-lg-6">
+            <div className="fr-modal__body">
+              <div className="fr-modal__header">
+                <button
+                  className="fr-link--close fr-link"
+                  title="Fermer la fenêtre modale"
+                  aria-controls={modal.id}
+                  onClick={modal.close}
+                >
+                  Fermer
+                </button>
+              </div>
+              <div className="fr-modal__content" id={contentId}>
+                {children}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  );
+}

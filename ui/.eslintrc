@@ -3,5 +3,8 @@
   "extends": [
     "react-app",
     "plugin:prettier/recommended"
-  ]
+  ],
+  "globals": {
+    "dsfr": true
+  }
 }
