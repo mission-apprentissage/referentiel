@@ -8,7 +8,7 @@ module.exports = (custom = {}) => {
   return {
     name,
     async stream() {
-      let stream = await api.streamEtablissements({}, { limit: 100000 });
+      let stream = await api.streamEtablissements({ catalogue_published: true }, { limit: 100000 });
 
       return compose(
         stream,
