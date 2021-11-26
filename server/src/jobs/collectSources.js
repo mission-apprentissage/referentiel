@@ -155,7 +155,7 @@ module.exports = async (array, options = {}) => {
           await handleAnomalies(from, etablissement, anomalies);
         }
 
-        let res = await dbCollection("etablissements").updateOne(query, {
+        let res = await dbCollection("etablissements").updateMany(query, {
           $set: {
             ...flattenObject(data),
             uais: mergeUAI(from, etablissement.uais, uais),

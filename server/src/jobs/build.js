@@ -25,6 +25,7 @@ async function build(options = {}) {
     "tableau-de-bord",
     "gesti",
     "opcoep",
+    "maf",
     "promotrans",
     "sifa-ramsese",
     "depp",
