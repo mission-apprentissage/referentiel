@@ -4,7 +4,7 @@ const collectSources = require("./collectSources");
 const importEtablissements = require("./importEtablissements");
 
 async function build(options = {}) {
-  let referentiels = options.referentiels || ["deca", "catalogue-etablissements", "sifa-ramsese"];
+  let referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese"];
   let stats = [];
 
   function collectAll(sourceNames, globalOptions = {}) {
