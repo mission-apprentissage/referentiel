@@ -1,11 +1,11 @@
 import queryString from "query-string";
-import buildQuery from "../../common/utils/buildQuery";
-import { useFetch } from "../../common/hooks/useFetch";
+import buildQuery from "../utils/buildQuery";
+import { useFetch } from "./useFetch";
 import { omit } from "lodash-es";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function useSearch(custom = {}) {
-  let history = useHistory();
+  let history = useNavigate();
   let location = useLocation();
 
   let defaults = {

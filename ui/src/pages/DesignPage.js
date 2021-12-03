@@ -1,22 +1,21 @@
 import React, { useState } from "react";
-import { Accordion, AccordionItem } from "./dsfr/elements/Accordion";
-import SearchBar from "./dsfr/elements/SearchBar";
-import Alert from "./dsfr/elements/Alert";
-import { Button, ButtonGroup } from "./dsfr/elements/Button";
-import { Col, Container, GridRow } from "./dsfr/fondamentaux";
+import { Accordion, AccordionItem } from "../common/components/dsfr/elements/Accordion";
+import SearchBar from "../common/components/dsfr/elements/SearchBar";
+import Alert from "../common/components/dsfr/elements/Alert";
+import { Button, ButtonGroup } from "../common/components/dsfr/elements/Button";
+import { Col, Container, GridRow } from "../common/components/dsfr/fondamentaux";
 import styled from "styled-components";
-import { icon } from "./dsfr/common/utils";
-import Radio from "./dsfr/elements/Radio";
-import Checkbox from "./dsfr/elements/Checkbox";
-import Fieldset from "./dsfr/elements/Fieldset";
-import { Footer, FooterLink, FooterList } from "./dsfr/elements/Footer";
-import Input from "./dsfr/elements/Input";
-import Select from "./dsfr/elements/Select";
-import { ToggleList, ToggleSwitch } from "./dsfr/elements/ToggleSwitch";
-import { Tab, TabPanel, Tabs } from "./dsfr/elements/Tabs";
-import { Header, HeaderMenu, HeaderSearch } from "./dsfr/elements/Header";
-import { Link, LinkGroup } from "./dsfr/elements/Link";
-import { Nav, NavButton, NavLink } from "./dsfr/elements/Nav";
+import Radio from "../common/components/dsfr/elements/Radio";
+import Checkbox from "../common/components/dsfr/elements/Checkbox";
+import Fieldset from "../common/components/dsfr/elements/Fieldset";
+import { Footer, FooterLink, FooterList } from "../common/components/dsfr/elements/Footer";
+import Input from "../common/components/dsfr/elements/Input";
+import Select from "../common/components/dsfr/elements/Select";
+import { ToggleList, ToggleSwitch } from "../common/components/dsfr/elements/ToggleSwitch";
+import { Tab, TabPanel, Tabs } from "../common/components/dsfr/elements/Tabs";
+import { Header, HeaderMenu, HeaderSearch } from "../common/components/dsfr/elements/Header";
+import { Link, LinkGroup } from "../common/components/dsfr/elements/Link";
+import { Nav, NavButton, NavLink } from "../common/components/dsfr/elements/Nav";
 
 const Colored = styled.div`
   background-color: ${(props) => props.color};
@@ -44,13 +43,13 @@ export default function DesignPage() {
         tagline={"Précisions sur l‘organisation"}
         links={
           <LinkGroup>
-            <Link to="/" className="fr-fi-add-circle-line">
+            <Link to="/" icons="add-circle-line">
               Créer un espace
             </Link>
-            <Link to="/" className="fr-fi-lock-line">
+            <Link to="/" icons="lock-line">
               Se connecter
             </Link>
-            <Link to="/" className="fr-fi-account-line">
+            <Link to="/" icons="account-line">
               S’enregistrer
             </Link>
           </LinkGroup>
@@ -198,11 +197,11 @@ export default function DesignPage() {
               </Option>
               <Option>
                 <h4>Boutons icône</h4>
-                <Button className={icon("checkbox-circle-line")}>Icon</Button>
-                <Button modifiers={"icon-right"} className={icon("checkbox-circle-line")}>
+                <Button icons={"checkbox-circle-line"}>Icon</Button>
+                <Button modifiers={"icon-right"} icons={"checkbox-circle-line"}>
                   Icon right
                 </Button>
-                <Button modifiers={"icon-left"} className={icon("checkbox-circle-line")}>
+                <Button modifiers={"icon-left"} icons={"checkbox-circle-line"}>
                   Icon left
                 </Button>
               </Option>
@@ -260,7 +259,7 @@ export default function DesignPage() {
               </Option>
               <Option>
                 <h4>Icône</h4>
-                <Input label={"Label"} icon={"fr-fi-alert-line"} />
+                <Input label={"Label"} icons={"alert-line"} />
               </Option>
               <Option>
                 <h4>Validation</h4>

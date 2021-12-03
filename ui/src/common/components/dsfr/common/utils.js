@@ -4,8 +4,8 @@ import cs from "classnames";
 
 export function buildComponent(Tag, dsfrName, options = {}) {
   return forwardRef((props, ref) => {
-    let { modifiers, className, children, ...rest } = props;
-    let clazz = classNames(dsfrName, { modifiers, className, ...options });
+    let { modifiers, icons, className, children, ...rest } = props;
+    let clazz = classNames(dsfrName, { modifiers, icons, className, ...options });
 
     return (
       <Tag className={clazz} {...rest} {...(ref ? { ref } : {})}>
@@ -30,12 +30,13 @@ export function buildListComponent(Tag, dsfrName, options = {}) {
   });
 }
 
-export function classNames(baseClassName, { modifiers, className, validation, bemDelimiter = "--" }) {
+export function classNames(baseClassName, { modifiers, icons, className, validation, bemDelimiter = "--" }) {
   return cs(
     baseClassName,
     modifiers ? modifiers.split(" ").map((m) => `${baseClassName}${bemDelimiter}${m}`) : "",
+    icons ? icons.split(" ").map((i) => `fr-fi-${i}`) : "",
     validation ? `${baseClassName}--${validation.type}` : "",
-    className ? className : ""
+    className
   );
 }
 

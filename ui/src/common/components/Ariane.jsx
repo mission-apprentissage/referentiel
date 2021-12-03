@@ -1,5 +1,5 @@
 import { last, lowerCase, startCase } from "lodash-es";
-import Breadcrumb, { BreadcrumbLink } from "../dsfr/elements/Breadcrumb";
+import Breadcrumb, { BreadcrumbLink } from "./dsfr/elements/Breadcrumb";
 import React from "react";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
 

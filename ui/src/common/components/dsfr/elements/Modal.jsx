@@ -1,7 +1,7 @@
 import { classNames, elementId } from "../common/utils";
 import React from "react";
 
-export default function Modal({ title, modal, children, modifiers, className, ...rest }) {
+export default function Modal({ title, modal, content, footer, modifiers, className, ...rest }) {
   let clazz = classNames("fr-modal", { modifiers, className });
   let contentId = elementId("modal-content");
 
@@ -22,8 +22,9 @@ export default function Modal({ title, modal, children, modifiers, className, ..
                 </button>
               </div>
               <div className="fr-modal__content" id={contentId}>
-                {children}
+                {content}
               </div>
+              <div className="fr-modal__footer">{footer}</div>
             </div>
           </div>
         </div>
