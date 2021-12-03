@@ -1,23 +1,9 @@
 const { oleoduc, writeData } = require("oleoduc");
-const { parseCsv } = require("../../common/utils/csvUtils");
-const { dbCollection } = require("../../common/db/mongodb");
-const logger = require("../../common/logger");
+const { parseCsv } = require("../common/utils/csvUtils");
+const validateUAI = require("../common/actions/validateUAI");
+const logger = require("../common/logger");
 
-async function updateEtablissementUAI(siret, uai) {
-  let res = await dbCollection("etablissements").updateOne(
-    {
-      siret,
-    },
-    {
-      $set: {
-        uai,
-      },
-    }
-  );
-  return res.modifiedCount;
-}
-
-async function confirmUAI(csvStream) {
+async function addModifications(csvStream) {
   let stats = { total: 0, updated: 0, unknown: 0, failed: 0 };
 
   await oleoduc(
@@ -32,9 +18,9 @@ async function confirmUAI(csvStream) {
 
       stats.total++;
       try {
-        let updated = await updateEtablissementUAI(siret, uai);
+        let updated = await validateUAI(siret, uai);
         if (updated) {
-          stats.updated += updated;
+          stats.updated++;
         } else {
           stats.unknown++;
         }
@@ -47,4 +33,4 @@ async function confirmUAI(csvStream) {
   return stats;
 }
 
-module.exports = confirmUAI;
+module.exports = addModifications;

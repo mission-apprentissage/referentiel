@@ -11,6 +11,7 @@ const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { getAcademies } = require("../../common/academies");
 const { getRegions } = require("../../common/regions");
 const { dbCollection } = require("../../common/db/mongodb");
+const validateUAI = require("../../common/actions/validateUAI");
 
 module.exports = () => {
   const router = express.Router();
@@ -222,6 +223,28 @@ module.exports = () => {
 
       delete etablissement._id;
       delete etablissement._meta;
+      return res.json(etablissement);
+    })
+  );
+
+  router.put(
+    "/api/v1/etablissements/:siret/validateUAI",
+    tryCatch(async (req, res) => {
+      let { siret, uai } = await Joi.object({
+        siret: Joi.string()
+          .pattern(/^[0-9]{14}$/)
+          .required(),
+        uai: Joi.string()
+          .pattern(/^[0-9]{7}[A-Z]{1}$/)
+          .required(),
+      }).validateAsync({ ...req.params, ...req.body }, { abortEarly: false });
+
+      let etablissement = await validateUAI(siret, uai);
+
+      if (!etablissement) {
+        throw Boom.notFound("Siret inconnu");
+      }
+
       return res.json(etablissement);
     })
   );

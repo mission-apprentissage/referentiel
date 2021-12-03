@@ -2,7 +2,6 @@ const { program: cli } = require("commander");
 const { createWriteStream, createReadStream } = require("fs");
 const { oleoduc, writeToStdout } = require("oleoduc");
 const experimentationCsvStream = require("./experimentationCsvStream");
-const confirmUAI = require("./confirmUAI");
 const runScript = require("../runScript");
 
 cli
@@ -19,15 +18,6 @@ cli
       let options = { filter, limit, previous };
       let stream = await experimentationCsvStream(options);
       return oleoduc(stream, out || writeToStdout());
-    });
-  });
-
-cli
-  .command("confirm")
-  .argument("<file>", "Le fichier avec les couples siret-uai confirmés", createReadStream)
-  .action((file) => {
-    runScript(() => {
-      return confirmUAI(file);
     });
   });
 

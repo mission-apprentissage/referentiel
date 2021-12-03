@@ -1,8 +1,8 @@
 const assert = require("assert");
-const { createStream } = require("../../utils/testUtils");
-const confirmUAI = require("../../../src/jobs/experimentation/confirmUAI");
-const { dbCollection } = require("../../../src/common/db/mongodb");
-const { insertEtablissement } = require("../../utils/fakeData");
+const { createStream } = require("../utils/testUtils");
+const addModifications = require("../../src/jobs/addModifications");
+const { dbCollection } = require("../../src/common/db/mongodb");
+const { insertEtablissement } = require("../utils/fakeData");
 
 let getCsvStream = (content) => {
   return createStream(
@@ -13,7 +13,7 @@ let getCsvStream = (content) => {
   );
 };
 
-describe("confirmUAI", () => {
+describe("addModifications", () => {
   it("Vérifie qu'on peut confirmer un uai", async () => {
     await insertEtablissement({
       siret: "11111111100006",
@@ -26,7 +26,7 @@ describe("confirmUAI", () => {
       ],
     });
 
-    let stats = await confirmUAI(
+    let stats = await addModifications(
       getCsvStream(`siret;uai
 11111111100006;0751234J
 `)
@@ -54,7 +54,7 @@ describe("confirmUAI", () => {
       ],
     });
 
-    let stats = await confirmUAI(
+    let stats = await addModifications(
       getCsvStream(`siret;uai
 11111111100006;
 ;0751234J
@@ -70,7 +70,7 @@ describe("confirmUAI", () => {
   });
 
   it("Vérifie qu'on compte les établisements inconnus", async () => {
-    let stats = await confirmUAI(
+    let stats = await addModifications(
       getCsvStream(`siret;uai
 33333333300006;0751234J
 `)

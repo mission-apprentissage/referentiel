@@ -10,6 +10,7 @@ const importCFD = require("./jobs/importCFD");
 const importEtablissements = require("./jobs/importEtablissements");
 const build = require("./jobs/build");
 const migrate = require("./jobs/migrate");
+const addModifications = require("./jobs/addModifications");
 
 cli
   .command("build")
@@ -70,6 +71,15 @@ cli
 cli.command("experimentation", "Commandes qui concernent les expérimentations avec les régions tests", {
   executableFile: "jobs/experimentation/experimentationCli.js",
 });
+
+cli
+  .command("addModifications")
+  .argument("<file>", "Le fichier avec les couples siret-uai validés", createReadStream)
+  .action((file) => {
+    runScript(() => {
+      return addModifications(file);
+    });
+  });
 
 cli
   .command("computeStats")
