@@ -1,22 +1,34 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { _get } from "../httpClient";
 
-export function useFetch(url, initialState = null) {
-  const [response, setResponse] = useState(initialState);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+function fetchReducer(state, action) {
+  switch (action.type) {
+    case "error":
+      return { loading: false, data: state.data, error: action.error };
+    case "loading":
+      return { loading: true, data: state.data, error: null };
+    case "data":
+      return { loading: false, data: action.data, error: null };
+    default:
+      throw new Error(`Unhandled action type ${action.type}`);
+  }
+}
+
+export function useFetch(url, initialState = {}) {
+  const [state, dispatch] = useReducer(fetchReducer, {
+    data: initialState,
+    loading: true,
+    error: null,
+  });
 
   const _fetch = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-
+    dispatch({ type: "loading" });
     try {
-      const response = await _get(url);
-      setResponse(response);
-      setLoading(false);
+      console.info(`Requesting ${url}`);
+      const data = await _get(url);
+      dispatch({ type: "data", data });
     } catch (error) {
-      setError(error);
-      setLoading(false);
+      dispatch({ type: "error", error });
     }
   }, [url]);
 
@@ -27,5 +39,5 @@ export function useFetch(url, initialState = null) {
     fetchData();
   }, [url, _fetch]);
 
-  return [response, loading, error];
+  return [state, (data) => dispatch({ type: "data", data })];
 }

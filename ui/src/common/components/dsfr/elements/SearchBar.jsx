@@ -1,7 +1,7 @@
 import React from "react";
 import { classNames, elementId } from "../common/utils";
 
-function Input({ label, modifiers, className, ...rest }) {
+function SearchBar({ label, placeholder = label, modifiers, className, ...rest }) {
   let clazz = classNames("fr-search-bar", { modifiers, className });
   let id = elementId("search");
   let inputId = elementId("search-input");
@@ -11,12 +11,12 @@ function Input({ label, modifiers, className, ...rest }) {
       <label className="fr-label" htmlFor={inputId}>
         {label}
       </label>
-      <input id={inputId} type="search" className="fr-input" placeholder={label} name={inputId} />
-      <button className="fr-btn" title={label}>
+      <input id={inputId} type="search" className="fr-input" placeholder={placeholder} {...rest} />
+      <button type="submit" className="fr-btn" title={label}>
         {label}
       </button>
     </div>
   );
 }
 
-export default Input;
+export default SearchBar;

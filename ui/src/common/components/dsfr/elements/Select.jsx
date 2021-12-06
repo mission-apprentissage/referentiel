@@ -12,10 +12,12 @@ function Input({ label, hint, validation, children, modifiers, className, ...res
 
   return (
     <div className={clazz}>
-      <label className="fr-label" htmlFor={id}>
-        {label}
-        {hint && <Hint>{hint}</Hint>}
-      </label>
+      {label && (
+        <label className="fr-label" htmlFor={id}>
+          {label}
+          {hint && <Hint>{hint}</Hint>}
+        </label>
+      )}
       <select id={id} className={selectClass} {...aria} {...rest}>
         {children}
       </select>

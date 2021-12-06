@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import cs from "classnames";
-import { Col, GridRow } from "../../common/components/dsfr/fondamentaux";
-import UAIUpdater from "./UAIUpdater";
+import { Col, GridRow } from "../../../common/components/dsfr/fondamentaux";
+import UAIValidator from "../fragments/UAIValidator";
 
 const Info = styled(({ label, value, children, className, ...rest }) => {
   return (
@@ -30,14 +30,14 @@ export function Immatriculation({ organisme }) {
       <Info label={"SIRET"} value={organisme.siret} />
       <Info label={"NDA"} value={organisme.numero_declaration_activite} />
       <Info label={"UAI"} value={organisme.uai}>
-        <UAIUpdater className="fr-ml-3v" organisme={organisme} />
+        <UAIValidator className="fr-ml-3v" organisme={organisme} />
       </Info>
       <GridRow>
         <Col modifiers={"sm-12 md-5"}>
           <Info label={"Raison sociale"} value={organisme.raison_sociale} />
           <Info label={"Adresse"} value={adresse} />
           <Info label={"Région"} value={organisme.adresse?.region?.nom} />
-          <Info label={"Région"} value={organisme.adresse?.academie?.nom} />
+          <Info label={"Académie"} value={organisme.adresse?.academie?.nom} />
         </Col>
         <Col modifiers={"sm-12 offset-md-2 md-5"}>
           <Info label={"Certifié Qualiopi"} value={organisme.certifie_qualiopi} />

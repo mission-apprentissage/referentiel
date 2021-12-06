@@ -13,7 +13,7 @@ import Input from "../common/components/dsfr/elements/Input";
 import Select from "../common/components/dsfr/elements/Select";
 import { ToggleList, ToggleSwitch } from "../common/components/dsfr/elements/ToggleSwitch";
 import { Tab, TabPanel, Tabs } from "../common/components/dsfr/elements/Tabs";
-import { Header, HeaderMenu, HeaderSearch } from "../common/components/dsfr/elements/Header";
+import { Header } from "../common/components/dsfr/elements/Header";
 import { Link, LinkGroup } from "../common/components/dsfr/elements/Link";
 import { Nav, NavButton, NavLink } from "../common/components/dsfr/elements/Nav";
 

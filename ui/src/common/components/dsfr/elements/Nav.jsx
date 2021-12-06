@@ -2,7 +2,7 @@ import React, { Children } from "react";
 import { buildComponent, classNames, elementId } from "../common/utils";
 import { Collapse } from "../common/Collapsable";
 import { useCollapse } from "../common/useCollapse";
-import { Link } from "react-router-dom";
+import { NavLink as RouterNavLink } from "react-router-dom";
 
 export function Nav({ modifiers, className, children }) {
   let clazz = classNames("fr-nav", { modifiers, className });
@@ -23,7 +23,7 @@ export function Nav({ modifiers, className, children }) {
   );
 }
 
-export const NavLink = buildComponent(Link, "fr-nav__link");
+export const NavLink = buildComponent(RouterNavLink, "fr-nav__link");
 
 export function NavButton({ text, children, ...rest }) {
   let { collapseId, collapseRef, collapse } = useCollapse();

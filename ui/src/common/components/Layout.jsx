@@ -16,9 +16,7 @@ export default function Layout({ children }) {
         tagline={"Le pourfendeur d'UAI"}
         nav={
           <Nav>
-            <NavLink to={"/"} aria-current={"page"}>
-              Tableau de bord
-            </NavLink>
+            <NavLink to={"/"}>Tableau de bord</NavLink>
             <NavLink to={"/organismes"}>Liste des organismes et lieux de formations</NavLink>
           </Nav>
         }

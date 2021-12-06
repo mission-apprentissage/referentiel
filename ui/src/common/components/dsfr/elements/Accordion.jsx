@@ -5,11 +5,11 @@ import { useCollapse } from "../common/useCollapse";
 
 const Accordion = buildComponent("ul", "fr-accordions-group");
 
-function AccordionItem({ label, children }) {
+function AccordionItem({ label, children, ...rest }) {
   let { collapseId, collapseRef, collapse } = useCollapse();
 
   return (
-    <li onClick={collapse}>
+    <li onClick={collapse} {...rest}>
       <section className="fr-accordion">
         <h3 className="fr-accordion__title">
           <button className="fr-accordion__btn" aria-controls={collapseId}>
