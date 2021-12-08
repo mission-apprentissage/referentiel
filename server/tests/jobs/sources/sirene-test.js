@@ -48,6 +48,10 @@ describe("sirene", () => {
       code_postal: "75019",
       code_insee: "75119",
       localite: "Paris",
+      departement: {
+        code: "75",
+        nom: "Paris",
+      },
       region: {
         code: "11",
         nom: "Île-de-France",
@@ -94,6 +98,10 @@ describe("sirene", () => {
       code_postal: "75019",
       code_insee: "75119",
       localite: "Paris",
+      departement: {
+        code: "75",
+        nom: "Paris",
+      },
       region: {
         code: "11",
         nom: "Île-de-France",

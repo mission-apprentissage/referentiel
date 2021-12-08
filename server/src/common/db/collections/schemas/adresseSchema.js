@@ -10,6 +10,13 @@ const adresseSchema = () => {
       code_postal: string(),
       code_insee: string(),
       localite: string(),
+      departement: object(
+        {
+          code: string(),
+          nom: string(),
+        },
+        { required: ["code", "nom"] }
+      ),
       region: object(
         {
           code: string(),

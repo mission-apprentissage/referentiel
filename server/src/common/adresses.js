@@ -2,6 +2,7 @@ const { pick } = require("lodash");
 const { findRegionByName } = require("./regions");
 const { findAcademieByCodeInsee } = require("./academies");
 const caches = require("./caches/caches");
+const { findDepartementByInsee } = require("./departements");
 const MIN_GEOCODE_SCORE = 0.6;
 
 class GeocodingError extends Error {
@@ -29,6 +30,7 @@ function selectBestResults(results, adresse) {
     code_postal: properties.postcode,
     code_insee: codeInsee,
     localite: properties.city,
+    departement: pick(findDepartementByInsee(codeInsee), ["code", "nom"]),
     region: pick(findRegionByName(regionName), ["code", "nom"]),
     academie: pick(findAcademieByCodeInsee(codeInsee), ["code", "nom"]),
     geojson: {

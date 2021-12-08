@@ -165,6 +165,10 @@ module.exports = {
             code_postal: "75001",
             code_insee: "75000",
             localite: "PARIS",
+            departement: {
+              code: "75",
+              nom: "Paris",
+            },
             region: {
               code: "11",
               nom: "Île-de-France",
