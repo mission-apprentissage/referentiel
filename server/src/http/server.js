@@ -10,6 +10,7 @@ module.exports = async () => {
   app.use(logMiddleware());
   app.use(require("./routes/healthcheckRoutes")());
   app.use(require("./routes/etablissementsRoutes")());
+  app.use(require("./routes/swaggerRoutes")());
 
   app.use(errorMiddleware());
   app.use((req, res) => {

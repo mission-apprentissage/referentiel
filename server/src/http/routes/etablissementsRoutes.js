@@ -16,90 +16,6 @@ const validateUAI = require("../../common/actions/validateUAI");
 module.exports = () => {
   const router = express.Router();
 
-  /**
-   * @swagger
-   *
-   * /api/v1/etablissements:
-   *   get:
-   *     summary: Récupérer la liste des établissements
-   *     parameters:
-   *       - in: query
-   *         name: siret
-   *         description: Retourne uniquement l'établissement ayant ce siren/siret
-   *         type: string
-   *         required: false
-   *       - in: query
-   *         name: text
-   *         description: Retourne uniquement l'établissement ayant cet uai.
-   *         type: string
-   *         required: false
-   *       - in: query
-   *         name: text
-   *         description: Permet de faire une recherche sur tous les champs texte d'un établissement
-   *         type: string
-   *         required: false
-   *       - in: query
-   *         name: anomalies
-   *         description: Si true renvoie uniquement les établissements contenant des anomalies
-   *         type: string
-   *         required: false
-   *       - in: query
-   *         name: page
-   *         description: Le numéro de la page désirée
-   *         type: string
-   *         required: false
-   *       - in: query
-   *         name: items_par_page
-   *         default: 10
-   *         description: Le nombre maximum d'éléments dans la page
-   *         type: string
-   *       - in: query
-   *         name: tri
-   *         description: Le champ utilisé pour trier la liste des résultats
-   *         type: string
-   *       - in: query
-   *         name: ordre
-   *         description: L'ordre du tri
-   *         default: desc
-   *         type: string
-   *         required: false
-   *       - in: query
-   *         name: champs
-   *         description: |
-   *          La liste des champs séparés par des virgules à inclure ou exclure dans la réponse.
-   *          Exemple :
-   *            - inclusion `champs=siret,uai`
-   *            - exclusion `champs=-siret,uai`
-   *         type: string
-   *         required: false
-   *     produces:
-   *      - application/json
-   *     tags:
-   *       - Referentiel
-   *     responses:
-   *       200:
-   *         description: OK
-   *         content:
-   *            application/json:
-   *              schema:
-   *                type: object
-   *                properties:
-   *                  etablissements:
-   *                    type: array
-   *                    items:
-   *                      $ref: '#/components/schemas/referentiel'
-   *                  pagination:
-   *                    type: object
-   *                    properties:
-   *                      page:
-   *                        type: string
-   *                      resultats_par_page:
-   *                        type: number
-   *                      nombre_de_page:
-   *                        type: number
-   *                      total:
-   *                        type: number
-   */
   router.get(
     "/api/v1/etablissements",
     tryCatch(async (req, res) => {
@@ -170,40 +86,6 @@ module.exports = () => {
     })
   );
 
-  /**
-   * @swagger
-   *
-   * /api/v1/etablissements/{siret}:
-   *   get:
-   *     summary: Récupérer les informations d'un établissement
-   *     parameters:
-   *       - in: path
-   *         name: siret
-   *         required: true
-   *         schema:
-   *          type: string
-   *         example: "42476141900045"
-   *       - in: query
-   *         name: champs
-   *         description: |
-   *          La liste des champs séparés par des virgules à inclure ou exclure dans la réponse.
-   *          Exemple :
-   *            - Retourne uniquement les champs uai et siret `champs=siret,uai`
-   *            - Retourne tous les champs sauf uai et siret `champs=-siret,uai`
-   *         type: string
-   *         required: false
-   *     produces:
-   *      - application/json
-   *     tags:
-   *       - Referentiel
-   *     responses:
-   *       200:
-   *         description: OK
-   *         content:
-   *          application/json:
-   *            schema:
-   *              $ref: '#/components/schemas/referentiel'
-   */
   router.get(
     "/api/v1/etablissements/:siret",
     tryCatch(async (req, res) => {

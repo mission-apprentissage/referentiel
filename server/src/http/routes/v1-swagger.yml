@@ -1,0 +1,204 @@
+#Can be edited online with https://editor.swagger.io/
+swagger: "2.0"
+info:
+  description: Documentation de l'API publique d'Anotéa
+  version: 1.0.0
+  title: Référentiel
+  termsOfService: http://swagger.io/terms/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+schemes:
+  - https
+  - http
+securityDefinitions:
+  Authorization:
+    type: apiKey
+    in: header
+    name: Authorization
+    description: |
+      Pour plus d'informations voir :
+      https://github.com/mission-apprentissage/referentiel
+responses:
+  EtablissementResponse:
+    description: Un etablissement
+    schema:
+      $ref: "#/definitions/Etablissement"
+  EtablissementsResponse:
+    description: La liste des organismes formateurs
+    schema:
+      type: object
+      properties:
+        etablissements:
+          type: array
+          items:
+            $ref: "#/definitions/Etablissement"
+        meta:
+          type: object
+          description: Informations complémentaires
+          properties:
+            pagination:
+              $ref: "#/definitions/Pagination"
+
+  UnauthorizedErrorResponse:
+    description: Le header Authorization header est manquant ou invalide
+    schema:
+      $ref: "#/definitions/Error"
+
+  BadRequestErrorResponse:
+    description: Bad Request
+    schema:
+      $ref: "#/definitions/Error"
+
+  NotFoundErrorResponse:
+    description: Not Found
+    schema:
+      $ref: "#/definitions/Error"
+
+definitions:
+  Error:
+    type: object
+    properties:
+      statusCode:
+        type: integer
+        example: 5xx/4xx
+      error:
+        type: string
+        example: Internal Server Error
+      message:
+        type: string
+        example: An internal server error occurred
+
+  Pagination:
+    type: object
+    description: Statut de la pagination
+    properties:
+      page:
+        type: string
+      resultats_par_page:
+        type: number
+      nombre_de_page:
+        type: number
+      total:
+        type: number
+
+  Etablissement:
+    type: object
+    properties:
+      TODO:
+        type: string
+        description: L'identifiant unique de l'action
+
+paths:
+  /api/v1/etablissements:
+    get:
+      description: >
+        Récupérer la liste des établissements
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: siret
+          description: Retourne uniquement l'établissement ayant ce siren/siret
+          type: string
+          required: false
+        - in: query
+          name: text
+          description: Retourne uniquement l'établissement ayant cet uai.
+          type: string
+          required: false
+        - in: query
+          name: text
+          description: Permet de faire une recherche sur tous les champs texte d'un établissement
+          type: string
+          required: false
+        - in: query
+          name: anomalies
+          description: Si true renvoie uniquement les établissements contenant des anomalies
+          type: string
+          required: false
+        - in: query
+          name: page
+          description: Le numéro de la page désirée
+          type: string
+          required: false
+        - in: query
+          name: items_par_page
+          default: 10
+          description: Le nombre maximum d'éléments dans la page
+          type: string
+        - in: query
+          name: tri
+          description: Le champ utilisé pour trier la liste des résultats
+          type: string
+        - in: query
+          name: ordre
+          description: L'ordre du tri
+          default: desc
+          type: string
+          required: false
+        - in: query
+          name: champs
+          description: |
+            La liste des champs séparés par des virgules à inclure ou exclure dans la réponse.
+            Exemple :
+              - inclusion `champs=siret,uai`
+              - exclusion `champs=-siret,uai`
+          type: string
+          required: false
+      security:
+        - Authorization: [ ]
+      responses:
+        200:
+          $ref: "#/responses/EtablissementsResponse"
+        400:
+          $ref: "#/responses/BadRequestErrorResponse"
+        401:
+          $ref: "#/responses/UnauthorizedErrorResponse"
+        404:
+          $ref: "#/responses/NotFoundErrorResponse"
+      tags:
+        - Publique
+
+  /api/v1/etablissements/{siret}:
+    get:
+      description: >
+        Récupérer les informations d'un établissement
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: siret
+          required: true
+          schema:
+            type: string
+            example: "42476141900045"
+        - in: query
+          name: champs
+          description: |
+            La liste des champs séparés par des virgules à inclure ou exclure dans la réponse.
+            Exemple :
+              - Retourne uniquement les champs uai et siret `champs=siret,uai`
+              - Retourne tous les champs sauf uai et siret `champs=-siret,uai`
+          type: string
+          required: false
+      security:
+        - Authorization: [ ]
+      responses:
+        200:
+          $ref: "#/responses/EtablissementResponse"
+        400:
+          $ref: "#/responses/BadRequestErrorResponse"
+        401:
+          $ref: "#/responses/UnauthorizedErrorResponse"
+        404:
+          $ref: "#/responses/NotFoundErrorResponse"
+      tags:
+        - Publique
+
+
+
+
+
+
+
