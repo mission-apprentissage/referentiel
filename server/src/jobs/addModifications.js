@@ -1,35 +1,35 @@
-const { oleoduc, writeData } = require("oleoduc");
+const { compose } = require("oleoduc");
 const { parseCsv } = require("../common/utils/csvUtils");
-const validateUAI = require("../common/actions/validateUAI");
 const logger = require("../common/logger");
+const { dbCollection } = require("../common/db/mongodb");
 
-async function addModifications(csvStream) {
-  let stats = { total: 0, updated: 0, unknown: 0, failed: 0 };
+async function addModifications(stream) {
+  let stats = { total: 0, inserted: 0, invalid: 0, failed: 0 };
+  let csvStream = compose(stream, parseCsv());
 
-  await oleoduc(
-    csvStream,
-    parseCsv(),
-    writeData(async (data) => {
-      let siret = data.siret;
-      let uai = data.uai;
-      if (!siret || !uai) {
-        return;
-      }
+  for await (const data of csvStream) {
+    stats.total++;
 
-      stats.total++;
-      try {
-        let updated = await validateUAI(siret, uai);
-        if (updated) {
-          stats.updated++;
-        } else {
-          stats.unknown++;
-        }
-      } catch (e) {
-        logger.error(e, `Impossible de confirmer l'uai ${uai} pour l'établissement ${siret}`);
-        stats.failed++;
-      }
-    })
-  );
+    let siret = data.siret;
+    let uai = data.uai;
+    if (!siret || !uai) {
+      stats.invalid++;
+      continue;
+    }
+
+    try {
+      await dbCollection("modifications").insertOne({
+        siret,
+        uai,
+        _meta: { created_at: new Date() },
+      });
+      stats.inserted++;
+    } catch (e) {
+      logger.error(e, `Impossible d'ajouter la modification pour l'uai ${uai} et l'établissement ${siret}`);
+      stats.failed++;
+    }
+  }
+
   return stats;
 }
 

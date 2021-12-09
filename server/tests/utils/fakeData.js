@@ -253,4 +253,19 @@ module.exports = {
       )
     );
   },
+  insertModification(custom) {
+    return dbCollection("modifications").insertOne(
+      merge(
+        {},
+        {
+          siret: faker.helpers.replaceSymbols("#########00015"),
+          uai: "0751234V",
+          _meta: {
+            created_at: new Date(),
+          },
+        },
+        custom
+      )
+    );
+  },
 };

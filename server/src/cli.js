@@ -11,6 +11,7 @@ const importEtablissements = require("./jobs/importEtablissements");
 const build = require("./jobs/build");
 const migrate = require("./jobs/migrate");
 const addModifications = require("./jobs/addModifications");
+const consolidate = require("./jobs/consolidate");
 
 cli
   .command("build")
@@ -80,6 +81,12 @@ cli
       return addModifications(file);
     });
   });
+
+cli.command("consolidate").action(() => {
+  runScript(() => {
+    return consolidate();
+  });
+});
 
 cli
   .command("computeStats")
