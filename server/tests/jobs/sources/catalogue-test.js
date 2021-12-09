@@ -335,6 +335,10 @@ describe("catalogue", () => {
           geometry: { coordinates: [2.396444, 48.879706], type: "Point" },
           properties: { score: 0.88 },
         },
+        departement: {
+          code: "75",
+          nom: "Paris",
+        },
         region: {
           code: "11",
           nom: "Île-de-France",
@@ -428,6 +432,10 @@ describe("catalogue", () => {
         code_postal: "75019",
         code_insee: "75119",
         localite: "Paris",
+        departement: {
+          code: "75",
+          nom: "Paris",
+        },
         region: {
           code: "11",
           nom: "Île-de-France",

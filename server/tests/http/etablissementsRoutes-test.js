@@ -9,6 +9,7 @@ describe("etablissementsRoutes", () => {
     const { httpClient } = await startServer();
     await insertEtablissement({
       siret: "11111111100001",
+      statuts: ["gestionnaire", "formateur"],
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
@@ -29,7 +30,7 @@ describe("etablissementsRoutes", () => {
           relations: [],
           lieux_de_formation: [],
           reseaux: [],
-          statuts: [],
+          statuts: ["gestionnaire", "formateur"],
           diplomes: [],
           certifications: [],
           siege_social: true,
@@ -53,6 +54,10 @@ describe("etablissementsRoutes", () => {
             code_postal: "75001",
             code_insee: "75000",
             localite: "PARIS",
+            departement: {
+              code: "75",
+              nom: "Paris",
+            },
             region: {
               code: "11",
               nom: "Île-de-France",
@@ -73,6 +78,13 @@ describe("etablissementsRoutes", () => {
         resultats_par_page: 10,
         nombre_de_page: 1,
         total: 1,
+      },
+      filtres: {
+        departements: [{ code: "75", label: "Paris", nombre_de_resultats: 1 }],
+        statuts: [
+          { code: "formateur", label: "UFA", nombre_de_resultats: 1 },
+          { code: "gestionnaire", label: "OF-CFA", nombre_de_resultats: 1 },
+        ],
       },
     });
   });
@@ -275,6 +287,112 @@ describe("etablissementsRoutes", () => {
     strictEqual(response.data.etablissements[1].siret, "33333333300008");
   });
 
+  it("Vérifie qu'on peut rechercher des établissements à partir de leur département", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100001",
+      adresse: {
+        departement: { code: "75", nom: "Paris" },
+      },
+    });
+    await insertEtablissement({
+      siret: "22222222200002",
+      adresse: {
+        departement: { code: "11", nom: "Aude" },
+      },
+    });
+
+    let response = await httpClient.get("/api/v1/etablissements?departements=11");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "22222222200002");
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements à partir de plusieurs départements", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100001",
+      adresse: {
+        departement: { code: "75", nom: "Paris" },
+      },
+    });
+    await insertEtablissement({
+      siret: "22222222200002",
+      adresse: {
+        departement: { code: "11", nom: "Aude" },
+      },
+    });
+
+    let response = await httpClient.get("/api/v1/etablissements?departements=11,75");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 2);
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements à partir de son statut", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100001",
+      statuts: ["gestionnaire"],
+    });
+    await insertEtablissement({
+      siret: "22222222200002",
+      statuts: ["formateur"],
+    });
+
+    let response = await httpClient.get("/api/v1/etablissements?statuts=formateur");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "22222222200002");
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements à partir de plusieurs statuts", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100001",
+      statuts: ["gestionnaire"],
+    });
+    await insertEtablissement({
+      siret: "22222222200002",
+      statuts: ["formateur"],
+    });
+
+    let response = await httpClient.get("/api/v1/etablissements?statuts=formateur,gestionnaire");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 2);
+  });
+
+  it("Vérifie qu'on peut ignorer des paramètres pour calculer les filtres", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100001",
+      adresse: {
+        departement: { code: "75", nom: "Paris" },
+      },
+    });
+    await insertEtablissement({
+      siret: "22222222200002",
+      adresse: {
+        departement: { code: "11", nom: "Aude" },
+      },
+    });
+
+    let response = await httpClient.get("/api/v1/etablissements?filtres=departements&departements=11");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    deepStrictEqual(response.data.filtres, {
+      departements: [
+        { code: "11", label: "Aude", nombre_de_resultats: 1 },
+        { code: "75", label: "Paris", nombre_de_resultats: 1 },
+      ],
+      statuts: [],
+    });
+  });
+
   it("Vérifie qu'on peut limiter les champs renvoyés pour la liste des établissements", async () => {
     const { httpClient } = await startServer();
     await insertEtablissement({
@@ -300,6 +418,10 @@ describe("etablissementsRoutes", () => {
         resultats_par_page: 10,
         nombre_de_page: 1,
         total: 1,
+      },
+      filtres: {
+        departements: [{ code: "75", label: "Paris", nombre_de_resultats: 1 }],
+        statuts: [],
       },
     });
   });
@@ -368,6 +490,10 @@ describe("etablissementsRoutes", () => {
         nombre_de_page: 1,
         total: 0,
       },
+      filtres: {
+        departements: [],
+        statuts: [],
+      },
     });
   });
 
@@ -431,6 +557,10 @@ describe("etablissementsRoutes", () => {
         code_postal: "75001",
         code_insee: "75000",
         localite: "PARIS",
+        departement: {
+          code: "75",
+          nom: "Paris",
+        },
         region: {
           code: "11",
           nom: "Île-de-France",

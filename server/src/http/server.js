@@ -11,6 +11,7 @@ module.exports = async () => {
   app.use(require("./routes/healthcheckRoutes")());
   app.use(require("./routes/etablissementsRoutes")());
   app.use(require("./routes/academiesRoutes")());
+  app.use(require("./routes/statsRoutes")());
   app.use(require("./routes/swaggerRoutes")());
 
   app.use(errorMiddleware());
