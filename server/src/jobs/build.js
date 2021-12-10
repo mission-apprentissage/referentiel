@@ -2,15 +2,22 @@ const GeoAdresseApi = require("../common/apis/GeoAdresseApi");
 const { createSource } = require("./sources/sources");
 const collectSources = require("./collectSources");
 const importEtablissements = require("./importEtablissements");
+const clearCache = require("./tasks/clearCache");
+const importCFD = require("./importCFD");
 
 async function build(options = {}) {
   let referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese"];
   let stats = [];
-
   function collectAll(sourceNames, globalOptions = {}) {
     let sources = sourceNames.map((sourceName) => createSource(sourceName, globalOptions));
     return collectSources(sources).then((res) => stats.push({ collect: res }));
   }
+
+  if (options.clearCache) {
+    await clearCache();
+  }
+
+  await importCFD();
 
   let sources = referentiels.map((name) => createSource(name));
   await importEtablissements(sources, { removeAll: true }).then((res) => stats.push({ importEtablissements: res }));

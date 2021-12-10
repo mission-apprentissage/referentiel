@@ -16,10 +16,11 @@ const consolidate = require("./jobs/consolidate");
 cli
   .command("build")
   .argument("[names]", "La liste des sources servant de référence d'établissements")
-  .action((names) => {
+  .option("--clearCache", "Supprime les données stockées en cache")
+  .action((names, options) => {
     runScript(() => {
       let referentiels = names ? names.split(",") : null;
-      return build({ referentiels });
+      return build({ referentiels, ...options });
     });
   });
 
