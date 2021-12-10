@@ -492,7 +492,7 @@ describe("catalogue", () => {
       job: "collect",
       source: "catalogue",
       code: "lieudeformation_geoloc_impossible",
-      details: "Lieu de formation inconnu : 31 rue des lilas. Adresse inconnue [2.396444,48.879706]",
+      details: "Lieu de formation inconnu : 31 rue des lilas. [2.396444,48.879706]",
     });
     assert.deepStrictEqual(stats, {
       catalogue: {

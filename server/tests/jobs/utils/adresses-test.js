@@ -25,7 +25,7 @@ describe("adresses", () => {
     } catch (e) {
       let found = await dbCollection("cache").findOne({ _id: "adresses_2_48" });
       assert.strictEqual(found.type, "error");
-      assert.deepStrictEqual(found.value.message, "Adresse inconnue [2,48]");
+      assert.deepStrictEqual(found.value.message, "Coordonnées inconnues [2,48]");
     }
   });
 

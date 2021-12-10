@@ -81,12 +81,19 @@ module.exports = (options = {}) => {
               if (data.longitude) {
                 try {
                   adresse = await getAdresseFromCoordinates(parseFloat(data.longitude), parseFloat(data.latitude), {
-                    label: data.geo_adresse,
+                    code_postal: data.code_postal,
+                    adresse: (
+                      `${data.numero_voie || ""} ${data.indice_repetition || ""} ` +
+                      `${data.type_voie || ""} ${data.libelle_voie || ""} ` +
+                      `${data.code_postal || ""} ${data.libelle_commune || ""} `
+                    )
+                      .replace(/\s{2,}/g, " ")
+                      .trim(),
                   });
                 } catch (e) {
                   anomalies.push({
                     code: "etablissement_geoloc_impossible",
-                    message: `Impossible de géolocaliser l'adresse de l'établissement: ${data.geo_adresse}. ${e.message}`,
+                    message: `Impossible de géolocaliser l'adresse de l'établissement. ${e.message}`,
                   });
                 }
               } else {

@@ -4,18 +4,41 @@ const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
 const { importEtablissements } = require("../../utils/testUtils");
-const { getMockedSireneApi, getMockedGeoAddresseApi } = require("../../utils/apiMocks");
+const { mockSireneApi, mockGeoAddresseApi } = require("../../utils/apiMocks");
 const { DateTime } = require("luxon");
 
-function createSireneSource(custom = {}) {
+function createSireneSource(options = {}) {
+  let { mocks = [], ...custom } = options;
+
+  if (mocks.includes("geo")) {
+    mockGeoAddresseApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("reverse"))
+        .query(() => true)
+        .reply(200, responses.reverse());
+
+      client
+        .get((uri) => uri.includes("search"))
+        .query(() => true)
+        .reply(400, {});
+    });
+  }
+
+  if (mocks.includes("sirene")) {
+    mockSireneApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(200, responses.unitesLegales());
+
+      client
+        .get((uri) => uri.includes("etablissements"))
+        .query(() => true)
+        .reply(200, responses.etablissement());
+    });
+  }
+
   return createSource("sirene", {
-    geoAdresseApi: getMockedGeoAddresseApi((mock, responses) => {
-      mock.onGet(/reverse.*/).reply(200, responses.reverse());
-    }),
-    sireneApi: getMockedSireneApi((mock, responses) => {
-      mock.onGet("unites_legales/111111111").reply(200, responses.unitesLegales());
-      mock.onGet("etablissements/11111111100006").reply(200, responses.etablissement());
-    }),
     organismes: ["11111111100006"],
     ...custom,
   });
@@ -23,8 +46,8 @@ function createSireneSource(custom = {}) {
 
 describe("sirene", () => {
   it("Vérifie qu'on peut collecter des informations de l'API Sirene", async () => {
+    let source = createSireneSource({ mocks: ["geo", "sirene"] });
     await importEtablissements();
-    let source = createSireneSource();
 
     let stats = await collectSources(source);
 
@@ -73,13 +96,19 @@ describe("sirene", () => {
 
   it("Vérifie qu'on recherche une adresse quand ne peut pas reverse-geocoder", async () => {
     await importEtablissements();
-    let source = createSireneSource({
-      geoAdresseApi: getMockedGeoAddresseApi((mock, responses) => {
-        mock.onGet(/reverse.*/).reply(400, {});
-        mock.onGet(/search.*/).reply(200, responses.search());
-      }),
+    mockGeoAddresseApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("reverse"))
+        .query(() => true)
+        .reply(400, {});
+
+      client
+        .get((uri) => uri.includes("search"))
+        .query(() => true)
+        .reply(200, responses.search());
     });
 
+    let source = createSireneSource({ mocks: ["sirene"] });
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
@@ -121,42 +150,149 @@ describe("sirene", () => {
     });
   });
 
-  it("Vérifie qu'on peut collecter des relations", async () => {
+  it("Vérifie qu'on recherche une adresse quand le code posal du reverse-geocoding n'est pas le même que l'adresse", async () => {
     await importEtablissements();
-    let api = getMockedSireneApi((mock, responses) => {
-      mock.onGet("etablissements/11111111100006").reply(200, responses.etablissement());
-      mock.onGet("unites_legales/111111111").reply(
-        200,
-        responses.unitesLegales({
-          unite_legale: {
-            etablissements: [
-              {
-                siret: "11111111100006",
-                etat_administratif: "A",
-                etablissement_siege: "true",
-                libelle_voie: "DES LILAS",
-                code_postal: "75019",
-                libelle_commune: "PARIS",
-              },
-              {
-                siret: "11111111122222",
-                denomination_usuelle: "NOMAYO2",
-                etat_administratif: "A",
-                etablissement_siege: "false",
-                libelle_voie: "DES LILAS",
-                code_postal: "75001",
-                libelle_commune: "PARIS",
-              },
-            ],
-          },
-        })
-      );
-    });
-    let source = createSireneSource({
-      sireneApi: api,
-      organismes: ["11111111100006", "11111111122222"],
+    mockSireneApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(
+          200,
+          responses.unitesLegales({
+            unite_legale: {
+              etablissements: [
+                {
+                  siret: "11111111100006",
+                  etat_administratif: "A",
+                  etablissement_siege: "true",
+                  libelle_voie: "DES LILAS",
+                  code_postal: "93100",
+                  libelle_commune: "MONTREUIL",
+                },
+              ],
+            },
+          })
+        );
+
+      client
+        .get((uri) => uri.includes("etablissements"))
+        .query(() => true)
+        .reply(200, responses.etablissement());
     });
 
+    mockGeoAddresseApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("reverse"))
+        .query(() => true)
+        .reply(200, responses.reverse());
+
+      client
+        .get((uri) => uri.includes("search"))
+        .query(() => true)
+        .reply(
+          200,
+          responses.search({
+            features: [
+              {
+                properties: {
+                  label: "31 Rue des lilas 93100 Montreuil",
+                  housenumber: "31",
+                  name: "31 Rue des Lilas",
+                  postcode: "93100",
+                  citycode: "93048",
+                  city: "Montreuil",
+                },
+              },
+            ],
+          })
+        );
+    });
+
+    let source = createSireneSource();
+    let stats = await collectSources(source);
+
+    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    assert.deepStrictEqual(found.adresse, {
+      geojson: {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [2.396444, 48.879706],
+        },
+        properties: {
+          score: 0.88,
+        },
+      },
+      label: "31 Rue des lilas 93100 Montreuil",
+      code_postal: "93100",
+      code_insee: "93048",
+      localite: "Montreuil",
+      departement: {
+        code: "93",
+        nom: "Seine-Saint-Denis",
+      },
+      region: {
+        code: "11",
+        nom: "Île-de-France",
+      },
+      academie: {
+        code: "24",
+        nom: "Créteil",
+      },
+    });
+    assert.deepStrictEqual(stats, {
+      sirene: {
+        total: 1,
+        updated: 1,
+        ignored: 0,
+        failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on peut collecter des relations", async () => {
+    await importEtablissements();
+    mockSireneApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("etablissements"))
+        .query(() => true)
+        .reply(200, responses.etablissement());
+
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(
+          200,
+          responses.unitesLegales({
+            unite_legale: {
+              etablissements: [
+                {
+                  siret: "11111111100006",
+                  etat_administratif: "A",
+                  etablissement_siege: "true",
+                  libelle_voie: "DES LILAS",
+                  code_postal: "75019",
+                  libelle_commune: "PARIS",
+                },
+                {
+                  siret: "11111111122222",
+                  denomination_usuelle: "NOMAYO2",
+                  etat_administratif: "A",
+                  etablissement_siege: "false",
+                  libelle_voie: "DES LILAS",
+                  code_postal: "75001",
+                  libelle_commune: "PARIS",
+                },
+              ],
+            },
+          })
+        );
+    });
+
+    let source = createSireneSource({
+      mocks: ["geo"],
+      organismes: ["11111111100006", "11111111122222"],
+    });
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
@@ -182,6 +318,7 @@ describe("sirene", () => {
     await importEtablissements([{ siret: "11111111100006" }]);
 
     let source = createSireneSource({
+      mocks: ["geo", "sirene"],
       organismes: ["11111111100006"],
     });
 
@@ -199,40 +336,43 @@ describe("sirene", () => {
 
   it("Vérifie qu'on ignore les relations qui ne sont pas des organismes de formations", async () => {
     await importEtablissements([{ siret: "11111111100006" }]);
-    let api = getMockedSireneApi((mock, responses) => {
-      mock.onGet("etablissements/11111111100006").reply(200, responses.etablissement());
-      mock.onGet("unites_legales/111111111").reply(
-        200,
-        responses.unitesLegales({
-          unite_legale: {
-            etablissements: [
-              {
-                siret: "11111111100006",
-                etat_administratif: "A",
-                etablissement_siege: "true",
-                libelle_voie: "DES LILAS",
-                code_postal: "75019",
-                libelle_commune: "PARIS",
-              },
-              {
-                siret: "2222222222222222",
-                etat_administratif: "A",
-                etablissement_siege: "true",
-                libelle_voie: "DES LILAS",
-                code_postal: "75019",
-                libelle_commune: "PARIS",
-              },
-            ],
-          },
-        })
-      );
+    mockSireneApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(
+          200,
+          responses.unitesLegales({
+            unite_legale: {
+              etablissements: [
+                {
+                  siret: "11111111100006",
+                  etat_administratif: "A",
+                  etablissement_siege: "true",
+                  libelle_voie: "DES LILAS",
+                  code_postal: "75019",
+                  libelle_commune: "PARIS",
+                },
+                {
+                  siret: "2222222222222222",
+                  etat_administratif: "A",
+                  etablissement_siege: "true",
+                  libelle_voie: "DES LILAS",
+                  code_postal: "75019",
+                  libelle_commune: "PARIS",
+                },
+              ],
+            },
+          })
+        );
+
+      client
+        .get((uri) => uri.includes("etablissements"))
+        .query(() => true)
+        .reply(200, responses.etablissement());
     });
 
-    let source = createSireneSource({
-      sireneApi: api,
-      organismes: ["2222222222222222"],
-    });
-
+    let source = createSireneSource({ mocks: ["geo"], organismes: ["2222222222222222"] });
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
@@ -250,41 +390,46 @@ describe("sirene", () => {
 
   it("Vérifie qu'on ignore les relations pour des établissements fermés", async () => {
     await importEtablissements();
-    let api = getMockedSireneApi((mock, responses) => {
-      mock.onGet("etablissements/11111111100006").reply(200, responses.etablissement());
-      mock.onGet("unites_legales/111111111").reply(
-        200,
-        responses.unitesLegales({
-          unite_legale: {
-            etablissements: [
-              {
-                siret: "11111111100006",
-                etat_administratif: "A",
-                etablissement_siege: "true",
-                libelle_voie: "DES LILAS",
-                code_postal: "75019",
-                libelle_commune: "PARIS",
-              },
-              {
-                siret: "11111111122222",
-                denomination_usuelle: "NOMAYO2",
-                etat_administratif: "F",
-                etablissement_siege: "false",
-                libelle_voie: "DES LILAS",
-                code_postal: "75001",
-                libelle_commune: "PARIS",
-              },
-            ],
-          },
-        })
-      );
+    mockSireneApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(
+          200,
+          responses.unitesLegales({
+            unite_legale: {
+              etablissements: [
+                {
+                  siret: "11111111100006",
+                  etat_administratif: "A",
+                  etablissement_siege: "true",
+                  libelle_voie: "DES LILAS",
+                  code_postal: "75019",
+                  libelle_commune: "PARIS",
+                },
+                {
+                  siret: "11111111122222",
+                  denomination_usuelle: "NOMAYO2",
+                  etat_administratif: "F",
+                  etablissement_siege: "false",
+                  libelle_voie: "DES LILAS",
+                  code_postal: "75001",
+                  libelle_commune: "PARIS",
+                },
+              ],
+            },
+          })
+        );
+
+      client
+        .get((uri) => uri.includes("etablissements"))
+        .query(() => true)
+        .reply(200, responses.etablissement());
     });
 
     let source = createSireneSource({
-      sireneApi: api,
       organismes: ["11111111100006", "11111111122222"],
     });
-
     await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
@@ -293,12 +438,14 @@ describe("sirene", () => {
 
   it("Vérifie qu'on gère une erreur lors de la récupération des informations de l'API Sirene", async () => {
     await importEtablissements();
-    let source = createSireneSource({
-      sireneApi: getMockedSireneApi((mock) => {
-        mock.onGet(/unites_legales.*/).reply(500, {});
-      }),
+    mockSireneApi((client) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(500, {});
     });
 
+    let source = createSireneSource();
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
@@ -315,12 +462,14 @@ describe("sirene", () => {
 
   it("Vérifie qu'on gère une erreur spécifique quand l'établissement n'existe pas", async () => {
     await importEtablissements();
-    let source = createSireneSource({
-      sireneApi: getMockedSireneApi((mock) => {
-        mock.onGet(/unites_legales.*/).reply(200, { unite_legale: { etablissements: [] } });
-      }),
+    mockSireneApi((client) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(200, { unite_legale: { etablissements: [] } });
     });
 
+    let source = createSireneSource();
     await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
@@ -329,12 +478,14 @@ describe("sirene", () => {
 
   it("Vérifie qu'on gère une erreur spécifique quand l'entreprise n'existe pas", async () => {
     await importEtablissements();
-    let source = createSireneSource({
-      sireneApi: getMockedSireneApi((mock) => {
-        mock.onGet(/unites_legales.*/).reply(404, {});
-      }),
+    mockSireneApi((client) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(404, {});
     });
 
+    let source = createSireneSource();
     await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
@@ -343,16 +494,19 @@ describe("sirene", () => {
 
   it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver l'adresse", async () => {
     await importEtablissements();
-    let source = createSireneSource({
-      geoAdresseApi: {
-        search() {
-          return Promise.reject(new Error());
-        },
-        reverse() {
-          return Promise.reject(new Error());
-        },
-      },
+    mockGeoAddresseApi((client) => {
+      client
+        .get((uri) => uri.includes("reverse"))
+        .query(() => true)
+        .reply(400, {});
+
+      client
+        .get((uri) => uri.includes("search"))
+        .query(() => true)
+        .reply(400, {});
     });
+
+    let source = createSireneSource({ mocks: ["sirene"] });
 
     let stats = await collectSources(source);
 
@@ -362,9 +516,7 @@ describe("sirene", () => {
       job: "collect",
       source: "sirene",
       code: "etablissement_geoloc_impossible",
-      details:
-        "Impossible de géolocaliser l'adresse de l'établissement: 31 rue des lilas Paris 75001. " +
-        "Adresse inconnue [2.396147,48.880391]",
+      details: "Impossible de géolocaliser l'adresse de l'établissement. [2.396147,48.880391]",
     });
     assert.deepStrictEqual(stats, {
       sirene: {
@@ -378,15 +530,19 @@ describe("sirene", () => {
 
   it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver la catégorie juridique", async () => {
     await importEtablissements();
-    let source = createSireneSource({
-      sireneApi: getMockedSireneApi((mock, responses) => {
-        mock.onGet("etablissements/11111111100006").reply(200, responses.etablissement());
-        mock
-          .onGet(/unites_legales.*/)
-          .reply(200, responses.unitesLegales({ unite_legale: { categorie_juridique: "INVALID" } }));
-      }),
+    mockSireneApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(200, responses.unitesLegales({ unite_legale: { categorie_juridique: "INVALID" } }));
+
+      client
+        .get((uri) => uri.includes("etablissements"))
+        .query(() => true)
+        .reply(200, responses.etablissement());
     });
 
+    let source = createSireneSource({ mocks: ["geo"] });
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
@@ -409,7 +565,7 @@ describe("sirene", () => {
 
   it("Vérifie qu'on met en cache les données de l'API sirene", async () => {
     await importEtablissements();
-    let source = createSireneSource();
+    let source = createSireneSource({ mocks: ["geo", "sirene"] });
 
     await collectSources(source);
 
@@ -421,12 +577,14 @@ describe("sirene", () => {
 
   it("Vérifie qu'on met en cache les erreurs 4xx de l'API sirene", async () => {
     await importEtablissements();
-    let source = createSireneSource({
-      sireneApi: getMockedSireneApi((mock) => {
-        mock.onGet(/unites_legales.*/).reply(404, {});
-      }),
+    mockSireneApi((client) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(404, {});
     });
 
+    let source = createSireneSource();
     await collectSources(source);
 
     let found = await dbCollection("cache").findOne({ _id: "sirene_111111111" });
@@ -437,12 +595,14 @@ describe("sirene", () => {
 
   it("Vérifie qu'on ne met pas en cache les erreurs 5xx de l'API sirene", async () => {
     await importEtablissements();
-    let source = createSireneSource({
-      sireneApi: getMockedSireneApi((mock) => {
-        mock.onGet(/unites_legales.*/).reply(500, {});
-      }),
+    mockSireneApi((client) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(500, {});
     });
 
+    let source = createSireneSource();
     await collectSources(source);
 
     let found = await dbCollection("cache").findOne({ _id: "sirene_111111111" });

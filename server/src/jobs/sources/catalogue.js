@@ -80,12 +80,14 @@ async function buildLieuDeFormation(formation, getAdresseFromCoordinates) {
 
   try {
     let [latitude, longitude] = formation.lieu_formation_geo_coordonnees.split(",");
+    let adresse = await getAdresseFromCoordinates(longitude, latitude, {
+      adresse: formation.lieu_formation_adresse,
+    });
+
     return {
       lieu: {
         code: `${longitude}_${latitude}`,
-        adresse: await getAdresseFromCoordinates(longitude, latitude, {
-          label: formation.lieu_formation_adresse,
-        }),
+        adresse,
         ...(formation.lieu_formation_siret ? { siret: formation.lieu_formation_siret } : {}),
       },
     };

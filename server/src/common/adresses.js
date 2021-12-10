@@ -10,21 +10,24 @@ class GeocodingError extends Error {
     super();
     Error.captureStackTrace(this, this.constructor);
     this.name = this.constructor.name;
-    this.message = `Adresse inconnue ${message}`;
+    this.message = message;
     this.cause = cause;
   }
 }
 
-function selectBestResults(results, adresse) {
+function selectBestResult(results, desc) {
   let best = results.features[0];
   if (!best || best.properties.score < MIN_GEOCODE_SCORE) {
-    throw new GeocodingError(`Score trop faible pour l'adresse ${adresse}`);
+    throw new GeocodingError(
+      `Score ${best?.properties.score} trop faible pour l'adresse ${desc} / ${best.geometry.coordinates}`
+    );
   }
 
   let properties = best.properties;
   let context = properties.context.split(",");
   let regionName = context[context.length - 1].trim();
   let codeInsee = properties.citycode;
+
   return {
     label: properties.label,
     code_postal: properties.postcode,
@@ -46,24 +49,38 @@ function selectBestResults(results, adresse) {
 module.exports = (geoAdresseApi) => {
   let cache = caches.geoAdresseApiCache();
 
-  async function reverseGeocodingFallback(error, longitude, latitude, label) {
-    let promise = label ? geoAdresseApi.search(label) : Promise.reject(error);
+  function geocode(adresse, { longitude, latitude }) {
+    return cache.memo(adresse, async () => {
+      return geoAdresseApi.search(adresse).catch((e) => {
+        throw new GeocodingError(`[${longitude},${latitude}]`, e);
+      });
+    });
+  }
 
-    return promise.catch((e) => {
-      throw new GeocodingError(`[${longitude},${latitude}]`, e);
+  function reverse(longitude, latitude, options) {
+    return cache.memo(`${longitude}_${latitude}`, () => {
+      return geoAdresseApi.reverse(longitude, latitude).catch((error) => {
+        if (!options.adresse) {
+          throw new GeocodingError(`Coordonnées inconnues [${longitude},${latitude}]`, error);
+        }
+        return geocode(options.adresse, { longitude, latitude });
+      });
     });
   }
 
   return {
     async getAdresseFromCoordinates(longitude, latitude, options = {}) {
-      let key = `${longitude}_${latitude}`;
-      let results = await cache.memo(key, () => {
-        return geoAdresseApi
-          .reverse(longitude, latitude)
-          .catch((e) => reverseGeocodingFallback(e, longitude, latitude, options.label));
-      });
-
-      return selectBestResults(results, `[${longitude},${latitude}]`);
+      let results = await reverse(longitude, latitude, options);
+      let best = selectBestResult(results, { longitude, latitude });
+      if (
+        options.adresse &&
+        options.code_postal &&
+        best.code_postal.substr(0, 2) !== options.code_postal.substr(0, 2)
+      ) {
+        let geocoded = await geocode(options.adresse, { longitude, latitude });
+        best = selectBestResult(geocoded, options.adresse);
+      }
+      return best;
     },
   };
 };

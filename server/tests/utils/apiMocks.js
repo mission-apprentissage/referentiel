@@ -9,13 +9,6 @@ const GeoAdresseApi = require("../../src/common/apis/GeoAdresseApi");
 const SireneApi = require("../../src/common/apis/SireneApi");
 const nock = require("nock"); // eslint-disable-line node/no-unpublished-require
 
-function debug(instance) {
-  instance.interceptors.request.use((request) => {
-    console.log("Starting Request", JSON.stringify(request, null, 2));
-    return request;
-  });
-}
-
 function createAxios(Api, responses, callback, options) {
   let instance = axios.create(options);
   let mock = new MockAdapter(instance);
@@ -469,61 +462,10 @@ module.exports = {
       },
     });
   },
-  getMockedGeoAddresseApi(callback, options = {}) {
-    let instance = axios.create(options);
-    options.debug && debug(instance);
+  mockSireneApi(callback) {
+    let client = nock(SireneApi.baseApiUrl);
 
-    let featureCollection = {
-      type: "FeatureCollection",
-      version: "draft",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [2.396444, 48.879706],
-          },
-          properties: {
-            label: "31 Rue des lilas 75019 Paris",
-            score: 0.88,
-            housenumber: "31",
-            id: "75119_5683_00031",
-            name: "31 Rue des Lilas",
-            postcode: "75019",
-            citycode: "75119",
-            x: 655734.91,
-            y: 6864578.76,
-            city: "Paris",
-            district: "Paris 19e Arrondissement",
-            context: "75, Paris, Île-de-France",
-            type: "housenumber",
-            importance: 0.73991,
-            street: "Rue des Lilas",
-          },
-        },
-      ],
-      attribution: "BAN",
-      licence: "ETALAB-2.0",
-      query: '31 rue des lilas 75019 Paris"',
-      limit: 5,
-    };
-
-    let responses = {
-      search(custom = {}) {
-        return merge({}, featureCollection, custom);
-      },
-      reverse(custom = {}) {
-        return merge({}, omit(featureCollection, ["query"]), custom);
-      },
-    };
-
-    return createAxios(GeoAdresseApi, responses, callback, options);
-  },
-  getMockedSireneApi(callback, options = {}) {
-    let instance = axios.create(options);
-    options.debug && debug(instance);
-
-    let responses = {
+    callback(client, {
       unitesLegales(custom = {}) {
         return merge(
           {},
@@ -700,7 +642,7 @@ module.exports = {
           custom
         );
       },
-      etablissement(custom = {}) {
+      etablissement(custom) {
         return merge(
           {},
           {
@@ -771,9 +713,7 @@ module.exports = {
           custom
         );
       },
-    };
-
-    return createAxios(SireneApi, responses, callback, options);
+    });
   },
   getMockedAcceApi(callback, options = {}) {
     let responses = {
