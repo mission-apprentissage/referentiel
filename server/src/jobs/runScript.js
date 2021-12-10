@@ -5,6 +5,12 @@ const { isEmpty } = require("lodash");
 
 process.on("unhandledRejection", (e) => console.error(e));
 process.on("uncaughtException", (e) => console.error(e));
+process.stdout.on("error", function (err) {
+  if (err.code === "EPIPE") {
+    // eslint-disable-next-line no-process-exit
+    process.exit(0);
+  }
+});
 
 const createTimer = () => {
   let launchTime;
