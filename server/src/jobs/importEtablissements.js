@@ -38,7 +38,7 @@ module.exports = async (array, options = {}) => {
       stats[from].total++;
       if (isEmpty(siret) || !luhn(siret)) {
         stats[from].invalid++;
-        logger.warn(`[Referentiel] Siret invalide pour l'établissement ${siret}`);
+        logger.warn(`[Referentiel] Siret '${siret}' invalide pour l'établissement`);
         return;
       }
 

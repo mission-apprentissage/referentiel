@@ -23,7 +23,7 @@ module.exports = (custom = {}) => {
         transformData((data) => {
           return {
             from: name,
-            selector: { siret: new RegExp(`^${data.siren}`) },
+            selector: { siret: { $regex: new RegExp(`^${data.siren}`) } },
             data: {
               numero_declaration_activite: data.num_da,
             },

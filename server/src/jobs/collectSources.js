@@ -8,7 +8,7 @@ const { sortBy } = require("lodash/collection");
 
 function buildQuery(selector) {
   if (isEmpty(selector)) {
-    return { not: "matching" };
+    return { siret: "not matching" };
   }
 
   return typeof selector === "object" ? selector : { $or: [{ siret: selector }, { uai: selector }] };
