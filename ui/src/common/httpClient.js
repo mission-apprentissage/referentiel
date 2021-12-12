@@ -1,5 +1,6 @@
 import EventEmitter from "events";
 import * as queryString from "querystring";
+import { getAuth } from "./auth";
 
 class AuthError extends Error {
   constructor(json, statusCode) {
@@ -39,12 +40,15 @@ function handleResponse(path, response) {
   return response.json();
 }
 
-function getHeaders() {
+const getHeaders = () => {
+  let auth = getAuth();
+
   return {
     Accept: "application/json",
+    ...(auth.sub !== "anonymous" ? { Authorization: `Bearer ${auth.token}` } : {}),
     "Content-Type": "application/json",
   };
-}
+};
 
 export const _get = (path, parmeters = {}) => {
   let params = queryString.stringify(parmeters, { skipNull: true });

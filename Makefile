@@ -1,10 +1,15 @@
-install: install-server install-ui
+install: install-server install-ui generate-dotenv
 
 install-server:
 	yarn --cwd server install --frozen-lockfile
 
 install-ui:
 	yarn --cwd ui install --frozen-lockfile
+
+generate-dotenv:
+	echo "Generating JWT secret..."
+	grep -sqF 'REFERENTIEL_AUTH_API_JWT_SECRET' server/.env || \
+		echo "REFERENTIEL_AUTH_API_JWT_SECRET=$$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '')" >> server/.env
 
 start:
 	docker-compose up --build --force-recreate

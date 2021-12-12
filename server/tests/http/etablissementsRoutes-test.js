@@ -1,6 +1,6 @@
 const { strictEqual, deepStrictEqual, ok } = require("assert");
 const { insertEtablissement, insertStats } = require("../utils/fakeData");
-const { startServer } = require("../utils/testUtils");
+const { startServer, generateAuthHeader } = require("../utils/testUtils");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const assert = require("assert");
 
@@ -623,14 +623,25 @@ describe("etablissementsRoutes", () => {
     });
   });
 
-  it("Vérifie qu'on peut valider une UAI", async () => {
+  it("Vérifie qu'on peut valider une UAI (region)", async () => {
     const { httpClient } = await startServer();
     await insertEtablissement({
       siret: "11111111100001",
       raison_sociale: "Centre de formation",
+      adresse: {
+        region: { code: "11", nom: "Île-de-France" },
+      },
     });
 
-    let response = await httpClient.put("/api/v1/etablissements/11111111100001/validateUAI", { uai: "0751234J" });
+    let response = await httpClient.put(
+      "/api/v1/etablissements/11111111100001/validateUAI",
+      { uai: "0751234J" },
+      {
+        headers: {
+          ...generateAuthHeader("region", "11"),
+        },
+      }
+    );
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data.siret, "11111111100001");
@@ -646,16 +657,132 @@ describe("etablissementsRoutes", () => {
     });
   });
 
+  it("Vérifie qu'on peut valider une UAI (region)", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100001",
+      raison_sociale: "Centre de formation",
+      adresse: {
+        region: { code: "11", nom: "Île-de-France" },
+      },
+    });
+
+    let response = await httpClient.put(
+      "/api/v1/etablissements/11111111100001/validateUAI",
+      { uai: "0751234J" },
+      {
+        headers: {
+          ...generateAuthHeader("region", "11"),
+        },
+      }
+    );
+
+    strictEqual(response.status, 200);
+    deepStrictEqual(response.data.siret, "11111111100001");
+    deepStrictEqual(response.data.uai, "0751234J");
+    let found = await dbCollection("etablissements").findOne({ siret: "11111111100001" });
+    deepStrictEqual(found.uai, "0751234J");
+    let { _meta, _id, ...modification } = await dbCollection("modifications").findOne();
+    assert.ok(_id);
+    assert.ok(_meta.created_at);
+    deepStrictEqual(modification, {
+      siret: "11111111100001",
+      uai: "0751234J",
+    });
+  });
+
+  it("Vérifie qu'on peut valider une UAI (academie)", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100001",
+      raison_sociale: "Centre de formation",
+      adresse: {
+        academie: { code: "01", nom: "Paris" },
+      },
+    });
+
+    let response = await httpClient.put(
+      "/api/v1/etablissements/11111111100001/validateUAI",
+      { uai: "0751234J" },
+      {
+        headers: {
+          ...generateAuthHeader("academie", "01"),
+        },
+      }
+    );
+
+    strictEqual(response.status, 200);
+    deepStrictEqual(response.data.siret, "11111111100001");
+    deepStrictEqual(response.data.uai, "0751234J");
+  });
+
   it("Vérifie qu'on retourne une erreur si l'UAI est liée à un siret inconnu", async () => {
     const { httpClient } = await startServer();
     await insertEtablissement({
       siret: "11111111100001",
       raison_sociale: "Centre de formation",
+      adresse: {
+        region: { code: "11", nom: "Île-de-France" },
+      },
     });
 
-    let response = await httpClient.put("/api/v1/etablissements/22222222200002/validateUAI", { uai: "0751234J" });
+    let response = await httpClient.put(
+      "/api/v1/etablissements/22222222200002/validateUAI",
+      { uai: "0751234J" },
+      {
+        headers: {
+          ...generateAuthHeader("region", "11"),
+        },
+      }
+    );
 
-    strictEqual(response.status, 404);
+    strictEqual(response.status, 400);
+  });
+
+  it("Vérifie qu'on retourne une erreur si l'UAI est liée à un siret d'une autre région", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100001",
+      raison_sociale: "Centre de formation",
+      adresse: {
+        region: { code: "76", nom: "Occitanie" },
+      },
+    });
+
+    let response = await httpClient.put(
+      "/api/v1/etablissements/22222222200002/validateUAI",
+      { uai: "0751234J" },
+      {
+        headers: {
+          ...generateAuthHeader("region", "76"),
+        },
+      }
+    );
+
+    strictEqual(response.status, 400);
+  });
+
+  it("Vérifie qu'on retourne une erreur si l'UAI est liée à un siret d'une autre académie", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100001",
+      raison_sociale: "Centre de formation",
+      adresse: {
+        academie: { code: "01", nom: "Paris" },
+      },
+    });
+
+    let response = await httpClient.put(
+      "/api/v1/etablissements/22222222200002/validateUAI",
+      { uai: "0751234J" },
+      {
+        headers: {
+          ...generateAuthHeader("academie", "11"),
+        },
+      }
+    );
+
+    strictEqual(response.status, 400);
   });
 
   it("Vérifie qu'on peut lister les stats", async () => {

@@ -265,6 +265,10 @@ function findAcademieByName(name) {
   return ACADEMIES.find((academie) => academie.nom === name) || null;
 }
 
+function findAcademieByCode(code) {
+  return ACADEMIES.find((academie) => academie.code === code) || null;
+}
+
 function findAcademieByCodeInsee(code) {
   return ACADEMIES.find((academie) => academie.departements.find((d) => code.startsWith(d.code))) || null;
 }
@@ -289,6 +293,7 @@ function getAcademies() {
 
 module.exports = {
   findAcademieByName,
+  findAcademieByCode,
   findAcademieByUai,
   findAcademieByCodeInsee,
   getAcademies,

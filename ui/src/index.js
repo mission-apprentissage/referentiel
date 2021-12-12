@@ -4,6 +4,7 @@ import "./index.scss";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { subscribeToHttpEvent } from "./common/httpClient";
+import { logout } from "./common/auth";
 
 window.dsfr = {
   verbose: false,
@@ -17,7 +18,14 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-subscribeToHttpEvent("htt:error", (e) => console.error(e));
+subscribeToHttpEvent("http:error", (response) => {
+  if (response.status === 401) {
+    //Auto logout user when token is invalid
+    logout();
+    window.location.href = "/login";
+  }
+  console.error(response);
+});
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

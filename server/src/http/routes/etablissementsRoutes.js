@@ -13,6 +13,8 @@ const { getRegions } = require("../../common/regions");
 const { dbCollection } = require("../../common/db/mongodb");
 const validateUAI = require("../../common/actions/validateUAI");
 const { getDepartements } = require("../../common/departements");
+const { checkApiToken, checkOptionnalApiToken } = require("../middlewares/authMiddleware");
+const canEditEtablissement = require("../../common/actions/canEditEtablissement");
 
 module.exports = () => {
   const router = express.Router();
@@ -129,14 +131,15 @@ module.exports = () => {
 
   router.get(
     "/api/v1/etablissements",
+    checkOptionnalApiToken(),
     tryCatch(async (req, res) => {
       let { filtres, ...params } = await Joi.object({
         uai: Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/),
         siret: Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/),
-        departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         statuts: stringList(Joi.string().valid("gestionnaire", "formateur")).default([]),
+        departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         region: Joi.string().valid(...getRegions().map((r) => r.code)),
-        academie: Joi.string().valid(...getAcademies().map((a) => a.code)),
+        academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
         text: Joi.string(),
         anomalies: Joi.boolean().default(null),
         page: Joi.number().default(1),
@@ -193,6 +196,7 @@ module.exports = () => {
 
   router.put(
     "/api/v1/etablissements/:siret/validateUAI",
+    checkApiToken(),
     tryCatch(async (req, res) => {
       let { siret, uai } = await Joi.object({
         siret: Joi.string()
@@ -202,6 +206,10 @@ module.exports = () => {
           .pattern(/^[0-9]{7}[A-Z]{1}$/)
           .required(),
       }).validateAsync({ ...req.params, ...req.body }, { abortEarly: false });
+
+      if (!(await canEditEtablissement(siret, req.user))) {
+        throw Boom.badRequest("Vous ne pouvez pas modifier cet établissement");
+      }
 
       let etablissement = await validateUAI(siret, uai);
 

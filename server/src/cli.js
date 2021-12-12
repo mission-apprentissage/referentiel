@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { program: cli } = require("commander");
 const { computeChecksum } = require("./common/utils/uaiUtils");
-const { createReadStream } = require("fs");
+const { createReadStream, createWriteStream } = require("fs");
 const runScript = require("./jobs/runScript");
 const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/collectSources");
@@ -12,6 +12,9 @@ const build = require("./jobs/build");
 const migrate = require("./jobs/migrate");
 const addModifications = require("./jobs/addModifications");
 const consolidate = require("./jobs/consolidate");
+const { oleoduc } = require("oleoduc");
+const generateMagicLinks = require("./jobs/generateMagicLinks");
+const writeToStdout = require("oleoduc/lib/writeToStdout");
 
 cli
   .command("build")
@@ -58,7 +61,7 @@ cli
   .argument("<names>", "la liste des sources à collecter")
   .argument("[file]", "Le nom du fichier utilisé par la source")
   .option("--siret <siret>", "Limite la collecte pour le siret")
-  .description("Parcourt la ou les sources pour trouver des données complémentaires")
+  .description("Parcours la ou les sources pour trouver des données complémentaires")
   .action((names, file, { siret }) => {
     runScript(() => {
       let sourceNames = names.split(",");
@@ -107,6 +110,21 @@ cli
   .action((options) => {
     runScript(() => {
       return migrate(options);
+    });
+  });
+
+cli
+  .command("generateMagicLinks")
+  .argument("<type>", "region ou academie")
+  .description("Génère un fichier csv avec un lien magique pour chaque région")
+  .option("--url [url]", "L'url de l'environnement cible")
+  .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
+  .description("Génère un toke permettant de consulter le site pour une region")
+  .action((type, { url, out }) => {
+    runScript(() => {
+      let csvStream = generateMagicLinks(type, { url });
+      let output = out || writeToStdout();
+      return oleoduc(csvStream, output);
     });
   });
 

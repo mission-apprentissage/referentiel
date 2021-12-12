@@ -287,6 +287,10 @@ function findRegionByName(name) {
   return REGIONS.find((region) => region.nom === name) || null;
 }
 
+function findRegionByCode(code) {
+  return REGIONS.find((region) => region.code === code) || null;
+}
+
 function findRegionByCodeInsee(code) {
   return REGIONS.find((region) => region.departements.find((d) => code.startsWith(d.code))) || null;
 }
@@ -302,6 +306,7 @@ function getRegions() {
 module.exports = {
   findRegionByUai,
   findRegionByName,
+  findRegionByCode,
   findRegionByCodeInsee,
   findRegionByAcademie,
   getRegions,

@@ -3,6 +3,7 @@ const {
   findRegionByUai,
   findRegionByName,
   findRegionByCodeInsee,
+  findRegionByCode,
   findRegionByAcademie,
 } = require("../../src/common/regions");
 
@@ -27,5 +28,9 @@ describe("regions", () => {
 
   it("Permet de trouver une région avec son nom", () => {
     assert.deepStrictEqual(findRegionByName("Île-de-France").code, "11");
+  });
+
+  it("Permet de trouver une région avec son code", () => {
+    assert.deepStrictEqual(findRegionByCode("11").nom, "Île-de-France");
   });
 });

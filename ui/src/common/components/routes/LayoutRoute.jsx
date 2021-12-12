@@ -1,12 +1,13 @@
-import { Header } from "./dsfr/elements/Header";
-import { Nav, NavLink } from "./dsfr/elements/Nav";
-import { Container, GridRow } from "./dsfr/fondamentaux";
-import { Footer, FooterLink, FooterList } from "./dsfr/elements/Footer";
+import { Header } from "../dsfr/elements/Header";
+import { Nav, NavLink } from "../dsfr/elements/Nav";
+import { Container, GridRow } from "../dsfr/fondamentaux";
+import { Footer, FooterLink, FooterList } from "../dsfr/elements/Footer";
 import React from "react";
-import useScrollToTop from "../hooks/useScrollToTop";
-import Ariane from "./Ariane";
+import useScrollToTop from "../../hooks/useScrollToTop";
+import Ariane from "../Ariane";
+import { Outlet } from "react-router-dom";
 
-export default function Layout({ children }) {
+export default function LayoutRoute() {
   useScrollToTop();
 
   return (
@@ -26,7 +27,7 @@ export default function Layout({ children }) {
           <Ariane />
         </GridRow>
       </Container>
-      {children}
+      <Outlet />
       <Footer
         content={{
           desc: <span>Lorem [...] elit ut.</span>,
