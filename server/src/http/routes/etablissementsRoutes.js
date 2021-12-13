@@ -1,5 +1,5 @@
 const express = require("express");
-const { isEmpty } = require("lodash");
+const { isEmpty, omit, isString } = require("lodash");
 const Boom = require("boom");
 const { oleoduc, transformIntoJSON } = require("oleoduc");
 const Joi = require("@hapi/joi");
@@ -8,31 +8,34 @@ const { sendJsonStream } = require("../utils/httpUtils");
 const buildProjection = require("../utils/buildProjection");
 const { stringList } = require("../utils/validators");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
-const { getAcademies } = require("../../common/academies");
-const { getRegions } = require("../../common/regions");
 const { dbCollection } = require("../../common/db/mongodb");
 const validateUAI = require("../../common/actions/validateUAI");
-const { getDepartements } = require("../../common/departements");
 const { checkApiToken, checkOptionnalApiToken } = require("../middlewares/authMiddleware");
 const canEditEtablissement = require("../../common/actions/canEditEtablissement");
+const { getRegions } = require("../../common/regions");
+const { getAcademies } = require("../../common/academies");
+const { getDepartements } = require("../../common/departements");
 
 module.exports = () => {
   const router = express.Router();
 
-  function buildQuery(params, filtres = []) {
-    let { siret, uai, departements, statuts, region, academie, text, anomalies } = params;
-    let departementsUsedAsFilter = filtres.includes("departements") || departements.length === 0;
-    let statutsUsedAsFilter = filtres.includes("statuts") || statuts.length === 0;
+  function buildQuery(params) {
+    let { siret, uai, departements = [], statuts = [], region, academie, text, anomalies, potentiel } = params;
 
     return {
       ...(siret ? { siret } : {}),
-      ...(uai ? { uai } : {}),
-      ...(departementsUsedAsFilter ? {} : { "adresse.departement.code": { $in: departements } }),
-      ...(statutsUsedAsFilter ? {} : { statuts: { $in: statuts } }),
+      ...(uai !== null ? (isString(uai) ? { uai } : { uai: { $exists: uai } }) : {}),
+      ...(departements.length === 0 ? {} : { "adresse.departement.code": { $in: departements } }),
+      ...(statuts.length === 0 ? {} : { statuts: { $in: statuts } }),
       ...(region ? { "adresse.region.code": region } : {}),
       ...(academie ? { "adresse.academie.code": academie } : {}),
       ...(text ? { $text: { $search: text } } : {}),
       ...(anomalies !== null ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
+      ...(potentiel !== null
+        ? isString(potentiel)
+          ? { "uais.uai": potentiel }
+          : { "uais.0": { $exists: potentiel } }
+        : {}),
     };
   }
 
@@ -40,16 +43,6 @@ module.exports = () => {
     let { page, items_par_page, tri, ordre, champs } = params;
     let query = buildQuery(params);
     let projection = buildProjection(champs);
-    let $project = [
-      {
-        $project: {
-          nb_uais: 0,
-          nb_relations: 0,
-          _id: 0,
-        },
-      },
-      ...(isEmpty(projection) ? [] : [{ $project: projection }]),
-    ];
     let $sort = tri
       ? [
           {
@@ -61,6 +54,16 @@ module.exports = () => {
           { $sort: { [`nb_${tri}`]: ordre === "asc" ? 1 : -1 } },
         ]
       : [{ $sort: { [`_meta.lastUpdate`]: -1 } }];
+    let $project = [
+      {
+        $project: {
+          nb_uais: 0,
+          nb_relations: 0,
+          _id: 0,
+        },
+      },
+      ...(isEmpty(projection) ? [] : [{ $project: projection }]),
+    ];
 
     return aggregateAndPaginate(dbCollection("etablissements"), query, [...$sort, ...$project], {
       page,
@@ -69,7 +72,7 @@ module.exports = () => {
   }
 
   async function getFiltres(params, filtres) {
-    let query = buildQuery(params, filtres);
+    let query = buildQuery(omit(params, filtres));
 
     let array = await dbCollection("etablissements")
       .aggregate([
@@ -134,20 +137,28 @@ module.exports = () => {
     checkOptionnalApiToken(),
     tryCatch(async (req, res) => {
       let { filtres, ...params } = await Joi.object({
-        uai: Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/),
+        uai: Joi.alternatives()
+          .try(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/), Joi.boolean())
+          .default(null),
         siret: Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/),
         statuts: stringList(Joi.string().valid("gestionnaire", "formateur")).default([]),
-        departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         region: Joi.string().valid(...getRegions().map((r) => r.code)),
         academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
+        departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         text: Joi.string(),
         anomalies: Joi.boolean().default(null),
-        page: Joi.number().default(1),
-        items_par_page: Joi.number().default(10),
-        tri: Joi.string().valid("uais", "relations"),
-        ordre: Joi.string().valid("asc", "desc").default("desc"),
+        //Misc
         champs: stringList().default([]),
         filtres: stringList().default([]),
+        potentiel: Joi.alternatives()
+          .try(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/), Joi.boolean())
+          .default(null),
+        //Pagination
+        page: Joi.number().default(1),
+        items_par_page: Joi.number().default(10),
+        //Sort
+        tri: Joi.string().valid("uais", "relations"),
+        ordre: Joi.string().valid("asc", "desc").default("desc"),
       }).validateAsync(req.query, { abortEarly: false });
 
       let [{ aggregate, pagination }, availableFilters] = await Promise.all([

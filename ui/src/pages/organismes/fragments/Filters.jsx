@@ -23,7 +23,7 @@ export default function Filters({ filters, search }) {
     return <div />;
   }
 
-  function getInitialValues() {
+  function getInitialFormValues() {
     return filterNames.reduce((acc, name) => {
       return {
         ...acc,
@@ -32,33 +32,32 @@ export default function Filters({ filters, search }) {
     }, {});
   }
 
-  function convertFormValuesIntoParams(values) {
+  function convertFormValuesIntoParams(formValues) {
     return filterNames.reduce((acc, key) => {
       return {
         ...acc,
-        [key]: values[key].join(","),
+        [key]: formValues[key].join(","),
       };
     }, {});
   }
 
-  function onSubmit(values) {
-    let usedFilterNames = filterNames.filter((k) => values[k] && values[k].length > 0);
+  function onSubmit(formValues) {
+    let usedFilterNames = filterNames.filter((k) => formValues[k] && formValues[k].length > 0);
 
     search({
-      ...omit(params, [...filterNames, "filtres"]),
+      ...omit(params, filterNames),
       filtres: usedFilterNames,
-      ...convertFormValuesIntoParams(values),
+      ...convertFormValuesIntoParams(formValues),
     });
   }
 
-  let initialValues = getInitialValues();
+  let initialFormValues = getInitialFormValues();
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+    <Formik initialValues={initialFormValues} onSubmit={onSubmit}>
       {() => {
         let { departements, statuts } = filters;
-
         return (
-          <AutoResetForm values={initialValues}>
+          <AutoResetForm values={initialFormValues}>
             <FiltersHeader filters={filters} />
             <Accordion>
               {filters.departements && filters.departements.length > 0 && (

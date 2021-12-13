@@ -28,7 +28,7 @@ const Result = styled(Box)`
   margin-bottom: 1rem;
 `;
 
-export default function OrganismeResult({ organisme }) {
+export default function OrganismeItem({ organisme }) {
   let adresse = organisme.adresse?.label || `${organisme.adresse?.code_postal} ${organisme.adresse?.localite}`;
 
   return (

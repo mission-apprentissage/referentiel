@@ -135,7 +135,7 @@ module.exports = {
       [{ "uais.uai": 1 }],
       [{ "adresse.geojson.geometry": "2dsphere" }],
       [
-        { siret: "text", uai: "text", "uais.uai": "text", raison_sociale: "text" },
+        { siret: "text", uai: "text", raison_sociale: "text" },
         { name: "fulltext", default_language: "french" },
       ],
     ];

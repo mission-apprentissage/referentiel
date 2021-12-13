@@ -1,14 +1,10 @@
 import { useFetch } from "../../common/hooks/useFetch";
 import useNavigation from "../../common/hooks/useNavigation";
 
-export function useSearch(criteria = {}) {
+export function useSearch(initialParams = {}) {
   let { params, buildUrl, navigate } = useNavigation();
-  function search(values = {}) {
-    navigate({ ...criteria, ...values });
-  }
-
-  let url = buildUrl(`/api/v1/etablissements`, { ...criteria, ...params });
-  let [{ data, ...rest }] = useFetch(url, {
+  let url = buildUrl(`/api/v1/etablissements`, { ...initialParams, ...params });
+  let [state] = useFetch(url, {
     etablissements: [],
     pagination: {
       page: 0,
@@ -19,5 +15,10 @@ export function useSearch(criteria = {}) {
     filtres: {},
   });
 
-  return [{ data, params, ...rest }, search];
+  return [
+    { ...state, params },
+    (values = {}) => {
+      navigate({ ...initialParams, ...values });
+    },
+  ];
 }

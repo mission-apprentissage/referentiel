@@ -6,7 +6,7 @@ export default function useScrollToTop() {
   let location = useLocation();
   let previous = usePrevious(location);
   useEffect(() => {
-    if (previous && previous.pathname !== location.pathname) {
+    if (previous && (previous.pathname !== location.pathname || previous.search !== location.search)) {
       window.scrollTo(0, 0);
     }
   });

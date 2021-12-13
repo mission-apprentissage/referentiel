@@ -1,5 +1,5 @@
 import { Field, useFormikContext } from "formik";
-import Checkbox from "../../../common/components/dsfr/elements/Checkbox";
+import { SmallCheckbox } from "../../../common/components/dsfr/elements/Checkbox";
 
 export default function FilterCheckbox({ filterName, item, ...props }) {
   let { submitForm, handleChange, values } = useFormikContext();
@@ -10,12 +10,11 @@ export default function FilterCheckbox({ filterName, item, ...props }) {
 
   return (
     <Field
-      as={Checkbox}
+      as={SmallCheckbox}
       onChange={triggerSubmit}
       name={filterName}
       label={item.label}
       value={item.code}
-      hint={item.nombre_de_resultats}
       checked={values[filterName].includes(item.code)}
       {...props}
     />

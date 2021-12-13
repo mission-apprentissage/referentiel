@@ -1,5 +1,5 @@
-const { strictEqual, deepStrictEqual, ok } = require("assert");
-const { insertEtablissement, insertStats } = require("../utils/fakeData");
+const { strictEqual, deepStrictEqual } = require("assert");
+const { insertEtablissement } = require("../utils/fakeData");
 const { startServer, generateAuthHeader } = require("../utils/testUtils");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const assert = require("assert");
@@ -73,12 +73,6 @@ describe("etablissementsRoutes", () => {
           },
         },
       ],
-      pagination: {
-        page: 1,
-        resultats_par_page: 10,
-        nombre_de_page: 1,
-        total: 1,
-      },
       filtres: {
         departements: [{ code: "75", label: "Paris", nombre_de_resultats: 1 }],
         statuts: [
@@ -86,18 +80,112 @@ describe("etablissementsRoutes", () => {
           { code: "gestionnaire", label: "OF-CFA", nombre_de_resultats: 1 },
         ],
       },
+      pagination: {
+        page: 1,
+        resultats_par_page: 10,
+        nombre_de_page: 1,
+        total: 1,
+      },
     });
   });
 
-  it("Vérifie qu'on peut rechercher des établissements à partir d'un uai confirmé", async () => {
+  it("Vérifie qu'on peut rechercher des établissements à partir d'un uai validé", async () => {
     const { httpClient } = await startServer();
     await insertEtablissement();
-    await insertEtablissement({ siret: "11111111111111", uai: "0751234J" });
+    await insertEtablissement({ siret: "11111111100006", uai: "0751234J" });
 
     let response = await httpClient.get("/api/v1/etablissements?uai=0751234J");
 
     strictEqual(response.status, 200);
-    ok(response.data.etablissements.every((e) => e.siret === "11111111111111"));
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements qui ont un uai", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({ siret: "11111111100006", uai: "0751234J" });
+    await insertEtablissement();
+
+    let response = await httpClient.get("/api/v1/etablissements?uai=true");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements qui n'ont pas d'uai", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({ siret: "11111111100006", uai: "0751234J" });
+    await insertEtablissement({ siret: "22222222200002" });
+
+    let response = await httpClient.get("/api/v1/etablissements?uai=false");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "22222222200002");
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements qui ont des uais potentiels", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100006",
+      uais: [
+        {
+          sources: ["dummy"],
+          uai: "0751234J",
+          valide: true,
+        },
+      ],
+    });
+    await insertEtablissement();
+
+    let response = await httpClient.get("/api/v1/etablissements?potentiel=true");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements qui n'ont pas uais potentiels", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100006",
+      uais: [
+        {
+          sources: ["dummy"],
+          uai: "0751234J",
+          valide: true,
+        },
+      ],
+    });
+    await insertEtablissement({ siret: "22222222200002" });
+
+    let response = await httpClient.get("/api/v1/etablissements?potentiel=false");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "22222222200002");
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements qui un uai potentiel particulier", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({
+      siret: "11111111100006",
+      uais: [
+        {
+          sources: ["dummy"],
+          uai: "0751234J",
+          valide: true,
+        },
+      ],
+    });
+    await insertEtablissement({ siret: "22222222200002" });
+
+    let response = await httpClient.get("/api/v1/etablissements?potentiel=0751234J");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "11111111100006");
   });
 
   it("Vérifie qu'on peut rechercher des établissements à partir d'un siret", async () => {
@@ -130,19 +218,13 @@ describe("etablissementsRoutes", () => {
     const { httpClient } = await startServer();
     await insertEtablissement();
     await insertEtablissement({
-      uais: [
-        {
-          sources: ["dummy"],
-          uai: "0010856A",
-          valide: true,
-        },
-      ],
+      uai: "0010856A",
     });
 
     let response = await httpClient.get("/api/v1/etablissements?text=0010856A");
 
     strictEqual(response.status, 200);
-    strictEqual(response.data.etablissements[0].uais[0].uai, "0010856A");
+    strictEqual(response.data.etablissements[0].uai, "0010856A");
   });
 
   it("Vérifie qu'on peut rechercher des établissements à partir d'un siret (fulltext)", async () => {
@@ -363,34 +445,6 @@ describe("etablissementsRoutes", () => {
 
     strictEqual(response.status, 200);
     strictEqual(response.data.etablissements.length, 2);
-  });
-
-  it("Vérifie qu'on peut ignorer des paramètres pour calculer les filtres", async () => {
-    const { httpClient } = await startServer();
-    await insertEtablissement({
-      siret: "11111111100001",
-      adresse: {
-        departement: { code: "75", nom: "Paris" },
-      },
-    });
-    await insertEtablissement({
-      siret: "22222222200002",
-      adresse: {
-        departement: { code: "11", nom: "Aude" },
-      },
-    });
-
-    let response = await httpClient.get("/api/v1/etablissements?filtres=departements&departements=11");
-
-    strictEqual(response.status, 200);
-    strictEqual(response.data.etablissements.length, 1);
-    deepStrictEqual(response.data.filtres, {
-      departements: [
-        { code: "11", label: "Aude", nombre_de_resultats: 1 },
-        { code: "75", label: "Paris", nombre_de_resultats: 1 },
-      ],
-      statuts: [],
-    });
   });
 
   it("Vérifie qu'on peut limiter les champs renvoyés pour la liste des établissements", async () => {
@@ -783,20 +837,5 @@ describe("etablissementsRoutes", () => {
     );
 
     strictEqual(response.status, 400);
-  });
-
-  it("Vérifie qu'on peut lister les stats", async () => {
-    const { httpClient } = await startServer();
-    await insertEtablissement({ siret: "11111111100001" });
-    await insertStats();
-
-    let response = await httpClient.get("/api/v1/stats");
-
-    strictEqual(response.status, 200);
-
-    let { created_at, ...rest } = response.data.stats[0];
-    ok(created_at);
-    ok(rest.validation);
-    ok(rest.matrix);
   });
 });

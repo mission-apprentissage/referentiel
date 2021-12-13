@@ -9,8 +9,12 @@ const customJoi = Joi.extend((joi) => ({
   },
 }));
 
+function stringList(itemSchema = Joi.string()) {
+  return customJoi.stringList().items(itemSchema).single();
+}
+
 module.exports = {
-  stringList: (itemSchema = Joi.string()) => customJoi.stringList().items(itemSchema).single(),
+  stringList,
   password: () =>
     // https://owasp.org/www-community/password-special-characters
     Joi.string().regex(
