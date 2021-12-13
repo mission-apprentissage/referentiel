@@ -12,12 +12,45 @@ const REGIONS = [
       { code: "977", nom: "Saint-Barthélemy" },
       { code: "978", nom: "Saint-Martin" },
     ],
+    academies: [
+      { code: "40", nom: "Nouvelle-Calédonie" },
+      { code: "42", nom: "Wallis et Futuna" },
+      { code: "44", nom: "Saint-Pierre-et-Miquelon" },
+      { code: "41", nom: "Polynésie Française" },
+      { code: "77", nom: "Saint-Barthélemy" },
+      { code: "78", nom: "Saint-Martin" },
+    ],
   },
-  { code: "01", nom: "Guadeloupe", departements: [{ code: "971", nom: "Guadeloupe" }] },
-  { code: "02", nom: "Martinique", departements: [{ code: "972", nom: "Martinique" }] },
-  { code: "03", nom: "Guyane", departements: [{ code: "973", nom: "Guyane" }] },
-  { code: "04", nom: "La Réunion", departements: [{ code: "974", nom: "La Réunion" }] },
-  { code: "06", nom: "Mayotte", departements: [{ code: "976", nom: "Mayotte" }] },
+  {
+    code: "01",
+    nom: "Guadeloupe",
+    departements: [{ code: "971", nom: "Guadeloupe" }],
+    academies: [{ code: "32", nom: "Guadeloupe" }],
+  },
+  {
+    code: "02",
+    nom: "Martinique",
+    departements: [{ code: "972", nom: "Martinique" }],
+    academies: [{ code: "31", nom: "Martinique" }],
+  },
+  {
+    code: "03",
+    nom: "Guyane",
+    departements: [{ code: "973", nom: "Guyane" }],
+    academies: [{ code: "33", nom: "Guyane" }],
+  },
+  {
+    code: "04",
+    nom: "La Réunion",
+    departements: [{ code: "974", nom: "La Réunion" }],
+    academies: [{ code: "28", nom: "La Réunion" }],
+  },
+  {
+    code: "06",
+    nom: "Mayotte",
+    departements: [{ code: "976", nom: "Mayotte" }],
+    academies: [{ code: "43", nom: "Mayotte" }],
+  },
   {
     code: "11",
     nom: "Île-de-France",
@@ -31,6 +64,11 @@ const REGIONS = [
       { code: "94", nom: "Val-de-Marne" },
       { code: "95", nom: "Val-d'Oise" },
     ],
+    academies: [
+      { code: "01", nom: "Paris" },
+      { code: "24", nom: "Créteil" },
+      { code: "25", nom: "Versailles" },
+    ],
   },
   {
     code: "24",
@@ -43,6 +81,7 @@ const REGIONS = [
       { code: "45", nom: "Loiret" },
       { code: "18", nom: "Cher" },
     ],
+    academies: [{ code: "18", nom: "Orléans-Tours" }],
   },
   {
     code: "27",
@@ -57,6 +96,10 @@ const REGIONS = [
       { code: "25", nom: "Doubs" },
       { code: "58", nom: "Nièvre" },
     ],
+    academies: [
+      { code: "07", nom: "Dijon" },
+      { code: "03", nom: "Besançon" },
+    ],
   },
   {
     code: "28",
@@ -68,6 +111,7 @@ const REGIONS = [
       { code: "14", nom: "Calvados" },
       { code: "61", nom: "Orne" },
     ],
+    academies: [{ code: "70", nom: "Normandie" }],
   },
   {
     code: "32",
@@ -78,6 +122,10 @@ const REGIONS = [
       { code: "59", nom: "Nord" },
       { code: "60", nom: "Oise" },
       { code: "62", nom: "Pas-de-Calais" },
+    ],
+    academies: [
+      { code: "20", nom: "Amiens" },
+      { code: "09", nom: "Lille" },
     ],
   },
   {
@@ -95,6 +143,11 @@ const REGIONS = [
       { code: "67", nom: "Bas-Rhin" },
       { code: "68", nom: "Haut-Rhin" },
     ],
+    academies: [
+      { code: "19", nom: "Reims" },
+      { code: "12", nom: "Nancy-Metz" },
+      { code: "15", nom: "Strasbourg" },
+    ],
   },
   {
     code: "52",
@@ -106,6 +159,7 @@ const REGIONS = [
       { code: "49", nom: "Maine-et-Loire" },
       { code: "53", nom: "Mayenne" },
     ],
+    academies: [{ code: "17", nom: "Nantes" }],
   },
   {
     code: "53",
@@ -116,6 +170,7 @@ const REGIONS = [
       { code: "22", nom: "Côtes-d'Armor" },
       { code: "56", nom: "Morbihan" },
     ],
+    academies: [{ code: "14", nom: "Rennes" }],
   },
   {
     code: "75",
@@ -133,6 +188,11 @@ const REGIONS = [
       { code: "23", nom: "Creuse" },
       { code: "24", nom: "Dordogne" },
       { code: "64", nom: "Pyrénées-Atlantiques" },
+    ],
+    academies: [
+      { code: "13", nom: "Poitiers" },
+      { code: "22", nom: "Limoges" },
+      { code: "04", nom: "Bordeaux" },
     ],
   },
   {
@@ -153,6 +213,10 @@ const REGIONS = [
       { code: "65", nom: "Hautes-Pyrénées" },
       { code: "66", nom: "Pyrénées-Orientales" },
     ],
+    academies: [
+      { code: "16", nom: "Toulouse" },
+      { code: "11", nom: "Montpellier" },
+    ],
   },
   {
     code: "84",
@@ -171,6 +235,11 @@ const REGIONS = [
       { code: "63", nom: "Puy-de-Dôme" },
       { code: "69", nom: "Rhône" },
     ],
+    academies: [
+      { code: "10", nom: "Lyon" },
+      { code: "06", nom: "Clermont-Ferrand" },
+      { code: "08", nom: "Grenoble" },
+    ],
   },
   {
     code: "93",
@@ -183,6 +252,10 @@ const REGIONS = [
       { code: "06", nom: "Alpes-Maritimes" },
       { code: "13", nom: "Bouches-du-Rhône" },
     ],
+    academies: [
+      { code: "02", nom: "Aix-Marseille" },
+      { code: "23", nom: "Nice" },
+    ],
   },
   {
     code: "94",
@@ -192,6 +265,7 @@ const REGIONS = [
       { code: "2A", nom: "Corse-du-Sud" },
       { code: "2B", nom: "Haute-Corse" },
     ],
+    academies: [{ code: "27", nom: "Corse" }],
   },
 ];
 
@@ -217,6 +291,10 @@ function findRegionByCodeInsee(code) {
   return REGIONS.find((region) => region.departements.find((d) => code.startsWith(d.code))) || null;
 }
 
+function findRegionByAcademie(code) {
+  return REGIONS.find((region) => region.academies.find((a) => a.code === code)) || null;
+}
+
 function getRegions() {
   return REGIONS;
 }
@@ -225,5 +303,6 @@ module.exports = {
   findRegionByUai,
   findRegionByName,
   findRegionByCodeInsee,
+  findRegionByAcademie,
   getRegions,
 };
