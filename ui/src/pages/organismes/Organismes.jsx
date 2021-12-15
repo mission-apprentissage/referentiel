@@ -9,7 +9,7 @@ import OrganismeList from "./fragments/OrganismeList";
 import { useFilAriane } from "../../common/components/FilAriane";
 
 export default function Organismes() {
-  let [{ data, loading, error }, search] = useSearch({ anomalies: false, ordre: "desc", page: 1, items_par_page: 25 });
+  let [{ data, loading, error }, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
   useFilAriane([
     { label: "Accueil", to: "/" },
     { label: "Organismes", to: "/organismes" },
