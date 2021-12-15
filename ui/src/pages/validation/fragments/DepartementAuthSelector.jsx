@@ -8,9 +8,9 @@ import { useAuth } from "../../../common/hooks/useAuth";
 export default function DepartementAuthSelector({ onChange }) {
   let [auth] = useAuth();
   let { params } = useNavigation();
-  let [{ regions }] = useData();
+  let [data] = useData();
   let [selected, setSelected] = useState(params.departements || "");
-  let departements = regions.find((r) => r.code === auth.code)?.departements || [];
+  let departements = data[`${auth.type}s`].find((r) => r.code === auth.code)?.departements || [];
 
   return (
     <Box align={"center"} justify={"start"}>
