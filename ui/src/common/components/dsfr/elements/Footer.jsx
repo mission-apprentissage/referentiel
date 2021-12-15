@@ -16,13 +16,14 @@ export function FooterList({ position, children, ...rest }) {
   );
 }
 
-export function FooterLink({ position, modifiers, children, className, ...rest }) {
+export function FooterLink({ as = Link, position, modifiers, children, className, ...rest }) {
+  let Component = as;
   let clazz = classNames(`fr-footer__${position}-link`, { modifiers, className });
 
   return (
-    <Link className={clazz} {...rest}>
+    <Component className={clazz} {...rest}>
       {children}
-    </Link>
+    </Component>
   );
 }
 

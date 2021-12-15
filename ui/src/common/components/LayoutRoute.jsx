@@ -22,7 +22,7 @@ export default function LayoutRoute() {
         nav={
           <Nav>
             <NavLink to={"/"}>Tableau de bord</NavLink>
-            <NavLink to={"/organismes"}>Liste des organismes</NavLink>
+            <NavLink to={"/organismes"}>Liste nationale des organismes</NavLink>
           </Nav>
         }
       />
@@ -38,11 +38,29 @@ export default function LayoutRoute() {
       </DataContext.Provider>
       <Footer
         content={{
-          desc: <span>Lorem [...] elit ut.</span>,
+          desc: (
+            <>
+              Mandatée par les ministres en charge de l’éducation nationale, de l’enseignement supérieur, du travail et
+              de la transformation publique, la{" "}
+              <a href="https://beta.gouv.fr/startups/?incubateur=mission-apprentissage">Mission interministérielle</a>{" "}
+              pour l'apprentissage développe plusieurs services destinés à faciliter les entrées en apprentissage. Le
+              référentiel SIRET-UAI facilite l’identification des organismes de formation en apprentissage.
+            </>
+          ),
           list: (
             <FooterList>
-              <FooterLink to={"/"}>Lien 1</FooterLink>
-              <FooterLink to={"/"}>Lien 2</FooterLink>
+              <FooterLink as={"a"} href="https://www.legifrance.gouv.fr/" target={"_blank"}>
+                legifrance.gouv.fr
+              </FooterLink>
+              <FooterLink as={"a"} href="https://www.gouvernement.fr/" target={"_blank"}>
+                gouvernement.fr
+              </FooterLink>
+              <FooterLink as={"a"} href="https://www.service-public.fr" target={"_blank"}>
+                service-public.fr
+              </FooterLink>
+              <FooterLink as={"a"} href="https://www.data.gouv.fr/fr/" target={"_blank"}>
+                data.gouv.fr
+              </FooterLink>
             </FooterList>
           ),
         }}
@@ -52,14 +70,6 @@ export default function LayoutRoute() {
               <FooterLink to={"/"}>Lien 1</FooterLink>
               <FooterLink to={"/"}>Lien 2</FooterLink>
             </FooterList>
-          ),
-          copyright: (
-            <p>
-              Sauf mention contraire, tous les contenus de ce site sont sous
-              <a href="https://github.com/etalab/licence-ouverte/blob/master/LO.md" target="_blank" rel="noreferrer">
-                licence etalab-2.0
-              </a>
-            </p>
           ),
         }}
       />
