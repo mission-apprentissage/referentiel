@@ -2,15 +2,16 @@ import { v4 as uuidv4 } from "uuid";
 import React, { Children, cloneElement, forwardRef } from "react";
 import cs from "classnames";
 
-export function buildComponent(Tag, dsfrName, options = {}) {
+export function buildComponent(componentName, dsfrName, options = {}) {
   return forwardRef((props, ref) => {
-    let { modifiers, icons, className, children, ...rest } = props;
+    let { as, modifiers, icons, className, children, ...rest } = props;
+    let Component = as || componentName;
     let clazz = classNames(dsfrName, { modifiers, icons, className, ...options });
 
     return (
-      <Tag className={clazz} {...rest} {...(ref ? { ref } : {})}>
+      <Component className={clazz} {...rest} {...(ref ? { ref } : {})}>
         {children}
-      </Tag>
+      </Component>
     );
   });
 }

@@ -1,34 +1,20 @@
 import { useFormikContext } from "formik";
-import styled from "styled-components";
-import { AccordionItem as FilterItem } from "../../../common/components/dsfr/elements/Accordion";
 import Fieldset from "../../../common/components/dsfr/elements/Fieldset";
 import FilterTitle from "./FilterTitle";
 import FilterCheckbox from "./FilterCheckbox";
+import GreyAccordionItem from "../../../common/components/dsfr/custom/GreyAccordionItem";
 
-const Filter = styled(({ label, filterName, filter, ...props }) => {
+export default function Filter({ label, filterName, filter, ...rest }) {
   const { values } = useFormikContext();
   let nbCheckedElements = values[filterName].length;
 
   return (
-    <FilterItem {...props} label={<FilterTitle label={label} nbCheckedElements={nbCheckedElements} />}>
+    <GreyAccordionItem label={<FilterTitle label={label} nbCheckedElements={nbCheckedElements} {...rest} />}>
       <Fieldset>
         {filter.map((item, index) => {
           return <FilterCheckbox key={index} filterName={filterName} item={item} />;
         })}
       </Fieldset>
-    </FilterItem>
+    </GreyAccordionItem>
   );
-})`
-  margin-bottom: 0.5rem;
-  .fr-accordion {
-    background-color: #f9f8f6;
-  }
-
-  .fr-tag {
-    margin-left: 0.5rem;
-    color: var(--text-inverted-grey);
-    background-color: var(--text-action-high-blue-france);
-  }
-`;
-
-export default Filter;
+}

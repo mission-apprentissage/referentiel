@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.scss";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { subscribeToHttpEvent } from "./common/httpClient";
 import { logout } from "./common/auth";
+import GlobalStyle from "./common/GlobalStyle";
 
 window.dsfr = {
   verbose: false,
@@ -13,6 +13,7 @@ window.dsfr = {
 
 ReactDOM.render(
   <React.StrictMode>
+    <GlobalStyle />
     <App />
   </React.StrictMode>,
   document.getElementById("root")

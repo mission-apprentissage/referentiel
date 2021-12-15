@@ -1,4 +1,3 @@
-import React from "react";
 import { buildComponent, buildListComponent } from "../common/utils";
 import { Link as ReactRouterLink } from "react-router-dom";
 
