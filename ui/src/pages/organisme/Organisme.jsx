@@ -5,7 +5,7 @@ import { Tab, TabPanel, Tabs } from "../../common/components/dsfr/elements/Tabs"
 import React from "react";
 import { Immatriculation } from "./tabs/Immatriculation";
 import { Presentation } from "./fragments/Presentation";
-import useOrganisme from "./useOrganisme";
+import useOrganisme from "../../common/hooks/useOrganisme";
 
 export const OrganismeContext = React.createContext(null);
 

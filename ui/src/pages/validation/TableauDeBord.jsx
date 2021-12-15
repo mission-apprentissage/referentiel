@@ -1,14 +1,14 @@
 import { Col, Container, GridRow } from "../../common/components/dsfr/fondamentaux";
-import React, { useContext } from "react";
-import { AuthContext } from "../../common/components/AuthRoute";
+import React from "react";
 import ValidationStatus from "./fragments/ValidationStatus";
 import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
 import useNavigation from "../../common/hooks/useNavigation";
 import { useFetch } from "../../common/hooks/useFetch";
 import Spinner from "../../common/components/Spinner";
+import { useAuth } from "../../common/hooks/useAuth";
 
 export default function TableauDeBord() {
-  let [auth] = useContext(AuthContext);
+  let [auth] = useAuth();
   let { params, buildUrl, navigate } = useNavigation();
   let [{ data, loading, error }] = useFetch(buildUrl("/api/v1/validation", params), {
     validation: {},

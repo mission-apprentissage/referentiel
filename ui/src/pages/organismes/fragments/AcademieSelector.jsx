@@ -1,12 +1,12 @@
 import Select from "../../../common/components/dsfr/elements/Select";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import useNavigation from "../../../common/hooks/useNavigation";
 import { Box, Item } from "../../../common/components/Flexbox";
-import { DataContext } from "../../../common/components/LayoutRoute";
+import { useData } from "../../../common/hooks/useData";
 
 export default function AcademieSelector({ onChange }) {
   let { params } = useNavigation();
-  let { academies } = useContext(DataContext);
+  let [{ academies }] = useData();
   let [selected, setSelected] = useState(params.academie || "");
 
   return (

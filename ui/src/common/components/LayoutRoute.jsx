@@ -11,10 +11,10 @@ import useScrollToTop from "../hooks/useScrollToTop";
 export const DataContext = React.createContext(null);
 
 export default function LayoutRoute() {
-  let [{ data }] = useFetch(`/api/v1/data`, { regions: [], academies: [], departements: [] });
+  let [{ data }, setData] = useFetch(`/api/v1/data`, { regions: [], academies: [], departements: [] });
   useScrollToTop();
   return (
-    <DataContext.Provider value={{ ...data }}>
+    <DataContext.Provider value={[data, setData]}>
       <div>
         <Header
           title={"Référentiel"}

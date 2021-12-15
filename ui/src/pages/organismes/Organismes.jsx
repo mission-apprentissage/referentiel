@@ -1,7 +1,7 @@
 import { Col, Container, GridRow } from "../../common/components/dsfr/fondamentaux";
 import { Tab, TabPanel, Tabs } from "../../common/components/dsfr/elements/Tabs";
 import AcademieSelector from "./fragments/AcademieSelector";
-import { useSearch } from "./useSearch";
+import { useSearch } from "../../common/hooks/useSearch";
 import Spinner from "../../common/components/Spinner";
 import SearchForm from "./fragments/SearchForm";
 import Filters from "./fragments/Filters";
@@ -38,6 +38,7 @@ export default function Organismes() {
                   </TabPanel>
                 ),
               },
+              { tab: <Tab disabled>Lexique</Tab>, panel: <TabPanel>-</TabPanel> },
               { tab: <Tab disabled>Guide Réglementaire</Tab>, panel: <TabPanel>-</TabPanel> },
             ]}
           />

@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import { Box } from "../../../common/components/Flexbox";
-import { Button } from "../../../common/components/dsfr/elements/Button";
+import LinkButton from "../../../common/components/dsfr/custom/LinkButton";
 
 export default function FiltersHeader({ filters }) {
   let { values, submitForm, setValues } = useFormikContext();
@@ -15,9 +15,9 @@ export default function FiltersHeader({ filters }) {
   }
 
   return (
-    <Box justify={"between"} className={"fr-mb-3v"}>
+    <Box justify={"between"} align={"top"} className={"fr-mb-3v"}>
       <div className={"fr-text--bold"}>FILTRER</div>
-      <Button onClick={() => reset()}>réinitialiser</Button>
+      <LinkButton onClick={() => reset()}>réinitialiser</LinkButton>
     </Box>
   );
 }

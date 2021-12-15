@@ -10,6 +10,7 @@ import { OrganismeContext } from "../Organisme";
 import { Tag } from "../../../common/components/dsfr/elements/Tag";
 import Input from "../../../common/components/dsfr/elements/Input";
 import { asValidation, validators } from "../../../common/formikUtils";
+import LinkButton from "../../../common/components/dsfr/custom/LinkButton";
 
 const BlueBox = styled("div")`
   border: 1px solid var(--border-active-blue-france);
@@ -85,9 +86,9 @@ export default function UAIValidator({ organisme, ...rest }) {
   return (
     <div style={{ display: "inline" }} {...rest}>
       <ValidationTag className="fr-mr-3v" organisme={organisme} />
-      <Button modifiers={"sm icon-left"} icons={"edit-line"} onClick={() => modal.open()}>
+      <LinkButton modifiers={"sm icon-left"} icons={"edit-line"} onClick={() => modal.open()}>
         {actionName}
-      </Button>
+      </LinkButton>
       <Formik initialValues={{ uai: organisme.uai, custom: "" }} onSubmit={onSubmit}>
         {({ values, touched, errors }) => {
           return (

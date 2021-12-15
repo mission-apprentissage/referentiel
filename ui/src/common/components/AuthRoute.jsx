@@ -2,7 +2,7 @@ import React from "react";
 import { getAuth, isAnonymous, setAuth } from "../auth";
 import { Navigate, Outlet } from "react-router-dom";
 
-export const AuthContext = React.createContext(null);
+export const AuthContext = React.createContext(getAuth());
 
 export default function AuthRoute() {
   let auth = getAuth();

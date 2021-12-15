@@ -3,7 +3,7 @@ import OrganismeList from "../organismes/fragments/OrganismeList";
 import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
 import Filters from "../organismes/fragments/Filters";
 import SearchForm from "../organismes/fragments/SearchForm";
-import { useSearch } from "../organismes/useSearch";
+import { useSearch } from "../../common/hooks/useSearch";
 import { omit } from "lodash-es";
 import Spinner from "../../common/components/Spinner";
 import { useParams } from "react-router-dom";

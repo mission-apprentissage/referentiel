@@ -1,5 +1,5 @@
-import { useFetch } from "../../common/hooks/useFetch";
-import useNavigation from "../../common/hooks/useNavigation";
+import { useFetch } from "./useFetch";
+import useNavigation from "./useNavigation";
 
 export function useSearch(initialParams = {}) {
   let { params, buildUrl, navigate } = useNavigation();
