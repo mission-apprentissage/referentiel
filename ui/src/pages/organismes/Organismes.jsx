@@ -6,14 +6,19 @@ import Spinner from "../../common/components/Spinner";
 import SearchForm from "./fragments/SearchForm";
 import Filters from "./fragments/Filters";
 import OrganismeList from "./fragments/OrganismeList";
+import { useFilAriane } from "../../common/components/FilAriane";
 
 export default function Organismes() {
   let [{ data, loading, error }, search] = useSearch({ anomalies: false, ordre: "desc", page: 1, items_par_page: 25 });
+  useFilAriane([
+    { label: "Accueil", to: "/" },
+    { label: "Organismes", to: "/organismes" },
+  ]);
 
   return (
     <Container>
       <GridRow className={"fr-pb-3w"}>
-        <Col modifiers={"12 offset-sm-8 sm-4"}>
+        <Col modifiers={"12 offset-md-8 md-4"}>
           <AcademieSelector onChange={(code) => search({ academie: code })} />
         </Col>
       </GridRow>

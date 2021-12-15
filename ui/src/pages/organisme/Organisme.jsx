@@ -6,12 +6,15 @@ import React from "react";
 import { Immatriculation } from "./tabs/Immatriculation";
 import { Presentation } from "./fragments/Presentation";
 import useOrganisme from "../../common/hooks/useOrganisme";
+import { useFilAriane, useFilArianeContext } from "../../common/components/FilAriane";
 
 export const OrganismeContext = React.createContext(null);
 
 export default function Organisme() {
   let { siret } = useParams();
   let [{ organisme, loading, error }, actions] = useOrganisme(siret);
+  let [fil] = useFilArianeContext();
+  useFilAriane([...fil, { label: organisme.raison_sociale, current: true }], [organisme]);
 
   if (error) {
     return (

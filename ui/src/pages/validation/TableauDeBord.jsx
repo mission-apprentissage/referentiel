@@ -6,10 +6,12 @@ import useNavigation from "../../common/hooks/useNavigation";
 import { useFetch } from "../../common/hooks/useFetch";
 import Spinner from "../../common/components/Spinner";
 import { useAuth } from "../../common/hooks/useAuth";
+import { useFilAriane } from "../../common/components/FilAriane";
 
 export default function TableauDeBord() {
   let [auth] = useAuth();
   let { params, buildUrl, navigate } = useNavigation();
+  useFilAriane([{ label: "Accueil", to: "/" }]);
   let [{ data, loading, error }] = useFetch(buildUrl("/api/v1/validation", params), {
     validation: {},
     total: 0,

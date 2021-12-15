@@ -24,6 +24,7 @@ function App() {
               <Route path="/" element={<TableauDeBord />} />
               <Route path="/validation" element={<Navigate replace to="/" />} />
               <Route path="/validation/:validationStatus" element={<Validation />} />
+              <Route path="/validation/:validationStatus/:siret" element={<Organisme />} />
               <Route path="/organismes" element={<Organismes />} />
               <Route path="/organismes/:siret" element={<Organisme />} />
             </Route>

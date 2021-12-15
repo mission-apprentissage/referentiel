@@ -22,3 +22,4 @@ export default function Breadcrumb({ label, children }) {
 }
 
 export const BreadcrumbLink = buildComponent(Link, "fr-breadcrumb__link");
+export const BreadcrumbCurrent = buildComponent("a", "fr-breadcrumb__link");

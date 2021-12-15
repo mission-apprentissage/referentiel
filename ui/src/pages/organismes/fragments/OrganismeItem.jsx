@@ -44,7 +44,7 @@ export default function OrganismeItem({ organisme }) {
           <span style={{ width: "50%" }}>UAI&nbsp;:&nbsp;{organisme.uai || "N.A"}</span>
           <span style={{ width: "50%" }}>SIRET&nbsp;:&nbsp;{organisme.siret}</span>
         </Identifiants>
-        <Link to={`/organismes/${organisme.siret}`} modifiers={"lg icon-right"} icons="arrow-right-line" />
+        <Link to={organisme.siret} modifiers={"lg icon-right"} icons="arrow-right-line" />
       </Box>
     </Result>
   );
