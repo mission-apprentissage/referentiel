@@ -1,5 +1,5 @@
 const express = require("express");
-const { isEmpty, omit, isString, isNil, isBoolean } = require("lodash");
+const { isEmpty, omit, isNil, isBoolean } = require("lodash");
 const Boom = require("boom");
 const { oleoduc, transformIntoJSON, transformData } = require("oleoduc");
 const Joi = require("@hapi/joi");
@@ -27,7 +27,11 @@ module.exports = () => {
         ? {
             _meta: {
               ...etablissement._meta,
-              validation: etablissement.uai ? "VALIDEE" : etablissement.uais.length > 0 ? "A_VALIDER" : "INCONNUE",
+              validation: etablissement.uai
+                ? "VALIDEE"
+                : etablissement.uai_potentiels.length > 0
+                ? "A_VALIDER"
+                : "INCONNUE",
             },
           }
         : {}),
@@ -44,7 +48,7 @@ module.exports = () => {
       academie,
       text,
       anomalies,
-      potentiel,
+      uai_potentiel,
       numero_declaration_activite: nda,
     } = params;
 
@@ -62,44 +66,31 @@ module.exports = () => {
       ...(academie ? { "adresse.academie.code": academie } : {}),
       ...(text ? { $text: { $search: text } } : {}),
       ...(!isNil(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
-      ...(potentiel !== null
-        ? isString(potentiel)
-          ? { "uais.uai": potentiel }
-          : { "uais.0": { $exists: potentiel } }
+      ...(!isNil(uai_potentiel)
+        ? isBoolean(uai_potentiel)
+          ? { "uai_potentiels.0": { $exists: uai_potentiel } }
+          : { "uai_potentiels.uai": uai_potentiel }
         : {}),
     };
   }
 
   function findEtablissements(params) {
-    let { page, items_par_page, tri, ordre, champs } = params;
+    let { page, items_par_page, ordre, champs } = params;
     let query = buildQuery(params);
     let projection = buildProjection(champs);
-    let $sort = tri
-      ? [
-          {
-            $addFields: {
-              nb_uais: { $size: "$uais" },
-              nb_relations: { $size: "$relations" },
-            },
-          },
-          { $sort: { [`nb_${tri}`]: ordre === "asc" ? 1 : -1 } },
-        ]
-      : [{ $sort: { [`_meta.lastUpdate`]: -1 } }];
-    let $project = [
-      {
-        $project: {
-          nb_uais: 0,
-          nb_relations: 0,
-          _id: 0,
-        },
-      },
-      ...(isEmpty(projection) ? [] : [{ $project: projection }]),
-    ];
 
-    return aggregateAndPaginate(dbCollection("etablissements"), query, [...$sort, ...$project], {
-      page,
-      limit: items_par_page,
-    });
+    return aggregateAndPaginate(
+      dbCollection("etablissements"),
+      query,
+      [
+        { $sort: { ["_meta.created_at"]: ordre === "asc" ? 1 : -1 } },
+        ...(isEmpty(projection) ? [] : [{ $project: projection }]),
+      ],
+      {
+        page,
+        limit: items_par_page,
+      }
+    );
   }
 
   async function getFiltres(params, filtres) {
@@ -212,20 +203,19 @@ module.exports = () => {
         region: Joi.string().valid(...getRegions().map((r) => r.code)),
         academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
         departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
-        text: Joi.string(),
         anomalies: Joi.boolean().default(null),
         //Misc
-        champs: stringList().default([]),
         filtres: stringList().default([]),
-        potentiel: Joi.alternatives()
+        uai_potentiel: Joi.alternatives()
           .try(Joi.boolean(), Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/))
           .default(null),
         //Pagination
         page: Joi.number().default(1),
         items_par_page: Joi.number().default(10),
-        //Sort
-        tri: Joi.string().valid("uais", "relations"),
+        //Misc
         ordre: Joi.string().valid("asc", "desc").default("desc"),
+        text: Joi.string(),
+        champs: stringList().default([]),
       }).validateAsync(req.query, { abortEarly: false });
 
       let [{ aggregate, pagination }, availableFilters] = await Promise.all([

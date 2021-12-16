@@ -16,7 +16,7 @@ module.exports = (custom = {}) => {
           return {
             from: name,
             selector: siret.trim(),
-            uais: uai ? [uai] : [],
+            uai_potentiels: uai ? [uai] : [],
           };
         })
       );

@@ -23,7 +23,7 @@ module.exports = (custom = {}) => {
           return {
             from: name,
             selector: data["siret"],
-            uais: [data["uai"]],
+            uai_potentiels: [data["uai"]],
             reseaux: ["promotrans"],
           };
         })

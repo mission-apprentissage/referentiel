@@ -121,8 +121,8 @@ async function validateSources(sources) {
   await oleoduc(
     stream,
     writeData(
-      async ({ from, selector: siret, uais = [] }) => {
-        let uai = uais[0];
+      async ({ from, selector: siret, uai_potentiels = [] }) => {
+        let uai = uai_potentiels[0];
         let isUaiValide = false;
         let isSiretValide = false;
         valides[from] = valides[from] || createSourceUniques();

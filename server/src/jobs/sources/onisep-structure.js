@@ -22,7 +22,7 @@ module.exports = (custom = {}) => {
           return {
             from: name,
             selector: data["STRUCT SIRET"],
-            uais: [data["STRUCT UAI"]],
+            uai_potentiels: [data["STRUCT UAI"]],
           };
         })
       );

@@ -20,7 +20,7 @@ describe("catalogue-etablissements", () => {
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
-    assert.deepStrictEqual(found.uais, [
+    assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["catalogue-etablissements"],
         uai: "0111111Y",

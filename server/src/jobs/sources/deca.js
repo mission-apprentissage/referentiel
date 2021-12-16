@@ -17,7 +17,7 @@ module.exports = (custom = {}) => {
           return {
             from: name,
             selector: data.FORM_ETABSIRET,
-            uais: [data.FORM_ETABUAI_R],
+            uai_potentiels: [data.FORM_ETABUAI_R],
           };
         })
       );

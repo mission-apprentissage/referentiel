@@ -5,27 +5,27 @@ import { classNames } from "../../../common/components/dsfr/common/utils";
 import useNavigation from "../../../common/hooks/useNavigation";
 import { useAuth } from "../../../common/hooks/useAuth";
 
-function buildValidationParams(validationStatus, auth) {
+function buildValidationParams(type, auth) {
   let restricted = { [auth.type]: auth.code };
-  switch (validationStatus) {
+  switch (type) {
     case "A_VALIDER":
-      return { uai: false, potentiel: true, ...restricted };
+      return { uai: false, uai_potentiel: true, ...restricted };
     case "VALIDEE":
       return { uai: true, ...restricted };
     case "INCONNUE":
-      return { uai: false, potentiel: false, ...restricted };
+      return { uai: false, uai_potentiel: false, ...restricted };
     default:
       throw new Error("Statut de validation inconnu");
   }
 }
 
-function ValidationStatus({ validationStatus, label, nbElements, className, ...rest }) {
+function ValidationCard({ type, label, nbElements, className, ...rest }) {
   let [auth] = useAuth();
   let { params, buildUrl } = useNavigation();
-  let clazz = classNames("validation-status", { modifiers: validationStatus, className });
-  let listeUrl = buildUrl(`/validation/${validationStatus}`, {
+  let clazz = classNames("validation-status", { modifiers: type, className });
+  let listeUrl = buildUrl(`/validation/${type}`, {
     ...params,
-    ...buildValidationParams(validationStatus, auth),
+    ...buildValidationParams(type, auth),
   });
 
   return (
@@ -41,7 +41,7 @@ function ValidationStatus({ validationStatus, label, nbElements, className, ...r
   );
 }
 
-export default styled(ValidationStatus)`
+export default styled(ValidationCard)`
   padding: 1.5rem;
   min-height: 240px;
   &.validation-status--A_VALIDER {

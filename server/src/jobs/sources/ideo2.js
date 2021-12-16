@@ -52,7 +52,7 @@ module.exports = (custom = {}) => {
             {
               from: name,
               selector: siretFormateur,
-              uais: [data["UAI_lieu_enseignement"]],
+              uai_potentiels: [data["UAI_lieu_enseignement"]],
               relations: [
                 ...(isEmpty(siretGestionnaire)
                   ? []

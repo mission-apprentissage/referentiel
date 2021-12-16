@@ -29,7 +29,7 @@ describe("importEtablissement", () => {
     assert.deepStrictEqual(omit(found, ["_meta"]), {
       siret: "11111111100006",
       referentiels: ["dummy"],
-      uais: [],
+      uai_potentiels: [],
       reseaux: [],
       statuts: [],
       contacts: [],

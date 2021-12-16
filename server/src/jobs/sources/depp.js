@@ -22,7 +22,7 @@ module.exports = (custom = {}) => {
           return {
             from: name,
             selector: data["numero_siren_siret_uai"],
-            uais: [data["numero_uai"]],
+            uai_potentiels: [data["numero_uai"]],
             data: {
               conformite_reglementaire: {
                 conventionne: true,

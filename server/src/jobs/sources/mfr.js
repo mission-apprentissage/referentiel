@@ -25,7 +25,7 @@ module.exports = (custom = {}) => {
             selector: {
               $or: [{ siret: data["siret"] }, { uai: { $in: uais } }],
             },
-            uais,
+            uai_potentiels: uais,
             reseaux: ["mfr"],
           };
         })

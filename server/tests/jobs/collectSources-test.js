@@ -25,14 +25,14 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        uais: ["0111111Y"],
+        uai_potentiels: ["0111111Y"],
       },
     ]);
 
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
-    assert.deepStrictEqual(found.uais, [
+    assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["dummy"],
         uai: "0111111Y",
@@ -54,14 +54,14 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        uais: ["093XXXT"],
+        uai_potentiels: ["093XXXT"],
       },
     ]);
 
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.deepStrictEqual(found.uais[0], {
+    assert.deepStrictEqual(found.uai_potentiels[0], {
       sources: ["dummy"],
       uai: "093XXXT",
       valide: false,
@@ -76,16 +76,16 @@ describe("collectSources", () => {
     });
   });
 
-  it("Vérifie qu'on ignore un uai quand il existe déjà dans la liste des uais", async () => {
+  it("Vérifie qu'on ignore un uai quand il existe déjà dans la liste des uai_potentiels", async () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        uais: ["0111111Y"],
+        uai_potentiels: ["0111111Y"],
       },
     ]);
     await insertEtablissement({
       siret: "11111111100006",
-      uais: [
+      uai_potentiels: [
         {
           sources: ["dummy"],
           uai: "0111111Y",
@@ -97,7 +97,7 @@ describe("collectSources", () => {
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.deepStrictEqual(found.uais, [
+    assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["dummy"],
         uai: "0111111Y",
@@ -117,7 +117,7 @@ describe("collectSources", () => {
   it("Vérifie qu'on fusionne un uai déjà collecté part une autre source", async () => {
     await insertEtablissement({
       siret: "11111111100006",
-      uais: [
+      uai_potentiels: [
         {
           sources: ["other"],
           uai: "0111111Y",
@@ -128,14 +128,14 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        uais: ["0111111Y"],
+        uai_potentiels: ["0111111Y"],
       },
     ]);
 
     await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
-    assert.deepStrictEqual(found.uais, found.uais, [
+    assert.deepStrictEqual(found.uai_potentiels, found.uai_potentiels, [
       {
         sources: ["other", "dummy"],
         uai: "0111111Y",
@@ -149,14 +149,14 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        uais: ["", null, "NULL"],
+        uai_potentiels: ["", null, "NULL"],
       },
     ]);
 
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.deepStrictEqual(found.uais, []);
+    assert.deepStrictEqual(found.uai_potentiels, []);
     assert.deepStrictEqual(stats, {
       dummy: {
         total: 1,
@@ -172,7 +172,7 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        uais: ["", null, "NULL"],
+        uai_potentiels: ["", null, "NULL"],
       },
     ]);
 
@@ -225,7 +225,7 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        uais: null,
+        uai_potentiels: null,
       },
     ]);
 
@@ -255,7 +255,7 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: {},
-        uais: [],
+        uai_potentiels: [],
       },
     ]);
 

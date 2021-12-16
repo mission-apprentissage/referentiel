@@ -24,7 +24,7 @@ module.exports = (custom = {}) => {
           return {
             from: name,
             selector: data["siret"],
-            uais: [data["uai_code_educnationale"]],
+            uai_potentiels: [data["uai_code_educnationale"]],
           };
         })
       );

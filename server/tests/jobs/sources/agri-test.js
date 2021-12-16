@@ -19,7 +19,7 @@ describe("agri", () => {
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["agri"]);
-    assert.deepStrictEqual(found.uais, [
+    assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["agri"],
         uai: "0111111Y",

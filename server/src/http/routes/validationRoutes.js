@@ -31,12 +31,12 @@ module.exports = () => {
               _id: null,
               A_VALIDER: {
                 $sum: {
-                  $cond: [{ $and: [nullOrEmpty("$uai"), { $gt: [{ $size: "$uais" }, 0] }] }, 1, 0],
+                  $cond: [{ $and: [nullOrEmpty("$uai"), { $gt: [{ $size: "$uai_potentiels" }, 0] }] }, 1, 0],
                 },
               },
               INCONNUE: {
                 $sum: {
-                  $cond: [{ $and: [nullOrEmpty("$uai"), { $eq: [{ $size: "$uais" }, 0] }] }, 1, 0],
+                  $cond: [{ $and: [nullOrEmpty("$uai"), { $eq: [{ $size: "$uai_potentiels" }, 0] }] }, 1, 0],
                 },
               },
               VALIDEE: { $sum: { $cond: { if: notEmpty("$uai"), then: 1, else: 0 } } },

@@ -19,7 +19,7 @@ describe("promotrans", () => {
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["promotrans"]);
-    assert.deepStrictEqual(found.uais, [
+    assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["promotrans"],
         uai: "0111111Y",

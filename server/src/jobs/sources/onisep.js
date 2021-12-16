@@ -13,7 +13,7 @@ function readCSV(stream) {
       return {
         from: "onisep",
         selector: data["n° SIRET"],
-        uais: [data["code UAI"]],
+        uai_potentiels: [data["code UAI"]],
       };
     })
   );

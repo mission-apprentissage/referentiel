@@ -7,7 +7,7 @@ describe("consolidate", () => {
   it("Vérifie qu'on peut valider un uai", async () => {
     await insertEtablissement({
       siret: "11111111100006",
-      uais: [
+      uai_potentiels: [
         {
           sources: ["dummy"],
           uai: "0751234J",

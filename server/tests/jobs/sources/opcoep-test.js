@@ -17,7 +17,7 @@ describe("opcoep", () => {
     let stats = await collectSources(source);
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.deepStrictEqual(found.uais, [
+    assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["opcoep"],
         uai: "0111111Y",

@@ -19,7 +19,7 @@ describe("compagnons-du-devoir", () => {
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["compagnons-du-devoir"]);
-    assert.deepStrictEqual(found.uais, [
+    assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["compagnons-du-devoir"],
         uai: "0111111Y",

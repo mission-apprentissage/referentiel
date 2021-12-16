@@ -1,6 +1,6 @@
 import { Col, Container, GridRow } from "../../common/components/dsfr/fondamentaux";
 import React from "react";
-import ValidationStatus from "./fragments/ValidationStatus";
+import ValidationCard from "./fragments/ValidationCard";
 import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
 import useNavigation from "../../common/hooks/useNavigation";
 import { useFetch } from "../../common/hooks/useFetch";
@@ -33,25 +33,13 @@ export default function TableauDeBord() {
       </GridRow>
       <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
         <Col modifiers={"12 sm-4"}>
-          <ValidationStatus
-            validationStatus={"A_VALIDER"}
-            label={"UAI à valider"}
-            nbElements={data.validation["A_VALIDER"]}
-          />
+          <ValidationCard type={"A_VALIDER"} label={"UAI à valider"} nbElements={data.validation["A_VALIDER"]} />
         </Col>
         <Col modifiers={"12 sm-4"}>
-          <ValidationStatus
-            validationStatus={"INCONNUE"}
-            label={"UAI inconnues"}
-            nbElements={data.validation["INCONNUE"]}
-          />
+          <ValidationCard type={"INCONNUE"} label={"UAI inconnues"} nbElements={data.validation["INCONNUE"]} />
         </Col>
         <Col modifiers={"12 sm-4"}>
-          <ValidationStatus
-            validationStatus={"VALIDEE"}
-            label={"UAI validées"}
-            nbElements={data.validation["VALIDEE"]}
-          />
+          <ValidationCard type={"VALIDEE"} label={"UAI validées"} nbElements={data.validation["VALIDEE"]} />
         </Col>
       </GridRow>
     </Container>

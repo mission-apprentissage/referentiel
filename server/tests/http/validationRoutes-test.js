@@ -9,7 +9,7 @@ describe("tableauDeBordRoutes", () => {
       siret: "11111111100001",
       statuts: ["gestionnaire", "formateur"],
       uai: "0751234J",
-      uais: [
+      uai_potentiels: [
         {
           sources: ["dummy"],
           uai: "0751234J",
@@ -19,7 +19,7 @@ describe("tableauDeBordRoutes", () => {
     });
     await insertEtablissement({
       siret: "22222222200002",
-      uais: [
+      uai_potentiels: [
         {
           sources: ["dummy"],
           uai: "0751234J",

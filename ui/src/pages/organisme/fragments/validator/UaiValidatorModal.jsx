@@ -46,7 +46,7 @@ export function UaiValidatorModal({ modal, organisme, validation }) {
                   </h1>
                   <BlueBox>
                     <Fieldset legend={validation.legend} validation={asFormValidation(touched, errors, "uai")}>
-                      {organisme.uais.map(({ uai, sources }, index) => {
+                      {organisme.uai_potentiels.map(({ uai, sources }, index) => {
                         return (
                           <Field
                             as={Radio}

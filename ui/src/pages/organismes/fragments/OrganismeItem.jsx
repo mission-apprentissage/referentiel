@@ -39,7 +39,9 @@ const Identifiants = styled(Box)`
 `;
 
 export default function OrganismeItem({ organisme }) {
-  let adresse = organisme.adresse?.label || `${organisme.adresse?.code_postal} ${organisme.adresse?.localite}`;
+  let adresse = !organisme.adresse
+    ? "Adresse inconnue"
+    : organisme.adresse.label || `${organisme.adresse.code_postal || ""} ${organisme.adresse.localite || ""}`;
 
   return (
     <ClickableItem to={organisme.siret}>
@@ -48,7 +50,9 @@ export default function OrganismeItem({ organisme }) {
           <Statuts organisme={organisme} />
           <Identite organisme={organisme} />
         </Box>
-        <RaisonSociale className={"fr-text--bold"}>{organisme.raison_sociale}</RaisonSociale>
+        <RaisonSociale className={"fr-text--bold"}>
+          {organisme.raison_sociale || "Raison sociale inconnue"}
+        </RaisonSociale>
         <Adresse>{adresse}</Adresse>
         <Box justify={"between"} align={"center"}>
           <Identifiants>

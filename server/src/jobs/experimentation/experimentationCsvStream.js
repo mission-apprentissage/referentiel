@@ -4,28 +4,28 @@ const { parseCsv } = require("../../common/utils/csvUtils");
 const { pick } = require("lodash");
 
 function findMostPopularUAI(etablissement) {
-  let uais = etablissement.uais.filter((item) => {
+  let potentiels = etablissement.uai_potentiels.filter((item) => {
     let sources = item.sources.filter((s) => s.includes("sifa-ramsese") || s.includes("catalogue-etablissements"));
     return sources.length >= 1;
   });
 
-  if (uais.length === 0) {
+  if (potentiels.length === 0) {
     return null;
   }
 
-  let found = uais.reduce((acc, u) => (acc.sources.length < u.sources.length ? u : acc));
+  let found = potentiels.reduce((acc, u) => (acc.sources.length < u.sources.length ? u : acc));
 
   return found.uai;
 }
 
 function getUAI(source, etablissement) {
-  let uais = etablissement.uais.filter((u) => u.sources.includes(source));
+  let potentiels = etablissement.uai_potentiels.filter((u) => u.sources.includes(source));
 
-  let found = uais.find((u) => u.uai === etablissement.uai);
+  let found = potentiels.find((u) => u.uai === etablissement.uai);
   if (etablissement.uai && found) {
     return found.uai;
   } else {
-    return uais.reduce((acc, u) => {
+    return potentiels.reduce((acc, u) => {
       if (!acc) {
         return u;
       }

@@ -19,7 +19,7 @@ describe("mfr", () => {
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["mfr"]);
-    assert.deepStrictEqual(found.uais, [
+    assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["mfr"],
         uai: "0011073X",
@@ -54,7 +54,7 @@ describe("mfr", () => {
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["mfr"]);
-    assert.deepStrictEqual(found.uais[0], {
+    assert.deepStrictEqual(found.uai_potentiels[0], {
       sources: ["mfr"],
       uai: "0011073X",
       valide: false,
@@ -72,9 +72,9 @@ describe("mfr", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ "uais.uai": "0011073X" });
+    let found = await dbCollection("etablissements").findOne({ "uai_potentiels.uai": "0011073X" });
     assert.deepStrictEqual(found.reseaux, ["mfr"]);
-    assert.deepStrictEqual(found.uais[1], {
+    assert.deepStrictEqual(found.uai_potentiels[1], {
       sources: ["mfr"],
       uai: "0111111Y",
       valide: true,

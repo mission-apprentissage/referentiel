@@ -6,7 +6,7 @@ module.exports = {
   schema: () => {
     let required = [
       "siret",
-      "uais",
+      "uai_potentiels",
       "contacts",
       "relations",
       "lieux_de_formation",
@@ -39,7 +39,7 @@ module.exports = {
           conventionne: boolean(),
           certificateur: string(),
         }),
-        uais: arrayOf(
+        uai_potentiels: arrayOf(
           object(
             {
               uai: string(),
@@ -132,7 +132,7 @@ module.exports = {
     return [
       [{ siret: 1 }, { unique: true }],
       [{ uai: 1 }],
-      [{ "uais.uai": 1 }],
+      [{ "uai_potentiels.uai": 1 }],
       [{ "adresse.geojson.geometry": "2dsphere" }],
       [
         { siret: "text", uai: "text", raison_sociale: "text" },

@@ -318,7 +318,7 @@ module.exports = {
             num_academie: 1,
             nom_academie: "Paris",
             uai: "0751111A",
-            uais_potentiels: [],
+            uai_potentiels: [],
             info_depp: 1,
             info_dgefp: 1,
             info_datagouv_ofs: 1,

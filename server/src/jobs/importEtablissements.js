@@ -50,7 +50,7 @@ module.exports = async (array, options = {}) => {
               siret,
             },
             $setOnInsert: {
-              uais: [],
+              uai_potentiels: [],
               contacts: [],
               relations: [],
               lieux_de_formation: [],

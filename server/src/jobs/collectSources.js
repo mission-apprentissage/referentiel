@@ -32,10 +32,10 @@ function mergeArray(from, existingArray, discriminator, newArray, custom = () =>
   return sortBy([...updated, ...untouched], discriminator);
 }
 
-function mergeUAI(from, uais, newUAIs) {
-  let newArray = newUAIs.filter((uai) => uai && uai !== "NULL").map((uai) => ({ uai }));
+function mergeUAIPotentiels(from, actual, collected) {
+  let newArray = collected.filter((uai) => uai && uai !== "NULL").map((uai) => ({ uai }));
 
-  return mergeArray(from, uais, "uai", newArray).map((item) => {
+  return mergeArray(from, actual, "uai", newArray).map((item) => {
     return {
       ...item,
       valide: validateUAI(item.uai),
@@ -128,7 +128,7 @@ module.exports = async (array, options = {}) => {
       let {
         from,
         selector,
-        uais = [],
+        uai_potentiels = [],
         contacts = [],
         relations = [],
         reseaux = [],
@@ -158,7 +158,7 @@ module.exports = async (array, options = {}) => {
         let res = await dbCollection("etablissements").updateMany(query, {
           $set: {
             ...flattenObject(data),
-            uais: mergeUAI(from, etablissement.uais, uais),
+            uai_potentiels: mergeUAIPotentiels(from, etablissement.uai_potentiels, uai_potentiels),
             relations: await mergeRelations(from, etablissement.relations, relations),
             contacts: mergeContacts(from, etablissement.contacts, contacts),
             diplomes: mergeArray(from, etablissement.diplomes, "code", diplomes),

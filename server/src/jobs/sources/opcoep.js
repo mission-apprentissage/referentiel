@@ -26,7 +26,7 @@ module.exports = (custom = {}) => {
           return {
             from: name,
             selector: data["SIRET CFA"],
-            uais: [data["N UAI CFA"]],
+            uai_potentiels: [data["N UAI CFA"]],
           };
         })
       );
