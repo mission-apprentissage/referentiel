@@ -1,4 +1,3 @@
-install: install-server install-ui generate-dotenv
 
 install-server:
 	yarn --cwd server install --frozen-lockfile
@@ -10,6 +9,12 @@ generate-dotenv:
 	echo "Generating JWT secret..."
 	grep -sqF 'REFERENTIEL_AUTH_API_JWT_SECRET' server/.env || \
 		echo "REFERENTIEL_AUTH_API_JWT_SECRET=$$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '')" >> server/.env
+
+hooks:
+	git config core.hooksPath misc/git-hooks
+	chmod +x misc/git-hooks/*
+
+install: install-server install-ui generate-dotenv hooks
 
 start:
 	docker-compose up --build --force-recreate
