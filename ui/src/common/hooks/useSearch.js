@@ -1,11 +1,23 @@
 import { useFetch } from "./useFetch";
 import useNavigation from "./useNavigation";
-import { omitBy } from "lodash-es";
+import { isArray } from "lodash-es";
+
+function adaptParamsForAPI(params) {
+  return Object.keys(params).reduce((acc, key) => {
+    let value = params[key];
+    let shouldIgnoreParam = isArray(value) && value.includes("true") && value.includes("false");
+
+    return {
+      ...acc,
+      ...(shouldIgnoreParam ? {} : { [key]: value }),
+    };
+  }, {});
+}
 
 export function useSearch(initialParams = {}) {
   let { params, buildUrl, navigate } = useNavigation();
-  let p = omitBy(params, (v) => v === "true,false" || v === "false,true");
-  let url = buildUrl(`/api/v1/etablissements`, { ...initialParams, ...p });
+
+  let url = buildUrl(`/api/v1/etablissements`, { ...initialParams, ...adaptParamsForAPI(params) });
   let [state] = useFetch(url, {
     etablissements: [],
     pagination: {
@@ -14,7 +26,6 @@ export function useSearch(initialParams = {}) {
       nombre_de_page: 0,
       total: 0,
     },
-    filtres: {},
   });
 
   return [

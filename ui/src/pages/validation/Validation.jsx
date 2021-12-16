@@ -4,10 +4,10 @@ import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
 import Filters from "../organismes/fragments/Filters";
 import SearchForm from "../organismes/fragments/SearchForm";
 import { useSearch } from "../../common/hooks/useSearch";
-import { omit } from "lodash-es";
 import Spinner from "../../common/components/Spinner";
 import { useParams } from "react-router-dom";
 import { useFilAriane } from "../../common/components/FilAriane";
+import { NdaFilter, StatutsFilter } from "../organismes/fragments/Filter";
 
 const validationMapper = {
   A_VALIDER: "l'UAI est à valider",
@@ -42,7 +42,10 @@ export default function Validation() {
           <SearchForm search={search} />
           <GridRow>
             <Col modifiers={"3"} className={"fr-pr-5v"}>
-              <Filters search={search} filters={omit(data.filtres, ["departements"])} />
+              <Filters search={search}>
+                <StatutsFilter />
+                <NdaFilter />
+              </Filters>
             </Col>
             <Col modifiers={"9"}>
               <Spinner error={error} loading={loading} />

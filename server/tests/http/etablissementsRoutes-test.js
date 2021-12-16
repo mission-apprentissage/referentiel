@@ -75,14 +75,6 @@ describe("etablissementsRoutes", () => {
           },
         },
       ],
-      filtres: {
-        numero_declaration_activite: [{ code: "false", label: "Non", nombre_de_resultats: 1 }],
-        departements: [{ code: "75", label: "Paris", nombre_de_resultats: 1 }],
-        statuts: [
-          { code: "formateur", label: "UFA", nombre_de_resultats: 1 },
-          { code: "gestionnaire", label: "OF-CFA", nombre_de_resultats: 1 },
-        ],
-      },
       pagination: {
         page: 1,
         resultats_par_page: 10,
@@ -431,11 +423,6 @@ describe("etablissementsRoutes", () => {
         nombre_de_page: 1,
         total: 1,
       },
-      filtres: {
-        numero_declaration_activite: [{ code: "false", label: "Non", nombre_de_resultats: 1 }],
-        departements: [{ code: "75", label: "Paris", nombre_de_resultats: 1 }],
-        statuts: [],
-      },
     });
   });
 
@@ -550,11 +537,6 @@ describe("etablissementsRoutes", () => {
         resultats_par_page: 10,
         nombre_de_page: 1,
         total: 0,
-      },
-      filtres: {
-        numero_declaration_activite: [],
-        departements: [],
-        statuts: [],
       },
     });
   });

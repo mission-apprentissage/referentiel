@@ -1,20 +1,98 @@
-import { useFormikContext } from "formik";
 import Fieldset from "../../../common/components/dsfr/elements/Fieldset";
-import FilterTitle from "./FilterTitle";
-import FilterCheckbox from "./FilterCheckbox";
 import GreyAccordionItem from "../../../common/components/dsfr/custom/GreyAccordionItem";
+import styled from "styled-components";
+import { Tag } from "../../../common/components/dsfr/elements/Tag";
+import SmallCheckbox from "../../../common/components/dsfr/custom/SmallCheckbox";
+import { castArray } from "lodash-es";
+import useNavigation from "../../../common/hooks/useNavigation";
+import { useData } from "../../../common/hooks/useData";
+import { useContext } from "react";
+import { FilterContext } from "./Filters";
 
-export default function Filter({ label, filterName, filter, ...rest }) {
-  const { values } = useFormikContext();
-  let nbCheckedElements = values[filterName].length;
+const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
+  return (
+    <div {...rest}>
+      <span>{label}</span>
+      {nbCheckedElements > 0 && <Tag>{nbCheckedElements}</Tag>}
+    </div>
+  );
+})`
+  .fr-tag {
+    margin-left: 0.5rem;
+    color: var(--text-inverted-grey);
+    background-color: var(--text-action-high-blue-france);
+  }
+`;
+
+export function Filter({ label, paramName, items }) {
+  let { params } = useNavigation();
+  let { onChange, register } = useContext(FilterContext);
+  let array = castArray(params[paramName]).filter((v) => v);
+  register(paramName);
 
   return (
-    <GreyAccordionItem label={<FilterTitle label={label} nbCheckedElements={nbCheckedElements} {...rest} />}>
+    <GreyAccordionItem label={<FilterTitle label={label} nbCheckedElements={array.length} />}>
       <Fieldset>
-        {filter.map((item, index) => {
-          return <FilterCheckbox key={index} filterName={filterName} item={item} />;
+        {items.map((item, index) => {
+          let checked = array.includes(item.code);
+          return (
+            <SmallCheckbox
+              key={index}
+              name={paramName}
+              label={item.label}
+              value={item.code}
+              checked={checked}
+              onChange={() => {
+                let elements = checked ? array.filter((i) => i !== item.code) : [...array, item.code];
+                onChange({ [paramName]: elements });
+              }}
+            />
+          );
         })}
       </Fieldset>
     </GreyAccordionItem>
+  );
+}
+
+export function DepartementsFilter() {
+  let [{ departements }] = useData();
+
+  return (
+    <Filter
+      label={"Départements"}
+      paramName={"departements"}
+      items={departements.map((d) => {
+        return {
+          code: d.code,
+          label: d.nom,
+        };
+      })}
+    />
+  );
+}
+
+export function StatutsFilter() {
+  return (
+    <Filter
+      label={"Type"}
+      paramName={"statuts"}
+      items={[
+        { code: "gestionnaire", label: "OF-CFA" },
+        { code: "formateur", label: "UFA" },
+      ]}
+    />
+  );
+}
+
+export function NdaFilter() {
+  return (
+    <Filter
+      label={"Déclaré datagouv"}
+      paramName={"numero_declaration_activite"}
+      items={[
+        { code: "true", label: "Oui" },
+        { code: "false", label: "Non" },
+      ]}
+    />
   );
 }

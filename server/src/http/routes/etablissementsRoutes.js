@@ -15,7 +15,6 @@ const canEditEtablissement = require("../../common/actions/canEditEtablissement"
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
-const { notEmpty } = require("../../common/db/aggregationUtils");
 
 module.exports = () => {
   const router = express.Router();
@@ -93,107 +92,11 @@ module.exports = () => {
     );
   }
 
-  async function getFiltres(params, filtres) {
-    let query = buildQuery(omit(params, filtres));
-
-    let array = await dbCollection("etablissements")
-      .aggregate([
-        { $match: query },
-        {
-          $facet: {
-            departements: [
-              {
-                $group: {
-                  _id: "$adresse.departement.code",
-                  departement: { $first: "$adresse.departement" },
-                  nombre_de_resultats: { $sum: 1 },
-                },
-              },
-              { $match: { _id: { $ne: null } } },
-              {
-                $project: {
-                  _id: 0,
-                  code: "$departement.code",
-                  label: "$departement.nom",
-                  nombre_de_resultats: "$nombre_de_resultats",
-                },
-              },
-              { $sort: { ["code"]: 1 } },
-            ],
-            statuts: [
-              { $unwind: "$statuts" },
-              {
-                $group: {
-                  _id: "$statuts",
-                  statut: { $first: "$statuts" },
-                  nombre_de_resultats: { $sum: 1 },
-                },
-              },
-              { $match: { _id: { $ne: null } } },
-              {
-                $project: {
-                  _id: 0,
-                  code: "$statut",
-                  label: {
-                    $cond: {
-                      if: { $eq: ["$statut", "formateur"] },
-                      then: "UFA",
-                      else: "OF-CFA",
-                    },
-                  },
-                  nombre_de_resultats: "$nombre_de_resultats",
-                },
-              },
-              { $sort: { ["code"]: 1 } },
-            ],
-            numero_declaration_activite: [
-              {
-                $project: {
-                  nda_exists: {
-                    $cond: {
-                      if: notEmpty("$numero_declaration_activite"),
-                      then: true,
-                      else: false,
-                    },
-                  },
-                },
-              },
-              {
-                $group: {
-                  _id: "$nda_exists",
-                  code: { $first: { $toString: "$nda_exists" } },
-                  label: {
-                    $first: {
-                      $cond: {
-                        if: { $eq: ["$nda_exists", true] },
-                        then: "Oui",
-                        else: "Non",
-                      },
-                    },
-                  },
-                  nombre_de_resultats: { $sum: 1 },
-                },
-              },
-              {
-                $project: {
-                  _id: 0,
-                },
-              },
-              { $sort: { ["code"]: 1 } },
-            ],
-          },
-        },
-      ])
-      .toArray();
-
-    return array[0];
-  }
-
   router.get(
     "/api/v1/etablissements",
     checkOptionnalApiToken(),
     tryCatch(async (req, res) => {
-      let { filtres, ...params } = await Joi.object({
+      let params = await Joi.object({
         uai: Joi.alternatives()
           .try(Joi.boolean(), Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/))
           .default(null),
@@ -205,7 +108,7 @@ module.exports = () => {
         departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         anomalies: Joi.boolean().default(null),
         //Misc
-        filtres: stringList().default([]),
+        champs: stringList().default([]),
         uai_potentiel: Joi.alternatives()
           .try(Joi.boolean(), Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/))
           .default(null),
@@ -215,13 +118,9 @@ module.exports = () => {
         //Misc
         ordre: Joi.string().valid("asc", "desc").default("desc"),
         text: Joi.string(),
-        champs: stringList().default([]),
       }).validateAsync(req.query, { abortEarly: false });
 
-      let [{ aggregate, pagination }, availableFilters] = await Promise.all([
-        findEtablissements(params),
-        getFiltres(params, filtres),
-      ]);
+      let { aggregate, pagination } = await findEtablissements(params);
 
       sendJsonStream(
         oleoduc(
@@ -231,7 +130,6 @@ module.exports = () => {
             arrayPropertyName: "etablissements",
             arrayWrapper: {
               pagination,
-              filtres: availableFilters,
             },
           })
         ),

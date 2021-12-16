@@ -4,9 +4,10 @@ import AcademieSelector from "./fragments/AcademieSelector";
 import { useSearch } from "../../common/hooks/useSearch";
 import Spinner from "../../common/components/Spinner";
 import SearchForm from "./fragments/SearchForm";
-import Filters from "./fragments/Filters";
 import OrganismeList from "./fragments/OrganismeList";
 import { useFilAriane } from "../../common/components/FilAriane";
+import Filters from "./fragments/Filters";
+import { DepartementsFilter, NdaFilter, StatutsFilter } from "./fragments/Filter";
 
 export default function Organismes() {
   let [{ data, loading, error }, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
@@ -33,7 +34,11 @@ export default function Organismes() {
                     <SearchForm search={search} />
                     <GridRow>
                       <Col modifiers={"3"} className={"fr-pr-5v"}>
-                        <Filters search={search} filters={data.filtres} />
+                        <Filters search={search}>
+                          <DepartementsFilter />
+                          <StatutsFilter />
+                          <NdaFilter />
+                        </Filters>
                       </Col>
                       <Col modifiers={"9"}>
                         <Spinner error={error} loading={loading} />
