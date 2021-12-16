@@ -4,7 +4,7 @@ const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
 const categoriesJuridiques = require("../../common/categoriesJuridiques");
 const { dbCollection } = require("../../common/db/mongodb");
-const loadOrganismeDeFormations = require("../tasks/loadOrganismeDeFormations");
+const createDatagouvSource = require("../sources/datagouv");
 const caches = require("../../common/caches/caches");
 
 function getEtablissementName(e, uniteLegale) {
@@ -44,7 +44,8 @@ module.exports = (options = {}) => {
     name,
     async stream(opts = {}) {
       let filters = opts.filters || {};
-      let organismes = options.organismes || (await loadOrganismeDeFormations());
+      let datagouv = createDatagouvSource();
+      let organismes = options.organismes || (await datagouv.loadOrganismeDeFormations());
 
       return compose(
         dbCollection("etablissements").find(filters, { siret: 1 }).stream(),
