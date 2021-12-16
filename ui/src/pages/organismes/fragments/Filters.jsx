@@ -55,7 +55,7 @@ export default function Filters({ filters, search }) {
   return (
     <Formik initialValues={initialFormValues} onSubmit={onSubmit}>
       {() => {
-        let { departements, statuts } = filters;
+        let { departements, statuts, numero_declaration_activite } = filters;
         return (
           <AutoResetForm values={initialFormValues}>
             <FiltersHeader filters={filters} />
@@ -64,6 +64,13 @@ export default function Filters({ filters, search }) {
                 <Filter label={"Département"} filterName={"departements"} filter={departements} />
               )}
               {statuts && statuts.length > 0 && <Filter label={"Type"} filterName={"statuts"} filter={statuts} />}
+              {numero_declaration_activite && numero_declaration_activite.length > 0 && (
+                <Filter
+                  label={"Déclaré datagouv"}
+                  filterName={"numero_declaration_activite"}
+                  filter={numero_declaration_activite}
+                />
+              )}
             </Accordion>
           </AutoResetForm>
         );

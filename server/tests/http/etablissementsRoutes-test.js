@@ -76,6 +76,7 @@ describe("etablissementsRoutes", () => {
         },
       ],
       filtres: {
+        numero_declaration_activite: [{ code: "false", label: "Non", nombre_de_resultats: 1 }],
         departements: [{ code: "75", label: "Paris", nombre_de_resultats: 1 }],
         statuts: [
           { code: "formateur", label: "UFA", nombre_de_resultats: 1 },
@@ -121,6 +122,42 @@ describe("etablissementsRoutes", () => {
     await insertEtablissement({ siret: "22222222200002" });
 
     let response = await httpClient.get("/api/v1/etablissements?uai=false");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "22222222200002");
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements à partir de leur nda", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement();
+    await insertEtablissement({ siret: "11111111100006", numero_declaration_activite: "12345678901" });
+
+    let response = await httpClient.get("/api/v1/etablissements?numero_declaration_activite=12345678901");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements qui ont un nda", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement();
+    await insertEtablissement({ siret: "11111111100006", numero_declaration_activite: "12345678901" });
+
+    let response = await httpClient.get("/api/v1/etablissements?numero_declaration_activite=true");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.etablissements.length, 1);
+    strictEqual(response.data.etablissements[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des établissements qui n'ont pas d'uai", async () => {
+    const { httpClient } = await startServer();
+    await insertEtablissement({ siret: "11111111100006", numero_declaration_activite: "12345678901" });
+    await insertEtablissement({ siret: "22222222200002" });
+
+    let response = await httpClient.get("/api/v1/etablissements?numero_declaration_activite=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.etablissements.length, 1);
@@ -476,6 +513,7 @@ describe("etablissementsRoutes", () => {
         total: 1,
       },
       filtres: {
+        numero_declaration_activite: [{ code: "false", label: "Non", nombre_de_resultats: 1 }],
         departements: [{ code: "75", label: "Paris", nombre_de_resultats: 1 }],
         statuts: [],
       },
@@ -547,6 +585,7 @@ describe("etablissementsRoutes", () => {
         total: 0,
       },
       filtres: {
+        numero_declaration_activite: [],
         departements: [],
         statuts: [],
       },

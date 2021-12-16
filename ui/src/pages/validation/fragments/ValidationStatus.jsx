@@ -31,7 +31,7 @@ function ValidationStatus({ validationStatus, label, nbElements, className, ...r
   return (
     <Box direction={"column"} justify={"between"} className={clazz} {...rest}>
       <div>
-        <h4>{nbElements}</h4>
+        <h4>{nbElements || 0}</h4>
         <div>{label}</div>
       </div>
       <Link to={listeUrl} modifiers={"icon-right"} icons="arrow-right-line">

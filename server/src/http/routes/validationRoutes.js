@@ -2,7 +2,7 @@ const express = require("express");
 const Joi = require("@hapi/joi");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
-const { nullOrEmpty, notEmpty } = require("../../common/db/aggregation");
+const { nullOrEmpty, notEmpty } = require("../../common/db/aggregationUtils");
 const { checkApiToken } = require("../middlewares/authMiddleware");
 const { stringList } = require("../utils/validators");
 
@@ -51,7 +51,7 @@ module.exports = () => {
         .toArray();
 
       res.json({
-        validation: filters[0],
+        validation: filters[0] || {},
       });
     })
   );

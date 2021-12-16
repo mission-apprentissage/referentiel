@@ -1,5 +1,5 @@
 const express = require("express");
-const { isEmpty, omit, isString } = require("lodash");
+const { isEmpty, omit, isString, isNil, isBoolean } = require("lodash");
 const Boom = require("boom");
 const { oleoduc, transformIntoJSON, transformData } = require("oleoduc");
 const Joi = require("@hapi/joi");
@@ -15,6 +15,7 @@ const canEditEtablissement = require("../../common/actions/canEditEtablissement"
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
+const { notEmpty } = require("../../common/db/aggregationUtils");
 
 module.exports = () => {
   const router = express.Router();
@@ -34,17 +35,33 @@ module.exports = () => {
   }
 
   function buildQuery(params) {
-    let { siret, uai, departements = [], statuts = [], region, academie, text, anomalies, potentiel } = params;
+    let {
+      siret,
+      uai,
+      departements = [],
+      statuts = [],
+      region,
+      academie,
+      text,
+      anomalies,
+      potentiel,
+      numero_declaration_activite: nda,
+    } = params;
 
     return {
       ...(siret ? { siret } : {}),
-      ...(uai !== null ? (isString(uai) ? { uai } : { uai: { $exists: uai } }) : {}),
+      ...(!isNil(uai) ? (isBoolean(uai) ? { uai: { $exists: uai } } : { uai }) : {}),
+      ...(!isNil(nda)
+        ? isBoolean(nda)
+          ? { numero_declaration_activite: { $exists: nda } }
+          : { numero_declaration_activite: nda }
+        : {}),
       ...(departements.length === 0 ? {} : { "adresse.departement.code": { $in: departements } }),
       ...(statuts.length === 0 ? {} : { statuts: { $in: statuts } }),
       ...(region ? { "adresse.region.code": region } : {}),
       ...(academie ? { "adresse.academie.code": academie } : {}),
       ...(text ? { $text: { $search: text } } : {}),
-      ...(anomalies !== null ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
+      ...(!isNil(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
       ...(potentiel !== null
         ? isString(potentiel)
           ? { "uais.uai": potentiel }
@@ -138,6 +155,41 @@ module.exports = () => {
               },
               { $sort: { ["code"]: 1 } },
             ],
+            numero_declaration_activite: [
+              {
+                $project: {
+                  nda_exists: {
+                    $cond: {
+                      if: notEmpty("$numero_declaration_activite"),
+                      then: true,
+                      else: false,
+                    },
+                  },
+                },
+              },
+              {
+                $group: {
+                  _id: "$nda_exists",
+                  code: { $first: { $toString: "$nda_exists" } },
+                  label: {
+                    $first: {
+                      $cond: {
+                        if: { $eq: ["$nda_exists", true] },
+                        then: "Oui",
+                        else: "Non",
+                      },
+                    },
+                  },
+                  nombre_de_resultats: { $sum: 1 },
+                },
+              },
+              {
+                $project: {
+                  _id: 0,
+                },
+              },
+              { $sort: { ["code"]: 1 } },
+            ],
           },
         },
       ])
@@ -152,9 +204,10 @@ module.exports = () => {
     tryCatch(async (req, res) => {
       let { filtres, ...params } = await Joi.object({
         uai: Joi.alternatives()
-          .try(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/), Joi.boolean())
+          .try(Joi.boolean(), Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/))
           .default(null),
         siret: Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/),
+        numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
         statuts: stringList(Joi.string().valid("gestionnaire", "formateur")).default([]),
         region: Joi.string().valid(...getRegions().map((r) => r.code)),
         academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
@@ -165,7 +218,7 @@ module.exports = () => {
         champs: stringList().default([]),
         filtres: stringList().default([]),
         potentiel: Joi.alternatives()
-          .try(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/), Joi.boolean())
+          .try(Joi.boolean(), Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/))
           .default(null),
         //Pagination
         page: Joi.number().default(1),

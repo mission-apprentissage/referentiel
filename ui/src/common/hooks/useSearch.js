@@ -1,9 +1,11 @@
 import { useFetch } from "./useFetch";
 import useNavigation from "./useNavigation";
+import { omitBy } from "lodash-es";
 
 export function useSearch(initialParams = {}) {
   let { params, buildUrl, navigate } = useNavigation();
-  let url = buildUrl(`/api/v1/etablissements`, { ...initialParams, ...params });
+  let p = omitBy(params, (v) => v === "true,false" || v === "false,true");
+  let url = buildUrl(`/api/v1/etablissements`, { ...initialParams, ...p });
   let [state] = useFetch(url, {
     etablissements: [],
     pagination: {

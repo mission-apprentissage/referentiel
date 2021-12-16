@@ -38,8 +38,11 @@ async function build(options = {}) {
     "refea",
     "uimm",
     "ymag",
+    "onisep",
+    "onisep-structure",
+    "ideo2",
   ]);
-  await collectAll(["onisep", "onisep-structure", "ideo2"]);
+  await collectAll(["onisep", "onisep-structure", "ideo2", "datagouv"]);
   await collectAll(["sirene", "catalogue"], {
     //Allow all sources to share the same api instance (ie. rate limit)
     geoAdresseApi: new GeoAdresseApi(),

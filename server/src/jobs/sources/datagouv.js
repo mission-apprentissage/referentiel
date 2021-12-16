@@ -7,7 +7,7 @@ function downloadListePubliqueDesOrganismesDeFormation() {
 }
 
 module.exports = (custom = {}) => {
-  let name = "maf";
+  let name = "datagouv";
 
   return {
     name,

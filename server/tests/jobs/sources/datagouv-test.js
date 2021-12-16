@@ -5,11 +5,11 @@ const { createStream } = require("../../utils/testUtils");
 const { insertEtablissement } = require("../../utils/fakeData");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 
-describe("maf", () => {
+describe("datagouv", () => {
   it("Vérifie qu'on peut collecter des informations de la liste publique des organismes de formation", async () => {
     await insertEtablissement({ siret: "11111111100006" });
     await insertEtablissement({ siret: "11111111100007" });
-    let source = createSource("maf", {
+    let source = createSource("datagouv", {
       input: createStream(
         `siren;num_etablissement;num_da;cfa
 "111111111";"00006";"88888888888";"Oui"`
@@ -22,7 +22,7 @@ describe("maf", () => {
     assert.deepStrictEqual(docs[0].numero_declaration_activite, "88888888888");
     assert.deepStrictEqual(docs[1].numero_declaration_activite, "88888888888");
     assert.deepStrictEqual(stats, {
-      maf: {
+      datagouv: {
         total: 1,
         updated: 2,
         ignored: 0,
@@ -33,7 +33,7 @@ describe("maf", () => {
 
   it("Vérifie qu'on peut ignore les organismes que ne sont pas des CFA", async () => {
     await insertEtablissement({ siret: "11111111100006" });
-    let source = createSource("maf", {
+    let source = createSource("datagouv", {
       input: createStream(
         `siren;num_etablissement;num_da;cfa
 "111111111";"00006";"88888888888";"Non"`
@@ -45,7 +45,7 @@ describe("maf", () => {
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.ok(!found.numero_declaration_activite);
     assert.deepStrictEqual(stats, {
-      maf: {
+      datagouv: {
         total: 0,
         updated: 0,
         ignored: 0,

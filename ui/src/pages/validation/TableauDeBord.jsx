@@ -14,7 +14,6 @@ export default function TableauDeBord() {
   useFilAriane([{ label: "Accueil", to: "/" }]);
   let [{ data, loading, error }] = useFetch(buildUrl("/api/v1/validation", params), {
     validation: {},
-    total: 0,
   });
 
   return (
