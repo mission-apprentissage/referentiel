@@ -10,9 +10,9 @@ function buildValidationParams(validationStatus, auth) {
   switch (validationStatus) {
     case "A_VALIDER":
       return { uai: false, potentiel: true, ...restricted };
-    case "VALIDEES":
+    case "VALIDEE":
       return { uai: true, ...restricted };
-    case "INCONNUES":
+    case "INCONNUE":
       return { uai: false, potentiel: false, ...restricted };
     default:
       throw new Error("Statut de validation inconnu");
@@ -48,11 +48,11 @@ export default styled(ValidationStatus)`
     background-color: var(--background-validation-A_VALIDER);
   }
 
-  &.validation-status--INCONNUES {
-    background-color: var(--background-validation-INCONNUES);
+  &.validation-status--INCONNUE {
+    background-color: var(--background-validation-INCONNUE);
   }
 
-  &.validation-status--VALIDEES {
-    background-color: var(--background-validation-VALIDEES);
+  &.validation-status--VALIDEE {
+    background-color: var(--background-validation-VALIDEE);
   }
 `;

@@ -34,12 +34,12 @@ module.exports = () => {
                   $cond: [{ $and: [nullOrEmpty("$uai"), { $gt: [{ $size: "$uais" }, 0] }] }, 1, 0],
                 },
               },
-              INCONNUES: {
+              INCONNUE: {
                 $sum: {
                   $cond: [{ $and: [nullOrEmpty("$uai"), { $eq: [{ $size: "$uais" }, 0] }] }, 1, 0],
                 },
               },
-              VALIDEES: { $sum: { $cond: { if: notEmpty("$uai"), then: 1, else: 0 } } },
+              VALIDEE: { $sum: { $cond: { if: notEmpty("$uai"), then: 1, else: 0 } } },
             },
           },
           {

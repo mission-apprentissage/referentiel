@@ -9,15 +9,15 @@ import Spinner from "../../common/components/Spinner";
 import { useParams } from "react-router-dom";
 import { useFilAriane } from "../../common/components/FilAriane";
 
-let statusMapper = {
+const validationMapper = {
   A_VALIDER: "l'UAI est à valider",
-  INCONNUES: "l'UAI est inconnue",
-  VALIDEES: "l'UAI est validée",
+  INCONNUE: "l'UAI est inconnue",
+  VALIDEE: "l'UAI est validée",
 };
 
 export default function Validation() {
   let { validationStatus } = useParams();
-  let title = `Liste des organismes dont ${statusMapper[validationStatus]}`;
+  let title = `Liste des organismes dont ${validationMapper[validationStatus]}`;
   useFilAriane(
     [
       { label: "Accueil", to: "/" },

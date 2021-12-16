@@ -1,7 +1,19 @@
-const { mergeWith, isArray, pickBy, isEmpty } = require("lodash");
+const { mergeWith, isArray, pickBy, isEmpty, cloneDeepWith } = require("lodash");
 
 function omitEmpty(obj) {
   return pickBy(obj, (v) => !isEmpty(v));
+}
+
+function omitDeep(collection, excludeKeys) {
+  function omitFn(value) {
+    if (value && typeof value === "object") {
+      excludeKeys.forEach((key) => {
+        delete value[key];
+      });
+    }
+  }
+
+  return cloneDeepWith(collection, omitFn);
 }
 
 function flattenObject(obj, parent, res = {}) {
@@ -43,4 +55,5 @@ module.exports = {
   isError,
   optionalItem,
   optionalObject,
+  omitDeep,
 };

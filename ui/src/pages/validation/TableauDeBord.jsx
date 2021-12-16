@@ -42,16 +42,16 @@ export default function TableauDeBord() {
         </Col>
         <Col modifiers={"12 sm-4"}>
           <ValidationStatus
-            validationStatus={"INCONNUES"}
+            validationStatus={"INCONNUE"}
             label={"UAI inconnues"}
-            nbElements={data.validation["INCONNUES"]}
+            nbElements={data.validation["INCONNUE"]}
           />
         </Col>
         <Col modifiers={"12 sm-4"}>
           <ValidationStatus
-            validationStatus={"VALIDEES"}
+            validationStatus={"VALIDEE"}
             label={"UAI validées"}
-            nbElements={data.validation["VALIDEES"]}
+            nbElements={data.validation["VALIDEE"]}
           />
         </Col>
       </GridRow>

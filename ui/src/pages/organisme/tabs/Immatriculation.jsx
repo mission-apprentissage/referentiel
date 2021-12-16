@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import cs from "classnames";
 import { Col, GridRow } from "../../../common/components/dsfr/fondamentaux";
-import UAIValidator from "../fragments/UAIValidator";
+import UAIValidator from "../fragments/validator/UAIValidator";
 
 const Info = styled(({ label, value, children, className, ...rest }) => {
   return (

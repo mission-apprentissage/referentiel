@@ -1,7 +1,7 @@
 const express = require("express");
 const { isEmpty, omit, isString } = require("lodash");
 const Boom = require("boom");
-const { oleoduc, transformIntoJSON } = require("oleoduc");
+const { oleoduc, transformIntoJSON, transformData } = require("oleoduc");
 const Joi = require("@hapi/joi");
 const { aggregateAndPaginate } = require("../../common/utils/dbUtils");
 const { sendJsonStream } = require("../utils/httpUtils");
@@ -18,6 +18,20 @@ const { getDepartements } = require("../../common/departements");
 
 module.exports = () => {
   const router = express.Router();
+
+  function toDto(etablissement) {
+    return {
+      ...omit(etablissement, ["_id"]),
+      ...(etablissement._meta
+        ? {
+            _meta: {
+              ...etablissement._meta,
+              validation: etablissement.uai ? "VALIDEE" : etablissement.uais.length > 0 ? "A_VALIDER" : "INCONNUE",
+            },
+          }
+        : {}),
+    };
+  }
 
   function buildQuery(params) {
     let { siret, uai, departements = [], statuts = [], region, academie, text, anomalies, potentiel } = params;
@@ -169,6 +183,7 @@ module.exports = () => {
       sendJsonStream(
         oleoduc(
           aggregate.stream(),
+          transformData((data) => toDto(data)),
           transformIntoJSON({
             arrayPropertyName: "etablissements",
             arrayWrapper: {
@@ -199,9 +214,7 @@ module.exports = () => {
         throw Boom.notFound("Siret inconnu");
       }
 
-      delete etablissement._id;
-      delete etablissement._meta;
-      return res.json(etablissement);
+      return res.json(toDto(etablissement));
     })
   );
 
@@ -228,7 +241,7 @@ module.exports = () => {
         throw Boom.notFound("Siret inconnu");
       }
 
-      return res.json(etablissement);
+      return res.json(toDto(etablissement));
     })
   );
 

@@ -3,6 +3,7 @@ const { insertEtablissement } = require("../utils/fakeData");
 const { startServer, generateAuthHeader } = require("../utils/testUtils");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const assert = require("assert");
+const { omitDeep } = require("../../src/common/utils/objectUtils");
 
 describe("etablissementsRoutes", () => {
   it("Vérifie qu'on peut lister des établissements", async () => {
@@ -70,6 +71,7 @@ describe("etablissementsRoutes", () => {
           _meta: {
             anomalies: [],
             created_at: "2021-02-10T16:39:13.064Z",
+            validation: "INCONNUE",
           },
         },
       ],
@@ -574,6 +576,10 @@ describe("etablissementsRoutes", () => {
     await insertEtablissement({
       siret: "11111111100001",
       raison_sociale: "Centre de formation",
+      _meta: {
+        anomalies: [],
+        created_at: new Date("2021-02-10T16:39:13.064Z"),
+      },
     });
 
     let response = await httpClient.get("/api/v1/etablissements/11111111100001");
@@ -623,6 +629,11 @@ describe("etablissementsRoutes", () => {
           code: "01",
           nom: "Paris",
         },
+      },
+      _meta: {
+        anomalies: [],
+        created_at: "2021-02-10T16:39:13.064Z",
+        validation: "INCONNUE",
       },
     });
   });
@@ -677,7 +688,7 @@ describe("etablissementsRoutes", () => {
     });
   });
 
-  it("Vérifie qu'on peut valider une UAI (region)", async () => {
+  it("Vérifie qu'on peut mettre à jour un établissement", async () => {
     const { httpClient } = await startServer();
     await insertEtablissement({
       siret: "11111111100001",
@@ -700,6 +711,58 @@ describe("etablissementsRoutes", () => {
     strictEqual(response.status, 200);
     deepStrictEqual(response.data.siret, "11111111100001");
     deepStrictEqual(response.data.uai, "0751234J");
+    deepStrictEqual(omitDeep(response.data, ["created_at"]), {
+      siret: "11111111100001",
+      uai: "0751234J",
+      raison_sociale: "Centre de formation",
+      uais: [],
+      contacts: [],
+      relations: [],
+      lieux_de_formation: [],
+      reseaux: [],
+      statuts: [],
+      diplomes: [],
+      certifications: [],
+      siege_social: true,
+      etat_administratif: "actif",
+      referentiels: ["test"],
+      conformite_reglementaire: {
+        conventionne: true,
+      },
+      adresse: {
+        geojson: {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [2.396444, 48.879706],
+          },
+          properties: {
+            score: 0.88,
+          },
+        },
+        label: "31 rue des lilas Paris 75019",
+        code_postal: "75001",
+        code_insee: "75000",
+        localite: "PARIS",
+        departement: {
+          code: "75",
+          nom: "Paris",
+        },
+        region: {
+          code: "11",
+          nom: "Île-de-France",
+        },
+        academie: {
+          code: "01",
+          nom: "Paris",
+        },
+      },
+      _meta: {
+        anomalies: [],
+        validation: "VALIDEE",
+      },
+    });
+
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100001" });
     deepStrictEqual(found.uai, "0751234J");
     let { _meta, _id, ...modification } = await dbCollection("modifications").findOne();
