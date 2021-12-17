@@ -4,8 +4,6 @@
   "private": true,
   "dependencies": {
     "@gouvfr/dsfr": "1.2.1",
-    "@nivo/core": "0.74.0",
-    "@nivo/network": "0.74.0",
     "@testing-library/jest-dom": "5.16.1",
     "@testing-library/react": "12.1.2",
     "@testing-library/user-event": "13.5.0",
@@ -13,7 +11,6 @@
     "formik": "2.2.9",
     "jsonwebtoken": "8.5.1",
     "lodash-es": "4.17.21",
-    "moment": "2.29.1",
     "prop-types": "15.7.2",
     "query-string": "7.0.1",
     "react": "17.0.2",
@@ -21,7 +18,6 @@
     "react-router-dom": "6.1.1",
     "react-scripts": "4.0.3",
     "styled-components": "5.3.3",
-    "use-react-router-breadcrumbs": "3.0.1",
     "uuid": "8.3.2",
     "yup": "0.32.11"
   },

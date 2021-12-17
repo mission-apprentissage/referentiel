@@ -1,4 +1,4 @@
-const { mergeWith, isArray, pickBy, isEmpty, cloneDeepWith } = require("lodash");
+const { pickBy, isEmpty, cloneDeepWith } = require("lodash");
 
 function omitEmpty(obj) {
   return pickBy(obj, (v) => !isEmpty(v));
@@ -28,14 +28,6 @@ function flattenObject(obj, parent, res = {}) {
   return res;
 }
 
-function mergeObjectsAndConcatArray(...args) {
-  return mergeWith(...args, function (a, b) {
-    if (isArray(a)) {
-      return a.concat(b);
-    }
-  });
-}
-
 function isError(obj) {
   return obj && obj.stack && obj.message;
 }
@@ -44,16 +36,10 @@ function optionalItem(key, value) {
   return value ? [{ [key]: value }] : [];
 }
 
-function optionalObject(key, value) {
-  return value ? { [key]: value } : {};
-}
-
 module.exports = {
   flattenObject,
   omitEmpty,
-  mergeObjectsAndConcatArray,
   isError,
   optionalItem,
-  optionalObject,
   omitDeep,
 };

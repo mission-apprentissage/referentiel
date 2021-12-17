@@ -1,4 +1,4 @@
-import Breadcrumb, { BreadcrumbLink, BreadcrumbCurrent } from "./dsfr/elements/Breadcrumb";
+import Breadcrumb, { BreadcrumbCurrent, BreadcrumbLink } from "./dsfr/elements/Breadcrumb";
 import React, { useContext, useEffect, useState } from "react";
 import { cloneDeep } from "lodash-es";
 
