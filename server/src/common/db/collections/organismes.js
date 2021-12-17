@@ -35,10 +35,7 @@ module.exports = {
         ),
         referentiels: arrayOf(string()),
         reseaux: arrayOf(string()),
-        conformite_reglementaire: object({
-          conventionne: boolean(),
-          certificateur: string(),
-        }),
+        qualiopi: boolean(),
         uai_potentiels: arrayOf(
           object(
             {

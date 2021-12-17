@@ -147,9 +147,6 @@ module.exports = {
           referentiels: ["test"],
           siege_social: true,
           etat_administratif: "actif",
-          conformite_reglementaire: {
-            conventionne: true,
-          },
           adresse: {
             geojson: {
               type: "Feature",

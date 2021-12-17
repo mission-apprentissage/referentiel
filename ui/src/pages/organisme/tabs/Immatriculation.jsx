@@ -40,7 +40,7 @@ export function Immatriculation({ organisme }) {
           <Info label={"Académie"} value={organisme.adresse?.academie?.nom} />
         </Col>
         <Col modifiers={"sm-12 offset-md-1 md-5"}>
-          <Info label={"Certifié Qualiopi"} value={organisme.certifie_qualiopi} />
+          <Info label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
           <Info label={"Forme jurique"} value={organisme.forme_juridique?.label} />
           <Info label={"Etat administratif"} value={organisme.etat_administratif} />
         </Col>

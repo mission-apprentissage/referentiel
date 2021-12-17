@@ -37,9 +37,6 @@ describe("organismesRoutes", () => {
           siege_social: true,
           etat_administratif: "actif",
           referentiels: ["test"],
-          conformite_reglementaire: {
-            conventionne: true,
-          },
           adresse: {
             geojson: {
               type: "Feature",
@@ -587,9 +584,6 @@ describe("organismesRoutes", () => {
       siege_social: true,
       etat_administratif: "actif",
       referentiels: ["test"],
-      conformite_reglementaire: {
-        conventionne: true,
-      },
       adresse: {
         geojson: {
           type: "Feature",
@@ -714,9 +708,6 @@ describe("organismesRoutes", () => {
       siege_social: true,
       etat_administratif: "actif",
       referentiels: ["test"],
-      conformite_reglementaire: {
-        conventionne: true,
-      },
       adresse: {
         geojson: {
           type: "Feature",

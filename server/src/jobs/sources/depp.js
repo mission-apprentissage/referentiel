@@ -23,11 +23,6 @@ module.exports = (custom = {}) => {
             from: name,
             selector: data["numero_siren_siret_uai"],
             uai_potentiels: [data["numero_uai"]],
-            data: {
-              conformite_reglementaire: {
-                conventionne: true,
-              },
-            },
           };
         })
       );
