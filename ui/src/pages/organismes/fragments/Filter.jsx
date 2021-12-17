@@ -71,14 +71,15 @@ export function DepartementsFilter() {
   );
 }
 
-export function StatutsFilter() {
+export function TypeFilter() {
   return (
     <Filter
       label={"Type"}
-      paramName={"statuts"}
+      paramName={"type"}
       items={[
-        { code: "gestionnaire", label: "OF-CFA" },
-        { code: "formateur", label: "UFA" },
+        { code: "of-cfa", label: "OF-CFA" },
+        { code: "ufa", label: "UFA" },
+        { code: "entite-administrative", label: "Entité administratrive" },
       ]}
     />
   );

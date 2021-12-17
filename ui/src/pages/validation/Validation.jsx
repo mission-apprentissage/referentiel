@@ -7,7 +7,7 @@ import { useSearch } from "../../common/hooks/useSearch";
 import Spinner from "../../common/components/Spinner";
 import { useParams } from "react-router-dom";
 import { useFilAriane } from "../../common/components/FilAriane";
-import { NdaFilter, StatutsFilter } from "../organismes/fragments/Filter";
+import { NdaFilter, TypeFilter } from "../organismes/fragments/Filter";
 
 const validationMapper = {
   A_VALIDER: "l'UAI est à valider",
@@ -43,7 +43,7 @@ export default function Validation() {
           <GridRow>
             <Col modifiers={"3"} className={"fr-pr-5v"}>
               <Filters search={search}>
-                <StatutsFilter />
+                <TypeFilter />
                 <NdaFilter />
               </Filters>
             </Col>

@@ -7,7 +7,7 @@ import SearchForm from "./fragments/SearchForm";
 import OrganismeList from "./fragments/OrganismeList";
 import { useFilAriane } from "../../common/components/FilAriane";
 import Filters from "./fragments/Filters";
-import { DepartementsFilter, NdaFilter, StatutsFilter } from "./fragments/Filter";
+import { DepartementsFilter, NdaFilter, TypeFilter } from "./fragments/Filter";
 
 export default function Organismes() {
   let [{ data, loading, error }, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
@@ -36,7 +36,7 @@ export default function Organismes() {
                       <Col modifiers={"3"} className={"fr-pr-5v"}>
                         <Filters search={search}>
                           <DepartementsFilter />
-                          <StatutsFilter />
+                          <TypeFilter />
                           <NdaFilter />
                         </Filters>
                       </Col>

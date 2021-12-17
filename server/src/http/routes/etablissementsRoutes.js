@@ -37,6 +37,19 @@ module.exports = () => {
     };
   }
 
+  function typeToStatusQuery(type) {
+    switch (type) {
+      case "of-cfa":
+        return { statuts: { $all: ["gestionnaire", "formateur"] } };
+      case "ufa":
+        return { statuts: ["formateur"] };
+      case "entite-administrative":
+        return { statuts: ["gestionnaire"] };
+      default:
+        throw new Boom.badRequest(`${type} inconnu`);
+    }
+  }
+
   function buildQuery(params) {
     let {
       siret,
@@ -49,6 +62,7 @@ module.exports = () => {
       anomalies,
       uai_potentiel,
       numero_declaration_activite: nda,
+      type,
     } = params;
 
     return {
@@ -70,6 +84,7 @@ module.exports = () => {
           ? { "uai_potentiels.0": { $exists: uai_potentiel } }
           : { "uai_potentiels.uai": uai_potentiel }
         : {}),
+      ...(type ? typeToStatusQuery(type) : {}),
     };
   }
 
@@ -107,6 +122,7 @@ module.exports = () => {
         academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
         departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         anomalies: Joi.boolean().default(null),
+        type: Joi.string().valid("of-cfa", "ufa", "entite-administrative"),
         //Misc
         champs: stringList().default([]),
         uai_potentiel: Joi.alternatives()

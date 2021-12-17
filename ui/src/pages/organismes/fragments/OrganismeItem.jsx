@@ -1,6 +1,6 @@
 import { Box } from "../../../common/components/Flexbox";
 import styled from "styled-components";
-import Statuts from "../../organisme/fragments/Statuts";
+import Type from "../../organisme/fragments/Type";
 import React from "react";
 import Identite from "../../organisme/fragments/Identite";
 import { Link } from "../../../common/components/dsfr/elements/Link";
@@ -47,7 +47,7 @@ export default function OrganismeItem({ organisme }) {
     <ClickableItem to={organisme.siret}>
       <Card direction={"column"}>
         <Box justify={"between"}>
-          <Statuts organisme={organisme} />
+          <Type organisme={organisme} />
           <Identite organisme={organisme} />
         </Box>
         <RaisonSociale className={"fr-text--bold"}>
