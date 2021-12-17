@@ -753,46 +753,12 @@ describe("etablissementsRoutes", () => {
 
     let found = await dbCollection("etablissements").findOne({ siret: "11111111100001" });
     deepStrictEqual(found.uai, "0751234J");
-    let { _meta, _id, ...modification } = await dbCollection("modifications").findOne();
-    assert.ok(_id);
-    assert.ok(_meta.created_at);
+    let { date, ...modification } = await dbCollection("modifications").findOne({}, { projection: { _id: 0 } });
+    assert.ok(date);
     deepStrictEqual(modification, {
       siret: "11111111100001",
       uai: "0751234J",
-    });
-  });
-
-  it("Vérifie qu'on peut valider une UAI (region)", async () => {
-    const { httpClient } = await startServer();
-    await insertEtablissement({
-      siret: "11111111100001",
-      raison_sociale: "Centre de formation",
-      adresse: {
-        region: { code: "11", nom: "Île-de-France" },
-      },
-    });
-
-    let response = await httpClient.put(
-      "/api/v1/etablissements/11111111100001/validateUAI",
-      { uai: "0751234J" },
-      {
-        headers: {
-          ...generateAuthHeader("region", "11"),
-        },
-      }
-    );
-
-    strictEqual(response.status, 200);
-    deepStrictEqual(response.data.siret, "11111111100001");
-    deepStrictEqual(response.data.uai, "0751234J");
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100001" });
-    deepStrictEqual(found.uai, "0751234J");
-    let { _meta, _id, ...modification } = await dbCollection("modifications").findOne();
-    assert.ok(_id);
-    assert.ok(_meta.created_at);
-    deepStrictEqual(modification, {
-      siret: "11111111100001",
-      uai: "0751234J",
+      auteur: "11",
     });
   });
 

@@ -3,24 +3,20 @@ const { object, objectId, string, date } = require("./schemas/jsonSchemaTypes");
 module.exports = {
   name: "modifications",
   schema: () => {
-    let required = ["siret", "_meta"];
+    let required = ["siret", "uai", "date", "auteur"];
 
     return object(
       {
         _id: objectId(),
         siret: string(),
         uai: string(),
-        _meta: object(
-          {
-            created_at: date(),
-          },
-          { required: ["created_at"] }
-        ),
+        date: date(),
+        auteur: string(),
       },
       { required }
     );
   },
   indexes: () => {
-    return [[{ siret: 1 }], [{ "_meta.created_at": 1 }]];
+    return [[{ siret: 1 }], [{ date: 1 }]];
   },
 };

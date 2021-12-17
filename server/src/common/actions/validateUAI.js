@@ -1,10 +1,11 @@
 const { dbCollection } = require("../../common/db/mongodb");
 
-async function validateUAI(siret, uai) {
+async function validateUAI(siret, uai, auteur) {
   await dbCollection("modifications").insertOne({
     siret,
     uai,
-    _meta: { created_at: new Date() },
+    date: new Date(),
+    auteur,
   });
 
   let res = await dbCollection("etablissements").findOneAndUpdate(

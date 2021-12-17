@@ -21,9 +21,10 @@ describe("addModifications", () => {
     );
 
     const found = await dbCollection("modifications").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.ok(found._meta.created_at);
+    assert.ok(found.date);
     assert.deepStrictEqual(found.siret, "11111111100006");
     assert.deepStrictEqual(found.uai, "0751234J");
+    assert.deepStrictEqual(found.auteur, "experimentation");
     assert.deepStrictEqual(stats, {
       total: 1,
       inserted: 1,

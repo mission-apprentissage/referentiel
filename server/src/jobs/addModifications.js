@@ -21,7 +21,8 @@ async function addModifications(stream) {
       await dbCollection("modifications").insertOne({
         siret,
         uai,
-        _meta: { created_at: new Date() },
+        date: new Date(),
+        auteur: "experimentation",
       });
       stats.inserted++;
     } catch (e) {

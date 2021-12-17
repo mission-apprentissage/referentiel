@@ -163,6 +163,7 @@ module.exports = () => {
     "/api/v1/etablissements/:siret/validateUAI",
     checkApiToken(),
     tryCatch(async (req, res) => {
+      let user = req.user;
       let { siret, uai } = await Joi.object({
         siret: Joi.string()
           .pattern(/^[0-9]{14}$/)
@@ -172,11 +173,11 @@ module.exports = () => {
           .required(),
       }).validateAsync({ ...req.params, ...req.body }, { abortEarly: false });
 
-      if (!(await canEditEtablissement(siret, req.user))) {
+      if (!(await canEditEtablissement(siret, user))) {
         throw Boom.badRequest("Vous ne pouvez pas modifier cet établissement");
       }
 
-      let etablissement = await validateUAI(siret, uai);
+      let etablissement = await validateUAI(siret, uai, user.code);
 
       if (!etablissement) {
         throw Boom.notFound("Siret inconnu");
