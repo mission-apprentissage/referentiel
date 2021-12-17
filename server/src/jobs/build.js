@@ -1,7 +1,7 @@
 const GeoAdresseApi = require("../common/apis/GeoAdresseApi");
 const { createSource } = require("./sources/sources");
 const collectSources = require("./collectSources");
-const importEtablissements = require("./importEtablissements");
+const importOrganismes = require("./importOrganismes");
 const clearCache = require("./tasks/clearCache");
 const importCFD = require("./importCFD");
 
@@ -20,7 +20,7 @@ async function build(options = {}) {
   await importCFD();
 
   let sources = referentiels.map((name) => createSource(name));
-  await importEtablissements(sources, { removeAll: true }).then((res) => stats.push({ importEtablissements: res }));
+  await importOrganismes(sources, { removeAll: true }).then((res) => stats.push({ importOrganismes: res }));
 
   await collectAll([
     "agri",

@@ -1,13 +1,13 @@
 const assert = require("assert");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
-const { importEtablissements } = require("../../utils/testUtils");
+const { importOrganismes } = require("../../utils/testUtils");
 const collectSources = require("../../../src/jobs/collectSources");
 const { mockCatalogueApi } = require("../../utils/apiMocks");
 
 describe("catalogue-etablissements", () => {
   it("Vérifie qu'on peut collecter des informations relatives aux établissements du catalogue", async () => {
-    await importEtablissements();
+    await importOrganismes();
     mockCatalogueApi((client, responses) => {
       client
         .get("/entity/etablissements.ndjson")
@@ -19,7 +19,7 @@ describe("catalogue-etablissements", () => {
 
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({}, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["catalogue-etablissements"],

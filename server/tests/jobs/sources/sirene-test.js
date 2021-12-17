@@ -3,7 +3,7 @@ const { omit } = require("lodash");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
-const { importEtablissements } = require("../../utils/testUtils");
+const { importOrganismes } = require("../../utils/testUtils");
 const { mockSireneApi, mockGeoAddresseApi } = require("../../utils/apiMocks");
 const { DateTime } = require("luxon");
 
@@ -47,11 +47,11 @@ function createSireneSource(options = {}) {
 describe("sirene", () => {
   it("Vérifie qu'on peut collecter des informations de l'API Sirene", async () => {
     let source = createSireneSource({ mocks: ["geo", "sirene"] });
-    await importEtablissements();
+    await importOrganismes();
 
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.raison_sociale, "NOMAYO");
     assert.strictEqual(found.siege_social, true);
     assert.strictEqual(found.etat_administratif, "actif");
@@ -95,7 +95,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on recherche une adresse quand ne peut pas reverse-geocoder", async () => {
-    await importEtablissements();
+    await importOrganismes();
     mockGeoAddresseApi((client, responses) => {
       client
         .get((uri) => uri.includes("reverse"))
@@ -111,7 +111,7 @@ describe("sirene", () => {
     let source = createSireneSource({ mocks: ["sirene"] });
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.adresse, {
       geojson: {
         type: "Feature",
@@ -151,7 +151,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on recherche une adresse quand le code posal du reverse-geocoding n'est pas le même que l'adresse", async () => {
-    await importEtablissements();
+    await importOrganismes();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -211,7 +211,7 @@ describe("sirene", () => {
     let source = createSireneSource();
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.adresse, {
       geojson: {
         type: "Feature",
@@ -251,7 +251,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on peut collecter des relations", async () => {
-    await importEtablissements();
+    await importOrganismes();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("etablissements"))
@@ -295,7 +295,7 @@ describe("sirene", () => {
     });
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.relations, [
       {
         siret: "11111111122222",
@@ -315,7 +315,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on peut filter par siret", async () => {
-    await importEtablissements([{ siret: "11111111100006" }]);
+    await importOrganismes([{ siret: "11111111100006" }]);
 
     let source = createSireneSource({
       mocks: ["geo", "sirene"],
@@ -335,7 +335,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on ignore les relations qui ne sont pas des organismes de formations", async () => {
-    await importEtablissements([{ siret: "11111111100006" }]);
+    await importOrganismes([{ siret: "11111111100006" }]);
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -375,7 +375,7 @@ describe("sirene", () => {
     let source = createSireneSource({ mocks: ["geo"], organismes: ["2222222222222222"] });
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.relations.length, 1);
     assert.deepStrictEqual(found.relations[0].siret, "2222222222222222");
     assert.deepStrictEqual(stats, {
@@ -388,8 +388,8 @@ describe("sirene", () => {
     });
   });
 
-  it("Vérifie qu'on ignore les relations pour des établissements fermés", async () => {
-    await importEtablissements();
+  it("Vérifie qu'on ignore les relations pour des organismes fermés", async () => {
+    await importOrganismes();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -432,12 +432,12 @@ describe("sirene", () => {
     });
     await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.relations, []);
   });
 
   it("Vérifie qu'on gère une erreur lors de la récupération des informations de l'API Sirene", async () => {
-    await importEtablissements();
+    await importOrganismes();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -448,7 +448,7 @@ describe("sirene", () => {
     let source = createSireneSource();
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
     assert.deepStrictEqual(found._meta.anomalies[0].details, "[SireneApi] Request failed with status code 500");
     assert.deepStrictEqual(stats, {
       sirene: {
@@ -460,8 +460,8 @@ describe("sirene", () => {
     });
   });
 
-  it("Vérifie qu'on gère une erreur spécifique quand l'établissement n'existe pas", async () => {
-    await importEtablissements();
+  it("Vérifie qu'on gère une erreur spécifique quand l'organisme n'existe pas", async () => {
+    await importOrganismes();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -472,12 +472,12 @@ describe("sirene", () => {
     let source = createSireneSource();
     await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
     assert.deepStrictEqual(found._meta.anomalies[0].details, "Etablissement inconnu pour l'entreprise 111111111");
   });
 
   it("Vérifie qu'on gère une erreur spécifique quand l'entreprise n'existe pas", async () => {
-    await importEtablissements();
+    await importOrganismes();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -488,12 +488,12 @@ describe("sirene", () => {
     let source = createSireneSource();
     await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
     assert.deepStrictEqual(found._meta.anomalies[0].details, "Entreprise inconnue");
   });
 
   it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver l'adresse", async () => {
-    await importEtablissements();
+    await importOrganismes();
     mockGeoAddresseApi((client) => {
       client
         .get((uri) => uri.includes("reverse"))
@@ -510,13 +510,13 @@ describe("sirene", () => {
 
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
       job: "collect",
       source: "sirene",
       code: "etablissement_geoloc_impossible",
-      details: "Impossible de géolocaliser l'adresse de l'établissement. [2.396147,48.880391]",
+      details: "Impossible de géolocaliser l'adresse de l'organisme. [2.396147,48.880391]",
     });
     assert.deepStrictEqual(stats, {
       sirene: {
@@ -529,7 +529,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver la catégorie juridique", async () => {
-    await importEtablissements();
+    await importOrganismes();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -545,7 +545,7 @@ describe("sirene", () => {
     let source = createSireneSource({ mocks: ["geo"] });
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
       job: "collect",
@@ -564,7 +564,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on met en cache les données de l'API sirene", async () => {
-    await importEtablissements();
+    await importOrganismes();
     let source = createSireneSource({ mocks: ["geo", "sirene"] });
 
     await collectSources(source);
@@ -576,7 +576,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on met en cache les erreurs 4xx de l'API sirene", async () => {
-    await importEtablissements();
+    await importOrganismes();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -594,7 +594,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on ne met pas en cache les erreurs 5xx de l'API sirene", async () => {
-    await importEtablissements();
+    await importOrganismes();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))

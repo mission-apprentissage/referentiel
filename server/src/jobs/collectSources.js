@@ -48,7 +48,7 @@ async function mergeRelations(from, relations, newRelations) {
 
   return Promise.all(
     array.map(async (r) => {
-      let count = await dbCollection("etablissements").countDocuments({ siret: r.siret });
+      let count = await dbCollection("organismes").countDocuments({ siret: r.siret });
       return {
         ...r,
         referentiel: count > 0,
@@ -65,14 +65,11 @@ function mergeContacts(from, contacts, newContacts) {
   });
 }
 
-function handleAnomalies(from, etablissement, anomalies) {
-  logger.warn(
-    { anomalies },
-    `[Collect][${from}] Erreur lors de la collecte pour l'établissement ${etablissement.siret}.`
-  );
+function handleAnomalies(from, organisme, anomalies) {
+  logger.warn({ anomalies }, `[Collect][${from}] Erreur lors de la collecte pour l'organisme ${organisme.siret}.`);
 
-  return dbCollection("etablissements").updateOne(
-    { siret: etablissement.siret },
+  return dbCollection("organismes").updateOne(
+    { siret: organisme.siret },
     {
       $push: {
         "_meta.anomalies": {
@@ -142,9 +139,9 @@ module.exports = async (array, options = {}) => {
 
       stats[from].total++;
       let query = buildQuery(selector);
-      let etablissement = await dbCollection("etablissements").findOne(query);
-      if (!etablissement) {
-        logger.trace(`[Collect][${from}] Etablissement ${query} inconnu`);
+      let organisme = await dbCollection("organismes").findOne(query);
+      if (!organisme) {
+        logger.trace(`[Collect][${from}] Organisme ${query} inconnu`);
         stats[from].ignored++;
         return;
       }
@@ -152,18 +149,18 @@ module.exports = async (array, options = {}) => {
       try {
         if (anomalies.length > 0) {
           stats[from].failed++;
-          await handleAnomalies(from, etablissement, anomalies);
+          await handleAnomalies(from, organisme, anomalies);
         }
 
-        let res = await dbCollection("etablissements").updateMany(query, {
+        let res = await dbCollection("organismes").updateMany(query, {
           $set: {
             ...flattenObject(data),
-            uai_potentiels: mergeUAIPotentiels(from, etablissement.uai_potentiels, uai_potentiels),
-            relations: await mergeRelations(from, etablissement.relations, relations),
-            contacts: mergeContacts(from, etablissement.contacts, contacts),
-            diplomes: mergeArray(from, etablissement.diplomes, "code", diplomes),
-            certifications: mergeArray(from, etablissement.certifications, "code", certifications),
-            lieux_de_formation: mergeArray(from, etablissement.lieux_de_formation, "code", lieux_de_formation),
+            uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),
+            relations: await mergeRelations(from, organisme.relations, relations),
+            contacts: mergeContacts(from, organisme.contacts, contacts),
+            diplomes: mergeArray(from, organisme.diplomes, "code", diplomes),
+            certifications: mergeArray(from, organisme.certifications, "code", certifications),
+            lieux_de_formation: mergeArray(from, organisme.lieux_de_formation, "code", lieux_de_formation),
           },
           $addToSet: {
             reseaux: {
@@ -178,13 +175,13 @@ module.exports = async (array, options = {}) => {
         let nbModifiedDocuments = res.modifiedCount;
         if (nbModifiedDocuments) {
           stats[from].updated += nbModifiedDocuments;
-          logger.debug(`[Collect][${from}] Etablissement ${etablissement.siret} mis à jour`);
+          logger.debug(`[Collect][${from}] Organisme ${organisme.siret} mis à jour`);
         } else {
-          logger.trace(`[Collect][${from}] Etablissement ${etablissement.siret} à jour`);
+          logger.trace(`[Collect][${from}] Organisme ${organisme.siret} à jour`);
         }
       } catch (e) {
         stats[from].failed++;
-        await handleAnomalies(from, etablissement, [e]);
+        await handleAnomalies(from, organisme, [e]);
       }
     })
   );

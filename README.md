@@ -1,11 +1,11 @@
 # Référentiel
 
-Le référentiel regroupe les établissements qui dispensent des formations en apprentissage.
+Le référentiel regroupe les organismes qui dispensent des formations en apprentissage.
 
-Il se base sur trois listes d'établissements fournies par la DEPP, la DGEFP et la mission apprentissage. 
-Ces établissements sont importés dans l'annuaire au moyen de scripts.
+Il se base sur trois listes d'organismes fournies par la DEPP, la DGEFP et la mission apprentissage. 
+Ces organismes sont importés dans l'annuaire au moyen de scripts.
 
-Pour chacun des établissements importés, des scripts vont ensuite collecter des informations dans les différentes
+Pour chacun des organismes importés, des scripts vont ensuite collecter des informations dans les différentes
 sources dont la mission apprentissage dispose :
 
 - Fichiers réseaux
@@ -20,20 +20,20 @@ sources dont la mission apprentissage dispose :
 
 ## API
 
-L'api permet de consulter les établissements issus des référentiels ainsi que les données collectées dans les sources.
+L'api permet de consulter les organismes issus des référentiels ainsi que les données collectées dans les sources.
 Cet API est actuellement composée de deux routes.
 
-### /api/v1/etablissements
+### /api/v1/organismes
 
-Permet de lister les établissements contenus dans l'annuaire
+Permet de lister les organismes contenus dans l'annuaire
 
-Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/etablissements
+Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/organismes
 
-### /api/v1/etablissements/:siret
+### /api/v1/organismes/:siret
 
-Permet d'obtenir les informations relatives à un établissement à partir de son numéro de SIRET
+Permet d'obtenir les informations relatives à un organisme à partir de son numéro de SIRET
 
-Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/etablissements/77928324100056
+Exemple : https://referentiel.apprentissage.beta.gouv.fr/api/v1/organismes/77928324100056
 
 ## Développement
 

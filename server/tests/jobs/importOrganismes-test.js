@@ -2,9 +2,9 @@ const assert = require("assert");
 const { omit } = require("lodash");
 const { Readable } = require("stream");
 const { dbCollection } = require("../../src/common/db/mongodb");
-const importReferentiel = require("../../src/jobs/importEtablissements");
+const importReferentiel = require("../../src/jobs/importOrganismes");
 const { compose, transformData } = require("oleoduc");
-const { insertEtablissement } = require("../utils/fakeData");
+const { insertOrganisme } = require("../utils/fakeData");
 
 function createTestSource(array) {
   let name = "dummy";
@@ -19,13 +19,13 @@ function createTestSource(array) {
   };
 }
 
-describe("importEtablissement", () => {
+describe("importOrganismes", () => {
   it("Vérifie qu'on peut importer un référentiel", async () => {
     let source = createTestSource([{ selector: "11111111100006" }]);
 
     let results = await importReferentiel(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
     assert.deepStrictEqual(omit(found, ["_meta"]), {
       siret: "11111111100006",
       referentiels: ["dummy"],
@@ -51,12 +51,12 @@ describe("importEtablissement", () => {
     });
   });
 
-  it("Vérifie qu'on ignore les établissements en double", async () => {
+  it("Vérifie qu'on ignore les organismes en double", async () => {
     let source = createTestSource([{ selector: "11111111100006" }, { selector: "11111111100006" }]);
 
     let results = await importReferentiel(source);
 
-    await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(results, {
       dummy: {
         total: 2,
@@ -68,7 +68,7 @@ describe("importEtablissement", () => {
     });
   });
 
-  it("Vérifie qu'on ignore un établissement avec un siret vide", async () => {
+  it("Vérifie qu'on ignore un organisme avec un siret vide", async () => {
     let source = createTestSource([
       {
         selector: "",
@@ -77,7 +77,7 @@ describe("importEtablissement", () => {
 
     let results = await importReferentiel(source);
 
-    let count = await dbCollection("etablissements").countDocuments({ siret: "11111111100006" });
+    let count = await dbCollection("organismes").countDocuments({ siret: "11111111100006" });
     assert.strictEqual(count, 0);
     assert.deepStrictEqual(results, {
       dummy: {
@@ -90,7 +90,7 @@ describe("importEtablissement", () => {
     });
   });
 
-  it("Vérifie qu'on ignore un établissement avec un siret invalide", async () => {
+  it("Vérifie qu'on ignore un organisme avec un siret invalide", async () => {
     let source = createTestSource([
       {
         selector: "",
@@ -99,7 +99,7 @@ describe("importEtablissement", () => {
 
     let results = await importReferentiel(source);
 
-    let count = await dbCollection("etablissements").countDocuments({ siret: "7894766" });
+    let count = await dbCollection("organismes").countDocuments({ siret: "7894766" });
     assert.strictEqual(count, 0);
     assert.deepStrictEqual(results, {
       dummy: {
@@ -112,13 +112,13 @@ describe("importEtablissement", () => {
     });
   });
 
-  it("Vérifie qu'on peut supprimer tous les établissements avant l'import", async () => {
+  it("Vérifie qu'on peut supprimer tous les organismes avant l'import", async () => {
     let source = createTestSource([{ selector: "11111111100006" }]);
-    await insertEtablissement({ siret: "22222222200002" });
+    await insertOrganisme({ siret: "22222222200002" });
 
     await importReferentiel(source, { removeAll: true });
 
-    let docs = await dbCollection("etablissements").find({}, { siret: 1 }).toArray();
+    let docs = await dbCollection("organismes").find({}, { siret: 1 }).toArray();
     assert.ok(docs.length, 1);
     assert.strictEqual(docs[0].siret, "11111111100006");
   });

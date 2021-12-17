@@ -173,8 +173,8 @@ module.exports = (custom = {}) => {
         fetchFormations(api, options.filters),
         transformData(async (formation) => {
           let [formateur, gestionnaire] = await Promise.all([
-            dbCollection("etablissements").findOne({ siret: formation.etablissement_formateur_siret }, { siret: 1 }),
-            dbCollection("etablissements").findOne({ siret: formation.etablissement_gestionnaire_siret }, { siret: 1 }),
+            dbCollection("organismes").findOne({ siret: formation.etablissement_formateur_siret }, { siret: 1 }),
+            dbCollection("organismes").findOne({ siret: formation.etablissement_gestionnaire_siret }, { siret: 1 }),
           ]);
 
           if (!formateur && !gestionnaire) {

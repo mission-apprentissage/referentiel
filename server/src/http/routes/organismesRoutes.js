@@ -11,7 +11,7 @@ const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
 const validateUAI = require("../../common/actions/validateUAI");
 const { checkApiToken, checkOptionnalApiToken } = require("../middlewares/authMiddleware");
-const canEditEtablissement = require("../../common/actions/canEditEtablissement");
+const canEditOrganisme = require("../../common/actions/canEditOrganisme");
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
@@ -19,18 +19,14 @@ const { getDepartements } = require("../../common/departements");
 module.exports = () => {
   const router = express.Router();
 
-  function toDto(etablissement) {
+  function toDto(organisme) {
     return {
-      ...omit(etablissement, ["_id"]),
-      ...(etablissement._meta
+      ...omit(organisme, ["_id"]),
+      ...(organisme._meta
         ? {
             _meta: {
-              ...etablissement._meta,
-              validation: etablissement.uai
-                ? "VALIDEE"
-                : etablissement.uai_potentiels.length > 0
-                ? "A_VALIDER"
-                : "INCONNUE",
+              ...organisme._meta,
+              validation: organisme.uai ? "VALIDEE" : organisme.uai_potentiels.length > 0 ? "A_VALIDER" : "INCONNUE",
             },
           }
         : {}),
@@ -88,13 +84,13 @@ module.exports = () => {
     };
   }
 
-  function findEtablissements(params) {
+  function findOrganismes(params) {
     let { page, items_par_page, ordre, champs } = params;
     let query = buildQuery(params);
     let projection = buildProjection(champs);
 
     return aggregateAndPaginate(
-      dbCollection("etablissements"),
+      dbCollection("organismes"),
       query,
       [
         { $sort: { ["_meta.created_at"]: ordre === "asc" ? 1 : -1 } },
@@ -108,7 +104,7 @@ module.exports = () => {
   }
 
   router.get(
-    "/api/v1/etablissements",
+    "/api/v1/organismes",
     checkOptionnalApiToken(),
     tryCatch(async (req, res) => {
       let params = await Joi.object({
@@ -136,14 +132,14 @@ module.exports = () => {
         text: Joi.string(),
       }).validateAsync(req.query, { abortEarly: false });
 
-      let { aggregate, pagination } = await findEtablissements(params);
+      let { aggregate, pagination } = await findOrganismes(params);
 
       sendJsonStream(
         oleoduc(
           aggregate.stream(),
           transformData((data) => toDto(data)),
           transformIntoJSON({
-            arrayPropertyName: "etablissements",
+            arrayPropertyName: "organismes",
             arrayWrapper: {
               pagination,
             },
@@ -155,7 +151,7 @@ module.exports = () => {
   );
 
   router.get(
-    "/api/v1/etablissements/:siret",
+    "/api/v1/organismes/:siret",
     tryCatch(async (req, res) => {
       let { siret, champs } = await Joi.object({
         siret: Joi.string()
@@ -165,18 +161,18 @@ module.exports = () => {
       }).validateAsync({ ...req.params, ...req.query }, { abortEarly: false });
 
       let projection = buildProjection(champs);
-      let etablissement = await dbCollection("etablissements").findOne({ siret }, { projection });
+      let organisme = await dbCollection("organismes").findOne({ siret }, { projection });
 
-      if (!etablissement) {
+      if (!organisme) {
         throw Boom.notFound("Siret inconnu");
       }
 
-      return res.json(toDto(etablissement));
+      return res.json(toDto(organisme));
     })
   );
 
   router.put(
-    "/api/v1/etablissements/:siret/validateUAI",
+    "/api/v1/organismes/:siret/validateUAI",
     checkApiToken(),
     tryCatch(async (req, res) => {
       let user = req.user;
@@ -189,17 +185,17 @@ module.exports = () => {
           .required(),
       }).validateAsync({ ...req.params, ...req.body }, { abortEarly: false });
 
-      if (!(await canEditEtablissement(siret, user))) {
-        throw Boom.badRequest("Vous ne pouvez pas modifier cet établissement");
+      if (!(await canEditOrganisme(siret, user))) {
+        throw Boom.badRequest("Vous ne pouvez pas modifier cet organisme");
       }
 
-      let etablissement = await validateUAI(siret, uai, user.code);
+      let organisme = await validateUAI(siret, uai, user.code);
 
-      if (!etablissement) {
+      if (!organisme) {
         throw Boom.notFound("Siret inconnu");
       }
 
-      return res.json(toDto(etablissement));
+      return res.json(toDto(organisme));
     })
   );
 

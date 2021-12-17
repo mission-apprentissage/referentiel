@@ -3,12 +3,12 @@ const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
 const { createStream } = require("../../utils/testUtils");
-const { insertEtablissement } = require("../../utils/fakeData");
+const { insertOrganisme } = require("../../utils/fakeData");
 
 describe("datadock", () => {
   it("Vérifie qu'on peut collecter des informations datadock", async () => {
-    await insertEtablissement({ siret: "11111111100006" });
-    await insertEtablissement({ siret: "22222222200002" });
+    await insertOrganisme({ siret: "11111111100006" });
+    await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("datadock", {
       input: createStream(
         `siret;REFERENCABLE
@@ -19,9 +19,9 @@ describe("datadock", () => {
 
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.conformite_reglementaire.certificateur, "datadock");
-    found = await dbCollection("etablissements").findOne({ siret: "22222222200002" }, { _id: 0 });
+    found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
     assert.strictEqual(found.conformite_reglementaire.certificateur, undefined);
 
     assert.deepStrictEqual(stats, {
@@ -35,7 +35,7 @@ describe("datadock", () => {
   });
 
   it("Vérifie qu'on peut préserver le conventionnement", async () => {
-    await insertEtablissement({
+    await insertOrganisme({
       siret: "11111111100006",
       conformite_reglementaire: {
         conventionne: true,
@@ -50,7 +50,7 @@ describe("datadock", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.conformite_reglementaire.conventionne, true);
   });
 });

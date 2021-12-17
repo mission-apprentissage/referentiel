@@ -85,7 +85,7 @@ describe("importAcce", () => {
     });
   });
 
-  it("Vérifie qu'on peut importer une établissement sans coordonnées de géolocalisation", async () => {
+  it("Vérifie qu'on peut importer un établissement sans coordonnées de géolocalisation", async () => {
     let api = getMockedAcceApi((mock, responses) => {
       mock.onGet(/.*index.php.*/).reply(200, responses.index(), {
         "set-cookie": ["PHPSESSID=123;"],

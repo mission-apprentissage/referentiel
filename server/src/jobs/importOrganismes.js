@@ -29,7 +29,7 @@ module.exports = async (array, options = {}) => {
   let stats = createStats(sources);
 
   if (options.removeAll) {
-    await clearCollection("etablissements");
+    await clearCollection("organismes");
   }
 
   await oleoduc(
@@ -38,12 +38,12 @@ module.exports = async (array, options = {}) => {
       stats[from].total++;
       if (isEmpty(siret) || !luhn(siret)) {
         stats[from].invalid++;
-        logger.warn(`[Referentiel] Siret '${siret}' invalide pour l'établissement`);
+        logger.warn(`[Referentiel] Siret '${siret}' invalide pour l'organisme`);
         return;
       }
 
       try {
-        let res = await dbCollection("etablissements").updateOne(
+        let res = await dbCollection("organismes").updateOne(
           { siret },
           {
             $set: {
@@ -69,11 +69,11 @@ module.exports = async (array, options = {}) => {
         );
 
         if (res.upsertedCount) {
-          logger.debug(`[Referentiel] Etablissement ${siret} créé`);
+          logger.debug(`[Referentiel] Organisme ${siret} créé`);
           stats[from].created += res.upsertedCount;
         } else if (res.modifiedCount) {
           stats[from].updated += res.modifiedCount;
-          logger.debug(`[Referentiel] Etablissement ${siret} mis à jour`);
+          logger.debug(`[Referentiel] Organisme ${siret} mis à jour`);
         }
       } catch (e) {
         stats[from].failed++;

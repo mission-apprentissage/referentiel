@@ -95,17 +95,17 @@ module.exports = {
             datagouv: {
               total: 2434,
               deca: 0,
-              etablissements: 432,
+              organismes: 432,
               ramsese: 0,
               sifa: 0,
             },
             deca: {
               total: 14287,
-              etablissements: 2013,
+              organismes: 2013,
               ramsese: 394,
               sifa: 1669,
             },
-            etablissements: {
+            organismes: {
               total: 5679,
               deca: 2013,
               ramsese: 513,
@@ -114,13 +114,13 @@ module.exports = {
             ramsese: {
               total: 1629,
               deca: 394,
-              etablissements: 513,
+              organismes: 513,
               sifa: 0,
             },
             sifa: {
               total: 2141,
               deca: 1669,
-              etablissements: 1081,
+              organismes: 1081,
               ramsese: 0,
             },
           },
@@ -129,8 +129,8 @@ module.exports = {
       )
     );
   },
-  insertEtablissement(custom) {
-    return dbCollection("etablissements").insertOne(
+  insertOrganisme(custom) {
+    return dbCollection("organismes").insertOne(
       merge(
         {},
         {

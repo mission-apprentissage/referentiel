@@ -3,8 +3,8 @@ const { dbCollection } = require("../../common/db/mongodb");
 const { parseCsv } = require("../../common/utils/csvUtils");
 const { pick } = require("lodash");
 
-function findMostPopularUAI(etablissement) {
-  let potentiels = etablissement.uai_potentiels.filter((item) => {
+function findMostPopularUAI(organisme) {
+  let potentiels = organisme.uai_potentiels.filter((item) => {
     let sources = item.sources.filter((s) => s.includes("sifa-ramsese") || s.includes("catalogue-etablissements"));
     return sources.length >= 1;
   });
@@ -18,11 +18,11 @@ function findMostPopularUAI(etablissement) {
   return found.uai;
 }
 
-function getUAI(source, etablissement) {
-  let potentiels = etablissement.uai_potentiels.filter((u) => u.sources.includes(source));
+function getUAI(source, organisme) {
+  let potentiels = organisme.uai_potentiels.filter((u) => u.sources.includes(source));
 
-  let found = potentiels.find((u) => u.uai === etablissement.uai);
-  if (etablissement.uai && found) {
+  let found = potentiels.find((u) => u.uai === organisme.uai);
+  if (organisme.uai && found) {
     return found.uai;
   } else {
     return potentiels.reduce((acc, u) => {
@@ -34,12 +34,12 @@ function getUAI(source, etablissement) {
   }
 }
 
-function getTask(etablissement) {
-  if (!etablissement.etat_administratif || etablissement.etat_administratif === "fermé") {
+function getTask(organisme) {
+  if (!organisme.etat_administratif || organisme.etat_administratif === "fermé") {
     return "inconnu";
   }
 
-  let uai = findMostPopularUAI(etablissement);
+  let uai = findMostPopularUAI(organisme);
   return uai ? "à valider" : "à expertiser";
 }
 
@@ -77,35 +77,35 @@ async function experimentationCsvStream(options = {}) {
   let previous = options.previous ? await loadPrevious(options.previous) : [];
 
   return compose(
-    dbCollection("etablissements")
+    dbCollection("organismes")
       .find({ uai: { $exists: false }, ...filter })
       .limit(limit)
       .sort({ siret: 1 })
       .stream(),
-    transformData((etablissement) => {
-      let task = getTask(etablissement);
+    transformData((organisme) => {
+      let task = getTask(organisme);
       if (task !== "à valider") {
         return null;
       }
       return {
-        etablissement,
+        organisme,
         task,
       };
     }),
     transformIntoCSV({
       separator: ",",
       columns: {
-        Académie: ({ etablissement }) => etablissement.adresse?.academie.nom,
-        Siret: ({ etablissement }) => etablissement.siret,
-        "Raison sociale": ({ etablissement }) => sanitize(etablissement.raison_sociale),
-        Statuts: ({ etablissement }) => etablissement.statuts.sort().reverse().join(" et "),
-        DECA: ({ etablissement }) => getUAI("deca", etablissement),
-        "SIFA RAMSESE": ({ etablissement }) => getUAI("sifa-ramsese", etablissement),
-        Catalogue: ({ etablissement }) => getUAI("catalogue-etablissements", etablissement),
-        UAI: ({ etablissement }) => findMostPopularUAI(etablissement),
+        Académie: ({ organisme }) => organisme.adresse?.academie.nom,
+        Siret: ({ organisme }) => organisme.siret,
+        "Raison sociale": ({ organisme }) => sanitize(organisme.raison_sociale),
+        Statuts: ({ organisme }) => organisme.statuts.sort().reverse().join(" et "),
+        DECA: ({ organisme }) => getUAI("deca", organisme),
+        "SIFA RAMSESE": ({ organisme }) => getUAI("sifa-ramsese", organisme),
+        Catalogue: ({ organisme }) => getUAI("catalogue-organismes", organisme),
+        UAI: ({ organisme }) => findMostPopularUAI(organisme),
         Tache: ({ task }) => task,
-        Précédent: ({ etablissement }) => {
-          let found = previous.find((p) => p.SIRET === etablissement.siret);
+        Précédent: ({ organisme }) => {
+          let found = previous.find((p) => p.SIRET === organisme.siret);
           return found ? found.UAI : "";
         },
       },

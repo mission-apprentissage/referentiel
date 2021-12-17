@@ -48,7 +48,7 @@ module.exports = (options = {}) => {
       let organismes = options.organismes || (await datagouv.loadOrganismeDeFormations());
 
       return compose(
-        dbCollection("etablissements").find(filters, { siret: 1 }).stream(),
+        dbCollection("organismes").find(filters, { siret: 1 }).stream(),
         transformData(
           async ({ siret }) => {
             try {
@@ -94,7 +94,7 @@ module.exports = (options = {}) => {
                 } catch (e) {
                   anomalies.push({
                     code: "etablissement_geoloc_impossible",
-                    message: `Impossible de géolocaliser l'adresse de l'établissement. ${e.message}`,
+                    message: `Impossible de géolocaliser l'adresse de l'organisme. ${e.message}`,
                   });
                 }
               } else {

@@ -26,7 +26,7 @@ async function addModifications(stream) {
       });
       stats.inserted++;
     } catch (e) {
-      logger.error(e, `Impossible d'ajouter la modification pour l'uai ${uai} et l'établissement ${siret}`);
+      logger.error(e, `Impossible d'ajouter la modification pour l'uai ${uai} et l'organisme ${siret}`);
       stats.failed++;
     }
   }

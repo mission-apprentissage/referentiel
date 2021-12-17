@@ -17,9 +17,9 @@ function adaptParamsForAPI(params) {
 export function useSearch(initialParams = {}) {
   let { params, buildUrl, navigate } = useNavigation();
 
-  let url = buildUrl(`/api/v1/etablissements`, { ...initialParams, ...adaptParamsForAPI(params) });
+  let url = buildUrl(`/api/v1/organismes`, { ...initialParams, ...adaptParamsForAPI(params) });
   let [state] = useFetch(url, {
-    etablissements: [],
+    organismes: [],
     pagination: {
       page: 0,
       resultats_par_page: 0,

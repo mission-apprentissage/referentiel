@@ -1,5 +1,5 @@
 const { Readable } = require("stream");
-const importEtablissements = require("../../src/jobs/importEtablissements");
+const importOrganismes = require("../../src/jobs/importOrganismes");
 const server = require("../../src/http/server");
 const axiosist = require("axiosist"); // eslint-disable-line node/no-unpublished-require
 const { compose, transformData } = require("oleoduc");
@@ -36,8 +36,8 @@ module.exports = {
   createStream,
   startServer,
   generateAuthHeader,
-  importEtablissements: (array = [{ siret: "11111111100006" }]) => {
-    return importEtablissements({
+  importOrganismes: (array = [{ siret: "11111111100006" }]) => {
+    return importOrganismes({
       name: "test",
       stream() {
         return compose(

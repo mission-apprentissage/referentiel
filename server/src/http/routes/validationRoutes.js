@@ -18,7 +18,7 @@ module.exports = () => {
         departements: stringList(Joi.string().valid(...user.departements.map((d) => d.code))).default([]),
       }).validateAsync(req.query, { abortEarly: false });
 
-      let filters = await dbCollection("etablissements")
+      let filters = await dbCollection("organismes")
         .aggregate([
           {
             $match: {

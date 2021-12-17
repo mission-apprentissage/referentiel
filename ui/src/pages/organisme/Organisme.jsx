@@ -21,7 +21,7 @@ export default function Organisme() {
       <GridRow className={"fr-pb-3w"}>
         <Col>
           <Alert modifiers={"error"} title={"Une erreur survenue"}>
-            Impossible de récupérer les informations liées à cet établissement
+            Impossible de récupérer les informations liées à cet organisme
           </Alert>
         </Col>
       </GridRow>

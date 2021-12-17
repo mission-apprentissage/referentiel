@@ -19,7 +19,7 @@ function selectBestResult(results, desc) {
   let best = results.features[0];
   if (!best || best.properties.score < MIN_GEOCODE_SCORE) {
     throw new GeocodingError(
-      `Score ${best?.properties.score} trop faible pour l'adresse ${desc} / ${best.geometry.coordinates}`
+      `Score ${best?.properties.score} trop faible pour l'adresse ${desc} / ${best?.geometry.coordinates}`
     );
   }
 

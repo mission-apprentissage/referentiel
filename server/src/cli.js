@@ -7,7 +7,7 @@ const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/collectSources");
 const computeStats = require("./jobs/computeStats");
 const importCFD = require("./jobs/importCFD");
-const importEtablissements = require("./jobs/importEtablissements");
+const importOrganismes = require("./jobs/importOrganismes");
 const build = require("./jobs/build");
 const migrate = require("./jobs/migrate");
 const addModifications = require("./jobs/addModifications");
@@ -18,7 +18,7 @@ const writeToStdout = require("oleoduc/lib/writeToStdout");
 
 cli
   .command("build")
-  .argument("[names]", "La liste des sources servant de référence d'établissements")
+  .argument("[names]", "La liste des sources servant de référence d'organismes")
   .option("--clearCache", "Supprime les données stockées en cache")
   .action((names, options) => {
     runScript(() => {
@@ -41,18 +41,18 @@ cli
   });
 
 cli
-  .command("importEtablissements")
+  .command("importOrganismes")
   .argument("<names>", "la liste des sources à importer")
   .argument("[file]", "Le nom du fichier utilisé par la source")
-  .option("--removeAll", "Supprimes tous les établissements avant import")
-  .description("Importe les établissements contenus dans les sources")
+  .option("--removeAll", "Supprimes tous les organismes avant import")
+  .description("Importe les organismes contenus dans les sources")
   .action((names, file, options) => {
     runScript(async () => {
       let mainSourceName = names.split(",");
       let input = file ? createReadStream(file) : null;
 
       let mainSources = mainSourceName.map((name) => createSource(name, { input }));
-      return importEtablissements(mainSources, options);
+      return importOrganismes(mainSources, options);
     });
   });
 

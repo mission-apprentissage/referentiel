@@ -20,19 +20,19 @@ securityDefinitions:
       Pour plus d'informations voir :
       https://github.com/mission-apprentissage/referentiel
 responses:
-  EtablissementResponse:
-    description: Un etablissement
+  OrganismeResponse:
+    description: Un organisme
     schema:
-      $ref: "#/definitions/Etablissement"
-  EtablissementsResponse:
+      $ref: "#/definitions/Organisme"
+  OrganismesResponse:
     description: La liste des organismes formateurs
     schema:
       type: object
       properties:
-        etablissements:
+        organismes:
           type: array
           items:
-            $ref: "#/definitions/Etablissement"
+            $ref: "#/definitions/Organisme"
         meta:
           type: object
           description: Informations complémentaires
@@ -82,7 +82,7 @@ definitions:
       total:
         type: number
 
-  Etablissement:
+  Organisme:
     type: object
     properties:
       TODO:
@@ -90,10 +90,10 @@ definitions:
         description: L'identifiant unique de l'action
 
 paths:
-  /api/v1/etablissements:
+  /api/v1/organismes:
     get:
       description: >
-        Récupérer la liste des établissements
+        Récupérer la liste des organismes
       produces:
         - application/json
       parameters:
@@ -150,7 +150,7 @@ paths:
         - Authorization: [ ]
       responses:
         200:
-          $ref: "#/responses/EtablissementsResponse"
+          $ref: "#/responses/OrganismesResponse"
         400:
           $ref: "#/responses/BadRequestErrorResponse"
         401:
@@ -160,7 +160,7 @@ paths:
       tags:
         - Publique
 
-  /api/v1/etablissements/{siret}:
+  /api/v1/organismes/{siret}:
     get:
       description: >
         Récupérer les informations d'un établissement
@@ -186,7 +186,7 @@ paths:
         - Authorization: [ ]
       responses:
         200:
-          $ref: "#/responses/EtablissementResponse"
+          $ref: "#/responses/OrganismeResponse"
         400:
           $ref: "#/responses/BadRequestErrorResponse"
         401:

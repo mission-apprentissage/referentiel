@@ -1,11 +1,11 @@
 const { strictEqual, deepStrictEqual } = require("assert");
-const { insertEtablissement } = require("../utils/fakeData");
+const { insertOrganisme } = require("../utils/fakeData");
 const { startServer, generateAuthHeader } = require("../utils/testUtils");
 
 describe("tableauDeBordRoutes", () => {
   it("Vérifie qu'on peut obtenir les informations", async () => {
     const { httpClient } = await startServer();
-    await insertEtablissement({
+    await insertOrganisme({
       siret: "11111111100001",
       statuts: ["gestionnaire", "formateur"],
       uai: "0751234J",
@@ -17,7 +17,7 @@ describe("tableauDeBordRoutes", () => {
         },
       ],
     });
-    await insertEtablissement({
+    await insertOrganisme({
       siret: "22222222200002",
       uai_potentiels: [
         {
@@ -27,7 +27,7 @@ describe("tableauDeBordRoutes", () => {
         },
       ],
     });
-    await insertEtablissement({
+    await insertOrganisme({
       siret: "33333333300008",
     });
 

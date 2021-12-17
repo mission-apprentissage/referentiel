@@ -7,7 +7,7 @@ async function consolidate() {
   for await (const { siret, uai } of dbCollection("modifications").find().sort({ date: 1 }).stream()) {
     try {
       stats.total++;
-      let res = await dbCollection("etablissements").updateOne({ siret }, { $set: { uai } });
+      let res = await dbCollection("organismes").updateOne({ siret }, { $set: { uai } });
 
       if (res.modifiedCount) {
         stats.modifications++;
@@ -15,7 +15,7 @@ async function consolidate() {
         stats.unknown++;
       }
     } catch (e) {
-      logger.error(e, `Impossible d'ajouter la modification pour l'uai ${uai} et l'établissement ${siret}`);
+      logger.error(e, `Impossible d'ajouter la modification pour l'uai ${uai} et l'organisme ${siret}`);
       stats.failed++;
     }
   }

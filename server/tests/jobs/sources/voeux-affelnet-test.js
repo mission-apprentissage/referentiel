@@ -3,11 +3,11 @@ const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
 const { createStream } = require("../../utils/testUtils");
-const { insertEtablissement } = require("../../utils/fakeData");
+const { insertOrganisme } = require("../../utils/fakeData");
 
 describe("voeux-affelnet", () => {
   it("Vérifie qu'on peut collecter des emails à partir du fichier des voeux-affelnet (uai)", async () => {
-    await insertEtablissement({
+    await insertOrganisme({
       siret: "11111111100006",
       uai: "0111111Y",
     });
@@ -20,7 +20,7 @@ describe("voeux-affelnet", () => {
 
     let stats = await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.contacts, [
       {
         email: "robert@formation.fr",
@@ -39,7 +39,7 @@ describe("voeux-affelnet", () => {
   });
 
   it("Vérifie qu'on peut collecter des emails à partir du fichier des voeux-affelnet (siret)", async () => {
-    await insertEtablissement({ siret: "11111111100006" });
+    await insertOrganisme({ siret: "11111111100006" });
     let source = await createSource("voeux-affelnet", {
       input: createStream(
         `email;uai;siret
@@ -49,7 +49,7 @@ describe("voeux-affelnet", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("etablissements").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.contacts, [
       {
         email: "robert@formation.fr",
@@ -60,7 +60,7 @@ describe("voeux-affelnet", () => {
   });
 
   it("Vérifie qu'on ne met pas à jour un établisement qu'on le siret est vide", async () => {
-    await insertEtablissement({ siret: "22222222200002" });
+    await insertOrganisme({ siret: "22222222200002" });
     let source = await createSource("voeux-affelnet", {
       input: createStream(
         `email;uai

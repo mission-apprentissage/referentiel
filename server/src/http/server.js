@@ -9,7 +9,7 @@ module.exports = async () => {
   app.use(bodyParser.json());
   app.use(logMiddleware());
   app.use(require("./routes/healthcheckRoutes")());
-  app.use(require("./routes/etablissementsRoutes")());
+  app.use(require("./routes/organismesRoutes")());
   app.use(require("./routes/validationRoutes")());
   app.use(require("./routes/dataRoutes")());
   app.use(require("./routes/swaggerRoutes")());

@@ -8,7 +8,7 @@ async function validateUAI(siret, uai, auteur) {
     auteur,
   });
 
-  let res = await dbCollection("etablissements").findOneAndUpdate(
+  let res = await dbCollection("organismes").findOneAndUpdate(
     { siret },
     { $set: { uai } },
     { returnDocument: "after" }

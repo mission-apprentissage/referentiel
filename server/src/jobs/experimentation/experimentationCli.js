@@ -6,7 +6,7 @@ const runScript = require("../runScript");
 
 cli
   .command("export")
-  .description("Exporte la liste des établissements à valider")
+  .description("Exporte la liste des organismes à valider")
   .option("--filter <filter>", "Filtre au format json", JSON.parse)
   .option("--limit <limit>", "Nombre maximum d'éléments à exporter", parseInt)
   .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)

@@ -49,7 +49,7 @@ export default function Validation() {
             </Col>
             <Col modifiers={"9"}>
               <Spinner error={error} loading={loading} />
-              <OrganismeList etablissements={data.etablissements} pagination={data.pagination} />
+              <OrganismeList organismes={data.organismes} pagination={data.pagination} />
             </Col>
           </GridRow>
         </Col>
