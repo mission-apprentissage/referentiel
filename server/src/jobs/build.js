@@ -26,7 +26,6 @@ async function build(options = {}) {
     "agri",
     "anasup",
     "compagnons-du-devoir",
-    "datadock",
     "deca",
     "catalogue-etablissements",
     "tableau-de-bord",

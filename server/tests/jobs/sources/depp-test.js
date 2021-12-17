@@ -25,7 +25,6 @@ describe("depp", () => {
         valide: true,
       },
     ]);
-    assert.deepStrictEqual(found.conformite_reglementaire, { conventionne: true });
     assert.deepStrictEqual(stats, {
       depp: {
         total: 1,
