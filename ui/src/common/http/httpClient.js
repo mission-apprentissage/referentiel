@@ -22,22 +22,19 @@ class HTTPError extends Error {
 
 const emitter = new EventEmitter();
 
-function handleResponse(path, response) {
+async function handleResponse(path, response) {
   let statusCode = response.status;
+  let json = await response.json();
   if (statusCode >= 400 && statusCode < 600) {
     emitter.emit("http:error", response);
 
     if (statusCode === 401 || statusCode === 403) {
-      throw new AuthError(response.json(), statusCode);
+      throw new AuthError(json, statusCode);
     } else {
-      throw new HTTPError(
-        `Server returned ${statusCode} when requesting resource ${path}`,
-        response.json(),
-        statusCode
-      );
+      throw new HTTPError(`Server returned ${statusCode} when requesting resource ${path}`, json, statusCode);
     }
   }
-  return response.json();
+  return json;
 }
 
 const getHeaders = () => {

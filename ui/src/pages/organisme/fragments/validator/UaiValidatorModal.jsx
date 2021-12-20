@@ -9,6 +9,7 @@ import useForm from "../../../../common/form/useForm";
 import * as yup from "yup";
 import { Form } from "../../../../common/form/Form";
 import { CustomUAIInput } from "./CustomUAIInput";
+import { _get } from "../../../../common/http/httpClient";
 
 const BlueBox = styled("div")`
   border: 1px solid var(--border-active-blue-france);
@@ -25,8 +26,21 @@ export function UaiValidatorModal({ modal, organisme, validation }) {
       uai: yup.string(),
       custom: yup.string().when("uai", {
         is: (uai) => uai === "custom",
-        then: yup.string().test("is-uai-valide", "L'uai n'est pas au bon format ou n'existe pas", async (value) => {
-          return /^[0-9]{7}[A-Z]{1}$/.test(value);
+        then: yup.string().test("is-uai-valide", async (value, { createError, path }) => {
+          return _get(`/api/v1/uais/${value}`)
+            .then(() => true)
+            .catch((e) => {
+              if (e.statusCode === 400) {
+                return createError({ message: "Le format de l'UAI n'est pas valide", path });
+              } else if (e.statusCode === 404) {
+                return createError({
+                  message: "Cette UAI n'existe pas dans la base RAMSESE, merci de renseigner une autre UAI",
+                  path,
+                });
+              } else {
+                return false;
+              }
+            });
         }),
         otherwise: yup.string().max(0),
       }),

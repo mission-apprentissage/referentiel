@@ -3,7 +3,7 @@ const { isEmpty, omit, isNil, isBoolean } = require("lodash");
 const Boom = require("boom");
 const { oleoduc, transformIntoJSON, transformData } = require("oleoduc");
 const Joi = require("@hapi/joi");
-const { aggregateAndPaginate } = require("../../common/utils/dbUtils");
+const { findAndPaginate } = require("../../common/utils/dbUtils");
 const { sendJsonStream } = require("../utils/httpUtils");
 const buildProjection = require("../utils/buildProjection");
 const { stringList } = require("../utils/validators");
@@ -84,30 +84,11 @@ module.exports = () => {
     };
   }
 
-  function findOrganismes(params) {
-    let { page, items_par_page, ordre, champs } = params;
-    let query = buildQuery(params);
-    let projection = buildProjection(champs);
-
-    return aggregateAndPaginate(
-      dbCollection("organismes"),
-      query,
-      [
-        { $sort: { ["_meta.created_at"]: ordre === "asc" ? 1 : -1 } },
-        ...(isEmpty(projection) ? [] : [{ $project: projection }]),
-      ],
-      {
-        page,
-        limit: items_par_page,
-      }
-    );
-  }
-
   router.get(
     "/api/v1/organismes",
     checkOptionnalApiToken(),
     tryCatch(async (req, res) => {
-      let params = await Joi.object({
+      let { page, items_par_page, ordre, champs, ...params } = await Joi.object({
         uai: Joi.alternatives()
           .try(Joi.boolean(), Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/))
           .default(null),
@@ -132,11 +113,19 @@ module.exports = () => {
         text: Joi.string(),
       }).validateAsync(req.query, { abortEarly: false });
 
-      let { aggregate, pagination } = await findOrganismes(params);
+      let query = buildQuery(params);
+      let projection = buildProjection(champs);
+
+      let { find, pagination } = await findAndPaginate(dbCollection("organismes"), query, {
+        page,
+        limit: items_par_page,
+        sort: { ["_meta.created_at"]: ordre === "asc" ? 1 : -1 },
+        ...(isEmpty(projection) ? {} : { projection }),
+      });
 
       sendJsonStream(
         oleoduc(
-          aggregate.stream(),
+          find.stream(),
           transformData((data) => toDto(data)),
           transformIntoJSON({
             arrayPropertyName: "organismes",
