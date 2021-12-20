@@ -16,7 +16,6 @@ export default function LayoutRoute() {
     <div>
       <Header
         title={"Référentiel"}
-        tagline={"Le pourfendeur d'UAI"}
         nav={
           <Nav>
             <NavLink to={"/"}>Tableau de bord</NavLink>
