@@ -1,5 +1,5 @@
 import { FirstPage, LastPage, NextPage, Page, Pagination, PreviousPage } from "./dsfr/elements/Pagination";
-import useNavigation from "../hooks/useNavigation";
+import useNavigation from "./navigation/useNavigation";
 
 export default function ResultsPagination({ pagination }) {
   let { params, buildUrl } = useNavigation();

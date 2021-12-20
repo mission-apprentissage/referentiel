@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { OrganismeContext } from "../../Organisme";
-import Modal from "../../../../common/components/dsfr/elements/Modal";
-import Fieldset from "../../../../common/components/dsfr/elements/Fieldset";
-import Radio from "../../../../common/components/dsfr/elements/Radio";
-import { Button, ButtonGroup } from "../../../../common/components/dsfr/elements/Button";
+import Modal from "../../../../common/dsfr/elements/Modal";
+import Fieldset from "../../../../common/dsfr/elements/Fieldset";
+import Radio from "../../../../common/dsfr/elements/Radio";
+import { Button, ButtonGroup } from "../../../../common/dsfr/elements/Button";
 import styled from "styled-components";
-import useForm from "../../../../common/hooks/useForm";
+import useForm from "../../../../common/form/useForm";
 import * as yup from "yup";
-import { Form } from "../../../../common/components/Form";
+import { Form } from "../../../../common/form/Form";
 import { CustomUAIInput } from "./CustomUAIInput";
 
 const BlueBox = styled("div")`

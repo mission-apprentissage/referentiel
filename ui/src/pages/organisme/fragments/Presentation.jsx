@@ -1,4 +1,4 @@
-import { Box } from "../../../common/components/Flexbox";
+import { Box } from "../../../common/Flexbox";
 import React from "react";
 import Type from "./Type";
 

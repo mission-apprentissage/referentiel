@@ -1,4 +1,9 @@
-import decodeJWT from "./decodeJWT";
+import jwt from "jsonwebtoken";
+
+function decodeJWT(token) {
+  let decoded = jwt.decode(token);
+  return { token, ...decoded };
+}
 
 const anonymous = { sub: "anonymous" };
 let initial = sessionStorage.getItem("referentiel:token");

@@ -1,11 +1,11 @@
-import Fieldset from "../../../common/components/dsfr/elements/Fieldset";
-import GreyAccordionItem from "../../../common/components/dsfr/custom/GreyAccordionItem";
+import Fieldset from "../../../common/dsfr/elements/Fieldset";
+import GreyAccordionItem from "../../../common/dsfr/custom/GreyAccordionItem";
 import styled from "styled-components";
-import { Tag } from "../../../common/components/dsfr/elements/Tag";
-import SmallCheckbox from "../../../common/components/dsfr/custom/SmallCheckbox";
+import { Tag } from "../../../common/dsfr/elements/Tag";
+import SmallCheckbox from "../../../common/dsfr/custom/SmallCheckbox";
 import { castArray } from "lodash-es";
-import useNavigation from "../../../common/hooks/useNavigation";
-import { useData } from "../../../common/hooks/useData";
+import useNavigation from "../../../common/navigation/useNavigation";
+import { useDataContext } from "../../../common/data/useDataContext";
 import { useContext } from "react";
 import { FilterContext } from "./Filters";
 
@@ -55,7 +55,7 @@ export function Filter({ label, paramName, items }) {
 }
 
 export function DepartementsFilter() {
-  let [{ departements }] = useData();
+  let [{ departements }] = useDataContext();
 
   return (
     <Filter

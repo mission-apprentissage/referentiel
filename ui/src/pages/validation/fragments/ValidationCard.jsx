@@ -1,9 +1,9 @@
-import { Link } from "../../../common/components/dsfr/elements/Link";
-import { Box } from "../../../common/components/Flexbox";
+import { Link } from "../../../common/dsfr/elements/Link";
+import { Box } from "../../../common/Flexbox";
 import styled from "styled-components";
-import { classNames } from "../../../common/components/dsfr/common/utils";
-import useNavigation from "../../../common/hooks/useNavigation";
-import { useAuth } from "../../../common/hooks/useAuth";
+import { classNames } from "../../../common/dsfr/common/utils";
+import useNavigation from "../../../common/navigation/useNavigation";
+import { useAuthContext } from "../../../common/auth/useAuthContext";
 
 function buildValidationParams(type, auth) {
   let restricted = { [auth.type]: auth.code };
@@ -20,7 +20,7 @@ function buildValidationParams(type, auth) {
 }
 
 function ValidationCard({ type, label, nbElements, className, ...rest }) {
-  let [auth] = useAuth();
+  let [auth] = useAuthContext();
   let { params, buildUrl } = useNavigation();
   let clazz = classNames("validation-status", { modifiers: type, className });
   let listeUrl = buildUrl(`/validation/${type}`, {

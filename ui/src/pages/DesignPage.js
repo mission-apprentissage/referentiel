@@ -1,21 +1,22 @@
 import React, { useState } from "react";
-import { Accordion, AccordionItem } from "../common/components/dsfr/elements/Accordion";
-import SearchBar from "../common/components/dsfr/elements/SearchBar";
-import Alert from "../common/components/dsfr/elements/Alert";
-import { Button, ButtonGroup } from "../common/components/dsfr/elements/Button";
-import { Col, Container, GridRow } from "../common/components/dsfr/fondamentaux";
+import { Accordion, AccordionItem } from "../common/dsfr/elements/Accordion";
+import SearchBar from "../common/dsfr/elements/SearchBar";
+import Alert from "../common/dsfr/elements/Alert";
+import { Button, ButtonGroup } from "../common/dsfr/elements/Button";
+import { Col, Container, GridRow } from "../common/dsfr/fondamentaux";
 import styled from "styled-components";
-import Radio from "../common/components/dsfr/elements/Radio";
-import Checkbox from "../common/components/dsfr/elements/Checkbox";
-import Fieldset from "../common/components/dsfr/elements/Fieldset";
-import { Footer, FooterLink, FooterList } from "../common/components/dsfr/elements/Footer";
-import Input from "../common/components/dsfr/elements/Input";
-import Select from "../common/components/dsfr/elements/Select";
-import { ToggleList, ToggleSwitch } from "../common/components/dsfr/elements/ToggleSwitch";
-import { Tab, TabPanel, Tabs } from "../common/components/dsfr/elements/Tabs";
-import { Header } from "../common/components/dsfr/elements/Header";
-import { Link, LinkGroup } from "../common/components/dsfr/elements/Link";
-import { Nav, NavButton, NavLink } from "../common/components/dsfr/elements/Nav";
+import Radio from "../common/dsfr/elements/Radio";
+import Checkbox from "../common/dsfr/elements/Checkbox";
+import Fieldset from "../common/dsfr/elements/Fieldset";
+import { Footer, FooterLink, FooterList } from "../common/dsfr/elements/Footer";
+import Input from "../common/dsfr/elements/Input";
+import Select from "../common/dsfr/elements/Select";
+import { ToggleList, ToggleSwitch } from "../common/dsfr/elements/ToggleSwitch";
+import { Tab, TabPanel, Tabs } from "../common/dsfr/elements/Tabs";
+import { Header } from "../common/dsfr/elements/Header";
+import { Link, LinkGroup } from "../common/dsfr/elements/Link";
+import { Nav, NavButton, NavLink } from "../common/dsfr/elements/Nav";
+import { useDataContext } from "../common/data/useDataContext";
 
 const Colored = styled.div`
   background-color: ${(props) => props.color};
@@ -34,6 +35,7 @@ function Option({ children }) {
 }
 
 export default function DesignPage() {
+  useDataContext();
   let [showAlert, setShowAlert] = useState(true);
 
   return (

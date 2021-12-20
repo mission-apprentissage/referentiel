@@ -1,4 +1,4 @@
-import { Tag, TagGroup } from "../../../common/components/dsfr/elements/Tag";
+import { Tag, TagGroup } from "../../../common/dsfr/elements/Tag";
 import React from "react";
 import { isEqual } from "lodash-es";
 

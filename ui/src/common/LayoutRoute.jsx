@@ -3,17 +3,15 @@ import { Nav, NavLink } from "./dsfr/elements/Nav";
 import { Container, GridRow } from "./dsfr/fondamentaux";
 import { Footer, FooterLink, FooterList } from "./dsfr/elements/Footer";
 import React from "react";
-import FilAriane, { FilArianeProvider } from "./FilAriane";
 import { Outlet } from "react-router-dom";
-import { useFetch } from "../hooks/useFetch";
-import useScrollToTop from "../hooks/useScrollToTop";
-
-export const DataContext = React.createContext(null);
+import useScrollToTop from "./navigation/useScrollToTop";
+import DataProvider from "./data/DataProvider";
+import FilArianeProvider from "./ariane/FilArianeProvider";
+import FilAriane from "./ariane/FilAriane";
 
 export default function LayoutRoute() {
-  let [{ data }, setData] = useFetch(`/api/v1/data`, { regions: [], academies: [], departements: [] });
-
   useScrollToTop();
+
   return (
     <div>
       <Header
@@ -26,7 +24,7 @@ export default function LayoutRoute() {
           </Nav>
         }
       />
-      <DataContext.Provider value={[data, setData]}>
+      <DataProvider>
         <FilArianeProvider>
           <Container>
             <GridRow>
@@ -35,7 +33,7 @@ export default function LayoutRoute() {
           </Container>
           <Outlet />
         </FilArianeProvider>
-      </DataContext.Provider>
+      </DataProvider>
       <Footer
         content={{
           desc: (

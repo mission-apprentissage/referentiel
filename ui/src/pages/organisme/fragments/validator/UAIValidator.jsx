@@ -1,9 +1,9 @@
 import React from "react";
-import { useModal } from "../../../../common/components/dsfr/common/useModal";
-import LinkButton from "../../../../common/components/dsfr/custom/LinkButton";
+import { useModal } from "../../../../common/dsfr/common/useModal";
+import LinkButton from "../../../../common/dsfr/custom/LinkButton";
 import ValidationTag from "./ValidationTag";
 import { UaiValidatorModal } from "./UaiValidatorModal";
-import { Button } from "../../../../common/components/dsfr/elements/Button";
+import { Button } from "../../../../common/dsfr/elements/Button";
 
 const actions = {
   A_VALIDER: {

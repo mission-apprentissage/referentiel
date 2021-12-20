@@ -1,15 +1,15 @@
-import { Col, Container, GridRow } from "../../common/components/dsfr/fondamentaux";
+import { Col, Container, GridRow } from "../../common/dsfr/fondamentaux";
 import React from "react";
 import ValidationCard from "./fragments/ValidationCard";
 import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
-import useNavigation from "../../common/hooks/useNavigation";
-import { useFetch } from "../../common/hooks/useFetch";
-import Spinner from "../../common/components/Spinner";
-import { useAuth } from "../../common/hooks/useAuth";
-import { useFilAriane } from "../../common/components/FilAriane";
+import useNavigation from "../../common/navigation/useNavigation";
+import { useFetch } from "../../common/http/useFetch";
+import Spinner from "../../common/Spinner";
+import { useAuthContext } from "../../common/auth/useAuthContext";
+import useFilAriane from "../../common/ariane/useFilAriane";
 
 export default function TableauDeBord() {
-  let [auth] = useAuth();
+  let [auth] = useAuthContext();
   let { params, buildUrl, navigate } = useNavigation();
   useFilAriane([{ label: "Accueil", to: "/" }]);
   let [{ data, loading, error }] = useFetch(buildUrl("/api/v1/validation", params), {

@@ -2,11 +2,11 @@ import React from "react";
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import "@gouvfr/dsfr/dist/dsfr/dsfr.css";
 import Organisme from "./pages/organisme/Organisme";
-import LayoutRoute from "./common/components/LayoutRoute";
+import LayoutRoute from "./common/LayoutRoute";
 import DesignPage from "./pages/DesignPage";
 import Organismes from "./pages/organismes/Organismes";
 import Login from "./pages/LoginPage";
-import AuthRoute from "./common/components/AuthRoute";
+import AuthProviderRoute from "./common/auth/AuthProviderRoute";
 import TableauDeBord from "./pages/validation/TableauDeBord";
 import Validation from "./pages/validation/Validation";
 
@@ -20,7 +20,7 @@ function App() {
         <Routes>
           <Route element={<LayoutRoute />}>
             <Route path="/login" element={<Login />} />
-            <Route element={<AuthRoute />}>
+            <Route element={<AuthProviderRoute />}>
               <Route path="/" element={<TableauDeBord />} />
               <Route path="/validation" element={<Navigate replace to="/" />} />
               <Route path="/validation/:validationStatus" element={<Validation />} />

@@ -1,5 +1,5 @@
-import { useFetch } from "./useFetch";
-import useNavigation from "./useNavigation";
+import { useFetch } from "../http/useFetch";
+import useNavigation from "../navigation/useNavigation";
 import { isArray } from "lodash-es";
 
 function adaptParamsForAPI(params) {

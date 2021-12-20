@@ -1,6 +1,6 @@
 import OrganismeItem from "./OrganismeItem";
-import ResultsPagination from "../../../common/components/ResultsPagination";
-import { Box } from "../../../common/components/Flexbox";
+import ResultsPagination from "../../../common/ResultsPagination";
+import { Box } from "../../../common/Flexbox";
 
 export default function OrganismeList({ organismes, pagination }) {
   return (

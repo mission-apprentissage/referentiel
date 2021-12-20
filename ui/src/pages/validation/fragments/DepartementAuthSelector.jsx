@@ -1,14 +1,14 @@
-import Select from "../../../common/components/dsfr/elements/Select";
+import Select from "../../../common/dsfr/elements/Select";
 import { useState } from "react";
-import useNavigation from "../../../common/hooks/useNavigation";
-import { Box, Item } from "../../../common/components/Flexbox";
-import { useData } from "../../../common/hooks/useData";
-import { useAuth } from "../../../common/hooks/useAuth";
+import useNavigation from "../../../common/navigation/useNavigation";
+import { Box, Item } from "../../../common/Flexbox";
+import { useDataContext } from "../../../common/data/useDataContext";
+import { useAuthContext } from "../../../common/auth/useAuthContext";
 
 export default function DepartementAuthSelector({ onChange }) {
-  let [auth] = useAuth();
+  let [auth] = useAuthContext();
   let { params } = useNavigation();
-  let [data] = useData();
+  let [data] = useDataContext();
   let [selected, setSelected] = useState(params.departements || "");
   let departements = data[`${auth.type}s`].find((r) => r.code === auth.code)?.departements || [];
 

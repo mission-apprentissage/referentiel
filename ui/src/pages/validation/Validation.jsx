@@ -1,13 +1,13 @@
-import { Col, Container, GridRow } from "../../common/components/dsfr/fondamentaux";
+import { Col, Container, GridRow } from "../../common/dsfr/fondamentaux";
 import OrganismeList from "../organismes/fragments/OrganismeList";
 import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
 import Filters from "../organismes/fragments/Filters";
 import SearchForm from "../organismes/fragments/SearchForm";
-import { useSearch } from "../../common/hooks/useSearch";
-import Spinner from "../../common/components/Spinner";
+import { useSearch } from "../../common/search/useSearch";
+import Spinner from "../../common/Spinner";
 import { useParams } from "react-router-dom";
-import { useFilAriane } from "../../common/components/FilAriane";
 import { NdaFilter, TypeFilter } from "../organismes/fragments/Filter";
+import useFilAriane from "../../common/ariane/useFilAriane";
 
 const validationMapper = {
   A_VALIDER: "l'UAI est à valider",
@@ -23,7 +23,7 @@ export default function Validation() {
       { label: "Accueil", to: "/" },
       { label: title, to: "/" },
     ],
-    [title]
+    { dependencies: [title] }
   );
   let [{ data, loading, error }, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
 

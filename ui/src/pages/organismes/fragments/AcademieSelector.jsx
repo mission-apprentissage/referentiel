@@ -1,12 +1,12 @@
-import Select from "../../../common/components/dsfr/elements/Select";
+import Select from "../../../common/dsfr/elements/Select";
 import { useState } from "react";
-import useNavigation from "../../../common/hooks/useNavigation";
-import { Box, Item } from "../../../common/components/Flexbox";
-import { useData } from "../../../common/hooks/useData";
+import useNavigation from "../../../common/navigation/useNavigation";
+import { Box, Item } from "../../../common/Flexbox";
+import { useDataContext } from "../../../common/data/useDataContext";
 
 export default function AcademieSelector({ onChange }) {
   let { params } = useNavigation();
-  let [{ academies }] = useData();
+  let [{ academies }] = useDataContext();
   let [selected, setSelected] = useState(params.academie || "");
 
   return (

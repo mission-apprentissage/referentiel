@@ -1,7 +1,7 @@
-import Radio from "../../../../common/components/dsfr/elements/Radio";
-import Input from "../../../../common/components/dsfr/elements/Input";
+import Radio from "../../../../common/dsfr/elements/Radio";
+import Input from "../../../../common/dsfr/elements/Input";
 import React from "react";
-import useFormContext from "../../../../common/hooks/useFormContext";
+import useFormContext from "../../../../common/form/useFormContext";
 
 export function CustomUAIInput() {
   let { registerField, values, errors } = useFormContext();

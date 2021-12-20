@@ -1,9 +1,9 @@
-import { Box } from "../../../common/components/Flexbox";
+import { Box } from "../../../common/Flexbox";
 import styled from "styled-components";
 import Type from "../../organisme/fragments/Type";
 import React from "react";
 import Identite from "../../organisme/fragments/Identite";
-import { Link } from "../../../common/components/dsfr/elements/Link";
+import { Link } from "../../../common/dsfr/elements/Link";
 import { Link as ReactRouterLink } from "react-router-dom";
 
 const ClickableItem = styled(ReactRouterLink)`

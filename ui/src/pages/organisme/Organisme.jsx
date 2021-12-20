@@ -1,20 +1,19 @@
-import { Col, Container, GridRow } from "../../common/components/dsfr/fondamentaux";
+import { Col, Container, GridRow } from "../../common/dsfr/fondamentaux";
 import { useParams } from "react-router-dom";
-import Alert from "../../common/components/dsfr/elements/Alert";
-import { Tab, TabPanel, Tabs } from "../../common/components/dsfr/elements/Tabs";
+import Alert from "../../common/dsfr/elements/Alert";
+import { Tab, TabPanel, Tabs } from "../../common/dsfr/elements/Tabs";
 import React from "react";
 import { Immatriculation } from "./tabs/Immatriculation";
 import { Presentation } from "./fragments/Presentation";
-import useOrganisme from "../../common/hooks/useOrganisme";
-import { useFilAriane, useFilArianeContext } from "../../common/components/FilAriane";
+import useOrganisme from "./hooks/useOrganisme";
+import useFilAriane from "../../common/ariane/useFilAriane";
 
 export const OrganismeContext = React.createContext(null);
 
 export default function Organisme() {
   let { siret } = useParams();
   let [{ organisme, loading, error }, actions] = useOrganisme(siret);
-  let [fil] = useFilArianeContext();
-  useFilAriane([...fil, { label: organisme.raison_sociale, current: true }], [organisme]);
+  useFilAriane([{ label: organisme.raison_sociale, current: true }], { dependencies: [organisme], preserve: true });
 
   if (error) {
     return (

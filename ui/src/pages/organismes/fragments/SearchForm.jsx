@@ -1,5 +1,5 @@
-import { Col, GridRow } from "../../../common/components/dsfr/fondamentaux";
-import SearchBar from "../../../common/components/dsfr/elements/SearchBar";
+import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
+import SearchBar from "../../../common/dsfr/elements/SearchBar";
 import styled from "styled-components";
 
 const SearchGridRow = styled(GridRow)`

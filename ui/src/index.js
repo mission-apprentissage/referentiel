@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { subscribeToHttpEvent } from "./common/httpClient";
-import { logout } from "./common/auth";
+import { subscribeToHttpEvent } from "./common/http/httpClient";
+import { logout } from "./common/auth/auth";
 import GlobalStyle from "./common/GlobalStyle";
 
 window.dsfr = {

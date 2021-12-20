@@ -1,4 +1,4 @@
-import { Tag } from "../../../common/components/dsfr/elements/Tag";
+import { Tag } from "../../../common/dsfr/elements/Tag";
 import React from "react";
 import styled from "styled-components";
 
