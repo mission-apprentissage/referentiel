@@ -6,6 +6,7 @@ export default function useForm(options = {}) {
   let schema = options.yup;
   let [values, setValues] = useState(options.initialValues || {});
   let [submitting, setSubmitting] = useState(false);
+  let [pristine, setPristine] = useState(true);
   let [errors, setErrors] = useState(null);
 
   function registerField(name) {
@@ -13,6 +14,7 @@ export default function useForm(options = {}) {
     return {
       name,
       onChange: ({ target: { name, value } }) => {
+        setPristine(false);
         setValues({
           ...values,
           [name]: value,
@@ -68,6 +70,7 @@ export default function useForm(options = {}) {
     registerField,
     setFormErrors: setErrors,
     values,
+    pristine,
     errors,
   };
 }
