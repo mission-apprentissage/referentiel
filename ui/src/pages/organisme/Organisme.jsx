@@ -13,7 +13,10 @@ export const OrganismeContext = React.createContext(null);
 export default function Organisme() {
   let { siret } = useParams();
   let [{ organisme, loading, error }, actions] = useOrganisme(siret);
-  useFilAriane([{ label: organisme.raison_sociale, current: true }], { dependencies: [organisme], preserve: true });
+  useFilAriane([{ label: organisme.raison_sociale, current: true }], {
+    dependencies: [organisme],
+    preserve: true,
+  });
 
   if (error) {
     return (

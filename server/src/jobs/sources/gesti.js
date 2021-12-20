@@ -1,7 +1,7 @@
 const { compose, transformData } = require("oleoduc");
-const csv = require("csv-parse");
 const { decodeStream } = require("iconv-lite");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
+const { parseCsv } = require("../../common/utils/csvUtils");
 
 module.exports = (custom = {}) => {
   let name = "gesti";
@@ -15,7 +15,7 @@ module.exports = (custom = {}) => {
       return compose(
         input,
         decodeStream("iso-8859-1"),
-        csv({
+        parseCsv({
           delimiter: ";",
           trim: true,
           columns: true,

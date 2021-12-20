@@ -1,6 +1,6 @@
 const { compose, transformData } = require("oleoduc");
-const csv = require("csv-parse");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
+const { parseCsv } = require("../../common/utils/csvUtils");
 
 module.exports = (custom = {}) => {
   let name = "anasup";
@@ -12,7 +12,7 @@ module.exports = (custom = {}) => {
 
       return compose(
         input,
-        csv({
+        parseCsv({
           delimiter: ";",
           trim: true,
           bom: true,
