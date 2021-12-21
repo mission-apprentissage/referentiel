@@ -36,7 +36,7 @@ function computeChecksum(numbers) {
  * https://blog.juliendelmas.fr/?qu-est-ce-que-le-code-rne-ou-uai
  */
 module.exports = {
-  validateUAI(code) {
+  isUAIValid(code) {
     if (!code || code.length !== 8) {
       return false;
     }

@@ -36,13 +36,13 @@ module.exports = {
   createStream,
   startServer,
   generateAuthHeader,
-  importOrganismes: (array = [{ siret: "11111111100006" }]) => {
+  importOrganismesForTest: (array = [{ siret: "11111111100006" }]) => {
     return importOrganismes({
       name: "test",
-      stream() {
+      referentiel() {
         return compose(
           Readable.from(array),
-          transformData((data) => ({ from: "test", selector: data.siret }))
+          transformData((data) => ({ from: "test", siret: data.siret }))
         );
       },
     });

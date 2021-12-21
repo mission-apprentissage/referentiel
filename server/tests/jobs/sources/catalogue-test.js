@@ -2,7 +2,7 @@ const assert = require("assert");
 const { omit } = require("lodash");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
-const { importOrganismes } = require("../../utils/testUtils");
+const { importOrganismesForTest } = require("../../utils/testUtils");
 const { mockCatalogueApi, mockGeoAddresseApi } = require("../../utils/apiMocks");
 const { insertOrganisme, insertCFD } = require("../../utils/fakeData");
 const { dbCollection } = require("../../../src/common/db/mongodb");
@@ -30,7 +30,7 @@ function mockApis(custom = {}) {
 
 describe("catalogue", () => {
   it("Vérifie qu'on peut collecter les statuts", async () => {
-    await importOrganismes([{ siret: "11111111100006" }, { siret: "22222222200002" }]);
+    await importOrganismesForTest([{ siret: "11111111100006" }, { siret: "22222222200002" }]);
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -59,7 +59,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter les statuts gestionnaire et formateur", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -77,7 +77,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des relations (formateur)", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -103,7 +103,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des relations (gestionnaire)", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -129,7 +129,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut ignore les relations quand l'établisssement est gestionnaire et formateur", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -147,7 +147,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des diplômes (cfd)", async () => {
-    await importOrganismes([{ siret: "22222222200002" }]);
+    await importOrganismesForTest([{ siret: "22222222200002" }]);
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -184,7 +184,7 @@ describe("catalogue", () => {
       NIVEAU_FORMATION_DIPLOME: "26C",
       LIBELLE_COURT: "FORMATION",
     });
-    await importOrganismes([{ siret: "22222222200002" }]);
+    await importOrganismesForTest([{ siret: "22222222200002" }]);
     let source = createSource("catalogue");
     mockApis({
       etablissement_formateur_siret: "22222222200002",
@@ -207,7 +207,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on ne collecte pas de diplômes pour les organismes gestionnaire", async () => {
-    await importOrganismes([{ siret: "11111111100006" }]);
+    await importOrganismesForTest([{ siret: "11111111100006" }]);
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -232,7 +232,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des certifications (rncp)", async () => {
-    await importOrganismes([{ siret: "22222222200002" }]);
+    await importOrganismesForTest([{ siret: "22222222200002" }]);
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -265,7 +265,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on ne collecte pas de certifications pour les organismes gestionnaire", async () => {
-    await importOrganismes([{ siret: "11111111100006" }]);
+    await importOrganismesForTest([{ siret: "11111111100006" }]);
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -291,7 +291,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des lieux de formation", async () => {
-    await importOrganismes([{ siret: "22222222200002" }]);
+    await importOrganismesForTest([{ siret: "22222222200002" }]);
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -360,7 +360,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on ne collecte pas des lieux de formation pour les organismes gestionnaire", async () => {
-    await importOrganismes([{ siret: "11111111100006" }]);
+    await importOrganismesForTest([{ siret: "11111111100006" }]);
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -386,7 +386,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on cherche une adresse quand on ne peut pas reverse-geocoder un lieu de formation", async () => {
-    await importOrganismes([{ siret: "22222222200002" }]);
+    await importOrganismesForTest([{ siret: "22222222200002" }]);
     let source = createSource("catalogue");
     mockCatalogueApi((client, responses) => {
       client
@@ -457,7 +457,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on créer une anomalie quand on ne peut pas trouver l'adresse d'un lieu de formation", async () => {
-    await importOrganismes([{ siret: "22222222200002" }]);
+    await importOrganismesForTest([{ siret: "22222222200002" }]);
     let source = createSource("catalogue");
     mockCatalogueApi((client, responses) => {
       client
@@ -505,7 +505,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des contacts", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -555,7 +555,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut détecter des relations avec des organismes déjà présents", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     await insertOrganisme({ siret: "22222222200002", raison_sociale: "Mon centre de formation" });
     let source = createSource("catalogue");
     mockApis({

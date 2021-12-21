@@ -161,7 +161,7 @@ module.exports = () => {
   );
 
   router.put(
-    "/api/v1/organismes/:siret/validateUAI",
+    "/api/v1/organismes/:siret/isUAIValid",
     checkApiToken(),
     tryCatch(async (req, res) => {
       let user = req.user;

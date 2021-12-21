@@ -1,12 +1,8 @@
-const { oleoduc, mergeStreams, writeData } = require("oleoduc");
-const { isEmpty } = require("lodash");
+const { mergeStreams } = require("oleoduc");
+const { isEmpty, castArray } = require("lodash");
 const logger = require("../common/logger");
 const luhn = require("fast-luhn");
 const { dbCollection, clearCollection } = require("../common/db/mongodb");
-
-async function getStreams(sources) {
-  return Promise.all(sources.map((source) => source.stream()));
-}
 
 function createStats(sources) {
   return sources.reduce((acc, source) => {
@@ -24,63 +20,60 @@ function createStats(sources) {
 }
 
 module.exports = async (array, options = {}) => {
-  let sources = Array.isArray(array) ? array : [array];
-  let streams = await getStreams(sources);
+  let sources = castArray(array);
+  let streams = await Promise.all(sources.map((source) => source.referentiel()));
   let stats = createStats(sources);
 
   if (options.removeAll) {
     await clearCollection("organismes");
   }
 
-  await oleoduc(
-    mergeStreams(streams),
-    writeData(async ({ from, selector: siret }) => {
-      stats[from].total++;
-      if (isEmpty(siret) || !luhn(siret)) {
-        stats[from].invalid++;
-        logger.warn(`[Referentiel] Siret '${siret}' invalide pour l'organisme`);
-        return;
-      }
+  for await (const { from, siret } of mergeStreams(streams)) {
+    stats[from].total++;
+    if (isEmpty(siret) || !luhn(siret)) {
+      stats[from].invalid++;
+      logger.warn(`[Referentiel] Siret '${siret}' invalide pour l'organisme`);
+      continue;
+    }
 
-      try {
-        let res = await dbCollection("organismes").updateOne(
-          { siret },
-          {
-            $set: {
-              siret,
-            },
-            $setOnInsert: {
-              uai_potentiels: [],
-              contacts: [],
-              relations: [],
-              lieux_de_formation: [],
-              reseaux: [],
-              statuts: [],
-              diplomes: [],
-              certifications: [],
-              "_meta.created_at": new Date(),
-              "_meta.anomalies": [],
-            },
-            $addToSet: {
-              referentiels: from,
-            },
+    try {
+      let res = await dbCollection("organismes").updateOne(
+        { siret },
+        {
+          $set: {
+            siret,
           },
-          { upsert: true }
-        );
+          $setOnInsert: {
+            uai_potentiels: [],
+            contacts: [],
+            relations: [],
+            lieux_de_formation: [],
+            reseaux: [],
+            statuts: [],
+            diplomes: [],
+            certifications: [],
+            "_meta.created_at": new Date(),
+            "_meta.anomalies": [],
+          },
+          $addToSet: {
+            referentiels: from,
+          },
+        },
+        { upsert: true }
+      );
 
-        if (res.upsertedCount) {
-          logger.debug(`[Referentiel] Organisme ${siret} créé`);
-          stats[from].created += res.upsertedCount;
-        } else if (res.modifiedCount) {
-          stats[from].updated += res.modifiedCount;
-          logger.debug(`[Referentiel] Organisme ${siret} mis à jour`);
-        }
-      } catch (e) {
-        stats[from].failed++;
-        logger.error(e, `[Referentiel] Impossible d'ajouter le document avec le siret ${siret}`);
+      if (res.upsertedCount) {
+        logger.debug(`[Referentiel] Organisme ${siret} créé`);
+        stats[from].created += res.upsertedCount;
+      } else if (res.modifiedCount) {
+        stats[from].updated += res.modifiedCount;
+        logger.debug(`[Referentiel] Organisme ${siret} mis à jour`);
       }
-    })
-  );
+    } catch (e) {
+      stats[from].failed++;
+      logger.error(e, `[Referentiel] Impossible d'ajouter le document avec le siret ${siret}`);
+    }
+  }
 
   return stats;
 };

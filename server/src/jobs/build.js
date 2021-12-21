@@ -4,6 +4,7 @@ const collectSources = require("./collectSources");
 const importOrganismes = require("./importOrganismes");
 const clearCache = require("./tasks/clearCache");
 const importCFD = require("./importCFD");
+const consolidate = require("./consolidate");
 
 async function build(options = {}) {
   let referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese"];
@@ -37,15 +38,14 @@ async function build(options = {}) {
     "refea",
     "uimm",
     "ymag",
-    "onisep",
-    "onisep-structure",
-    "ideo2",
   ]);
   await collectAll(["onisep", "onisep-structure", "ideo2", "datagouv"]);
   await collectAll(["sirene", "catalogue"], {
     //Allow all sources to share the same api instance (ie. rate limit)
     geoAdresseApi: new GeoAdresseApi(),
   });
+
+  await consolidate().then((res) => stats.push({ consolidate: res }));
 
   //Theses sources use uai as selector, so we need to consolidate UAI before running them
   await collectAll(["ccca-btp", "cci-france", "cma", "mfr", "acce", "voeux-affelnet"]);

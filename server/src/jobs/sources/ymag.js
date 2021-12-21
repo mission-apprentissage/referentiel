@@ -21,7 +21,7 @@ module.exports = (custom = {}) => {
         transformData((data) => {
           return {
             from: name,
-            selector: data["siret"].replace(/ /g, ""),
+            selector: data["siret"]?.replace(/ /g, ""),
             uai_potentiels: [data["uai"]],
           };
         })

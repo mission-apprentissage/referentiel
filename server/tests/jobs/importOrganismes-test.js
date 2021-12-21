@@ -10,7 +10,7 @@ function createTestSource(array) {
   let name = "dummy";
   return {
     name,
-    stream() {
+    referentiel() {
       return compose(
         Readable.from(array),
         transformData((d) => ({ from: name, ...d }))
@@ -21,7 +21,7 @@ function createTestSource(array) {
 
 describe("importOrganismes", () => {
   it("Vérifie qu'on peut importer un référentiel", async () => {
-    let source = createTestSource([{ selector: "11111111100006" }]);
+    let source = createTestSource([{ siret: "11111111100006" }]);
 
     let results = await importReferentiel(source);
 
@@ -52,7 +52,7 @@ describe("importOrganismes", () => {
   });
 
   it("Vérifie qu'on ignore les organismes en double", async () => {
-    let source = createTestSource([{ selector: "11111111100006" }, { selector: "11111111100006" }]);
+    let source = createTestSource([{ siret: "11111111100006" }, { siret: "11111111100006" }]);
 
     let results = await importReferentiel(source);
 
@@ -69,11 +69,7 @@ describe("importOrganismes", () => {
   });
 
   it("Vérifie qu'on ignore un organisme avec un siret vide", async () => {
-    let source = createTestSource([
-      {
-        selector: "",
-      },
-    ]);
+    let source = createTestSource([{ siret: "" }]);
 
     let results = await importReferentiel(source);
 
@@ -91,11 +87,7 @@ describe("importOrganismes", () => {
   });
 
   it("Vérifie qu'on ignore un organisme avec un siret invalide", async () => {
-    let source = createTestSource([
-      {
-        selector: "",
-      },
-    ]);
+    let source = createTestSource([{ siret: "" }]);
 
     let results = await importReferentiel(source);
 
@@ -113,7 +105,7 @@ describe("importOrganismes", () => {
   });
 
   it("Vérifie qu'on peut supprimer tous les organismes avant l'import", async () => {
-    let source = createTestSource([{ selector: "11111111100006" }]);
+    let source = createTestSource([{ siret: "11111111100006" }]);
     await insertOrganisme({ siret: "22222222200002" });
 
     await importReferentiel(source, { removeAll: true });

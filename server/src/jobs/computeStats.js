@@ -4,7 +4,7 @@ const { intersection, union, range, uniq } = require("lodash");
 const logger = require("../common/logger");
 const SireneApi = require("../common/apis/SireneApi");
 const caches = require("../common/caches/caches");
-const { validateUAI } = require("../common/utils/uaiUtils");
+const { isUAIValid } = require("../common/utils/uaiUtils");
 const { dbCollection } = require("../common/db/mongodb");
 
 // eslint-disable-next-line no-unused-vars
@@ -132,7 +132,7 @@ async function validateSources(sources) {
         logger.debug(`Validation de ${uai} ${siret}...`);
 
         if (uai) {
-          if (validateUAI(uai)) {
+          if (isUAIValid(uai)) {
             isUaiValide = true;
             validation[from].uais.valides++;
             if (valides[from].uais.has(uai)) {

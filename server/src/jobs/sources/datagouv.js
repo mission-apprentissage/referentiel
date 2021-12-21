@@ -1,4 +1,4 @@
-const { compose, transformData, oleoduc, accumulateData, writeData } = require("oleoduc");
+const { compose, transformData, oleoduc, accumulateData, writeData, filterData } = require("oleoduc");
 const { parseCsv } = require("../../common/utils/csvUtils");
 const { getFileAsStream } = require("../../common/utils/httpUtils");
 
@@ -17,6 +17,14 @@ async function downloadListePubliqueDesOrganismesDeFormation(options = {}) {
   );
 }
 
+function isQualiopi(data) {
+  return data["certifications_actionsDeFormationParApprentissage"] === "true";
+}
+
+function getSiret(data) {
+  return `${data.siren}${data.siretEtablissementDeclarant}`;
+}
+
 module.exports = (custom = {}) => {
   let name = "datagouv";
 
@@ -30,7 +38,7 @@ module.exports = (custom = {}) => {
         stream,
         transformData((data) => {
           return {
-            siret: `${data.siren}${data.siretEtablissementDeclarant}`,
+            siret: getSiret(data),
           };
         }),
         accumulateData((acc, data) => [...acc, data.siret], { accumulator: [] }),
@@ -38,6 +46,20 @@ module.exports = (custom = {}) => {
       );
 
       return organismes;
+    },
+    async referentiel() {
+      let stream = await downloadListePubliqueDesOrganismesDeFormation(custom);
+
+      return compose(
+        stream,
+        filterData(isQualiopi),
+        transformData((data) => {
+          return {
+            from: name,
+            siret: getSiret(data),
+          };
+        })
+      );
     },
     async stream() {
       let stream = await downloadListePubliqueDesOrganismesDeFormation(custom);
@@ -51,7 +73,7 @@ module.exports = (custom = {}) => {
             selector: { siret: { $regex: new RegExp(`^${data.siren}`) } },
             data: {
               ...(nda ? { numero_declaration_activite: nda } : {}),
-              qualiopi: data["certifications_actionsDeFormationParApprentissage"] === "true",
+              qualiopi: isQualiopi(data),
             },
           };
         })

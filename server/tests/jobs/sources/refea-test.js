@@ -2,11 +2,11 @@ const assert = require("assert");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
-const { importOrganismes, createStream } = require("../../utils/testUtils");
+const { importOrganismesForTest, createStream } = require("../../utils/testUtils");
 
 describe("refea", () => {
   it("Vérifie qu'on peut collecter des informations du fichier REFEA", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     let source = createSource("refea", {
       input: createStream(
         `uai_code_siret;uai_code_educnationale;uai_libelle_educnationale

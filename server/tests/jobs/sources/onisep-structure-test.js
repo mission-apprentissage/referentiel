@@ -2,11 +2,11 @@ const assert = require("assert");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
-const { importOrganismes, createStream } = require("../../utils/testUtils");
+const { importOrganismesForTest, createStream } = require("../../utils/testUtils");
 
 describe("onisep-structure", () => {
   it("Vérifie qu'on peut collecter des informations du fichier ONISEP (structure)", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     let source = createSource("onisep-structure", {
       input: createStream(
         `STRUCT SIRET;STRUCT UAI;STRUCT Libellé Amétys

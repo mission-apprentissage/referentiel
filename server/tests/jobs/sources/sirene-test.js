@@ -3,7 +3,7 @@ const { omit } = require("lodash");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
-const { importOrganismes } = require("../../utils/testUtils");
+const { importOrganismesForTest } = require("../../utils/testUtils");
 const { mockSireneApi, mockGeoAddresseApi } = require("../../utils/apiMocks");
 const { DateTime } = require("luxon");
 
@@ -47,7 +47,7 @@ function createSireneSource(options = {}) {
 describe("sirene", () => {
   it("Vérifie qu'on peut collecter des informations de l'API Sirene", async () => {
     let source = createSireneSource({ mocks: ["geo", "sirene"] });
-    await importOrganismes();
+    await importOrganismesForTest();
 
     let stats = await collectSources(source);
 
@@ -95,7 +95,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on recherche une adresse quand ne peut pas reverse-geocoder", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockGeoAddresseApi((client, responses) => {
       client
         .get((uri) => uri.includes("reverse"))
@@ -151,7 +151,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on recherche une adresse quand le code posal du reverse-geocoding n'est pas le même que l'adresse", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -251,7 +251,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on peut collecter des relations", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("etablissements"))
@@ -315,7 +315,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on peut filter par siret", async () => {
-    await importOrganismes([{ siret: "11111111100006" }]);
+    await importOrganismesForTest([{ siret: "11111111100006" }]);
 
     let source = createSireneSource({
       mocks: ["geo", "sirene"],
@@ -335,7 +335,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on ignore les relations qui ne sont pas des organismes de formations", async () => {
-    await importOrganismes([{ siret: "11111111100006" }]);
+    await importOrganismesForTest([{ siret: "11111111100006" }]);
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -389,7 +389,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on ignore les relations pour des organismes fermés", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -437,7 +437,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on gère une erreur lors de la récupération des informations de l'API Sirene", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -461,7 +461,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on gère une erreur spécifique quand l'organisme n'existe pas", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -477,7 +477,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on gère une erreur spécifique quand l'entreprise n'existe pas", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -493,7 +493,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver l'adresse", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockGeoAddresseApi((client) => {
       client
         .get((uri) => uri.includes("reverse"))
@@ -529,7 +529,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver la catégorie juridique", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -564,7 +564,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on met en cache les données de l'API sirene", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     let source = createSireneSource({ mocks: ["geo", "sirene"] });
 
     await collectSources(source);
@@ -576,7 +576,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on met en cache les erreurs 4xx de l'API sirene", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -594,7 +594,7 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on ne met pas en cache les erreurs 5xx de l'API sirene", async () => {
-    await importOrganismes();
+    await importOrganismesForTest();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))

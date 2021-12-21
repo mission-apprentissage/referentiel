@@ -20,6 +20,19 @@ module.exports = (custom = {}) => {
 
   return {
     name,
+    async referentiel() {
+      let input = custom.input ? readCsv(custom.input) : await defaultStream();
+
+      return compose(
+        input,
+        transformData((data) => {
+          return {
+            from: name,
+            siret: data.numero_siren_siret_uai,
+          };
+        })
+      );
+    },
     async stream() {
       let input = custom.input ? readCsv(custom.input) : await defaultStream();
 

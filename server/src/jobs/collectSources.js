@@ -1,7 +1,7 @@
-const { oleoduc, writeData, filterData, mergeStreams } = require("oleoduc");
+const { mergeStreams } = require("oleoduc");
 const { uniq, isEmpty } = require("lodash");
 const { flattenObject, isError } = require("../common/utils/objectUtils");
-const { validateUAI } = require("../common/utils/uaiUtils");
+const { isUAIValid } = require("../common/utils/uaiUtils");
 const logger = require("../common/logger");
 const { dbCollection } = require("../common/db/mongodb");
 const { sortBy } = require("lodash/collection");
@@ -38,7 +38,7 @@ function mergeUAIPotentiels(from, actual, collected) {
   return mergeArray(from, actual, "uai", newArray).map((item) => {
     return {
       ...item,
-      valide: validateUAI(item.uai),
+      valide: isUAIValid(item.uai),
     };
   });
 }
@@ -116,75 +116,73 @@ module.exports = async (array, options = {}) => {
   let stats = createStats(sources);
   let streams = await getStreams(sources);
 
-  await oleoduc(
-    mergeStreams(streams),
-    filterData((data) => {
-      return filters.siret ? filters.siret === data.selector : !!data;
-    }),
-    writeData(async (res) => {
-      let {
-        from,
-        selector,
-        uai_potentiels = [],
-        contacts = [],
-        relations = [],
-        reseaux = [],
-        diplomes = [],
-        certifications = [],
-        lieux_de_formation = [],
-        data = {},
-        statuts = [],
-        anomalies = [],
-      } = res;
+  for await (const res of mergeStreams(streams)) {
+    let {
+      from,
+      selector,
+      uai_potentiels = [],
+      contacts = [],
+      relations = [],
+      reseaux = [],
+      diplomes = [],
+      certifications = [],
+      lieux_de_formation = [],
+      data = {},
+      statuts = [],
+      anomalies = [],
+    } = res;
 
-      stats[from].total++;
-      let query = buildQuery(selector);
-      let organisme = await dbCollection("organismes").findOne(query);
-      if (!organisme) {
-        logger.trace(`[Collect][${from}] Organisme ${query} inconnu`);
-        stats[from].ignored++;
-        return;
-      }
+    if (filters.siret && filters.siret !== data.selector) {
+      continue;
+    }
 
-      try {
-        if (anomalies.length > 0) {
-          stats[from].failed++;
-          await handleAnomalies(from, organisme, anomalies);
-        }
+    stats[from].total++;
+    let query = buildQuery(selector);
+    let organisme = await dbCollection("organismes").findOne(query);
+    if (!organisme) {
+      logger.trace(`[Collect][${from}] Organisme ${query} inconnu`);
+      stats[from].ignored++;
+      continue;
+    }
 
-        let res = await dbCollection("organismes").updateMany(query, {
-          $set: {
-            ...flattenObject(data),
-            uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),
-            relations: await mergeRelations(from, organisme.relations, relations),
-            contacts: mergeContacts(from, organisme.contacts, contacts),
-            diplomes: mergeArray(from, organisme.diplomes, "code", diplomes),
-            certifications: mergeArray(from, organisme.certifications, "code", certifications),
-            lieux_de_formation: mergeArray(from, organisme.lieux_de_formation, "code", lieux_de_formation),
-          },
-          $addToSet: {
-            reseaux: {
-              $each: reseaux,
-            },
-            statuts: {
-              $each: statuts,
-            },
-          },
-        });
-
-        let nbModifiedDocuments = res.modifiedCount;
-        if (nbModifiedDocuments) {
-          stats[from].updated += nbModifiedDocuments;
-          logger.debug(`[Collect][${from}] Organisme ${organisme.siret} mis à jour`);
-        } else {
-          logger.trace(`[Collect][${from}] Organisme ${organisme.siret} à jour`);
-        }
-      } catch (e) {
+    try {
+      if (anomalies.length > 0) {
         stats[from].failed++;
-        await handleAnomalies(from, organisme, [e]);
+        await handleAnomalies(from, organisme, anomalies);
       }
-    })
-  );
+
+      let res = await dbCollection("organismes").updateMany(query, {
+        $set: {
+          ...flattenObject(data),
+          uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),
+          relations: await mergeRelations(from, organisme.relations, relations),
+          contacts: mergeContacts(from, organisme.contacts, contacts),
+          diplomes: mergeArray(from, organisme.diplomes, "code", diplomes),
+          certifications: mergeArray(from, organisme.certifications, "code", certifications),
+          lieux_de_formation: mergeArray(from, organisme.lieux_de_formation, "code", lieux_de_formation),
+        },
+        $addToSet: {
+          reseaux: {
+            $each: reseaux,
+          },
+          statuts: {
+            $each: statuts,
+          },
+        },
+      });
+
+      let nbModifiedDocuments = res.modifiedCount;
+      if (nbModifiedDocuments) {
+        stats[from].updated += nbModifiedDocuments;
+        logger.debug(`[Collect][${from}] Organisme ${organisme.siret} mis à jour`);
+      } else {
+        logger.trace(`[Collect][${from}] Organisme ${organisme.siret} à jour`);
+      }
+    } catch (e) {
+      stats[from].failed++;
+      await handleAnomalies(from, organisme, [e]);
+    }
+  }
 
   return stats;
 };
