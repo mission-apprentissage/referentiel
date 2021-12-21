@@ -4,15 +4,18 @@ const { oleoduc, writeData } = require("oleoduc");
 const { pick } = require("lodash");
 const { dbCollection } = require("../common/db/mongodb");
 const { parseCsv } = require("../common/utils/csvUtils");
+const { decodeStream } = require("iconv-lite");
 
 async function importCsv(csvStream) {
   let stats = { total: 0, created: 0, updated: 0, failed: 0 };
 
   await oleoduc(
     csvStream,
+    decodeStream("iso-8859-1"),
     parseCsv({
       delimiter: "|",
       skip_lines_with_error: true,
+      quote: null,
     }),
     writeData(async (data) => {
       try {
