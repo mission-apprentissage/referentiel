@@ -5,7 +5,7 @@ import { Tab, TabPanel, Tabs } from "../../common/dsfr/elements/Tabs";
 import React from "react";
 import { Immatriculation } from "./tabs/Immatriculation";
 import { Presentation } from "./fragments/Presentation";
-import useOrganisme from "./hooks/useOrganisme";
+import useOrganisme from "../../common/organismes/useOrganisme";
 import useFilAriane from "../../common/ariane/useFilAriane";
 
 export const OrganismeContext = React.createContext(null);
