@@ -1,6 +1,7 @@
 import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
 import SearchBar from "../../../common/dsfr/elements/SearchBar";
 import styled from "styled-components";
+import useForm from "../../../common/form/useForm";
 
 const SearchGridRow = styled(GridRow)`
   padding-bottom: 1.5rem;
@@ -9,21 +10,25 @@ const SearchGridRow = styled(GridRow)`
 `;
 
 export default function SearchForm({ search }) {
-  async function onChange(e) {
-    search({ page: 1, text: e.target.value });
+  let { registerForm, registerField } = useForm({ initialValues: { text: "" } });
+
+  async function onSubmit({ text }) {
+    search({ page: 1, text });
   }
 
   return (
     <SearchGridRow>
       <Col>
-        <SearchBar
-          name="text"
-          modifiers={"lg"}
-          label={"Rechercher"}
-          placeholder={"Rechercher une raison sociale, une UAI, un SIRET."}
-          className={"fr-ml-1v"}
-          onChange={onChange}
-        />
+        <form {...registerForm(onSubmit)}>
+          <SearchBar
+            name="text"
+            modifiers={"lg"}
+            label={"Rechercher"}
+            placeholder={"Rechercher une raison sociale, une UAI, un SIRET."}
+            className={"fr-ml-1v"}
+            {...registerField("text")}
+          />
+        </form>
       </Col>
     </SearchGridRow>
   );
