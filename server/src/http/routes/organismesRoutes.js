@@ -26,7 +26,7 @@ module.exports = () => {
         ? {
             _meta: {
               ...organisme._meta,
-              validation: organisme.uai ? "VALIDEE" : organisme.uai_potentiels.length > 0 ? "A_VALIDER" : "INCONNUE",
+              validation: organisme.uai ? "VALIDE" : organisme.uai_potentiels.length > 0 ? "A_VALIDER" : "A_RENSEIGNER",
             },
           }
         : {}),

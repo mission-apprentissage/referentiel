@@ -23,9 +23,9 @@ const actions = {
       );
     },
   },
-  INCONNUE: {
-    type: "INCONNUE",
-    label: "inconnue",
+  A_RENSEIGNER: {
+    type: "A_RENSEIGNER",
+    label: "à renseigner",
     icon: "error-warning-fill",
     legend: "Quelle UAI souhaitez-vous utiliser pour immatriculer cet OF-CFA ?",
     actionName: "Renseigner une UAI",
@@ -51,8 +51,8 @@ const actions = {
       );
     },
   },
-  VALIDEE: {
-    type: "VALIDEE",
+  VALIDE: {
+    type: "VALIDE",
     label: "validée",
     icon: "checkbox-circle-fill",
     legend: "Par quelle UAI souhaitez-vous remplacer l’UAI validée ?",

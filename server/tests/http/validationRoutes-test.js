@@ -41,8 +41,8 @@ describe("tableauDeBordRoutes", () => {
     deepStrictEqual(response.data, {
       validation: {
         A_VALIDER: 1,
-        INCONNUE: 1,
-        VALIDEE: 1,
+        A_RENSEIGNER: 1,
+        VALIDE: 1,
       },
     });
   });

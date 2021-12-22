@@ -15,13 +15,13 @@ const ValidationTag = styled(({ validation, ...props }) => {
     }
   }
 
-  &.fr-tag--INCONNUE {
+  &.fr-tag--A_RENSEIGNER {
     &.fr-fi-error-warning-fill::before {
       color: var(--pink-tuile-main-556);
     }
   }
 
-  &.fr-tag--VALIDEE {
+  &.fr-tag--VALIDE {
     &.fr-fi-checkbox-circle-fill::before {
       color: var(--text-default-success);
     }

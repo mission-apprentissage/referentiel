@@ -11,8 +11,8 @@ import useFilAriane from "../../common/ariane/useFilAriane";
 
 const validationMapper = {
   A_VALIDER: "l'UAI est à valider",
-  INCONNUE: "l'UAI est inconnue",
-  VALIDEE: "l'UAI est validée",
+  A_RENSEIGNER: "l'UAI est à renseigner",
+  VALIDE: "l'UAI est validée",
 };
 
 export default function Validation() {

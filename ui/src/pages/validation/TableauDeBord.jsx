@@ -36,10 +36,14 @@ export default function TableauDeBord() {
           <ValidationCard type={"A_VALIDER"} label={"UAI à valider"} nbElements={data.validation["A_VALIDER"]} />
         </Col>
         <Col modifiers={"12 sm-4"}>
-          <ValidationCard type={"INCONNUE"} label={"UAI inconnues"} nbElements={data.validation["INCONNUE"]} />
+          <ValidationCard
+            type={"A_RENSEIGNER"}
+            label={"UAI à renseigner"}
+            nbElements={data.validation["A_RENSEIGNER"]}
+          />
         </Col>
         <Col modifiers={"12 sm-4"}>
-          <ValidationCard type={"VALIDEE"} label={"UAI validées"} nbElements={data.validation["VALIDEE"]} />
+          <ValidationCard type={"VALIDE"} label={"UAI validées"} nbElements={data.validation["VALIDE"]} />
         </Col>
       </GridRow>
     </Container>
