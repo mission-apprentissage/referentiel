@@ -51,10 +51,10 @@ function selectBestResult(results, desc) {
 module.exports = (geoAdresseApi) => {
   let cache = caches.geoAdresseApiCache();
 
-  function geocode(adresse, { longitude, latitude }) {
+  function geocode(adresse, options = {}) {
     return cache.memo(adresse, async () => {
       return geoAdresseApi.search(adresse).catch((e) => {
-        throw new GeocodingError(`[${longitude},${latitude}]`, e);
+        throw new GeocodingError(`[${options.longitude},${options.latitude}]`, e);
       });
     });
   }
@@ -71,6 +71,10 @@ module.exports = (geoAdresseApi) => {
   }
 
   return {
+    async geocodeAdresse(adresse) {
+      let geocoded = await geocode(adresse);
+      return selectBestResult(geocoded, adresse);
+    },
     async getAdresseFromCoordinates(longitude, latitude, options = {}) {
       let results = await reverse(longitude, latitude, options);
       let best = selectBestResult(results, { longitude, latitude });

@@ -34,18 +34,38 @@ function getRelationLabel(e, uniteLegale) {
   return `${nom} ${localisation}`.replace(/ +/g, " ").trim();
 }
 
-module.exports = (options = {}) => {
+async function getAdresse(adresseResolver, data) {
+  let { getAdresseFromCoordinates, geocodeAdresse } = adresseResolver;
+  const addr = (
+    `${data.numero_voie || ""} ${data.indice_repetition || ""} ` +
+    `${data.type_voie || ""} ${data.libelle_voie || ""} ` +
+    `${data.code_postal || ""} ${data.libelle_commune || ""} `
+  )
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
+  if (data.longitude) {
+    return getAdresseFromCoordinates(parseFloat(data.longitude), parseFloat(data.latitude), {
+      code_postal: data.code_postal,
+      adresse: addr,
+    });
+  } else {
+    return geocodeAdresse(addr);
+  }
+}
+
+module.exports = (custom = {}) => {
   let name = "sirene";
-  let api = options.sireneApi || new SireneApi();
+  let api = custom.sireneApi || new SireneApi();
   let cache = caches.sireneApiCache();
-  let { getAdresseFromCoordinates } = adresses(options.geoAdresseApi || new GeoAdresseApi());
+  let adresseResolver = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
   return {
     name,
-    async stream(opts = {}) {
-      let filters = opts.filters || {};
+    async stream(options = {}) {
+      let filters = options.filters || {};
       let datagouv = createDatagouvSource();
-      let organismes = options.organismes || (await datagouv.loadOrganismeDeFormations());
+      let organismes = custom.organismes || (await datagouv.loadOrganismeDeFormations());
 
       return compose(
         dbCollection("organismes").find(filters, { siret: 1 }).stream(),
@@ -78,29 +98,6 @@ module.exports = (options = {}) => {
                   };
                 });
 
-              let adresse;
-              if (data.longitude) {
-                try {
-                  adresse = await getAdresseFromCoordinates(parseFloat(data.longitude), parseFloat(data.latitude), {
-                    code_postal: data.code_postal,
-                    adresse: (
-                      `${data.numero_voie || ""} ${data.indice_repetition || ""} ` +
-                      `${data.type_voie || ""} ${data.libelle_voie || ""} ` +
-                      `${data.code_postal || ""} ${data.libelle_commune || ""} `
-                    )
-                      .replace(/\s{2,}/g, " ")
-                      .trim(),
-                  });
-                } catch (e) {
-                  anomalies.push({
-                    code: "etablissement_geoloc_impossible",
-                    message: `Impossible de géolocaliser l'adresse de l'organisme. ${e.message}`,
-                  });
-                }
-              } else {
-                // TODO getAdresseFromLabel
-              }
-
               let formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);
               if (!formeJuridique) {
                 anomalies.push({
@@ -108,6 +105,13 @@ module.exports = (options = {}) => {
                   message: `Impossible de trouver la catégorie juridique de l'entreprise : ${uniteLegale.categorie_juridique}`,
                 });
               }
+
+              let adresse = await getAdresse(adresseResolver, data).catch((e) => {
+                anomalies.push({
+                  code: "etablissement_geoloc_impossible",
+                  message: `Impossible de géolocaliser l'adresse de l'organisme. ${e.message}`,
+                });
+              });
 
               return {
                 selector: siret,

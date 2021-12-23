@@ -106,15 +106,15 @@ function createStats(sources) {
   }, {});
 }
 
-async function getStreams(sources) {
-  return Promise.all(sources.map((source) => source.stream()));
+async function getStreams(sources, filters) {
+  return Promise.all(sources.map((source) => source.stream({ filters })));
 }
 
 module.exports = async (array, options = {}) => {
   let sources = Array.isArray(array) ? array : [array];
   let filters = options.filters || {};
   let stats = createStats(sources);
-  let streams = await getStreams(sources);
+  let streams = await getStreams(sources, filters);
 
   for await (const res of mergeStreams(streams)) {
     let {

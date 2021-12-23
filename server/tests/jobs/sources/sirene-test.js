@@ -30,11 +30,6 @@ function createSireneSource(options = {}) {
         .get((uri) => uri.includes("unites_legales"))
         .query(() => true)
         .reply(200, responses.unitesLegales());
-
-      client
-        .get((uri) => uri.includes("etablissements"))
-        .query(() => true)
-        .reply(200, responses.etablissement());
     });
   }
 
@@ -150,7 +145,7 @@ describe("sirene", () => {
     });
   });
 
-  it("Vérifie qu'on recherche une adresse quand le code posal du reverse-geocoding n'est pas le même que l'adresse", async () => {
+  it("Vérifie qu'on recherche une adresse quand le code postal du reverse-geocoding n'est pas le même que l'adresse", async () => {
     await importOrganismesForTest();
     mockSireneApi((client, responses) => {
       client
@@ -173,11 +168,6 @@ describe("sirene", () => {
             },
           })
         );
-
-      client
-        .get((uri) => uri.includes("etablissements"))
-        .query(() => true)
-        .reply(200, responses.etablissement());
     });
 
     mockGeoAddresseApi((client, responses) => {
@@ -212,34 +202,56 @@ describe("sirene", () => {
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.deepStrictEqual(found.adresse, {
-      geojson: {
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [2.396444, 48.879706],
-        },
-        properties: {
-          score: 0.88,
-        },
-      },
-      label: "31 Rue des lilas 93100 Montreuil",
-      code_postal: "93100",
-      code_insee: "93048",
-      localite: "Montreuil",
-      departement: {
-        code: "93",
-        nom: "Seine-Saint-Denis",
-      },
-      region: {
-        code: "11",
-        nom: "Île-de-France",
-      },
-      academie: {
-        code: "24",
-        nom: "Créteil",
+    assert.strictEqual(found.adresse.label, "31 Rue des lilas 93100 Montreuil");
+    assert.deepStrictEqual(stats, {
+      sirene: {
+        total: 1,
+        updated: 1,
+        ignored: 0,
+        failed: 0,
       },
     });
+  });
+
+  it("Vérifie qu'on recherche une adresse quand il n'y a pas d'informations de geocoding", async () => {
+    await importOrganismesForTest();
+    mockSireneApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("unites_legales"))
+        .query(() => true)
+        .reply(
+          200,
+          responses.unitesLegales({
+            unite_legale: {
+              etablissements: [
+                {
+                  siret: "11111111100006",
+                  longitude: null,
+                  latitude: null,
+                },
+              ],
+            },
+          })
+        );
+    });
+
+    mockGeoAddresseApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("reverse"))
+        .query(() => true)
+        .reply(500, responses.reverse());
+
+      client
+        .get((uri) => uri.includes("search"))
+        .query(() => true)
+        .reply(200, responses.search());
+    });
+
+    let source = createSireneSource();
+    let stats = await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    assert.strictEqual(found.adresse.label, "31 Rue des lilas 75019 Paris");
     assert.deepStrictEqual(stats, {
       sirene: {
         total: 1,
@@ -253,11 +265,6 @@ describe("sirene", () => {
   it("Vérifie qu'on peut collecter des relations", async () => {
     await importOrganismesForTest();
     mockSireneApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("etablissements"))
-        .query(() => true)
-        .reply(200, responses.etablissement());
-
       client
         .get((uri) => uri.includes("unites_legales"))
         .query(() => true)
@@ -365,11 +372,6 @@ describe("sirene", () => {
             },
           })
         );
-
-      client
-        .get((uri) => uri.includes("etablissements"))
-        .query(() => true)
-        .reply(200, responses.etablissement());
     });
 
     let source = createSireneSource({ mocks: ["geo"], organismes: ["2222222222222222"] });
@@ -420,11 +422,6 @@ describe("sirene", () => {
             },
           })
         );
-
-      client
-        .get((uri) => uri.includes("etablissements"))
-        .query(() => true)
-        .reply(200, responses.etablissement());
     });
 
     let source = createSireneSource({
@@ -535,11 +532,6 @@ describe("sirene", () => {
         .get((uri) => uri.includes("unites_legales"))
         .query(() => true)
         .reply(200, responses.unitesLegales({ unite_legale: { categorie_juridique: "INVALID" } }));
-
-      client
-        .get((uri) => uri.includes("etablissements"))
-        .query(() => true)
-        .reply(200, responses.etablissement());
     });
 
     let source = createSireneSource({ mocks: ["geo"] });
