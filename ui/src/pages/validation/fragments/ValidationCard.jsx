@@ -1,10 +1,11 @@
 import { Link } from "../../../common/dsfr/elements/Link";
 import { Box } from "../../../common/Flexbox";
 import styled from "styled-components";
-import { classNames } from "../../../common/dsfr/common/utils";
 import useNavigation from "../../../common/navigation/useNavigation";
 import { useContext } from "react";
 import { AuthContext } from "../../../common/AuthRoutes";
+import ClickableItem from "../../../common/ClickableItem";
+import { without } from "../../../common/utils";
 
 function buildValidationParams(type, auth) {
   let restricted = { [auth.type]: auth.code };
@@ -20,40 +21,35 @@ function buildValidationParams(type, auth) {
   }
 }
 
-function ValidationCard({ type, label, nbElements, className, ...rest }) {
+const StyledBox = styled(without(Box, ["type"]))`
+  padding: 1.5rem;
+  min-height: 240px;
+
+  background-color: ${(props) => `var(--color-validation-background-${props.type})`};
+  &:hover {
+    background-color: ${(props) => `var(--color-validation-background-hover-${props.type})`};
+  }
+`;
+
+export default function ValidationCard({ type, label, nbElements, ...rest }) {
   let [auth] = useContext(AuthContext);
   let { params, buildUrl } = useNavigation();
-  let clazz = classNames("validation-status", { modifiers: type, className });
-  let listeUrl = buildUrl(`/validation/${type}`, {
+  let link = buildUrl(`/validation/${type}`, {
     ...params,
     ...buildValidationParams(type, auth),
   });
 
   return (
-    <Box direction={"column"} justify={"between"} className={clazz} {...rest}>
-      <div>
-        <h4>{nbElements || 0}</h4>
-        <div>{label}</div>
-      </div>
-      <Link to={listeUrl} modifiers={"icon-right"} icons="arrow-right-line">
-        Voir la liste
-      </Link>
-    </Box>
+    <ClickableItem to={link}>
+      <StyledBox direction={"column"} justify={"between"} type={type} {...rest}>
+        <div>
+          <h4>{nbElements || 0}</h4>
+          <div>{label}</div>
+        </div>
+        <Link as="span" modifiers={"icon-right"} icons="arrow-right-line">
+          Voir la liste
+        </Link>
+      </StyledBox>
+    </ClickableItem>
   );
 }
-
-export default styled(ValidationCard)`
-  padding: 1.5rem;
-  min-height: 240px;
-  &.validation-status--A_VALIDER {
-    background-color: var(--background-validation-A_VALIDER);
-  }
-
-  &.validation-status--A_RENSEIGNER {
-    background-color: var(--background-validation-A_RENSEIGNER);
-  }
-
-  &.validation-status--VALIDE {
-    background-color: var(--background-validation-VALIDE);
-  }
-`;

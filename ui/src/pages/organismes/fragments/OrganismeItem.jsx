@@ -3,18 +3,15 @@ import styled from "styled-components";
 import React from "react";
 import Identite from "../../organisme/fragments/Identite";
 import { Link } from "../../../common/dsfr/elements/Link";
-import { Link as ReactRouterLink } from "react-router-dom";
-
-const ClickableItem = styled(ReactRouterLink)`
-  div:hover {
-    background-color: var(--background-box-hover);
-  }
-`;
+import ClickableItem from "../../../common/ClickableItem";
 
 const Card = styled(Box)`
-  background-color: var(--background-box);
   padding: 1rem 2rem;
   margin-bottom: 1rem;
+  background-color: var(--color-box-background);
+  &:hover {
+    background-color: var(--color-box-background-hover);
+  }
 `;
 
 const RaisonSociale = styled("div")`
@@ -46,11 +43,11 @@ export default function OrganismeItem({ organisme }) {
     <ClickableItem to={organisme.siret}>
       <Card direction={"column"}>
         <Box justify={"between"}>
+          <RaisonSociale className={"fr-text--bold"}>
+            {organisme.raison_sociale || "Raison sociale inconnue"}
+          </RaisonSociale>
           <Identite organisme={organisme} />
         </Box>
-        <RaisonSociale className={"fr-text--bold"}>
-          {organisme.raison_sociale || "Raison sociale inconnue"}
-        </RaisonSociale>
         <Adresse>{adresse}</Adresse>
         <Box justify={"between"} align={"center"}>
           <Identifiants>

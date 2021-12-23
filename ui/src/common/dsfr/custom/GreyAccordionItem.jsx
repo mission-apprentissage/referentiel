@@ -3,12 +3,14 @@ import { AccordionItem } from "../elements/Accordion";
 
 const GreyAccordionItem = styled(AccordionItem)`
   margin-bottom: 0.5rem;
+
   h3 {
-    background-color: var(--background-box);
+    background-color: var(--color-box-background);
   }
 
   .fr-collapse {
-    background-color: var(--background-box-light);
+    margin: 0;
+    background-color: var(--color-box-background-light);
   }
 `;
 
