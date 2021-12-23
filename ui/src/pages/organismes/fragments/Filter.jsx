@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Tag } from "../../../common/dsfr/elements/Tag";
 import SmallCheckbox from "../../../common/dsfr/custom/SmallCheckbox";
 import { castArray } from "lodash-es";
-import useNavigation from "../../../common/navigation/useNavigation";
+import useNavigation from "../../../common/hooks/useNavigation";
 import { useContext } from "react";
 import { FilterContext } from "./Filters";
 import { DataContext } from "../../../common/hooks/useData";

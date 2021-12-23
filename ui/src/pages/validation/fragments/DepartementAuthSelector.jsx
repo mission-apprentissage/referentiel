@@ -1,6 +1,6 @@
 import Select from "../../../common/dsfr/elements/Select";
 import { useContext, useState } from "react";
-import useNavigation from "../../../common/navigation/useNavigation";
+import useNavigation from "../../../common/hooks/useNavigation";
 import { Box, Item } from "../../../common/Flexbox";
 import { DataContext } from "../../../common/hooks/useData";
 import { AuthContext } from "../../../common/AuthRoutes";

@@ -1,7 +1,7 @@
 import { Link } from "../../../common/dsfr/elements/Link";
 import { Box } from "../../../common/Flexbox";
 import styled from "styled-components";
-import useNavigation from "../../../common/navigation/useNavigation";
+import useNavigation from "../../../common/hooks/useNavigation";
 import { useContext } from "react";
 import { AuthContext } from "../../../common/AuthRoutes";
 import ClickableItem from "../../../common/ClickableItem";

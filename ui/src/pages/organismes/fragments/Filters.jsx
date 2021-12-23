@@ -1,7 +1,7 @@
 import { Accordion } from "../../../common/dsfr/elements/Accordion";
 import { Box } from "../../../common/Flexbox";
 import LinkButton from "../../../common/dsfr/custom/LinkButton";
-import useNavigation from "../../../common/navigation/useNavigation";
+import useNavigation from "../../../common/hooks/useNavigation";
 import { createContext } from "react";
 import { uniq } from "lodash-es";
 

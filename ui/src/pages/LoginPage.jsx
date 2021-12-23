@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import useNavigation from "../common/navigation/useNavigation";
+import useNavigation from "../common/hooks/useNavigation";
 import { isAnonymous, setAuth } from "../common/api/auth";
 import Alert from "../common/dsfr/elements/Alert";
 import { Col, Container, GridRow } from "../common/dsfr/fondamentaux";
