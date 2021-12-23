@@ -132,7 +132,7 @@ module.exports = async (array, options = {}) => {
       anomalies = [],
     } = res;
 
-    if (filters.siret && filters.siret !== data.selector) {
+    if (filters.siret && filters.siret !== selector) {
       continue;
     }
 

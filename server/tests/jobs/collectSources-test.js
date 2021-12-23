@@ -569,19 +569,26 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on peut filter par siret", async () => {
     await insertOrganisme({ siret: "11111111100006" });
+    await insertOrganisme({ siret: "33333333300008" });
     let source = createTestSource([
       {
         selector: "11111111100006",
+        reseaux: ["test"],
+      },
+      {
+        selector: "33333333300008",
         reseaux: ["test"],
       },
     ]);
 
     let stats = await collectSources(source, { filters: { siret: "33333333300008" } });
 
+    let found = await dbCollection("organismes").findOne({ siret: "33333333300008" });
+    assert.deepStrictEqual(found.reseaux, ["test"]);
     assert.deepStrictEqual(stats, {
       dummy: {
-        total: 0,
-        updated: 0,
+        total: 1,
+        updated: 1,
         ignored: 0,
         failed: 0,
       },
