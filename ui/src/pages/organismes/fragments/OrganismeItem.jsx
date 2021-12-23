@@ -57,7 +57,7 @@ export default function OrganismeItem({ organisme }) {
             <span>UAI&nbsp;:&nbsp;{organisme.uai || "N.A"}</span>
             <span>SIRET&nbsp;:&nbsp;{organisme.siret}</span>
           </Identifiants>
-          <Link to={organisme.siret} modifiers={"lg icon-right"} icons="arrow-right-line" />
+          <Link as={"span"} modifiers={"lg icon-right"} icons="arrow-right-line" />
         </Box>
       </Card>
     </ClickableItem>
