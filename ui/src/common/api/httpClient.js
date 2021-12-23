@@ -1,6 +1,6 @@
 import EventEmitter from "events";
 import * as queryString from "querystring";
-import { getAuth } from "../auth/auth";
+import { getAuth } from "./auth";
 
 class AuthError extends Error {
   constructor(json, statusCode) {

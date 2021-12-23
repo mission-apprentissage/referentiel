@@ -1,7 +1,7 @@
 import { Col, Container, GridRow } from "../../common/dsfr/fondamentaux";
 import { Tab, TabPanel, Tabs } from "../../common/dsfr/elements/Tabs";
 import AcademieSelector from "./fragments/AcademieSelector";
-import { useSearch } from "../../common/organismes/useSearch";
+import { useSearch } from "../../common/hooks/useSearch";
 import Spinner from "../../common/Spinner";
 import SearchForm from "./fragments/SearchForm";
 import OrganismeList from "./fragments/OrganismeList";

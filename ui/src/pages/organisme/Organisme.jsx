@@ -4,7 +4,7 @@ import Alert from "../../common/dsfr/elements/Alert";
 import { Tab, TabPanel, Tabs } from "../../common/dsfr/elements/Tabs";
 import React, { useContext } from "react";
 import { Immatriculation } from "./tabs/Immatriculation";
-import useOrganisme from "../../common/organismes/useOrganisme";
+import useOrganisme from "../../common/hooks/useOrganisme";
 import MainTitle from "../../common/layout/MainTitle";
 import Reseaux from "./fragments/Reseaux";
 

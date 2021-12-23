@@ -5,9 +5,9 @@ import { Tag } from "../../../common/dsfr/elements/Tag";
 import SmallCheckbox from "../../../common/dsfr/custom/SmallCheckbox";
 import { castArray } from "lodash-es";
 import useNavigation from "../../../common/navigation/useNavigation";
-import { useDataContext } from "../../../common/data/useDataContext";
 import { useContext } from "react";
 import { FilterContext } from "./Filters";
+import { DataContext } from "../../../common/hooks/useData";
 
 const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   return (
@@ -55,7 +55,7 @@ export function Filter({ label, paramName, items }) {
 }
 
 export function DepartementsFilter() {
-  let [{ departements }] = useDataContext();
+  let [{ departements }] = useContext(DataContext);
 
   return (
     <Filter

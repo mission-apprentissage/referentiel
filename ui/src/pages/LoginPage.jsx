@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import useNavigation from "../common/navigation/useNavigation";
-import { isAnonymous, setAuth } from "../common/auth/auth";
+import { isAnonymous, setAuth } from "../common/api/auth";
 import Alert from "../common/dsfr/elements/Alert";
 import { Col, Container, GridRow } from "../common/dsfr/fondamentaux";
 
@@ -23,5 +23,6 @@ export default function Login() {
       </Container>
     );
   }
+
   return <Navigate to="/" replace={true} />;
 }

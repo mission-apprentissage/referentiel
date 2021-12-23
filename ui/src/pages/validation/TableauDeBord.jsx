@@ -1,15 +1,15 @@
 import { Col, Container, GridRow } from "../../common/dsfr/fondamentaux";
-import React from "react";
+import React, { useContext } from "react";
 import ValidationCard from "./fragments/ValidationCard";
 import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
 import useNavigation from "../../common/navigation/useNavigation";
-import { useFetch } from "../../common/http/useFetch";
+import { useFetch } from "../../common/hooks/useFetch";
 import Spinner from "../../common/Spinner";
-import { useAuthContext } from "../../common/auth/useAuthContext";
 import MainTitle from "../../common/layout/MainTitle";
+import { AuthContext } from "../../common/AuthRoutes";
 
 export default function TableauDeBord() {
-  let [auth] = useAuthContext();
+  let [auth] = useContext(AuthContext);
   let title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
 
   let { params, buildUrl, navigate } = useNavigation();

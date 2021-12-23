@@ -3,7 +3,7 @@ import OrganismeList from "../organismes/fragments/OrganismeList";
 import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
 import Filters from "../organismes/fragments/Filters";
 import SearchForm from "../organismes/fragments/SearchForm";
-import { useSearch } from "../../common/organismes/useSearch";
+import { useSearch } from "../../common/hooks/useSearch";
 import Spinner from "../../common/Spinner";
 import { useParams } from "react-router-dom";
 import { NdaFilter, TypeFilter } from "../organismes/fragments/Filter";

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer } from "react";
-import { _get } from "./httpClient";
+import { _get } from "../api/httpClient";
 
 export function useFetch(url, initialState = {}) {
   function fetchReducer(state, action) {

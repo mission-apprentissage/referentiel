@@ -6,7 +6,7 @@ import styled from "styled-components";
 import useForm from "../../../../common/form/useForm";
 import * as yup from "yup";
 import { Form } from "../../../../common/form/Form";
-import { _get } from "../../../../common/http/httpClient";
+import { _get } from "../../../../common/api/httpClient";
 import { UAIPotentielsSelector } from "./UAIPotentielsSelector";
 import { UAICustom } from "./UAICustom";
 

@@ -1,5 +1,5 @@
-import { useFetch } from "../http/useFetch";
-import { _put } from "../http/httpClient";
+import { useFetch } from "./useFetch";
+import { _put } from "../api/httpClient";
 
 export default function useOrganisme(siret) {
   let [{ data: organisme, ...rest }, setData] = useFetch(`/api/v1/organismes/${siret}`);

@@ -6,15 +6,17 @@ import Layout from "./common/layout/Layout";
 import DesignPage from "./pages/DesignPage";
 import Organismes from "./pages/organismes/Organismes";
 import Login from "./pages/LoginPage";
-import AuthProvider from "./common/auth/AuthProvider";
 import TableauDeBord from "./pages/validation/TableauDeBord";
 import Validation from "./pages/validation/Validation";
-import DataProvider from "./common/data/DataProvider";
+import useData, { DataContext } from "./common/hooks/useData";
+import AuthRoutes from "./common/AuthRoutes";
 
 function App() {
+  let data = useData();
+
   return (
     <div className="App">
-      <DataProvider>
+      <DataContext.Provider value={data}>
         <Router>
           <Routes>
             <Route path="/dsfr" element={<DesignPage />} />
@@ -22,7 +24,7 @@ function App() {
           <Routes>
             <Route element={<Layout children={<Outlet />} />}>
               <Route path="/login" element={<Login />} />
-              <Route element={<AuthProvider children={<Outlet />} />}>
+              <Route element={<AuthRoutes />}>
                 <Route path="/" element={<TableauDeBord />} />
                 <Route path="/validation" element={<Navigate replace to="/" />} />
                 <Route path="/validation/:validationStatus" element={<Validation />} />
@@ -33,7 +35,7 @@ function App() {
             </Route>
           </Routes>
         </Router>
-      </DataProvider>
+      </DataContext.Provider>
     </div>
   );
 }

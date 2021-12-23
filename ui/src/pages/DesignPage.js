@@ -16,7 +16,6 @@ import { Tab, TabPanel, Tabs } from "../common/dsfr/elements/Tabs";
 import { Header } from "../common/dsfr/elements/Header";
 import { Link, LinkGroup } from "../common/dsfr/elements/Link";
 import { Nav, NavButton, NavLink } from "../common/dsfr/elements/Nav";
-import { useDataContext } from "../common/data/useDataContext";
 
 const Colored = styled.div`
   background-color: ${(props) => props.color};
@@ -35,7 +34,6 @@ function Option({ children }) {
 }
 
 export default function DesignPage() {
-  useDataContext();
   let [showAlert, setShowAlert] = useState(true);
 
   return (

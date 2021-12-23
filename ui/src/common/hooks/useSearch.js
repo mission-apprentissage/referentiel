@@ -1,4 +1,4 @@
-import { useFetch } from "../http/useFetch";
+import { useFetch } from "./useFetch";
 import useNavigation from "../navigation/useNavigation";
 import { isArray } from "lodash-es";
 
