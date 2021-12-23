@@ -1,4 +1,4 @@
-import { Box } from "../../../common/Flexbox";
+import { Box, Item } from "../../../common/Flexbox";
 import styled from "styled-components";
 import React from "react";
 import Identite from "../../organisme/fragments/Identite";
@@ -14,13 +14,13 @@ const Card = styled(Box)`
   }
 `;
 
-const RaisonSociale = styled("div")`
+const RaisonSociale = styled.div`
   font-size: 1.25rem;
   line-height: 2rem;
   padding-bottom: 0.25rem;
 `;
 
-const Adresse = styled("div")`
+const Adresse = styled.div`
   font-size: 1rem;
   line-height: 1.5rem;
   padding-bottom: 0.5rem;
@@ -43,10 +43,12 @@ export default function OrganismeItem({ organisme }) {
     <ClickableItem to={organisme.siret}>
       <Card direction={"column"}>
         <Box justify={"between"}>
-          <RaisonSociale className={"fr-text--bold"}>
+          <RaisonSociale className={"fr-text--bold"} style={{ width: "85%" }}>
             {organisme.raison_sociale || "Raison sociale inconnue"}
           </RaisonSociale>
-          <Identite organisme={organisme} />
+          <Item alignSelf={"baseline"}>
+            <Identite organisme={organisme} />
+          </Item>
         </Box>
         <Adresse>{adresse}</Adresse>
         <Box justify={"between"} align={"center"}>

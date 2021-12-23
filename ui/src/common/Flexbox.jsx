@@ -4,6 +4,8 @@ import cs from "classnames";
 import { without } from "./utils";
 
 const div = without("div", [
+  "width",
+  "height",
   "offset",
   "direction",
   "reverse",

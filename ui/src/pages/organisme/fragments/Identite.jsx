@@ -14,7 +14,7 @@ const Identite = styled(({ organisme, ...props }) => {
   );
 })`
   &::before {
-    color: var(--text-default-success);
+    color: var(--green-emeraude-main-632);
   }
 `;
 
