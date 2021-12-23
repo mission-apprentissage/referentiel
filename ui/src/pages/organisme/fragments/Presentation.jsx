@@ -1,17 +1,6 @@
 import { Box } from "../../../common/Flexbox";
 import React from "react";
-
-function Reseaux({ organisme }) {
-  if (organisme.reseaux.length === 0) {
-    return <div />;
-  }
-  return (
-    <div>
-      <span className={"fr-text--bold fr-pr-2v"}>Membre des réseaux</span>
-      <span>{organisme.reseaux.join(" ,")}</span>
-    </div>
-  );
-}
+import Reseaux from "./Reseaux";
 
 export function Presentation({ organisme }) {
   return (

@@ -2,21 +2,23 @@ import { Col, Container, GridRow } from "../../common/dsfr/fondamentaux";
 import { useParams } from "react-router-dom";
 import Alert from "../../common/dsfr/elements/Alert";
 import { Tab, TabPanel, Tabs } from "../../common/dsfr/elements/Tabs";
-import React from "react";
+import React, { useContext } from "react";
 import { Immatriculation } from "./tabs/Immatriculation";
-import { Presentation } from "./fragments/Presentation";
 import useOrganisme from "../../common/organismes/useOrganisme";
-import useFilAriane from "../../common/ariane/useFilAriane";
+import MainTitle from "../../common/layout/MainTitle";
+import Reseaux from "./fragments/Reseaux";
 
 export const OrganismeContext = React.createContext(null);
+
+export function OrganismeTitle() {
+  let { organisme } = useContext(OrganismeContext);
+
+  return <span>{organisme.raison_sociale}</span>;
+}
 
 export default function Organisme() {
   let { siret } = useParams();
   let [{ organisme, loading, error }, actions] = useOrganisme(siret);
-  useFilAriane([{ label: organisme.raison_sociale, current: true }], {
-    dependencies: [organisme],
-    preserve: true,
-  });
 
   if (error) {
     return (
@@ -39,13 +41,12 @@ export default function Organisme() {
   }
 
   return (
-    <OrganismeContext.Provider value={actions}>
+    <OrganismeContext.Provider value={{ organisme, actions }}>
+      <MainTitle title={<OrganismeTitle />}>
+        <Reseaux organisme={organisme} />
+      </MainTitle>
+
       <Container>
-        <GridRow className={"fr-pb-3w"}>
-          <Col>
-            <Presentation organisme={organisme} />
-          </Col>
-        </GridRow>
         <GridRow className={"fr-pb-3w"}>
           <Col>
             <Tabs

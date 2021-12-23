@@ -1,15 +1,10 @@
-import { Header } from "./dsfr/elements/Header";
-import { Nav, NavLink } from "./dsfr/elements/Nav";
-import { Container, GridRow } from "./dsfr/fondamentaux";
-import { Footer, FooterLink, FooterList } from "./dsfr/elements/Footer";
+import { Header } from "../dsfr/elements/Header";
+import { Nav, NavLink } from "../dsfr/elements/Nav";
+import { Footer, FooterLink, FooterList } from "../dsfr/elements/Footer";
 import React from "react";
-import { Outlet } from "react-router-dom";
-import useScrollToTop from "./navigation/useScrollToTop";
-import DataProvider from "./data/DataProvider";
-import FilArianeProvider from "./ariane/FilArianeProvider";
-import FilAriane from "./ariane/FilAriane";
+import useScrollToTop from "../navigation/useScrollToTop";
 
-export default function LayoutRoute() {
+export default function Layout({ children }) {
   useScrollToTop();
 
   return (
@@ -23,16 +18,9 @@ export default function LayoutRoute() {
           </Nav>
         }
       />
-      <DataProvider>
-        <FilArianeProvider>
-          <Container>
-            <GridRow>
-              <FilAriane />
-            </GridRow>
-          </Container>
-          <Outlet />
-        </FilArianeProvider>
-      </DataProvider>
+
+      {children}
+
       <Footer
         content={{
           desc: (

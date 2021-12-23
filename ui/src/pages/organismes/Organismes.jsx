@@ -7,22 +7,14 @@ import SearchForm from "./fragments/SearchForm";
 import OrganismeList from "./fragments/OrganismeList";
 import Filters from "./fragments/Filters";
 import { DepartementsFilter, NdaFilter, TypeFilter } from "./fragments/Filter";
-import useFilAriane from "../../common/ariane/useFilAriane";
+import MainTitle from "../../common/layout/MainTitle";
 
 export default function Organismes() {
   let [{ data, loading, error }, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
-  useFilAriane([
-    { label: "Accueil", to: "/" },
-    { label: "Organismes", to: "/organismes" },
-  ]);
 
   return (
     <Container>
-      <GridRow className={"fr-pb-3w"}>
-        <Col modifiers={"12 offset-md-8 md-4"}>
-          <AcademieSelector onChange={(code) => search({ academie: code })} />
-        </Col>
-      </GridRow>
+      <MainTitle selector={<AcademieSelector onChange={(code) => search({ academie: code })} />} />
       <GridRow className={"fr-pb-3w"}>
         <Col>
           <Tabs

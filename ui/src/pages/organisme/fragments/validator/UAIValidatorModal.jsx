@@ -42,7 +42,7 @@ const validators = yup.object({
 });
 
 export function UAIValidatorModal({ modal, organisme, validation }) {
-  let { validateUAI, setOrganisme } = useContext(OrganismeContext);
+  let { actions } = useContext(OrganismeContext);
   let hasPotentiels = organisme.uai_potentiels.length > 0;
   let form = useForm({
     initialValues: hasPotentiels ? { uai: organisme.uai || "", custom: "" } : { uai: "custom", custom: "" },
@@ -50,10 +50,11 @@ export function UAIValidatorModal({ modal, organisme, validation }) {
   });
 
   async function onSubmit(values) {
-    validateUAI(values.uai === "custom" ? values.custom : values.uai)
+    actions
+      .validateUAI(values.uai === "custom" ? values.custom : values.uai)
       .then((updated) => {
         modal.close();
-        setOrganisme(updated);
+        actions.setOrganisme(updated);
       })
       .catch(() => {
         form.setFormErrors({ uai: "L'uai saisie est invalide" });
