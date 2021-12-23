@@ -4,7 +4,6 @@ const { Readable } = require("stream");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const importReferentiel = require("../../src/jobs/importOrganismes");
 const { compose, transformData } = require("oleoduc");
-const { insertOrganisme } = require("../utils/fakeData");
 
 function createTestSource(array) {
   let name = "dummy";
@@ -102,16 +101,5 @@ describe("importOrganismes", () => {
         failed: 0,
       },
     });
-  });
-
-  it("Vérifie qu'on peut supprimer tous les organismes avant l'import", async () => {
-    let source = createTestSource([{ siret: "11111111100006" }]);
-    await insertOrganisme({ siret: "22222222200002" });
-
-    await importReferentiel(source, { removeAll: true });
-
-    let docs = await dbCollection("organismes").find({}, { siret: 1 }).toArray();
-    assert.ok(docs.length, 1);
-    assert.strictEqual(docs[0].siret, "11111111100006");
   });
 });

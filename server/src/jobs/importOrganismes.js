@@ -2,7 +2,7 @@ const { mergeStreams } = require("oleoduc");
 const { isEmpty, castArray } = require("lodash");
 const logger = require("../common/logger");
 const luhn = require("fast-luhn");
-const { dbCollection, clearCollection } = require("../common/db/mongodb");
+const { dbCollection } = require("../common/db/mongodb");
 
 function createStats(sources) {
   return sources.reduce((acc, source) => {
@@ -19,14 +19,10 @@ function createStats(sources) {
   }, {});
 }
 
-module.exports = async (array, options = {}) => {
+module.exports = async (array) => {
   let sources = castArray(array);
   let streams = await Promise.all(sources.map((source) => source.referentiel()));
   let stats = createStats(sources);
-
-  if (options.removeAll) {
-    await clearCollection("organismes");
-  }
 
   for await (const { from, siret } of mergeStreams(streams)) {
     stats[from].total++;

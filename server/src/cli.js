@@ -20,6 +20,7 @@ cli
   .command("build")
   .argument("[names]", "La liste des sources servant de référence d'organismes")
   .option("--clearCache", "Supprime les données stockées en cache")
+  .option("--removeAll", "Supprime tous les établissements")
   .action((names, options) => {
     runScript(() => {
       let referentiels = names ? names.split(",") : null;
