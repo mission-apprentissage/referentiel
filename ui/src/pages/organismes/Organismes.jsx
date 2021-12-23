@@ -40,8 +40,6 @@ export default function Organismes() {
                   </TabPanel>
                 ),
               },
-              { tab: <Tab disabled>Lexique</Tab>, panel: <TabPanel>-</TabPanel> },
-              { tab: <Tab disabled>Guide Réglementaire</Tab>, panel: <TabPanel>-</TabPanel> },
             ]}
           />
         </Col>
