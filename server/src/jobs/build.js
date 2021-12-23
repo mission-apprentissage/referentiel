@@ -7,7 +7,7 @@ const importCFD = require("./importCFD");
 const consolidate = require("./consolidate");
 
 async function build(options = {}) {
-  let referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese"];
+  let referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "mna"];
   let stats = [];
   function collectAll(sourceNames, globalOptions = {}) {
     let sources = sourceNames.map((sourceName) => createSource(sourceName, globalOptions));
@@ -38,6 +38,7 @@ async function build(options = {}) {
     "refea",
     "uimm",
     "ymag",
+    "mna",
   ]);
   await collectAll(["onisep", "onisep-structure", "ideo2", "datagouv"]);
   await collectAll(["sirene", "catalogue"], {
