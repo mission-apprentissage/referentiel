@@ -59,6 +59,9 @@ export default function Organisme() {
                     </TabPanel>
                   ),
                 },
+                { tab: <Tab disabled>Lieux de formations</Tab>, panel: <TabPanel>-</TabPanel> },
+                { tab: <Tab disabled>Relations de sous traitances</Tab>, panel: <TabPanel>-</TabPanel> },
+                { tab: <Tab disabled>Relations administratives</Tab>, panel: <TabPanel>-</TabPanel> },
               ]}
             />{" "}
           </Col>
