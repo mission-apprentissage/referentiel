@@ -681,7 +681,7 @@ describe("organismesRoutes", () => {
     });
 
     let response = await httpClient.put(
-      "/api/v1/organismes/11111111100001/isUAIValid",
+      "/api/v1/organismes/11111111100001/setUAI",
       { uai: "0751234J" },
       {
         headers: {
@@ -749,7 +749,7 @@ describe("organismesRoutes", () => {
     deepStrictEqual(modification, {
       siret: "11111111100001",
       uai: "0751234J",
-      auteur: "11",
+      auteur: "region-11",
     });
   });
 
@@ -764,7 +764,7 @@ describe("organismesRoutes", () => {
     });
 
     let response = await httpClient.put(
-      "/api/v1/organismes/11111111100001/isUAIValid",
+      "/api/v1/organismes/11111111100001/setUAI",
       { uai: "0751234J" },
       {
         headers: {
@@ -789,7 +789,7 @@ describe("organismesRoutes", () => {
     });
 
     let response = await httpClient.put(
-      "/api/v1/organismes/22222222200002/isUAIValid",
+      "/api/v1/organismes/22222222200002/setUAI",
       { uai: "0751234J" },
       {
         headers: {
@@ -812,7 +812,7 @@ describe("organismesRoutes", () => {
     });
 
     let response = await httpClient.put(
-      "/api/v1/organismes/22222222200002/isUAIValid",
+      "/api/v1/organismes/22222222200002/setUAI",
       { uai: "0751234J" },
       {
         headers: {
@@ -835,7 +835,7 @@ describe("organismesRoutes", () => {
     });
 
     let response = await httpClient.put(
-      "/api/v1/organismes/22222222200002/isUAIValid",
+      "/api/v1/organismes/22222222200002/setUAI",
       { uai: "0751234J" },
       {
         headers: {

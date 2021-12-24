@@ -9,7 +9,7 @@ const buildProjection = require("../utils/buildProjection");
 const { stringList } = require("../utils/validators");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
-const validateUAI = require("../../common/actions/validateUAI");
+const setUAI = require("../../common/actions/setUAI");
 const { checkApiToken, checkOptionnalApiToken } = require("../middlewares/authMiddleware");
 const canEditOrganisme = require("../../common/actions/canEditOrganisme");
 const { getRegions } = require("../../common/regions");
@@ -161,7 +161,7 @@ module.exports = () => {
   );
 
   router.put(
-    "/api/v1/organismes/:siret/isUAIValid",
+    "/api/v1/organismes/:siret/setUAI",
     checkApiToken(),
     tryCatch(async (req, res) => {
       let user = req.user;
@@ -178,7 +178,7 @@ module.exports = () => {
         throw Boom.badRequest("Vous ne pouvez pas modifier cet organisme");
       }
 
-      let organisme = await validateUAI(siret, uai, user.code);
+      let organisme = await setUAI(siret, uai, `${user.type}-${user.code}`);
 
       if (!organisme) {
         throw Boom.notFound("Siret inconnu");

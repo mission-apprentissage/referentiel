@@ -1,6 +1,6 @@
 const { dbCollection } = require("../../common/db/mongodb");
 
-async function validateUAI(siret, uai, auteur) {
+async function setUAI(siret, uai, auteur) {
   await dbCollection("modifications").insertOne({
     siret,
     uai,
@@ -17,4 +17,4 @@ async function validateUAI(siret, uai, auteur) {
   return res.value;
 }
 
-module.exports = validateUAI;
+module.exports = setUAI;

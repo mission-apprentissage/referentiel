@@ -51,7 +51,7 @@ export function UAIValidatorModal({ modal, organisme, validation }) {
 
   async function onSubmit(values) {
     actions
-      .validateUAI(values.uai === "custom" ? values.custom : values.uai)
+      .setUAI(values.uai === "custom" ? values.custom : values.uai)
       .then((updated) => {
         modal.close();
         actions.setOrganisme(updated);
