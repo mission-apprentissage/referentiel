@@ -5,4 +5,5 @@ module.exports = {
   cfd: require("./cfd"),
   cache: require("./cache"),
   logs: require("./logs"),
+  migrations: require("./migrations"),
 };

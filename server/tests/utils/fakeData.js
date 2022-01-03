@@ -260,9 +260,12 @@ module.exports = {
         {},
         {
           siret: faker.helpers.replaceSymbols("#########00015"),
-          uai: "0751234V",
           date: new Date(),
           auteur: "test",
+          original: {},
+          changements: {
+            uai: "0751234V",
+          },
         },
         custom
       )

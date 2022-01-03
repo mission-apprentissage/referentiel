@@ -1,7 +1,8 @@
 const assert = require("assert");
 const { createStream } = require("../utils/testUtils");
-const addModifications = require("../../src/jobs/addModifications");
+const addModifications = require("../../src/jobs/experimentation/addModifications");
 const { dbCollection } = require("../../src/common/db/mongodb");
+const { insertOrganisme } = require("../utils/fakeData");
 
 let getCsvStream = (content) => {
   return createStream(
@@ -14,6 +15,7 @@ let getCsvStream = (content) => {
 
 describe("addModifications", () => {
   it("Vérifie qu'on peut ajouter des modifications", async () => {
+    await insertOrganisme({ siret: "11111111100006" });
     let stats = await addModifications(
       getCsvStream(`siret;uai
 11111111100006;0751234J
@@ -22,9 +24,10 @@ describe("addModifications", () => {
 
     const found = await dbCollection("modifications").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.ok(found.date);
-    assert.deepStrictEqual(found.siret, "11111111100006");
-    assert.deepStrictEqual(found.uai, "0751234J");
-    assert.deepStrictEqual(found.auteur, "experimentation");
+    assert.strictEqual(found.siret, "11111111100006");
+    assert.strictEqual(found.auteur, "experimentation");
+    assert.strictEqual(found.original.uai, undefined);
+    assert.deepStrictEqual(found.changements, { uai: "0751234J" });
     assert.deepStrictEqual(stats, {
       total: 1,
       inserted: 1,

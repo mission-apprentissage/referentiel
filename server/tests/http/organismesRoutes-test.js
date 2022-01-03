@@ -717,6 +717,7 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
+      uai: "0751234X",
       raison_sociale: "Centre de formation",
       adresse: {
         region: { code: "11", nom: "Île-de-France" },
@@ -791,8 +792,13 @@ describe("organismesRoutes", () => {
     assert.ok(date);
     deepStrictEqual(modification, {
       siret: "11111111100001",
-      uai: "0751234J",
       auteur: "region-11",
+      original: {
+        uai: "0751234X",
+      },
+      changements: {
+        uai: "0751234J",
+      },
     });
   });
 
