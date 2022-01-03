@@ -616,7 +616,7 @@ module.exports = {
                   libelle_pays_etranger_2: null,
                   date_debut: "2020-11-27",
                   etat_administratif: "A",
-                  enseigne_1: null,
+                  enseigne_1: "ENSEIGNE",
                   enseigne_2: null,
                   enseigne_3: null,
                   denomination_usuelle: null,

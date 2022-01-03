@@ -7,12 +7,8 @@ const { dbCollection } = require("../../common/db/mongodb");
 const createDatagouvSource = require("../sources/datagouv");
 const caches = require("../../common/caches/caches");
 
-function getEtablissementName(e, uniteLegale) {
+function getRaisonSociale(uniteLegale) {
   return (
-    e.enseigne_1 ||
-    e.enseigne_2 ||
-    e.enseigne_3 ||
-    e.denomination_usuelle ||
     uniteLegale.denomination ||
     uniteLegale.denomination_usuelle_1 ||
     uniteLegale.denomination_usuelle_2 ||
@@ -21,9 +17,16 @@ function getEtablissementName(e, uniteLegale) {
   );
 }
 
-function getRelationLabel(e, uniteLegale) {
-  let nom = getEtablissementName(e, uniteLegale);
+function getEnseigne(etablissement) {
+  return (
+    etablissement.enseigne_1 ||
+    etablissement.enseigne_2 ||
+    etablissement.enseigne_3 ||
+    etablissement.denomination_usuelle
+  );
+}
 
+function getRelationLabel(e, raisonSociale) {
   let localisation;
   if (e.code_postal) {
     localisation = `${e.numero_voie || ""} ${e.code_postal || ""} ${e.libelle_commune || ""}`;
@@ -31,7 +34,7 @@ function getRelationLabel(e, uniteLegale) {
     localisation = `${e.libelle_commune_etranger || ""} ${e.code_pays_etranger || ""} ${e.libelle_pays_etranger || ""}`;
   }
 
-  return `${nom} ${localisation}`.replace(/ +/g, " ").trim();
+  return `${raisonSociale} ${localisation}`.replace(/ +/g, " ").trim();
 }
 
 async function getAdresse(adresseResolver, data) {
@@ -76,6 +79,7 @@ module.exports = (custom = {}) => {
               let anomalies = [];
 
               let uniteLegale = await cache.memo(siren, () => api.getUniteLegale(siren));
+              let raisonSociale = getRaisonSociale(uniteLegale);
 
               let data = uniteLegale.etablissements.find((e) => e.siret === siret);
               if (!data) {
@@ -94,7 +98,7 @@ module.exports = (custom = {}) => {
                 .map((e) => {
                   return {
                     siret: e.siret,
-                    label: getRelationLabel(e, uniteLegale),
+                    label: getRelationLabel(e, raisonSociale),
                   };
                 });
 
@@ -118,7 +122,8 @@ module.exports = (custom = {}) => {
                 relations,
                 anomalies,
                 data: {
-                  raison_sociale: getEtablissementName(data, uniteLegale),
+                  raison_sociale: raisonSociale,
+                  enseigne: getEnseigne(data),
                   siege_social: data.etablissement_siege === "true",
                   etat_administratif: data.etat_administratif === "A" ? "actif" : "fermé",
                   ...(adresse ? { adresse } : {}),

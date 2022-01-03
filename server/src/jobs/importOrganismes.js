@@ -28,7 +28,7 @@ module.exports = async (array) => {
     stats[from].total++;
     if (isEmpty(siret) || !luhn(siret)) {
       stats[from].invalid++;
-      logger.warn(`[Referentiel] Siret '${siret}' invalide pour l'organisme`);
+      logger.warn(`[Import] Siret '${siret}' invalide pour l'organisme`);
       continue;
     }
 
@@ -59,15 +59,15 @@ module.exports = async (array) => {
       );
 
       if (res.upsertedCount) {
-        logger.debug(`[Referentiel] Organisme ${siret} créé`);
+        logger.debug(`[Import] Organisme ${siret} créé`);
         stats[from].created += res.upsertedCount;
       } else if (res.modifiedCount) {
         stats[from].updated += res.modifiedCount;
-        logger.debug(`[Referentiel] Organisme ${siret} mis à jour`);
+        logger.debug(`[Import] Organisme ${siret} mis à jour`);
       }
     } catch (e) {
       stats[from].failed++;
-      logger.error(e, `[Referentiel] Impossible d'ajouter le document avec le siret ${siret}`);
+      logger.error(e, `[Import] Impossible d'ajouter le document avec le siret ${siret}`);
     }
   }
 

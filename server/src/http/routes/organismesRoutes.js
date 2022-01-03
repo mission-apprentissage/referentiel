@@ -93,10 +93,10 @@ module.exports = () => {
     checkOptionnalApiToken(),
     tryCatch(async (req, res) => {
       let { page, items_par_page, ordre, champs, ...params } = await Joi.object({
+        siret: Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/),
         uai: Joi.alternatives()
           .try(Joi.boolean(), Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/))
           .default(null),
-        siret: Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/),
         numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
         statuts: stringList(Joi.string().valid("gestionnaire", "formateur")).default([]),
         region: Joi.string().valid(...getRegions().map((r) => r.code)),

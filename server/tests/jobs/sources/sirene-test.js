@@ -48,6 +48,7 @@ describe("sirene", () => {
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.raison_sociale, "NOMAYO");
+    assert.strictEqual(found.enseigne, "ENSEIGNE");
     assert.strictEqual(found.siege_social, true);
     assert.strictEqual(found.etat_administratif, "actif");
     assert.deepStrictEqual(found.forme_juridique, { code: "5710", label: "SAS, société par actions simplifiée" });
@@ -283,7 +284,6 @@ describe("sirene", () => {
                 },
                 {
                   siret: "11111111122222",
-                  denomination_usuelle: "NOMAYO2",
                   etat_administratif: "A",
                   etablissement_siege: "false",
                   libelle_voie: "DES LILAS",
@@ -306,7 +306,7 @@ describe("sirene", () => {
     assert.deepStrictEqual(found.relations, [
       {
         siret: "11111111122222",
-        label: "NOMAYO2 75001 PARIS",
+        label: "NOMAYO 75001 PARIS",
         referentiel: false,
         sources: ["sirene"],
       },

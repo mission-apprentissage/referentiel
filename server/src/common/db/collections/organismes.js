@@ -21,6 +21,7 @@ module.exports = {
         siret: string(),
         uai: string(),
         raison_sociale: string(),
+        enseigne: string(),
         siege_social: boolean(),
         numero_declaration_activite: string(),
         etat_administratif: string({ enum: ["actif", "fermé"] }),
