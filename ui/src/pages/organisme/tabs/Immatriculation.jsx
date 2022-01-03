@@ -26,7 +26,7 @@ export function Immatriculation({ organisme }) {
 
   return (
     <>
-      <h2>Immatriculation</h2>
+      <h6>Immatriculation</h6>
       <Info label={"SIRET"} value={organisme.siret} />
       <Info label={"NDA"} value={organisme.numero_declaration_activite} />
       <Info label={"UAI"} value={organisme.uai}>

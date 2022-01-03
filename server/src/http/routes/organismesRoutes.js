@@ -33,17 +33,21 @@ module.exports = () => {
     };
   }
 
-  function typeToStatusQuery(type) {
-    switch (type) {
-      case "of-cfa":
-        return { statuts: { $all: ["gestionnaire", "formateur"] } };
-      case "ufa":
-        return { statuts: ["formateur"] };
-      case "entite-administrative":
-        return { statuts: ["gestionnaire"] };
-      default:
-        throw new Boom.badRequest(`${type} inconnu`);
-    }
+  function mapTypesToQuery(types) {
+    return {
+      $or: types.map((type) => {
+        switch (type) {
+          case "of-cfa":
+            return { statuts: { $all: ["gestionnaire", "formateur"] } };
+          case "ufa":
+            return { statuts: ["formateur"] };
+          case "entite-administrative":
+            return { statuts: ["gestionnaire"] };
+          default:
+            throw Boom.badRequest(`${type} inconnu`);
+        }
+      }),
+    };
   }
 
   function buildQuery(params) {
@@ -52,13 +56,13 @@ module.exports = () => {
       uai,
       departements = [],
       statuts = [],
+      types = [],
       region,
       academie,
       text,
       anomalies,
       uai_potentiel,
       numero_declaration_activite: nda,
-      type,
     } = params;
 
     return {
@@ -71,6 +75,7 @@ module.exports = () => {
         : {}),
       ...(departements.length === 0 ? {} : { "adresse.departement.code": { $in: departements } }),
       ...(statuts.length === 0 ? {} : { statuts: { $in: statuts } }),
+      ...(types.length === 0 ? {} : mapTypesToQuery(types)),
       ...(region ? { "adresse.region.code": region } : {}),
       ...(academie ? { "adresse.academie.code": academie } : {}),
       ...(text ? { $text: { $search: text } } : {}),
@@ -80,7 +85,6 @@ module.exports = () => {
           ? { "uai_potentiels.0": { $exists: uai_potentiel } }
           : { "uai_potentiels.uai": uai_potentiel }
         : {}),
-      ...(type ? typeToStatusQuery(type) : {}),
     };
   }
 
@@ -99,7 +103,7 @@ module.exports = () => {
         academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
         departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         anomalies: Joi.boolean().default(null),
-        type: Joi.string().valid("of-cfa", "ufa", "entite-administrative"),
+        types: stringList(Joi.string().valid("of-cfa", "ufa", "entite-administrative")),
         //Misc
         champs: stringList().default([]),
         uai_potentiel: Joi.alternatives()

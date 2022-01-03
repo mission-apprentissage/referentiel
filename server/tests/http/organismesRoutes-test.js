@@ -4,6 +4,7 @@ const { startServer, generateAuthHeader } = require("../utils/testUtils");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const assert = require("assert");
 const { omitDeep } = require("../../src/common/utils/objectUtils");
+const { sortBy } = require("lodash");
 
 describe("organismesRoutes", () => {
   it("Vérifie qu'on peut lister des organismes", async () => {
@@ -392,6 +393,48 @@ describe("organismesRoutes", () => {
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 3);
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes à partir d'un type", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100001",
+      statuts: ["gestionnaire", "formateur"],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      statuts: ["formateur"],
+    });
+
+    let response = await httpClient.get("/api/v1/organismes?types=of-cfa");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100001");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes à partir de plusieurs types", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100001",
+      statuts: ["gestionnaire", "formateur"],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      statuts: ["formateur"],
+    });
+    await insertOrganisme({
+      siret: "333333333000003",
+      statuts: ["gestionnaire"],
+    });
+
+    let response = await httpClient.get("/api/v1/organismes?types=of-cfa,ufa");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 2);
+    let organismes = sortBy(response.data.organismes, ["siret"]);
+    strictEqual(organismes[0].siret, "11111111100001");
+    strictEqual(organismes[1].siret, "22222222200002");
   });
 
   it("Vérifie qu'on peut limiter les champs renvoyés pour la liste des organismes", async () => {

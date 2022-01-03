@@ -75,7 +75,7 @@ export function TypeFilter() {
   return (
     <Filter
       label={"Type"}
-      paramName={"type"}
+      paramName={"types"}
       items={[
         { code: "of-cfa", label: "OF-CFA" },
         { code: "ufa", label: "UFA" },
