@@ -10,12 +10,15 @@ export const FilterContext = createContext(null);
 export default function Filters({ children, search }) {
   let { params } = useNavigation();
   let filters = [];
+
   function onChange(data) {
     search({ ...params, ...data });
   }
+
   function register(paramName) {
     filters = uniq([...filters, paramName]);
   }
+
   function reset() {
     onChange(
       filters.reduce((acc, name) => {

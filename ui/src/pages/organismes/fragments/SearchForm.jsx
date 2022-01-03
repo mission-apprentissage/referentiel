@@ -9,12 +9,8 @@ const SearchGridRow = styled(GridRow)`
   box-shadow: inset 0 1px 0 0 var(--border-default-grey), 0 1px 0 0 var(--border-default-grey);
 `;
 
-export default function SearchForm({ search }) {
+export default function SearchForm({ onSubmit }) {
   let { registerForm, registerField } = useForm({ initialValues: { text: "" } });
-
-  async function onSubmit({ text }) {
-    search({ page: 1, text });
-  }
 
   return (
     <SearchGridRow>

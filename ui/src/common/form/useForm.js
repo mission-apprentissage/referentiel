@@ -59,7 +59,7 @@ export default function useForm(options = {}) {
             }
           }
 
-          return onSubmit(values).finally(() => setSubmitting(false));
+          return Promise.resolve(onSubmit(values)).finally(() => setSubmitting(false));
         }
       },
     };

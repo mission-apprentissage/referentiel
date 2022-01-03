@@ -23,7 +23,7 @@ export default function Organismes() {
                 tab: <Tab>Liste</Tab>,
                 panel: (
                   <TabPanel>
-                    <SearchForm search={search} />
+                    <SearchForm onSubmit={(form) => search({ page: 1, text: form.text })} />
                     <GridRow>
                       <Col modifiers={"3"} className={"fr-pr-5v"}>
                         <Filters search={search}>
