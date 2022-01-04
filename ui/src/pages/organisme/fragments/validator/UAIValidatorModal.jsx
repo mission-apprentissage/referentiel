@@ -22,6 +22,10 @@ const validators = yup.object({
   custom: yup.string().when("uai", {
     is: (uai) => uai === "custom",
     then: yup.string().test("is-uai-valide", async (value, { createError, path }) => {
+      if (!value) {
+        return createError({ message: "Le format de l'UAI n'est pas valide", path });
+      }
+
       return _get(`/api/v1/uais/${value}`)
         .then(() => true)
         .catch((e) => {
