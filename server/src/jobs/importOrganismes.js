@@ -28,7 +28,7 @@ module.exports = async (array) => {
     stats[from].total++;
     if (isEmpty(siret) || !luhn(siret)) {
       stats[from].invalid++;
-      logger.warn(`[Import] Siret '${siret}' invalide pour l'organisme`);
+      logger.warn(`[Import] Impossible d'importer le siret '${siret}' car il est invalide.`);
       continue;
     }
 
@@ -67,7 +67,7 @@ module.exports = async (array) => {
       }
     } catch (e) {
       stats[from].failed++;
-      logger.error(e, `[Import] Impossible d'ajouter le document avec le siret ${siret}`);
+      logger.error(e, `[Import] Impossible d'ajouter l'organisme ${siret}`);
     }
   }
 

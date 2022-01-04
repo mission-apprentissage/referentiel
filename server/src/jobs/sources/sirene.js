@@ -71,7 +71,7 @@ module.exports = (custom = {}) => {
       let organismes = custom.organismes || (await datagouv.loadOrganismeDeFormations());
 
       return compose(
-        dbCollection("organismes").find(filters, { siret: 1 }).stream(),
+        dbCollection("organismes").find(filters, { siret: 1 }).batchSize(20).stream(),
         transformData(
           async ({ siret }) => {
             try {
