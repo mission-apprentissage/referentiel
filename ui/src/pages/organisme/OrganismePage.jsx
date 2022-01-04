@@ -1,12 +1,13 @@
 import { Col, Container, GridRow } from "../../common/dsfr/fondamentaux";
 import { useParams } from "react-router-dom";
 import Alert from "../../common/dsfr/elements/Alert";
-import { Tab, TabPanel, Tabs } from "../../common/dsfr/elements/Tabs";
+import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
 import React, { useContext } from "react";
 import { Immatriculation } from "./tabs/Immatriculation";
 import useOrganisme from "../../common/hooks/useOrganisme";
-import MainTitle from "../../common/layout/MainTitle";
+import PageTitle from "../../common/page/PageTitle";
 import Reseaux from "./fragments/Reseaux";
+import WideTabs from "../../common/dsfr/custom/WideTabs";
 
 export const OrganismeContext = React.createContext(null);
 
@@ -16,7 +17,7 @@ export function OrganismeTitle() {
   return <span>{organisme.raison_sociale}</span>;
 }
 
-export default function Organisme() {
+export default function OrganismePage() {
   let { siret } = useParams();
   let [{ organisme, loading, error }, actions] = useOrganisme(siret);
 
@@ -42,31 +43,27 @@ export default function Organisme() {
 
   return (
     <OrganismeContext.Provider value={{ organisme, actions }}>
-      <MainTitle title={<OrganismeTitle />}>
+      <PageTitle title={<OrganismeTitle />}>
         <Reseaux organisme={organisme} />
-      </MainTitle>
-
-      <Container>
-        <GridRow className={"fr-pb-3w"}>
-          <Col>
-            <Tabs
-              tabs={[
-                {
-                  tab: <Tab>Identité</Tab>,
-                  panel: (
-                    <TabPanel>
-                      <Immatriculation organisme={organisme} />
-                    </TabPanel>
-                  ),
-                },
-                { tab: <Tab disabled>Lieux de formations</Tab>, panel: <TabPanel>-</TabPanel> },
-                { tab: <Tab disabled>Relations de sous traitances</Tab>, panel: <TabPanel>-</TabPanel> },
-                { tab: <Tab disabled>Relations administratives</Tab>, panel: <TabPanel>-</TabPanel> },
-              ]}
-            />{" "}
-          </Col>
-        </GridRow>
-      </Container>
+      </PageTitle>
+      <WideTabs
+        className={"fr-mb-3w"}
+        tabs={[
+          {
+            tab: <Tab>Identité</Tab>,
+            panel: (
+              <TabPanel>
+                <Container>
+                  <Immatriculation organisme={organisme} />
+                </Container>
+              </TabPanel>
+            ),
+          },
+          { tab: <Tab disabled>Lieux de formations</Tab>, panel: <TabPanel>-</TabPanel> },
+          { tab: <Tab disabled>Relations de sous traitances</Tab>, panel: <TabPanel>-</TabPanel> },
+          { tab: <Tab disabled>Relations administratives</Tab>, panel: <TabPanel>-</TabPanel> },
+        ]}
+      />
     </OrganismeContext.Provider>
   );
 }

@@ -10,7 +10,7 @@ const GreyAccordionItem = styled(AccordionItem)`
 
   .fr-collapse {
     margin: 0;
-    background-color: var(--color-box-background-light);
+    background-color: rgba(249, 248, 246, 0.4);
   }
 `;
 

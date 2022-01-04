@@ -4,7 +4,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { subscribeToHttpEvent } from "./common/api/httpClient";
 import { logout } from "./common/api/auth";
-import GlobalStyle from "./common/GlobalStyle";
+import "./xdsfr.scss";
 
 window.dsfr = {
   verbose: false,
@@ -13,7 +13,6 @@ window.dsfr = {
 
 ReactDOM.render(
   <React.StrictMode>
-    <GlobalStyle />
     <App />
   </React.StrictMode>,
   document.getElementById("root")

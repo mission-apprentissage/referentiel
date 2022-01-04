@@ -2,13 +2,13 @@ import { buildComponent, elementId } from "../common/utils";
 import React, { Children } from "react";
 import { Link } from "react-router-dom";
 
-export default function Breadcrumb({ label, children }) {
+export default function Breadcrumb({ children }) {
   let id = elementId("breadcrumb");
 
   return (
-    <nav role="navigation" className="fr-breadcrumb" aria-label={label}>
+    <nav role="navigation" className="fr-breadcrumb" aria-label={"vous êtes ici :"}>
       <button className="fr-breadcrumb__button" aria-expanded="false" aria-controls={id}>
-        {label}
+        Voir le fil d’Ariane
       </button>
       <div className="fr-collapse" id={id}>
         <ol className="fr-breadcrumb__list">

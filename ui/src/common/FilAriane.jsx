@@ -1,8 +1,8 @@
 import Breadcrumb, { BreadcrumbCurrent, BreadcrumbLink } from "./dsfr/elements/Breadcrumb";
 import React from "react";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
-import { ValidationTitle } from "../pages/validation/Validation";
-import { OrganismeTitle } from "../pages/organisme/Organisme";
+import { ValidationTitle } from "../pages/validation/ValidationPage";
+import { OrganismeTitle } from "../pages/organisme/OrganismePage";
 
 export default function FilAriane() {
   const routes = [

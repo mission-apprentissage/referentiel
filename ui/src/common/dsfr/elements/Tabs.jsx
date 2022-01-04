@@ -1,15 +1,16 @@
 import { classNames, elementId } from "../common/utils";
 import { cloneElement, createRef, forwardRef } from "react";
 
-export function Tabs({ label, tabs }) {
+export function Tabs({ label, tabs, className }) {
   let ids = tabs.map(() => elementId("tabs"));
+  let clazz = classNames("fr-tabs", { className });
   let refs = tabs.map(() => createRef());
   function showTab(el) {
     return dsfr(el).tabPanel.disclose();
   }
 
   return (
-    <div className="fr-tabs">
+    <div className={clazz}>
       <ul className="fr-tabs__list" role="tablist" aria-label={label}>
         <li role="presentation">
           {tabs

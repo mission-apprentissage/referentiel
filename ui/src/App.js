@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import "@gouvfr/dsfr/dist/dsfr/dsfr.css";
-import Organisme from "./pages/organisme/Organisme";
-import Layout from "./common/layout/Layout";
+import OrganismePage from "./pages/organisme/OrganismePage";
+import Layout from "./common/page/Layout";
 import DesignPage from "./pages/DesignPage";
-import Organismes from "./pages/organismes/Organismes";
+import OrganismesPage from "./pages/organismes/OrganismesPage";
 import Login from "./pages/LoginPage";
-import TableauDeBord from "./pages/validation/TableauDeBord";
-import Validation from "./pages/validation/Validation";
+import TableauDeBordPage from "./pages/validation/TableauDeBordPage";
+import ValidationPage from "./pages/validation/ValidationPage";
 import useData, { DataContext } from "./common/hooks/useData";
 import AuthRoutes from "./common/AuthRoutes";
 
@@ -25,12 +25,12 @@ function App() {
             <Route element={<Layout children={<Outlet />} />}>
               <Route path="/login" element={<Login />} />
               <Route element={<AuthRoutes />}>
-                <Route path="/" element={<TableauDeBord />} />
+                <Route path="/" element={<TableauDeBordPage />} />
                 <Route path="/validation" element={<Navigate replace to="/" />} />
-                <Route path="/validation/:validationStatus" element={<Validation />} />
-                <Route path="/validation/:validationStatus/:siret" element={<Organisme />} />
-                <Route path="/organismes" element={<Organismes />} />
-                <Route path="/organismes/:siret" element={<Organisme />} />
+                <Route path="/validation/:validationStatus" element={<ValidationPage />} />
+                <Route path="/validation/:validationStatus/:siret" element={<OrganismePage />} />
+                <Route path="/organismes" element={<OrganismesPage />} />
+                <Route path="/organismes/:siret" element={<OrganismePage />} />
               </Route>
             </Route>
           </Routes>

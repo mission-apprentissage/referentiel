@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { OrganismeContext } from "../../Organisme";
+import { OrganismeContext } from "../../OrganismePage";
 import Modal from "../../../../common/dsfr/elements/Modal";
 import { Button, ButtonGroup } from "../../../../common/dsfr/elements/Button";
 import styled from "styled-components";
