@@ -3,7 +3,6 @@ import GreyAccordionItem from "../../../common/dsfr/custom/GreyAccordionItem";
 import styled from "styled-components";
 import { Tag } from "../../../common/dsfr/elements/Tag";
 import SmallCheckbox from "../../../common/dsfr/custom/SmallCheckbox";
-import { castArray } from "lodash-es";
 import useNavigation from "../../../common/hooks/useNavigation";
 import { useContext } from "react";
 import { FilterContext } from "./Filters";
@@ -27,7 +26,7 @@ const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
 export function Filter({ label, paramName, items }) {
   let { params } = useNavigation();
   let { onChange, register } = useContext(FilterContext);
-  let array = castArray(params[paramName]).filter((v) => v);
+  let array = params[paramName] ? params[paramName].split(",") : [];
   register(paramName);
 
   return (

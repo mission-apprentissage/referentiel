@@ -1,11 +1,10 @@
 import { useFetch } from "./useFetch";
 import useNavigation from "./useNavigation";
-import { isArray } from "lodash-es";
 
 function adaptParamsForAPI(params) {
   return Object.keys(params).reduce((acc, key) => {
     let value = params[key];
-    let shouldIgnoreParam = isArray(value) && value.includes("true") && value.includes("false");
+    let shouldIgnoreParam = value.indexOf(",") !== -1 && value.includes("true") && value.includes("false");
 
     return {
       ...acc,

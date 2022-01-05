@@ -4,7 +4,7 @@ import Filters from "../organismes/fragments/Filters";
 import SearchForm from "../organismes/fragments/SearchForm";
 import { useSearch } from "../../common/hooks/useSearch";
 import { useParams } from "react-router-dom";
-import { NdaFilter, TypeFilter } from "../organismes/fragments/Filter";
+import { TypeFilter } from "../organismes/fragments/Filter";
 import PageTitle from "../../common/page/PageTitle";
 import useNavigation from "../../common/hooks/useNavigation";
 import ResultsPageContent from "../../common/page/ResultsPageContent";
@@ -38,14 +38,13 @@ export default function ValidationPage() {
     <>
       <PageTitle
         title={<ValidationTitle />}
-        selector={<DepartementAuthSelector onChange={(code) => search({ departements: code })} />}
+        selector={<DepartementAuthSelector onChange={(code) => search({ ...params, departements: code })} />}
       />
       <ResultsPageContent
-        search={<SearchForm onSubmit={(form) => search({ ...params, page: 1, text: form.text })} />}
+        search={<SearchForm onSubmit={(values) => search({ ...params, ...values, page: 1 })} />}
         filters={
-          <Filters search={search}>
+          <Filters onChange={(filters) => search({ ...params, ...filters })}>
             <TypeFilter />
-            <NdaFilter />
           </Filters>
         }
         results={<OrganismeList results={results} />}

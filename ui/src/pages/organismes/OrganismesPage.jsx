@@ -24,7 +24,7 @@ export default function OrganismesPage() {
                 <ResultsPageContent
                   search={<SearchForm onSubmit={(form) => search({ page: 1, text: form.text })} />}
                   filters={
-                    <Filters search={search}>
+                    <Filters onChange={(filters) => search({ ...filters })}>
                       <DepartementsFilter />
                       <TypeFilter />
                       <NdaFilter />

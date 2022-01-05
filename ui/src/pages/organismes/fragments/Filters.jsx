@@ -1,18 +1,24 @@
 import { Accordion } from "../../../common/dsfr/elements/Accordion";
 import { Box } from "../../../common/Flexbox";
 import LinkButton from "../../../common/dsfr/custom/LinkButton";
-import useNavigation from "../../../common/hooks/useNavigation";
 import { createContext } from "react";
 import { uniq } from "lodash-es";
 
 export const FilterContext = createContext(null);
 
-export default function Filters({ children, search }) {
-  let { params } = useNavigation();
+export default function Filters({ children, onChange: handleChange }) {
   let filters = [];
 
   function onChange(data) {
-    search({ ...params, ...data });
+    const arrayAsString = Object.keys(data).reduce((acc, key) => {
+      const array = data[key];
+      return {
+        ...acc,
+        [key]: array.join(","),
+      };
+    }, {});
+
+    handleChange(arrayAsString);
   }
 
   function register(paramName) {
