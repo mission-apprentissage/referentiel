@@ -5,6 +5,7 @@ import * as serviceWorker from "./serviceWorker";
 import { subscribeToHttpEvent } from "./common/api/httpClient";
 import { logout } from "./common/api/auth";
 import "./xdsfr.scss";
+import GridDisplayer from "./common/dsfr/GridDisplayer";
 
 window.dsfr = {
   verbose: false,
@@ -13,6 +14,7 @@ window.dsfr = {
 
 ReactDOM.render(
   <React.StrictMode>
+    <GridDisplayer />
     <App />
   </React.StrictMode>,
   document.getElementById("root")
