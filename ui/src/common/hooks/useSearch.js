@@ -30,8 +30,8 @@ export function useSearch(initialParams = {}) {
 
   return [
     { ...state, params },
-    (values = {}) => {
-      navigate({ ...initialParams, ...values });
+    (newParams = {}) => {
+      navigate({ ...initialParams, ...newParams });
     },
   ];
 }

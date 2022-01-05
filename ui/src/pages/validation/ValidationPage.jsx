@@ -8,6 +8,8 @@ import { NdaFilter, TypeFilter } from "../organismes/fragments/Filter";
 import PageTitle from "../../common/page/PageTitle";
 import useNavigation from "../../common/hooks/useNavigation";
 import ResultsPageContent from "../../common/page/ResultsPageContent";
+import { useContext } from "react";
+import { AuthContext } from "../../common/AuthRoutes";
 
 export function ValidationTitle() {
   let { validationStatus } = useParams();
@@ -22,7 +24,15 @@ export function ValidationTitle() {
 
 export default function ValidationPage() {
   let { params } = useNavigation();
-  let [results, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
+  let [auth] = useContext(AuthContext);
+  let [results, search] = useSearch({
+    ordre: "desc",
+    page: 1,
+    items_par_page: 25,
+    etat_administratif: "actif",
+    numero_declaration_activite: true,
+    [auth.type]: auth.code,
+  });
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { Col, Container, GridRow } from "../../common/dsfr/fondamentaux";
+import { Col, GridRow } from "../../common/dsfr/fondamentaux";
 import React, { useContext } from "react";
 import ValidationCard from "./fragments/ValidationCard";
 import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
