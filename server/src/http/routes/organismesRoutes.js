@@ -62,6 +62,7 @@ module.exports = () => {
       text,
       anomalies,
       uai_potentiel,
+      etat_administratif,
       numero_declaration_activite: nda,
     } = params;
 
@@ -76,6 +77,7 @@ module.exports = () => {
       ...(departements.length === 0 ? {} : { "adresse.departement.code": { $in: departements } }),
       ...(statuts.length === 0 ? {} : { statuts: { $in: statuts } }),
       ...(types.length === 0 ? {} : mapTypesToQuery(types)),
+      ...(etat_administratif ? { etat_administratif: etat_administratif } : {}),
       ...(region ? { "adresse.region.code": region } : {}),
       ...(academie ? { "adresse.academie.code": academie } : {}),
       ...(text ? { $text: { $search: text } } : {}),
@@ -99,6 +101,7 @@ module.exports = () => {
           .default(null),
         numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
         statuts: stringList(Joi.string().valid("gestionnaire", "formateur")).default([]),
+        etat_administratif: Joi.string().valid("actif", "fermé"),
         region: Joi.string().valid(...getRegions().map((r) => r.code)),
         academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
         departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),

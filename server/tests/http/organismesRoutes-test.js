@@ -142,7 +142,7 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].siret, "11111111100006");
   });
 
-  it("Vérifie qu'on peut rechercher des organismes qui n'ont pas d'uai", async () => {
+  it("Vérifie qu'on peut rechercher des organismes qui n'ont pas de nda", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({ siret: "11111111100006", numero_declaration_activite: "12345678901" });
     await insertOrganisme({ siret: "22222222200002" });
@@ -152,6 +152,30 @@ describe("organismesRoutes", () => {
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
     strictEqual(response.data.organismes[0].siret, "22222222200002");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes actifs", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({ siret: "11111111100006", etat_administratif: "actif" });
+    await insertOrganisme({ etat_administratif: "fermé" });
+
+    let response = await httpClient.get("/api/v1/organismes?etat_administratif=actif");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes actifs", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({ siret: "11111111100006", etat_administratif: "fermé" });
+    await insertOrganisme({ etat_administratif: "actif" });
+
+    let response = await httpClient.get("/api/v1/organismes?etat_administratif=fermé");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100006");
   });
 
   it("Vérifie qu'on peut rechercher des organismes qui ont des uais potentiels", async () => {
