@@ -63,6 +63,7 @@ module.exports = () => {
       anomalies,
       uai_potentiel,
       etat_administratif,
+      qualiopi,
       numero_declaration_activite: nda,
     } = params;
 
@@ -82,6 +83,7 @@ module.exports = () => {
       ...(academie ? { "adresse.academie.code": academie } : {}),
       ...(text ? { $text: { $search: text } } : {}),
       ...(!isNil(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
+      ...(!isNil(qualiopi) ? { qualiopi } : {}),
       ...(!isNil(uai_potentiel)
         ? isBoolean(uai_potentiel)
           ? { "uai_potentiels.0": { $exists: uai_potentiel } }
@@ -106,6 +108,7 @@ module.exports = () => {
         academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
         departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         anomalies: Joi.boolean().default(null),
+        qualiopi: Joi.boolean().default(null),
         types: stringList(Joi.string().valid("of-cfa", "ufa", "entite-administrative")),
         //Misc
         champs: stringList().default([]),

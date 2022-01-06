@@ -23,7 +23,7 @@ module.exports = () => {
           {
             $match: {
               etat_administratif: "actif",
-              numero_declaration_activite: { $exists: true },
+              qualiopi: true,
               [`adresse.${user.type}.code`]: user.code,
               ...(departements.length > 0 ? { "adresse.departement.code": { $in: departements } } : {}),
             },

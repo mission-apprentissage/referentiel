@@ -4,7 +4,7 @@ import Filters from "../organismes/fragments/Filters";
 import SearchForm from "../organismes/fragments/SearchForm";
 import { useSearch } from "../../common/hooks/useSearch";
 import { useParams } from "react-router-dom";
-import { TypeFilter } from "../organismes/fragments/Filter";
+import { NdaFilter, TypeFilter } from "../organismes/fragments/Filter";
 import PageTitle from "../../common/page/PageTitle";
 import useNavigation from "../../common/hooks/useNavigation";
 import ResultsPageContent from "../../common/page/ResultsPageContent";
@@ -26,12 +26,12 @@ export default function ValidationPage() {
   let { params } = useNavigation();
   let [auth] = useContext(AuthContext);
   let [results, search] = useSearch({
+    [auth.type]: auth.code,
     ordre: "desc",
     page: 1,
     items_par_page: 25,
     etat_administratif: "actif",
-    numero_declaration_activite: true,
-    [auth.type]: auth.code,
+    qualiopi: true,
   });
 
   return (
@@ -45,6 +45,7 @@ export default function ValidationPage() {
         filters={
           <Filters onChange={(filters) => search({ ...params, ...filters })}>
             <TypeFilter />
+            <NdaFilter />
           </Filters>
         }
         results={<OrganismeList results={results} />}

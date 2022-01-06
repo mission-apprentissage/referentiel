@@ -142,6 +142,31 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].siret, "11111111100006");
   });
 
+  it("Vérifie qu'on peut rechercher des organismes qualiopi", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme();
+    await insertOrganisme({ qualiopi: false });
+    await insertOrganisme({ siret: "11111111100006", qualiopi: true });
+
+    let response = await httpClient.get("/api/v1/organismes?qualiopi=true");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes qui ne sont pas qualiopi", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({ qualiopi: true });
+    await insertOrganisme({ siret: "11111111100006", qualiopi: false });
+
+    let response = await httpClient.get("/api/v1/organismes?qualiopi=false");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100006");
+  });
+
   it("Vérifie qu'on peut rechercher des organismes qui n'ont pas de nda", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({ siret: "11111111100006", numero_declaration_activite: "12345678901" });

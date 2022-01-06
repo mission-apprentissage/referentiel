@@ -10,7 +10,7 @@ describe("validationRoutes", () => {
       statuts: ["gestionnaire", "formateur"],
       uai: "0751234J",
       etat_administratif: "actif",
-      numero_declaration_activite: "01234567899",
+      qualiopi: true,
       uai_potentiels: [
         {
           sources: ["dummy"],
@@ -22,7 +22,7 @@ describe("validationRoutes", () => {
     await insertOrganisme({
       siret: "22222222200002",
       etat_administratif: "actif",
-      numero_declaration_activite: "01234567899",
+      qualiopi: true,
       uai_potentiels: [
         {
           sources: ["dummy"],
@@ -34,17 +34,16 @@ describe("validationRoutes", () => {
     await insertOrganisme({
       siret: "33333333300008",
       etat_administratif: "actif",
-      numero_declaration_activite: "01234567899",
+      qualiopi: true,
     });
 
     await insertOrganisme({
       siret: "44444444400008",
-      etat_administratif: "fermé",
+      qualiopi: false,
     });
 
     await insertOrganisme({
       siret: "55555555500008",
-      etat_administratif: "actif",
     });
 
     let response = await httpClient.get("/api/v1/validation", {
