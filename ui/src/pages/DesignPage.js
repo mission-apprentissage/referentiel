@@ -16,6 +16,7 @@ import { Tab, TabPanel, Tabs } from "../common/dsfr/elements/Tabs";
 import { Header } from "../common/dsfr/elements/Header";
 import { Link, LinkGroup } from "../common/dsfr/elements/Link";
 import { Nav, NavButton, NavLink } from "../common/dsfr/elements/Nav";
+import { Table, Thead } from "../common/dsfr/elements/Table";
 
 const Colored = styled.div`
   background-color: ${(props) => props.color};
@@ -107,6 +108,7 @@ export default function DesignPage() {
         <Composant>
           <Col>
             <h2>Éléments d'interface</h2>
+
             <Element>
               <h3>Tabs</h3>
               <div>
@@ -127,6 +129,31 @@ export default function DesignPage() {
                     <span>test</span>
                   </AccordionItem>
                 </Accordion>
+              </div>
+            </Element>
+
+            <Element>
+              <h3>Tableau</h3>
+              <div>
+                <Table
+                  caption={"Caption"}
+                  modifiers={"bordered"}
+                  thead={
+                    <Thead>
+                      <td>col 1</td>
+                      <td>col 2</td>
+                    </Thead>
+                  }
+                >
+                  <tr>
+                    <td>val 1</td>
+                    <td>val 2</td>
+                  </tr>
+                  <tr>
+                    <td>val 1</td>
+                    <td>val 2</td>
+                  </tr>
+                </Table>
               </div>
             </Element>
 
