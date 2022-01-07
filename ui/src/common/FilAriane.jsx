@@ -1,12 +1,16 @@
 import Breadcrumb, { BreadcrumbCurrent, BreadcrumbLink } from "./dsfr/elements/Breadcrumb";
-import React from "react";
+import React, { useContext } from "react";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
 import { ValidationTitle } from "../pages/validation/ValidationPage";
 import { OrganismeTitle } from "../pages/organisme/OrganismePage";
+import { AuthContext } from "./AuthRoutes";
 
 export default function FilAriane() {
+  let [auth] = useContext(AuthContext);
+  let authTitle = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
+
   const routes = [
-    { path: "/", breadcrumb: "Tableau de bord" },
+    { path: "/", breadcrumb: `Tableau de bord (${authTitle})` },
     { path: "/validation/:validationStatus", breadcrumb: ValidationTitle },
     { path: "/validation/:validationStatus/:siret", breadcrumb: OrganismeTitle },
     { path: "/organismes", breadcrumb: "Liste des organismes" },
