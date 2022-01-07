@@ -1,12 +1,12 @@
-import { Col, GridRow } from "../../common/dsfr/fondamentaux";
+import { Col, GridRow } from "../common/dsfr/fondamentaux";
 import React, { useContext } from "react";
-import ValidationCard from "./fragments/ValidationCard";
-import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
-import useNavigation from "../../common/hooks/useNavigation";
-import { useFetch } from "../../common/hooks/useFetch";
-import Spinner from "../../common/Spinner";
-import PageTitle from "../../common/page/PageTitle";
-import { AuthContext } from "../../common/AuthRoutes";
+import ValidationCard from "./validation/fragments/ValidationCard";
+import DepartementAuthSelector from "./validation/fragments/DepartementAuthSelector";
+import useNavigation from "../common/hooks/useNavigation";
+import { useFetch } from "../common/hooks/useFetch";
+import Spinner from "../common/Spinner";
+import PageTitle from "../common/page/PageTitle";
+import { AuthContext } from "../common/AuthRoutes";
 
 export default function TableauDeBordPage() {
   let [auth] = useContext(AuthContext);

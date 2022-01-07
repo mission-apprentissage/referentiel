@@ -1,10 +1,10 @@
-import { Col, Container, GridRow } from "../dsfr/fondamentaux";
+import { Col, GridRow } from "../dsfr/fondamentaux";
 import React from "react";
 import { useModal } from "../dsfr/common/useModal";
 import { Button } from "../dsfr/elements/Button";
 import styled from "styled-components";
 import { Box, Item } from "../Flexbox";
-import FullModal from "../custom/FullModal";
+import FullModal from "../dsfr/custom/FullModal";
 
 const SearchBox = styled(Box)`
   padding-bottom: 1.5rem;

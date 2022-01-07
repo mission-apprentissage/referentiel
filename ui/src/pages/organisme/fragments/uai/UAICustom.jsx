@@ -2,12 +2,12 @@ import Input from "../../../../common/dsfr/elements/Input";
 import React from "react";
 import useFormContext from "../../../../common/form/useFormContext";
 
-export function UAICustom({ organisme, validation }) {
+export function UAICustom({ action }) {
   let { registerField, errors } = useFormContext();
 
   return (
     <>
-      <div>{validation.legend}</div>
+      <div>{action.legend}</div>
       <Input {...registerField("custom")} className={"fr-ml-2w"} validation={errors?.custom} />
     </>
   );

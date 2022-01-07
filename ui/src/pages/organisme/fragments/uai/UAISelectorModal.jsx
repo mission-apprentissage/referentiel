@@ -7,7 +7,7 @@ import useForm from "../../../../common/form/useForm";
 import * as yup from "yup";
 import { Form } from "../../../../common/form/Form";
 import { _get } from "../../../../common/api/httpClient";
-import { UAIPotentielsSelector } from "./UAIPotentielsSelector";
+import { UAIPotentielsRadios } from "./UAIPotentielsRadios";
 import { UAICustom } from "./UAICustom";
 
 const BlueBox = styled("div")`
@@ -45,7 +45,7 @@ const validators = yup.object({
   }),
 });
 
-export function UAIValidatorModal({ modal, organisme, validation }) {
+export function UAISelectorModal({ modal, organisme, action }) {
   let { actions } = useContext(OrganismeContext);
   let hasPotentiels = organisme.uai_potentiels.length > 0;
   let form = useForm({
@@ -73,13 +73,13 @@ export function UAIValidatorModal({ modal, organisme, validation }) {
         content={
           <>
             <h1 className="fr-modal__title">
-              <span className="fr-fi-arrow-right-line fr-fi--lg">{validation.actionName}</span>
+              <span className="fr-fi-arrow-right-line fr-fi--lg">{action.actionName}</span>
             </h1>
             <BlueBox>
               {hasPotentiels ? (
-                <UAIPotentielsSelector organisme={organisme} validation={validation} />
+                <UAIPotentielsRadios organisme={organisme} action={action} />
               ) : (
-                <UAICustom organisme={organisme} validation={validation} />
+                <UAICustom action={action} />
               )}
             </BlueBox>
           </>

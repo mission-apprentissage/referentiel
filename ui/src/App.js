@@ -6,7 +6,7 @@ import Layout from "./common/page/Layout";
 import DesignPage from "./pages/DesignPage";
 import OrganismesPage from "./pages/organismes/OrganismesPage";
 import Login from "./pages/LoginPage";
-import TableauDeBordPage from "./pages/validation/TableauDeBordPage";
+import TableauDeBordPage from "./pages/TableauDeBordPage";
 import ValidationPage from "./pages/validation/ValidationPage";
 import useData, { DataContext } from "./common/hooks/useData";
 import AuthRoutes from "./common/AuthRoutes";

@@ -1,11 +1,17 @@
-import styled from "styled-components";
-import { Tag } from "../../../../common/dsfr/elements/Tag";
 import React from "react";
+import styled from "styled-components";
+import { Tag } from "./dsfr/elements/Tag";
 
-const ValidationTag = styled(({ validation, ...props }) => {
+const iconMapper = {
+  A_VALIDER: "error-warning-fill",
+  A_RENSEIGNER: "error-warning-fill",
+  VALIDE: "checkbox-circle-fill",
+};
+
+const ValidationTag = styled(({ type, label, ...props }) => {
   return (
-    <Tag modifiers={`sm icon-left ${validation.type}`} icons={validation.icon} {...props}>
-      {validation.label}
+    <Tag modifiers={`sm icon-left ${type}`} icons={iconMapper[type]} {...props}>
+      {label}
     </Tag>
   );
 })`

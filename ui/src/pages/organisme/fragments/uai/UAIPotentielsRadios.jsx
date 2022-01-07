@@ -4,11 +4,11 @@ import React from "react";
 import useFormContext from "../../../../common/form/useFormContext";
 import Fieldset from "../../../../common/dsfr/elements/Fieldset";
 
-export function UAIPotentielsSelector({ organisme, validation }) {
+export function UAIPotentielsRadios({ organisme, action }) {
   let { registerField, values, errors } = useFormContext();
 
   return (
-    <Fieldset legend={validation.legend}>
+    <Fieldset legend={action.legend}>
       {organisme.uai_potentiels.map(({ uai, sources }, index) => {
         return (
           <Radio
