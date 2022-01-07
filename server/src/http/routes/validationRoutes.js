@@ -24,6 +24,7 @@ module.exports = () => {
             $match: {
               etat_administratif: "actif",
               qualiopi: true,
+              statuts: { $all: ["gestionnaire", "formateur"] },
               [`adresse.${user.type}.code`]: user.code,
               ...(departements.length > 0 ? { "adresse.departement.code": { $in: departements } } : {}),
             },

@@ -1,10 +1,8 @@
 import OrganismeList from "../organismes/fragments/OrganismeList";
 import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
-import Filters from "../organismes/fragments/Filters";
 import SearchForm from "../organismes/fragments/SearchForm";
 import { useSearch } from "../../common/hooks/useSearch";
 import { useParams } from "react-router-dom";
-import { NdaFilter, TypeFilter } from "../organismes/fragments/Filter";
 import PageTitle from "../../common/page/PageTitle";
 import useNavigation from "../../common/hooks/useNavigation";
 import ResultsPageContent from "../../common/page/ResultsPageContent";
@@ -14,9 +12,9 @@ import { AuthContext } from "../../common/AuthRoutes";
 export function ValidationTitle() {
   let { validationStatus } = useParams();
   const validationTitleMapper = {
-    A_VALIDER: "Organismes à valider",
-    A_RENSEIGNER: "Organismes à renseigner",
-    VALIDE: "Organismes validés",
+    A_VALIDER: "OF-CFA à valider",
+    A_RENSEIGNER: "OF-CFA à identifier",
+    VALIDE: "OF-CFA validés",
   };
 
   return <span>{validationTitleMapper[validationStatus]}</span>;
@@ -32,6 +30,7 @@ export default function ValidationPage() {
     items_par_page: 25,
     etat_administratif: "actif",
     qualiopi: true,
+    types: "of-cfa",
   });
 
   return (
@@ -42,12 +41,6 @@ export default function ValidationPage() {
       />
       <ResultsPageContent
         search={<SearchForm onSubmit={(values) => search({ ...params, ...values, page: 1 })} />}
-        filters={
-          <Filters onChange={(filters) => search({ ...params, ...filters })}>
-            <TypeFilter />
-            <NdaFilter />
-          </Filters>
-        }
         results={<OrganismeList results={results} />}
       />
     </>

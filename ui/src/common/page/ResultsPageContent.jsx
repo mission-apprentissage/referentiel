@@ -39,10 +39,12 @@ export default function ResultsPageContent({ search, filters, results }) {
         </Col>
       </GridRow>
       <GridRow modifiers={"gutters"}>
-        <Col modifiers={"sm-3"} className={"xfr-display-xs-none xfr-display-sm-block"}>
-          {filters}
-        </Col>
-        <Col modifiers={"12 sm-9"}>{results}</Col>
+        {filters && (
+          <Col modifiers={"sm-3"} className={"xfr-display-xs-none xfr-display-sm-block"}>
+            {filters}
+          </Col>
+        )}
+        <Col modifiers={`12 ${filters ? "sm-9" : ""}`}>{results}</Col>
       </GridRow>
     </>
   );
