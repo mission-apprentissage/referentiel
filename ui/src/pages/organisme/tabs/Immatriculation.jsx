@@ -33,13 +33,13 @@ export function Immatriculation({ organisme }) {
         <UAIValidator className="fr-ml-3v" organisme={organisme} />
       </Info>
       <GridRow>
-        <Col modifiers={"sm-12 md-6"}>
+        <Col modifiers={"12 md-6"}>
           <Info label={"Raison sociale"} value={organisme.raison_sociale} />
           <Info label={"Adresse"} value={adresse} />
           <Info label={"Région"} value={organisme.adresse?.region?.nom} />
           <Info label={"Académie"} value={organisme.adresse?.academie?.nom} />
         </Col>
-        <Col modifiers={"sm-12 offset-md-1 md-5"}>
+        <Col modifiers={"12 offset-md-1 md-5"}>
           <Info label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
           <Info label={"Forme jurique"} value={organisme.forme_juridique?.label} />
           <Info label={"Etat administratif"} value={organisme.etat_administratif} />

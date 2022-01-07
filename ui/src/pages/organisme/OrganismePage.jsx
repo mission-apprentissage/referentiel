@@ -1,4 +1,4 @@
-import { Col, Container, GridRow } from "../../common/dsfr/fondamentaux";
+import { Col, GridRow } from "../../common/dsfr/fondamentaux";
 import { useParams } from "react-router-dom";
 import Alert from "../../common/dsfr/elements/Alert";
 import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
@@ -53,9 +53,7 @@ export default function OrganismePage() {
             tab: <Tab>Identité</Tab>,
             panel: (
               <TabPanel>
-                <Container>
-                  <Immatriculation organisme={organisme} />
-                </Container>
+                <Immatriculation organisme={organisme} />
               </TabPanel>
             ),
           },
