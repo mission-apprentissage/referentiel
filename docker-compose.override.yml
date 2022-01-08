@@ -12,9 +12,6 @@ services:
     build:
       args:
         - REFERENTIEL_ENV=dev
-        - REFERENTIEL_NO_BUILD=true
-    environment:
-      - FAST_REFRESH=false
     volumes:
       - ./ui:/app #Allows source folders to be watched
 
