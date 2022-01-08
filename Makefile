@@ -1,4 +1,27 @@
 
+install: install-server install-ui generate-dotenv hooks
+
+start:
+	docker-compose up --build --force-recreate
+
+stop:
+	docker-compose stop
+
+clean:
+	docker-compose down
+
+test:
+	yarn --cwd server test
+
+coverage:
+	yarn --cwd server coverage
+
+lint:
+	yarn --cwd server lint
+
+dataset:
+	docker exec referentiel_server yarn --silent --cwd server cli misc injectDataset
+
 install-server:
 	yarn --cwd server install --frozen-lockfile
 
@@ -13,32 +36,5 @@ generate-dotenv:
 hooks:
 	git config core.hooksPath misc/git-hooks
 	chmod +x misc/git-hooks/*
-
-install: install-server install-ui generate-dotenv hooks
-
-start:
-	docker-compose up --build --force-recreate
-
-start-mongodb:
-	docker-compose up -d mongodb
-
-stop:
-	docker-compose stop
-
-test:
-	yarn --cwd server test
-
-coverage:
-	yarn --cwd server coverage
-
-lint:
-	yarn --cwd server lint
-
-clean:
-	docker-compose down
-
-dataset:
-	docker exec referentiel_server yarn --silent --cwd server cli misc injectDataset
-
 
 ci: install-server lint coverage
