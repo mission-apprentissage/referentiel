@@ -64,7 +64,7 @@ module.exports = {
               siret: string(),
               referentiel: boolean(),
               label: string(),
-              type: string({ enum: ["formateur", "gestionnaire", "fille", "mère"] }),
+              type: string({ enum: ["formateur", "gestionnaire"] }),
               sources: arrayOf(string()),
             },
             { required: ["siret", "referentiel", "sources"] }
