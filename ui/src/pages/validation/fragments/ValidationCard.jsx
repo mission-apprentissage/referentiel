@@ -28,6 +28,12 @@ const StyledBox = styled(without(Box, ["type"]))`
   }
 `;
 
+const Counter = styled("div")`
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+`;
+
 export default function ValidationCard({ type, label, nbElements, ...rest }) {
   let { params, buildUrl } = useNavigation();
   let link = buildUrl(`/validation/${type}`, {
@@ -39,8 +45,8 @@ export default function ValidationCard({ type, label, nbElements, ...rest }) {
     <ClickableItem to={link}>
       <StyledBox direction={"column"} justify={"between"} type={type} {...rest}>
         <div>
-          <h4>{nbElements || 0}</h4>
-          <div>{label}</div>
+          <Counter>{nbElements || 0}</Counter>
+          <div className={"fr-text--bold"}>{label}</div>
         </div>
         <Link as="span" modifiers={"icon-right"} icons="arrow-right-line">
           Voir la liste

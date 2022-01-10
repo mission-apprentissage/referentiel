@@ -8,6 +8,7 @@ const LinkButton = styled(Button)`
     padding: 0;
     background-image: none;
     min-height: unset;
+    overflow: unset;
     &:hover {
       background-image: none;
     }

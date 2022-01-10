@@ -30,17 +30,17 @@ export default function TableauDeBordPage() {
         </GridRow>
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_VALIDER"} label={"UAI à valider"} nbElements={data.validation["A_VALIDER"]} />
+            <ValidationCard type={"A_VALIDER"} label={"OF-CFA à vérifier"} nbElements={data.validation["A_VALIDER"]} />
           </Col>
           <Col modifiers={"12 sm-4"}>
             <ValidationCard
               type={"A_RENSEIGNER"}
-              label={"UAI à renseigner"}
+              label={"OF-CFA à identifier"}
               nbElements={data.validation["A_RENSEIGNER"]}
             />
           </Col>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"VALIDE"} label={"UAI validées"} nbElements={data.validation["VALIDE"]} />
+            <ValidationCard type={"VALIDE"} label={"OF-CFA validés"} nbElements={data.validation["VALIDE"]} />
           </Col>
         </GridRow>
       </LayoutContent>

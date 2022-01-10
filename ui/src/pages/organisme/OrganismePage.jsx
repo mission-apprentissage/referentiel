@@ -44,7 +44,7 @@ export default function OrganismePage() {
 
   return (
     <OrganismeContext.Provider value={{ organisme, setData }}>
-      <LayoutTitle title={<OrganismeTitle />}>
+      <LayoutTitle title={<OrganismeTitle />} back={"Retour à la liste"}>
         <Reseaux organisme={organisme} />
       </LayoutTitle>
       <LayoutContent>
