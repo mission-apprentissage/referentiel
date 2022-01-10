@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { OrganismeContext } from "../../OrganismePage";
+import React from "react";
 import Modal from "../../../../common/dsfr/elements/Modal";
 import { Button, ButtonGroup } from "../../../../common/dsfr/elements/Button";
 import styled from "styled-components";
@@ -45,25 +44,12 @@ const validators = yup.object({
   }),
 });
 
-export function UAISelectorModal({ modal, organisme, action }) {
-  let { actions } = useContext(OrganismeContext);
+export function UAISelectorModal({ modal, organisme, action, onSubmit }) {
   let hasPotentiels = organisme.uai_potentiels.length > 0;
   let form = useForm({
     initialValues: hasPotentiels ? { uai: organisme.uai || "", custom: "" } : { uai: "custom", custom: "" },
     yup: validators,
   });
-
-  async function onSubmit(values) {
-    actions
-      .setUAI(values.uai === "custom" ? values.custom : values.uai)
-      .then((updated) => {
-        modal.close();
-        actions.setOrganisme(updated);
-      })
-      .catch(() => {
-        form.setFormErrors({ uai: "L'uai saisie est invalide" });
-      });
-  }
 
   return (
     <Form onSubmit={onSubmit} {...form}>

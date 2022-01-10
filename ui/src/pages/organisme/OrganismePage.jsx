@@ -2,15 +2,15 @@ import { Col, GridRow } from "../../common/dsfr/fondamentaux";
 import { useParams } from "react-router-dom";
 import Alert from "../../common/dsfr/elements/Alert";
 import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
-import React, { useContext } from "react";
+import React, { createContext, useContext } from "react";
 import { Immatriculation } from "./tabs/Immatriculation";
-import useOrganisme from "../../common/hooks/useOrganisme";
 import LayoutTitle from "../../common/layout/LayoutTitle";
 import Reseaux from "./fragments/Reseaux";
 import WideTabs from "../../common/dsfr/custom/WideTabs";
 import LayoutContent from "../../common/layout/LayoutContent";
+import { useFetch } from "../../common/hooks/useFetch";
 
-export const OrganismeContext = React.createContext(null);
+export const OrganismeContext = createContext(null);
 
 export function OrganismeTitle() {
   let { organisme } = useContext(OrganismeContext);
@@ -20,7 +20,7 @@ export function OrganismeTitle() {
 
 export default function OrganismePage() {
   let { siret } = useParams();
-  let [{ organisme, loading, error }, actions] = useOrganisme(siret);
+  let [{ data: organisme, loading, error }, setData] = useFetch(`/api/v1/organismes/${siret}`);
 
   if (error) {
     return (
@@ -43,7 +43,7 @@ export default function OrganismePage() {
   }
 
   return (
-    <OrganismeContext.Provider value={{ organisme, actions }}>
+    <OrganismeContext.Provider value={{ organisme, setData }}>
       <LayoutTitle title={<OrganismeTitle />}>
         <Reseaux organisme={organisme} />
       </LayoutTitle>
