@@ -9,6 +9,7 @@ import Reseaux from "./fragments/Reseaux";
 import WideTabs from "../../common/dsfr/custom/WideTabs";
 import LayoutContent from "../../common/layout/LayoutContent";
 import { useFetch } from "../../common/hooks/useFetch";
+import { Relations } from "./tabs/Relations";
 
 export const OrganismeContext = createContext(null);
 
@@ -56,6 +57,14 @@ export default function OrganismePage() {
               panel: (
                 <TabPanel>
                   <Immatriculation organisme={organisme} />
+                </TabPanel>
+              ),
+            },
+            {
+              tab: <Tab>Relations</Tab>,
+              panel: (
+                <TabPanel>
+                  <Relations organisme={organisme} />
                 </TabPanel>
               ),
             },
