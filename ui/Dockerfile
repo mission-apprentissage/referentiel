@@ -16,7 +16,6 @@ ENV REACT_APP_REFERENTIEL_SENTRY_DSN=$REFERENTIEL_SENTRY_DSN
 # Build site
 SHELL ["bash", "-c"]
 COPY . ./
-RUN mkdir -p /site
 RUN if [[ "$REFERENTIEL_ENV" == "dev" ]] ; then \
       echo "[WARNING] Site has not been built. You must start this container with command 'yarn start'" ; \
     else \
