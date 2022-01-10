@@ -3,25 +3,38 @@ import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
 import SearchForm from "../organismes/fragments/SearchForm";
 import { useSearch } from "../../common/hooks/useSearch";
 import { useParams } from "react-router-dom";
-import PageTitle from "../../common/page/PageTitle";
+import LayoutTitle from "../../common/layout/LayoutTitle";
 import useNavigation from "../../common/hooks/useNavigation";
-import ResultsPageContent from "../../common/page/ResultsPageContent";
+import Results from "../../common/layout/Results";
 import { useContext } from "react";
 import { AuthContext } from "../../common/AuthRoutes";
+import LayoutContent from "../../common/layout/LayoutContent";
+import styled from "styled-components";
 
 export function ValidationTitle() {
-  let { validationStatus } = useParams();
-  const validationTitleMapper = {
+  let { validationStatus: type } = useParams();
+  let validationTitleMapper = {
     A_VALIDER: "OF-CFA à valider",
     A_RENSEIGNER: "OF-CFA à identifier",
     VALIDE: "OF-CFA validés",
   };
 
-  return <span>{validationTitleMapper[validationStatus]}</span>;
+  return <span>{validationTitleMapper[type]}</span>;
 }
+
+const ValidationLayoutTitle = styled(({ children, className, ...props }) => {
+  return (
+    <div className={className}>
+      <LayoutTitle {...props}>{children}</LayoutTitle>
+    </div>
+  );
+})`
+  background: ${(props) => `var(--color-validation-background-${props.type})`};
+`;
 
 export default function ValidationPage() {
   let { params } = useNavigation();
+  let { validationStatus } = useParams();
   let [auth] = useContext(AuthContext);
   let [results, search] = useSearch({
     [auth.type]: auth.code,
@@ -35,14 +48,17 @@ export default function ValidationPage() {
 
   return (
     <>
-      <PageTitle
+      <ValidationLayoutTitle
+        type={validationStatus}
         title={<ValidationTitle />}
         selector={<DepartementAuthSelector onChange={(code) => search({ ...params, departements: code })} />}
       />
-      <ResultsPageContent
-        search={<SearchForm onSubmit={(values) => search({ ...params, ...values, page: 1 })} />}
-        results={<OrganismeList results={results} />}
-      />
+      <LayoutContent>
+        <Results
+          search={<SearchForm onSubmit={(values) => search({ ...params, ...values, page: 1 })} />}
+          results={<OrganismeList results={results} />}
+        />
+      </LayoutContent>
     </>
   );
 }

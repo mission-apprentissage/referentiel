@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Navigate, Outlet, Route, Routes } from "react-router-dom";
 import "@gouvfr/dsfr/dist/dsfr/dsfr.css";
 import OrganismePage from "./pages/organisme/OrganismePage";
-import Layout from "./common/page/Layout";
+import Layout from "./common/layout/Layout";
 import DesignPage from "./pages/DesignPage";
 import OrganismesPage from "./pages/organismes/OrganismesPage";
 import Login from "./pages/LoginPage";

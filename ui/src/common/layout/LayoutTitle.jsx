@@ -1,10 +1,10 @@
-import { Col, GridRow } from "../dsfr/fondamentaux";
+import { Col, Container, GridRow } from "../dsfr/fondamentaux";
 import React from "react";
 import FilAriane from "../FilAriane";
 
-export default function PageTitle({ title, selector, children }) {
+export default function LayoutTitle({ title, selector, children }) {
   return (
-    <>
+    <Container>
       <GridRow modifier={"gutters"}>
         <Col>
           <FilAriane />
@@ -17,6 +17,6 @@ export default function PageTitle({ title, selector, children }) {
         </Col>
         {selector && <Col modifiers={"12 md-5"}>{selector}</Col>}
       </GridRow>
-    </>
+    </Container>
   );
 }

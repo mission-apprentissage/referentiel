@@ -3,7 +3,6 @@ import { Nav, NavLink } from "../dsfr/elements/Nav";
 import { Footer, FooterLink, FooterList } from "../dsfr/elements/Footer";
 import React from "react";
 import useScrollToTop from "../hooks/useScrollToTop";
-import { Container } from "../dsfr/fondamentaux";
 
 export default function Layout({ children }) {
   useScrollToTop();
@@ -20,7 +19,7 @@ export default function Layout({ children }) {
         }
       />
 
-      <Container>{children}</Container>
+      {children}
 
       <Footer
         content={{

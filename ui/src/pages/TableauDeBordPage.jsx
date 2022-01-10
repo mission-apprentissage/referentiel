@@ -5,8 +5,9 @@ import DepartementAuthSelector from "./validation/fragments/DepartementAuthSelec
 import useNavigation from "../common/hooks/useNavigation";
 import { useFetch } from "../common/hooks/useFetch";
 import Spinner from "../common/Spinner";
-import PageTitle from "../common/page/PageTitle";
+import LayoutTitle from "../common/layout/LayoutTitle";
 import { AuthContext } from "../common/AuthRoutes";
+import LayoutContent from "../common/layout/LayoutContent";
 
 export default function TableauDeBordPage() {
   let [auth] = useContext(AuthContext);
@@ -19,28 +20,30 @@ export default function TableauDeBordPage() {
 
   return (
     <>
-      <PageTitle
+      <LayoutTitle
         title={title}
         selector={<DepartementAuthSelector onChange={(code) => navigate({ departements: code })} />}
       />
-      <GridRow modifier={"gutters"}>
-        <Spinner loading={loading} error={error} />
-      </GridRow>
-      <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
-        <Col modifiers={"12 sm-4"}>
-          <ValidationCard type={"A_VALIDER"} label={"UAI à valider"} nbElements={data.validation["A_VALIDER"]} />
-        </Col>
-        <Col modifiers={"12 sm-4"}>
-          <ValidationCard
-            type={"A_RENSEIGNER"}
-            label={"UAI à renseigner"}
-            nbElements={data.validation["A_RENSEIGNER"]}
-          />
-        </Col>
-        <Col modifiers={"12 sm-4"}>
-          <ValidationCard type={"VALIDE"} label={"UAI validées"} nbElements={data.validation["VALIDE"]} />
-        </Col>
-      </GridRow>
+      <LayoutContent>
+        <GridRow modifier={"gutters"}>
+          <Spinner loading={loading} error={error} />
+        </GridRow>
+        <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
+          <Col modifiers={"12 sm-4"}>
+            <ValidationCard type={"A_VALIDER"} label={"UAI à valider"} nbElements={data.validation["A_VALIDER"]} />
+          </Col>
+          <Col modifiers={"12 sm-4"}>
+            <ValidationCard
+              type={"A_RENSEIGNER"}
+              label={"UAI à renseigner"}
+              nbElements={data.validation["A_RENSEIGNER"]}
+            />
+          </Col>
+          <Col modifiers={"12 sm-4"}>
+            <ValidationCard type={"VALIDE"} label={"UAI validées"} nbElements={data.validation["VALIDE"]} />
+          </Col>
+        </GridRow>
+      </LayoutContent>
     </>
   );
 }

@@ -5,9 +5,10 @@ import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
 import React, { useContext } from "react";
 import { Immatriculation } from "./tabs/Immatriculation";
 import useOrganisme from "../../common/hooks/useOrganisme";
-import PageTitle from "../../common/page/PageTitle";
+import LayoutTitle from "../../common/layout/LayoutTitle";
 import Reseaux from "./fragments/Reseaux";
 import WideTabs from "../../common/dsfr/custom/WideTabs";
+import LayoutContent from "../../common/layout/LayoutContent";
 
 export const OrganismeContext = React.createContext(null);
 
@@ -43,25 +44,27 @@ export default function OrganismePage() {
 
   return (
     <OrganismeContext.Provider value={{ organisme, actions }}>
-      <PageTitle title={<OrganismeTitle />}>
+      <LayoutTitle title={<OrganismeTitle />}>
         <Reseaux organisme={organisme} />
-      </PageTitle>
-      <WideTabs
-        className={"fr-mb-3w"}
-        tabs={[
-          {
-            tab: <Tab>Identité</Tab>,
-            panel: (
-              <TabPanel>
-                <Immatriculation organisme={organisme} />
-              </TabPanel>
-            ),
-          },
-          { tab: <Tab disabled>Lieux de formations</Tab>, panel: <TabPanel>-</TabPanel> },
-          { tab: <Tab disabled>Relations de sous traitances</Tab>, panel: <TabPanel>-</TabPanel> },
-          { tab: <Tab disabled>Relations administratives</Tab>, panel: <TabPanel>-</TabPanel> },
-        ]}
-      />
+      </LayoutTitle>
+      <LayoutContent>
+        <WideTabs
+          className={"fr-mb-3w"}
+          tabs={[
+            {
+              tab: <Tab>Identité</Tab>,
+              panel: (
+                <TabPanel>
+                  <Immatriculation organisme={organisme} />
+                </TabPanel>
+              ),
+            },
+            { tab: <Tab disabled>Lieux de formations</Tab>, panel: <TabPanel>-</TabPanel> },
+            { tab: <Tab disabled>Relations de sous traitances</Tab>, panel: <TabPanel>-</TabPanel> },
+            { tab: <Tab disabled>Relations administratives</Tab>, panel: <TabPanel>-</TabPanel> },
+          ]}
+        />
+      </LayoutContent>
     </OrganismeContext.Provider>
   );
 }

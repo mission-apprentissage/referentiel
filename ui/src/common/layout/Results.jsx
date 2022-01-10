@@ -8,12 +8,13 @@ import FullModal from "../dsfr/custom/FullModal";
 
 const SearchBox = styled(Box)`
   padding-bottom: 1.5rem;
+  margin-top: 2rem;
   margin-bottom: 2rem;
   margin-left: 0;
   box-shadow: inset 0 1px 0 0 var(--border-default-grey), 0 1px 0 0 var(--border-default-grey);
 `;
 
-export default function ResultsPageContent({ search, filters, results }) {
+export default function Results({ search, filters, results }) {
   let modal = useModal();
 
   return (
