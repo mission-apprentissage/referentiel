@@ -177,7 +177,7 @@ module.exports = {
           },
           _meta: {
             anomalies: [],
-            created_at: new Date(),
+            import_date: new Date(),
           },
         },
         custom

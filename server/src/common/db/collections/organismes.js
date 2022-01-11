@@ -106,7 +106,7 @@ module.exports = {
         ),
         _meta: object(
           {
-            created_at: date(),
+            import_date: date(),
             anomalies: arrayOf(
               object(
                 {
@@ -120,7 +120,7 @@ module.exports = {
               )
             ),
           },
-          { required: ["anomalies", "created_at"] }
+          { required: ["anomalies", "import_date"] }
         ),
       },
       { required }

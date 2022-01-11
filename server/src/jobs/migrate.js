@@ -1,43 +1,32 @@
-const { configureIndexes, configureValidation, dbCollection, getDatabase } = require("../common/db/mongodb");
+const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
 
-const VERSION = 1;
+const VERSION = 2;
 
-async function updateModifications() {
-  for await (const doc of dbCollection("modifications").find().stream()) {
-    let newAuteur = doc.auteur.length === 2 ? `region-${doc.auteur}` : doc.auteur;
-
-    await dbCollection("modifications").updateOne(
-      { _id: doc._id },
-      {
-        $unset: { uai: 1 },
-        $set: { original: {}, changements: { uai: doc.uai }, auteur: newAuteur },
-      }
-    );
-  }
+async function _tasks() {
+  await dbCollection("organismes").updateMany({}, { $rename: { created_at: "import_date" } });
 }
 
-async function ensureMigrationCanBeRun() {
+async function _ensureMigrationCanBeRun() {
   let count = await dbCollection("migrations").count({ version: VERSION });
   if (count > 0) {
     throw new Error(`La migration ${VERSION} a déjà été réalisée`);
   }
 }
 
-function saveMigrationVersion() {
+async function _prepareMigration(options) {
+  await configureIndexes({ dropIndexes: options.dropIndexes || false });
+  await configureValidation();
+}
+
+function _saveMigration() {
   return dbCollection("migrations").insertOne({ version: VERSION });
 }
 
 async function migrate(options = {}) {
-  await ensureMigrationCanBeRun();
-
-  //Add migration stuff here
-  await configureIndexes({ dropIndexes: options.dropIndexes || false });
-  await configureValidation();
-  await dbCollection("organismes").updateMany({}, { $unset: { conformite_reglementaire: 1 } });
-  await getDatabase().dropCollection("etablissements");
-  await updateModifications();
-
-  await saveMigrationVersion();
+  await _ensureMigrationCanBeRun();
+  await _prepareMigration(options);
+  await _tasks();
+  await _saveMigration();
 }
 
 module.exports = migrate;

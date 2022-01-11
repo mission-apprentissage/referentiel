@@ -130,7 +130,7 @@ module.exports = () => {
       let { find, pagination } = await findAndPaginate(dbCollection("organismes"), query, {
         page,
         limit: items_par_page,
-        sort: { ["_meta.created_at"]: ordre === "asc" ? 1 : -1 },
+        sort: { ["_meta.import_date"]: ordre === "asc" ? 1 : -1 },
         ...(isEmpty(projection) ? {} : { projection }),
       });
 
