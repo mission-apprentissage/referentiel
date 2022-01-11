@@ -1,25 +1,8 @@
 const { dbCollection } = require("../../common/db/mongodb");
 
-async function setUAI(siret, uai, auteur) {
-  let found = await dbCollection("organismes").findOne({ siret });
-  if (!found) {
-    return null;
-  }
-
-  await dbCollection("modifications").insertOne({
-    siret,
-    date: new Date(),
-    auteur,
-    original: {
-      ...(found.uai ? { uai: found.uai } : {}),
-    },
-    changements: {
-      uai,
-    },
-  });
-
+async function setUAI(organisme, uai) {
   let res = await dbCollection("organismes").findOneAndUpdate(
-    { siret },
+    { siret: organisme.siret },
     { $set: { uai } },
     { returnDocument: "after" }
   );

@@ -11,11 +11,12 @@ const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
 const setUAI = require("../../common/actions/setUAI");
 const { checkApiToken, checkOptionnalApiToken } = require("../middlewares/authMiddleware");
-const canEditOrganisme = require("../../common/actions/canEditOrganisme");
+const canEditOrganisme = require("../middlewares/canEditOrganismeMiddleware");
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
 const getValidationStatus = require("../../common/actions/getValidationStatus");
+const addModification = require("../../common/actions/addModification");
 
 module.exports = () => {
   const router = express.Router();
@@ -174,28 +175,24 @@ module.exports = () => {
   router.put(
     "/api/v1/organismes/:siret/setUAI",
     checkApiToken(),
+    canEditOrganisme(),
     tryCatch(async (req, res) => {
       let user = req.user;
-      let { siret, uai } = await Joi.object({
-        siret: Joi.string()
-          .pattern(/^[0-9]{14}$/)
-          .required(),
+      let auteur = `${user.type}-${user.code}`;
+      let { uai } = await Joi.object({
         uai: Joi.string()
           .pattern(/^[0-9]{7}[A-Z]{1}$/)
           .required(),
-      }).validateAsync({ ...req.params, ...req.body }, { abortEarly: false });
+      }).validateAsync(req.body, { abortEarly: false });
 
-      if (!(await canEditOrganisme(siret, user))) {
-        throw Boom.badRequest("Vous ne pouvez pas modifier cet organisme");
-      }
+      await addModification(auteur, req.organisme, { uai });
+      let updated = await setUAI(req.organisme, uai, auteur);
 
-      let organisme = await setUAI(siret, uai, `${user.type}-${user.code}`);
-
-      if (!organisme) {
+      if (!updated) {
         throw Boom.notFound("Siret inconnu");
       }
 
-      return res.json(toDto(organisme));
+      return res.json(toDto(updated));
     })
   );
 
