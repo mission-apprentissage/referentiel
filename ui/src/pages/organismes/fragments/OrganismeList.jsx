@@ -3,8 +3,8 @@ import ResultsPagination from "../../../common/ResultsPagination";
 import { Box } from "../../../common/Flexbox";
 import Spinner from "../../../common/Spinner";
 
-export default function OrganismeList({ results }) {
-  let { data, loading, error } = results;
+export default function OrganismeList({ response }) {
+  let { data, loading, error } = response;
   let pagination = data.pagination;
 
   return (

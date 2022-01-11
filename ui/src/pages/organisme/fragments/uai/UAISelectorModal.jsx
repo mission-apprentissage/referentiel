@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import Modal from "../../../../common/dsfr/elements/Modal";
 import { Button, ButtonGroup } from "../../../../common/dsfr/elements/Button";
 import styled from "styled-components";
 import useForm from "../../../../common/form/useForm";
 import * as yup from "yup";
 import { Form } from "../../../../common/form/Form";
-import { _get } from "../../../../common/api/httpClient";
+import { _get, _put } from "../../../../common/api/httpClient";
 import { UAIPotentielsRadios } from "./UAIPotentielsRadios";
 import { UAICustom } from "./UAICustom";
+import Alert from "../../../../common/dsfr/elements/Alert";
+import { OrganismeContext } from "../../OrganismePage";
 
 const BlueBox = styled("div")`
   border: 1px solid var(--border-active-blue-france);
@@ -44,12 +46,27 @@ const validators = yup.object({
   }),
 });
 
-export function UAISelectorModal({ modal, organisme, action, onSubmit }) {
+export function UAISelectorModal({ modal, organisme, action }) {
   let hasPotentiels = organisme.uai_potentiels.length > 0;
+  let { updateOrganisme } = useContext(OrganismeContext);
   let form = useForm({
     initialValues: hasPotentiels ? { uai: organisme.uai || "", custom: "" } : { uai: "custom", custom: "" },
     yup: validators,
   });
+
+  function onSubmit(values) {
+    const uai = values.uai === "custom" ? values.custom : values.uai;
+    return _put(`/api/v1/organismes/${organisme.siret}/setUAI`, { uai }).then((updated) => {
+      modal.close();
+      updateOrganisme(updated, {
+        message: (
+          <Alert modifiers={"success"}>
+            <p>L’UAI que vous avez renseignée pour cet OF-CFA a bien été enregistré</p>
+          </Alert>
+        ),
+      });
+    });
+  }
 
   return (
     <Form onSubmit={onSubmit} {...form}>
@@ -73,7 +90,7 @@ export function UAISelectorModal({ modal, organisme, action, onSubmit }) {
         footer={
           <ButtonGroup modifiers={"inline right"}>
             <Button type={"button"} modifiers={"secondary"} onClick={modal.close}>
-              Cancel
+              Annuler
             </Button>
             <Button type={"submit"} disabled={form.pristine}>
               Valider

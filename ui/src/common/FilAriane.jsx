@@ -11,8 +11,8 @@ export default function FilAriane() {
 
   const routes = [
     { path: "/", breadcrumb: `Tableau de bord (${authTitle})` },
-    { path: "/validation/:validationStatus", breadcrumb: ValidationTitle },
-    { path: "/validation/:validationStatus/:siret", breadcrumb: OrganismeTitle },
+    { path: "/validation/:type", breadcrumb: ValidationTitle },
+    { path: "/validation/:type/:siret", breadcrumb: OrganismeTitle },
     { path: "/organismes", breadcrumb: "Liste des organismes" },
     { path: "/organismes/:siret", breadcrumb: OrganismeTitle },
   ];

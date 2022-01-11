@@ -15,7 +15,6 @@ const canEditOrganisme = require("../middlewares/canEditOrganismeMiddleware");
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
-const getValidationStatus = require("../../common/actions/getValidationStatus");
 const addModification = require("../../common/actions/addModification");
 
 module.exports = () => {
@@ -28,7 +27,6 @@ module.exports = () => {
         ? {
             _meta: {
               ...organisme._meta,
-              validation: getValidationStatus(organisme),
             },
           }
         : {}),

@@ -13,11 +13,11 @@ function adaptParamsForAPI(params) {
   }, {});
 }
 
-export function useSearch(initialParams = {}) {
+export function useSearch(defaults = {}) {
   let { params, buildUrl, navigate } = useNavigation();
 
-  let url = buildUrl(`/api/v1/organismes`, { ...initialParams, ...adaptParamsForAPI(params) });
-  let [state] = useFetch(url, {
+  let url = buildUrl(`/api/v1/organismes`, { ...defaults, ...adaptParamsForAPI(params) });
+  let [response] = useFetch(url, {
     organismes: [],
     pagination: {
       page: 0,
@@ -28,9 +28,9 @@ export function useSearch(initialParams = {}) {
   });
 
   return [
-    { ...state, params },
+    { ...response, params },
     (newParams = {}) => {
-      navigate({ ...initialParams, ...newParams });
+      navigate({ ...defaults, ...newParams });
     },
   ];
 }

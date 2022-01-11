@@ -17,6 +17,7 @@ export default function Modal({ title, modal, content, footer, modifiers, classN
                   title="Fermer la fenêtre modale"
                   aria-controls={modal.id}
                   onClick={modal.close}
+                  type={"button"}
                 >
                   Fermer
                 </button>

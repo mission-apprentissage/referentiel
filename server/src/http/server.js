@@ -10,7 +10,6 @@ module.exports = async () => {
   app.use(logMiddleware());
   app.use(require("./routes/healthcheckRoutes")());
   app.use(require("./routes/organismesRoutes")());
-  app.use(require("./routes/validationRoutes")());
   app.use(require("./routes/uaisRoutes")());
   app.use(require("./routes/dataRoutes")());
   app.use(require("./routes/swaggerRoutes")());

@@ -10,22 +10,24 @@ import { useContext } from "react";
 import { AuthContext } from "../../common/AuthRoutes";
 import LayoutContent from "../../common/layout/LayoutContent";
 import styled from "styled-components";
+import { buildValidationParams, getValidationTitle } from "./fragments/validation";
 
 export function ValidationTitle() {
-  let { validationStatus: type } = useParams();
-  let validationTitleMapper = {
-    A_VALIDER: "OF-CFA à valider",
-    A_RENSEIGNER: "OF-CFA à identifier",
-    VALIDE: "OF-CFA validés",
-  };
-
-  return <span>{validationTitleMapper[type]}</span>;
+  let { type } = useParams();
+  return <span>{getValidationTitle(type)}</span>;
 }
 
-const ValidationLayoutTitle = styled(({ children, className, ...props }) => {
+const ValidationLayoutTitle = styled(({ search, children, className }) => {
+  let { params } = useNavigation();
+
   return (
     <div className={className}>
-      <LayoutTitle {...props}>{children}</LayoutTitle>
+      <LayoutTitle
+        title={<ValidationTitle />}
+        selector={<DepartementAuthSelector onChange={(code) => search({ ...params, departements: code })} />}
+      >
+        {children}
+      </LayoutTitle>
     </div>
   );
 })`
@@ -34,29 +36,23 @@ const ValidationLayoutTitle = styled(({ children, className, ...props }) => {
 
 export default function ValidationPage() {
   let { params } = useNavigation();
-  let { validationStatus } = useParams();
+  let { type } = useParams();
   let [auth] = useContext(AuthContext);
-  let [results, search] = useSearch({
+  let [response, search] = useSearch({
     [auth.type]: auth.code,
     ordre: "desc",
     page: 1,
     items_par_page: 25,
-    etat_administratif: "actif",
-    qualiopi: true,
-    types: "of-cfa",
+    ...buildValidationParams(type),
   });
 
   return (
     <>
-      <ValidationLayoutTitle
-        type={validationStatus}
-        title={<ValidationTitle />}
-        selector={<DepartementAuthSelector onChange={(code) => search({ ...params, departements: code })} />}
-      />
+      <ValidationLayoutTitle type={type} search={search} />
       <LayoutContent>
         <Results
           search={<SearchForm onSubmit={(values) => search({ ...params, ...values, page: 1 })} />}
-          results={<OrganismeList results={results} />}
+          results={<OrganismeList response={response} />}
         />
       </LayoutContent>
     </>

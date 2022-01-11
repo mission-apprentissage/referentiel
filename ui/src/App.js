@@ -27,8 +27,8 @@ function App() {
               <Route element={<AuthRoutes />}>
                 <Route path="/" element={<TableauDeBordPage />} />
                 <Route path="/validation" element={<Navigate replace to="/" />} />
-                <Route path="/validation/:validationStatus" element={<ValidationPage />} />
-                <Route path="/validation/:validationStatus/:siret" element={<OrganismePage />} />
+                <Route path="/validation/:type" element={<ValidationPage />} />
+                <Route path="/validation/:type/:siret" element={<OrganismePage />} />
                 <Route path="/organismes" element={<OrganismesPage />} />
                 <Route path="/organismes/:siret" element={<OrganismePage />} />
               </Route>

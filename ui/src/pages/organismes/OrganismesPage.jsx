@@ -11,7 +11,7 @@ import WideTabs from "../../common/dsfr/custom/WideTabs";
 import LayoutContent from "../../common/layout/LayoutContent";
 
 export default function OrganismesPage() {
-  let [results, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
+  let [response, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
 
   return (
     <>
@@ -32,7 +32,7 @@ export default function OrganismesPage() {
                         <NdaFilter />
                       </Filters>
                     }
-                    results={<OrganismeList results={results} />}
+                    results={<OrganismeList response={response} />}
                   />
                 </TabPanel>
               ),

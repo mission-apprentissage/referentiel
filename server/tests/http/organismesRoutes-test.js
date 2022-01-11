@@ -69,7 +69,6 @@ describe("organismesRoutes", () => {
           _meta: {
             anomalies: [],
             import_date: "2021-02-10T16:39:13.064Z",
-            validation: "A_RENSEIGNER",
           },
         },
       ],
@@ -707,7 +706,6 @@ describe("organismesRoutes", () => {
       _meta: {
         anomalies: [],
         import_date: "2021-02-10T16:39:13.064Z",
-        validation: "A_RENSEIGNER",
       },
     });
   });
@@ -831,7 +829,6 @@ describe("organismesRoutes", () => {
       },
       _meta: {
         anomalies: [],
-        validation: "VALIDE",
       },
     });
 

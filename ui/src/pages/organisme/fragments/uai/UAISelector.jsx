@@ -1,12 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useModal } from "../../../../common/dsfr/common/useModal";
 import LinkButton from "../../../../common/dsfr/custom/LinkButton";
 import ValidationTag from "../../../../common/ValidationTag";
 import { UAISelectorModal } from "./UAISelectorModal";
 import { Button } from "../../../../common/dsfr/elements/Button";
-import { OrganismeContext } from "../../OrganismePage";
-import { _put } from "../../../../common/api/httpClient";
-import Alert from "../../../../common/dsfr/elements/Alert";
+import { getValidationType } from "../../../validation/fragments/validation";
 
 const actions = {
   A_VALIDER: {
@@ -69,33 +67,15 @@ const actions = {
 
 export default function UAIValidator({ organisme, ...rest }) {
   let modal = useModal();
-  let validation = organisme._meta.validation;
-  let action = actions[validation];
-  let { updateOrganisme } = useContext(OrganismeContext);
+  let validationType = getValidationType(organisme);
+  let action = actions[validationType];
   let { label, ActionButton } = action;
 
   return (
     <div style={{ display: "inline" }} {...rest}>
-      <ValidationTag type={validation} label={label} className="fr-mr-3v" />
+      <ValidationTag type={validationType} label={label} className="fr-mr-3v" />
       <ActionButton label={action.actionName} onClick={() => modal.open()}>
-        <UAISelectorModal
-          organisme={organisme}
-          modal={modal}
-          action={action}
-          onSubmit={(values) => {
-            const uai = values.uai === "custom" ? values.custom : values.uai;
-            return _put(`/api/v1/organismes/${organisme.siret}/setUAI`, { uai }).then((updated) => {
-              modal.close();
-              updateOrganisme(updated, {
-                message: (
-                  <Alert modifiers={"success"}>
-                    <p>L’UAI que vous avez renseignée pour cet OF-CFA a bien été enregistré</p>
-                  </Alert>
-                ),
-              });
-            });
-          }}
-        />
+        <UAISelectorModal organisme={organisme} modal={modal} action={action} />
       </ActionButton>
     </div>
   );

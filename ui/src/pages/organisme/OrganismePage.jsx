@@ -76,7 +76,7 @@ export default function OrganismePage() {
               ),
             },
             {
-              tab: <Tab>Relations</Tab>,
+              tab: <Tab disabled={organisme.relations.length === 0}>Relations</Tab>,
               panel: (
                 <TabPanel>
                   <Relations organisme={organisme} />
