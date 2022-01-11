@@ -2,7 +2,7 @@ const { compose, transformData, oleoduc, accumulateData, writeData, filterData }
 const { parseCsv } = require("../../common/utils/csvUtils");
 const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
 
-async function downloadListePubliqueDesOrganismesDeFormation(options = {}) {
+async function getListePubliqueDesOrganismesDeFormationAsStream(options = {}) {
   //await getFileAsStream("https://www.monactiviteformation.emploi.gouv.fr/mon-activite-formation/public/listePubliqueOF?format=csv")
   let stream = options.input || (await getOvhFileAsStream("annuaire/public_ofs_latest.csv"));
 
@@ -18,10 +18,6 @@ function isQualiopi(data) {
   return data["certifications_actionsDeFormationParApprentissage"] === "true";
 }
 
-function getSiret(data) {
-  return `${data.siren}${data.siretEtablissementDeclarant}`;
-}
-
 module.exports = (custom = {}) => {
   let name = "datagouv";
 
@@ -29,13 +25,13 @@ module.exports = (custom = {}) => {
     name,
     async loadOrganismeDeFormations() {
       let organismes = [];
-      let stream = await downloadListePubliqueDesOrganismesDeFormation(custom);
+      let stream = await getListePubliqueDesOrganismesDeFormationAsStream(custom);
 
       await oleoduc(
         stream,
         transformData((data) => {
           return {
-            siret: getSiret(data),
+            siret: data.siretEtablissementDeclarant,
           };
         }),
         accumulateData((acc, data) => [...acc, data.siret], { accumulator: [] }),
@@ -45,21 +41,22 @@ module.exports = (custom = {}) => {
       return organismes;
     },
     async referentiel() {
-      let stream = await downloadListePubliqueDesOrganismesDeFormation(custom);
+      let stream = await getListePubliqueDesOrganismesDeFormationAsStream(custom);
 
       return compose(
         stream,
         filterData(isQualiopi),
         transformData((data) => {
+          const siret = data.siretEtablissementDeclarant;
           return {
             from: name,
-            siret: getSiret(data),
+            siret: siret,
           };
         })
       );
     },
     async stream() {
-      let stream = await downloadListePubliqueDesOrganismesDeFormation(custom);
+      let stream = await getListePubliqueDesOrganismesDeFormationAsStream(custom);
 
       return compose(
         stream,

@@ -7,7 +7,7 @@ const consolidate = require("./consolidate");
 const { clearCollection } = require("../common/db/mongodb");
 
 async function build(options = {}) {
-  let referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "mna"];
+  let referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv", "mna"];
   let stats = [];
 
   function collectAll(sourceNames, globalOptions = {}) {

@@ -10,8 +10,8 @@ describe("datagouv", () => {
   it("Vérifie que peut convertir la source en référentiel", async () => {
     let input = createStream(
       `numeroDeclarationActivite;siren;siretEtablissementDeclarant;certifications.actionsDeFormationParApprentissage
-"88888888888";"111111111";"00006";"true"
-"88888888889";"111111111";"00007";"false"`
+"88888888888";"111111111";"11111111100006";"true"
+"88888888889";"111111111";"11111111100007";"false"`
     );
     let source = createSource("datagouv", { input });
 
@@ -38,7 +38,7 @@ describe("datagouv", () => {
     let source = createSource("datagouv", {
       input: createStream(
         `numeroDeclarationActivite;siren;siretEtablissementDeclarant;certifications.actionsDeFormationParApprentissage
-"88888888888";"111111111";"00006";"true"`
+"88888888888";"111111111";"11111111100006";"true"`
       ),
     });
 
@@ -64,7 +64,7 @@ describe("datagouv", () => {
   it("Vérifie que peut charger en mémoire la liste des CFA", async () => {
     let input = createStream(
       `numeroDeclarationActivite;siren;siretEtablissementDeclarant;certifications.actionsDeFormationParApprentissage
-"88888888888";"111111111";"00006";"true"`
+"88888888888";"111111111";"11111111100006";"true"`
     );
     let source = createSource("datagouv", { input });
 
