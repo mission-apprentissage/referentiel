@@ -15,6 +15,7 @@ const canEditOrganisme = require("../../common/actions/canEditOrganisme");
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
+const getValidationStatus = require("../../common/actions/getValidationStatus");
 
 module.exports = () => {
   const router = express.Router();
@@ -26,7 +27,7 @@ module.exports = () => {
         ? {
             _meta: {
               ...organisme._meta,
-              validation: organisme.uai ? "VALIDE" : organisme.uai_potentiels.length > 0 ? "A_VALIDER" : "A_RENSEIGNER",
+              validation: getValidationStatus(organisme),
             },
           }
         : {}),
