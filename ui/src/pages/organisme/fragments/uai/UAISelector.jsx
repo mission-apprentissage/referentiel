@@ -6,6 +6,7 @@ import { UAISelectorModal } from "./UAISelectorModal";
 import { Button } from "../../../../common/dsfr/elements/Button";
 import { OrganismeContext } from "../../OrganismePage";
 import { _put } from "../../../../common/api/httpClient";
+import Alert from "../../../../common/dsfr/elements/Alert";
 
 const actions = {
   A_VALIDER: {
@@ -70,7 +71,7 @@ export default function UAIValidator({ organisme, ...rest }) {
   let modal = useModal();
   let validation = organisme._meta.validation;
   let action = actions[validation];
-  let { setData } = useContext(OrganismeContext);
+  let { updateOrganisme } = useContext(OrganismeContext);
   let { label, ActionButton } = action;
 
   return (
@@ -85,7 +86,13 @@ export default function UAIValidator({ organisme, ...rest }) {
             const uai = values.uai === "custom" ? values.custom : values.uai;
             return _put(`/api/v1/organismes/${organisme.siret}/setUAI`, { uai }).then((updated) => {
               modal.close();
-              setData(updated);
+              updateOrganisme(updated, {
+                message: (
+                  <Alert modifiers={"success"}>
+                    <p>L’UAI que vous avez renseignée pour cet OF-CFA a bien été enregistré</p>
+                  </Alert>
+                ),
+              });
             });
           }}
         />

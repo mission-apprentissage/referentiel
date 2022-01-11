@@ -9,7 +9,11 @@ const Back = styled(LinkButton)`
   margin-bottom: 1.5rem;
 `;
 
-export default function LayoutTitle({ title, back, selector, children }) {
+const Message = styled("div")`
+  margin-bottom: 1.5rem;
+`;
+
+export default function LayoutTitle({ title, message, back, selector, children }) {
   let navigate = useNavigate();
 
   return (
@@ -19,6 +23,13 @@ export default function LayoutTitle({ title, back, selector, children }) {
           <FilAriane />
         </Col>
       </GridRow>
+      {message && (
+        <GridRow modifier={"gutters"}>
+          <Col>
+            <Message>{message}</Message>
+          </Col>
+        </GridRow>
+      )}
       {back && (
         <GridRow modifier={"gutters"}>
           <Col>

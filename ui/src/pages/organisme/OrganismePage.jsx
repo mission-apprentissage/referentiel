@@ -2,7 +2,7 @@ import { Col, GridRow } from "../../common/dsfr/fondamentaux";
 import { useParams } from "react-router-dom";
 import Alert from "../../common/dsfr/elements/Alert";
 import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { Immatriculation } from "./tabs/Immatriculation";
 import LayoutTitle from "../../common/layout/LayoutTitle";
 import Reseaux from "./fragments/Reseaux";
@@ -22,6 +22,21 @@ export function OrganismeTitle() {
 export default function OrganismePage() {
   let { siret } = useParams();
   let [{ data: organisme, loading, error }, setData] = useFetch(`/api/v1/organismes/${siret}`);
+  let [message, setMessage] = useState(null);
+  function autoCloseMessage() {
+    let timeout = setTimeout(() => {
+      clearTimeout(timeout);
+      setMessage(null);
+    }, 5000);
+  }
+
+  async function updateOrganisme(organisme, options = {}) {
+    if (options.message) {
+      setMessage(options.message);
+      autoCloseMessage();
+    }
+    await setData(organisme);
+  }
 
   if (error) {
     return (
@@ -44,8 +59,8 @@ export default function OrganismePage() {
   }
 
   return (
-    <OrganismeContext.Provider value={{ organisme, setData }}>
-      <LayoutTitle title={<OrganismeTitle />} back={"Retour à la liste"}>
+    <OrganismeContext.Provider value={{ organisme, updateOrganisme }}>
+      <LayoutTitle title={<OrganismeTitle />} message={message} back={"Retour à la liste"}>
         <Reseaux organisme={organisme} />
       </LayoutTitle>
       <LayoutContent>
