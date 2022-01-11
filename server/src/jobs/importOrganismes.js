@@ -19,6 +19,10 @@ function createStats(sources) {
   }, {});
 }
 
+function isSiretValid(siret) {
+  return !isEmpty(siret) && siret.length === 14 && luhn(siret);
+}
+
 module.exports = async (array) => {
   let sources = castArray(array);
   let streams = await Promise.all(sources.map((source) => source.referentiel()));
@@ -26,7 +30,7 @@ module.exports = async (array) => {
 
   for await (const { from, siret } of mergeStreams(streams)) {
     stats[from].total++;
-    if (isEmpty(siret) || !luhn(siret)) {
+    if (!isSiretValid(siret)) {
       stats[from].invalid++;
       logger.warn(`[Import] Impossible d'importer le siret '${siret}' car il est invalide.`);
       continue;

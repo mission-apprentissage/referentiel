@@ -2,7 +2,7 @@ const assert = require("assert");
 const { omit } = require("lodash");
 const { Readable } = require("stream");
 const { dbCollection } = require("../../src/common/db/mongodb");
-const importReferentiel = require("../../src/jobs/importOrganismes");
+const importOrganismes = require("../../src/jobs/importOrganismes");
 const { compose, transformData } = require("oleoduc");
 
 function createTestSource(array) {
@@ -22,7 +22,7 @@ describe("importOrganismes", () => {
   it("Vérifie qu'on peut importer un référentiel", async () => {
     let source = createTestSource([{ siret: "11111111100006" }]);
 
-    let results = await importReferentiel(source);
+    let results = await importOrganismes(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
     assert.deepStrictEqual(omit(found, ["_meta"]), {
@@ -53,7 +53,7 @@ describe("importOrganismes", () => {
   it("Vérifie qu'on ignore les organismes en double", async () => {
     let source = createTestSource([{ siret: "11111111100006" }, { siret: "11111111100006" }]);
 
-    let results = await importReferentiel(source);
+    let results = await importOrganismes(source);
 
     await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(results, {
@@ -70,7 +70,7 @@ describe("importOrganismes", () => {
   it("Vérifie qu'on ignore un organisme avec un siret vide", async () => {
     let source = createTestSource([{ siret: "" }]);
 
-    let results = await importReferentiel(source);
+    let results = await importOrganismes(source);
 
     let count = await dbCollection("organismes").countDocuments({ siret: "11111111100006" });
     assert.strictEqual(count, 0);
@@ -88,7 +88,7 @@ describe("importOrganismes", () => {
   it("Vérifie qu'on ignore un organisme avec un siret invalide", async () => {
     let source = createTestSource([{ siret: "" }]);
 
-    let results = await importReferentiel(source);
+    let results = await importOrganismes(source);
 
     let count = await dbCollection("organismes").countDocuments({ siret: "7894766" });
     assert.strictEqual(count, 0);
