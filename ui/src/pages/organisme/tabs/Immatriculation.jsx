@@ -4,7 +4,7 @@ import cs from "classnames";
 import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
 import UAIValidator from "../fragments/uai/UAISelector";
 
-const Info = styled(({ label, value, children, className, ...rest }) => {
+const Field = styled(({ label, value, children, className, ...rest }) => {
   return (
     <div className={cs(className, "fr-text", "fr-py-3v")} {...rest}>
       <span className={"fr-text--regular"}>{label} :&nbsp;</span>
@@ -29,24 +29,27 @@ export function Immatriculation({ organisme }) {
       <h6>Immatriculation</h6>
       <GridRow>
         <Col>
-          <Info label={"SIRET"} value={organisme.siret} />
-          <Info label={"NDA"} value={organisme.numero_declaration_activite} />
-          <Info label={"UAI"} value={organisme.uai}>
+          <Field label={"UAI"} value={organisme.uai}>
             <UAIValidator className="fr-ml-3v" organisme={organisme} />
-          </Info>
+          </Field>
+          <Field label={"SIREN"} value={organisme.siret.substr(0, 9)} />
+          <Field
+            label={"SIRET"}
+            value={`${organisme.siret} (${organisme.etat_administratif === "actif" ? "en activité" : "fermé"})`}
+          />
+          <Field label={"NDA"} value={organisme.numero_declaration_activite} />
         </Col>
       </GridRow>
       <GridRow>
         <Col modifiers={"12 md-6"}>
-          <Info label={"Raison sociale"} value={organisme.enseigne || organisme.raison_sociale} />
-          <Info label={"Adresse"} value={adresse} />
-          <Info label={"Région"} value={organisme.adresse?.region?.nom} />
-          <Info label={"Académie"} value={organisme.adresse?.academie?.nom} />
+          <Field label={"Raison sociale"} value={organisme.enseigne || organisme.raison_sociale} />
+          <Field label={"Adresse"} value={adresse} />
+          <Field label={"Région"} value={organisme.adresse?.region?.nom} />
+          <Field label={"Académie"} value={organisme.adresse?.academie?.nom} />
         </Col>
         <Col modifiers={"12 offset-md-1 md-5"}>
-          <Info label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
-          <Info label={"Forme jurique"} value={organisme.forme_juridique?.label} />
-          <Info label={"Etat administratif"} value={organisme.etat_administratif} />
+          <Field label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
+          <Field label={"Forme jurique"} value={organisme.forme_juridique?.label} />
         </Col>
       </GridRow>
     </>
