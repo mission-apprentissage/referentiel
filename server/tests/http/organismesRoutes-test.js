@@ -1,4 +1,4 @@
-const { strictEqual, deepStrictEqual } = require("assert");
+const { strictEqual, deepStrictEqual, ok } = require("assert");
 const { insertOrganisme } = require("../utils/fakeData");
 const { startServer, generateAuthHeader } = require("../utils/testUtils");
 const { dbCollection } = require("../../src/common/db/mongodb");
@@ -216,7 +216,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme();
 
-    let response = await httpClient.get("/api/v1/organismes?uai_potentiel=true");
+    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=true");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -237,7 +237,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme({ siret: "22222222200002" });
 
-    let response = await httpClient.get("/api/v1/organismes?uai_potentiel=false");
+    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -258,11 +258,43 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme({ siret: "22222222200002" });
 
-    let response = await httpClient.get("/api/v1/organismes?uai_potentiel=0751234J");
+    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=0751234J");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
     strictEqual(response.data.organismes[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes avec plusieurs uai potentiels", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      uai_potentiels: [
+        {
+          sources: ["dummy"],
+          uai: "0751234J",
+          valide: true,
+        },
+      ],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      uai_potentiels: [
+        {
+          sources: ["dummy"],
+          uai: "0751234X",
+          valide: true,
+        },
+      ],
+    });
+    await insertOrganisme({ siret: "33333333300003" });
+
+    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=0751234J,0751234X");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 2);
+    ok(response.data.organismes.find((o) => o.siret === "11111111100006"));
+    ok(response.data.organismes.find((o) => o.siret === "22222222200002"));
   });
 
   it("Vérifie qu'on peut rechercher des organismes à partir d'un siret", async () => {

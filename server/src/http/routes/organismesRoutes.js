@@ -6,7 +6,7 @@ const Joi = require("@hapi/joi");
 const { findAndPaginate } = require("../../common/utils/dbUtils");
 const { sendJsonStream } = require("../utils/httpUtils");
 const buildProjection = require("../utils/buildProjection");
-const { stringList } = require("../utils/validators");
+const { arrayOf } = require("../utils/validators");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
 const setUAI = require("../../common/actions/setUAI");
@@ -61,7 +61,7 @@ module.exports = () => {
       academie,
       text,
       anomalies,
-      uai_potentiel,
+      uai_potentiels,
       etat_administratif,
       qualiopi,
       numero_declaration_activite: nda,
@@ -84,10 +84,10 @@ module.exports = () => {
       ...(text ? { $text: { $search: text } } : {}),
       ...(!isNil(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
       ...(!isNil(qualiopi) ? { qualiopi } : {}),
-      ...(!isNil(uai_potentiel)
-        ? isBoolean(uai_potentiel)
-          ? { "uai_potentiels.0": { $exists: uai_potentiel } }
-          : { "uai_potentiels.uai": uai_potentiel }
+      ...(!isNil(uai_potentiels)
+        ? isBoolean(uai_potentiels)
+          ? { "uai_potentiels.0": { $exists: uai_potentiels } }
+          : { "uai_potentiels.uai": { $in: uai_potentiels } }
         : {}),
     };
   }
@@ -101,26 +101,24 @@ module.exports = () => {
         uai: Joi.alternatives()
           .try(Joi.boolean(), Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/))
           .default(null),
+        uai_potentiels: Joi.alternatives()
+          .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
+          .default(null),
         numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
-        statuts: stringList(Joi.string().valid("gestionnaire", "formateur")).default([]),
+        statuts: arrayOf(Joi.string().valid("gestionnaire", "formateur")).default([]),
         etat_administratif: Joi.string().valid("actif", "fermé"),
         region: Joi.string().valid(...getRegions().map((r) => r.code)),
         academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
-        departements: stringList(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
+        departements: arrayOf(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         anomalies: Joi.boolean().default(null),
         qualiopi: Joi.boolean().default(null),
-        types: stringList(Joi.string().valid("of-cfa", "ufa", "entite-administrative")),
-        //Misc
-        champs: stringList().default([]),
-        uai_potentiel: Joi.alternatives()
-          .try(Joi.boolean(), Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/))
-          .default(null),
-        //Pagination
-        page: Joi.number().default(1),
-        items_par_page: Joi.number().default(10),
+        types: arrayOf(Joi.string().valid("of-cfa", "ufa", "entite-administrative")),
+        text: Joi.string(),
         //Misc
         ordre: Joi.string().valid("asc", "desc").default("desc"),
-        text: Joi.string(),
+        champs: arrayOf().default([]),
+        items_par_page: Joi.number().default(10),
+        page: Joi.number().default(1),
       }).validateAsync(req.query, { abortEarly: false });
 
       let query = buildQuery(params);
@@ -156,7 +154,7 @@ module.exports = () => {
         siret: Joi.string()
           .pattern(/^[0-9]{14}$/)
           .required(),
-        champs: stringList().default([]),
+        champs: arrayOf().default([]),
       }).validateAsync({ ...req.params, ...req.query }, { abortEarly: false });
 
       let projection = buildProjection(champs);

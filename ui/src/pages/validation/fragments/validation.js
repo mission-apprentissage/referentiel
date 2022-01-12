@@ -16,11 +16,11 @@ export function buildValidationParams(type) {
   let params = { etat_administratif: "actif", qualiopi: true, types: "of-cfa" };
   switch (type) {
     case "A_VALIDER":
-      return { ...params, uai: false, uai_potentiel: true };
+      return { ...params, uai: false, uai_potentiels: true };
     case "VALIDE":
       return { ...params, uai: true };
     case "A_RENSEIGNER":
-      return { ...params, uai: false, uai_potentiel: false };
+      return { ...params, uai: false, uai_potentiels: false };
     default:
       throw new Error("Statut de validation inconnu");
   }
