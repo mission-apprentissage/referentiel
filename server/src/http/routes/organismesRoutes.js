@@ -16,17 +16,20 @@ const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
 const addModification = require("../../common/actions/addModification");
+const findBestUAIPotentiel = require("../../common/actions/findBestUAIPotentiel");
 
 module.exports = () => {
   const router = express.Router();
 
   function toDto(organisme) {
+    const best = organisme.uai_potentiels && findBestUAIPotentiel(organisme);
     return {
       ...omit(organisme, ["_id"]),
       ...(organisme._meta
         ? {
             _meta: {
               ...organisme._meta,
+              ...(best ? { uai_probale: best.uai } : {}),
             },
           }
         : {}),

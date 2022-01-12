@@ -2,21 +2,7 @@ const { transformIntoCSV, transformData, compose, mergeStreams, writeData, oleod
 const { dbCollection } = require("../../common/db/mongodb");
 const { parseCsv } = require("../../common/utils/csvUtils");
 const { pick } = require("lodash");
-
-function findMostPopularUAI(organisme) {
-  let potentiels = organisme.uai_potentiels.filter((item) => {
-    let sources = item.sources.filter((s) => s.includes("sifa-ramsese") || s.includes("catalogue-etablissements"));
-    return sources.length >= 1;
-  });
-
-  if (potentiels.length === 0) {
-    return null;
-  }
-
-  let found = potentiels.reduce((acc, u) => (acc.sources.length < u.sources.length ? u : acc));
-
-  return found.uai;
-}
+const findBestUAIPotentiel = require("../../common/actions/findBestUAIPotentiel");
 
 function getUAI(source, organisme) {
   let potentiels = organisme.uai_potentiels.filter((u) => u.sources.includes(source));
@@ -39,7 +25,7 @@ function getTask(organisme) {
     return "inconnu";
   }
 
-  let uai = findMostPopularUAI(organisme);
+  let uai = findBestUAIPotentiel(organisme);
   return uai ? "à valider" : "à expertiser";
 }
 
@@ -102,7 +88,7 @@ async function experimentationCsvStream(options = {}) {
         DECA: ({ organisme }) => getUAI("deca", organisme),
         "SIFA RAMSESE": ({ organisme }) => getUAI("sifa-ramsese", organisme),
         Catalogue: ({ organisme }) => getUAI("catalogue-organismes", organisme),
-        UAI: ({ organisme }) => findMostPopularUAI(organisme),
+        UAI: ({ organisme }) => findBestUAIPotentiel(organisme)?.uai,
         Tache: ({ task }) => task,
         Précédent: ({ organisme }) => {
           let found = previous.find((p) => p.SIRET === organisme.siret);

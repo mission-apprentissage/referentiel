@@ -202,6 +202,30 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].siret, "11111111100006");
   });
 
+  it("Vérifie qu'on peut calcule le meilleur UAI potentiel", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      uai_potentiels: [
+        {
+          sources: ["sifa-ramsese"],
+          uai: "0751234J",
+          valide: true,
+        },
+        {
+          sources: ["other"],
+          uai: "0751234X",
+          valide: true,
+        },
+      ],
+    });
+
+    let response = await httpClient.get("/api/v1/organismes");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes[0]._meta.uai_probale, "0751234J");
+  });
+
   it("Vérifie qu'on peut rechercher des organismes qui ont des uais potentiels", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
