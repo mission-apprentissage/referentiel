@@ -99,8 +99,9 @@ function createStats(sources) {
       [source.name]: {
         total: 0,
         updated: 0,
-        ignored: 0,
+        unknown: 0,
         failed: 0,
+        anomalies: 0,
       },
     };
   }, {});
@@ -141,13 +142,13 @@ module.exports = async (array, options = {}) => {
     let organisme = await dbCollection("organismes").findOne(query);
     if (!organisme) {
       logger.trace(`[Collect][${from}] Organisme ${query} inconnu`);
-      stats[from].ignored++;
+      stats[from].unknown++;
       continue;
     }
 
     try {
       if (anomalies.length > 0) {
-        stats[from].failed++;
+        stats[from].anomalies++;
         await handleAnomalies(from, organisme, anomalies);
       }
 

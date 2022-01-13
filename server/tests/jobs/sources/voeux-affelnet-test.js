@@ -32,7 +32,8 @@ describe("voeux-affelnet", () => {
       "voeux-affelnet": {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -74,7 +75,8 @@ describe("voeux-affelnet", () => {
       "voeux-affelnet": {
         total: 1,
         updated: 0,
-        ignored: 1,
+        unknown: 1,
+        anomalies: 0,
         failed: 0,
       },
     });

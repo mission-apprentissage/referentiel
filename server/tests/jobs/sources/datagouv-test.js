@@ -55,7 +55,8 @@ describe("datagouv", () => {
       datagouv: {
         total: 1,
         updated: 2,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });

@@ -43,8 +43,9 @@ describe("collectSources", () => {
       dummy: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
         failed: 0,
+        anomalies: 0,
       },
     });
   });
@@ -70,8 +71,9 @@ describe("collectSources", () => {
       dummy: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
         failed: 0,
+        anomalies: 0,
       },
     });
   });
@@ -108,8 +110,9 @@ describe("collectSources", () => {
       dummy: {
         total: 1,
         updated: 0,
-        ignored: 0,
+        unknown: 0,
         failed: 0,
+        anomalies: 0,
       },
     });
   });
@@ -161,8 +164,9 @@ describe("collectSources", () => {
       dummy: {
         total: 1,
         updated: 0,
-        ignored: 0,
+        unknown: 0,
         failed: 0,
+        anomalies: 0,
       },
     });
   });
@@ -184,8 +188,9 @@ describe("collectSources", () => {
       dummy: {
         total: 1,
         updated: 0,
-        ignored: 1,
+        unknown: 1,
         failed: 0,
+        anomalies: 0,
       },
     });
   });
@@ -214,8 +219,9 @@ describe("collectSources", () => {
       dummy: {
         total: 1,
         updated: 0,
-        ignored: 0,
-        failed: 1,
+        unknown: 0,
+        failed: 0,
+        anomalies: 1,
       },
     });
   });
@@ -244,8 +250,9 @@ describe("collectSources", () => {
       dummy: {
         total: 1,
         updated: 0,
-        ignored: 0,
+        unknown: 0,
         failed: 1,
+        anomalies: 0,
       },
     });
   });
@@ -264,9 +271,10 @@ describe("collectSources", () => {
     assert.deepStrictEqual(stats, {
       dummy: {
         total: 1,
-        ignored: 1,
+        unknown: 1,
         failed: 0,
         updated: 0,
+        anomalies: 0,
       },
     });
   });
@@ -589,8 +597,9 @@ describe("collectSources", () => {
       dummy: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
         failed: 0,
+        anomalies: 0,
       },
     });
   });
@@ -615,8 +624,9 @@ describe("collectSources", () => {
       dummy: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
         failed: 0,
+        anomalies: 0,
       },
     });
   });

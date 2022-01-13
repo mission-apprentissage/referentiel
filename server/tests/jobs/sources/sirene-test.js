@@ -84,7 +84,8 @@ describe("sirene", () => {
       sirene: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -140,7 +141,8 @@ describe("sirene", () => {
       sirene: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -208,7 +210,8 @@ describe("sirene", () => {
       sirene: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -257,7 +260,8 @@ describe("sirene", () => {
       sirene: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -315,7 +319,8 @@ describe("sirene", () => {
       sirene: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -335,7 +340,8 @@ describe("sirene", () => {
       sirene: {
         total: 0,
         updated: 0,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -384,7 +390,8 @@ describe("sirene", () => {
       sirene: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -451,8 +458,9 @@ describe("sirene", () => {
       sirene: {
         total: 1,
         updated: 0,
-        ignored: 0,
-        failed: 1,
+        unknown: 0,
+        anomalies: 1,
+        failed: 0,
       },
     });
   });
@@ -519,8 +527,9 @@ describe("sirene", () => {
       sirene: {
         total: 1,
         updated: 1,
-        ignored: 0,
-        failed: 1,
+        unknown: 0,
+        anomalies: 1,
+        failed: 0,
       },
     });
   });
@@ -549,8 +558,9 @@ describe("sirene", () => {
       sirene: {
         total: 1,
         updated: 1,
-        ignored: 0,
-        failed: 1,
+        unknown: 0,
+        anomalies: 1,
+        failed: 0,
       },
     });
   });

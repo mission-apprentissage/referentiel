@@ -29,8 +29,9 @@ describe("depp", () => {
       depp: {
         total: 1,
         updated: 1,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
-        ignored: 0,
       },
     });
   });

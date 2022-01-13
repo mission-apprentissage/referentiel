@@ -26,7 +26,8 @@ describe("ccca-btp", () => {
       "ccca-btp": {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
