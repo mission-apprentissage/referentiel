@@ -5,6 +5,7 @@ const { oleoduc, transformIntoJSON, transformData } = require("oleoduc");
 const Joi = require("@hapi/joi");
 const { findAndPaginate } = require("../../common/utils/dbUtils");
 const { sendJsonStream } = require("../utils/httpUtils");
+const validators = require("../utils/validators");
 const buildProjection = require("../utils/buildProjection");
 const { arrayOf } = require("../utils/validators");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
@@ -118,10 +119,9 @@ module.exports = () => {
         types: arrayOf(Joi.string().valid("of-cfa", "ufa", "entite-administrative")),
         text: Joi.string(),
         //Misc
-        ordre: Joi.string().valid("asc", "desc").default("desc"),
-        champs: arrayOf().default([]),
-        items_par_page: Joi.number().default(10),
-        page: Joi.number().default(1),
+        ...validators.champs(),
+        ...validators.pagination(),
+        ...validators.tri(),
       }).validateAsync(req.query, { abortEarly: false });
 
       let query = buildQuery(params);

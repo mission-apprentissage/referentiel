@@ -19,7 +19,29 @@ function password() {
   );
 }
 
+function pagination() {
+  return {
+    items_par_page: Joi.number().default(10),
+    page: Joi.number().default(1),
+  };
+}
+
+function tri() {
+  return {
+    ordre: Joi.string().valid("asc", "desc").default("desc"),
+  };
+}
+
+function champs() {
+  return {
+    champs: arrayOf(Joi.string()).default([]),
+  };
+}
+
 module.exports = {
   arrayOf,
   password,
+  pagination,
+  tri,
+  champs,
 };
