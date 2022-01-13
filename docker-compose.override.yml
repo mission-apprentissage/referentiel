@@ -9,9 +9,6 @@ services:
     command: yarn start
     mem_limit: 2g
     stdin_open: true
-    build:
-      args:
-        - REFERENTIEL_ENV=dev
     volumes:
       - ./ui:/app #Allows source folders to be watched
     environment:

@@ -15,11 +15,7 @@ ENV REACT_APP_REFERENTIEL_SENTRY_DSN=$REFERENTIEL_SENTRY_DSN
 
 # Build site
 COPY . ./
-RUN if [ "$REFERENTIEL_ENV" == "dev" ] ; then \
-      echo "[WARNING] Site has not been built. You must start this container with command 'yarn start'" ; \
-    else \
-      INLINE_RUNTIME_CHUNK=false yarn build && mv /app/build /site ; \
-fi
+RUN INLINE_RUNTIME_CHUNK=false yarn build && mv /app/build /site
 
 
 EXPOSE 3000
