@@ -6,8 +6,8 @@ import UAIValidator from "../fragments/uai/UAISelector";
 
 const Field = styled(({ label, value, children, className, ...rest }) => {
   return (
-    <div className={cs(className, "fr-text", "fr-py-3v")} {...rest}>
-      <span className={"fr-text--regular"}>{label} :&nbsp;</span>
+    <div className={cs(className, "fr-py-3v")} {...rest}>
+      {label && <span className={"fr-text--regular"}>{label} :&nbsp;</span>}
       <span className={cs("fr-text", "fr-text--bold", "fr-p-1v", "value", { na: !value })}>{value || "N.A"}</span>
       {children}
     </div>
@@ -33,23 +33,21 @@ export function Immatriculation({ organisme }) {
             <UAIValidator className="fr-ml-3v" organisme={organisme} />
           </Field>
           <Field label={"SIREN"} value={organisme.siret.substr(0, 9)} />
+          <Field label={"SIRET"} className={"fr-mr-1w xfr-display-inline-block"} value={organisme.siret} />
           <Field
-            label={"SIRET"}
-            value={`${organisme.siret} (${organisme.etat_administratif === "actif" ? "en activité" : "fermé"})`}
+            className={"xfr-display-inline-block"}
+            value={`(${organisme.etat_administratif === "actif" ? "en activité" : "fermé"})`}
           />
           <Field label={"NDA"} value={organisme.numero_declaration_activite} />
+          <Field label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
         </Col>
       </GridRow>
-      <GridRow>
-        <Col modifiers={"12 md-6"}>
+      <GridRow className={"fr-mt-5w"}>
+        <Col>
           <Field label={"Raison sociale"} value={organisme.enseigne || organisme.raison_sociale} />
           <Field label={"Adresse"} value={adresse} />
           <Field label={"Région"} value={organisme.adresse?.region?.nom} />
           <Field label={"Académie"} value={organisme.adresse?.academie?.nom} />
-        </Col>
-        <Col modifiers={"12 offset-md-1 md-5"}>
-          <Field label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
-          <Field label={"Forme jurique"} value={organisme.forme_juridique?.label} />
         </Col>
       </GridRow>
     </>
