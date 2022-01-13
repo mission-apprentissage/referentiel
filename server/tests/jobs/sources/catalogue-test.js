@@ -52,7 +52,8 @@ describe("catalogue", () => {
       catalogue: {
         total: 2,
         updated: 2,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -172,7 +173,8 @@ describe("catalogue", () => {
       catalogue: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -225,7 +227,8 @@ describe("catalogue", () => {
       catalogue: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -258,7 +261,8 @@ describe("catalogue", () => {
       catalogue: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -284,7 +288,8 @@ describe("catalogue", () => {
       catalogue: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -353,7 +358,8 @@ describe("catalogue", () => {
       catalogue: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -379,7 +385,8 @@ describe("catalogue", () => {
       catalogue: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -450,7 +457,8 @@ describe("catalogue", () => {
       catalogue: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -498,8 +506,9 @@ describe("catalogue", () => {
       catalogue: {
         total: 1,
         updated: 1,
-        ignored: 0,
-        failed: 1,
+        unknown: 0,
+        anomalies: 1,
+        failed: 0,
       },
     });
   });
@@ -529,7 +538,44 @@ describe("catalogue", () => {
       catalogue: {
         total: 1,
         updated: 1,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
+        failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on peut collecter des emails multiples", async () => {
+    await importOrganismesForTest();
+    let source = createSource("catalogue");
+    mockApis({
+      formation: {
+        email: "robert@formation.fr##henri@formation.fr",
+        etablissement_gestionnaire_siret: "11111111100006",
+      },
+    });
+
+    let stats = await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    assert.deepStrictEqual(found.contacts, [
+      {
+        email: "henri@formation.fr",
+        confirmé: false,
+        sources: ["catalogue"],
+      },
+      {
+        email: "robert@formation.fr",
+        confirmé: false,
+        sources: ["catalogue"],
+      },
+    ]);
+    assert.deepStrictEqual(stats, {
+      catalogue: {
+        total: 1,
+        updated: 1,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });
@@ -548,7 +594,8 @@ describe("catalogue", () => {
       catalogue: {
         total: 0,
         updated: 0,
-        ignored: 0,
+        unknown: 0,
+        anomalies: 0,
         failed: 0,
       },
     });

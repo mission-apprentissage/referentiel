@@ -101,15 +101,17 @@ async function buildLieuDeFormation(formation, getAdresseFromCoordinates) {
   }
 }
 
-function buildContact(formation) {
+function buildContacts(formation) {
   if (!formation.email) {
     return null;
   }
 
-  return {
-    email: formation.email,
-    confirmé: false,
-  };
+  return formation.email.split("##").map((email) => {
+    return {
+      email,
+      confirmé: false,
+    };
+  });
 }
 
 module.exports = (custom = {}) => {
@@ -128,9 +130,9 @@ module.exports = (custom = {}) => {
         statuts,
       };
 
-      let contact = buildContact(formation);
-      if (contact) {
-        res.contacts.push(contact);
+      let contacts = buildContacts(formation);
+      if (contacts) {
+        res.contacts = contacts;
       }
 
       let relation = buildRelation(formation, statuts);

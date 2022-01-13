@@ -3,7 +3,10 @@ const { configureIndexes, configureValidation, dbCollection } = require("../comm
 const VERSION = 2;
 
 async function _tasks() {
-  await dbCollection("organismes").updateMany({}, { $rename: { "_meta.created_at": "_meta.import_date" } });
+  await dbCollection("organismes").updateMany(
+    {},
+    { $rename: { "_meta.created_at": "_meta.import_date" }, $pull: { contacts: { email: /##/ } } }
+  );
 }
 
 async function _ensureMigrationCanBeRun() {
