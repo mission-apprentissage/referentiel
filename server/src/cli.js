@@ -14,6 +14,7 @@ const consolidate = require("./jobs/consolidate");
 const { oleoduc } = require("oleoduc");
 const generateMagicLinks = require("./jobs/generateMagicLinks");
 const writeToStdout = require("oleoduc/lib/writeToStdout");
+const exportOrganismes = require("./jobs/exportOrganismes");
 
 cli
   .command("build")
@@ -73,14 +74,28 @@ cli
     });
   });
 
-cli.command("experimentation", "Commandes qui concernent les expérimentations avec les régions tests", {
-  executableFile: "jobs/experimentation/experimentationCli.js",
-});
-
 cli.command("consolidate").action(() => {
   runScript(() => {
     return consolidate();
   });
+});
+
+cli
+  .command("exportOrganismes")
+  .description("Exporte la liste des organismes")
+  .option("--filter <filter>", "Filtre au format json", JSON.parse)
+  .option("--limit <limit>", "Nombre maximum d'éléments à exporter", parseInt)
+  .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
+  .action(({ filter, limit, out }) => {
+    runScript(async () => {
+      let options = { filter, limit };
+      let stream = await exportOrganismes(options);
+      return oleoduc(stream, out || writeToStdout());
+    });
+  });
+
+cli.command("experimentation", "Commandes qui concernent les expérimentations avec les régions tests", {
+  executableFile: "jobs/experimentation/experimentationCli.js",
 });
 
 cli
