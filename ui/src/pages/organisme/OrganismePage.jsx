@@ -16,7 +16,7 @@ export const OrganismeContext = createContext(null);
 export function OrganismeTitle() {
   let { organisme } = useContext(OrganismeContext);
 
-  return <span>{organisme.raison_sociale}</span>;
+  return <span>{organisme.enseigne || organisme.raison_sociale}</span>;
 }
 
 export default function OrganismePage() {

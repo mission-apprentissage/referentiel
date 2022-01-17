@@ -36,7 +36,7 @@ export function Immatriculation({ organisme }) {
           <Field label={"SIRET"} className={"fr-mr-1w xfr-display-inline-block"} value={organisme.siret} />
           <Field
             className={"xfr-display-inline-block"}
-            value={`(${organisme.etat_administratif === "actif" ? "en activité" : "fermé"})`}
+            value={organisme.etat_administratif === "actif" ? "en activité" : "fermé"}
           />
           <Field label={"NDA"} value={organisme.numero_declaration_activite} />
           <Field label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
@@ -44,7 +44,8 @@ export function Immatriculation({ organisme }) {
       </GridRow>
       <GridRow className={"fr-mt-5w"}>
         <Col>
-          <Field label={"Raison sociale"} value={organisme.enseigne || organisme.raison_sociale} />
+          <Field label={"Enseigne"} value={organisme.enseigne} />
+          <Field label={"Raison sociale"} value={organisme.raison_sociale} />
           <Field label={"Adresse"} value={adresse} />
           <Field label={"Région"} value={organisme.adresse?.region?.nom} />
           <Field label={"Académie"} value={organisme.adresse?.academie?.nom} />
