@@ -37,21 +37,15 @@ module.exports = () => {
     };
   }
 
-  function mapTypesToQuery(types) {
-    return {
-      $or: types.map((type) => {
-        switch (type) {
-          case "of-cfa":
-            return { natures: { $all: ["responsable", "formateur"] } };
-          case "ufa":
-            return { natures: ["formateur"] };
-          case "entite-administrative":
-            return { natures: ["responsable"] };
-          default:
-            throw Boom.badRequest(`${type} inconnu`);
-        }
-      }),
-    };
+  function convertNaturesIntoQuery(criteria) {
+    return criteria.reduce(
+      (acc, c) => {
+        let results = c.split("|").filter((v) => !v.startsWith("-"));
+        acc.$or.push(results.length > 1 ? { natures: { $all: results } } : { natures: results });
+        return acc;
+      },
+      { $or: [] }
+    );
   }
 
   function buildQuery(params) {
@@ -60,7 +54,6 @@ module.exports = () => {
       uai,
       departements = [],
       natures = [],
-      types = [],
       region,
       academie,
       text,
@@ -80,8 +73,7 @@ module.exports = () => {
           : { numero_declaration_activite: nda }
         : {}),
       ...(departements.length === 0 ? {} : { "adresse.departement.code": { $in: departements } }),
-      ...(natures.length === 0 ? {} : { natures: { $in: natures } }),
-      ...(types.length === 0 ? {} : mapTypesToQuery(types)),
+      ...(natures.length === 0 ? {} : convertNaturesIntoQuery(natures)),
       ...(etat_administratif ? { etat_administratif: etat_administratif } : {}),
       ...(region ? { "adresse.region.code": region } : {}),
       ...(academie ? { "adresse.academie.code": academie } : {}),
@@ -109,16 +101,14 @@ module.exports = () => {
           .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
           .default(null),
         numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
-        natures: arrayOf(Joi.string().valid("responsable", "formateur")).default([]),
+        natures: arrayOf(Joi.string()).default([]),
         etat_administratif: Joi.string().valid("actif", "fermé"),
         region: Joi.string().valid(...getRegions().map((r) => r.code)),
         academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
         departements: arrayOf(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         anomalies: Joi.boolean().default(null),
         qualiopi: Joi.boolean().default(null),
-        types: arrayOf(Joi.string().valid("of-cfa", "ufa", "entite-administrative")),
         text: Joi.string(),
-        //Misc
         ...validators.champs(),
         ...validators.pagination(),
         ...validators.tri(),

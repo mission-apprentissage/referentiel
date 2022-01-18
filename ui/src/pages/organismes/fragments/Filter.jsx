@@ -70,15 +70,16 @@ export function DepartementsFilter() {
   );
 }
 
-export function TypeFilter() {
+export function NatureFilter() {
   return (
     <Filter
-      label={"Type"}
-      paramName={"types"}
+      label={"Nature"}
+      paramName={"natures"}
       items={[
-        { code: "of-cfa", label: "OF-CFA" },
-        { code: "ufa", label: "UFA" },
-        { code: "entite-administrative", label: "Entité administratrive" },
+        { code: "formateur|responsable", label: "Responsable et formateur" },
+        { code: "formateur|-responsable", label: "Formateur" },
+        { code: "-formateur|responsable", label: "Responsable" },
+        { code: "-formateur|-responsable", label: "N.A" },
       ]}
     />
   );
@@ -87,7 +88,7 @@ export function TypeFilter() {
 export function NdaFilter() {
   return (
     <Filter
-      label={"Déclaré datagouv"}
+      label={"Déclaré en tant qu'Organisme Formateur"}
       paramName={"numero_declaration_activite"}
       items={[
         { code: "true", label: "Oui" },

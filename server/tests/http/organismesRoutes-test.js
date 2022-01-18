@@ -4,7 +4,6 @@ const { startServer, generateAuthHeader } = require("../utils/testUtils");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const assert = require("assert");
 const { omitDeep } = require("../../src/common/utils/objectUtils");
-const { sortBy } = require("lodash");
 
 describe("organismesRoutes", () => {
   it("Vérifie qu'on peut lister des organismes", async () => {
@@ -460,7 +459,7 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes.length, 2);
   });
 
-  it("Vérifie qu'on peut rechercher des organismes à partir d'un statut", async () => {
+  it("Vérifie qu'on peut rechercher des organismes à partir d'une nature", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
@@ -478,6 +477,24 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].siret, "22222222200002");
   });
 
+  it("Vérifie qu'on peut rechercher des organismes responsable et formateur à partir de sa nature", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100001",
+      natures: ["responsable", "formateur"],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      natures: ["formateur"],
+    });
+
+    let response = await httpClient.get("/api/v1/organismes?natures=formateur|responsable");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100001");
+  });
+
   it("Vérifie qu'on peut rechercher des organismes à partir de plusieurs natures", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
@@ -493,52 +510,34 @@ describe("organismesRoutes", () => {
       natures: ["formateur"],
     });
 
-    let response = await httpClient.get("/api/v1/organismes?natures=responsable,formateur");
-
-    strictEqual(response.status, 200);
-    strictEqual(response.data.organismes.length, 3);
-  });
-
-  it("Vérifie qu'on peut rechercher des organismes à partir d'un type", async () => {
-    const { httpClient } = await startServer();
-    await insertOrganisme({
-      siret: "11111111100001",
-      natures: ["responsable", "formateur"],
-    });
-    await insertOrganisme({
-      siret: "22222222200002",
-      natures: ["formateur"],
-    });
-
-    let response = await httpClient.get("/api/v1/organismes?types=of-cfa");
-
-    strictEqual(response.status, 200);
-    strictEqual(response.data.organismes.length, 1);
-    strictEqual(response.data.organismes[0].siret, "11111111100001");
-  });
-
-  it("Vérifie qu'on peut rechercher des organismes à partir de plusieurs types", async () => {
-    const { httpClient } = await startServer();
-    await insertOrganisme({
-      siret: "11111111100001",
-      natures: ["responsable", "formateur"],
-    });
-    await insertOrganisme({
-      siret: "22222222200002",
-      natures: ["formateur"],
-    });
-    await insertOrganisme({
-      siret: "333333333000003",
-      natures: ["responsable"],
-    });
-
-    let response = await httpClient.get("/api/v1/organismes?types=of-cfa,ufa");
+    let response = await httpClient.get("/api/v1/organismes?natures=formateur|-responsable,-formateur|responsable");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 2);
-    let organismes = sortBy(response.data.organismes, ["siret"]);
-    strictEqual(organismes[0].siret, "11111111100001");
-    strictEqual(organismes[1].siret, "22222222200002");
+    ok(response.data.organismes.find((o) => o.siret === "11111111100001"));
+    ok(response.data.organismes.find((o) => o.siret === "333333333000003"));
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes sans nature", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100001",
+      natures: [],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      natures: ["responsable", "formateur"],
+    });
+    await insertOrganisme({
+      siret: "333333333000003",
+      natures: ["formateur"],
+    });
+
+    let response = await httpClient.get("/api/v1/organismes?natures=-formateur|-responsable");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    ok(response.data.organismes.find((o) => o.siret === "11111111100001"));
   });
 
   it("Vérifie qu'on peut limiter les champs renvoyés pour la liste des organismes", async () => {

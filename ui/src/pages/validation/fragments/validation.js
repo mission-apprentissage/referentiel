@@ -13,7 +13,7 @@ export function getValidationType(organisme) {
 }
 
 export function buildValidationParams(type) {
-  let params = { etat_administratif: "actif", qualiopi: true, types: "of-cfa" };
+  let params = { etat_administratif: "actif", qualiopi: true, natures: "formateur|responsable" };
   switch (type) {
     case "A_VALIDER":
       return { ...params, uai: false, uai_potentiels: true };
