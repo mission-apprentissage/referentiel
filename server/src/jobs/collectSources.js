@@ -129,7 +129,7 @@ module.exports = async (array, options = {}) => {
       certifications = [],
       lieux_de_formation = [],
       data = {},
-      statuts = [],
+      natures = [],
       anomalies = [],
     } = res;
 
@@ -166,8 +166,8 @@ module.exports = async (array, options = {}) => {
           reseaux: {
             $each: reseaux,
           },
-          statuts: {
-            $each: statuts,
+          natures: {
+            $each: natures,
           },
         },
       });

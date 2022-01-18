@@ -29,7 +29,7 @@ function mockApis(custom = {}) {
 }
 
 describe("catalogue", () => {
-  it("Vérifie qu'on peut collecter les statuts", async () => {
+  it("Vérifie qu'on peut collecter les natures", async () => {
     await importOrganismesForTest([{ siret: "11111111100006" }, { siret: "22222222200002" }]);
     let source = createSource("catalogue");
     mockApis({
@@ -44,10 +44,10 @@ describe("catalogue", () => {
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found.statuts, ["responsable"]);
+    assert.deepStrictEqual(found.natures, ["responsable"]);
 
     found = await dbCollection("organismes").findOne({ siret: "22222222200002" });
-    assert.deepStrictEqual(found.statuts, ["formateur"]);
+    assert.deepStrictEqual(found.natures, ["formateur"]);
     assert.deepStrictEqual(stats, {
       catalogue: {
         total: 2,
@@ -59,7 +59,7 @@ describe("catalogue", () => {
     });
   });
 
-  it("Vérifie qu'on peut collecter les statuts responsable et formateur", async () => {
+  it("Vérifie qu'on peut collecter les natures responsable et formateur", async () => {
     await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
@@ -74,7 +74,7 @@ describe("catalogue", () => {
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found.statuts, ["responsable", "formateur"]);
+    assert.deepStrictEqual(found.natures, ["responsable", "formateur"]);
   });
 
   it("Vérifie qu'on peut collecter des relations (formateur)", async () => {

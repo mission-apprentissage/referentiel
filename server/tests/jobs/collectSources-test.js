@@ -540,37 +540,37 @@ describe("collectSources", () => {
     assert.deepStrictEqual(found.reseaux, ["test"]);
   });
 
-  it("Vérifie qu'on peut collecter des statuts", async () => {
+  it("Vérifie qu'on peut collecter des natures", async () => {
     await insertOrganisme({ siret: "11111111100006" });
     let source = createTestSource([
       {
         selector: "11111111100006",
-        statuts: ["responsable"],
+        natures: ["responsable"],
       },
     ]);
 
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({}, { _id: 0 });
-    assert.deepStrictEqual(found.statuts, ["responsable"]);
+    assert.deepStrictEqual(found.natures, ["responsable"]);
   });
 
-  it("Vérifie qu'on ne duplique pas les statuts", async () => {
+  it("Vérifie qu'on ne duplique pas les natures", async () => {
     await insertOrganisme({
       siret: "11111111100006",
-      statuts: ["responsable"],
+      natures: ["responsable"],
     });
     let source = createTestSource([
       {
         selector: "11111111100006",
-        statuts: ["responsable"],
+        natures: ["responsable"],
       },
     ]);
 
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found.statuts, ["responsable"]);
+    assert.deepStrictEqual(found.natures, ["responsable"]);
   });
 
   it("Vérifie qu'on peut filter par siret", async () => {

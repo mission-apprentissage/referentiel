@@ -11,7 +11,7 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      statuts: ["responsable", "formateur"],
+      natures: ["responsable", "formateur"],
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
@@ -32,7 +32,7 @@ describe("organismesRoutes", () => {
           relations: [],
           lieux_de_formation: [],
           reseaux: [],
-          statuts: ["responsable", "formateur"],
+          natures: ["responsable", "formateur"],
           diplomes: [],
           certifications: [],
           siege_social: true,
@@ -464,36 +464,36 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      statuts: ["responsable"],
+      natures: ["responsable"],
     });
     await insertOrganisme({
       siret: "22222222200002",
-      statuts: ["formateur"],
+      natures: ["formateur"],
     });
 
-    let response = await httpClient.get("/api/v1/organismes?statuts=formateur");
+    let response = await httpClient.get("/api/v1/organismes?natures=formateur");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
     strictEqual(response.data.organismes[0].siret, "22222222200002");
   });
 
-  it("Vérifie qu'on peut rechercher des organismes à partir de plusieurs statuts", async () => {
+  it("Vérifie qu'on peut rechercher des organismes à partir de plusieurs natures", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      statuts: ["responsable"],
+      natures: ["responsable"],
     });
     await insertOrganisme({
       siret: "22222222200002",
-      statuts: ["responsable", "formateur"],
+      natures: ["responsable", "formateur"],
     });
     await insertOrganisme({
       siret: "333333333000003",
-      statuts: ["formateur"],
+      natures: ["formateur"],
     });
 
-    let response = await httpClient.get("/api/v1/organismes?statuts=responsable,formateur");
+    let response = await httpClient.get("/api/v1/organismes?natures=responsable,formateur");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 3);
@@ -503,11 +503,11 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      statuts: ["responsable", "formateur"],
+      natures: ["responsable", "formateur"],
     });
     await insertOrganisme({
       siret: "22222222200002",
-      statuts: ["formateur"],
+      natures: ["formateur"],
     });
 
     let response = await httpClient.get("/api/v1/organismes?types=of-cfa");
@@ -521,15 +521,15 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      statuts: ["responsable", "formateur"],
+      natures: ["responsable", "formateur"],
     });
     await insertOrganisme({
       siret: "22222222200002",
-      statuts: ["formateur"],
+      natures: ["formateur"],
     });
     await insertOrganisme({
       siret: "333333333000003",
-      statuts: ["responsable"],
+      natures: ["responsable"],
     });
 
     let response = await httpClient.get("/api/v1/organismes?types=of-cfa,ufa");
@@ -725,7 +725,7 @@ describe("organismesRoutes", () => {
       contacts: [],
       relations: [],
       reseaux: [],
-      statuts: [],
+      natures: [],
       lieux_de_formation: [],
       diplomes: [],
       certifications: [],
@@ -833,7 +833,7 @@ describe("organismesRoutes", () => {
       relations: [],
       lieux_de_formation: [],
       reseaux: [],
-      statuts: [],
+      natures: [],
       diplomes: [],
       certifications: [],
       siege_social: true,

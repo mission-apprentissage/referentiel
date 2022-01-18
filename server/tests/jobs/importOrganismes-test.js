@@ -30,7 +30,7 @@ describe("importOrganismes", () => {
       referentiels: ["dummy"],
       uai_potentiels: [],
       reseaux: [],
-      statuts: [],
+      natures: [],
       contacts: [],
       relations: [],
       lieux_de_formation: [],

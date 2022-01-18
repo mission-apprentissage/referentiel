@@ -3,7 +3,8 @@ const { configureIndexes, configureValidation, dbCollection } = require("../comm
 const VERSION = 3;
 
 async function _tasks() {
-  await dbCollection("organismes").updateMany({ statuts: "gestionnaire" }, { $set: { "statuts.$": "responsable" } });
+  await dbCollection("organismes").updateMany({}, { $rename: { statuts: "natures" } });
+  await dbCollection("organismes").updateMany({ natures: "gestionnaire" }, { $set: { "natures.$": "responsable" } });
   await dbCollection("organismes").updateMany(
     { "relations.type": "gestionnaire" },
     { $set: { "relations.$[q].type": "responsable" } },

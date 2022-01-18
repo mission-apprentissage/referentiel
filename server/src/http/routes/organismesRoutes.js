@@ -42,11 +42,11 @@ module.exports = () => {
       $or: types.map((type) => {
         switch (type) {
           case "of-cfa":
-            return { statuts: { $all: ["responsable", "formateur"] } };
+            return { natures: { $all: ["responsable", "formateur"] } };
           case "ufa":
-            return { statuts: ["formateur"] };
+            return { natures: ["formateur"] };
           case "entite-administrative":
-            return { statuts: ["responsable"] };
+            return { natures: ["responsable"] };
           default:
             throw Boom.badRequest(`${type} inconnu`);
         }
@@ -59,7 +59,7 @@ module.exports = () => {
       siret,
       uai,
       departements = [],
-      statuts = [],
+      natures = [],
       types = [],
       region,
       academie,
@@ -80,7 +80,7 @@ module.exports = () => {
           : { numero_declaration_activite: nda }
         : {}),
       ...(departements.length === 0 ? {} : { "adresse.departement.code": { $in: departements } }),
-      ...(statuts.length === 0 ? {} : { statuts: { $in: statuts } }),
+      ...(natures.length === 0 ? {} : { natures: { $in: natures } }),
       ...(types.length === 0 ? {} : mapTypesToQuery(types)),
       ...(etat_administratif ? { etat_administratif: etat_administratif } : {}),
       ...(region ? { "adresse.region.code": region } : {}),
@@ -109,7 +109,7 @@ module.exports = () => {
           .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
           .default(null),
         numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
-        statuts: arrayOf(Joi.string().valid("responsable", "formateur")).default([]),
+        natures: arrayOf(Joi.string().valid("responsable", "formateur")).default([]),
         etat_administratif: Joi.string().valid("actif", "fermé"),
         region: Joi.string().valid(...getRegions().map((r) => r.code)),
         academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
