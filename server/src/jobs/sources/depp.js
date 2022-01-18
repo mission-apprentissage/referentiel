@@ -1,5 +1,5 @@
 const { compose, transformData } = require("oleoduc");
-const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
+const { getFromStorage } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
 
 module.exports = (custom = {}) => {
@@ -8,7 +8,7 @@ module.exports = (custom = {}) => {
   return {
     name,
     async stream() {
-      let input = custom.input || (await getOvhFileAsStream("annuaire/DEPP-CFASousConvRegionale_17122020_1.csv"));
+      let input = custom.input || (await getFromStorage("DEPP-CFASousConvRegionale_17122020_1.csv"));
 
       return compose(
         input,

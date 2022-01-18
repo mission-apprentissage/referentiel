@@ -1,8 +1,9 @@
+// eslint-disable-next-line node/no-extraneous-require
 const axios = require("axios");
 const config = require("../../config");
 const { getFileAsStream } = require("./httpUtils");
 
-let getAuth = async (uri) => {
+async function authenticate(uri) {
   let regExp = new RegExp(/^(https:\/\/)(.+):(.+):(.+)@(.*)$/);
 
   if (!regExp.test(uri)) {
@@ -30,18 +31,26 @@ let getAuth = async (uri) => {
 
   let token = response.headers["x-subject-token"];
   let { endpoints } = response.data.token.catalog.find((c) => c.type === "object-store");
-  let { url } = endpoints.find((s) => s.region === "GRA");
+  let { url: baseUrl } = endpoints.find((s) => s.region === "GRA");
 
-  return { token, baseUrl: url };
-};
+  return { baseUrl, token };
+}
+
+async function requestObjectAccess(path, options = {}) {
+  let storage = options.storage || config.ovh.storage.storageName;
+  let { baseUrl, token } = await authenticate(config.ovh.storage.uri);
+
+  return {
+    url: encodeURI(`${baseUrl}/${storage}${path === "/" ? "" : `/${path}`}`),
+    token,
+  };
+}
 
 module.exports = {
-  getOvhFileAsStream: async (relativePath, options = {}) => {
-    let storage = options.storage || "mna-tables-correspondances";
-    let { token, baseUrl } = await getAuth(config.ovh.storage.uri);
-
-    let fullPath = encodeURI(`${baseUrl}/${storage}/${relativePath}`);
-    return getFileAsStream(fullPath, {
+  getFromStorage: async (path, options = {}) => {
+    let { url, token } = await requestObjectAccess(path, options);
+    return getFileAsStream(url, {
+      method: "GET",
       headers: {
         "X-Auth-Token": token,
         Accept: "application/json",

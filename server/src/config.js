@@ -19,6 +19,7 @@ module.exports = {
   ovh: {
     storage: {
       uri: env.get("REFERENTIEL_OVH_STORAGE_URI").asString(),
+      storageName: env.get("REFERENTIEL_OVH_STORAGE_NAME").default("mna-referentiel").asString(),
     },
   },
   sentry: {

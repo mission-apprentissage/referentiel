@@ -1,6 +1,6 @@
 const { compose, transformData } = require("oleoduc");
 const { decodeStream } = require("iconv-lite");
-const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
+const { getFromStorage } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
 
 module.exports = (custom = {}) => {
@@ -9,8 +9,7 @@ module.exports = (custom = {}) => {
     name,
     async stream() {
       let input =
-        custom.input ||
-        (await getOvhFileAsStream("cfas-clients-erps/referentielCfas_gesti.csv", { storage: "mna-flux" }));
+        custom.input || (await getFromStorage("cfas-clients-erps/referentielCfas_gesti.csv", { storage: "mna-flux" }));
 
       return compose(
         input,

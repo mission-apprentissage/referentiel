@@ -1,10 +1,10 @@
 const { compose, transformData, oleoduc, accumulateData, writeData, filterData } = require("oleoduc");
 const { parseCsv } = require("../../common/utils/csvUtils");
-const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
+const { getFromStorage } = require("../../common/utils/ovhUtils");
 
 async function getListePubliqueDesOrganismesDeFormationAsStream(options = {}) {
   //await getFileAsStream("https://www.monactiviteformation.emploi.gouv.fr/mon-activite-formation/public/listePubliqueOF?format=csv")
-  let stream = options.input || (await getOvhFileAsStream("annuaire/public_ofs_latest.csv"));
+  let stream = options.input || (await getFromStorage("public_ofs_latest.csv"));
 
   return compose(
     stream,

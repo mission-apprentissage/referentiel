@@ -1,5 +1,5 @@
 const { compose, transformData, mergeStreams } = require("oleoduc");
-const { getOvhFileAsStream } = require("../../common/utils/ovhUtils");
+const { getFromStorage } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
 
 function readCSV(stream) {
@@ -21,8 +21,8 @@ function readCSV(stream) {
 
 async function defaultStream() {
   return mergeStreams([
-    readCSV(await getOvhFileAsStream("annuaire/ONISEP-ideo-structures_denseignement_secondaire.csv")),
-    readCSV(await getOvhFileAsStream("annuaire/ONISEP-ideo-structures_denseignement_superieur.csv")),
+    readCSV(await getFromStorage("ONISEP-ideo-structures_denseignement_secondaire.csv")),
+    readCSV(await getFromStorage("ONISEP-ideo-structures_denseignement_superieur.csv")),
   ]);
 }
 
