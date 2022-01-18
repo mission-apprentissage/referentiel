@@ -59,7 +59,7 @@ module.exports = (custom = {}) => {
                   : [
                       {
                         siret: siretGestionnaire,
-                        type: "gestionnaire",
+                        type: "responsable",
                         ...(cfaGestionnaire ? { label: cfaGestionnaire } : {}),
                       },
                     ]),

@@ -44,7 +44,7 @@ describe("catalogue", () => {
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found.statuts, ["gestionnaire"]);
+    assert.deepStrictEqual(found.statuts, ["responsable"]);
 
     found = await dbCollection("organismes").findOne({ siret: "22222222200002" });
     assert.deepStrictEqual(found.statuts, ["formateur"]);
@@ -59,7 +59,7 @@ describe("catalogue", () => {
     });
   });
 
-  it("Vérifie qu'on peut collecter les statuts gestionnaire et formateur", async () => {
+  it("Vérifie qu'on peut collecter les statuts responsable et formateur", async () => {
     await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
@@ -74,7 +74,7 @@ describe("catalogue", () => {
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found.statuts, ["gestionnaire", "formateur"]);
+    assert.deepStrictEqual(found.statuts, ["responsable", "formateur"]);
   });
 
   it("Vérifie qu'on peut collecter des relations (formateur)", async () => {
@@ -103,7 +103,7 @@ describe("catalogue", () => {
     ]);
   });
 
-  it("Vérifie qu'on peut collecter des relations (gestionnaire)", async () => {
+  it("Vérifie qu'on peut collecter des relations (responsable)", async () => {
     await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
@@ -123,13 +123,13 @@ describe("catalogue", () => {
         siret: "22222222200002",
         label: "Entreprise",
         referentiel: false,
-        type: "gestionnaire",
+        type: "responsable",
         sources: ["catalogue"],
       },
     ]);
   });
 
-  it("Vérifie qu'on peut ignore les relations quand l'établisssement est gestionnaire et formateur", async () => {
+  it("Vérifie qu'on peut ignore les relations quand l'établisssement est responsable et formateur", async () => {
     await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
@@ -208,7 +208,7 @@ describe("catalogue", () => {
     ]);
   });
 
-  it("Vérifie qu'on ne collecte pas de diplômes pour les organismes gestionnaire", async () => {
+  it("Vérifie qu'on ne collecte pas de diplômes pour les organismes responsables", async () => {
     await importOrganismesForTest([{ siret: "11111111100006" }]);
     let source = createSource("catalogue");
     mockApis({
@@ -268,7 +268,7 @@ describe("catalogue", () => {
     });
   });
 
-  it("Vérifie qu'on ne collecte pas de certifications pour les organismes gestionnaire", async () => {
+  it("Vérifie qu'on ne collecte pas de certifications pour les organismes responsables", async () => {
     await importOrganismesForTest([{ siret: "11111111100006" }]);
     let source = createSource("catalogue");
     mockApis({
@@ -365,7 +365,7 @@ describe("catalogue", () => {
     });
   });
 
-  it("Vérifie qu'on ne collecte pas des lieux de formation pour les organismes gestionnaire", async () => {
+  it("Vérifie qu'on ne collecte pas des lieux de formation pour les organismes responsables", async () => {
     await importOrganismesForTest([{ siret: "11111111100006" }]);
     let source = createSource("catalogue");
     mockApis({

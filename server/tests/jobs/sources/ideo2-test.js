@@ -30,7 +30,7 @@ describe("ideo2", () => {
     assert.deepStrictEqual(omit(found.relations[0], ["label"]), {
       siret: "11111111100006",
       referentiel: true,
-      type: "gestionnaire",
+      type: "responsable",
       sources: ["ideo2"],
     });
   });

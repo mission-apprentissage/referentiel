@@ -11,7 +11,7 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      statuts: ["gestionnaire", "formateur"],
+      statuts: ["responsable", "formateur"],
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
@@ -32,7 +32,7 @@ describe("organismesRoutes", () => {
           relations: [],
           lieux_de_formation: [],
           reseaux: [],
-          statuts: ["gestionnaire", "formateur"],
+          statuts: ["responsable", "formateur"],
           diplomes: [],
           certifications: [],
           siege_social: true,
@@ -464,7 +464,7 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      statuts: ["gestionnaire"],
+      statuts: ["responsable"],
     });
     await insertOrganisme({
       siret: "22222222200002",
@@ -482,18 +482,18 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      statuts: ["gestionnaire"],
+      statuts: ["responsable"],
     });
     await insertOrganisme({
       siret: "22222222200002",
-      statuts: ["gestionnaire", "formateur"],
+      statuts: ["responsable", "formateur"],
     });
     await insertOrganisme({
       siret: "333333333000003",
       statuts: ["formateur"],
     });
 
-    let response = await httpClient.get("/api/v1/organismes?statuts=gestionnaire,formateur");
+    let response = await httpClient.get("/api/v1/organismes?statuts=responsable,formateur");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 3);
@@ -503,7 +503,7 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      statuts: ["gestionnaire", "formateur"],
+      statuts: ["responsable", "formateur"],
     });
     await insertOrganisme({
       siret: "22222222200002",
@@ -521,7 +521,7 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      statuts: ["gestionnaire", "formateur"],
+      statuts: ["responsable", "formateur"],
     });
     await insertOrganisme({
       siret: "22222222200002",
@@ -529,7 +529,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme({
       siret: "333333333000003",
-      statuts: ["gestionnaire"],
+      statuts: ["responsable"],
     });
 
     let response = await httpClient.get("/api/v1/organismes?types=of-cfa,ufa");

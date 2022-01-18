@@ -338,7 +338,7 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        relations: [{ siret: "22222222200002", referentiel: false, label: "test", type: "gestionnaire" }],
+        relations: [{ siret: "22222222200002", referentiel: false, label: "test", type: "responsable" }],
       },
     ]);
 
@@ -437,9 +437,7 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        relations: [
-          { siret: "22222222200002", referentiel: false, label: "Centre de formation", type: "gestionnaire" },
-        ],
+        relations: [{ siret: "22222222200002", referentiel: false, label: "Centre de formation", type: "responsable" }],
       },
     ]);
 
@@ -451,7 +449,7 @@ describe("collectSources", () => {
         siret: "22222222200002",
         referentiel: false,
         label: "Centre de formation",
-        type: "gestionnaire",
+        type: "responsable",
         sources: ["dummy"],
       },
     ]);
@@ -465,7 +463,7 @@ describe("collectSources", () => {
           siret: "22222222200002",
           referentiel: false,
           label: "test",
-          type: "gestionnaire",
+          type: "responsable",
           sources: ["other"],
         },
       ],
@@ -473,7 +471,7 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        relations: [{ siret: "22222222200002", referentiel: false, label: "test", type: "gestionnaire" }],
+        relations: [{ siret: "22222222200002", referentiel: false, label: "test", type: "responsable" }],
       },
     ]);
 
@@ -482,7 +480,7 @@ describe("collectSources", () => {
     let found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.strictEqual(found.relations.length, 1);
     assert.strictEqual(found.relations[0].siret, "22222222200002");
-    assert.strictEqual(found.relations[0].type, "gestionnaire");
+    assert.strictEqual(found.relations[0].type, "responsable");
     assert.deepStrictEqual(found.relations[0].sources, ["other", "dummy"]);
   });
 
@@ -547,32 +545,32 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        statuts: ["gestionnaire"],
+        statuts: ["responsable"],
       },
     ]);
 
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({}, { _id: 0 });
-    assert.deepStrictEqual(found.statuts, ["gestionnaire"]);
+    assert.deepStrictEqual(found.statuts, ["responsable"]);
   });
 
   it("Vérifie qu'on ne duplique pas les statuts", async () => {
     await insertOrganisme({
       siret: "11111111100006",
-      statuts: ["gestionnaire"],
+      statuts: ["responsable"],
     });
     let source = createTestSource([
       {
         selector: "11111111100006",
-        statuts: ["gestionnaire"],
+        statuts: ["responsable"],
       },
     ]);
 
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found.statuts, ["gestionnaire"]);
+    assert.deepStrictEqual(found.statuts, ["responsable"]);
   });
 
   it("Vérifie qu'on peut filter par siret", async () => {

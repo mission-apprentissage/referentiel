@@ -1,11 +1,19 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
 
-const VERSION = 2;
+const VERSION = 3;
 
 async function _tasks() {
+  await dbCollection("organismes").updateMany({ statuts: "gestionnaire" }, { $set: { "statuts.$": "responsable" } });
   await dbCollection("organismes").updateMany(
-    {},
-    { $rename: { "_meta.created_at": "_meta.import_date" }, $pull: { contacts: { email: /##/ } } }
+    { "relations.type": "gestionnaire" },
+    { $set: { "relations.$[q].type": "responsable" } },
+    {
+      arrayFilters: [
+        {
+          "q.type": "gestionnaire",
+        },
+      ],
+    }
   );
 }
 

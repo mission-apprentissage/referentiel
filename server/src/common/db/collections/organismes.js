@@ -25,7 +25,7 @@ module.exports = {
         siege_social: boolean(),
         numero_declaration_activite: string(),
         etat_administratif: string({ enum: ["actif", "fermé"] }),
-        statuts: arrayOf(string({ enum: ["gestionnaire", "formateur"] })),
+        statuts: arrayOf(string({ enum: ["gestionnaire", "responsable", "formateur"] })),
         adresse: adresseSchema,
         forme_juridique: object(
           {
@@ -64,7 +64,7 @@ module.exports = {
               siret: string(),
               referentiel: boolean(),
               label: string(),
-              type: string({ enum: ["formateur", "gestionnaire"] }),
+              type: string({ enum: ["gestionnaire", "responsable", "formateur"] }),
               sources: arrayOf(string()),
             },
             { required: ["siret", "referentiel", "sources"] }

@@ -38,11 +38,11 @@ function buildRelation(formation, statuts) {
     return null;
   }
 
-  let isGestionnaire = statuts.includes("gestionnaire");
+  let isReponsable = statuts.includes("responsable");
   return omitEmpty({
-    type: isGestionnaire ? "formateur" : "gestionnaire",
-    siret: isGestionnaire ? formation.etablissement_formateur_siret : formation.etablissement_gestionnaire_siret,
-    label: isGestionnaire
+    type: isReponsable ? "formateur" : "responsable",
+    siret: isReponsable ? formation.etablissement_formateur_siret : formation.etablissement_gestionnaire_siret,
+    label: isReponsable
       ? formation.etablissement_formateur_entreprise_raison_sociale
       : formation.etablissement_gestionnaire_entreprise_raison_sociale,
   });
@@ -174,12 +174,12 @@ module.exports = (custom = {}) => {
       return compose(
         fetchFormations(api, options.filters),
         transformData(async (formation) => {
-          let [formateur, gestionnaire] = await Promise.all([
+          let [formateur, responsable] = await Promise.all([
             dbCollection("organismes").findOne({ siret: formation.etablissement_formateur_siret }, { siret: 1 }),
             dbCollection("organismes").findOne({ siret: formation.etablissement_gestionnaire_siret }, { siret: 1 }),
           ]);
 
-          if (!formateur && !gestionnaire) {
+          if (!formateur && !responsable) {
             return null;
           }
 
@@ -188,16 +188,16 @@ module.exports = (custom = {}) => {
               {
                 from: "catalogue",
                 selector: formation.etablissement_formateur_siret,
-                ...(await computeData(formation, ["gestionnaire", "formateur"])),
+                ...(await computeData(formation, ["responsable", "formateur"])),
               },
             ];
           } else {
             let array = [];
-            if (gestionnaire) {
+            if (responsable) {
               array.push({
                 from: "catalogue",
-                selector: gestionnaire.siret,
-                ...(await computeData(formation, ["gestionnaire"])),
+                selector: responsable.siret,
+                ...(await computeData(formation, ["responsable"])),
               });
             }
 
