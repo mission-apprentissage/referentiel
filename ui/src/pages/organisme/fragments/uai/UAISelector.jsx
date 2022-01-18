@@ -10,7 +10,7 @@ const actions = {
   A_VALIDER: {
     actionName: "Choisir l'UAI",
     label: "à valider",
-    legend: "Quelle UAI souhaitez-vous utiliser pour immatriculer cet OF-CFA ?",
+    legend: "Quelle UAI souhaitez-vous utiliser pour immatriculer cet organisme de formation ?",
     ActionButton: function ({ label, onClick, children }) {
       return (
         <div className={"fr-mt-3w"}>
@@ -25,7 +25,7 @@ const actions = {
   A_RENSEIGNER: {
     actionName: "Renseigner une UAI",
     label: "à renseigner",
-    legend: "Quelle UAI souhaitez-vous utiliser pour immatriculer cet OF-CFA ?",
+    legend: "Quelle UAI souhaitez-vous utiliser pour immatriculer cet organisme de formation ?",
     ActionButton: function ({ label, onClick, children }) {
       return (
         <>

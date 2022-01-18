@@ -61,7 +61,7 @@ export function UAISelectorModal({ modal, organisme, action }) {
       updateOrganisme(updated, {
         message: (
           <Alert modifiers={"success"}>
-            <p>L’UAI que vous avez renseignée pour cet OF-CFA a bien été enregistré</p>
+            <p>L’UAI que vous avez renseignée pour cet organisme a bien été enregistré</p>
           </Alert>
         ),
       });

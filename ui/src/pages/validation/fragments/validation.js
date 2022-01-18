@@ -1,7 +1,7 @@
 const titles = {
-  A_VALIDER: "OF-CFA à valider",
-  A_RENSEIGNER: "OF-CFA à identifier",
-  VALIDE: "OF-CFA validés",
+  A_VALIDER: "Organismes à valider",
+  A_RENSEIGNER: "Organismes à identifier",
+  VALIDE: "Organismes validés",
 };
 
 export function getValidationTitle(type) {

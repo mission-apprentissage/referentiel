@@ -21,13 +21,13 @@ export default function TableauDeBordPage() {
       <LayoutContent>
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_VALIDER"} label={"OF-CFA à vérifier"} />
+            <ValidationCard type={"A_VALIDER"} label={"Organismes à vérifier"} />
           </Col>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_RENSEIGNER"} label={"OF-CFA à identifier"} />
+            <ValidationCard type={"A_RENSEIGNER"} label={"Organismes à identifier"} />
           </Col>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"VALIDE"} label={"OF-CFA validés"} />
+            <ValidationCard type={"VALIDE"} label={"Organismes validés"} />
           </Col>
         </GridRow>
       </LayoutContent>
