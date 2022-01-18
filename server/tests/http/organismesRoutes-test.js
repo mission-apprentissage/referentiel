@@ -552,13 +552,14 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes?champs=siret,uai");
+    let response = await httpClient.get("/api/v1/organismes?champs=siret,raison_sociale");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
       organismes: [
         {
           siret: "11111111100001",
+          raison_sociale: "Centre de formation",
         },
       ],
       pagination: {
@@ -777,30 +778,13 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes/11111111100001?champs=siret,uai");
+    let response = await httpClient.get("/api/v1/organismes/11111111100001?champs=siret,raison_sociale");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
       siret: "11111111100001",
-    });
-  });
-
-  it("Vérifie qu'on peut exclure des champs renvoyés pour un organisme", async () => {
-    const { httpClient } = await startServer();
-    await insertOrganisme({
-      siret: "11111111100001",
       raison_sociale: "Centre de formation",
-      _meta: {
-        anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
-      },
     });
-
-    let response = await httpClient.get("/api/v1/organismes/11111111100001?champs=-siret,uai");
-
-    strictEqual(response.status, 200);
-    strictEqual(response.data.siret, undefined);
-    strictEqual(response.data.uai, undefined);
   });
 
   it("Vérifie qu'on renvoie une 404 si le siret n'est pas connu", async () => {
