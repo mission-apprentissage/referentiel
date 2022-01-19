@@ -1,17 +1,8 @@
 const assert = require("assert");
-const { Readable } = require("stream");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
 const { dbCollection } = require("../../../src/common/db/mongodb");
-const { insertOrganisme } = require("../../utils/fakeData");
-
-function createAcceSource(array = {}) {
-  let ndjson = array.map((i) => `${JSON.stringify(i)}\n`);
-
-  return createSource("acce", {
-    input: Readable.from(ndjson),
-  });
-}
+const { insertOrganisme, insertAcce } = require("../../utils/fakeData");
 
 describe("acce", () => {
   it("Vérifie qu'on peut collecter des contacts", async () => {
@@ -19,13 +10,12 @@ describe("acce", () => {
       siret: "11111111100006",
       uai: "0111111Y",
     });
-    let source = createAcceSource([
-      {
-        uai: "0111111Y",
-        email: "robert@formation.fr",
-        rattachements: { fille: [], mere: [] },
-      },
-    ]);
+    await insertAcce({
+      uai: "0111111Y",
+      email: "robert@formation.fr",
+      rattachements: { fille: [], mere: [] },
+    });
+    let source = createSource("acce");
 
     let stats = await collectSources(source);
 

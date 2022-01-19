@@ -1,5 +1,5 @@
-const { compose, transformData, readLineByLine } = require("oleoduc");
-const { getFromStorage } = require("../../common/utils/ovhUtils");
+const { compose, transformData } = require("oleoduc");
+const { dbCollection } = require("../../common/db/mongodb");
 
 function buildContacts(email) {
   if (!email) {
@@ -9,27 +9,23 @@ function buildContacts(email) {
   return [{ email, confirmé: false }];
 }
 
-module.exports = (custom = {}) => {
+module.exports = () => {
   let name = "acce";
 
   return {
     name,
     async stream() {
-      let input = custom.input || (await getFromStorage("acce-2021-09-02.ndjson"));
-
       return compose(
-        input,
-        readLineByLine(),
-        transformData((line) => {
-          let { uai, email } = JSON.parse(line);
-          if (!uai) {
+        dbCollection("acce").find({}, { _search: 0 }).stream(),
+        transformData((doc) => {
+          if (!doc.uai) {
             return;
           }
 
           return {
             from: name,
-            selector: uai,
-            contacts: buildContacts(email),
+            selector: doc.uai,
+            contacts: buildContacts(doc.email),
           };
         })
       );
