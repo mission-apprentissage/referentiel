@@ -1,5 +1,5 @@
 const titles = {
-  A_VALIDER: "Organismes à valider",
+  A_VALIDER: "Organismes à vérifier",
   A_RENSEIGNER: "Organismes à identifier",
   VALIDE: "Organismes validés",
 };
@@ -13,7 +13,7 @@ export function getValidationType(organisme) {
 }
 
 export function buildValidationParams(type) {
-  let params = { etat_administratif: "actif", qualiopi: true, natures: "formateur|responsable" };
+  let params = { etat_administratif: "actif", qualiopi: true, natures: "-formateur|responsable,formateur|responsable" };
   switch (type) {
     case "A_VALIDER":
       return { ...params, uai: false, uai_potentiels: true };

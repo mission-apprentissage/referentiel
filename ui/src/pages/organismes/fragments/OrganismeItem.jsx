@@ -4,6 +4,8 @@ import React from "react";
 import Identite from "../../organisme/fragments/Identite";
 import { Link } from "../../../common/dsfr/elements/Link";
 import ClickableItem from "../../../common/ClickableItem";
+import { Tag } from "../../../common/dsfr/elements/Tag";
+import { Natures } from "../../organisme/fragments/Natures";
 
 const Card = styled(Box)`
   padding: 1rem 2rem;
@@ -42,6 +44,11 @@ export default function OrganismeItem({ organisme }) {
   return (
     <ClickableItem to={organisme.siret}>
       <Card direction={"column"}>
+        {organisme.natures.length > 0 && (
+          <Box justify={"between"}>
+            <Tag modifiers="sm">{<Natures organisme={organisme} />}</Tag>
+          </Box>
+        )}
         <Box justify={"between"}>
           <RaisonSociale className={"fr-text--bold"} style={{ width: "85%" }}>
             {organisme.raison_sociale || "Raison sociale inconnue"}

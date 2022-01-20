@@ -29,15 +29,6 @@ const actions = {
     ActionButton: function ({ label, onClick, children }) {
       return (
         <>
-          <a
-            title="consulter la fiche Data.gouv"
-            href="https://www.data.gouv.fr/fr/datasets/liste-publique-des-organismes-de-formation-l-6351-7-1-du-code-du-travail/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="fr-text--sm"
-          >
-            consulter la fiche Data.gouv
-          </a>
           <div className={"fr-mt-3w"}>
             <Button modifiers={"sm icon-left"} icons={"edit-line"} onClick={onClick}>
               {label}

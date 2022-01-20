@@ -3,6 +3,7 @@ import styled from "styled-components";
 import cs from "classnames";
 import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
 import UAIValidator from "../fragments/uai/UAISelector";
+import { Natures } from "../fragments/Natures";
 
 const Field = styled(({ label, value, children, className, ...rest }) => {
   return (
@@ -32,6 +33,7 @@ export function Immatriculation({ organisme }) {
           <Field label={"UAI"} value={organisme.uai}>
             <UAIValidator className="fr-ml-3v" organisme={organisme} />
           </Field>
+          <Field label={"Natures"} value={<Natures organisme={organisme} />} />
           <Field label={"SIREN"} value={organisme.siret.substr(0, 9)} />
           <Field label={"SIRET"} className={"fr-mr-1w xfr-display-inline-block"} value={organisme.siret} />
           <Field

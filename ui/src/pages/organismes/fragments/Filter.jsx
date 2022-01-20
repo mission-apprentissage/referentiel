@@ -97,3 +97,16 @@ export function NdaFilter() {
     />
   );
 }
+
+export function IdentiteFilter() {
+  return (
+    <Filter
+      label={"Identité validée"}
+      paramName={"uai"}
+      items={[
+        { code: "true", label: "Oui" },
+        { code: "false", label: "Non" },
+      ]}
+    />
+  );
+}

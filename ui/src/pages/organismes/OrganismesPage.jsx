@@ -4,7 +4,7 @@ import { useSearch } from "../../common/hooks/useSearch";
 import SearchForm from "./fragments/SearchForm";
 import OrganismeList from "./fragments/OrganismeList";
 import Filters from "./fragments/Filters";
-import { DepartementsFilter, NdaFilter, NatureFilter } from "./fragments/Filter";
+import { DepartementsFilter, NdaFilter, NatureFilter, IdentiteFilter } from "./fragments/Filter";
 import LayoutTitle from "../../common/layout/LayoutTitle";
 import Results from "../../common/layout/Results";
 import WideTabs from "../../common/dsfr/custom/WideTabs";
@@ -30,6 +30,7 @@ export default function OrganismesPage() {
                         <DepartementsFilter />
                         <NatureFilter />
                         <NdaFilter />
+                        <IdentiteFilter />
                       </Filters>
                     }
                     results={<OrganismeList response={response} />}
