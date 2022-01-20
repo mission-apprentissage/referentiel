@@ -2,18 +2,25 @@ const assert = require("assert");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
 const importOrganismes = require("../../../src/jobs/importOrganismes");
-const { createStream } = require("../../utils/testUtils");
-const { insertOrganisme } = require("../../utils/fakeData");
+const { insertOrganisme, insertDatagouv } = require("../../utils/fakeData");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 
 describe("datagouv", () => {
   it("Vérifie que peut convertir la source en référentiel", async () => {
-    let input = createStream(
-      `numeroDeclarationActivite;siren;siretEtablissementDeclarant;certifications.actionsDeFormationParApprentissage
-"88888888888";"111111111";"11111111100006";"true"
-"88888888889";"111111111";"11111111100007";"false"`
-    );
-    let source = createSource("datagouv", { input });
+    await Promise.all([
+      insertDatagouv({
+        siren: "111111111",
+        siretEtablissementDeclarant: "11111111100006",
+        certifications: { actionsDeFormationParApprentissage: true },
+      }),
+      insertDatagouv({
+        siren: "111111111",
+        siretEtablissementDeclarant: "11111111100007",
+        certifications: { actionsDeFormationParApprentissage: false },
+      }),
+    ]);
+
+    let source = createSource("datagouv");
 
     let stats = await importOrganismes(source);
 
@@ -32,15 +39,18 @@ describe("datagouv", () => {
   });
 
   it("Vérifie qu'on peut collecter des informations de la liste publique des organismes de formation", async () => {
-    await insertOrganisme({ siret: "11111111100006" });
-    await insertOrganisme({ siret: "11111111100007" });
-    await insertOrganisme({ siret: "22222222200002" });
-    let source = createSource("datagouv", {
-      input: createStream(
-        `numeroDeclarationActivite;siren;siretEtablissementDeclarant;certifications.actionsDeFormationParApprentissage
-"88888888888";"111111111";"11111111100006";"true"`
-      ),
-    });
+    await Promise.all([
+      insertOrganisme({ siret: "11111111100006" }),
+      insertOrganisme({ siret: "11111111100007" }),
+      insertOrganisme({ siret: "22222222200002" }),
+      insertDatagouv({
+        numeroDeclarationActivite: "88888888888",
+        siren: "111111111",
+        siretEtablissementDeclarant: "11111111100006",
+        certifications: { actionsDeFormationParApprentissage: true },
+      }),
+    ]);
+    let source = createSource("datagouv");
 
     let stats = await collectSources(source);
 
@@ -63,13 +73,16 @@ describe("datagouv", () => {
   });
 
   it("Vérifie que peut charger en mémoire la liste des CFA", async () => {
-    let input = createStream(
-      `numeroDeclarationActivite;siren;siretEtablissementDeclarant;certifications.actionsDeFormationParApprentissage
-"88888888888";"111111111";"11111111100006";"true"`
-    );
-    let source = createSource("datagouv", { input });
+    await insertDatagouv({
+      numeroDeclarationActivite: "88888888888",
+      siren: "111111111",
+      siretEtablissementDeclarant: "11111111100006",
+      certifications: { actionsDeFormationParApprentissage: true },
+    });
 
-    let organismes = await source.loadOrganismeDeFormations({ input });
+    let source = createSource("datagouv");
+
+    let organismes = await source.loadSirets();
 
     assert.strictEqual(organismes.length, 1);
     assert.deepStrictEqual(organismes[0], "11111111100006");

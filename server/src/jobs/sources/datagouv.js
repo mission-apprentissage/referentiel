@@ -1,53 +1,28 @@
-const { compose, transformData, oleoduc, accumulateData, writeData, filterData } = require("oleoduc");
-const { parseCsv } = require("../../common/utils/csvUtils");
-const { getFromStorage } = require("../../common/utils/ovhUtils");
+const { compose, transformData } = require("oleoduc");
+const { dbCollection } = require("../../common/db/mongodb");
 
-async function getListePubliqueDesOrganismesDeFormationAsStream(options = {}) {
-  //await getFileAsStream("https://www.monactiviteformation.emploi.gouv.fr/mon-activite-formation/public/listePubliqueOF?format=csv")
-  let stream = options.input || (await getFromStorage("public_ofs_latest.csv"));
-
-  return compose(
-    stream,
-    parseCsv({
-      columns: (header) => header.map((column) => column.replace(/\./g, "_")),
-    })
-  );
+function isQualiopi(doc) {
+  return doc.certifications.actionsDeFormationParApprentissage === true;
 }
 
-function isQualiopi(data) {
-  return data["certifications_actionsDeFormationParApprentissage"] === "true";
-}
-
-module.exports = (custom = {}) => {
+module.exports = () => {
   let name = "datagouv";
 
   return {
     name,
-    async loadOrganismeDeFormations() {
-      let organismes = [];
-      let stream = await getListePubliqueDesOrganismesDeFormationAsStream(custom);
+    async loadSirets() {
+      let organismes = await dbCollection("datagouv")
+        .aggregate([{ $group: { _id: "$siretEtablissementDeclarant" } }])
+        .toArray();
 
-      await oleoduc(
-        stream,
-        transformData((data) => {
-          return {
-            siret: data.siretEtablissementDeclarant,
-          };
-        }),
-        accumulateData((acc, data) => [...acc, data.siret], { accumulator: [] }),
-        writeData((acc) => (organismes = acc))
-      );
-
-      return organismes;
+      return organismes.map((o) => o._id);
     },
     async referentiel() {
-      let stream = await getListePubliqueDesOrganismesDeFormationAsStream(custom);
-
       return compose(
-        stream,
-        filterData(isQualiopi),
-        transformData((data) => {
-          const siret = data.siretEtablissementDeclarant;
+        dbCollection("datagouv").find({ "certifications.actionsDeFormationParApprentissage": true }).stream(),
+        transformData((doc) => {
+          let siret = doc.siretEtablissementDeclarant;
+
           return {
             from: name,
             siret: siret,
@@ -56,18 +31,17 @@ module.exports = (custom = {}) => {
       );
     },
     async stream() {
-      let stream = await getListePubliqueDesOrganismesDeFormationAsStream(custom);
-
       return compose(
-        stream,
-        transformData((data) => {
-          let nda = data.numeroDeclarationActivite;
+        dbCollection("datagouv").find().stream(),
+        transformData((doc) => {
+          let nda = doc.numeroDeclarationActivite;
+
           return {
             from: name,
-            selector: { siret: { $regex: new RegExp(`^${data.siren}`) } },
+            selector: { siret: { $regex: new RegExp(`^${doc.siren}`) } },
             data: {
               ...(nda ? { numero_declaration_activite: nda } : {}),
-              qualiopi: isQualiopi(data),
+              qualiopi: isQualiopi(doc),
             },
           };
         })

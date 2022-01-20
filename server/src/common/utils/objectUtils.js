@@ -1,19 +1,27 @@
-const { pickBy, isEmpty, cloneDeepWith } = require("lodash");
+const { pickBy, cloneDeepWith, isNil, isPlainObject } = require("lodash");
 
-function omitEmpty(obj) {
-  return pickBy(obj, (v) => !isEmpty(v));
+function omitNil(obj) {
+  return pickBy(obj, (v) => !isNil(v));
 }
 
-function omitDeep(collection, excludeKeys) {
-  function omitFn(value) {
-    if (value && typeof value === "object") {
-      excludeKeys.forEach((key) => {
+function omitDeep(collection, callback) {
+  function clone(value) {
+    if (isPlainObject(value)) {
+      let keysToDelete = callback(value);
+      keysToDelete.forEach((key) => {
         delete value[key];
       });
     }
   }
+  return cloneDeepWith(collection, clone);
+}
 
-  return cloneDeepWith(collection, omitFn);
+function omitDeepNil(obj) {
+  return omitDeep(obj, (value) =>
+    Object.keys(value)
+      .map((k) => (isNil(value[k]) ? k : null))
+      .filter((k) => k)
+  );
 }
 
 function flattenObject(obj, parent, res = {}) {
@@ -38,8 +46,9 @@ function optionalItem(key, value) {
 
 module.exports = {
   flattenObject,
-  omitEmpty,
+  omitNil,
   isError,
   optionalItem,
   omitDeep,
+  omitDeepNil,
 };

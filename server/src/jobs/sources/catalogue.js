@@ -3,7 +3,7 @@ const CatalogueApi = require("../../common/apis/CatalogueApi");
 const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
 const { dbCollection } = require("../../common/db/mongodb");
-const { omitEmpty } = require("../../common/utils/objectUtils");
+const { omitNil } = require("../../common/utils/objectUtils");
 
 function fetchFormations(api, options = {}) {
   let siret = options.siret;
@@ -39,7 +39,7 @@ function buildRelation(formation, natures) {
   }
 
   let isReponsable = natures.includes("responsable");
-  return omitEmpty({
+  return omitNil({
     type: isReponsable ? "formateur" : "responsable",
     siret: isReponsable ? formation.etablissement_formateur_siret : formation.etablissement_gestionnaire_siret,
     label: isReponsable

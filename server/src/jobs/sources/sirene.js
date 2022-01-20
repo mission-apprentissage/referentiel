@@ -57,10 +57,21 @@ async function getAdresse(adresseResolver, data) {
   }
 }
 
+function getRelations(uniteLegale, siret, sirets) {
+  return uniteLegale.etablissements
+    .filter((e) => e.siret !== siret && e.etat_administratif === "A" && sirets.includes(e.siret))
+    .map((e) => {
+      return {
+        siret: e.siret,
+        label: getRelationLabel(e, getRaisonSociale(uniteLegale)),
+      };
+    });
+}
+
 module.exports = (custom = {}) => {
   let name = "sirene";
   let api = custom.sireneApi || new SireneApi();
-  let cache = caches.sireneApiCache();
+  let sireneApiCache = caches.sireneApiCache();
   let adresseResolver = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
   return {
@@ -68,7 +79,7 @@ module.exports = (custom = {}) => {
     async stream(options = {}) {
       let filters = options.filters || {};
       let datagouv = createDatagouvSource();
-      let organismes = custom.organismes || (await datagouv.loadOrganismeDeFormations());
+      let sirets = await datagouv.loadSirets();
 
       return compose(
         dbCollection("organismes").find(filters, { siret: 1 }).batchSize(20).stream(),
@@ -78,11 +89,11 @@ module.exports = (custom = {}) => {
               let siren = siret.substring(0, 9);
               let anomalies = [];
 
-              let uniteLegale = await cache.memo(siren, () => api.getUniteLegale(siren));
+              let uniteLegale = await sireneApiCache.memo(siren, () => api.getUniteLegale(siren));
               let raisonSociale = getRaisonSociale(uniteLegale);
 
-              let data = uniteLegale.etablissements.find((e) => e.siret === siret);
-              if (!data) {
+              let etablissement = uniteLegale.etablissements.find((e) => e.siret === siret);
+              if (!etablissement) {
                 return {
                   selector: siret,
                   anomalies: [
@@ -91,16 +102,12 @@ module.exports = (custom = {}) => {
                 };
               }
 
-              let relations = uniteLegale.etablissements
-                .filter((e) => {
-                  return e.siret !== siret && e.etat_administratif === "A" && organismes.includes(e.siret);
-                })
-                .map((e) => {
-                  return {
-                    siret: e.siret,
-                    label: getRelationLabel(e, raisonSociale),
-                  };
+              let adresse = await getAdresse(adresseResolver, etablissement).catch((e) => {
+                anomalies.push({
+                  code: "etablissement_geoloc_impossible",
+                  message: `Impossible de géolocaliser l'adresse de l'organisme. ${e.message}`,
                 });
+              });
 
               let formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);
               if (!formeJuridique) {
@@ -110,22 +117,15 @@ module.exports = (custom = {}) => {
                 });
               }
 
-              let adresse = await getAdresse(adresseResolver, data).catch((e) => {
-                anomalies.push({
-                  code: "etablissement_geoloc_impossible",
-                  message: `Impossible de géolocaliser l'adresse de l'organisme. ${e.message}`,
-                });
-              });
-
               return {
                 selector: siret,
-                relations,
+                relations: await getRelations(uniteLegale, siret, sirets),
                 anomalies,
                 data: {
                   raison_sociale: raisonSociale,
-                  enseigne: getEnseigne(data),
-                  siege_social: data.etablissement_siege === "true",
-                  etat_administratif: data.etat_administratif === "A" ? "actif" : "fermé",
+                  enseigne: getEnseigne(etablissement),
+                  siege_social: etablissement.etablissement_siege === "true",
+                  etat_administratif: etablissement.etat_administratif === "A" ? "actif" : "fermé",
                   ...(adresse ? { adresse } : {}),
                   ...(formeJuridique ? { forme_juridique: formeJuridique } : {}),
                 },

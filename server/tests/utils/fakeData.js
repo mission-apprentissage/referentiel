@@ -271,4 +271,44 @@ module.exports = {
       )
     );
   },
+  insertDatagouv: async (custom = {}) => {
+    return dbCollection("datagouv").insertOne(
+      merge(
+        {},
+        {
+          adressePhysiqueOrganismeFormation: {
+            codePostal: "75001",
+            codeRegion: "11",
+            ville: "PARIS",
+            voie: "RUE DES LILAS",
+          },
+          certifications: {
+            VAE: "false",
+            actionsDeFormation: true,
+            actionsDeFormationParApprentissage: false,
+            bilansDeCompetences: false,
+          },
+          denomination: "OF",
+          informationsDeclarees: {
+            dateDerniereDeclaration: new Date("2020-12-02T23:00:00.000Z"),
+            debutExercice: new Date("2020-10-31T23:00:00.000Z"),
+            effectifFormateurs: 0,
+            finExercice: new Date("2021-12-30T23:00:00.000Z"),
+            nbStagiaires: 3,
+            nbStagiairesConfiesParUnAutreOF: 3,
+            specialitesDeFormation: {
+              codeSpecialite1: "312",
+              libelleSpecialite1: "Commerce, vente",
+            },
+          },
+          numeroDeclarationActivite: faker.helpers.replaceSymbols("###########"),
+          numerosDeclarationActivitePrecedent: "12345678900",
+          organismeEtrangerRepresente: {},
+          siren: "111111111",
+          siretEtablissementDeclarant: "1111111110001",
+        },
+        custom
+      )
+    );
+  },
 };

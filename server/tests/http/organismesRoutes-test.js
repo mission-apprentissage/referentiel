@@ -823,53 +823,56 @@ describe("organismesRoutes", () => {
     strictEqual(response.status, 200);
     deepStrictEqual(response.data.siret, "11111111100001");
     deepStrictEqual(response.data.uai, "0751234J");
-    deepStrictEqual(omitDeep(response.data, ["import_date"]), {
-      siret: "11111111100001",
-      uai: "0751234J",
-      raison_sociale: "Centre de formation",
-      uai_potentiels: [],
-      contacts: [],
-      relations: [],
-      lieux_de_formation: [],
-      reseaux: [],
-      natures: [],
-      diplomes: [],
-      certifications: [],
-      siege_social: true,
-      etat_administratif: "actif",
-      referentiels: ["test"],
-      adresse: {
-        geojson: {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [2.396444, 48.879706],
+    deepStrictEqual(
+      omitDeep(response.data, () => ["import_date"]),
+      {
+        siret: "11111111100001",
+        uai: "0751234J",
+        raison_sociale: "Centre de formation",
+        uai_potentiels: [],
+        contacts: [],
+        relations: [],
+        lieux_de_formation: [],
+        reseaux: [],
+        natures: [],
+        diplomes: [],
+        certifications: [],
+        siege_social: true,
+        etat_administratif: "actif",
+        referentiels: ["test"],
+        adresse: {
+          geojson: {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [2.396444, 48.879706],
+            },
+            properties: {
+              score: 0.88,
+            },
           },
-          properties: {
-            score: 0.88,
+          label: "31 rue des lilas Paris 75019",
+          code_postal: "75001",
+          code_insee: "75000",
+          localite: "PARIS",
+          departement: {
+            code: "75",
+            nom: "Paris",
+          },
+          region: {
+            code: "11",
+            nom: "Île-de-France",
+          },
+          academie: {
+            code: "01",
+            nom: "Paris",
           },
         },
-        label: "31 rue des lilas Paris 75019",
-        code_postal: "75001",
-        code_insee: "75000",
-        localite: "PARIS",
-        departement: {
-          code: "75",
-          nom: "Paris",
+        _meta: {
+          anomalies: [],
         },
-        region: {
-          code: "11",
-          nom: "Île-de-France",
-        },
-        academie: {
-          code: "01",
-          nom: "Paris",
-        },
-      },
-      _meta: {
-        anomalies: [],
-      },
-    });
+      }
+    );
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100001" });
     deepStrictEqual(found.uai, "0751234J");

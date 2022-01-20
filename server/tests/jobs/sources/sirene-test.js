@@ -6,11 +6,12 @@ const collectSources = require("../../../src/jobs/collectSources");
 const { importOrganismesForTest } = require("../../utils/testUtils");
 const { mockSireneApi, mockGeoAddresseApi } = require("../../utils/apiMocks");
 const { DateTime } = require("luxon");
+const { insertDatagouv } = require("../../utils/fakeData");
 
 function createSireneSource(options = {}) {
-  let { mocks = [], ...custom } = options;
+  let { withPredefinedMocks = [], ...custom } = options;
 
-  if (mocks.includes("geo")) {
+  if (withPredefinedMocks.includes("geoMocks")) {
     mockGeoAddresseApi((client, responses) => {
       client
         .get((uri) => uri.includes("reverse"))
@@ -24,7 +25,7 @@ function createSireneSource(options = {}) {
     });
   }
 
-  if (mocks.includes("sirene")) {
+  if (withPredefinedMocks.includes("sireneMocks")) {
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -41,7 +42,7 @@ function createSireneSource(options = {}) {
 
 describe("sirene", () => {
   it("Vérifie qu'on peut collecter des informations de l'API Sirene", async () => {
-    let source = createSireneSource({ mocks: ["geo", "sirene"] });
+    let source = createSireneSource({ withPredefinedMocks: ["geoMocks", "sireneMocks"] });
     await importOrganismesForTest();
 
     let stats = await collectSources(source);
@@ -105,7 +106,7 @@ describe("sirene", () => {
         .reply(200, responses.search());
     });
 
-    let source = createSireneSource({ mocks: ["sirene"] });
+    let source = createSireneSource({ withPredefinedMocks: ["sireneMocks"] });
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
@@ -267,8 +268,34 @@ describe("sirene", () => {
     });
   });
 
+  it("Vérifie qu'on peut filter par siret", async () => {
+    await importOrganismesForTest([{ siret: "11111111100006" }]);
+
+    let source = createSireneSource({
+      withPredefinedMocks: ["geoMocks", "sireneMocks"],
+      organismes: ["11111111100006"],
+    });
+
+    let stats = await collectSources(source, { filters: { siret: "33333333300008" } });
+
+    assert.deepStrictEqual(stats, {
+      sirene: {
+        total: 0,
+        updated: 0,
+        unknown: 0,
+        anomalies: 0,
+        failed: 0,
+      },
+    });
+  });
+
   it("Vérifie qu'on peut collecter des relations", async () => {
-    await importOrganismesForTest();
+    await Promise.all([
+      importOrganismesForTest(),
+      insertDatagouv({ siren: "111111111", siretEtablissementDeclarant: "11111111100006" }),
+      insertDatagouv({ siren: "111111111", siretEtablissementDeclarant: "11111111122222" }),
+    ]);
+
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -301,8 +328,7 @@ describe("sirene", () => {
     });
 
     let source = createSireneSource({
-      mocks: ["geo"],
-      organismes: ["11111111100006", "11111111122222"],
+      withPredefinedMocks: ["geoMocks"],
     });
     let stats = await collectSources(source);
 
@@ -326,29 +352,11 @@ describe("sirene", () => {
     });
   });
 
-  it("Vérifie qu'on peut filter par siret", async () => {
-    await importOrganismesForTest([{ siret: "11111111100006" }]);
-
-    let source = createSireneSource({
-      mocks: ["geo", "sirene"],
-      organismes: ["11111111100006"],
-    });
-
-    let stats = await collectSources(source, { filters: { siret: "33333333300008" } });
-
-    assert.deepStrictEqual(stats, {
-      sirene: {
-        total: 0,
-        updated: 0,
-        unknown: 0,
-        anomalies: 0,
-        failed: 0,
-      },
-    });
-  });
-
   it("Vérifie qu'on ignore les relations qui ne sont pas des organismes de formations", async () => {
-    await importOrganismesForTest([{ siret: "11111111100006" }]);
+    await Promise.all([
+      importOrganismesForTest([{ siret: "11111111100006" }]),
+      insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222222222" }),
+    ]);
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -367,7 +375,7 @@ describe("sirene", () => {
                   libelle_commune: "PARIS",
                 },
                 {
-                  siret: "2222222222222222",
+                  siret: "22222222222222",
                   etat_administratif: "A",
                   etablissement_siege: "true",
                   libelle_voie: "DES LILAS",
@@ -380,12 +388,12 @@ describe("sirene", () => {
         );
     });
 
-    let source = createSireneSource({ mocks: ["geo"], organismes: ["2222222222222222"] });
+    let source = createSireneSource({ withPredefinedMocks: ["geoMocks"] });
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.relations.length, 1);
-    assert.deepStrictEqual(found.relations[0].siret, "2222222222222222");
+    assert.deepStrictEqual(found.relations[0].siret, "22222222222222");
     assert.deepStrictEqual(stats, {
       sirene: {
         total: 1,
@@ -511,7 +519,7 @@ describe("sirene", () => {
         .reply(400, {});
     });
 
-    let source = createSireneSource({ mocks: ["sirene"] });
+    let source = createSireneSource({ withPredefinedMocks: ["sireneMocks"] });
 
     let stats = await collectSources(source);
 
@@ -543,7 +551,7 @@ describe("sirene", () => {
         .reply(200, responses.unitesLegales({ unite_legale: { categorie_juridique: "INVALID" } }));
     });
 
-    let source = createSireneSource({ mocks: ["geo"] });
+    let source = createSireneSource({ withPredefinedMocks: ["geoMocks"] });
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
@@ -567,7 +575,7 @@ describe("sirene", () => {
 
   it("Vérifie qu'on met en cache les données de l'API sirene", async () => {
     await importOrganismesForTest();
-    let source = createSireneSource({ mocks: ["geo", "sirene"] });
+    let source = createSireneSource({ withPredefinedMocks: ["geoMocks", "sireneMocks"] });
 
     await collectSources(source);
 

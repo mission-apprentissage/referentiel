@@ -1,6 +1,6 @@
 const { mergeStreams } = require("oleoduc");
 const { uniq, isEmpty } = require("lodash");
-const { flattenObject, isError } = require("../common/utils/objectUtils");
+const { flattenObject, isError, omitNil } = require("../common/utils/objectUtils");
 const { isUAIValid } = require("../common/utils/uaiUtils");
 const logger = require("../common/logger");
 const { dbCollection } = require("../common/db/mongodb");
@@ -154,7 +154,7 @@ module.exports = async (array, options = {}) => {
 
       let res = await dbCollection("organismes").updateMany(query, {
         $set: {
-          ...flattenObject(data),
+          ...omitNil(flattenObject(data)),
           uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),
           relations: await mergeRelations(from, organisme.relations, relations),
           contacts: mergeContacts(from, organisme.contacts, contacts),

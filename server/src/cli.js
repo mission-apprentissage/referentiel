@@ -7,6 +7,7 @@ const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/collectSources");
 const computeStats = require("./jobs/computeStats");
 const importCFD = require("./jobs/importCFD");
+const importDatagouv = require("./jobs/importDatagouv");
 const importOrganismes = require("./jobs/importOrganismes");
 const build = require("./jobs/build");
 const migrate = require("./jobs/migrate");
@@ -37,6 +38,17 @@ cli
       return importCFD({
         ...(options.nFormationDiplome ? { nFormationDiplome: options.nFormationDiplome } : {}),
         ...(options.vFormationDiplome ? { vFormationDiplome: options.vFormationDiplome } : {}),
+      });
+    });
+  });
+
+cli
+  .command("importDatagouv")
+  .argument("[file]", "Le fichier de la Liste Publique des Organismes de Formation", createReadStream)
+  .action((file) => {
+    runScript(() => {
+      return importDatagouv({
+        input: file,
       });
     });
   });
