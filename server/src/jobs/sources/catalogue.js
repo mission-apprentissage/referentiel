@@ -38,14 +38,19 @@ function buildRelation(formation, natures) {
     return null;
   }
 
-  let isReponsable = natures.includes("responsable");
-  return omitNil({
-    type: isReponsable ? "formateur" : "responsable",
-    siret: isReponsable ? formation.etablissement_formateur_siret : formation.etablissement_gestionnaire_siret,
-    label: isReponsable
-      ? formation.etablissement_formateur_entreprise_raison_sociale
-      : formation.etablissement_gestionnaire_entreprise_raison_sociale,
-  });
+  if (natures.includes("responsable")) {
+    return omitNil({
+      type: "formateur",
+      siret: formation.etablissement_formateur_siret,
+      label: formation.etablissement_formateur_entreprise_raison_sociale,
+    });
+  } else {
+    return omitNil({
+      type: "responsable",
+      siret: formation.etablissement_gestionnaire_siret,
+      label: formation.etablissement_gestionnaire_entreprise_raison_sociale,
+    });
+  }
 }
 
 async function buildDiplome(formation) {
@@ -118,7 +123,7 @@ module.exports = (custom = {}) => {
   let api = custom.catalogueAPI || new CatalogueApi();
   let { getAdresseFromCoordinates } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
-  async function computeData(formation, natures) {
+  async function extractData(formation, natures) {
     try {
       let res = {
         relations: [],
@@ -174,42 +179,33 @@ module.exports = (custom = {}) => {
       return compose(
         fetchFormations(api, options.filters),
         transformData(async (formation) => {
-          let [formateur, responsable] = await Promise.all([
-            dbCollection("organismes").findOne({ siret: formation.etablissement_formateur_siret }, { siret: 1 }),
-            dbCollection("organismes").findOne({ siret: formation.etablissement_gestionnaire_siret }, { siret: 1 }),
-          ]);
-
-          if (!formateur && !responsable) {
-            return null;
-          }
-
           if (formation.etablissement_formateur_siret === formation.etablissement_gestionnaire_siret) {
             return [
               {
                 from: "catalogue",
                 selector: formation.etablissement_formateur_siret,
-                ...(await computeData(formation, ["responsable", "formateur"])),
+                ...(await extractData(formation, ["responsable", "formateur"])),
               },
             ];
-          } else {
-            let array = [];
-            if (responsable) {
-              array.push({
-                from: "catalogue",
-                selector: responsable.siret,
-                ...(await computeData(formation, ["responsable"])),
-              });
-            }
-
-            if (formateur) {
-              array.push({
-                from: "catalogue",
-                selector: formateur.siret,
-                ...(await computeData(formation, ["formateur"])),
-              });
-            }
-            return array;
           }
+
+          let [responsable, formateur] = await Promise.all([
+            extractData(formation, ["responsable"]),
+            extractData(formation, ["formateur"]),
+          ]);
+
+          return [
+            {
+              from: "catalogue",
+              selector: formation.etablissement_gestionnaire_siret,
+              ...responsable,
+            },
+            {
+              from: "catalogue",
+              selector: formation.etablissement_formateur_siret,
+              ...formateur,
+            },
+          ];
         }),
         flattenArray()
       );

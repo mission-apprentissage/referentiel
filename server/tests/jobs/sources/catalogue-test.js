@@ -171,9 +171,9 @@ describe("catalogue", () => {
     ]);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 0,
         failed: 0,
       },
@@ -225,9 +225,9 @@ describe("catalogue", () => {
     assert.deepStrictEqual(found.diplomes, []);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 0,
         failed: 0,
       },
@@ -259,9 +259,9 @@ describe("catalogue", () => {
     ]);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 0,
         failed: 0,
       },
@@ -286,9 +286,9 @@ describe("catalogue", () => {
     assert.deepStrictEqual(found.certifications, []);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 0,
         failed: 0,
       },
@@ -356,9 +356,9 @@ describe("catalogue", () => {
     });
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 0,
         failed: 0,
       },
@@ -383,9 +383,9 @@ describe("catalogue", () => {
     assert.deepStrictEqual(found.lieux_de_formation, []);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 0,
         failed: 0,
       },
@@ -455,9 +455,9 @@ describe("catalogue", () => {
     });
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 0,
         failed: 0,
       },
@@ -504,9 +504,9 @@ describe("catalogue", () => {
     });
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 1,
         failed: 0,
       },
@@ -536,9 +536,9 @@ describe("catalogue", () => {
     ]);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 0,
         failed: 0,
       },
@@ -572,9 +572,9 @@ describe("catalogue", () => {
     ]);
     assert.deepStrictEqual(stats, {
       catalogue: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 0,
         failed: 0,
       },
