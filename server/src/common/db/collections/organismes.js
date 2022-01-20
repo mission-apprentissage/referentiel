@@ -61,10 +61,12 @@ module.exports = {
         relations: arrayOf(
           object(
             {
+              type: string({
+                enum: ["gestionnaire", "formateur", "formateur->responsable", "responsable->formateur", "entreprise"],
+              }),
               siret: string(),
               referentiel: boolean(),
               label: string(),
-              type: string({ enum: ["gestionnaire", "responsable", "formateur"] }),
               sources: arrayOf(string()),
             },
             { required: ["siret", "referentiel", "sources"] }

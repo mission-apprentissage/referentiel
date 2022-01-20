@@ -337,6 +337,7 @@ describe("sirene", () => {
       {
         siret: "11111111122222",
         label: "NOMAYO 75001 PARIS",
+        type: "entreprise",
         referentiel: false,
         sources: ["sirene"],
       },

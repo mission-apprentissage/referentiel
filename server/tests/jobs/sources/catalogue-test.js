@@ -77,7 +77,7 @@ describe("catalogue", () => {
     assert.deepStrictEqual(found.natures, ["responsable", "formateur"]);
   });
 
-  it("Vérifie qu'on peut collecter des relations (formateur)", async () => {
+  it("Vérifie qu'on peut collecter des relations (responsable->formateur)", async () => {
     await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
@@ -97,13 +97,13 @@ describe("catalogue", () => {
         siret: "22222222200002",
         label: "Etablissement",
         referentiel: false,
-        type: "formateur",
+        type: "responsable->formateur",
         sources: ["catalogue"],
       },
     ]);
   });
 
-  it("Vérifie qu'on peut collecter des relations (responsable)", async () => {
+  it("Vérifie qu'on peut collecter des relations (formateur->responsable)", async () => {
     await importOrganismesForTest();
     let source = createSource("catalogue");
     mockApis({
@@ -123,7 +123,7 @@ describe("catalogue", () => {
         siret: "22222222200002",
         label: "Entreprise",
         referentiel: false,
-        type: "responsable",
+        type: "formateur->responsable",
         sources: ["catalogue"],
       },
     ]);

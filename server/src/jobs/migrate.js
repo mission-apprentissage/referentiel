@@ -3,19 +3,46 @@ const { configureIndexes, configureValidation, dbCollection } = require("../comm
 const VERSION = 3;
 
 async function _tasks() {
-  await dbCollection("organismes").updateMany({}, { $rename: { statuts: "natures" } });
-  await dbCollection("organismes").updateMany({ natures: "gestionnaire" }, { $set: { "natures.$": "responsable" } });
-  await dbCollection("organismes").updateMany(
-    { "relations.type": "gestionnaire" },
-    { $set: { "relations.$[q].type": "responsable" } },
-    {
-      arrayFilters: [
-        {
-          "q.type": "gestionnaire",
-        },
-      ],
-    }
-  );
+  return {
+    renameStatus: await dbCollection("organismes").updateMany({}, { $rename: { statuts: "natures" } }),
+    renameGestionnaireStatuts: await dbCollection("organismes").updateMany(
+      { natures: "gestionnaire" },
+      { $set: { "natures.$": "responsable" } }
+    ),
+    renameGestionnaireType: await dbCollection("organismes").updateMany(
+      { "relations.type": "gestionnaire" },
+      { $set: { "relations.$[q].type": "formateur->responsable" } },
+      {
+        arrayFilters: [
+          {
+            "q.type": "gestionnaire",
+          },
+        ],
+      }
+    ),
+    renameFormateurType: await dbCollection("organismes").updateMany(
+      { "relations.type": "formateur" },
+      { $set: { "relations.$[q].type": "responsable->formateur" } },
+      {
+        arrayFilters: [
+          {
+            "q.type": "formateur",
+          },
+        ],
+      }
+    ),
+    renameEntrepriseType: await dbCollection("organismes").updateMany(
+      { relations: { $elemMatch: { type: { $exists: false } } } },
+      { $set: { "relations.$[q].type": "entreprise" } },
+      {
+        arrayFilters: [
+          {
+            "q.sources": "sirene",
+          },
+        ],
+      }
+    ),
+  };
 }
 
 async function _ensureMigrationCanBeRun() {
@@ -37,8 +64,9 @@ function _saveMigration() {
 async function migrate(options = {}) {
   await _ensureMigrationCanBeRun();
   await _prepareMigration(options);
-  await _tasks();
+  let res = await _tasks();
   await _saveMigration();
+  return res;
 }
 
 module.exports = migrate;

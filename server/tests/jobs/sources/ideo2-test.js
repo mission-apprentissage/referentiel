@@ -23,14 +23,14 @@ describe("ideo2", () => {
     assert.deepStrictEqual(omit(found.relations[0], ["label"]), {
       siret: "22222222200002",
       referentiel: true,
-      type: "formateur",
+      type: "responsable->formateur",
       sources: ["ideo2"],
     });
     found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
     assert.deepStrictEqual(omit(found.relations[0], ["label"]), {
       siret: "11111111100006",
       referentiel: true,
-      type: "responsable",
+      type: "formateur->responsable",
       sources: ["ideo2"],
     });
   });

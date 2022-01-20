@@ -62,6 +62,7 @@ function getRelations(uniteLegale, siret, sirets) {
     .filter((e) => e.siret !== siret && e.etat_administratif === "A" && sirets.includes(e.siret))
     .map((e) => {
       return {
+        type: "entreprise",
         siret: e.siret,
         label: getRelationLabel(e, getRaisonSociale(uniteLegale)),
       };

@@ -42,8 +42,8 @@ module.exports = (custom = {}) => {
                   ? []
                   : [
                       {
+                        type: "responsable->formateur",
                         siret: siretFormateur,
-                        type: "formateur",
                         ...(nomLieuEnseignement ? { label: nomLieuEnseignement } : {}),
                       },
                     ]),
@@ -58,8 +58,8 @@ module.exports = (custom = {}) => {
                   ? []
                   : [
                       {
+                        type: "formateur->responsable",
                         siret: siretGestionnaire,
-                        type: "responsable",
                         ...(cfaGestionnaire ? { label: cfaGestionnaire } : {}),
                       },
                     ]),

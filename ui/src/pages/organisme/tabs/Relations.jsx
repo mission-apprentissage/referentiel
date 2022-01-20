@@ -15,7 +15,7 @@ export function Relations({ organisme }) {
               <Thead>
                 <td>Nom</td>
                 <td>SIRET</td>
-                <td>Partage le même siren</td>
+                <td>entreprise</td>
                 <td>Type de relation</td>
               </Thead>
             }

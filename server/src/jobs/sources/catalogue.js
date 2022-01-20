@@ -40,13 +40,13 @@ function buildRelation(formation, natures) {
 
   if (natures.includes("responsable")) {
     return omitNil({
-      type: "formateur",
+      type: "responsable->formateur",
       siret: formation.etablissement_formateur_siret,
       label: formation.etablissement_formateur_entreprise_raison_sociale,
     });
   } else {
     return omitNil({
-      type: "responsable",
+      type: "formateur->responsable",
       siret: formation.etablissement_gestionnaire_siret,
       label: formation.etablissement_gestionnaire_entreprise_raison_sociale,
     });

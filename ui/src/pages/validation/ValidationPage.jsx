@@ -48,7 +48,7 @@ export default function ValidationPage() {
 
   return (
     <>
-      <ValidationLayoutTitle type={type} search={search} />
+      <ValidationLayoutTitle search={search} type={type} />
       <LayoutContent>
         <Results
           search={<SearchForm onSubmit={(values) => search({ ...params, ...values, page: 1 })} />}
