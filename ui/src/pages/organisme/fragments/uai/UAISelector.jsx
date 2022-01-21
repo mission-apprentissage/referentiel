@@ -4,7 +4,7 @@ import LinkButton from "../../../../common/dsfr/custom/LinkButton";
 import ValidationTag from "../../../../common/ValidationTag";
 import { UAISelectorModal } from "./UAISelectorModal";
 import { Button } from "../../../../common/dsfr/elements/Button";
-import { getValidationType } from "../../../validation/fragments/validation";
+import { getValidationType } from "../../../../common/validation";
 
 const actions = {
   A_VALIDER: {
@@ -58,13 +58,13 @@ const actions = {
 
 export default function UAIValidator({ organisme, ...rest }) {
   let modal = useModal();
-  let validationType = getValidationType(organisme);
-  let action = actions[validationType];
+  let type = getValidationType(organisme);
+  let action = actions[type];
   let { label, ActionButton } = action;
 
   return (
     <div style={{ display: "inline" }} {...rest}>
-      <ValidationTag type={validationType} label={label} className="fr-mr-3v" />
+      <ValidationTag type={type} label={label} className="fr-mr-3v" />
       <ActionButton label={action.actionName} onClick={() => modal.open()}>
         <UAISelectorModal organisme={organisme} modal={modal} action={action} />
       </ActionButton>

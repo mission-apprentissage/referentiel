@@ -3,11 +3,8 @@ import { Box } from "../../../common/Flexbox";
 import styled from "styled-components";
 import ClickableItem from "../../../common/ClickableItem";
 import { without } from "../../../common/utils";
-import { useSearch } from "../../../common/hooks/useSearch";
-import { useContext } from "react";
-import { AuthContext } from "../../../common/AuthRoutes";
 import Spinner from "../../../common/Spinner";
-import { buildValidationParams } from "./validation";
+import useValidationSearch from "../../../common/hooks/useValidationSearch";
 
 const StyledBox = styled(without(Box, ["type"]))`
   padding: 1.5rem;
@@ -32,14 +29,10 @@ const Counter = styled(({ data, loading, error, className }) => {
 `;
 
 export default function ValidationCard({ type, label, ...rest }) {
-  let [auth] = useContext(AuthContext);
-  const validationParams = buildValidationParams(type);
-  let [{ data, loading, error }] = useSearch({
-    [`${auth.type}s`]: auth.code,
+  let [{ data, loading, error }] = useValidationSearch(type, {
     page: 1,
     items_par_page: 1,
     champs: "siret",
-    ...validationParams,
   });
 
   return (

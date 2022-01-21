@@ -1,16 +1,14 @@
 import OrganismeList from "../organismes/fragments/OrganismeList";
 import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
 import SearchForm from "../organismes/fragments/SearchForm";
-import { useSearch } from "../../common/hooks/useSearch";
 import { useParams } from "react-router-dom";
 import LayoutTitle from "../../common/layout/LayoutTitle";
 import useNavigation from "../../common/hooks/useNavigation";
 import Results from "../../common/layout/Results";
-import { useContext } from "react";
-import { AuthContext } from "../../common/AuthRoutes";
 import LayoutContent from "../../common/layout/LayoutContent";
 import styled from "styled-components";
-import { buildValidationParams, getValidationTitle } from "./fragments/validation";
+import { getValidationTitle } from "../../common/validation";
+import useValidationSearch from "../../common/hooks/useValidationSearch";
 
 export function ValidationTitle() {
   let { type } = useParams();
@@ -37,13 +35,10 @@ const ValidationLayoutTitle = styled(({ search, children, className }) => {
 export default function ValidationPage() {
   let { params } = useNavigation();
   let { type } = useParams();
-  let [auth] = useContext(AuthContext);
-  let [response, search] = useSearch({
-    [`${auth.type}s`]: auth.code,
+  let [response, search] = useValidationSearch(type, {
     ordre: "desc",
     page: 1,
     items_par_page: 25,
-    ...buildValidationParams(type),
   });
 
   return (
