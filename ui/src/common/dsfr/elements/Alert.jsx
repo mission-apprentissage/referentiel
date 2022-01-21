@@ -5,7 +5,7 @@ export default function Alert({ title, onClose, modifiers, className, children }
   let clazz = classNames("fr-alert", { modifiers, className });
 
   return (
-    <div role="alert" className={clazz}>
+    <div className={clazz}>
       {title && <p className="fr-alert__title">{title}</p>}
       {children}
       {onClose && (
