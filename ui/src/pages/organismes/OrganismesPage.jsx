@@ -15,7 +15,7 @@ export default function OrganismesPage() {
 
   return (
     <>
-      <LayoutTitle selector={<AcademieSelector onChange={(code) => search({ academie: code })} />} />
+      <LayoutTitle selector={<AcademieSelector onChange={(code) => search({ academies: code })} />} />
       <LayoutContent>
         <WideTabs
           tabs={[

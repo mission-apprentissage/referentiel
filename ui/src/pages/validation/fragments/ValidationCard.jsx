@@ -35,7 +35,7 @@ export default function ValidationCard({ type, label, ...rest }) {
   let [auth] = useContext(AuthContext);
   const validationParams = buildValidationParams(type);
   let [{ data, loading, error }] = useSearch({
-    [auth.type]: auth.code,
+    [`${auth.type}s`]: auth.code,
     page: 1,
     items_par_page: 1,
     champs: "siret",

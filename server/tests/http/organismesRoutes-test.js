@@ -4,6 +4,7 @@ const { startServer, generateAuthHeader } = require("../utils/testUtils");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const assert = require("assert");
 const { omitDeep } = require("../../src/common/utils/objectUtils");
+const { sortBy } = require("lodash");
 
 describe("organismesRoutes", () => {
   it("Vérifie qu'on peut lister des organismes", async () => {
@@ -80,36 +81,51 @@ describe("organismesRoutes", () => {
     });
   });
 
-  it("Vérifie qu'on peut rechercher des organismes à partir d'un uai validé", async () => {
+  it("Vérifie qu'on peut rechercher des organismes à partir d'un UAI", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme();
-    await insertOrganisme({ siret: "11111111100006", uai: "0751234J" });
+    await insertOrganisme({ uai: "0751234J" });
 
-    let response = await httpClient.get("/api/v1/organismes?uai=0751234J");
+    let response = await httpClient.get("/api/v1/organismes?uais=0751234J");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].uai, "0751234J");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes à partir de plusieurs UAI", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme();
+    await insertOrganisme({ uai: "0751234J" });
+    await insertOrganisme({ uai: "0751234X" });
+
+    let response = await httpClient.get("/api/v1/organismes?uais=0751234J,0751234X");
+
+    strictEqual(response.status, 200);
+    let organismes = sortBy(response.data.organismes, (o) => o.uai);
+    strictEqual(organismes.length, 2);
+    strictEqual(organismes[0].uai, "0751234J");
+    strictEqual(organismes[1].uai, "0751234X");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes qui ont un UAI", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({ siret: "11111111100006", uai: "0751234J" });
+    await insertOrganisme();
+
+    let response = await httpClient.get("/api/v1/organismes?uais=true");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
     strictEqual(response.data.organismes[0].siret, "11111111100006");
   });
 
-  it("Vérifie qu'on peut rechercher des organismes qui ont un uai", async () => {
-    const { httpClient } = await startServer();
-    await insertOrganisme({ siret: "11111111100006", uai: "0751234J" });
-    await insertOrganisme();
-
-    let response = await httpClient.get("/api/v1/organismes?uai=true");
-
-    strictEqual(response.status, 200);
-    strictEqual(response.data.organismes.length, 1);
-    strictEqual(response.data.organismes[0].siret, "11111111100006");
-  });
-
-  it("Vérifie qu'on peut rechercher des organismes qui n'ont pas d'uai", async () => {
+  it("Vérifie qu'on peut rechercher des organismes qui n'ont pas d'UAI", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({ siret: "11111111100006", uai: "0751234J" });
     await insertOrganisme({ siret: "22222222200002" });
 
-    let response = await httpClient.get("/api/v1/organismes?uai=false");
+    let response = await httpClient.get("/api/v1/organismes?uais=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -140,6 +156,18 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].siret, "11111111100006");
   });
 
+  it("Vérifie qu'on peut rechercher des organismes qui n'ont pas de nda", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({ siret: "11111111100006", numero_declaration_activite: "12345678901" });
+    await insertOrganisme({ siret: "22222222200002" });
+
+    let response = await httpClient.get("/api/v1/organismes?numero_declaration_activite=false");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "22222222200002");
+  });
+
   it("Vérifie qu'on peut rechercher des organismes qualiopi", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme();
@@ -165,18 +193,6 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].siret, "11111111100006");
   });
 
-  it("Vérifie qu'on peut rechercher des organismes qui n'ont pas de nda", async () => {
-    const { httpClient } = await startServer();
-    await insertOrganisme({ siret: "11111111100006", numero_declaration_activite: "12345678901" });
-    await insertOrganisme({ siret: "22222222200002" });
-
-    let response = await httpClient.get("/api/v1/organismes?numero_declaration_activite=false");
-
-    strictEqual(response.status, 200);
-    strictEqual(response.data.organismes.length, 1);
-    strictEqual(response.data.organismes[0].siret, "22222222200002");
-  });
-
   it("Vérifie qu'on peut rechercher des organismes actifs", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({ siret: "11111111100006", etat_administratif: "actif" });
@@ -189,7 +205,7 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].siret, "11111111100006");
   });
 
-  it("Vérifie qu'on peut rechercher des organismes actifs", async () => {
+  it("Vérifie qu'on peut rechercher des organismes fermés", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({ siret: "11111111100006", etat_administratif: "fermé" });
     await insertOrganisme({ etat_administratif: "actif" });
@@ -201,7 +217,7 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].siret, "11111111100006");
   });
 
-  it("Vérifie qu'on peut calcule le meilleur UAI potentiel", async () => {
+  it("Vérifie qu'on calcule le meilleur UAI probable", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100006",
@@ -223,48 +239,6 @@ describe("organismesRoutes", () => {
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes[0]._meta.uai_probale, "0751234J");
-  });
-
-  it("Vérifie qu'on peut rechercher des organismes qui ont des uais potentiels", async () => {
-    const { httpClient } = await startServer();
-    await insertOrganisme({
-      siret: "11111111100006",
-      uai_potentiels: [
-        {
-          sources: ["dummy"],
-          uai: "0751234J",
-          valide: true,
-        },
-      ],
-    });
-    await insertOrganisme();
-
-    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=true");
-
-    strictEqual(response.status, 200);
-    strictEqual(response.data.organismes.length, 1);
-    strictEqual(response.data.organismes[0].siret, "11111111100006");
-  });
-
-  it("Vérifie qu'on peut rechercher des organismes qui n'ont pas uais potentiels", async () => {
-    const { httpClient } = await startServer();
-    await insertOrganisme({
-      siret: "11111111100006",
-      uai_potentiels: [
-        {
-          sources: ["dummy"],
-          uai: "0751234J",
-          valide: true,
-        },
-      ],
-    });
-    await insertOrganisme({ siret: "22222222200002" });
-
-    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=false");
-
-    strictEqual(response.status, 200);
-    strictEqual(response.data.organismes.length, 1);
-    strictEqual(response.data.organismes[0].siret, "22222222200002");
   });
 
   it("Vérifie qu'on peut rechercher des organismes qui un uai potentiel particulier", async () => {
@@ -320,33 +294,75 @@ describe("organismesRoutes", () => {
     ok(response.data.organismes.find((o) => o.siret === "22222222200002"));
   });
 
+  it("Vérifie qu'on peut rechercher des organismes qui ont des uais potentiels", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      uai_potentiels: [
+        {
+          sources: ["dummy"],
+          uai: "0751234J",
+          valide: true,
+        },
+      ],
+    });
+    await insertOrganisme();
+
+    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=true");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes qui n'ont pas uais potentiels", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      uai_potentiels: [
+        {
+          sources: ["dummy"],
+          uai: "0751234J",
+          valide: true,
+        },
+      ],
+    });
+    await insertOrganisme({ siret: "22222222200002" });
+
+    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=false");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "22222222200002");
+  });
+
   it("Vérifie qu'on peut rechercher des organismes à partir d'un siret", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme();
-    await insertOrganisme({
-      siret: "11111111100001",
-    });
+    await insertOrganisme({ siret: "11111111100001" });
 
-    let response = await httpClient.get("/api/v1/organismes?siret=11111111100001");
+    let response = await httpClient.get("/api/v1/organismes?sirets=11111111100001");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes[0].siret, "11111111100001");
   });
 
-  it("Vérifie qu'on peut rechercher des organismes à partir d'un siren", async () => {
+  it("Vérifie qu'on peut rechercher des organismes à partir de plusieurs sirets", async () => {
     const { httpClient } = await startServer();
-    await insertOrganisme();
-    await insertOrganisme({
-      siret: "11111111100001",
-    });
+    await insertOrganisme({ siret: "11111111100001" });
+    await insertOrganisme({ siret: "22222222200002" });
+    await insertOrganisme({ siret: "33333333300003" });
 
-    let response = await httpClient.get("/api/v1/organismes?siret=11111111100001");
+    let response = await httpClient.get("/api/v1/organismes?sirets=11111111100001,22222222200002");
 
     strictEqual(response.status, 200);
-    strictEqual(response.data.organismes[0].siret, "11111111100001");
+    let organismes = sortBy(response.data.organismes, (o) => o.siret);
+    strictEqual(organismes.length, 2);
+    strictEqual(organismes[0].siret, "11111111100001");
+    strictEqual(organismes[1].siret, "22222222200002");
   });
 
-  it("Vérifie qu'on peut rechercher des organismes à partir d'un uai (fulltext)", async () => {
+  it("Vérifie qu'on peut rechercher des organismes en fulltext (uai)", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme();
     await insertOrganisme({
@@ -359,7 +375,7 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].uai, "0010856A");
   });
 
-  it("Vérifie qu'on peut rechercher des organismes à partir d'un siret (fulltext)", async () => {
+  it("Vérifie qu'on peut rechercher des organismes en fulltext (siret)", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme();
     await insertOrganisme({
@@ -374,46 +390,114 @@ describe("organismesRoutes", () => {
 
   it("Vérifie qu'on peut rechercher des organismes à partir d'une académie", async () => {
     const { httpClient } = await startServer();
-    await insertOrganisme({
-      siret: "11111111100001",
-      adresse: {
-        academie: { code: "01", nom: "Paris" },
-      },
-    });
-    await insertOrganisme({
-      siret: "22222222200002",
-      adresse: {
-        academie: { code: "02", nom: "Aix-Marseille" },
-      },
-    });
+    await Promise.all([
+      insertOrganisme({
+        siret: "11111111100001",
+        adresse: {
+          academie: { code: "01", nom: "Paris" },
+        },
+      }),
+      insertOrganisme({
+        siret: "22222222200002",
+        adresse: {
+          academie: { code: "02", nom: "Aix-Marseille" },
+        },
+      }),
+    ]);
 
-    let response = await httpClient.get("/api/v1/organismes?academie=01");
+    let response = await httpClient.get("/api/v1/organismes?academies=01");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
     strictEqual(response.data.organismes[0].siret, "11111111100001");
   });
 
+  it("Vérifie qu'on peut rechercher des organismes à partir de plusieurs académies", async () => {
+    const { httpClient } = await startServer();
+    await Promise.all([
+      insertOrganisme({
+        siret: "11111111100001",
+        adresse: {
+          academie: { code: "01", nom: "Paris" },
+        },
+      }),
+      insertOrganisme({
+        siret: "22222222200002",
+        adresse: {
+          academie: { code: "16", nom: "Toulouse" },
+        },
+      }),
+      insertOrganisme({
+        siret: "33333333300003",
+        adresse: {
+          academie: { code: "02", nom: "Aix-Marseille" },
+        },
+      }),
+    ]);
+
+    let response = await httpClient.get("/api/v1/organismes?academies=01,16");
+
+    strictEqual(response.status, 200);
+    let organismes = sortBy(response.data.organismes, (o) => o.siret);
+    strictEqual(organismes.length, 2);
+    strictEqual(organismes[0].siret, "11111111100001");
+    strictEqual(organismes[1].siret, "22222222200002");
+  });
+
   it("Vérifie qu'on peut rechercher des organismes à partir d'une région", async () => {
     const { httpClient } = await startServer();
-    await insertOrganisme({
-      siret: "11111111100001",
-      adresse: {
-        region: { code: "11", nom: "Île-de-France" },
-      },
-    });
-    await insertOrganisme({
-      siret: "22222222200002",
-      adresse: {
-        region: { code: "93", nom: "Provence-Alpes-Côte d'Azur" },
-      },
-    });
+    await Promise.all([
+      insertOrganisme({
+        siret: "11111111100001",
+        adresse: {
+          region: { code: "11", nom: "Île-de-France" },
+        },
+      }),
+      insertOrganisme({
+        siret: "22222222200002",
+        adresse: {
+          region: { code: "93", nom: "Provence-Alpes-Côte d'Azur" },
+        },
+      }),
+    ]);
 
-    let response = await httpClient.get("/api/v1/organismes?region=11");
+    let response = await httpClient.get("/api/v1/organismes?regions=11");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
     strictEqual(response.data.organismes[0].siret, "11111111100001");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes à partir de plusieurs régions", async () => {
+    const { httpClient } = await startServer();
+    await Promise.all([
+      insertOrganisme({
+        siret: "11111111100001",
+        adresse: {
+          region: { code: "11", nom: "Île-de-France" },
+        },
+      }),
+      insertOrganisme({
+        siret: "22222222200002",
+        adresse: {
+          region: { code: "76", nom: "Occitanie" },
+        },
+      }),
+      insertOrganisme({
+        siret: "33333333300003",
+        adresse: {
+          region: { code: "93", nom: "Provence-Alpes-Côte d'Azur" },
+        },
+      }),
+    ]);
+
+    let response = await httpClient.get("/api/v1/organismes?regions=11,76");
+
+    strictEqual(response.status, 200);
+    let organismes = sortBy(response.data.organismes, (o) => o.siret);
+    strictEqual(organismes.length, 2);
+    strictEqual(organismes[0].siret, "11111111100001");
+    strictEqual(organismes[1].siret, "22222222200002");
   });
 
   it("Vérifie qu'on peut rechercher des organismes à partir de leur département", async () => {

@@ -50,12 +50,12 @@ module.exports = () => {
 
   function buildQuery(params) {
     let {
-      siret,
-      uai,
+      sirets,
+      uais,
       departements = [],
       natures = [],
-      region,
-      academie,
+      regions,
+      academies,
       text,
       anomalies,
       uai_potentiels,
@@ -65,8 +65,8 @@ module.exports = () => {
     } = params;
 
     return {
-      ...(siret ? { siret } : {}),
-      ...(!isNil(uai) ? (isBoolean(uai) ? { uai: { $exists: uai } } : { uai }) : {}),
+      ...(!isNil(sirets) ? (isBoolean(sirets) ? { siret: { $exists: true } } : { siret: { $in: sirets } }) : {}),
+      ...(!isNil(uais) ? (isBoolean(uais) ? { uai: { $exists: uais } } : { uai: { $in: uais } }) : {}),
       ...(!isNil(nda)
         ? isBoolean(nda)
           ? { numero_declaration_activite: { $exists: nda } }
@@ -75,8 +75,8 @@ module.exports = () => {
       ...(departements.length === 0 ? {} : { "adresse.departement.code": { $in: departements } }),
       ...(natures.length === 0 ? {} : convertNaturesIntoQuery(natures)),
       ...(etat_administratif ? { etat_administratif: etat_administratif } : {}),
-      ...(region ? { "adresse.region.code": region } : {}),
-      ...(academie ? { "adresse.academie.code": academie } : {}),
+      ...(regions ? { "adresse.region.code": { $in: regions } } : {}),
+      ...(academies ? { "adresse.academie.code": { $in: academies } } : {}),
       ...(text ? { $text: { $search: text } } : {}),
       ...(!isNil(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
       ...(!isNil(qualiopi) ? { qualiopi } : {}),
@@ -93,9 +93,11 @@ module.exports = () => {
     checkOptionnalApiToken(),
     tryCatch(async (req, res) => {
       let { page, items_par_page, ordre, champs, ...params } = await Joi.object({
-        siret: Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/),
-        uai: Joi.alternatives()
-          .try(Joi.boolean(), Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/))
+        sirets: Joi.alternatives()
+          .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/)))
+          .default(null),
+        uais: Joi.alternatives()
+          .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
           .default(null),
         uai_potentiels: Joi.alternatives()
           .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
@@ -103,8 +105,8 @@ module.exports = () => {
         numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
         natures: arrayOf(Joi.string()).default([]),
         etat_administratif: Joi.string().valid("actif", "fermé"),
-        region: Joi.string().valid(...getRegions().map((r) => r.code)),
-        academie: Joi.string().valid(...getAcademies().map((r) => r.code)),
+        regions: arrayOf(Joi.string().valid(...getRegions().map((r) => r.code))),
+        academies: arrayOf(Joi.string().valid(...getAcademies().map((r) => r.code))),
         departements: arrayOf(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
         anomalies: Joi.boolean().default(null),
         qualiopi: Joi.boolean().default(null),

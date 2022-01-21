@@ -39,7 +39,7 @@ export default function ValidationPage() {
   let { type } = useParams();
   let [auth] = useContext(AuthContext);
   let [response, search] = useSearch({
-    [auth.type]: auth.code,
+    [`${auth.type}s`]: auth.code,
     ordre: "desc",
     page: 1,
     items_par_page: 25,

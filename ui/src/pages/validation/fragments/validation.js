@@ -16,11 +16,11 @@ export function buildValidationParams(type) {
   let params = { etat_administratif: "actif", qualiopi: true, natures: "-formateur|responsable,formateur|responsable" };
   switch (type) {
     case "A_VALIDER":
-      return { ...params, uai: false, uai_potentiels: true };
+      return { ...params, uais: false, uai_potentiels: true };
     case "VALIDE":
-      return { ...params, uai: true };
+      return { ...params, uais: true };
     case "A_RENSEIGNER":
-      return { ...params, uai: false, uai_potentiels: false };
+      return { ...params, uais: false, uai_potentiels: false };
     default:
       throw new Error("Statut de validation inconnu");
   }
