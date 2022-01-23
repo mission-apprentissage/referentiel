@@ -2,9 +2,18 @@ import { classNames, elementId } from "../common/utils";
 import { cloneElement, createRef, forwardRef } from "react";
 
 export function Tabs({ label = "Système d'onglet", tabs, className }) {
-  let tabIds = tabs.map(() => elementId("tabs"));
   let clazz = classNames("fr-tabs", { className });
-  let refs = tabs.map(() => createRef());
+  let array = tabs.map((item, index) => {
+    return {
+      tabId: elementId("tab"),
+      panelId: elementId("tab-panel"),
+      tab: item.tab,
+      panel: item.panel,
+      ref: createRef(),
+      key: index,
+    };
+  });
+
   function showTab(el) {
     return dsfr(el).tabPanel.disclose();
   }
@@ -12,36 +21,29 @@ export function Tabs({ label = "Système d'onglet", tabs, className }) {
   return (
     <div className={clazz}>
       <ul className="fr-tabs__list" role="tablist" aria-label={label}>
-        {tabs
-          .map((t) => t.tab)
-          .map((tab, index) => {
-            let id = tabIds[index];
-            const element = cloneElement(tab, {
-              id,
-              "aria-controls": `${id}-panel`,
-              "aria-selected": index === 0,
-              onClick: () => showTab(refs[index].current),
-            });
-
-            return (
-              <li role="presentation" key={index}>
-                {element}
-              </li>
-            );
-          })}
-      </ul>
-      {tabs
-        .map((t) => t.panel)
-        .map((tabPanel, index) => {
-          const tabId = tabIds[index];
-          let panelId = `${tabId}-panel`;
-          return cloneElement(tabPanel, {
-            key: index,
-            id: panelId,
-            ref: refs[index],
-            "aria-labelledby": tabId,
-          });
+        {array.map(({ tabId, panelId, tab, ref, key }) => {
+          return (
+            <li role="presentation" key={key}>
+              {cloneElement(tab, {
+                id: tabId,
+                "aria-controls": panelId,
+                "aria-selected": key === 0,
+                tabIndex: key === 0 ? 0 : -1,
+                onClick: () => showTab(ref.current),
+              })}
+            </li>
+          );
         })}
+      </ul>
+      {array.map(({ tabId, panelId, panel, ref, key }) => {
+        return cloneElement(panel, {
+          id: panelId,
+          "aria-labelledby": tabId,
+          tabIndex: 0,
+          ref,
+          key,
+        });
+      })}
     </div>
   );
 }
