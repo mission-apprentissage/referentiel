@@ -1,13 +1,14 @@
 import React from "react";
-import { ariaDescribedBy, classNames, elementId } from "../dsfr";
+import { ariaDescribedBy, classNames } from "../dsfr";
 import Validation from "../common/Validation";
 import Hint from "./Hint";
+import useElementId from "../../hooks/useElementId";
 
 function Input({ label, hint, validation, children, modifiers, className, ...rest }) {
-  let id = elementId("input");
+  let id = useElementId("input");
   let clazz = classNames("fr-select-group", { modifiers, className, validation });
   let selectClass = classNames("fr-select", { validation });
-  let validationId = elementId("validation");
+  let validationId = useElementId("validation");
   let aria = validation ? ariaDescribedBy(validationId) : {};
 
   return (

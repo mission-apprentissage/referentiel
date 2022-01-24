@@ -1,11 +1,12 @@
 import React from "react";
-import { ariaDescribedBy, classNames, elementId } from "../dsfr";
+import { ariaDescribedBy, classNames } from "../dsfr";
 import Validation from "../common/Validation";
 import Hint from "./Hint";
+import useElementId from "../../hooks/useElementId";
 
 export default function Checkbox({ label, hint, validation, modifiers, className, ...rest }) {
-  let id = elementId("checkbox");
-  let validationId = elementId("validation");
+  let id = useElementId("checkbox");
+  let validationId = useElementId("validation");
   let aria = validation ? ariaDescribedBy(validationId) : {};
   let clazz = classNames("fr-checkbox-group", {
     modifiers,

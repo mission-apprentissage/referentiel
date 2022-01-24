@@ -1,8 +1,8 @@
-import { createRef, useMemo } from "react";
-import { elementId } from "../dsfr";
+import { createRef } from "react";
+import useElementId from "../../hooks/useElementId";
 
 export function useModal() {
-  let id = useMemo(() => elementId("modal"), []);
+  let id = useElementId("modal");
   let ref = createRef();
   function open() {
     dsfr(ref.current).modal.disclose();

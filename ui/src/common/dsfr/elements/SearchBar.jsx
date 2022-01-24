@@ -1,10 +1,11 @@
 import React from "react";
-import { classNames, elementId } from "../dsfr";
+import { classNames } from "../dsfr";
+import useElementId from "../../hooks/useElementId";
 
 function SearchBar({ label, placeholder = label, modifiers, className, ...rest }) {
   let clazz = classNames("fr-search-bar", { modifiers, className });
-  let id = elementId("search");
-  let inputId = elementId("search-input");
+  let id = useElementId("search");
+  let inputId = useElementId("search-input");
 
   return (
     <div className={clazz} id={id} role="search">

@@ -1,6 +1,7 @@
 import React, { Children, cloneElement } from "react";
-import { classNames, cloneNodes } from "../dsfr";
+import { classNames } from "../dsfr";
 import { Link } from "react-router-dom";
+import { cloneNodes } from "../../utils";
 
 export function FooterList({ position, children, ...rest }) {
   return (

@@ -1,12 +1,13 @@
 import React, { Children } from "react";
-import { buildComponent, classNames, elementId } from "../dsfr";
+import { buildComponent, classNames } from "../dsfr";
 import { Collapse } from "../common/Collapsable";
 import { useCollapse } from "../common/useCollapse";
 import { NavLink as RouterNavLink } from "react-router-dom";
+import useElementId from "../../hooks/useElementId";
 
 export function Nav({ modifiers, className, children }) {
   let clazz = classNames("fr-nav", { modifiers, className });
-  let id = elementId("nav");
+  let id = useElementId("nav");
 
   return (
     <nav className={clazz} id={id} role="navigation" aria-label="Menu principal">

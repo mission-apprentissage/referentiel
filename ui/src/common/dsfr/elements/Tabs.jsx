@@ -1,15 +1,15 @@
-import { classNames, elementId } from "../dsfr";
+import { classNames } from "../dsfr";
 import { cloneElement, createRef, forwardRef, useState } from "react";
-
-let fixedRandomId = elementId();
+import useElementId from "../../hooks/useElementId";
 
 export function Tabs({ label = "Système d'onglet", tabs, className }) {
   let clazz = classNames("fr-tabs", { className });
+  let tabsId = useElementId();
   let [selected, setSelected] = useState(0);
   let array = tabs.map((item, index) => {
     return {
-      tabId: `tab-${index}-${fixedRandomId}`,
-      panelId: `tab-panel-${index}-${fixedRandomId}`,
+      tabId: `tab-${index}-${tabsId}`,
+      panelId: `tab-panel-${index}-${tabsId}`,
       tab: item.tab,
       panel: item.panel,
       ref: createRef(),

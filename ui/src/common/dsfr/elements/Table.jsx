@@ -1,5 +1,6 @@
 import React from "react";
-import { classNames, cloneNodes } from "../dsfr";
+import { classNames } from "../dsfr";
+import { cloneNodes } from "../../utils";
 
 export function Thead({ children }) {
   return (

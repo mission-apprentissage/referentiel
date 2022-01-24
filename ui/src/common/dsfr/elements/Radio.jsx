@@ -1,9 +1,10 @@
 import React from "react";
-import { classNames, elementId } from "../dsfr";
+import { classNames } from "../dsfr";
 import Hint from "./Hint";
+import useElementId from "../../hooks/useElementId";
 
 export default function Radio({ label, hint, modifiers, className, ...rest }) {
-  let id = elementId("radio");
+  let id = useElementId("radio");
   let clazz = classNames("fr-radio-group", { modifiers, className });
 
   return (

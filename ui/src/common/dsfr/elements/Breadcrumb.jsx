@@ -1,9 +1,10 @@
-import { buildComponent, elementId } from "../dsfr";
+import { buildComponent } from "../dsfr";
 import React, { Children } from "react";
 import { Link } from "react-router-dom";
+import useElementId from "../../hooks/useElementId";
 
 export default function Breadcrumb({ children }) {
-  let id = elementId("breadcrumb");
+  let id = useElementId("breadcrumb");
 
   return (
     <nav role="navigation" className="fr-breadcrumb" aria-label={"vous êtes ici :"}>

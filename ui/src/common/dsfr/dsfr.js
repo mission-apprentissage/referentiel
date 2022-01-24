@@ -1,5 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
-import React, { Children, cloneElement, forwardRef } from "react";
+import React, { forwardRef } from "react";
 import cs from "classnames";
 
 window.dsfr = {
@@ -48,11 +47,6 @@ export function classNames(baseClassName, { modifiers, icons, className, validat
   );
 }
 
-export function elementId(name) {
-  let prefix = name ? `${name}-` : "";
-  return `${prefix}${uuidv4().substr(0, 8)}`;
-}
-
 export function icon(name) {
   return `fr-fi-${name}`;
 }
@@ -71,10 +65,6 @@ export function collapseElement(el) {
   el.style.setProperty("--collapse", -height + "px");
   el.style.setProperty("max-height", "none");
   el.style.setProperty("--collapser", "");
-}
-
-export function cloneNodes(nodes, propsCallback) {
-  return Children.toArray(nodes).map((node) => cloneElement(node, propsCallback(node)));
 }
 
 export function bootstrapDsfr() {

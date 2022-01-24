@@ -1,12 +1,13 @@
 import React from "react";
-import { buildListComponent, classNames, elementId } from "../dsfr";
+import { buildListComponent, classNames } from "../dsfr";
 import Hint from "./Hint";
+import useElementId from "../../hooks/useElementId";
 
 export const ToggleList = buildListComponent("fr-toggle__list");
 
 export function ToggleSwitch({ label, hint, modifiers, className, ...rest }) {
-  let id = elementId("toggle");
-  let hintId = elementId("hint");
+  let id = useElementId("toggle");
+  let hintId = useElementId("hint");
   let clazz = classNames("fr-toggle", { modifiers, className });
 
   return (

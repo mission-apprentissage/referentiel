@@ -1,9 +1,10 @@
-import { classNames, elementId } from "../dsfr";
+import { classNames } from "../dsfr";
 import React from "react";
+import useElementId from "../../hooks/useElementId";
 
 export default function Modal({ title, modal, content, footer, modifiers, className, ...rest }) {
   let clazz = classNames("fr-modal", { modifiers, className });
-  let contentId = elementId("modal-content");
+  let contentId = useElementId("modal-content");
 
   return (
     <dialog id={modal.id} ref={modal.ref} aria-labelledby={contentId} role="dialog" className={clazz} {...rest}>

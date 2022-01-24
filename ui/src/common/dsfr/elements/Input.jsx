@@ -1,14 +1,15 @@
 import React from "react";
-import { ariaDescribedBy, classNames, elementId } from "../dsfr";
+import { ariaDescribedBy, classNames } from "../dsfr";
 import Validation from "../common/Validation";
 import Hint from "./Hint";
+import useElementId from "../../hooks/useElementId";
 
 function Input({ label, hint, icons, validation, modifiers, className, ...rest }) {
-  let id = elementId("input");
+  let id = useElementId("input");
   let clazz = classNames("fr-input-group", { modifiers, className, validation });
   let wrapperClazz = classNames("fr-input-wrap ", { icons });
   let inputClass = classNames("fr-input", { validation });
-  let validationId = elementId("validation");
+  let validationId = useElementId("validation");
   let aria = validation ? ariaDescribedBy(validationId) : {};
 
   return (
