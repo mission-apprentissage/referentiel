@@ -6,18 +6,15 @@ import { subscribeToHttpEvent } from "./common/api/httpClient";
 import { logout } from "./common/api/auth";
 import "./xfr.scss";
 import GridDisplayer from "./common/dsfr/GridDisplayer";
-
-window.dsfr = {
-  verbose: false,
-  mode: "runtime",
-};
+import dsfrApi from "./common/dsfr/dsfrApi";
 
 ReactDOM.render(
   <React.StrictMode>
     <GridDisplayer />
     <App />
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById("root"),
+  () => dsfrApi.bootstrap()
 );
 
 subscribeToHttpEvent("http:error", (response) => {
@@ -33,6 +30,3 @@ subscribeToHttpEvent("http:error", (response) => {
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
-
-require("@gouvfr/dsfr/dist/dsfr/dsfr.module");
-require("@gouvfr/dsfr/dist/dsfr/dsfr.nomodule");
