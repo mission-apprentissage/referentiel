@@ -1,4 +1,4 @@
-import { classNames, elementId } from "../common/utils";
+import { classNames, elementId } from "../dsfr";
 import { cloneElement, createRef, forwardRef, useState } from "react";
 
 let fixedRandomId = elementId();

@@ -1,5 +1,5 @@
 import React, { Children } from "react";
-import { buildComponent, classNames, elementId } from "../common/utils";
+import { buildComponent, classNames, elementId } from "../dsfr";
 import { Collapse } from "../common/Collapsable";
 import { useCollapse } from "../common/useCollapse";
 import { NavLink as RouterNavLink } from "react-router-dom";

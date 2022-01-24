@@ -1,4 +1,4 @@
-import { buildComponent } from "../common/utils";
+import { buildComponent } from "../dsfr";
 
 export const Container = buildComponent("div", "fr-container");
 export const GridRow = buildComponent("div", "fr-grid-row");

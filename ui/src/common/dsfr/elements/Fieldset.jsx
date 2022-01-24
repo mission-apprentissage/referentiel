@@ -1,4 +1,4 @@
-import { ariaLabelledBy, classNames, elementId } from "../common/utils";
+import { ariaLabelledBy, classNames, elementId } from "../dsfr";
 import React from "react";
 import Validation from "../common/Validation";
 

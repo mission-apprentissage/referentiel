@@ -1,5 +1,5 @@
 import React from "react";
-import { buildComponent } from "../common/utils";
+import { buildComponent } from "../dsfr";
 import { Collapse } from "../common/Collapsable";
 import { useCollapse } from "../common/useCollapse";
 

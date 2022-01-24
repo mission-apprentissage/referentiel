@@ -1,4 +1,4 @@
-import { buildComponent, elementId } from "../common/utils";
+import { buildComponent, elementId } from "../dsfr";
 import React, { Children } from "react";
 import { Link } from "react-router-dom";
 

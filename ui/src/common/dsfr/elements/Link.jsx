@@ -1,4 +1,4 @@
-import { buildComponent, buildListComponent } from "../common/utils";
+import { buildComponent, buildListComponent } from "../dsfr";
 import { Link as ReactRouterLink } from "react-router-dom";
 
 export const LinkGroup = buildListComponent("ul", "fr-links-group");

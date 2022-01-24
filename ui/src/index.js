@@ -6,7 +6,7 @@ import { subscribeToHttpEvent } from "./common/api/httpClient";
 import { logout } from "./common/api/auth";
 import "./xfr.scss";
 import GridDisplayer from "./common/dsfr/GridDisplayer";
-import dsfrApi from "./common/dsfr/dsfrApi";
+import { bootstrapDsfr } from "./common/dsfr/dsfr";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,7 +14,7 @@ ReactDOM.render(
     <App />
   </React.StrictMode>,
   document.getElementById("root"),
-  () => dsfrApi.bootstrap()
+  () => bootstrapDsfr()
 );
 
 subscribeToHttpEvent("http:error", (response) => {

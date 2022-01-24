@@ -1,4 +1,4 @@
-import { buildComponent, buildListComponent } from "../common/utils";
+import { buildComponent, buildListComponent } from "../dsfr";
 import { Link } from "react-router-dom";
 
 export const TagGroup = buildListComponent("ul", "fr-tags-group");

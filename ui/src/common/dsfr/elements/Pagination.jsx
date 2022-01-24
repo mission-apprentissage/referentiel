@@ -1,4 +1,4 @@
-import { classNames } from "../common/utils";
+import { classNames } from "../dsfr";
 import cs from "classnames";
 import { Link } from "react-router-dom";
 

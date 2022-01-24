@@ -1,5 +1,5 @@
 import React from "react";
-import { classNames } from "../common/utils";
+import { classNames } from "../dsfr";
 
 export default function Alert({ title, onClose, modifiers, className, children }) {
   let clazz = classNames("fr-alert", { modifiers, className });

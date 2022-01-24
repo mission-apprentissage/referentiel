@@ -1,4 +1,4 @@
-import { classNames, elementId } from "../common/utils";
+import { classNames, elementId } from "../dsfr";
 import React from "react";
 
 export default function Modal({ title, modal, content, footer, modifiers, className, ...rest }) {

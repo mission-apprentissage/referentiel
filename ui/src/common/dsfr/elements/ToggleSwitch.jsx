@@ -1,5 +1,5 @@
 import React from "react";
-import { buildListComponent, classNames, elementId } from "../common/utils";
+import { buildListComponent, classNames, elementId } from "../dsfr";
 import Hint from "./Hint";
 
 export const ToggleList = buildListComponent("fr-toggle__list");

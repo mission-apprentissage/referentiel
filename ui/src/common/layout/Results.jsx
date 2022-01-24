@@ -21,22 +21,24 @@ export default function Results({ search, filters, results }) {
     <>
       <GridRow modifier={"gutters"}>
         <Col>
-          <SearchBox justify={"between"}>
-            <Item grow={1}>{search}</Item>
-            <Item className={"xfr-display-block xfr-display-sm-none"}>
-              <Button
-                title={"Filters"}
-                modifiers={"secondary"}
-                className={"fr-ml-1v"}
-                icons={"filter-line"}
-                aria-controls={modal.id}
-                onClick={modal.open}
-              >
-                Menu
-              </Button>
-              <FullModal modal={modal}>{filters}</FullModal>
-            </Item>
-          </SearchBox>
+          {search && (
+            <SearchBox justify={"between"}>
+              <Item grow={1}>{search}</Item>
+              <Item className={"xfr-display-block xfr-display-sm-none"}>
+                <Button
+                  title={"Filters"}
+                  modifiers={"secondary"}
+                  className={"fr-ml-1v"}
+                  icons={"filter-line"}
+                  aria-controls={modal.id}
+                  onClick={modal.open}
+                >
+                  Menu
+                </Button>
+                <FullModal modal={modal}>{filters}</FullModal>
+              </Item>
+            </SearchBox>
+          )}
         </Col>
       </GridRow>
       <GridRow modifiers={"gutters"}>

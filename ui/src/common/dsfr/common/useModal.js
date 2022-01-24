@@ -1,5 +1,5 @@
 import { createRef, useMemo } from "react";
-import { elementId } from "./utils";
+import { elementId } from "../dsfr";
 
 export function useModal() {
   let id = useMemo(() => elementId("modal"), []);

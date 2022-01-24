@@ -1,4 +1,4 @@
-import { buildComponent, collapseElement } from "./utils";
+import { buildComponent, collapseElement } from "../dsfr";
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
 

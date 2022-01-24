@@ -1,5 +1,5 @@
 import React from "react";
-import { ariaDescribedBy, classNames, elementId } from "../common/utils";
+import { ariaDescribedBy, classNames, elementId } from "../dsfr";
 import Validation from "../common/Validation";
 import Hint from "./Hint";
 

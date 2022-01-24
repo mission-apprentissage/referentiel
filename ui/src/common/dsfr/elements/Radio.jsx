@@ -1,5 +1,5 @@
 import React from "react";
-import { classNames, elementId } from "../common/utils";
+import { classNames, elementId } from "../dsfr";
 import Hint from "./Hint";
 
 export default function Radio({ label, hint, modifiers, className, ...rest }) {

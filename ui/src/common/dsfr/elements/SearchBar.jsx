@@ -1,5 +1,5 @@
 import React from "react";
-import { classNames, elementId } from "../common/utils";
+import { classNames, elementId } from "../dsfr";
 
 function SearchBar({ label, placeholder = label, modifiers, className, ...rest }) {
   let clazz = classNames("fr-search-bar", { modifiers, className });

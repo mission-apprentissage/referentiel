@@ -1,5 +1,5 @@
 import { createRef, useMemo } from "react";
-import { elementId } from "./utils";
+import { elementId } from "../dsfr";
 
 export function useCollapse() {
   let collapseId = useMemo(() => elementId("collapse"), []);

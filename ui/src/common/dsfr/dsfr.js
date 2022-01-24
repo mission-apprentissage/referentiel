@@ -2,6 +2,13 @@ import { v4 as uuidv4 } from "uuid";
 import React, { Children, cloneElement, forwardRef } from "react";
 import cs from "classnames";
 
+window.dsfr = {
+  verbose: true,
+  mode: "manual",
+};
+require("@gouvfr/dsfr/dist/dsfr/dsfr.module");
+require("@gouvfr/dsfr/dist/dsfr/dsfr.nomodule");
+
 export function buildComponent(componentName, dsfrName, options = {}) {
   return forwardRef((props, ref) => {
     let { as, modifiers, icons, className, children, ...rest } = props;
@@ -68,4 +75,8 @@ export function collapseElement(el) {
 
 export function cloneNodes(nodes, propsCallback) {
   return Children.toArray(nodes).map((node) => cloneElement(node, propsCallback(node)));
+}
+
+export function bootstrapDsfr() {
+  return setTimeout(() => dsfr.start(), 250);
 }
