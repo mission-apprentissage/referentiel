@@ -1,12 +1,15 @@
 import { classNames, elementId } from "../common/utils";
-import { cloneElement, createRef, forwardRef } from "react";
+import { cloneElement, createRef, forwardRef, useState } from "react";
+
+let fixedRandomId = elementId();
 
 export function Tabs({ label = "Système d'onglet", tabs, className }) {
   let clazz = classNames("fr-tabs", { className });
+  let [selected, setSelected] = useState(0);
   let array = tabs.map((item, index) => {
     return {
-      tabId: elementId("tab"),
-      panelId: elementId("tab-panel"),
+      tabId: `tab-${index}-${fixedRandomId}`,
+      panelId: `tab-panel-${index}-${fixedRandomId}`,
       tab: item.tab,
       panel: item.panel,
       ref: createRef(),
@@ -14,8 +17,9 @@ export function Tabs({ label = "Système d'onglet", tabs, className }) {
     };
   });
 
-  function showTab(el) {
-    return dsfr(el).tabPanel.disclose();
+  function showTab(key, el) {
+    setSelected(key);
+    dsfr(el).tabPanel.disclose();
   }
 
   return (
@@ -29,14 +33,14 @@ export function Tabs({ label = "Système d'onglet", tabs, className }) {
                 "aria-controls": panelId,
                 "aria-selected": key === 0,
                 tabIndex: key === 0 ? 0 : -1,
-                onClick: () => showTab(ref.current),
+                onClick: () => showTab(key, ref.current),
               })}
             </li>
           );
         })}
       </ul>
       {array.map(({ tabId, panelId, panel, ref, key }) => {
-        return cloneElement(panel, {
+        return cloneElement(selected === key ? panel : <TabPanel />, {
           id: panelId,
           "aria-labelledby": tabId,
           tabIndex: 0,

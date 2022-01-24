@@ -41,8 +41,9 @@ export function classNames(baseClassName, { modifiers, icons, className, validat
   );
 }
 
-export function elementId(prefix) {
-  return `${prefix}-${uuidv4().substr(0, 8)}`;
+export function elementId(name) {
+  let prefix = name ? `${name}-` : "";
+  return `${prefix}${uuidv4().substr(0, 8)}`;
 }
 
 export function icon(name) {
