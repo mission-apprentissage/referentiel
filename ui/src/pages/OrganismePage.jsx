@@ -2,9 +2,9 @@ import { Col, GridRow } from "../common/dsfr/fondamentaux";
 import { useParams } from "react-router-dom";
 import Alert from "../common/dsfr/elements/Alert";
 import React, { createContext, useContext, useState } from "react";
-import LayoutTitle from "../common/layout/LayoutTitle";
+import TitleLayout from "../common/layout/TitleLayout";
 import Reseaux from "../organismes/fiche/Reseaux";
-import LayoutContent from "../common/layout/LayoutContent";
+import ContentLayout from "../common/layout/ContentLayout";
 import { useFetch } from "../common/hooks/useFetch";
 import Fiche from "../organismes/fiche/Fiche";
 
@@ -57,12 +57,12 @@ export default function OrganismePage() {
 
   return (
     <OrganismeContext.Provider value={{ organisme, updateOrganisme }}>
-      <LayoutTitle title={<OrganismeTitle />} message={message} back={"Retour à la liste"}>
+      <TitleLayout title={<OrganismeTitle />} message={message} back={"Retour à la liste"}>
         <Reseaux organisme={organisme} />
-      </LayoutTitle>
-      <LayoutContent>
+      </TitleLayout>
+      <ContentLayout>
         <Fiche organisme={organisme} />
-      </LayoutContent>
+      </ContentLayout>
     </OrganismeContext.Provider>
   );
 }

@@ -5,21 +5,21 @@ import SearchForm from "../organismes/liste/SearchForm";
 import OrganismeList from "../organismes/liste/OrganismeList";
 import Filters from "../organismes/liste/Filters";
 import { DepartementsFilter, IdentiteFilter, NatureFilter, NdaFilter } from "../organismes/liste/Filter";
-import LayoutTitle from "../common/layout/LayoutTitle";
+import TitleLayout from "../common/layout/TitleLayout";
 import Results from "../common/layout/Results";
 import WideTabs from "../common/dsfr/custom/WideTabs";
-import LayoutContent from "../common/layout/LayoutContent";
+import ContentLayout from "../common/layout/ContentLayout";
 
 export default function OrganismesPage() {
   let [response, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
 
   return (
     <>
-      <LayoutTitle
+      <TitleLayout
         title={"Référentiel national"}
         selector={<AcademieSelector onChange={(code) => search({ academies: code })} />}
       />
-      <LayoutContent>
+      <ContentLayout>
         <WideTabs
           tabs={[
             {
@@ -45,7 +45,7 @@ export default function OrganismesPage() {
             { tab: <Tab disabled>Guide Réglementaire</Tab>, panel: <TabPanel>-</TabPanel> },
           ]}
         />
-      </LayoutContent>
+      </ContentLayout>
     </>
   );
 }

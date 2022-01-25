@@ -1,6 +1,6 @@
 import { Container } from "../dsfr/fondamentaux";
 import React from "react";
 
-export default function LayoutContent({ children }) {
+export default function ContentLayout({ children }) {
   return <Container>{children}</Container>;
 }

@@ -4,7 +4,6 @@ import LinkButton from "../../../common/dsfr/custom/LinkButton";
 import ValidationTag from "../../../common/ValidationTag";
 import { UAISelectorModal } from "./UAISelectorModal";
 import { Button } from "../../../common/dsfr/elements/Button";
-import { getValidationType } from "../../../common/validation";
 
 const actions = {
   A_VALIDER: {
@@ -58,7 +57,7 @@ const actions = {
 
 export default function UAIValidator({ organisme, ...rest }) {
   let modal = useModal();
-  let type = getValidationType(organisme);
+  let type = organisme.uai ? "VALIDE" : organisme.uai_potentiels.length > 0 ? "A_VALIDER" : "A_RENSEIGNER";
   let action = actions[type];
   let { label, ActionButton } = action;
 

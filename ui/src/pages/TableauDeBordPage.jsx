@@ -3,9 +3,9 @@ import React, { useContext } from "react";
 import TableauDeBordCard from "./components/TableauDeBordCard";
 import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
 import useNavigation from "../common/hooks/useNavigation";
-import LayoutTitle from "../common/layout/LayoutTitle";
+import TitleLayout from "../common/layout/TitleLayout";
 import { AuthContext } from "../common/AuthRoutes";
-import LayoutContent from "../common/layout/LayoutContent";
+import ContentLayout from "../common/layout/ContentLayout";
 
 export default function TableauDeBordPage() {
   let [auth] = useContext(AuthContext);
@@ -14,11 +14,11 @@ export default function TableauDeBordPage() {
 
   return (
     <>
-      <LayoutTitle
+      <TitleLayout
         title={title}
         selector={<DepartementAuthSelector onChange={(code) => navigate({ departements: code })} />}
       />
-      <LayoutContent>
+      <ContentLayout>
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
           <Col modifiers={"12 sm-4"}>
             <TableauDeBordCard type={"A_VALIDER"} label={"Organismes à vérifier"} />
@@ -30,7 +30,7 @@ export default function TableauDeBordPage() {
             <TableauDeBordCard type={"VALIDE"} label={"Organismes validés"} />
           </Col>
         </GridRow>
-      </LayoutContent>
+      </ContentLayout>
     </>
   );
 }

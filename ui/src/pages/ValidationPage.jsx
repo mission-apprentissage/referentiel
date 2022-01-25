@@ -2,12 +2,11 @@ import OrganismeList from "../organismes/liste/OrganismeList";
 import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
 import SearchForm from "../organismes/liste/SearchForm";
 import { useParams } from "react-router-dom";
-import LayoutTitle from "../common/layout/LayoutTitle";
+import TitleLayout from "../common/layout/TitleLayout";
 import useNavigation from "../common/hooks/useNavigation";
 import Results from "../common/layout/Results";
-import LayoutContent from "../common/layout/LayoutContent";
+import ContentLayout from "../common/layout/ContentLayout";
 import styled from "styled-components";
-import { getValidationTitle } from "../common/validation";
 import useValidationSearch from "../common/hooks/useValidationSearch";
 import Filters from "../organismes/liste/Filters";
 import { NatureFilter } from "../organismes/liste/Filter";
@@ -22,12 +21,12 @@ const ValidationLayoutTitle = styled(({ search, children, className }) => {
 
   return (
     <div className={className}>
-      <LayoutTitle
+      <TitleLayout
         title={<ValidationTitle />}
         selector={<DepartementAuthSelector onChange={(code) => search({ ...params, departements: code })} />}
       >
         {children}
-      </LayoutTitle>
+      </TitleLayout>
     </div>
   );
 })`
@@ -46,7 +45,7 @@ export default function ValidationPage() {
   return (
     <>
       <ValidationLayoutTitle search={search} type={type} />
-      <LayoutContent>
+      <ContentLayout>
         <Results
           search={<SearchForm onSubmit={(values) => search({ ...params, ...values, page: 1 })} />}
           filters={
@@ -61,7 +60,7 @@ export default function ValidationPage() {
           }
           results={<OrganismeList response={response} />}
         />
-      </LayoutContent>
+      </ContentLayout>
     </>
   );
 }
