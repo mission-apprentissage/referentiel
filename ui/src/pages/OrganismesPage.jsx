@@ -4,7 +4,7 @@ import { useSearch } from "../common/hooks/useSearch";
 import SearchForm from "../organismes/liste/SearchForm";
 import OrganismeList from "../organismes/liste/OrganismeList";
 import Filters from "../organismes/liste/Filters";
-import { DepartementsFilter, IdentiteFilter, NatureFilter, NdaFilter } from "../organismes/liste/Filter";
+import { DepartementsFilter, UAIFilter, NatureFilter, NdaFilter } from "../organismes/liste/Filter";
 import TitleLayout from "../common/layout/TitleLayout";
 import Results from "../common/layout/Results";
 import WideTabs from "../common/dsfr/custom/WideTabs";
@@ -33,7 +33,7 @@ export default function OrganismesPage() {
                         <DepartementsFilter />
                         <NatureFilter />
                         <NdaFilter />
-                        <IdentiteFilter />
+                        <UAIFilter />
                       </Filters>
                     }
                     results={<OrganismeList response={response} />}

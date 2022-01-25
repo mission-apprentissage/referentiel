@@ -1,4 +1,4 @@
-import { Box, Item } from "../../common/Flexbox";
+import { Box } from "../../common/Flexbox";
 import styled from "styled-components";
 import React from "react";
 import { Link } from "../../common/dsfr/elements/Link";
@@ -35,14 +35,14 @@ const Identifiants = styled(Box)`
   }
 `;
 
-const IdentiteTag = styled(({ organisme, ...props }) => {
+const ValidationTag = styled(({ organisme, ...props }) => {
   if (!organisme.uai) {
     return <span {...props} />;
   }
 
   return (
     <Tag modifiers="sm icon-left" icons={"checkbox-circle-fill"} {...props}>
-      Identité validée
+      UAI validée
     </Tag>
   );
 })`
@@ -62,15 +62,13 @@ export default function OrganismeItem({ organisme }) {
         {organisme.natures.length > 0 && (
           <Box justify={"between"}>
             <Tag modifiers="sm">{<Natures organisme={organisme} />}</Tag>
+            <ValidationTag organisme={organisme} />
           </Box>
         )}
         <Box justify={"between"}>
           <RaisonSociale className={"fr-text--bold"} style={{ width: "85%" }}>
             {organisme.raison_sociale || "Raison sociale inconnue"}
           </RaisonSociale>
-          <Item alignSelf={"baseline"}>
-            <IdentiteTag organisme={organisme} />
-          </Item>
         </Box>
         <Adresse>{adresse}</Adresse>
         <Box justify={"between"} align={"center"}>

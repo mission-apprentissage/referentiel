@@ -100,11 +100,11 @@ export function NdaFilter() {
   );
 }
 
-export function IdentiteFilter() {
+export function UAIFilter() {
   return (
     <Filter
-      label={"Identité validée"}
-      paramName={"uai"}
+      label={"UAI validée"}
+      paramName={"uais"}
       items={[
         { code: "true", label: "Oui" },
         { code: "false", label: "Non" },

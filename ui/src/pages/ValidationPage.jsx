@@ -13,7 +13,13 @@ import { NatureFilter } from "../organismes/liste/Filter";
 
 export function ValidationTitle() {
   let { type } = useParams();
-  return <span>{getValidationTitle(type)}</span>;
+  let mapper = {
+    A_VALIDER: "Organismes à vérifier",
+    A_RENSEIGNER: "Organismes à identifier",
+    VALIDE: "Organismes validés",
+  };
+
+  return <span>{mapper[type]}</span>;
 }
 
 const ValidationLayoutTitle = styled(({ search, children, className }) => {
