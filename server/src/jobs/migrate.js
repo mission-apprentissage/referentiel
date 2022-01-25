@@ -1,31 +1,9 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
 
-const VERSION = 3;
+const VERSION = 4;
 
 async function tasks() {
-  return {
-    renameStatus: await dbCollection("organismes").updateMany({}, { $rename: { statuts: "natures" } }),
-    renameGestionnaireStatuts: await dbCollection("organismes").updateMany(
-      { natures: "gestionnaire" },
-      { $set: { "natures.$": "responsable" } }
-    ),
-    unsetQualiopi: await dbCollection("organismes").updateMany(
-      { qualiopi: { $exists: true } },
-      { $unset: { qualiopi: 1 } }
-    ),
-    clearRelations: await dbCollection("organismes").updateMany(
-      { "relations.0": { $exists: true } },
-      { $set: { relations: [] } }
-    ),
-    clearAnomalies: await dbCollection("organismes").updateMany(
-      { "_meta.anomalies.0": { $exists: true } },
-      { $set: { "_meta.anomalies": [] } }
-    ),
-    clearUAIPotentiels: await dbCollection("organismes").updateMany(
-      { "uai_potentiels.0": { $exists: true } },
-      { $set: { uai_potentiels: [] } }
-    ),
-  };
+  return {};
 }
 
 async function _ensureMigrationCanBeRun() {
