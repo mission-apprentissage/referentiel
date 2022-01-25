@@ -2,7 +2,7 @@ const { compose, transformData } = require("oleoduc");
 const CatalogueApi = require("../../common/apis/CatalogueApi");
 
 function streamEtablissements(api) {
-  return api.streamEtablissements({ catalogue_published: true }, { limit: 100000 });
+  return api.streamEtablissements({ published: true }, { limit: 100000 });
 }
 
 module.exports = (custom = {}) => {

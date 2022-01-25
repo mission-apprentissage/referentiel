@@ -10,7 +10,7 @@ const { dbCollection } = require("../../../src/common/db/mongodb");
 function mockApis(custom = {}) {
   mockCatalogueApi((client, responses) => {
     client
-      .get((uri) => uri.includes("formations2021.ndjson"))
+      .get((uri) => uri.includes("formations.ndjson"))
       .query(() => true)
       .reply(200, responses.formations(custom.formation));
   });
@@ -397,7 +397,7 @@ describe("catalogue", () => {
     let source = createSource("catalogue");
     mockCatalogueApi((client, responses) => {
       client
-        .get((uri) => uri.includes("formations2021.ndjson"))
+        .get((uri) => uri.includes("formations.ndjson"))
         .query(() => true)
         .reply(
           200,
@@ -469,7 +469,7 @@ describe("catalogue", () => {
     let source = createSource("catalogue");
     mockCatalogueApi((client, responses) => {
       client
-        .get((uri) => uri.includes("formations2021.ndjson"))
+        .get((uri) => uri.includes("formations.ndjson"))
         .query(() => true)
         .reply(
           200,
