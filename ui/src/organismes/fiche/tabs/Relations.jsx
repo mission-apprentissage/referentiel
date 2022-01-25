@@ -5,6 +5,7 @@ import OrganismeList from "../../liste/OrganismeList";
 import Results from "../../../common/layout/Results";
 import NatureFilter from "../../filtres/NatureFilter";
 import RelationFilter from "../../filtres/RelationFilter";
+import EtatAdministratifFilter from "../../filtres/EtatAdministratifFilter";
 
 export function Relations({ organisme }) {
   let relations = organisme.relations.filter((r) => r.referentiel);
@@ -20,8 +21,9 @@ export function Relations({ organisme }) {
       <Results
         filters={
           <Filters onChange={(filters) => search({ ...filters })}>
-            <NatureFilter />
             <RelationFilter />
+            <NatureFilter />
+            <EtatAdministratifFilter />
           </Filters>
         }
         results={
