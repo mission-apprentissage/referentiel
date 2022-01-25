@@ -3,12 +3,15 @@ import AcademieSelector from "../organismes/selectors/AcademieSelector";
 import { useSearch } from "../common/hooks/useSearch";
 import SearchForm from "../organismes/liste/SearchForm";
 import OrganismeList from "../organismes/liste/OrganismeList";
-import Filters from "../organismes/liste/Filters";
-import { DepartementsFilter, UAIFilter, NatureFilter, NdaFilter } from "../organismes/liste/Filter";
+import Filters from "../organismes/filtres/Filters";
 import TitleLayout from "../common/layout/TitleLayout";
 import Results from "../common/layout/Results";
 import WideTabs from "../common/dsfr/custom/WideTabs";
 import ContentLayout from "../common/layout/ContentLayout";
+import NatureFilter from "../organismes/filtres/NatureFilter";
+import NdaFilter from "../organismes/filtres/NdaFilter";
+import DepartementsFilter from "../organismes/filtres/DepartementsFilter";
+import UAIFilter from "../organismes/filtres/UAIFilter";
 
 export default function OrganismesPage() {
   let [response, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });

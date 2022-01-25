@@ -8,8 +8,8 @@ import Results from "../common/layout/Results";
 import ContentLayout from "../common/layout/ContentLayout";
 import styled from "styled-components";
 import useValidationSearch from "../common/hooks/useValidationSearch";
-import Filters from "../organismes/liste/Filters";
-import { NatureFilter } from "../organismes/liste/Filter";
+import Filters from "../organismes/filtres/Filters";
+import NatureFilter from "../organismes/filtres/NatureFilter";
 
 export function ValidationTitle() {
   let { type } = useParams();

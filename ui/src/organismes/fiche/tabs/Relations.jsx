@@ -1,9 +1,10 @@
 import React from "react";
 import { useSearch } from "../../../common/hooks/useSearch";
-import Filters from "../../liste/Filters";
-import { NatureFilter, RelationFilter } from "../../liste/Filter";
+import Filters from "../../filtres/Filters";
 import OrganismeList from "../../liste/OrganismeList";
 import Results from "../../../common/layout/Results";
+import NatureFilter from "../../filtres/NatureFilter";
+import RelationFilter from "../../filtres/RelationFilter";
 
 export function Relations({ organisme }) {
   let relations = organisme.relations.filter((r) => r.referentiel);

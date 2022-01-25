@@ -14,7 +14,7 @@ export default function Layout({ children }) {
         nav={
           <Nav>
             <NavLink to={"/"}>Tableau de bord</NavLink>
-            <NavLink to={"/organismes"}>Liste nationale des organismes</NavLink>
+            <NavLink to={"/organismes"}>Référentiel national</NavLink>
           </Nav>
         }
       />
