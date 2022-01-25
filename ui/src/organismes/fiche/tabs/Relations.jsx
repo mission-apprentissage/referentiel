@@ -1,44 +1,38 @@
 import React from "react";
-import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
-import { Table, Thead } from "../../../common/dsfr/elements/Table";
-import { Link } from "../../../common/dsfr/elements/Link";
+import { useSearch } from "../../../common/hooks/useSearch";
+import Filters from "../../liste/Filters";
+import { NatureFilter, RelationFilter } from "../../liste/Filter";
+import OrganismeList from "../../liste/OrganismeList";
+import Results from "../../../common/layout/Results";
 
 export function Relations({ organisme }) {
+  let relations = organisme.relations.filter((r) => r.referentiel);
+  let [{ data, loading, error }, search] = useSearch({
+    page: 1,
+    sirets: relations.map((r) => r.siret),
+    items_par_page: relations.length,
+  });
+
   return (
     <>
-      <h6>Relations</h6>
-      <GridRow>
-        <Col>
-          <Table
-            modifiers={"bordered layout-fixed"}
-            thead={
-              <Thead>
-                <td>Nom</td>
-                <td>SIRET</td>
-                <td>entreprise</td>
-                <td>Type de relation</td>
-              </Thead>
-            }
-          >
-            {organisme.relations.map((relation, index) => {
-              return (
-                <tr key={index}>
-                  <td>{relation.label}</td>
-                  <td>
-                    {relation.referentiel ? (
-                      <Link to={`/organismes/${relation.siret}`}>{relation.siret}</Link>
-                    ) : (
-                      relation.siret
-                    )}
-                  </td>
-                  <td>{organisme.siret.substr(0, 9) === relation?.siret.substr(0, 9) ? "Oui" : "Non"}</td>
-                  <td>{relation.type}</td>
-                </tr>
-              );
-            })}
-          </Table>
-        </Col>
-      </GridRow>
+      <h6>Ecosystème de l'organisme</h6>
+      <Results
+        filters={
+          <Filters onChange={(filters) => search({ ...filters })}>
+            <NatureFilter />
+            <RelationFilter />
+          </Filters>
+        }
+        results={
+          <OrganismeList
+            response={{
+              data,
+              loading,
+              error,
+            }}
+          />
+        }
+      />
     </>
   );
 }
