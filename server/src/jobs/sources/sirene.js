@@ -83,9 +83,9 @@ module.exports = (custom = {}) => {
       let sirets = await datagouv.loadSirets();
 
       return compose(
-        dbCollection("organismes").find(filters, { siret: 1 }).batchSize(20).stream(),
+        dbCollection("organismes").find(filters, { siret: 1, "adresse.code_insee": 1 }).batchSize(20).stream(),
         transformData(
-          async ({ siret }) => {
+          async ({ siret, adresse: previousAdresse }) => {
             try {
               let siren = siret.substring(0, 9);
               let anomalies = [];
@@ -103,12 +103,14 @@ module.exports = (custom = {}) => {
                 };
               }
 
-              let adresse = await getAdresse(adresseResolver, etablissement).catch((e) => {
-                anomalies.push({
-                  code: "etablissement_geoloc_impossible",
-                  message: `Impossible de géolocaliser l'adresse de l'organisme. ${e.message}`,
-                });
-              });
+              let adresse = previousAdresse
+                ? null
+                : await getAdresse(adresseResolver, etablissement).catch((e) => {
+                    anomalies.push({
+                      code: "etablissement_geoloc_impossible",
+                      message: `Impossible de géolocaliser l'adresse de l'organisme. ${e.message}`,
+                    });
+                  });
 
               let formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);
               if (!formeJuridique) {

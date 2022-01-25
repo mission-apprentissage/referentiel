@@ -6,7 +6,7 @@ const collectSources = require("../../../src/jobs/collectSources");
 const { importOrganismesForTest } = require("../../utils/testUtils");
 const { mockSireneApi, mockGeoAddresseApi } = require("../../utils/apiMocks");
 const { DateTime } = require("luxon");
-const { insertDatagouv } = require("../../utils/fakeData");
+const { insertDatagouv, insertOrganisme } = require("../../utils/fakeData");
 
 function createSireneSource(options = {}) {
   let { withPredefinedMocks = [], ...custom } = options;
@@ -266,6 +266,43 @@ describe("sirene", () => {
         failed: 0,
       },
     });
+  });
+
+  it("Vérifie qu'on ne recherche pas une adresse si elle a déjà été resolue", async () => {
+    let source = createSireneSource({ withPredefinedMocks: ["sireneMocks"] });
+    await insertOrganisme({ siret: "11111111100006" });
+    mockGeoAddresseApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("reverse"))
+        .query(() => true)
+        .reply(
+          200,
+          responses.reverse({
+            features: [
+              {
+                properties: {
+                  label: "32 rue des lilas Paris 75019",
+                  housenumber: "32",
+                  name: "32 rue des Lilas",
+                  postcode: "75019",
+                  citycode: "75000",
+                  city: "Montreuil",
+                },
+              },
+            ],
+          })
+        );
+
+      client
+        .get((uri) => uri.includes("search"))
+        .query(() => true)
+        .reply(400, {});
+    });
+
+    await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    assert.strictEqual(found.adresse.label, "31 rue des lilas Paris 75019");
   });
 
   it("Vérifie qu'on peut filter par siret", async () => {

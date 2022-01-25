@@ -4,8 +4,8 @@ const RateLimitedApi = require("./RateLimitedApi");
 
 class SireneApi extends RateLimitedApi {
   constructor(options = {}) {
-    super("SireneApi", { nbRequests: 4, durationInSeconds: 1, ...options });
-    this.client = options.axios || axios.create({ timeout: 5000 });
+    super("SireneApi", { nbRequests: 2, durationInSeconds: 1, ...options });
+    this.client = options.axios || axios.create({ timeout: 10000 });
   }
 
   static get baseApiUrl() {
