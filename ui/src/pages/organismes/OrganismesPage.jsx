@@ -15,7 +15,10 @@ export default function OrganismesPage() {
 
   return (
     <>
-      <LayoutTitle selector={<AcademieSelector onChange={(code) => search({ academies: code })} />} />
+      <LayoutTitle
+        title={"Référentiel national"}
+        selector={<AcademieSelector onChange={(code) => search({ academies: code })} />}
+      />
       <LayoutContent>
         <WideTabs
           tabs={[

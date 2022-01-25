@@ -70,17 +70,19 @@ export function DepartementsFilter() {
   );
 }
 
-export function NatureFilter() {
+export function NatureFilter({ items }) {
   return (
     <Filter
-      label={"Nature"}
+      label={"Nature des organismes"}
       paramName={"natures"}
-      items={[
-        { code: "formateur|responsable", label: "Responsable et formateur" },
-        { code: "formateur|-responsable", label: "Formateur" },
-        { code: "-formateur|responsable", label: "Responsable" },
-        { code: "-formateur|-responsable", label: "N.A" },
-      ]}
+      items={
+        items || [
+          { code: "formateur|responsable", label: "Responsable et formateur" },
+          { code: "formateur|-responsable", label: "Formateur" },
+          { code: "-formateur|responsable", label: "Responsable" },
+          { code: "-formateur|-responsable", label: "N.A" },
+        ]
+      }
     />
   );
 }

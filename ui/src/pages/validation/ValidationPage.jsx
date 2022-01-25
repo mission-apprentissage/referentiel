@@ -9,6 +9,8 @@ import LayoutContent from "../../common/layout/LayoutContent";
 import styled from "styled-components";
 import { getValidationTitle } from "../../common/validation";
 import useValidationSearch from "../../common/hooks/useValidationSearch";
+import Filters from "../organismes/fragments/Filters";
+import { NatureFilter } from "../organismes/fragments/Filter";
 
 export function ValidationTitle() {
   let { type } = useParams();
@@ -47,6 +49,16 @@ export default function ValidationPage() {
       <LayoutContent>
         <Results
           search={<SearchForm onSubmit={(values) => search({ ...params, ...values, page: 1 })} />}
+          filters={
+            <Filters onChange={(filters) => search({ ...filters })}>
+              <NatureFilter
+                items={[
+                  { code: "formateur|responsable", label: "Responsable et formateur" },
+                  { code: "-formateur|responsable", label: "Responsable" },
+                ]}
+              />
+            </Filters>
+          }
           results={<OrganismeList response={response} />}
         />
       </LayoutContent>
