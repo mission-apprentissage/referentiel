@@ -152,7 +152,7 @@ module.exports = async (array, options = {}) => {
         await handleAnomalies(from, organisme, anomalies);
       }
 
-      let res = await dbCollection("organismes").updateMany(query, {
+      let res = await dbCollection("organismes").updateOne(query, {
         $set: {
           ...omitNil(flattenObject(data)),
           uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),

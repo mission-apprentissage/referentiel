@@ -41,7 +41,6 @@ describe("datagouv", () => {
   it("Vérifie qu'on peut collecter des informations de la liste publique des organismes de formation", async () => {
     await Promise.all([
       insertOrganisme({ siret: "11111111100006" }),
-      insertOrganisme({ siret: "11111111100007" }),
       insertOrganisme({ siret: "22222222200002" }),
       insertDatagouv({
         numeroDeclarationActivite: "88888888888",
@@ -56,15 +55,13 @@ describe("datagouv", () => {
 
     let docs = await dbCollection("organismes").find({}, { _id: 0 }).sort({ siret: 1 }).toArray();
     assert.deepStrictEqual(docs[0].numero_declaration_activite, "88888888888");
-    assert.deepStrictEqual(docs[1].numero_declaration_activite, "88888888888");
-    assert.deepStrictEqual(docs[2].numero_declaration_activite, undefined);
     assert.deepStrictEqual(docs[0].qualiopi, true);
-    assert.deepStrictEqual(docs[1].qualiopi, true);
-    assert.deepStrictEqual(docs[2].qualiopi, undefined);
+    assert.deepStrictEqual(docs[1].numero_declaration_activite, undefined);
+    assert.deepStrictEqual(docs[1].qualiopi, undefined);
     assert.deepStrictEqual(stats, {
       datagouv: {
         total: 1,
-        updated: 2,
+        updated: 1,
         unknown: 0,
         anomalies: 0,
         failed: 0,
@@ -72,7 +69,7 @@ describe("datagouv", () => {
     });
   });
 
-  it("Vérifie que peut charger en mémoire la liste des CFA", async () => {
+  it("Vérifie que peut charger en mémoire la liste des organismes de formation", async () => {
     await insertDatagouv({
       numeroDeclarationActivite: "88888888888",
       siren: "111111111",

@@ -2,45 +2,28 @@ const { configureIndexes, configureValidation, dbCollection } = require("../comm
 
 const VERSION = 3;
 
-async function _tasks() {
+async function tasks() {
   return {
     renameStatus: await dbCollection("organismes").updateMany({}, { $rename: { statuts: "natures" } }),
     renameGestionnaireStatuts: await dbCollection("organismes").updateMany(
       { natures: "gestionnaire" },
       { $set: { "natures.$": "responsable" } }
     ),
-    renameGestionnaireType: await dbCollection("organismes").updateMany(
-      { "relations.type": "gestionnaire" },
-      { $set: { "relations.$[q].type": "formateur->responsable" } },
-      {
-        arrayFilters: [
-          {
-            "q.type": "gestionnaire",
-          },
-        ],
-      }
+    unsetQualiopi: await dbCollection("organismes").updateMany(
+      { qualiopi: { $exists: true } },
+      { $unset: { qualiopi: 1 } }
     ),
-    renameFormateurType: await dbCollection("organismes").updateMany(
-      { "relations.type": "formateur" },
-      { $set: { "relations.$[q].type": "responsable->formateur" } },
-      {
-        arrayFilters: [
-          {
-            "q.type": "formateur",
-          },
-        ],
-      }
+    clearRelations: await dbCollection("organismes").updateMany(
+      { "relations.0": { $exists: true } },
+      { $set: { relations: [] } }
     ),
-    renameEntrepriseType: await dbCollection("organismes").updateMany(
-      { relations: { $elemMatch: { type: { $exists: false } } } },
-      { $set: { "relations.$[q].type": "entreprise" } },
-      {
-        arrayFilters: [
-          {
-            "q.sources": "sirene",
-          },
-        ],
-      }
+    clearAnomalies: await dbCollection("organismes").updateMany(
+      { "_meta.anomalies.0": { $exists: true } },
+      { $set: { "_meta.anomalies": [] } }
+    ),
+    clearUAIPotentiels: await dbCollection("organismes").updateMany(
+      { "uai_potentiels.0": { $exists: true } },
+      { $set: { uai_potentiels: [] } }
     ),
   };
 }
@@ -64,7 +47,7 @@ function _saveMigration() {
 async function migrate(options = {}) {
   await _ensureMigrationCanBeRun();
   await _prepareMigration(options);
-  let res = await _tasks();
+  let res = await tasks();
   await _saveMigration();
   return res;
 }

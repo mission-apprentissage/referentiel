@@ -21,11 +21,9 @@ module.exports = () => {
       return compose(
         dbCollection("datagouv").find({ "certifications.actionsDeFormationParApprentissage": true }).stream(),
         transformData((doc) => {
-          let siret = doc.siretEtablissementDeclarant;
-
           return {
             from: name,
-            siret: siret,
+            siret: doc.siretEtablissementDeclarant,
           };
         })
       );
@@ -38,7 +36,7 @@ module.exports = () => {
 
           return {
             from: name,
-            selector: { siret: { $regex: new RegExp(`^${doc.siren}`) } },
+            selector: { siret: doc.siretEtablissementDeclarant },
             data: {
               ...(nda ? { numero_declaration_activite: nda } : {}),
               qualiopi: isQualiopi(doc),

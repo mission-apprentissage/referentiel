@@ -18,7 +18,7 @@ class GeocodingError extends Error {
 function selectBestResult(results, desc) {
   let best = results.features[0];
   if (!best) {
-    throw new GeocodingError(`Pas de résultats pour l'adresse ${desc}`);
+    throw new GeocodingError(`Pas de résultats pour l'adresse ${JSON.stringify(desc)}`);
   } else if (best.properties.score < MIN_GEOCODE_SCORE) {
     throw new GeocodingError(
       `Score ${best.properties.score} trop faible pour l'adresse ${desc} / ${best.geometry.coordinates}`
