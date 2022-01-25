@@ -19,6 +19,10 @@ function parseDate(value) {
   return DateTime.fromFormat(value, "dd/MM/yyyy", { zone: "utc" }).toJSDate();
 }
 
+function parseNumber(value) {
+  return value ? parseInt(value) : null;
+}
+
 async function importDatagouv(options = {}) {
   let stats = { total: 0, created: 0, updated: 0, failed: 0 };
   let stream = options.input || (await getListePubliqueDesOrganismesDeFormationAsStream());
@@ -61,9 +65,11 @@ async function importDatagouv(options = {}) {
               dateDerniereDeclaration: parseDate(data["informationsDeclarees.dateDerniereDeclaration"]),
               debutExercice: parseDate(data["informationsDeclarees.debutExercice"]),
               finExercice: parseDate(data["informationsDeclarees.finExercice"]),
-              nbStagiaires: data["informationsDeclarees.nbStagiaires"],
-              nbStagiairesConfiesParUnAutreOF: data["informationsDeclarees.nbStagiairesConfiesParUnAutreOF"],
-              effectifFormateurs: parseInt(data["informationsDeclarees.effectifFormateurs"]),
+              nbStagiaires: parseNumber(data["informationsDeclarees.nbStagiaires"]),
+              nbStagiairesConfiesParUnAutreOF: parseNumber(
+                data["informationsDeclarees.nbStagiairesConfiesParUnAutreOF"]
+              ),
+              effectifFormateurs: parseNumber(data["informationsDeclarees.effectifFormateurs"]),
               specialitesDeFormation: {
                 codeSpecialite1: data["informationsDeclarees.specialitesDeFormation.codeSpecialite1"],
                 libelleSpecialite1: data["informationsDeclarees.specialitesDeFormation.libelleSpecialite1"],
