@@ -1,8 +1,8 @@
 import Breadcrumb, { BreadcrumbCurrent, BreadcrumbLink } from "./dsfr/elements/Breadcrumb";
 import React, { useContext } from "react";
 import useBreadcrumbs from "use-react-router-breadcrumbs";
-import { ValidationTitle } from "../pages/validation/ValidationPage";
-import { OrganismeTitle } from "../pages/organisme/OrganismePage";
+import { ValidationTitle } from "../pages/ValidationPage";
+import { OrganismeTitle } from "../pages/OrganismePage";
 import { AuthContext } from "./AuthRoutes";
 
 export default function FilAriane() {

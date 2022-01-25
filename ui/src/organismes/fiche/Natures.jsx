@@ -1,8 +1,8 @@
 import React from "react";
-import { capitalizeFirstLetter } from "../../../common/utils";
+import { capitalizeFirstLetter } from "../../common/utils";
 import NA from "./NA";
 
-export function Natures({ organisme }) {
+export default function Natures({ organisme }) {
   if (organisme.natures.length === 0) {
     return <NA />;
   }

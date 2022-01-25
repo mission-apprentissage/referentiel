@@ -1,13 +1,16 @@
-import Select from "../../../common/dsfr/elements/Select";
+import Select from "../../common/dsfr/elements/Select";
 import { useContext, useState } from "react";
-import useNavigation from "../../../common/hooks/useNavigation";
-import { Box, Item } from "../../../common/Flexbox";
-import { DataContext } from "../../../common/hooks/useData";
+import useNavigation from "../../common/hooks/useNavigation";
+import { Box, Item } from "../../common/Flexbox";
+import { DataContext } from "../../common/hooks/useData";
+import { AuthContext } from "../../common/AuthRoutes";
 
-export default function AcademieSelector({ onChange }) {
-  let [{ academies }] = useContext(DataContext);
+export default function DepartementAuthSelector({ onChange }) {
   let { params } = useNavigation();
-  let [selected, setSelected] = useState(params.academie || "");
+  let [data] = useContext(DataContext);
+  let [auth] = useContext(AuthContext);
+  let [selected, setSelected] = useState(params.departements || "");
+  let departements = data[`${auth.type}s`].find((r) => r.code === auth.code)?.departements || [];
 
   return (
     <Box align={"center"} justify={"start"} style={{ width: "100%" }}>
@@ -21,8 +24,8 @@ export default function AcademieSelector({ onChange }) {
             return onChange(code);
           }}
         >
-          <option value="">Tous les académies</option>
-          {academies.map((dep, index) => {
+          <option value="">Tous les départements</option>
+          {departements.map((dep, index) => {
             let code = dep.code;
             return (
               <option key={index} value={code}>

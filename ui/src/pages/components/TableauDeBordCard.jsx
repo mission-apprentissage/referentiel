@@ -1,10 +1,10 @@
-import { Link } from "../../../common/dsfr/elements/Link";
-import { Box } from "../../../common/Flexbox";
+import { Link } from "../../common/dsfr/elements/Link";
+import { Box } from "../../common/Flexbox";
 import styled from "styled-components";
-import ClickableItem from "../../../common/ClickableItem";
-import { without } from "../../../common/utils";
-import Spinner from "../../../common/Spinner";
-import useValidationSearch from "../../../common/hooks/useValidationSearch";
+import ClickableItem from "../../common/ClickableItem";
+import { without } from "../../common/utils";
+import Spinner from "../../common/Spinner";
+import useValidationSearch from "../../common/hooks/useValidationSearch";
 
 const StyledBox = styled(without(Box, ["type"]))`
   padding: 1.5rem;
@@ -28,7 +28,7 @@ const Counter = styled(({ data, loading, error, className }) => {
   margin-bottom: 0.5rem;
 `;
 
-export default function ValidationCard({ type, label, ...rest }) {
+export default function TableauDeBordCard({ type, label, ...rest }) {
   let [{ data, loading, error }] = useValidationSearch(type, {
     page: 1,
     items_par_page: 1,

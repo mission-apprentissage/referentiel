@@ -1,5 +1,5 @@
-import SearchBar from "../../../common/dsfr/elements/SearchBar";
-import useForm from "../../../common/form/useForm";
+import SearchBar from "../../common/dsfr/elements/SearchBar";
+import useForm from "../../common/form/useForm";
 
 export default function SearchForm({ onSubmit }) {
   let { registerForm, registerField } = useForm({ initialValues: { text: "" } });

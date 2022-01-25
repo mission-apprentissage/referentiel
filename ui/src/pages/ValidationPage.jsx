@@ -1,16 +1,16 @@
-import OrganismeList from "../organismes/fragments/OrganismeList";
-import DepartementAuthSelector from "./fragments/DepartementAuthSelector";
-import SearchForm from "../organismes/fragments/SearchForm";
+import OrganismeList from "../organismes/liste/OrganismeList";
+import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
+import SearchForm from "../organismes/liste/SearchForm";
 import { useParams } from "react-router-dom";
-import LayoutTitle from "../../common/layout/LayoutTitle";
-import useNavigation from "../../common/hooks/useNavigation";
-import Results from "../../common/layout/Results";
-import LayoutContent from "../../common/layout/LayoutContent";
+import LayoutTitle from "../common/layout/LayoutTitle";
+import useNavigation from "../common/hooks/useNavigation";
+import Results from "../common/layout/Results";
+import LayoutContent from "../common/layout/LayoutContent";
 import styled from "styled-components";
-import { getValidationTitle } from "../../common/validation";
-import useValidationSearch from "../../common/hooks/useValidationSearch";
-import Filters from "../organismes/fragments/Filters";
-import { NatureFilter } from "../organismes/fragments/Filter";
+import { getValidationTitle } from "../common/validation";
+import useValidationSearch from "../common/hooks/useValidationSearch";
+import Filters from "../organismes/liste/Filters";
+import { NatureFilter } from "../organismes/liste/Filter";
 
 export function ValidationTitle() {
   let { type } = useParams();

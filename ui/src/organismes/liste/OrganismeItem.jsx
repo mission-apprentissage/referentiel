@@ -1,11 +1,10 @@
-import { Box, Item } from "../../../common/Flexbox";
+import { Box, Item } from "../../common/Flexbox";
 import styled from "styled-components";
 import React from "react";
-import Identite from "../../organisme/fragments/Identite";
-import { Link } from "../../../common/dsfr/elements/Link";
-import ClickableItem from "../../../common/ClickableItem";
-import { Tag } from "../../../common/dsfr/elements/Tag";
-import { Natures } from "../../organisme/fragments/Natures";
+import { Link } from "../../common/dsfr/elements/Link";
+import ClickableItem from "../../common/ClickableItem";
+import { Tag } from "../../common/dsfr/elements/Tag";
+import Natures from "../fiche/Natures";
 
 const Card = styled(Box)`
   padding: 1rem 2rem;
@@ -36,6 +35,22 @@ const Identifiants = styled(Box)`
   }
 `;
 
+const IdentiteTag = styled(({ organisme, ...props }) => {
+  if (!organisme.uai) {
+    return <span {...props} />;
+  }
+
+  return (
+    <Tag modifiers="sm icon-left" icons={"checkbox-circle-fill"} {...props}>
+      Identité validée
+    </Tag>
+  );
+})`
+  &::before {
+    color: var(--green-emeraude-main-632);
+  }
+`;
+
 export default function OrganismeItem({ organisme }) {
   let adresse = !organisme.adresse
     ? "Adresse inconnue"
@@ -54,7 +69,7 @@ export default function OrganismeItem({ organisme }) {
             {organisme.raison_sociale || "Raison sociale inconnue"}
           </RaisonSociale>
           <Item alignSelf={"baseline"}>
-            <Identite organisme={organisme} />
+            <IdentiteTag organisme={organisme} />
           </Item>
         </Box>
         <Adresse>{adresse}</Adresse>

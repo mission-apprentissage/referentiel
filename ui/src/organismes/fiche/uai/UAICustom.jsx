@@ -1,6 +1,6 @@
-import Input from "../../../../common/dsfr/elements/Input";
+import Input from "../../../common/dsfr/elements/Input";
 import React from "react";
-import useFormContext from "../../../../common/form/useFormContext";
+import useFormContext from "../../../common/form/useFormContext";
 
 export function UAICustom({ action }) {
   let { registerField, errors } = useFormContext();

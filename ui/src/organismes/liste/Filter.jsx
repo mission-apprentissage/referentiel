@@ -1,12 +1,12 @@
-import Fieldset from "../../../common/dsfr/elements/Fieldset";
-import GreyAccordionItem from "../../../common/dsfr/custom/GreyAccordionItem";
+import Fieldset from "../../common/dsfr/elements/Fieldset";
+import GreyAccordionItem from "../../common/dsfr/custom/GreyAccordionItem";
 import styled from "styled-components";
-import { Tag } from "../../../common/dsfr/elements/Tag";
-import SmallCheckbox from "../../../common/dsfr/custom/SmallCheckbox";
-import useNavigation from "../../../common/hooks/useNavigation";
+import { Tag } from "../../common/dsfr/elements/Tag";
+import SmallCheckbox from "../../common/dsfr/custom/SmallCheckbox";
+import useNavigation from "../../common/hooks/useNavigation";
 import { useContext } from "react";
 import { FilterContext } from "./Filters";
-import { DataContext } from "../../../common/hooks/useData";
+import { DataContext } from "../../common/hooks/useData";
 
 const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   return (

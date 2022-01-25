@@ -1,15 +1,12 @@
-import { Col, GridRow } from "../../common/dsfr/fondamentaux";
+import { Col, GridRow } from "../common/dsfr/fondamentaux";
 import { useParams } from "react-router-dom";
-import Alert from "../../common/dsfr/elements/Alert";
-import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
+import Alert from "../common/dsfr/elements/Alert";
 import React, { createContext, useContext, useState } from "react";
-import { Immatriculation } from "./tabs/Immatriculation";
-import LayoutTitle from "../../common/layout/LayoutTitle";
-import Reseaux from "./fragments/Reseaux";
-import WideTabs from "../../common/dsfr/custom/WideTabs";
-import LayoutContent from "../../common/layout/LayoutContent";
-import { useFetch } from "../../common/hooks/useFetch";
-import { Relations } from "./tabs/Relations";
+import LayoutTitle from "../common/layout/LayoutTitle";
+import Reseaux from "../organismes/fiche/Reseaux";
+import LayoutContent from "../common/layout/LayoutContent";
+import { useFetch } from "../common/hooks/useFetch";
+import Fiche from "../organismes/fiche/Fiche";
 
 export const OrganismeContext = createContext(null);
 
@@ -64,27 +61,7 @@ export default function OrganismePage() {
         <Reseaux organisme={organisme} />
       </LayoutTitle>
       <LayoutContent>
-        <WideTabs
-          className={"fr-mb-3w"}
-          tabs={[
-            {
-              tab: <Tab>Identité</Tab>,
-              panel: (
-                <TabPanel>
-                  <Immatriculation organisme={organisme} />
-                </TabPanel>
-              ),
-            },
-            {
-              tab: <Tab disabled={organisme.relations.length === 0}>Relations</Tab>,
-              panel: (
-                <TabPanel>
-                  <Relations organisme={organisme} />
-                </TabPanel>
-              ),
-            },
-          ]}
-        />
+        <Fiche organisme={organisme} />
       </LayoutContent>
     </OrganismeContext.Provider>
   );

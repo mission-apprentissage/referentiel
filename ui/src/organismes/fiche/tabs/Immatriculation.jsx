@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import cs from "classnames";
 import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
-import UAIValidator from "../fragments/uai/UAISelector";
-import { Natures } from "../fragments/Natures";
-import NA from "../fragments/NA";
+import UAIValidator from "../uai/UAISelector";
+import Natures from "../Natures";
+import NA from "../NA";
 
 const Field = styled(({ label, value, children, className, ...rest }) => {
   return (

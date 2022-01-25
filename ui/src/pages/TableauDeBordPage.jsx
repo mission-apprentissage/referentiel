@@ -1,7 +1,7 @@
 import { Col, GridRow } from "../common/dsfr/fondamentaux";
 import React, { useContext } from "react";
-import ValidationCard from "./validation/fragments/ValidationCard";
-import DepartementAuthSelector from "./validation/fragments/DepartementAuthSelector";
+import TableauDeBordCard from "./components/TableauDeBordCard";
+import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
 import useNavigation from "../common/hooks/useNavigation";
 import LayoutTitle from "../common/layout/LayoutTitle";
 import { AuthContext } from "../common/AuthRoutes";
@@ -21,13 +21,13 @@ export default function TableauDeBordPage() {
       <LayoutContent>
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_VALIDER"} label={"Organismes à vérifier"} />
+            <TableauDeBordCard type={"A_VALIDER"} label={"Organismes à vérifier"} />
           </Col>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_RENSEIGNER"} label={"Organismes à identifier"} />
+            <TableauDeBordCard type={"A_RENSEIGNER"} label={"Organismes à identifier"} />
           </Col>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"VALIDE"} label={"Organismes validés"} />
+            <TableauDeBordCard type={"VALIDE"} label={"Organismes validés"} />
           </Col>
         </GridRow>
       </LayoutContent>
