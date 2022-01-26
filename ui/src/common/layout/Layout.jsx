@@ -2,11 +2,8 @@ import { Header } from "../dsfr/elements/Header";
 import { Nav, NavLink } from "../dsfr/elements/Nav";
 import { Footer, FooterLink, FooterList } from "../dsfr/elements/Footer";
 import React from "react";
-import useScrollToTop from "../hooks/useScrollToTop";
 
 export default function Layout({ children }) {
-  useScrollToTop();
-
   return (
     <>
       <Header

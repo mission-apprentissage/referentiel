@@ -7,7 +7,10 @@ export default function ApiPagination({ pagination }) {
   let previousPage = pagination.page - 1;
 
   function to(data = {}) {
-    return buildUrl(window.location.pathname, { ...params, ...data });
+    return {
+      to: buildUrl(window.location.pathname, { ...params, ...data }),
+      onClick: () => window.scrollTo(0, 0),
+    };
   }
 
   if (pagination.total === 0) {
@@ -16,13 +19,13 @@ export default function ApiPagination({ pagination }) {
 
   return (
     <Pagination>
-      <FirstPage to={to({ page: 1 })} />
-      <PreviousPage disabled={previousPage < 1} to={to({ page: previousPage })} />
-      <Page aria-current="page" to={to()}>
+      <FirstPage {...to({ page: 1 })} />
+      <PreviousPage disabled={previousPage < 1} {...to({ page: previousPage })} />
+      <Page aria-current="page" {...to()}>
         {pagination.page}/{pagination.nombre_de_page}
       </Page>
-      <NextPage disabled={nextPage > pagination.nombre_de_page} to={to({ page: nextPage })} />
-      <LastPage to={to({ page: pagination.nombre_de_page })} />
+      <NextPage disabled={nextPage > pagination.nombre_de_page} {...to({ page: nextPage })} />
+      <LastPage {...to({ page: pagination.nombre_de_page })} />
     </Pagination>
   );
 }
