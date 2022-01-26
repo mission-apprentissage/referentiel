@@ -13,6 +13,7 @@ export default function useForm(options = {}) {
     fields = uniq([...fields, name]);
     return {
       name,
+      value: values[name] || "",
       onChange: ({ target: { name, value } }) => {
         setPristine(false);
         setValues({

@@ -1,8 +1,10 @@
 import SearchBar from "../../common/dsfr/elements/SearchBar";
 import useForm from "../../common/form/useForm";
+import useNavigation from "../../common/hooks/useNavigation";
 
 export default function SearchForm({ onSubmit }) {
-  let { registerForm, registerField } = useForm({ initialValues: { text: "" } });
+  let { params } = useNavigation();
+  let { registerForm, registerField } = useForm({ initialValues: { text: params.text || "" } });
 
   return (
     <form {...registerForm(onSubmit)}>
