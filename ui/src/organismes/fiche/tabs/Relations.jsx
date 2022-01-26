@@ -2,7 +2,7 @@ import React from "react";
 import { useSearch } from "../../../common/hooks/useSearch";
 import Filters from "../../filtres/Filters";
 import OrganismeList from "../../liste/OrganismeList";
-import Results from "../../../common/layout/Results";
+import Results from "../../../common/Results";
 import NatureFilter from "../../filtres/NatureFilter";
 import RelationFilter from "../../filtres/RelationFilter";
 import EtatAdministratifFilter from "../../filtres/EtatAdministratifFilter";

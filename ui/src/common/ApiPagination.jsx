@@ -1,7 +1,7 @@
 import { FirstPage, LastPage, NextPage, Page, Pagination, PreviousPage } from "./dsfr/elements/Pagination";
 import useNavigation from "./hooks/useNavigation";
 
-export default function ResultsPagination({ pagination }) {
+export default function ApiPagination({ pagination }) {
   let { params, buildUrl } = useNavigation();
   let nextPage = pagination.page + 1;
   let previousPage = pagination.page - 1;

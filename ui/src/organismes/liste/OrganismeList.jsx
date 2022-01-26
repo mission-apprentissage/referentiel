@@ -1,5 +1,5 @@
 import OrganismeItem from "./OrganismeItem";
-import ResultsPagination from "../../common/ResultsPagination";
+import ApiPagination from "../../common/ApiPagination";
 import { Box } from "../../common/Flexbox";
 import Spinner from "../../common/Spinner";
 
@@ -15,7 +15,7 @@ export default function OrganismeList({ response }) {
         return <OrganismeItem key={index} organisme={organisme} />;
       })}
       <Box justify={"center"}>
-        <ResultsPagination pagination={pagination} />
+        <ApiPagination pagination={pagination} />
       </Box>
     </>
   );

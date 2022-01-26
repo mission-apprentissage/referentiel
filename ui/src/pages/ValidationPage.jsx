@@ -4,7 +4,7 @@ import SearchForm from "../organismes/liste/SearchForm";
 import { useParams } from "react-router-dom";
 import TitleLayout from "../common/layout/TitleLayout";
 import useNavigation from "../common/hooks/useNavigation";
-import Results from "../common/layout/Results";
+import Results from "../common/Results";
 import ContentLayout from "../common/layout/ContentLayout";
 import styled from "styled-components";
 import useValidationSearch from "../common/hooks/useValidationSearch";

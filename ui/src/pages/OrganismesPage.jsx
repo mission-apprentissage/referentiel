@@ -5,7 +5,7 @@ import SearchForm from "../organismes/liste/SearchForm";
 import OrganismeList from "../organismes/liste/OrganismeList";
 import Filters from "../organismes/filtres/Filters";
 import TitleLayout from "../common/layout/TitleLayout";
-import Results from "../common/layout/Results";
+import Results from "../common/Results";
 import WideTabs from "../common/dsfr/custom/WideTabs";
 import ContentLayout from "../common/layout/ContentLayout";
 import NatureFilter from "../organismes/filtres/NatureFilter";

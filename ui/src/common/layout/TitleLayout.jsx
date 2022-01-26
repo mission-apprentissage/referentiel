@@ -23,7 +23,7 @@ export default function TitleLayout({ title, message, back, selector, children }
 
   return (
     <Container>
-      <GridRow modifier={"gutters"}>
+      <GridRow modifiers={"gutters"}>
         <Col>
           <FilAriane
             routes={[
@@ -37,14 +37,14 @@ export default function TitleLayout({ title, message, back, selector, children }
         </Col>
       </GridRow>
       {message && (
-        <GridRow modifier={"gutters"}>
+        <GridRow modifiers={"gutters"}>
           <Col>
             <Message>{message}</Message>
           </Col>
         </GridRow>
       )}
       {back && (
-        <GridRow modifier={"gutters"}>
+        <GridRow modifiers={"gutters"}>
           <Col>
             <Back icons={"arrow-left-line"} onClick={() => navigate(-1)}>
               {back}
@@ -53,11 +53,11 @@ export default function TitleLayout({ title, message, back, selector, children }
         </GridRow>
       )}
       <GridRow className={"fr-pb-1w"}>
-        <Col modifiers={"12 md-7"}>
+        <Col modifiers={"12 md-8"}>
           {title && <h2>{title}</h2>}
           {children}
         </Col>
-        {selector && <Col modifiers={"12 md-5"}>{selector}</Col>}
+        {selector && <Col modifiers={"12 md-4"}>{selector}</Col>}
       </GridRow>
     </Container>
   );

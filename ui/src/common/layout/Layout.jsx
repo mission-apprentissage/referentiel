@@ -8,7 +8,7 @@ export default function Layout({ children }) {
   useScrollToTop();
 
   return (
-    <div>
+    <>
       <Header
         title={"Référentiel"}
         nav={
@@ -19,8 +19,7 @@ export default function Layout({ children }) {
         }
       />
 
-      {children}
-
+      <div style={{ marginBottom: "15rem" }}>{children}</div>
       <Footer
         content={{
           desc: (
@@ -58,6 +57,6 @@ export default function Layout({ children }) {
           ),
         }}
       />
-    </div>
+    </>
   );
 }
