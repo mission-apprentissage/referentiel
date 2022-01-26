@@ -7,7 +7,7 @@ import NatureFilter from "../../filtres/NatureFilter";
 import RelationFilter from "../../filtres/RelationFilter";
 import EtatAdministratifFilter from "../../filtres/EtatAdministratifFilter";
 
-export function Relations({ organisme }) {
+export default function RelationsTab({ organisme }) {
   let relations = organisme.relations.filter((r) => r.referentiel);
   let [{ data, loading, error }, search] = useSearch({
     page: 1,

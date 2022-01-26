@@ -3,8 +3,9 @@ import styled from "styled-components";
 import cs from "classnames";
 import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
 import UAIValidator from "../uai/UAISelector";
-import Natures from "../Natures";
-import NA from "../NA";
+import Natures from "../../common/Natures";
+import NA from "../../common/NA";
+import Siret from "../../common/Siret";
 
 const Field = styled(({ label, value, children, className, ...rest }) => {
   return (
@@ -20,7 +21,7 @@ const Field = styled(({ label, value, children, className, ...rest }) => {
   }
 `;
 
-export function Immatriculation({ organisme }) {
+export default function ImmatriculationTab({ organisme }) {
   let adresse = organisme.adresse?.label || `${organisme.adresse?.code_postal} ${organisme.adresse?.localite}`;
 
   return (
@@ -33,7 +34,11 @@ export function Immatriculation({ organisme }) {
           </Field>
           <Field label={"Nature"} value={<Natures organisme={organisme} />} />
           <Field label={"SIREN"} value={organisme.siret.substr(0, 9)} />
-          <Field label={"SIRET"} className={"fr-mr-1w xfr-display-inline-block"} value={organisme.siret} />
+          <Field
+            label={"SIRET"}
+            className={"fr-mr-1w xfr-display-inline-block"}
+            value={<Siret siret={organisme.siret} />}
+          />
           <Field
             className={"xfr-display-inline-block"}
             value={organisme.etat_administratif === "actif" ? "en activité" : "fermé"}

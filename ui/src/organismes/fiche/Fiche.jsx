@@ -1,7 +1,7 @@
 import React from "react";
 import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
-import { Immatriculation } from "./tabs/Immatriculation";
-import { Relations } from "./tabs/Relations";
+import ImmatriculationTab from "./tabs/ImmatriculationTab";
+import RelationsTab from "./tabs/RelationsTab";
 import WideTabs from "../../common/dsfr/custom/WideTabs";
 
 export default function Fiche({ organisme }) {
@@ -13,7 +13,7 @@ export default function Fiche({ organisme }) {
           tab: <Tab>Identité</Tab>,
           panel: (
             <TabPanel>
-              <Immatriculation organisme={organisme} />
+              <ImmatriculationTab organisme={organisme} />
             </TabPanel>
           ),
         },
@@ -21,7 +21,7 @@ export default function Fiche({ organisme }) {
           tab: <Tab disabled={organisme.relations.length === 0}>Relations</Tab>,
           panel: (
             <TabPanel>
-              <Relations organisme={organisme} />
+              <RelationsTab organisme={organisme} />
             </TabPanel>
           ),
         },

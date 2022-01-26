@@ -17,6 +17,7 @@ export default function Layout({ children }) {
       />
 
       <div style={{ marginBottom: "15rem" }}>{children}</div>
+
       <Footer
         content={{
           desc: (

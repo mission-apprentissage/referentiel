@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Alert from "../common/dsfr/elements/Alert";
 import React, { createContext, useContext, useState } from "react";
 import TitleLayout from "../common/layout/TitleLayout";
-import Reseaux from "../organismes/fiche/Reseaux";
+import Reseaux from "../organismes/common/Reseaux";
 import ContentLayout from "../common/layout/ContentLayout";
 import { useFetch } from "../common/hooks/useFetch";
 import Fiche from "../organismes/fiche/Fiche";

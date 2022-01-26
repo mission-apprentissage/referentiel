@@ -4,7 +4,8 @@ import React from "react";
 import { Link } from "../../common/dsfr/elements/Link";
 import ClickableItem from "../../common/ClickableItem";
 import { Tag } from "../../common/dsfr/elements/Tag";
-import Natures from "../fiche/Natures";
+import Natures from "../common/Natures";
+import Siret from "../common/Siret";
 
 const Card = styled(Box)`
   padding: 1rem 2rem;
@@ -30,8 +31,13 @@ const Adresse = styled.div`
 const Identifiants = styled(Box)`
   font-size: 0.875rem;
   line-height: 1.5rem;
-  span {
-    width: 50%;
+  width: 45%;
+  .uai {
+    width: 30%;
+  }
+  .siret {
+    display: inline;
+    width: 70%;
   }
 `;
 
@@ -71,10 +77,14 @@ export default function OrganismeItem({ organisme }) {
           </RaisonSociale>
         </Box>
         <Adresse>{adresse}</Adresse>
-        <Box justify={"between"} align={"center"}>
-          <Identifiants>
-            <span>UAI&nbsp;:&nbsp;{organisme.uai || "N.A"}</span>
-            <span>SIRET&nbsp;:&nbsp;{organisme.siret}</span>
+        <Box justify={"between"} align={"center"} wrap={"nowrap"}>
+          <Identifiants justify={"start"}>
+            <span className={"uai"}>UAI : {organisme.uai || "N.A"}</span>
+            <div className={"siret"}>
+              <span>SIRET : </span>
+              <Siret siret={organisme.siret} />
+              <span>{organisme.etat_administratif === "actif" ? "(en activité)" : "(fermé)"}</span>
+            </div>
           </Identifiants>
           <Link as={"span"} modifiers={"lg icon-right"} icons="arrow-right-line" />
         </Box>
