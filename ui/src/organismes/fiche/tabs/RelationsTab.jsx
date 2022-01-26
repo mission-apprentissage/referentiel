@@ -9,7 +9,7 @@ import EtatAdministratifFilter from "../../filtres/EtatAdministratifFilter";
 
 export default function RelationsTab({ organisme }) {
   let relations = organisme.relations.filter((r) => r.referentiel);
-  let [{ data, loading, error }, search] = useSearch({
+  let { response, refine } = useSearch({
     page: 1,
     sirets: relations.map((r) => r.siret),
     items_par_page: relations.length,
@@ -20,21 +20,13 @@ export default function RelationsTab({ organisme }) {
       <h6>Ecosystème de l'organisme</h6>
       <Results
         filters={
-          <Filters onChange={(filters) => search({ ...filters })}>
+          <Filters onChange={(filters) => refine({ ...filters })}>
             <RelationFilter expanded={true} />
             <NatureFilter />
             <EtatAdministratifFilter />
           </Filters>
         }
-        results={
-          <OrganismeList
-            response={{
-              data,
-              loading,
-              error,
-            }}
-          />
-        }
+        results={<OrganismeList response={response} />}
       />
     </>
   );

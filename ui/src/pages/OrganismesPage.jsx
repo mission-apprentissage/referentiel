@@ -1,3 +1,4 @@
+import React from "react";
 import { Tab, TabPanel } from "../common/dsfr/elements/Tabs";
 import AcademieSelector from "../organismes/selectors/AcademieSelector";
 import { useSearch } from "../common/hooks/useSearch";
@@ -14,7 +15,7 @@ import DepartementsFilter from "../organismes/filtres/DepartementsFilter";
 import UAIFilter from "../organismes/filtres/UAIFilter";
 
 export default function OrganismesPage() {
-  let [response, search] = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
+  let { response, search, refine } = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
 
   return (
     <>
@@ -32,7 +33,7 @@ export default function OrganismesPage() {
                   <Results
                     search={<SearchForm onSubmit={(form) => search({ page: 1, text: form.text })} />}
                     filters={
-                      <Filters onChange={(filters) => search({ ...filters })}>
+                      <Filters onChange={(filters) => refine({ ...filters })}>
                         <DepartementsFilter />
                         <NatureFilter />
                         <NdaFilter />

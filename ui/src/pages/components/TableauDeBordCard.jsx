@@ -16,7 +16,8 @@ const StyledBox = styled(without(Box, ["type"]))`
   }
 `;
 
-const Counter = styled(({ data, loading, error, className }) => {
+const Counter = styled(({ response, className }) => {
+  let { data, loading, error } = response;
   if (loading || error) {
     return <Spinner loading={loading} error={error} />;
   }
@@ -29,7 +30,7 @@ const Counter = styled(({ data, loading, error, className }) => {
 `;
 
 export default function TableauDeBordCard({ type, label, ...rest }) {
-  let [{ data, loading, error }] = useValidationSearch(type, {
+  let { response } = useValidationSearch(type, {
     page: 1,
     items_par_page: 1,
     champs: "siret",
@@ -39,7 +40,7 @@ export default function TableauDeBordCard({ type, label, ...rest }) {
     <ClickableItem to={`/validation/${type}`}>
       <StyledBox direction={"column"} justify={"between"} type={type} {...rest}>
         <div>
-          <Counter data={data} loading={loading} error={error} />
+          <Counter response={response} />
           <div className={"fr-text--bold"}>{label}</div>
         </div>
         <Link as="span" modifiers={"icon-right"} icons="arrow-right-line">

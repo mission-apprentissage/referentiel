@@ -27,10 +27,13 @@ export function useSearch(defaults = {}) {
     },
   });
 
-  return [
-    { ...response, params },
-    (newParams = {}) => {
-      navigate({ ...defaults, ...newParams });
-    },
-  ];
+  function search(newParams = {}) {
+    navigate({ ...defaults, ...newParams });
+  }
+
+  function refine(values = {}) {
+    navigate({ ...defaults, ...params, ...values });
+  }
+
+  return { response, search, refine };
 }

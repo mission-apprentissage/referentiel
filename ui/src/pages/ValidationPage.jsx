@@ -42,7 +42,7 @@ const ValidationLayoutTitle = styled(({ search, children, className }) => {
 export default function ValidationPage() {
   let { params } = useNavigation();
   let { type } = useParams();
-  let [response, search] = useValidationSearch(type, {
+  let { response, search, refine } = useValidationSearch(type, {
     ordre: "desc",
     page: 1,
     items_par_page: 25,
@@ -55,7 +55,7 @@ export default function ValidationPage() {
         <Results
           search={<SearchForm onSubmit={(values) => search({ ...params, ...values, page: 1 })} />}
           filters={
-            <Filters onChange={(filters) => search({ ...filters })}>
+            <Filters onChange={(filters) => refine({ ...filters })}>
               <NatureFilter
                 items={[
                   { code: "formateur|responsable", label: "Responsable et formateur" },
