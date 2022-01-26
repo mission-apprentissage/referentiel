@@ -41,13 +41,13 @@ export function classNames(baseClassName, { modifiers, icons, className, validat
   return cs(
     baseClassName,
     modifiers ? modifiers.split(" ").map((m) => `${baseClassName}${bemDelimiter}${m}`) : "",
-    icons ? icons.split(" ").map((i) => `fr-fi-${i}`) : "",
+    icons ? icons.split(" ").map((iconName) => asIconClassName(iconName)) : "",
     validation ? `${baseClassName}--${validation.type}` : "",
     className
   );
 }
 
-export function icon(name) {
+function asIconClassName(name) {
   return `fr-fi-${name}`;
 }
 
@@ -57,6 +57,10 @@ export function ariaLabelledBy(...byIds) {
 
 export function ariaDescribedBy(id) {
   return { "aria-describedby": id };
+}
+
+export function ariaExpanded(value) {
+  return { "aria-expanded": value };
 }
 
 export function collapseElement(el) {

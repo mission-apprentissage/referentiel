@@ -21,7 +21,7 @@ export default function RelationsTab({ organisme }) {
       <Results
         filters={
           <Filters onChange={(filters) => search({ ...filters })}>
-            <RelationFilter />
+            <RelationFilter expanded={true} />
             <NatureFilter />
             <EtatAdministratifFilter />
           </Filters>

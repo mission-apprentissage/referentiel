@@ -6,6 +6,7 @@ import SmallCheckbox from "../../common/dsfr/custom/SmallCheckbox";
 import useNavigation from "../../common/hooks/useNavigation";
 import { useContext } from "react";
 import { FilterContext } from "./Filters";
+import { ariaExpanded } from "../../common/dsfr/dsfr";
 
 const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   return (
@@ -22,14 +23,17 @@ const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   }
 `;
 
-export function Filter({ label, paramName, items }) {
+export function Filter({ label, paramName, items, expanded = false }) {
   let { params } = useNavigation();
   let { onChange, register } = useContext(FilterContext);
   let array = params[paramName] ? params[paramName].split(",") : [];
   register(paramName);
 
   return (
-    <GreyAccordionItem label={<FilterTitle label={label} nbCheckedElements={array.length} />}>
+    <GreyAccordionItem
+      {...ariaExpanded(expanded)}
+      label={<FilterTitle label={label} nbCheckedElements={array.length} />}
+    >
       <Fieldset>
         {items.map((item, index) => {
           let checked = array.includes(item.code);
