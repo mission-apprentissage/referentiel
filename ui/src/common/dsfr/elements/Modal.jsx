@@ -2,15 +2,21 @@ import { classNames } from "../dsfr";
 import React from "react";
 import useElementId from "../../hooks/useElementId";
 
-export default function Modal({ title, modal, content, footer, modifiers, className, ...rest }) {
-  let clazz = classNames("fr-modal", { modifiers, className });
+export const modalSizeModifiers = {
+  sm: "md-4",
+  md: "md-8 lg-6",
+  lg: "md-8",
+};
+
+export default function Modal({ title, modal, content, footer, size, modifiers, className, ...rest }) {
+  let clazz = classNames("fr-col", { modifiers: modifiers || modalSizeModifiers.md, className, bemDelimiter: "-" });
   let contentId = useElementId("modal-content");
 
   return (
-    <dialog id={modal.id} ref={modal.ref} aria-labelledby={contentId} role="dialog" className={clazz} {...rest}>
+    <dialog className={"fr-modal"} id={modal.id} ref={modal.ref} aria-labelledby={contentId} role="dialog" {...rest}>
       <div className="fr-container fr-container--fluid fr-container-md">
         <div className="fr-grid-row fr-grid-row--center">
-          <div className="fr-col-12 fr-col-md-8 fr-col-lg-6">
+          <div className={clazz}>
             <div className="fr-modal__body">
               <div className="fr-modal__header">
                 <button

@@ -11,6 +11,7 @@ module.exports = async () => {
   app.use(require("./routes/healthcheckRoutes")());
   app.use(require("./routes/organismesRoutes")());
   app.use(require("./routes/uaisRoutes")());
+  app.use(require("./routes/datagouvRoutes")());
   app.use(require("./routes/dataRoutes")());
   app.use(require("./routes/swaggerRoutes")());
 

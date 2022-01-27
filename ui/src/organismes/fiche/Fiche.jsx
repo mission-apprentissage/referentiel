@@ -1,7 +1,7 @@
 import React from "react";
 import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
-import ImmatriculationTab from "./tabs/ImmatriculationTab";
-import RelationsTab from "./tabs/RelationsTab";
+import ImmatriculationTab from "./ImmatriculationTab";
+import RelationsTab from "./RelationsTab";
 import WideTabs from "../../common/dsfr/custom/WideTabs";
 
 export default function Fiche({ organisme }) {

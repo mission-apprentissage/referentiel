@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import Modal from "../../../common/dsfr/elements/Modal";
 import { Button, ButtonGroup } from "../../../common/dsfr/elements/Button";
-import styled from "styled-components";
 import useForm from "../../../common/form/useForm";
 import * as yup from "yup";
 import { Form } from "../../../common/form/Form";
@@ -10,13 +9,7 @@ import { UAIPotentielsRadios } from "./UAIPotentielsRadios";
 import { UAICustom } from "./UAICustom";
 import Alert from "../../../common/dsfr/elements/Alert";
 import { OrganismeContext } from "../../../pages/OrganismePage";
-
-const BlueBox = styled("div")`
-  border: 1px solid var(--border-active-blue-france);
-  padding: 1.5rem;
-  margin-top: 1rem;
-  margin-bottom: 3rem;
-`;
+import BlueBox from "../../../common/BlueBox";
 
 const validators = yup.object({
   uai: yup.string(),
