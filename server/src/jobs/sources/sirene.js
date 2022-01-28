@@ -4,7 +4,6 @@ const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
 const categoriesJuridiques = require("../../common/categoriesJuridiques");
 const { dbCollection } = require("../../common/db/mongodb");
-const createDatagouvSource = require("../sources/datagouv");
 const caches = require("../../common/caches/caches");
 
 function getRaisonSociale(uniteLegale) {
@@ -57,9 +56,9 @@ async function getAdresse(adresseResolver, data) {
   }
 }
 
-function getRelations(uniteLegale, siret, sirets) {
+function getRelations(uniteLegale, siret) {
   return uniteLegale.etablissements
-    .filter((e) => e.siret !== siret && e.etat_administratif === "A" && sirets.includes(e.siret))
+    .filter((e) => e.siret !== siret && e.etat_administratif === "A")
     .map((e) => {
       return {
         type: "entreprise",
@@ -79,8 +78,6 @@ module.exports = (custom = {}) => {
     name,
     async stream(options = {}) {
       let filters = options.filters || {};
-      let datagouv = createDatagouvSource();
-      let sirets = await datagouv.loadSirets();
 
       return compose(
         dbCollection("organismes").find(filters, { siret: 1, "adresse.code_insee": 1 }).batchSize(20).stream(),
@@ -122,7 +119,7 @@ module.exports = (custom = {}) => {
 
               return {
                 selector: siret,
-                relations: await getRelations(uniteLegale, siret, sirets),
+                relations: await getRelations(uniteLegale, siret),
                 anomalies,
                 data: {
                   raison_sociale: raisonSociale,

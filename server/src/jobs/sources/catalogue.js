@@ -4,6 +4,7 @@ const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
 const { dbCollection } = require("../../common/db/mongodb");
 const { omitNil } = require("../../common/utils/objectUtils");
+const { compact } = require("lodash");
 
 function fetchFormations(api, options = {}) {
   let siret = options.siret;
@@ -33,12 +34,12 @@ function fetchFormations(api, options = {}) {
   });
 }
 
-function buildRelation(formation, natures) {
+function buildRelation(formation, nature) {
   if (formation.etablissement_gestionnaire_siret === formation.etablissement_formateur_siret) {
     return null;
   }
 
-  if (natures.includes("responsable")) {
+  if (nature === "responsable->formateur") {
     return omitNil({
       type: "responsable->formateur",
       siret: formation.etablissement_formateur_siret,
@@ -108,7 +109,7 @@ async function buildLieuDeFormation(formation, getAdresseFromCoordinates) {
 
 function buildContacts(formation) {
   if (!formation.email) {
-    return null;
+    return [];
   }
 
   return formation.email.split("##").map((email) => {
@@ -123,87 +124,32 @@ module.exports = (custom = {}) => {
   let api = custom.catalogueAPI || new CatalogueApi();
   let { getAdresseFromCoordinates } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
-  async function extractData(formation, natures) {
-    try {
-      let res = {
-        relations: [],
-        contacts: [],
-        diplomes: [],
-        certifications: [],
-        lieux_de_formation: [],
-        anomalies: [],
-        natures,
-      };
-
-      let contacts = buildContacts(formation);
-      if (contacts) {
-        res.contacts = contacts;
-      }
-
-      let relation = buildRelation(formation, natures);
-      if (relation) {
-        res.relations.push(relation);
-      }
-
-      if (natures.includes("formateur")) {
-        let diplome = await buildDiplome(formation);
-        if (diplome) {
-          res.diplomes.push(diplome);
-        }
-
-        let certification = buildCertification(formation);
-        if (certification) {
-          res.certifications.push(certification);
-        }
-
-        let { lieu, anomalie } = await buildLieuDeFormation(formation, getAdresseFromCoordinates);
-        if (lieu) {
-          res.lieux_de_formation.push(lieu);
-        }
-        if (anomalie) {
-          res.anomalies.push(anomalie);
-        }
-      }
-
-      return res;
-    } catch (e) {
-      return {
-        anomalies: [e],
-      };
-    }
-  }
-
   return {
     name: "catalogue",
     async stream(options = {}) {
       return compose(
         fetchFormations(api, options.filters),
         transformData(async (formation) => {
-          if (formation.etablissement_formateur_siret === formation.etablissement_gestionnaire_siret) {
-            return [
-              {
-                from: "catalogue",
-                selector: formation.etablissement_formateur_siret,
-                ...(await extractData(formation, ["responsable", "formateur"])),
-              },
-            ];
-          }
-
-          let [responsable, formateur] = await Promise.all([
-            extractData(formation, ["responsable"]),
-            extractData(formation, ["formateur"]),
-          ]);
+          let { lieu, anomalie } = await buildLieuDeFormation(formation, getAdresseFromCoordinates);
 
           return [
             {
               from: "catalogue",
               selector: formation.etablissement_gestionnaire_siret,
-              ...responsable,
+              natures: ["responsable"],
+              relations: compact([buildRelation(formation, "responsable->formateur")]),
+              contacts: buildContacts(formation),
             },
             {
               from: "catalogue",
               selector: formation.etablissement_formateur_siret,
-              ...formateur,
+              natures: ["formateur"],
+              relations: compact([buildRelation(formation, "formateur->responsable")]),
+              contacts: buildContacts(formation),
+              diplomes: compact([await buildDiplome(formation)]),
+              certifications: compact([buildCertification(formation)]),
+              lieux_de_formation: compact([lieu]),
+              anomalies: compact([anomalie]),
             },
           ];
         }),

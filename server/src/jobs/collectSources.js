@@ -5,6 +5,7 @@ const { isUAIValid } = require("../common/utils/uaiUtils");
 const logger = require("../common/logger");
 const { dbCollection } = require("../common/db/mongodb");
 const { sortBy } = require("lodash/collection");
+const createDatagouvSource = require("./sources/datagouv");
 
 function buildQuery(selector) {
   if (isEmpty(selector)) {
@@ -14,14 +15,14 @@ function buildQuery(selector) {
   return typeof selector === "object" ? selector : { $or: [{ siret: selector }, { uai: selector }] };
 }
 
-function mergeArray(from, existingArray, discriminator, newArray, custom = () => ({})) {
-  let updated = newArray.map((item) => {
-    let found = existingArray.find((e) => e[discriminator] === item[discriminator]) || {};
+function mergeArray(source, existingArray, discriminator, newArray, options = {}) {
+  let updated = newArray.map((element) => {
+    let previous = existingArray.find((e) => e[discriminator] === element[discriminator]) || {};
     return {
-      ...found,
-      ...item,
-      sources: uniq([...(found.sources || []), from]),
-      ...custom(found, item),
+      ...previous,
+      ...element,
+      sources: uniq([...(previous.sources || []), source]),
+      ...(options.merge ? options.merge(previous, element) : {}),
     };
   });
 
@@ -32,41 +33,64 @@ function mergeArray(from, existingArray, discriminator, newArray, custom = () =>
   return sortBy([...updated, ...untouched], discriminator);
 }
 
-function mergeUAIPotentiels(from, actual, collected) {
-  let newArray = collected.filter((uai) => uai && uai !== "NULL").map((uai) => ({ uai }));
+function mergeUAIPotentiels(source, potentiels, newPotentiels) {
+  return mergeArray(
+    source,
+    potentiels,
+    "uai",
+    newPotentiels
+      .filter((uai) => uai && uai !== "NULL")
+      .map((uai) => ({
+        uai,
+        valide: isUAIValid(uai),
+      }))
+  );
+}
 
-  return mergeArray(from, actual, "uai", newArray).map((item) => {
-    return {
-      ...item,
-      valide: isUAIValid(item.uai),
-    };
+async function mergeRelations(source, relations, newRelations, siretsFromDatagouv) {
+  let validatedNewRelations = await newRelations.reduce(async (acc, relation) => {
+    let isInReferentiel = (await dbCollection("organismes").countDocuments({ siret: relation.siret })) > 0;
+    let isInDatagouv = siretsFromDatagouv.includes(relation.siret);
+
+    if (!isInReferentiel && !isInDatagouv) {
+      return Promise.resolve(acc);
+    }
+
+    return Promise.resolve([
+      ...(await acc),
+      {
+        ...relation,
+        referentiel: isInReferentiel,
+      },
+    ]);
+  }, Promise.resolve([]));
+
+  return mergeArray(source, relations, "siret", validatedNewRelations, {
+    merge: (previous, relation) => {
+      let availables = uniq([relation.type, previous.type]);
+      return {
+        type: availables.find((v) => v?.indexOf("->") !== -1) || availables[0],
+      };
+    },
   });
 }
 
-async function mergeRelations(from, relations, newRelations) {
-  let array = mergeArray(from, relations, "siret", newRelations);
-
-  return Promise.all(
-    array.map(async (r) => {
-      let count = await dbCollection("organismes").countDocuments({ siret: r.siret });
+function mergeContacts(source, contacts, newContacts) {
+  return mergeArray(
+    source,
+    contacts,
+    "email",
+    newContacts.map((contact) => {
       return {
-        ...r,
-        referentiel: count > 0,
+        ...contact,
+        confirmé: contact.confirmé || false,
       };
     })
   );
 }
 
-function mergeContacts(from, contacts, newContacts) {
-  return mergeArray(from, contacts, "email", newContacts, (found, contact) => {
-    return {
-      confirmé: contact.confirmé || false,
-    };
-  });
-}
-
-function handleAnomalies(from, organisme, anomalies) {
-  logger.warn({ anomalies }, `[Collect][${from}] Erreur lors de la collecte pour l'organisme ${organisme.siret}.`);
+function handleAnomalies(source, organisme, anomalies) {
+  logger.warn({ anomalies }, `[Collect][${source}] Erreur lors de la collecte pour l'organisme ${organisme.siret}.`);
 
   return dbCollection("organismes").updateOne(
     { siret: organisme.siret },
@@ -75,8 +99,8 @@ function handleAnomalies(from, organisme, anomalies) {
         "_meta.anomalies": {
           $each: anomalies.map((ano) => {
             return {
+              source,
               job: "collect",
-              source: from,
               date: new Date(),
               code: isError(ano) ? "erreur" : ano.code,
               details: ano.message,
@@ -116,6 +140,8 @@ module.exports = async (array, options = {}) => {
   let filters = options.filters || {};
   let stats = createStats(sources);
   let streams = await getStreams(sources, filters);
+  let datagouv = createDatagouvSource();
+  let siretsFromDatagouv = await datagouv.loadSirets();
 
   for await (const res of mergeStreams(streams)) {
     let {
@@ -156,7 +182,7 @@ module.exports = async (array, options = {}) => {
         $set: {
           ...omitNil(flattenObject(data)),
           uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),
-          relations: await mergeRelations(from, organisme.relations, relations),
+          relations: await mergeRelations(from, organisme.relations, relations, siretsFromDatagouv),
           contacts: mergeContacts(from, organisme.contacts, contacts),
           diplomes: mergeArray(from, organisme.diplomes, "code", diplomes),
           certifications: mergeArray(from, organisme.certifications, "code", certifications),

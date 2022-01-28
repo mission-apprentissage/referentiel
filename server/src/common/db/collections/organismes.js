@@ -69,7 +69,7 @@ module.exports = {
               label: string(),
               sources: arrayOf(string()),
             },
-            { required: ["siret", "referentiel", "sources"] }
+            { required: ["siret", "referentiel", "sources", "type"] }
           )
         ),
         lieux_de_formation: arrayOf(

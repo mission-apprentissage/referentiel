@@ -3,7 +3,7 @@ const { omit } = require("lodash");
 const { compose, transformData } = require("oleoduc");
 const { Readable } = require("stream");
 const { dbCollection } = require("../../src/common/db/mongodb");
-const { insertOrganisme } = require("../utils/fakeData");
+const { insertOrganisme, insertDatagouv } = require("../utils/fakeData");
 const collectSources = require("../../src/jobs/collectSources");
 
 describe("collectSources", () => {
@@ -434,6 +434,7 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on peut collecter des relations", async () => {
     await insertOrganisme({ siret: "11111111100006" });
+    await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
     let source = createTestSource([
       {
         selector: "11111111100006",
@@ -462,6 +463,21 @@ describe("collectSources", () => {
     ]);
   });
 
+  it("Vérifie qu'on peut collecter des relations (referentiel)", async () => {
+    await Promise.all([insertOrganisme({ siret: "11111111100006" }), insertOrganisme({ siret: "22222222200002" })]);
+    let source = createTestSource([
+      {
+        selector: "11111111100006",
+        relations: [{ siret: "22222222200002", type: "entreprise", label: "test" }],
+      },
+    ]);
+
+    await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    assert.strictEqual(found.relations[0].referentiel, true);
+  });
+
   it("Vérifie qu'on ne duplique pas les relations", async () => {
     await insertOrganisme({
       siret: "11111111100006",
@@ -475,10 +491,11 @@ describe("collectSources", () => {
         },
       ],
     });
+    await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
     let source = createTestSource([
       {
         selector: "11111111100006",
-        relations: [{ siret: "22222222200002", referentiel: false, label: "test", type: "formateur->responsable" }],
+        relations: [{ siret: "22222222200002", referentiel: false, label: "test", type: "entreprise" }],
       },
     ]);
 
@@ -491,9 +508,8 @@ describe("collectSources", () => {
     assert.deepStrictEqual(found.relations[0].sources, ["other", "dummy"]);
   });
 
-  it("Vérifie qu'on peut détecter des relations entre organismes", async () => {
+  it("Vérifie qu'on ignore les relations qui ne sont ni dans datagouv ni dans le referentiel", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    await insertOrganisme({ siret: "22222222200002", raison_sociale: "Centre de formation" });
     let source = createTestSource([
       {
         selector: "11111111100006",
@@ -504,15 +520,7 @@ describe("collectSources", () => {
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.deepStrictEqual(found.relations, [
-      {
-        siret: "22222222200002",
-        label: "test",
-        type: "entreprise",
-        referentiel: true,
-        sources: ["dummy"],
-      },
-    ]);
+    assert.deepStrictEqual(found.relations, []);
   });
 
   it("Vérifie qu'on peut collecter des reseaux", async () => {

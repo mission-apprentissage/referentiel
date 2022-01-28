@@ -3,7 +3,12 @@ const { configureIndexes, configureValidation, dbCollection } = require("../comm
 const VERSION = 4;
 
 async function tasks() {
-  return {};
+  return {
+    clearRelations: await dbCollection("organismes").updateMany(
+      { "relations.0": { $exists: true } },
+      { $set: { relations: [] } }
+    ),
+  };
 }
 
 async function _ensureMigrationCanBeRun() {

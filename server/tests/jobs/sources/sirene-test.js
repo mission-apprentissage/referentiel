@@ -390,59 +390,6 @@ describe("sirene", () => {
     });
   });
 
-  it("Vérifie qu'on ignore les relations qui ne sont pas des organismes de formations", async () => {
-    await Promise.all([
-      importOrganismesForTest([{ siret: "11111111100006" }]),
-      insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222222222" }),
-    ]);
-    mockSireneApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("unites_legales"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.unitesLegales({
-            unite_legale: {
-              etablissements: [
-                {
-                  siret: "11111111100006",
-                  etat_administratif: "A",
-                  etablissement_siege: "true",
-                  libelle_voie: "DES LILAS",
-                  code_postal: "75019",
-                  libelle_commune: "PARIS",
-                },
-                {
-                  siret: "22222222222222",
-                  etat_administratif: "A",
-                  etablissement_siege: "true",
-                  libelle_voie: "DES LILAS",
-                  code_postal: "75019",
-                  libelle_commune: "PARIS",
-                },
-              ],
-            },
-          })
-        );
-    });
-
-    let source = createSireneSource({ withPredefinedMocks: ["geoMocks"] });
-    let stats = await collectSources(source);
-
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.strictEqual(found.relations.length, 1);
-    assert.deepStrictEqual(found.relations[0].siret, "22222222222222");
-    assert.deepStrictEqual(stats, {
-      sirene: {
-        total: 1,
-        updated: 1,
-        unknown: 0,
-        anomalies: 0,
-        failed: 0,
-      },
-    });
-  });
-
   it("Vérifie qu'on ignore les relations pour des organismes fermés", async () => {
     await importOrganismesForTest();
     mockSireneApi((client, responses) => {
