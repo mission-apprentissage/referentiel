@@ -73,7 +73,7 @@ export default function OrganismeItem({ organisme }) {
         )}
         <Box justify={"between"}>
           <RaisonSociale className={"fr-text--bold"} style={{ width: "85%" }}>
-            {organisme.raison_sociale || "Raison sociale inconnue"}
+            {organisme.enseigne || organisme.raison_sociale || "Raison sociale inconnue"}
           </RaisonSociale>
         </Box>
         <Adresse>{adresse}</Adresse>
