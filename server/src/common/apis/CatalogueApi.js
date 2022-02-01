@@ -59,7 +59,7 @@ class CatalogueApi extends RateLimitedApi {
       return compose(
         response,
         readLineByLine(),
-        transformData((data) => JSON.parse(data))
+        transformData((data) => (data ? JSON.parse(data) : data))
       );
     });
   }
