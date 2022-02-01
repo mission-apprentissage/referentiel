@@ -32,19 +32,13 @@ async function build(options = {}) {
   await importOrganismes(sources).then((res) => stats.push({ importOrganismes: res }));
 
   await collectAll([
-    "agri",
-    "anasup",
-    "compagnons-du-devoir",
     "deca",
     "catalogue-etablissements",
     "tableau-de-bord",
-    "gesti",
     "opcoep",
-    "promotrans",
     "sifa-ramsese",
     "depp",
     "refea",
-    "uimm",
     "ymag",
     "mna",
   ]);
@@ -58,7 +52,7 @@ async function build(options = {}) {
   await consolidate().then((res) => stats.push({ consolidate: res }));
 
   //Theses sources use uai as selector, so we need to consolidate UAI before running them
-  await collectAll(["ccca-btp", "cci-france", "cma", "mfr", "acce", "voeux-affelnet"]);
+  await collectAll(["acce", "voeux-affelnet"]);
 
   return stats;
 }

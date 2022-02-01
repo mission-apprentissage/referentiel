@@ -1,13 +1,14 @@
 const path = require("path");
 const { readFileSync } = require("fs");
 const axios = require("axios");
+const nock = require("nock"); // eslint-disable-line node/no-unpublished-require
 const MockAdapter = require("axios-mock-adapter"); // eslint-disable-line node/no-unpublished-require
 const AcceApi = require("../../src/common/apis/AcceApi");
 const { merge, omit } = require("lodash");
 const CatalogueApi = require("../../src/common/apis/CatalogueApi");
 const GeoAdresseApi = require("../../src/common/apis/GeoAdresseApi");
 const SireneApi = require("../../src/common/apis/SireneApi");
-const nock = require("nock"); // eslint-disable-line node/no-unpublished-require
+const TableauDeBordApi = require("../../src/common/apis/TableauDeBordApi"); // eslint-disable-line node/no-unpublished-require
 
 function createAxios(Api, responses, callback, options) {
   let instance = axios.create(options);
@@ -711,6 +712,40 @@ module.exports = {
             },
           },
           custom
+        );
+      },
+    });
+  },
+  mockTableauDeBordApi(callback) {
+    let client = createNock(TableauDeBordApi.baseApiUrl);
+    callback(client, {
+      cfas(custom = {}) {
+        return (
+          JSON.stringify(
+            merge(
+              {},
+              {
+                cfas: [
+                  {
+                    uai: "0751234J",
+                    sirets: ["11111111100001"],
+                    nom: "Organisme de formation",
+                    reseaux: ["cfa-reseau"],
+                    region_nom: "Normandie",
+                    region_num: "28",
+                    metiers: ["Vente en magasin : produits non alimentaires (vêtements, équipement, livres, …)"],
+                  },
+                ],
+                pagination: {
+                  page: 1,
+                  resultats_par_page: 1,
+                  nombre_de_page: 1,
+                  total: 1,
+                },
+              },
+              custom
+            )
+          ) + "\n"
         );
       },
     });
