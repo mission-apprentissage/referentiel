@@ -1,4 +1,4 @@
-const logger = require("../common/logger");
+const logger = require("../common/logger").child({ context: "cfd" });
 const { getFileAsStream } = require("../common/utils/httpUtils");
 const { oleoduc, writeData } = require("oleoduc");
 const { pick } = require("lodash");

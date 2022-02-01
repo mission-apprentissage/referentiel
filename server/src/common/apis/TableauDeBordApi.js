@@ -1,5 +1,4 @@
 const queryString = require("query-string");
-const logger = require("../logger");
 const RateLimitedApi = require("./RateLimitedApi");
 const { getFileAsStream } = require("../utils/httpUtils");
 const Pick = require("stream-json/filters/Pick");
@@ -8,7 +7,7 @@ const { compose, transformData } = require("oleoduc");
 
 class TableauDeBordApi extends RateLimitedApi {
   constructor(options = {}) {
-    super("CatalogueApi", { nbRequests: 5, durationInSeconds: 1, ...options });
+    super("TableauDeBordApi", { nbRequests: 5, durationInSeconds: 1, ...options });
   }
 
   static get baseApiUrl() {
@@ -29,7 +28,6 @@ class TableauDeBordApi extends RateLimitedApi {
       { encode: false }
     );
 
-    logger.debug(`[${this.name}] Fetching CFA with params ${params}...`);
     let response = getFileAsStream(`${TableauDeBordApi.baseApiUrl}/cfas?${params}`);
 
     return compose(

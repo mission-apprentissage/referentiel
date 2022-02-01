@@ -1,6 +1,6 @@
 const { mergeStreams } = require("oleoduc");
 const { isEmpty, castArray } = require("lodash");
-const logger = require("../common/logger");
+const logger = require("../common/logger").child({ context: "import" });
 const luhn = require("fast-luhn");
 const { dbCollection } = require("../common/db/mongodb");
 
@@ -23,16 +23,25 @@ function isSiretValid(siret) {
   return !isEmpty(siret) && siret.length === 14 && luhn(siret);
 }
 
+function getStreams(sources) {
+  return Promise.all(
+    sources.map((source) => {
+      logger.info(`Import des organimes contenus dans le référentiel : ${source.name}...`);
+      return source.referentiel();
+    })
+  );
+}
+
 module.exports = async (array) => {
   let sources = castArray(array);
-  let streams = await Promise.all(sources.map((source) => source.referentiel()));
+  let streams = await getStreams(sources);
   let stats = createStats(sources);
 
   for await (const { from, siret } of mergeStreams(streams)) {
     stats[from].total++;
     if (!isSiretValid(siret)) {
       stats[from].invalid++;
-      logger.warn(`[Import] Impossible d'importer le siret '${siret}' car il est invalide.`);
+      logger.warn(`Impossible d'importer le siret '${siret}' car il est invalide.`);
       continue;
     }
 
@@ -63,15 +72,15 @@ module.exports = async (array) => {
       );
 
       if (res.upsertedCount) {
-        logger.debug(`[Import] Organisme ${siret} créé`);
+        logger.debug(`Organisme ${siret} créé`);
         stats[from].created += res.upsertedCount;
       } else if (res.modifiedCount) {
         stats[from].updated += res.modifiedCount;
-        logger.debug(`[Import] Organisme ${siret} mis à jour`);
+        logger.debug(`Organisme ${siret} mis à jour`);
       }
     } catch (e) {
       stats[from].failed++;
-      logger.error(e, `[Import] Impossible d'ajouter l'organisme ${siret}`);
+      logger.error(e, `Impossible d'ajouter l'organisme ${siret}`);
     }
   }
 

@@ -1,4 +1,4 @@
-const logger = require("../logger");
+const logger = require("../logger").child({ context: "api" });
 const RateLimiter = require("./RateLimiter");
 const ApiError = require("./ApiError");
 

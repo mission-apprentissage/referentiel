@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 const config = require("../../config");
 const collections = require("./collections");
-const logger = require("../logger");
+const logger = require("../logger").child({ context: "db" });
 const { writeData } = require("oleoduc");
 
 let clientHolder;
@@ -75,7 +75,7 @@ async function configureIndexes(options = {}) {
       let shouldDropIndexes = options.dropIndexes || false;
       let dbCol = dbCollection(collection.name);
 
-      logger.info(`Configuring indexes for collection ${collection.name} (drop:${shouldDropIndexes})...`);
+      logger.debug(`Configuring indexes for collection ${collection.name} (drop:${shouldDropIndexes})...`);
       if (shouldDropIndexes) {
         await dbCol.dropIndexes({ background: false });
       }
@@ -104,7 +104,7 @@ async function configureValidation() {
         return;
       }
 
-      logger.info(`Configuring validation for collection ${collection.name}...`);
+      logger.debug(`Configuring validation for collection ${collection.name}...`);
       let db = getDatabase();
       await db.command({
         collMod: collection.name,

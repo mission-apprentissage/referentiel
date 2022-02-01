@@ -2,7 +2,7 @@ const { mergeStreams } = require("oleoduc");
 const { uniq, isEmpty } = require("lodash");
 const { flattenObject, isError, omitNil } = require("../common/utils/objectUtils");
 const { isUAIValid } = require("../common/utils/uaiUtils");
-const logger = require("../common/logger");
+const logger = require("../common/logger").child({ context: "collect" });
 const { dbCollection } = require("../common/db/mongodb");
 const { sortBy } = require("lodash/collection");
 const createDatagouvSource = require("./sources/datagouv");
@@ -90,7 +90,7 @@ function mergeContacts(source, contacts, newContacts) {
 }
 
 function handleAnomalies(source, organisme, anomalies) {
-  logger.warn({ anomalies }, `[Collect][${source}] Erreur lors de la collecte pour l'organisme ${organisme.siret}.`);
+  logger.warn({ anomalies }, `Erreur lors de la collecte pour l'organisme ${organisme.siret}.`, { source });
 
   return dbCollection("organismes").updateOne(
     { siret: organisme.siret },
@@ -132,7 +132,12 @@ function createStats(sources) {
 }
 
 async function getStreams(sources, filters) {
-  return Promise.all(sources.map((source) => source.stream({ filters })));
+  return Promise.all(
+    sources.map((source) => {
+      logger.info(`Collecte de la sources de données : ${source.name}...`);
+      return source.stream({ filters });
+    })
+  );
 }
 
 module.exports = async (array, options = {}) => {
@@ -167,7 +172,7 @@ module.exports = async (array, options = {}) => {
     let query = buildQuery(selector);
     let organisme = await dbCollection("organismes").findOne(query);
     if (!organisme) {
-      logger.trace(`[Collect][${from}] Organisme ${query} inconnu`);
+      logger.trace(`Organisme ${JSON.stringify(query)} inconnu`, { source: from });
       stats[from].unknown++;
       continue;
     }
@@ -201,9 +206,7 @@ module.exports = async (array, options = {}) => {
       let nbModifiedDocuments = res.modifiedCount;
       if (nbModifiedDocuments) {
         stats[from].updated += nbModifiedDocuments;
-        logger.debug(`[Collect][${from}] Organisme ${organisme.siret} mis à jour`);
-      } else {
-        logger.trace(`[Collect][${from}] Organisme ${organisme.siret} à jour`);
+        logger.debug(`Organisme ${organisme.siret} mis à jour`, { source: from });
       }
     } catch (e) {
       stats[from].failed++;

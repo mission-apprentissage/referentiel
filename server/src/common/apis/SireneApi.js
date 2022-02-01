@@ -1,5 +1,4 @@
 const axios = require("axios");
-const logger = require("../logger");
 const RateLimitedApi = require("./RateLimitedApi");
 
 class SireneApi extends RateLimitedApi {
@@ -14,7 +13,6 @@ class SireneApi extends RateLimitedApi {
 
   getUniteLegale(siren) {
     return this.execute(async () => {
-      logger.debug(`[${this.name}] Fetching unites_legales for siren ${siren}...`);
       let response = await this.client.get(`${SireneApi.baseApiUrl}/unites_legales/${siren}`);
       return response.data.unite_legale;
     });
@@ -22,7 +20,6 @@ class SireneApi extends RateLimitedApi {
 
   getEtablissement(siret) {
     return this.execute(async () => {
-      logger.debug(`[${this.name}] Fetching etablissement ${siret}...`);
       let response = await this.client.get(`${SireneApi.baseApiUrl}/etablissements/${siret}`);
 
       return response.data.etablissement;

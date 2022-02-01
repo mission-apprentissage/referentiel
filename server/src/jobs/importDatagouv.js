@@ -1,4 +1,4 @@
-const logger = require("../common/logger");
+const logger = require("../common/logger").child({ context: "datagouv" });
 const { getFileAsStream } = require("../common/utils/httpUtils");
 const { oleoduc, writeData } = require("oleoduc");
 const { dbCollection } = require("../common/db/mongodb");
@@ -81,7 +81,7 @@ async function importDatagouv(options = {}) {
             },
           };
 
-          logger.debug(`[Datagouv] Import de l'organisme de formation ${nda}`);
+          logger.debug(`Import de l'organisme de formation ${nda}...`);
           let res = await dbCollection("datagouv").updateOne(
             {
               numeroDeclarationActivite: nda,
@@ -95,7 +95,7 @@ async function importDatagouv(options = {}) {
           stats.updated += res.modifiedCount;
           stats.created += res.upsertedCount;
         } catch (e) {
-          logger.error(e, `[Datagouv] Impossible d'importer l'organisme de formation  ${nda}`);
+          logger.error(e, `Impossible d'importer l'organisme de formation  ${nda}`);
           stats.failed++;
         }
       },

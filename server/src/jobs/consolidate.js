@@ -1,4 +1,4 @@
-const logger = require("../common/logger");
+const logger = require("../common/logger").child({ context: "consolidate" });
 const { dbCollection } = require("../common/db/mongodb");
 
 async function consolidate() {

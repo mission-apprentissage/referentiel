@@ -1,4 +1,4 @@
-const logger = require("../logger");
+const logger = require("../logger").child({ context: "cache" });
 const { DateTime } = require("luxon");
 const { dbCollection } = require("../db/mongodb");
 const { serializeError, deserializeError } = require("serialize-error");

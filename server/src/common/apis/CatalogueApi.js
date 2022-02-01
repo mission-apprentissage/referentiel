@@ -1,5 +1,4 @@
 const queryString = require("query-string");
-const logger = require("../logger");
 const RateLimitedApi = require("./RateLimitedApi");
 const { getFileAsStream } = require("../utils/httpUtils");
 const { compose, readLineByLine, transformData } = require("oleoduc");
@@ -27,7 +26,6 @@ class CatalogueApi extends RateLimitedApi {
       { encode: false }
     );
 
-    logger.debug(`[${this.name}] Fetching formations with params ${params}...`);
     let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations.ndjson?${params}`, {
       highWaterMark: 1048576 * 10, //MiB
     });
@@ -54,7 +52,6 @@ class CatalogueApi extends RateLimitedApi {
         { encode: false }
       );
 
-      logger.debug(`[${this.name}] Fetching etablissements with params ${params}...`);
       let response = await getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/etablissements.ndjson?${params}`, {
         timeout: 5000,
       });

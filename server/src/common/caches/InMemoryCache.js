@@ -1,4 +1,4 @@
-const logger = require("../logger");
+const logger = require("../logger").child({ context: "cache" });
 
 class InMemoryCache {
   constructor(cacheName) {
