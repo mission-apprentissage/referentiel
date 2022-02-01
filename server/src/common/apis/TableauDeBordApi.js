@@ -1,9 +1,9 @@
-const queryString = require("query-string");
 const RateLimitedApi = require("./RateLimitedApi");
 const { getFileAsStream } = require("../utils/httpUtils");
 const Pick = require("stream-json/filters/Pick");
 const { streamArray } = require("stream-json/streamers/StreamArray");
 const { compose, transformData } = require("oleoduc");
+const convertQueryIntoParams = require("./utils/convertQueryIntoParams");
 
 class TableauDeBordApi extends RateLimitedApi {
   constructor(options = {}) {
@@ -15,18 +15,7 @@ class TableauDeBordApi extends RateLimitedApi {
   }
 
   streamCfas(query, options) {
-    let params = queryString.stringify(
-      {
-        query: JSON.stringify(query),
-        ...Object.keys(options).reduce((acc, key) => {
-          return {
-            ...acc,
-            [key]: JSON.stringify(options[key]),
-          };
-        }, {}),
-      },
-      { encode: false }
-    );
+    let params = convertQueryIntoParams(query, options);
 
     let response = getFileAsStream(`${TableauDeBordApi.baseApiUrl}/cfas?${params}`);
 
