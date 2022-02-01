@@ -19,10 +19,12 @@ describe("consolidate", () => {
     const found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
     assert.strictEqual(found.uai, "0751234J");
     assert.deepStrictEqual(stats, {
-      total: 1,
-      modifications: 1,
-      unknown: 0,
-      failed: 0,
+      modifications: {
+        total: 1,
+        modifications: 1,
+        unknown: 0,
+        failed: 0,
+      },
     });
   });
 
@@ -49,10 +51,12 @@ describe("consolidate", () => {
     const found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
     assert.strictEqual(found.uai, "0751234X");
     assert.deepStrictEqual(stats, {
-      total: 2,
-      modifications: 2,
-      unknown: 0,
-      failed: 0,
+      modifications: {
+        total: 2,
+        modifications: 2,
+        unknown: 0,
+        failed: 0,
+      },
     });
   });
 
@@ -67,10 +71,12 @@ describe("consolidate", () => {
     let stats = await consolidate();
 
     assert.deepStrictEqual(stats, {
-      total: 1,
-      modifications: 0,
-      unknown: 1,
-      failed: 0,
+      modifications: {
+        total: 1,
+        modifications: 0,
+        unknown: 1,
+        failed: 0,
+      },
     });
   });
 });
