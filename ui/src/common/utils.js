@@ -24,3 +24,7 @@ export function flattenObject(obj, parent, res = {}) {
   }
   return res;
 }
+
+export function asSiren(siret) {
+  return siret.substring(0, 9);
+}

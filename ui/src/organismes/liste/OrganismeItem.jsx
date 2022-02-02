@@ -82,7 +82,7 @@ export default function OrganismeItem({ organisme }) {
             <span className={"uai"}>UAI : {organisme.uai || "N.A"}</span>
             <div className={"siret"}>
               <span>SIRET : </span>
-              <Siret siret={organisme.siret} />
+              <Siret organisme={organisme} />
               <span>{organisme.etat_administratif === "actif" ? "(en activité)" : "(fermé)"}</span>
             </div>
           </Identifiants>

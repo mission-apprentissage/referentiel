@@ -38,7 +38,7 @@ export default function ImmatriculationTab({ organisme }) {
         <Field
           label={"SIRET"}
           className={"fr-mr-1w xfr-display-inline-block"}
-          value={<Siret siret={organisme.siret} />}
+          value={<Siret organisme={organisme} />}
         />
         <Field
           className={"xfr-display-inline-block"}
