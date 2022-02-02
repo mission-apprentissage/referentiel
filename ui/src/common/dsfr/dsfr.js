@@ -1,5 +1,7 @@
 import React, { forwardRef } from "react";
 import cs from "classnames";
+import "@gouvfr/dsfr/dist/dsfr/dsfr.css";
+import "./custom/xfr.scss";
 
 window.dsfr = {
   verbose: true,
