@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UAIValidator from "./uai/UAISelector";
 import Natures from "../common/Natures";
 import Siret from "../common/Siret";
@@ -7,10 +7,12 @@ import LinkButton from "../../common/dsfr/custom/LinkButton";
 import { useModal } from "../../common/dsfr/common/useModal";
 import DatagouvModal from "./DatagouvModal";
 import Field from "../../common/Field";
+import { AuthContext } from "../../common/AuthRoutes";
 
 export default function ImmatriculationTab({ organisme }) {
-  let adresse = organisme.adresse?.label || `${organisme.adresse?.code_postal} ${organisme.adresse?.localite}`;
+  let [auth] = useContext(AuthContext);
   let [showDatagouvModal, setShowDatagouvModal] = useState(false);
+  let adresse = organisme.adresse;
   let datagouvModal = useModal();
   useEffect(() => {
     showDatagouvModal && datagouvModal.open();
@@ -31,7 +33,9 @@ export default function ImmatriculationTab({ organisme }) {
       </Box>
       <Box direction={"column"}>
         <Field label={"UAI"} value={organisme.uai}>
-          <UAIValidator className="fr-ml-3v" organisme={organisme} />
+          {adresse && adresse[auth.type].code === auth.code && (
+            <UAIValidator className="fr-ml-3v" organisme={organisme} />
+          )}
         </Field>
         <Field label={"Nature"} value={<Natures organisme={organisme} />} />
         <Field label={"SIREN"} value={organisme.siret.substr(0, 9)} />
@@ -50,9 +54,9 @@ export default function ImmatriculationTab({ organisme }) {
       <Box direction={"column"} className={"fr-mt-5w"}>
         <Field label={"Enseigne"} value={organisme.enseigne} />
         <Field label={"Raison sociale"} value={organisme.raison_sociale} />
-        <Field label={"Adresse"} value={adresse} />
-        <Field label={"Région"} value={organisme.adresse?.region?.nom} />
-        <Field label={"Académie"} value={organisme.adresse?.academie?.nom} />
+        <Field label={"Adresse"} value={adresse?.label || `${adresse?.code_postal} ${adresse?.localite}`} />
+        <Field label={"Région"} value={adresse?.region?.nom} />
+        <Field label={"Académie"} value={adresse?.academie?.nom} />
       </Box>
     </>
   );
