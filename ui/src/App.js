@@ -27,9 +27,15 @@ function App() {
                 <Route path="/" element={<TableauDeBordPage />} />
                 <Route path="/validation" element={<Navigate replace to="/" />} />
                 <Route path="/validation/:type" element={<ValidationPage />} />
-                <Route path="/validation/:type/:siret" element={<OrganismePage />} />
+                <Route path="/validation/:type/:siret">
+                  <Route path=":tab" element={<OrganismePage />} />
+                  <Route path="" element={<OrganismePage />} />
+                </Route>
                 <Route path="/organismes" element={<OrganismesPage />} />
-                <Route path="/organismes/:siret" element={<OrganismePage />} />
+                <Route path="/organismes/:siret">
+                  <Route path=":tab" element={<OrganismePage />} />
+                  <Route path="" element={<OrganismePage />} />
+                </Route>
               </Route>
             </Route>
           </Routes>
