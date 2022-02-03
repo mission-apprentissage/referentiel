@@ -1,8 +1,8 @@
 import { AuthContext } from "../AuthRoutes";
 import { useContext } from "react";
-import { useSearch } from "./useSearch";
+import { useOrganismes } from "./useOrganismes";
 
-export default function useValidationSearch(type, custom = {}) {
+export function useValidation(type, custom = {}) {
   let [auth] = useContext(AuthContext);
   let params = {
     [`${auth.type}s`]: auth.code,
@@ -28,5 +28,5 @@ export default function useValidationSearch(type, custom = {}) {
       throw new Error(`Type de validation inconnu : ${type}`);
   }
 
-  return useSearch(params);
+  return useOrganismes(params);
 }

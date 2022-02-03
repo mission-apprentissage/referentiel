@@ -3,11 +3,10 @@ import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSele
 import SearchForm from "../organismes/liste/SearchForm";
 import { useParams } from "react-router-dom";
 import TitleLayout from "../common/layout/TitleLayout";
-import useNavigation from "../common/hooks/useNavigation";
 import Results from "../common/Results";
 import ContentLayout from "../common/layout/ContentLayout";
 import styled from "styled-components";
-import useValidationSearch from "../common/hooks/useValidationSearch";
+import { useValidation } from "../common/hooks/useValidation";
 import Filters from "../organismes/filtres/Filters";
 import NatureFilter from "../organismes/filtres/NatureFilter";
 
@@ -22,14 +21,12 @@ export function ValidationTitle() {
   return <span>{mapper[type]}</span>;
 }
 
-const ValidationLayoutTitle = styled(({ search, children, className }) => {
-  let { params } = useNavigation();
-
+const ValidationLayoutTitle = styled(({ refine, children, className }) => {
   return (
     <div className={className}>
       <TitleLayout
         title={<ValidationTitle />}
-        selector={<DepartementAuthSelector onChange={(code) => search({ ...params, departements: code })} />}
+        selector={<DepartementAuthSelector onChange={(code) => refine({ departements: code })} />}
       >
         {children}
       </TitleLayout>
@@ -40,9 +37,8 @@ const ValidationLayoutTitle = styled(({ search, children, className }) => {
 `;
 
 export default function ValidationPage() {
-  let { params } = useNavigation();
   let { type } = useParams();
-  let { response, search, refine } = useValidationSearch(type, {
+  let { response, search, refine } = useValidation(type, {
     ordre: "desc",
     page: 1,
     items_par_page: 25,
@@ -50,10 +46,10 @@ export default function ValidationPage() {
 
   return (
     <>
-      <ValidationLayoutTitle search={search} type={type} />
+      <ValidationLayoutTitle refine={refine} type={type} />
       <ContentLayout>
         <Results
-          search={<SearchForm onSubmit={(values) => search({ ...params, ...values, page: 1 })} />}
+          search={<SearchForm onSubmit={(values) => search({ ...values, page: 1 })} />}
           filters={
             <Filters onChange={(filters) => refine({ ...filters })}>
               <NatureFilter

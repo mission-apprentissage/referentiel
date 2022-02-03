@@ -1,15 +1,13 @@
 import Select from "../../common/dsfr/elements/Select";
 import { useContext, useState } from "react";
-import useNavigation from "../../common/hooks/useNavigation";
 import { Box, Item } from "../../common/Flexbox";
 import { DataContext } from "../../common/hooks/useData";
 import { AuthContext } from "../../common/AuthRoutes";
 
-export default function DepartementAuthSelector({ onChange }) {
-  let { params } = useNavigation();
+export default function DepartementAuthSelector({ departement, onChange }) {
   let [data] = useContext(DataContext);
   let [auth] = useContext(AuthContext);
-  let [selected, setSelected] = useState(params.departements || "");
+  let [selected, setSelected] = useState(departement || "");
   let departements = data[`${auth.type}s`].find((r) => r.code === auth.code)?.departements || [];
 
   return (

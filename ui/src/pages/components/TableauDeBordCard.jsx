@@ -4,7 +4,7 @@ import styled from "styled-components";
 import ClickableItem from "../../common/ClickableItem";
 import { without } from "../../common/utils";
 import Spinner from "../../common/Spinner";
-import useValidationSearch from "../../common/hooks/useValidationSearch";
+import { useValidation } from "../../common/hooks/useValidation";
 
 const StyledBox = styled(without(Box, ["type"]))`
   padding: 1.5rem;
@@ -30,7 +30,7 @@ const Counter = styled(({ response, className }) => {
 `;
 
 export default function TableauDeBordCard({ type, label, ...rest }) {
-  let { response } = useValidationSearch(type, {
+  let { response } = useValidation(type, {
     page: 1,
     items_par_page: 1,
     champs: "siret",

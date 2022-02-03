@@ -1,13 +1,13 @@
 import Select from "../../common/dsfr/elements/Select";
 import { useContext, useState } from "react";
-import useNavigation from "../../common/hooks/useNavigation";
 import { Box, Item } from "../../common/Flexbox";
 import { DataContext } from "../../common/hooks/useData";
+import { useQuery } from "../../common/hooks/useQuery";
 
 export default function AcademieSelector({ onChange }) {
   let [{ academies }] = useContext(DataContext);
-  let { params } = useNavigation();
-  let [selected, setSelected] = useState(params.academie || "");
+  let { query } = useQuery();
+  let [selected, setSelected] = useState(query.academie || "");
 
   return (
     <Box align={"center"} justify={"start"} style={{ width: "100%" }}>

@@ -3,10 +3,10 @@ import GreyAccordionItem from "../../common/dsfr/custom/GreyAccordionItem";
 import styled from "styled-components";
 import { Tag } from "../../common/dsfr/elements/Tag";
 import SmallCheckbox from "../../common/dsfr/custom/SmallCheckbox";
-import useNavigation from "../../common/hooks/useNavigation";
 import { useContext } from "react";
 import { FilterContext } from "./Filters";
 import { ariaExpanded } from "../../common/dsfr/dsfr";
+import { useQuery } from "../../common/hooks/useQuery";
 
 const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   return (
@@ -24,9 +24,9 @@ const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
 `;
 
 export function Filter({ label, paramName, items, expanded = false }) {
-  let { params } = useNavigation();
+  let { query } = useQuery();
   let { onChange, register } = useContext(FilterContext);
-  let array = params[paramName] ? params[paramName].split(",") : [];
+  let array = query[paramName] ? query[paramName].split(",") : [];
   register(paramName);
 
   return (

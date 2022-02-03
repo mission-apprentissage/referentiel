@@ -1,5 +1,6 @@
 import { omit } from "lodash-es";
 import { Children, cloneElement } from "react";
+import queryString from "query-string";
 
 export function without(Tag, filter = []) {
   return (props) => <Tag {...omit(props, filter)} />;
@@ -27,4 +28,9 @@ export function flattenObject(obj, parent, res = {}) {
 
 export function asSiren(siret) {
   return siret.substring(0, 9);
+}
+
+export function buildUrl(base, data) {
+  let params = `${queryString.stringify(data, { skipNull: true, skipEmptyString: true })}`;
+  return `${base}?${params}`;
 }

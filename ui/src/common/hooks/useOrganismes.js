@@ -1,7 +1,8 @@
 import { useFetch } from "./useFetch";
-import useNavigation from "./useNavigation";
+import { buildUrl } from "../utils";
+import { useQuery } from "./useQuery";
 
-function adaptParamsForAPI(params) {
+function adaptQueryForAPI(params) {
   return Object.keys(params).reduce((acc, key) => {
     let value = params[key];
     let shouldIgnoreParam = value.indexOf(",") !== -1 && value.includes("true") && value.includes("false");
@@ -13,10 +14,10 @@ function adaptParamsForAPI(params) {
   }, {});
 }
 
-export function useSearch(defaults = {}) {
-  let { params, buildUrl, navigate } = useNavigation();
+export function useOrganismes(defaults = {}) {
+  let { query, setQuery } = useQuery();
 
-  let url = buildUrl(`/api/v1/organismes`, { ...defaults, ...adaptParamsForAPI(params) });
+  let url = buildUrl(`/api/v1/organismes`, { ...defaults, ...adaptQueryForAPI(query) });
   let [response] = useFetch(url, {
     organismes: [],
     pagination: {
@@ -27,13 +28,9 @@ export function useSearch(defaults = {}) {
     },
   });
 
-  function search(newParams = {}) {
-    navigate({ ...defaults, ...newParams });
-  }
-
-  function refine(values = {}) {
-    navigate({ ...defaults, ...params, ...values });
-  }
-
-  return { response, search, refine };
+  return {
+    response,
+    search: (params = {}) => setQuery({ ...params }),
+    refine: (params = {}) => setQuery({ ...query, ...params }),
+  };
 }

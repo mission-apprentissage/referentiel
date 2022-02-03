@@ -1,14 +1,15 @@
 import { FirstPage, LastPage, NextPage, Page, Pagination, PreviousPage } from "./dsfr/elements/Pagination";
-import useNavigation from "./hooks/useNavigation";
+import { useQuery } from "./hooks/useQuery";
+import { buildUrl } from "./utils";
 
 export default function ApiPagination({ pagination }) {
-  let { params, buildUrl } = useNavigation();
+  let { query } = useQuery();
   let nextPage = pagination.page + 1;
   let previousPage = pagination.page - 1;
 
   function to(data = {}) {
     return {
-      to: buildUrl(window.location.pathname, { ...params, ...data }),
+      to: buildUrl(window.location.pathname, { ...query, ...data }),
       onClick: () => window.scrollTo(0, 0),
     };
   }

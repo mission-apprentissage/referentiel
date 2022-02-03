@@ -1,7 +1,7 @@
 import React from "react";
 import { Tab, TabPanel } from "../common/dsfr/elements/Tabs";
 import AcademieSelector from "../organismes/selectors/AcademieSelector";
-import { useSearch } from "../common/hooks/useSearch";
+import { useOrganismes } from "../common/hooks/useOrganismes";
 import SearchForm from "../organismes/liste/SearchForm";
 import OrganismeList from "../organismes/liste/OrganismeList";
 import Filters from "../organismes/filtres/Filters";
@@ -15,13 +15,13 @@ import DepartementsFilter from "../organismes/filtres/DepartementsFilter";
 import UAIFilter from "../organismes/filtres/UAIFilter";
 
 export default function OrganismesPage() {
-  let { response, search, refine } = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
+  let { response, search, refine } = useOrganismes({ ordre: "desc", page: 1, items_par_page: 25 });
 
   return (
     <>
       <TitleLayout
         title={"Référentiel national"}
-        selector={<AcademieSelector onChange={(code) => search({ academies: code })} />}
+        selector={<AcademieSelector onChange={(code) => refine({ academies: code })} />}
       />
       <ContentLayout>
         <WideTabs
