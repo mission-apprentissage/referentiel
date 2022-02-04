@@ -36,24 +36,16 @@ function getRelationLabel(e, raisonSociale) {
   return `${raisonSociale} ${localisation}`.replace(/ +/g, " ").trim();
 }
 
-async function getAdresse(adresseResolver, data) {
-  let { getAdresseFromCoordinates, geocodeAdresse } = adresseResolver;
-  const addr = (
-    `${data.numero_voie || ""} ${data.indice_repetition || ""} ` +
-    `${data.type_voie || ""} ${data.libelle_voie || ""} ` +
-    `${data.code_postal || ""} ${data.libelle_commune || ""} `
+function getAdresse(etablissement, { geocode }) {
+  const adresse = (
+    `${etablissement.numero_voie || ""} ${etablissement.indice_repetition || ""} ` +
+    `${etablissement.type_voie || ""} ${etablissement.libelle_voie || ""} ` +
+    `${etablissement.code_postal || ""} ${etablissement.libelle_commune || ""}`
   )
     .replace(/\s{2,}/g, " ")
     .trim();
 
-  if (data.longitude) {
-    return getAdresseFromCoordinates(parseFloat(data.longitude), parseFloat(data.latitude), {
-      code_postal: data.code_postal,
-      adresse: addr,
-    });
-  } else {
-    return geocodeAdresse(addr);
-  }
+  return geocode(adresse);
 }
 
 function getRelations(uniteLegale, siret) {
@@ -82,7 +74,7 @@ module.exports = (custom = {}) => {
       return compose(
         dbCollection("organismes").find(filters, { siret: 1, "adresse.code_insee": 1 }).batchSize(20).stream(),
         transformData(
-          async ({ siret, adresse: previousAdresse }) => {
+          async ({ siret }) => {
             try {
               let siren = siret.substring(0, 9);
               let anomalies = [];
@@ -100,14 +92,12 @@ module.exports = (custom = {}) => {
                 };
               }
 
-              let adresse = previousAdresse
-                ? null
-                : await getAdresse(adresseResolver, etablissement).catch((e) => {
-                    anomalies.push({
-                      code: "etablissement_geoloc_impossible",
-                      message: `Impossible de géolocaliser l'adresse de l'organisme. ${e.message}`,
-                    });
-                  });
+              let adresse = await getAdresse(etablissement, adresseResolver).catch((e) => {
+                anomalies.push({
+                  code: "etablissement_geoloc_impossible",
+                  message: e.message,
+                });
+              });
 
               let formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);
               if (!formeJuridique) {

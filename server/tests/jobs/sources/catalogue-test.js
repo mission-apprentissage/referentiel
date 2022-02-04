@@ -19,11 +19,6 @@ function mockApis(custom = {}) {
       .get((uri) => uri.includes("reverse"))
       .query(() => true)
       .reply(200, responses.reverse(custom.reverse));
-
-    client
-      .get((uri) => uri.includes("search"))
-      .query(() => true)
-      .reply(200, responses.search());
   });
 }
 
@@ -415,79 +410,7 @@ describe("catalogue", () => {
     });
   });
 
-  it("Vérifie qu'on cherche une adresse quand on ne peut pas reverse-geocoder un lieu de formation", async () => {
-    await insertOrganisme({ siret: "22222222200002" });
-    let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_formateur_siret: "22222222200002",
-          })
-        );
-    });
-    mockGeoAddresseApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("reverse"))
-        .query(() => true)
-        .reply(400, {});
-
-      client
-        .get((uri) => uri.includes("search"))
-        .query(() => true)
-        .reply(200, responses.search());
-    });
-
-    let stats = await collectSources(source);
-
-    let found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
-    assert.deepStrictEqual(found.lieux_de_formation[0], {
-      code: "2.396444_48.879706",
-      sources: ["catalogue"],
-      adresse: {
-        geojson: {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [2.396444, 48.879706],
-          },
-          properties: {
-            score: 0.88,
-          },
-        },
-        label: "31 Rue des lilas 75019 Paris",
-        code_postal: "75019",
-        code_insee: "75119",
-        localite: "Paris",
-        departement: {
-          code: "75",
-          nom: "Paris",
-        },
-        region: {
-          code: "11",
-          nom: "Île-de-France",
-        },
-        academie: {
-          code: "01",
-          nom: "Paris",
-        },
-      },
-    });
-    assert.deepStrictEqual(stats, {
-      catalogue: {
-        total: 2,
-        updated: 1,
-        unknown: 1,
-        anomalies: 0,
-        failed: 0,
-      },
-    });
-  });
-
-  it("Vérifie qu'on créer une anomalie quand on ne peut pas trouver l'adresse d'un lieu de formation", async () => {
+  it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver l'adresse d'un lieu de formation", async () => {
     await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockCatalogueApi((client, responses) => {
@@ -506,11 +429,6 @@ describe("catalogue", () => {
         .get((uri) => uri.includes("reverse"))
         .query(() => true)
         .reply(400, {});
-
-      client
-        .get((uri) => uri.includes("search"))
-        .query(() => true)
-        .reply(400, {});
     });
 
     let stats = await collectSources(source);
@@ -523,7 +441,9 @@ describe("catalogue", () => {
       job: "collect",
       source: "catalogue",
       code: "lieudeformation_geoloc_impossible",
-      details: "Lieu de formation inconnu : 31 rue des lilas. [2.396444,48.879706]",
+      details:
+        "Lieu de formation inconnu : 31 rue des lilas. Coordonnées inconnues [2.396444,48.879706] " +
+        "(cause: [GeoAdresseApi] Request failed with status code 400)",
     });
     assert.deepStrictEqual(stats, {
       catalogue: {

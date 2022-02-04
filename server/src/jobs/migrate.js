@@ -5,8 +5,8 @@ const VERSION = 4;
 async function tasks() {
   return {
     clearRelations: await dbCollection("organismes").updateMany(
-      { "relations.0": { $exists: true } },
-      { $set: { relations: [] } }
+      {},
+      { $set: { relations: [], "_meta.anomalies": [] }, $unset: { adresse: 1 } }
     ),
   };
 }

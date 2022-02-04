@@ -79,16 +79,14 @@ function buildCertification(formation) {
   };
 }
 
-async function buildLieuDeFormation(formation, getAdresseFromCoordinates) {
+async function buildLieuDeFormation(formation, { reverseGeocode }) {
   if (!formation.lieu_formation_geo_coordonnees) {
     return {};
   }
 
   try {
     let [latitude, longitude] = formation.lieu_formation_geo_coordonnees.split(",");
-    let adresse = await getAdresseFromCoordinates(longitude, latitude, {
-      adresse: formation.lieu_formation_adresse,
-    });
+    let adresse = await reverseGeocode(longitude, latitude);
 
     return {
       lieu: {
@@ -122,7 +120,7 @@ function buildContacts(formation) {
 
 module.exports = (custom = {}) => {
   let api = custom.catalogueAPI || new CatalogueApi();
-  let { getAdresseFromCoordinates } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
+  let adresseResolver = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
   return {
     name: "catalogue",
@@ -130,7 +128,7 @@ module.exports = (custom = {}) => {
       return compose(
         fetchFormations(api, options.filters),
         transformData(async (formation) => {
-          let { lieu, anomalie } = await buildLieuDeFormation(formation, getAdresseFromCoordinates);
+          let { lieu, anomalie } = await buildLieuDeFormation(formation, adresseResolver);
 
           return [
             {
