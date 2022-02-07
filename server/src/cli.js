@@ -16,6 +16,7 @@ const { oleoduc } = require("oleoduc");
 const generateMagicLinks = require("./jobs/generateMagicLinks");
 const writeToStdout = require("oleoduc/lib/writeToStdout");
 const exportOrganismes = require("./jobs/exportOrganismes");
+const importCommunes = require("./jobs/importCommunes");
 
 cli
   .command("build")
@@ -26,6 +27,21 @@ cli
     runScript(() => {
       let referentiels = names ? names.split(",") : null;
       return build({ referentiels, ...options });
+    });
+  });
+
+cli
+  .command("importCommunes")
+  .argument(
+    "[file]",
+    "Le fichier de Datagouv : Contours des communes de France simplifié, avec régions et département d'outre-mer rapprochés",
+    createReadStream
+  )
+  .action((file) => {
+    runScript(() => {
+      return importCommunes({
+        input: file,
+      });
     });
   });
 
