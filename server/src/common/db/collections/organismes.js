@@ -112,13 +112,15 @@ module.exports = {
             anomalies: arrayOf(
               object(
                 {
+                  key: string(),
+                  type: string(),
                   job: string(),
-                  source: string(),
+                  sources: arrayOf(string()),
                   date: date(),
                   code: string(),
                   details: string(),
                 },
-                { required: ["job", "source", "date"] }
+                { required: ["key", "job", "sources", "date"] }
               )
             ),
           },

@@ -98,8 +98,9 @@ async function buildLieuDeFormation(formation, { reverseGeocode }) {
   } catch (e) {
     return {
       anomalie: {
-        code: "lieudeformation_geoloc_impossible",
-        message: `Lieu de formation inconnu : ${formation.lieu_formation_adresse}. ${e.message}`,
+        key: `lieudeformation_${formation.lieu_formation_adresse}`,
+        type: "lieudeformation_geoloc_impossible",
+        details: `Lieu de formation inconnu : ${formation.lieu_formation_adresse}. ${e.message}`,
       },
     };
   }

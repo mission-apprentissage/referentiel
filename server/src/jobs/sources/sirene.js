@@ -36,16 +36,14 @@ function getRelationLabel(e, raisonSociale) {
   return `${raisonSociale} ${localisation}`.replace(/ +/g, " ").trim();
 }
 
-function getAdresse(etablissement, { geocode }) {
-  const adresse = (
+function getAdresseAsString(etablissement) {
+  return (
     `${etablissement.numero_voie || ""} ${etablissement.indice_repetition || ""} ` +
     `${etablissement.type_voie || ""} ${etablissement.libelle_voie || ""} ` +
     `${etablissement.code_postal || ""} ${etablissement.libelle_commune || ""}`
   )
     .replace(/\s{2,}/g, " ")
     .trim();
-
-  return geocode(adresse);
 }
 
 function getRelations(uniteLegale, siret) {
@@ -64,7 +62,7 @@ module.exports = (custom = {}) => {
   let name = "sirene";
   let api = custom.sireneApi || new SireneApi();
   let sireneApiCache = caches.sireneApiCache();
-  let adresseResolver = adresses(custom.geoAdresseApi || new GeoAdresseApi());
+  let { geocode } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
   return {
     name,
@@ -87,23 +85,30 @@ module.exports = (custom = {}) => {
                 return {
                   selector: siret,
                   anomalies: [
-                    { code: "etablissement_inconnu", message: `Etablissement inconnu pour l'entreprise ${siren}` },
+                    {
+                      key: `etablissement_inconnu_${siren}`,
+                      type: "etablissement_inconnu",
+                      details: `Etablissement inconnu pour l'entreprise ${siren}`,
+                    },
                   ],
                 };
               }
 
-              let adresse = await getAdresse(etablissement, adresseResolver).catch((e) => {
+              let addresseAsString = getAdresseAsString(etablissement);
+              let adresse = await geocode(addresseAsString).catch((e) => {
                 anomalies.push({
-                  code: "etablissement_geoloc_impossible",
-                  message: e.message,
+                  key: `adresse_${addresseAsString}`,
+                  type: "etablissement_geoloc_impossible",
+                  details: e.message,
                 });
               });
 
               let formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);
               if (!formeJuridique) {
                 anomalies.push({
-                  code: "categorie_juridique_inconnue",
-                  message: `Impossible de trouver la catégorie juridique de l'entreprise : ${uniteLegale.categorie_juridique}`,
+                  key: `categorie_juridique_${uniteLegale.categorie_juridique}`,
+                  type: "categorie_juridique_inconnue",
+                  details: `Impossible de trouver la catégorie juridique de l'entreprise : ${uniteLegale.categorie_juridique}`,
                 });
               }
 
@@ -124,7 +129,9 @@ module.exports = (custom = {}) => {
               return {
                 selector: siret,
                 anomalies: [
-                  e.httpStatusCode === 404 ? { code: "entreprise_inconnue", message: `Entreprise inconnue` } : e,
+                  e.httpStatusCode === 404
+                    ? { key: "404", type: "entreprise_inconnue", details: "Entreprise inconnue" }
+                    : e,
                 ],
               };
             }

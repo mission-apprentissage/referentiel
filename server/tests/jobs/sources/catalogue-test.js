@@ -438,9 +438,10 @@ describe("catalogue", () => {
     assert.strictEqual(found.lieux_de_formation.length, 0);
     assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "lieudeformation_31 rue des lilas",
+      type: "lieudeformation_geoloc_impossible",
+      sources: ["catalogue"],
       job: "collect",
-      source: "catalogue",
-      code: "lieudeformation_geoloc_impossible",
       details:
         "Lieu de formation inconnu : 31 rue des lilas. Coordonnées inconnues [2.396444,48.879706] " +
         "(cause: [GeoAdresseApi] Request failed with status code 400)",

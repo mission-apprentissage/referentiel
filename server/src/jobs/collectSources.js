@@ -89,27 +89,30 @@ function mergeContacts(source, contacts, newContacts) {
   );
 }
 
-function handleAnomalies(source, organisme, anomalies) {
-  logger.warn({ anomalies }, `Erreur lors de la collecte pour l'organisme ${organisme.siret}.`, { source });
+function handleAnomalies(source, organisme, newAnomalies) {
+  logger.warn({ anomalies: newAnomalies }, `Erreur lors de la collecte pour l'organisme ${organisme.siret}.`, {
+    source,
+  });
 
   return dbCollection("organismes").updateOne(
     { siret: organisme.siret },
     {
-      $push: {
-        "_meta.anomalies": {
-          $each: anomalies.map((ano) => {
+      $set: {
+        "_meta.anomalies": mergeArray(
+          source,
+          organisme._meta.anomalies,
+          "key",
+          newAnomalies.map((ano) => {
+            let error = isError(ano) && ano;
             return {
-              source,
+              key: error ? `${error.httpStatusCode || error.message}` : ano.key,
+              type: error ? "erreur" : ano.type,
+              details: error ? error.message : ano.details,
               job: "collect",
               date: new Date(),
-              code: isError(ano) ? "erreur" : ano.code,
-              details: ano.message,
             };
-          }),
-          // Max 10 elements ordered by date
-          $slice: 10,
-          $sort: { date: -1 },
-        },
+          })
+        ),
       },
     },
     { runValidators: true }

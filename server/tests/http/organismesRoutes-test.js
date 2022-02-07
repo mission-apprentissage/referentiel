@@ -784,8 +784,10 @@ describe("organismesRoutes", () => {
         _meta: {
           anomalies: [
             {
+              key: "123456",
+              type: "dummy",
+              sources: ["test"],
               job: "collect",
-              source: "sirene",
               date: new Date("2021-02-10T08:31:58.572Z"),
             },
           ],

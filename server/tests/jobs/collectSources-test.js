@@ -200,7 +200,7 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        anomalies: [new Error("Erreur")],
+        anomalies: [new Error("Une erreur est survenue")],
       },
     ]);
 
@@ -210,9 +210,10 @@ describe("collectSources", () => {
     let errors = found._meta.anomalies;
     assert.ok(errors[0].date);
     assert.deepStrictEqual(omit(errors[0], ["date"]), {
-      details: "Erreur",
-      source: "dummy",
-      code: "erreur",
+      key: "Une erreur est survenue",
+      sources: ["dummy"],
+      type: "erreur",
+      details: "Une erreur est survenue",
       job: "collect",
     });
     assert.deepStrictEqual(stats, {
@@ -241,9 +242,10 @@ describe("collectSources", () => {
     let errors = found._meta.anomalies;
     assert.ok(errors[0].date);
     assert.deepStrictEqual(omit(errors[0], ["date"]), {
+      key: "Cannot read properties of null (reading 'filter')",
+      sources: ["dummy"],
+      type: "erreur",
       details: "Cannot read properties of null (reading 'filter')",
-      source: "dummy",
-      code: "erreur",
       job: "collect",
     });
     assert.deepStrictEqual(stats, {
@@ -255,6 +257,35 @@ describe("collectSources", () => {
         anomalies: 0,
       },
     });
+  });
+
+  it("Vérifie qu'on ne duplique pas les anomalies", async () => {
+    await insertOrganisme({
+      siret: "11111111100006",
+      _meta: {
+        anomalies: [
+          {
+            key: "Une erreur est survenue",
+            sources: ["dummy"],
+            type: "erreur",
+            details: "Une erreur est survenue",
+            job: "collect",
+            date: new Date(),
+          },
+        ],
+      },
+    });
+    let source = createTestSource([
+      {
+        selector: "11111111100006",
+        anomalies: [new Error("Une erreur est survenue")],
+      },
+    ]);
+
+    await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    assert.strictEqual(found._meta.anomalies.length, 1);
   });
 
   it("Vérifie qu'on ignore un selecteur vide", async () => {

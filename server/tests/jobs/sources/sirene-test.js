@@ -216,7 +216,13 @@ describe("sirene", () => {
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found._meta.anomalies[0].details, "[SireneApi] Request failed with status code 500");
+    assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "500",
+      type: "erreur",
+      sources: ["sirene"],
+      details: "[SireneApi] Request failed with status code 500",
+      job: "collect",
+    });
     assert.deepStrictEqual(stats, {
       sirene: {
         total: 1,
@@ -242,7 +248,13 @@ describe("sirene", () => {
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found._meta.anomalies[0].details, "Etablissement inconnu pour l'entreprise 111111111");
+    assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "etablissement_inconnu_111111111",
+      type: "etablissement_inconnu",
+      sources: ["sirene"],
+      details: "Etablissement inconnu pour l'entreprise 111111111",
+      job: "collect",
+    });
   });
 
   it("Vérifie qu'on gère une erreur spécifique quand l'entreprise n'existe pas", async () => {
@@ -259,7 +271,13 @@ describe("sirene", () => {
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found._meta.anomalies[0].details, "Entreprise inconnue");
+    assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "404",
+      type: "entreprise_inconnue",
+      sources: ["sirene"],
+      details: "Entreprise inconnue",
+      job: "collect",
+    });
   });
 
   it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver l'adresse", async () => {
@@ -278,9 +296,10 @@ describe("sirene", () => {
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "adresse_31 B RUE DES LILAS 75001 PARIS",
+      sources: ["sirene"],
+      type: "etablissement_geoloc_impossible",
       job: "collect",
-      source: "sirene",
-      code: "etablissement_geoloc_impossible",
       details:
         "Geocoding impossible pour l'adresse 31 B RUE DES LILAS 75001 PARIS " +
         "(cause: [GeoAdresseApi] Request failed with status code 400)",
@@ -312,9 +331,10 @@ describe("sirene", () => {
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "categorie_juridique_INVALID",
+      type: "categorie_juridique_inconnue",
+      sources: ["sirene"],
       job: "collect",
-      source: "sirene",
-      code: "categorie_juridique_inconnue",
       details: "Impossible de trouver la catégorie juridique de l'entreprise : INVALID",
     });
     assert.deepStrictEqual(stats, {
