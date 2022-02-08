@@ -21,7 +21,6 @@ describe("ifocop", () => {
       {
         sources: ["ifocop"],
         uai: "0111111Y",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {

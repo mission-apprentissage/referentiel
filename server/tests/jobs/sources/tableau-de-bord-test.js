@@ -38,7 +38,6 @@ describe("tableau-de-bord", () => {
       {
         sources: ["tableau-de-bord"],
         uai: "0751234J",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(found.reseaux, ["cfa-reseau"]);

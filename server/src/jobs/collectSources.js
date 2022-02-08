@@ -39,10 +39,9 @@ function mergeUAIPotentiels(source, potentiels, newPotentiels) {
     potentiels,
     "uai",
     newPotentiels
-      .filter((uai) => uai && uai !== "NULL")
+      .filter((uai) => isUAIValid(uai))
       .map((uai) => ({
         uai,
-        valide: isUAIValid(uai),
       }))
   );
 }

@@ -36,7 +36,6 @@ describe("collectSources", () => {
       {
         sources: ["dummy"],
         uai: "0111111Y",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -55,22 +54,18 @@ describe("collectSources", () => {
     let source = createTestSource([
       {
         selector: "11111111100006",
-        uai_potentiels: ["093XXXT"],
+        uai_potentiels: ["INVALID"],
       },
     ]);
 
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.deepStrictEqual(found.uai_potentiels[0], {
-      sources: ["dummy"],
-      uai: "093XXXT",
-      valide: false,
-    });
+    assert.deepStrictEqual(found.uai_potentiels, []);
     assert.deepStrictEqual(stats, {
       dummy: {
         total: 1,
-        updated: 1,
+        updated: 0,
         unknown: 0,
         failed: 0,
         anomalies: 0,
@@ -91,7 +86,6 @@ describe("collectSources", () => {
         {
           sources: ["dummy"],
           uai: "0111111Y",
-          valide: true,
         },
       ],
     });
@@ -103,7 +97,6 @@ describe("collectSources", () => {
       {
         sources: ["dummy"],
         uai: "0111111Y",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -124,7 +117,6 @@ describe("collectSources", () => {
         {
           sources: ["other"],
           uai: "0111111Y",
-          valide: true,
         },
       ],
     });
@@ -142,7 +134,6 @@ describe("collectSources", () => {
       {
         sources: ["other", "dummy"],
         uai: "0111111Y",
-        valide: true,
       },
     ]);
   });

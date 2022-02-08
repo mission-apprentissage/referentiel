@@ -22,7 +22,6 @@ describe("depp", () => {
       {
         sources: ["depp"],
         uai: "0011058V",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {

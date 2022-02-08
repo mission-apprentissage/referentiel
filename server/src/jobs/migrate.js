@@ -6,7 +6,7 @@ async function tasks() {
   return {
     clearRelations: await dbCollection("organismes").updateMany(
       {},
-      { $set: { relations: [], "_meta.anomalies": [] }, $unset: { adresse: 1 } }
+      { $set: { relations: [], "_meta.anomalies": [] }, $unset: { adresse: 1, uai_potentiels: 1 } }
     ),
   };
 }

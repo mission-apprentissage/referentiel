@@ -41,10 +41,9 @@ module.exports = {
           object(
             {
               uai: string(),
-              valide: boolean(),
               sources: arrayOf(string()),
             },
-            { required: ["uai", "valide"] }
+            { required: ["uai"] }
           )
         ),
         contacts: arrayOf(

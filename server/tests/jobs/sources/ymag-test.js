@@ -22,7 +22,6 @@ describe("ymag", () => {
       {
         sources: ["ymag"],
         uai: "0111111Y",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {

@@ -44,7 +44,6 @@ describe("sifa-ramsese", () => {
       {
         sources: ["sifa-ramsese"],
         uai: "0111111Y",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {

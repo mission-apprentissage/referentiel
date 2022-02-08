@@ -14,7 +14,7 @@ describe("enseignement-catholique", () => {
         createStream(`"N° UAI CFA";"SIRET"
 "0111111Y";"11111111100006"`),
         createStream(`"CFA";"SIRET CFA";"UFA";"UAI CFA UFA";"SIRET UFA"
-"cfa";"11111111100006";"ufa";"0222222Y";"22222222200002"`),
+"cfa";"11111111100006";"ufa";"0222222W";"22222222200002"`),
       ],
     });
 
@@ -26,7 +26,6 @@ describe("enseignement-catholique", () => {
       {
         sources: ["enseignement-catholique"],
         uai: "0111111Y",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(found.relations, [
@@ -44,8 +43,7 @@ describe("enseignement-catholique", () => {
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["enseignement-catholique"],
-        uai: "0222222Y",
-        valide: false,
+        uai: "0222222W",
       },
     ]);
     assert.deepStrictEqual(found.relations, [

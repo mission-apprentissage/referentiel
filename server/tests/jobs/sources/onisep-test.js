@@ -21,7 +21,6 @@ describe("onisep", () => {
       {
         sources: ["onisep"],
         uai: "0111111Y",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {

@@ -20,7 +20,6 @@ describe("deca", () => {
       {
         sources: ["deca"],
         uai: "0111111Y",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {

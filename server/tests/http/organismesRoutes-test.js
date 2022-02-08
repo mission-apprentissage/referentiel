@@ -225,12 +225,10 @@ describe("organismesRoutes", () => {
         {
           sources: ["sifa-ramsese"],
           uai: "0751234J",
-          valide: true,
         },
         {
           sources: ["other"],
           uai: "0751234X",
-          valide: true,
         },
       ],
     });
@@ -249,7 +247,6 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
-          valide: true,
         },
       ],
     });
@@ -270,7 +267,6 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
-          valide: true,
         },
       ],
     });
@@ -280,7 +276,6 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234X",
-          valide: true,
         },
       ],
     });
@@ -302,7 +297,6 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
-          valide: true,
         },
       ],
     });
@@ -323,7 +317,6 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
-          valide: true,
         },
       ],
     });
