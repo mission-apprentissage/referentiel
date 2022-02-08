@@ -20,10 +20,6 @@ async function build(options = {}) {
     await clearCollection("cache");
   }
 
-  if (options.removeAll) {
-    await clearCollection("organismes");
-  }
-
   await Promise.all([importCFD(), importDatagouv()]).then(([cfd, datagouv]) => {
     return stats.push({ imports: { cfd, datagouv } });
   });
