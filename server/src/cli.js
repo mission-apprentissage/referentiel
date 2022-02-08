@@ -18,25 +18,28 @@ const writeToStdout = require("oleoduc/lib/writeToStdout");
 const exportOrganismes = require("./jobs/exportOrganismes");
 const importCommunes = require("./jobs/importCommunes");
 
+function asArray(v) {
+  return v.split(",");
+}
+
 cli
   .command("build")
-  .argument("[names]", "La liste des sources servant de référence d'organismes")
+  .description("Construit le référentiel")
+  .argument("[names]", "La liste des sources servant de référence d'organismes", asArray)
   .option("--clearCache", "Supprime les données stockées en cache")
   .option("--removeAll", "Supprime tous les établissements")
   .action((names, options) => {
     runScript(() => {
-      let referentiels = names ? names.split(",") : null;
-      return build({ referentiels, ...options });
+      return build({ referentiels: names, ...options });
     });
   });
 
 cli
   .command("importCommunes")
-  .argument(
-    "[file]",
-    "Le fichier de Datagouv : Contours des communes de France simplifié, avec régions et département d'outre-mer rapprochés",
-    createReadStream
+  .description(
+    "Importe les coordonnées de géolocalisation des communes contenus dans le fichier 'Contours des communes de France simplifié, avec régions et département d'outre-mer rapprochés'"
   )
+  .argument("[file]", "Le fichier JSON disponible sur Datagouv", createReadStream)
   .action((file) => {
     runScript(() => {
       return importCommunes({
@@ -47,6 +50,7 @@ cli
 
 cli
   .command("importCFD")
+  .description("Importe les codes formation diplomes issus de la BCN")
   .option("--nFormationDiplome <nFormationDiplome>", "Un fichier CSV BCN de type N_FORMATION_DIPLOME", createReadStream)
   .option("--vFormationDiplome <vFormationDiplome>", "Un fichier CSV BCN de type V_FORMATION_DIPLOME", createReadStream)
   .action((options) => {
@@ -60,7 +64,8 @@ cli
 
 cli
   .command("importDatagouv")
-  .argument("[file]", "Le fichier de la Liste Publique des Organismes de Formation", createReadStream)
+  .description("Importe les organismes contenus dans la Liste Publique des Organismes de Formation")
+  .argument("[file]", "Le fichier CSV disponible sur Datagouv", createReadStream)
   .action((file) => {
     runScript(() => {
       return importDatagouv({
@@ -71,42 +76,43 @@ cli
 
 cli
   .command("importOrganismes")
-  .argument("<names>", "la liste des sources à importer")
+  .description("Importe les organismes contenus dans les référentiels")
+  .argument("<names>", "la liste des sources à importer", asArray)
   .argument("[file]", "Le nom du fichier utilisé par la source")
   .option("--removeAll", "Supprimes tous les organismes avant import")
-  .description("Importe les organismes contenus dans les sources")
   .action((names, file, options) => {
     runScript(async () => {
-      let mainSourceName = names.split(",");
       let input = file ? createReadStream(file) : null;
 
-      let mainSources = mainSourceName.map((name) => createSource(name, { input }));
+      let mainSources = names.map((name) => createSource(name, { input }));
       return importOrganismes(mainSources, options);
     });
   });
 
 cli
   .command("collectSources")
-  .argument("<names>", "la liste des sources à collecter")
-  .argument("[file]", "Le nom du fichier utilisé par la source")
+  .description("Collecte des données dans les sources")
+  .argument("<names>", "Noms des sources à collecter", asArray)
+  .argument("[files...]", "Noms des fichiers utilisés par les sources")
   .option("--siret <siret>", "Limite la collecte pour le siret")
-  .description("Parcours la ou les sources pour trouver des données complémentaires")
-  .action((names, file, { siret }) => {
+  .action((names, files, { siret }) => {
     runScript(() => {
-      let sourceNames = names.split(",");
-      let input = file ? createReadStream(file) : null;
+      let array = files.length > 0 ? files.map((f) => createReadStream(f)) : null;
       let options = siret ? { filters: { siret } } : {};
 
-      let sources = sourceNames.map((name) => createSource(name, { input }));
+      let sources = names.map((name) => createSource(name, { input: array?.length === 1 ? array[0] : array }));
       return collectSources(sources, options);
     });
   });
 
-cli.command("consolidate").action(() => {
-  runScript(() => {
-    return consolidate();
+cli
+  .command("consolidate")
+  .description("Consolide les données précédement collectées")
+  .action(() => {
+    runScript(() => {
+      return consolidate();
+    });
   });
-});
 
 cli
   .command("exportOrganismes")
@@ -139,8 +145,8 @@ cli
 
 cli
   .command("migrate")
+  .description("Execute les scripts de migration")
   .option("--dropIndexes", "Supprime les anciens indexes")
-  .description("Migre les données de la base")
   .action((options) => {
     runScript(() => {
       return migrate(options);
@@ -149,11 +155,11 @@ cli
 
 cli
   .command("generateMagicLinks")
+  .description("Génère un token permettant de consulter le site pour une region")
   .argument("<type>", "region ou academie")
   .description("Génère un fichier csv avec un lien magique pour chaque région")
   .option("--url [url]", "L'url de l'environnement cible")
   .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
-  .description("Génère un toke permettant de consulter le site pour une region")
   .action((type, { url, out }) => {
     runScript(() => {
       let csvStream = generateMagicLinks(type, { url });
