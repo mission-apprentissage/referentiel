@@ -1,63 +1,93 @@
 const { pick } = require("lodash");
-const { findRegionByName } = require("./regions");
+const { findRegionByCodeInsee } = require("./regions");
 const { findAcademieByCodeInsee } = require("./academies");
 const caches = require("./caches/caches");
 const { findDepartementByInsee } = require("./departements");
+const { dbCollection } = require("./db/mongodb");
+const logger = require("./logger");
 const MIN_GEOCODE_SCORE = 0.6;
 
 class GeocodingError extends Error {
   constructor(message, options = {}) {
-    super();
+    super(message, options);
     Error.captureStackTrace(this, this.constructor);
     this.name = this.constructor.name;
-    this.message = message;
-    if (options.original) {
-      this.message += ` (original: ${JSON.stringify(options.original)})`;
-    }
-    if (options.cause) {
-      this.message += ` (cause: ${options.cause.message})`;
-    }
     this.cause = options.cause;
+    this.fallback = options.fallback;
+    this.message = message;
+    if (this.cause) {
+      this.message += ` (cause: ${this.cause.message})`;
+    }
   }
 }
 
 module.exports = (geoAdresseApi) => {
   let cache = caches.geoAdresseApiCache();
 
-  function selectBestResult(results, original) {
+  function buildAdresse(geojson, props) {
+    return {
+      ...props,
+      departement: pick(findDepartementByInsee(props.code_insee), ["code", "nom"]),
+      region: pick(findRegionByCodeInsee(props.code_insee), ["code", "nom"]),
+      academie: pick(findAcademieByCodeInsee(props.code_insee), ["code", "nom"]),
+      geojson: {
+        type: geojson.type,
+        geometry: geojson.geometry,
+        ...(geojson.properties?.score
+          ? {
+              properties: {
+                score: geojson.properties.score,
+              },
+            }
+          : {}),
+      },
+    };
+  }
+
+  async function findCommune(source, fallback) {
+    let found = await dbCollection("communes").findOne(
+      { "properties.codgeo": fallback.codeInsee },
+      { projection: { _id: 0 } }
+    );
+
+    if (!found) {
+      logger.warn(`Commune ${fallback.codeInsee} inconnue`);
+      return null;
+    }
+
+    return buildAdresse(found, {
+      label: source,
+      code_postal: fallback.codePostal,
+      code_insee: fallback.codeInsee,
+      localite: found.properties.libgeo,
+    });
+  }
+
+  async function newError(message, source, fallback) {
+    return new GeocodingError(message, {
+      fallback: fallback ? await findCommune(source, fallback) : null,
+    });
+  }
+
+  async function selectBestResult(source, results, fallback) {
     let best = results.features[0];
 
     if (!best) {
-      throw new GeocodingError(`Pas de résultats pour l'adresse ${JSON.stringify(original)}`);
+      throw await newError(`Pas de résultats pour l'adresse ${source}`, source, fallback);
     } else if (best.properties.score < MIN_GEOCODE_SCORE) {
-      throw new GeocodingError(
-        `Score ${best.properties.score} trop faible pour l'adresse ${JSON.stringify(original)} / ${
-          best.geometry.coordinates
-        }`
+      throw await newError(
+        `Score ${best.properties.score} trop faible pour l'adresse ${source} / ${best.geometry.coordinates}`,
+        source,
+        fallback
       );
     }
 
-    let properties = best.properties;
-    let context = properties.context.split(",");
-    let regionName = context[context.length - 1].trim();
-    let codeInsee = properties.citycode;
-
-    return {
-      label: properties.label,
-      code_postal: properties.postcode,
-      code_insee: codeInsee,
-      localite: properties.city,
-      departement: pick(findDepartementByInsee(codeInsee), ["code", "nom"]),
-      region: pick(findRegionByName(regionName), ["code", "nom"]),
-      academie: pick(findAcademieByCodeInsee(codeInsee), ["code", "nom"]),
-      geojson: {
-        type: best.type,
-        geometry: best.geometry,
-        properties: {
-          score: properties.score,
-        },
-      },
-    };
+    return buildAdresse(best, {
+      label: best.properties.label,
+      code_postal: best.properties.postcode,
+      code_insee: best.properties.citycode,
+      localite: best.properties.city,
+    });
   }
 
   function search(adresse) {
@@ -77,13 +107,13 @@ module.exports = (geoAdresseApi) => {
   }
 
   return {
-    async geocode(adresse) {
+    async geocode(adresse, options = {}) {
       let results = await search(adresse);
-      return selectBestResult(results, adresse);
+      return selectBestResult(adresse, results, options.fallback);
     },
     async reverseGeocode(longitude, latitude) {
       let results = await reverse(longitude, latitude);
-      return selectBestResult(results, { longitude, latitude });
+      return selectBestResult(`${longitude}_${latitude}`, results);
     },
   };
 };

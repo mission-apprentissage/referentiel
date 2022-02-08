@@ -95,12 +95,18 @@ module.exports = (custom = {}) => {
               }
 
               let addresseAsString = getAdresseAsString(etablissement);
-              let adresse = await geocode(addresseAsString).catch((e) => {
+              let adresse = await geocode(addresseAsString, {
+                fallback: {
+                  codeInsee: etablissement.code_commune,
+                  codePostal: etablissement.code_postal,
+                },
+              }).catch((e) => {
                 anomalies.push({
                   key: `adresse_${addresseAsString}`,
                   type: "etablissement_geoloc_impossible",
                   details: e.message,
                 });
+                return e.fallback;
               });
 
               let formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);

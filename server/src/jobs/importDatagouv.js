@@ -25,7 +25,7 @@ function parseNumber(value) {
 
 async function importDatagouv(options = {}) {
   let stats = { total: 0, created: 0, updated: 0, failed: 0 };
-  let stream = options.input || (await getListePubliqueDesOrganismesDeFormationAsStream());
+  let stream = options.input || getListePubliqueDesOrganismesDeFormationAsStream();
 
   await oleoduc(
     stream,
