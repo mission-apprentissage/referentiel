@@ -1,4 +1,4 @@
-const logger = require("../common/logger").child({ context: "datagouv" });
+const logger = require("../common/logger").child({ context: "import" });
 const { getFileAsStream } = require("../common/utils/httpUtils");
 const { oleoduc, writeData } = require("oleoduc");
 const { dbCollection } = require("../common/db/mongodb");
@@ -26,6 +26,7 @@ function parseNumber(value) {
 async function importDatagouv(options = {}) {
   let stats = { total: 0, created: 0, updated: 0, failed: 0 };
   let stream = options.input || getListePubliqueDesOrganismesDeFormationAsStream();
+  logger.info(`Import de la Liste Publique des Organismes de Formation...`);
 
   await oleoduc(
     stream,

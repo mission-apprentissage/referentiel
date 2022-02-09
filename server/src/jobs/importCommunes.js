@@ -1,4 +1,4 @@
-const logger = require("../common/logger").child({ context: "datagouv" });
+const logger = require("../common/logger").child({ context: "import" });
 const { getFileAsStream } = require("../common/utils/httpUtils");
 const { oleoduc, writeData } = require("oleoduc");
 const { dbCollection } = require("../common/db/mongodb");

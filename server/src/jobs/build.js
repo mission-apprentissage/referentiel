@@ -6,6 +6,7 @@ const importCFD = require("./importCFD");
 const consolidate = require("./consolidate");
 const { clearCollection } = require("../common/db/mongodb");
 const importDatagouv = require("./importDatagouv");
+const importCommunes = require("./importCommunes");
 
 async function build(options = {}) {
   let referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv", "mna"];
@@ -20,8 +21,8 @@ async function build(options = {}) {
     await clearCollection("cache");
   }
 
-  await Promise.all([importCFD(), importDatagouv()]).then(([cfd, datagouv]) => {
-    return stats.push({ imports: { cfd, datagouv } });
+  await Promise.all([importCFD(), importDatagouv(), importCommunes()]).then(([cfd, datagouv, communes]) => {
+    return stats.push({ imports: { cfd, datagouv, communes } });
   });
 
   let sources = referentiels.map((name) => createSource(name));
