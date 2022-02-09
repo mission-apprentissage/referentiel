@@ -49,6 +49,7 @@ describe("sirene", () => {
         },
         properties: {
           score: 0.88,
+          source: "geo-adresse-api",
         },
       },
       label: "31 Rue des lilas 75019 Paris",
@@ -413,7 +414,12 @@ describe("sirene", () => {
         nom: "Paris",
       },
       geojson: {
+        type: "Feature",
+        properties: {
+          source: "commune",
+        },
         geometry: {
+          type: "Polygon",
           coordinates: [
             [
               [2.2007059510300557, 42.950340977698936],
@@ -450,9 +456,7 @@ describe("sirene", () => {
               [2.2007059510300557, 42.950340977698936],
             ],
           ],
-          type: "Polygon",
         },
-        type: "Feature",
       },
     });
   });

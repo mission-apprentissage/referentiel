@@ -106,7 +106,7 @@ module.exports = (custom = {}) => {
                   type: "etablissement_geoloc_impossible",
                   details: e.message,
                 });
-                return e.fallback;
+                return e.commune;
               });
 
               let formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);

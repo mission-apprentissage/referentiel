@@ -356,7 +356,7 @@ describe("catalogue", () => {
         geojson: {
           type: "Feature",
           geometry: { coordinates: [2.396444, 48.879706], type: "Point" },
-          properties: { score: 0.88 },
+          properties: { score: 0.88, source: "geo-adresse-api" },
         },
         departement: {
           code: "75",
