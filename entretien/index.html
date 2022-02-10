@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Entretien Demo</title>
+</head>
+<body>
+<div id="root" dir="auto"></div>
+
+<script type="text/babel">
+
+
+  async function List({ type }) {
+    let data = await fetch("http://localhost:5000/data");
+
+    return (
+      <div>
+        {data[type].map((o) => {
+          return <div>{o.nom}</div>;
+        })}
+      </div>
+    );
+  }
+
+  function App() {
+    return (
+      <div>
+        <List type={"organismes"} />
+        <List type={"formations"} />
+        <List type={"apprentis"} />
+      </div>
+    );
+  }
+
+  ReactDOM.render(<App />, document.getElementById('root'));
+
+
+</script>
+<script src="https://unpkg.com/react@16.13.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@16.13.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/dataformsjs@4.0.1/js/react/jsxLoader.min.js"></script>
+</body>
+</html>
