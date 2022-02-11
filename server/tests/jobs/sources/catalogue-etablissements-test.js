@@ -50,7 +50,6 @@ describe("catalogue-etablissements", () => {
       {
         sources: ["catalogue-etablissements"],
         uai: "0111111Y",
-        valide: true,
       },
     ]);
     assert.deepStrictEqual(stats, {

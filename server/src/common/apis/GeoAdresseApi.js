@@ -1,6 +1,6 @@
 const axios = require("axios");
 const queryString = require("query-string");
-const logger = require("../logger");
+const logger = require("../logger").child({ context: "GeoAdresseApi" });
 const RateLimitedApi = require("./RateLimitedApi");
 
 class GeoAdresseApi extends RateLimitedApi {
@@ -16,7 +16,7 @@ class GeoAdresseApi extends RateLimitedApi {
   async search(q, options = {}) {
     return this.execute(async () => {
       let params = queryString.stringify({ q, ...options });
-      logger.debug(`[${this.name}] Searching adresse with parameters ${params}...`);
+      logger.debug(`Searching adresse with parameters ${params}...`);
       const response = await this.client.get(`${GeoAdresseApi.baseApiUrl}/search?${params}`);
       return response.data;
     });
@@ -25,7 +25,7 @@ class GeoAdresseApi extends RateLimitedApi {
   async reverse(lon, lat, options = {}) {
     return this.execute(async () => {
       let params = queryString.stringify({ lon, lat, ...options });
-      logger.debug(`[${this.name}] Reverse geocode with parameters ${params}...`);
+      logger.debug(`Reverse geocode with parameters ${params}...`);
       const response = await this.client.get(`${GeoAdresseApi.baseApiUrl}/reverse?${params}`);
       return response.data;
     });

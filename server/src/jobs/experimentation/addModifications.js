@@ -1,6 +1,6 @@
 const { compose } = require("oleoduc");
 const { parseCsv } = require("../../common/utils/csvUtils");
-const logger = require("../../common/logger");
+const logger = require("../../common/logger").child({ context: "experimentation" });
 const { dbCollection } = require("../../common/db/mongodb");
 const addModification = require("../../common/actions/addModification");
 

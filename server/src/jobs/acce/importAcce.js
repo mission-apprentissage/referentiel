@@ -1,5 +1,5 @@
 const AcceApi = require("../../common/apis/AcceApi");
-const logger = require("../../common/logger");
+const logger = require("../../common/logger").child({ context: "acce" });
 const { dbCollection } = require("../../common/db/mongodb");
 const { merge } = require("lodash");
 

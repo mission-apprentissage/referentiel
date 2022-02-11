@@ -3,47 +3,34 @@ const { omit } = require("lodash");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
-const { importOrganismesForTest } = require("../../utils/testUtils");
 const { mockSireneApi, mockGeoAddresseApi } = require("../../utils/apiMocks");
 const { DateTime } = require("luxon");
-const { insertDatagouv } = require("../../utils/fakeData");
+const { insertDatagouv, insertOrganisme, insertCommunes } = require("../../utils/fakeData");
 
-function createSireneSource(options = {}) {
-  let { withPredefinedMocks = [], ...custom } = options;
+function withGeoApiMock() {
+  mockGeoAddresseApi((client, responses) => {
+    client
+      .get((uri) => uri.includes("search"))
+      .query(() => true)
+      .reply(200, responses.search());
+  });
+}
 
-  if (withPredefinedMocks.includes("geoMocks")) {
-    mockGeoAddresseApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("reverse"))
-        .query(() => true)
-        .reply(200, responses.reverse());
-
-      client
-        .get((uri) => uri.includes("search"))
-        .query(() => true)
-        .reply(400, {});
-    });
-  }
-
-  if (withPredefinedMocks.includes("sireneMocks")) {
-    mockSireneApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("unites_legales"))
-        .query(() => true)
-        .reply(200, responses.unitesLegales());
-    });
-  }
-
-  return createSource("sirene", {
-    organismes: ["11111111100006"],
-    ...custom,
+function withSireneApiMocks() {
+  mockSireneApi((client, responses) => {
+    client
+      .get((uri) => uri.includes("unites_legales"))
+      .query(() => true)
+      .reply(200, responses.unitesLegales());
   });
 }
 
 describe("sirene", () => {
   it("Vérifie qu'on peut collecter des informations de l'API Sirene", async () => {
-    let source = createSireneSource({ withPredefinedMocks: ["geoMocks", "sireneMocks"] });
-    await importOrganismesForTest();
+    let source = createSource("sirene");
+    withGeoApiMock();
+    withSireneApiMocks();
+    await insertOrganisme({ siret: "11111111100006" });
 
     let stats = await collectSources(source);
 
@@ -62,6 +49,7 @@ describe("sirene", () => {
         },
         properties: {
           score: 0.88,
+          source: "geo-adresse-api",
         },
       },
       label: "31 Rue des lilas 75019 Paris",
@@ -81,182 +69,6 @@ describe("sirene", () => {
         nom: "Paris",
       },
     });
-    assert.deepStrictEqual(stats, {
-      sirene: {
-        total: 1,
-        updated: 1,
-        unknown: 0,
-        anomalies: 0,
-        failed: 0,
-      },
-    });
-  });
-
-  it("Vérifie qu'on recherche une adresse quand ne peut pas reverse-geocoder", async () => {
-    await importOrganismesForTest();
-    mockGeoAddresseApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("reverse"))
-        .query(() => true)
-        .reply(400, {});
-
-      client
-        .get((uri) => uri.includes("search"))
-        .query(() => true)
-        .reply(200, responses.search());
-    });
-
-    let source = createSireneSource({ withPredefinedMocks: ["sireneMocks"] });
-    let stats = await collectSources(source);
-
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.deepStrictEqual(found.adresse, {
-      geojson: {
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [2.396444, 48.879706],
-        },
-        properties: {
-          score: 0.88,
-        },
-      },
-      label: "31 Rue des lilas 75019 Paris",
-      code_postal: "75019",
-      code_insee: "75119",
-      localite: "Paris",
-      departement: {
-        code: "75",
-        nom: "Paris",
-      },
-      region: {
-        code: "11",
-        nom: "Île-de-France",
-      },
-      academie: {
-        code: "01",
-        nom: "Paris",
-      },
-    });
-    assert.deepStrictEqual(stats, {
-      sirene: {
-        total: 1,
-        updated: 1,
-        unknown: 0,
-        anomalies: 0,
-        failed: 0,
-      },
-    });
-  });
-
-  it("Vérifie qu'on recherche une adresse quand le code postal du reverse-geocoding n'est pas le même que l'adresse", async () => {
-    await importOrganismesForTest();
-    mockSireneApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("unites_legales"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.unitesLegales({
-            unite_legale: {
-              etablissements: [
-                {
-                  siret: "11111111100006",
-                  etat_administratif: "A",
-                  etablissement_siege: "true",
-                  libelle_voie: "DES LILAS",
-                  code_postal: "93100",
-                  libelle_commune: "MONTREUIL",
-                },
-              ],
-            },
-          })
-        );
-    });
-
-    mockGeoAddresseApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("reverse"))
-        .query(() => true)
-        .reply(200, responses.reverse());
-
-      client
-        .get((uri) => uri.includes("search"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.search({
-            features: [
-              {
-                properties: {
-                  label: "31 Rue des lilas 93100 Montreuil",
-                  housenumber: "31",
-                  name: "31 Rue des Lilas",
-                  postcode: "93100",
-                  citycode: "93048",
-                  city: "Montreuil",
-                },
-              },
-            ],
-          })
-        );
-    });
-
-    let source = createSireneSource();
-    let stats = await collectSources(source);
-
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.strictEqual(found.adresse.label, "31 Rue des lilas 93100 Montreuil");
-    assert.deepStrictEqual(stats, {
-      sirene: {
-        total: 1,
-        updated: 1,
-        unknown: 0,
-        anomalies: 0,
-        failed: 0,
-      },
-    });
-  });
-
-  it("Vérifie qu'on recherche une adresse quand il n'y a pas d'informations de geocoding", async () => {
-    await importOrganismesForTest();
-    mockSireneApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("unites_legales"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.unitesLegales({
-            unite_legale: {
-              etablissements: [
-                {
-                  siret: "11111111100006",
-                  longitude: null,
-                  latitude: null,
-                },
-              ],
-            },
-          })
-        );
-    });
-
-    mockGeoAddresseApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("reverse"))
-        .query(() => true)
-        .reply(500, responses.reverse());
-
-      client
-        .get((uri) => uri.includes("search"))
-        .query(() => true)
-        .reply(200, responses.search());
-    });
-
-    let source = createSireneSource();
-    let stats = await collectSources(source);
-
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.strictEqual(found.adresse.label, "31 Rue des lilas 75019 Paris");
     assert.deepStrictEqual(stats, {
       sirene: {
         total: 1,
@@ -269,12 +81,10 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on peut filter par siret", async () => {
-    await importOrganismesForTest([{ siret: "11111111100006" }]);
-
-    let source = createSireneSource({
-      withPredefinedMocks: ["geoMocks", "sireneMocks"],
-      organismes: ["11111111100006"],
-    });
+    await insertOrganisme({ siret: "11111111100006" });
+    let source = createSource("sirene");
+    withGeoApiMock();
+    withSireneApiMocks();
 
     let stats = await collectSources(source, { filters: { siret: "33333333300008" } });
 
@@ -290,12 +100,8 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on peut collecter des relations", async () => {
-    await Promise.all([
-      importOrganismesForTest(),
-      insertDatagouv({ siren: "111111111", siretEtablissementDeclarant: "11111111100006" }),
-      insertDatagouv({ siren: "111111111", siretEtablissementDeclarant: "11111111122222" }),
-    ]);
-
+    let source = createSource("sirene");
+    withGeoApiMock();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -326,10 +132,12 @@ describe("sirene", () => {
           })
         );
     });
+    await Promise.all([
+      await insertOrganisme({ siret: "11111111100006" }),
+      insertDatagouv({ siren: "111111111", siretEtablissementDeclarant: "11111111100006" }),
+      insertDatagouv({ siren: "111111111", siretEtablissementDeclarant: "11111111122222" }),
+    ]);
 
-    let source = createSireneSource({
-      withPredefinedMocks: ["geoMocks"],
-    });
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
@@ -353,61 +161,10 @@ describe("sirene", () => {
     });
   });
 
-  it("Vérifie qu'on ignore les relations qui ne sont pas des organismes de formations", async () => {
-    await Promise.all([
-      importOrganismesForTest([{ siret: "11111111100006" }]),
-      insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222222222" }),
-    ]);
-    mockSireneApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("unites_legales"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.unitesLegales({
-            unite_legale: {
-              etablissements: [
-                {
-                  siret: "11111111100006",
-                  etat_administratif: "A",
-                  etablissement_siege: "true",
-                  libelle_voie: "DES LILAS",
-                  code_postal: "75019",
-                  libelle_commune: "PARIS",
-                },
-                {
-                  siret: "22222222222222",
-                  etat_administratif: "A",
-                  etablissement_siege: "true",
-                  libelle_voie: "DES LILAS",
-                  code_postal: "75019",
-                  libelle_commune: "PARIS",
-                },
-              ],
-            },
-          })
-        );
-    });
-
-    let source = createSireneSource({ withPredefinedMocks: ["geoMocks"] });
-    let stats = await collectSources(source);
-
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.strictEqual(found.relations.length, 1);
-    assert.deepStrictEqual(found.relations[0].siret, "22222222222222");
-    assert.deepStrictEqual(stats, {
-      sirene: {
-        total: 1,
-        updated: 1,
-        unknown: 0,
-        anomalies: 0,
-        failed: 0,
-      },
-    });
-  });
-
   it("Vérifie qu'on ignore les relations pour des organismes fermés", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
+    let source = createSource("sirene");
+    withGeoApiMock();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -440,9 +197,6 @@ describe("sirene", () => {
         );
     });
 
-    let source = createSireneSource({
-      organismes: ["11111111100006", "11111111122222"],
-    });
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
@@ -450,7 +204,9 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on gère une erreur lors de la récupération des informations de l'API Sirene", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
+    let source = createSource("sirene");
+    withGeoApiMock();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -458,11 +214,16 @@ describe("sirene", () => {
         .reply(500, {});
     });
 
-    let source = createSireneSource();
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found._meta.anomalies[0].details, "[SireneApi] Request failed with status code 500");
+    assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "500",
+      type: "erreur",
+      sources: ["sirene"],
+      details: "[SireneApi] Request failed with status code 500",
+      job: "collect",
+    });
     assert.deepStrictEqual(stats, {
       sirene: {
         total: 1,
@@ -475,7 +236,9 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on gère une erreur spécifique quand l'organisme n'existe pas", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
+    let source = createSource("sirene");
+    withGeoApiMock();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -483,15 +246,22 @@ describe("sirene", () => {
         .reply(200, { unite_legale: { etablissements: [] } });
     });
 
-    let source = createSireneSource();
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found._meta.anomalies[0].details, "Etablissement inconnu pour l'entreprise 111111111");
+    assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "etablissement_inconnu_111111111",
+      type: "etablissement_inconnu",
+      sources: ["sirene"],
+      details: "Etablissement inconnu pour l'entreprise 111111111",
+      job: "collect",
+    });
   });
 
   it("Vérifie qu'on gère une erreur spécifique quand l'entreprise n'existe pas", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
+    let source = createSource("sirene");
+    withGeoApiMock();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -499,38 +269,41 @@ describe("sirene", () => {
         .reply(404, {});
     });
 
-    let source = createSireneSource();
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found._meta.anomalies[0].details, "Entreprise inconnue");
+    assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "404",
+      type: "entreprise_inconnue",
+      sources: ["sirene"],
+      details: "Entreprise inconnue",
+      job: "collect",
+    });
   });
 
   it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver l'adresse", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" }, (o) => omit(o, ["adresse"]));
+    let source = createSource("sirene");
+    withSireneApiMocks();
     mockGeoAddresseApi((client) => {
-      client
-        .get((uri) => uri.includes("reverse"))
-        .query(() => true)
-        .reply(400, {});
-
       client
         .get((uri) => uri.includes("search"))
         .query(() => true)
         .reply(400, {});
     });
 
-    let source = createSireneSource({ withPredefinedMocks: ["sireneMocks"] });
-
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "adresse_31 B RUE DES LILAS 75001 PARIS",
+      sources: ["sirene"],
+      type: "etablissement_geoloc_impossible",
       job: "collect",
-      source: "sirene",
-      code: "etablissement_geoloc_impossible",
-      details: "Impossible de géolocaliser l'adresse de l'organisme. [2.396147,48.880391]",
+      details:
+        "Geocoding impossible pour l'adresse 31 B RUE DES LILAS 75001 PARIS " +
+        "(cause: [GeoAdresseApi] Request failed with status code 400)",
     });
     assert.deepStrictEqual(stats, {
       sirene: {
@@ -543,8 +316,155 @@ describe("sirene", () => {
     });
   });
 
+  it("Vérifie qu'on crée une anomalie quand le score de l'adresse est trop faible (sans commune)", async () => {
+    await insertOrganisme({ siret: "11111111100006" }, (o) => omit(o, ["adresse"]));
+    let source = createSource("sirene");
+    withSireneApiMocks();
+    mockGeoAddresseApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("search"))
+        .query(() => true)
+        .reply(
+          200,
+          responses.search({
+            features: [
+              {
+                properties: {
+                  score: 0,
+                },
+              },
+            ],
+          })
+        );
+    });
+
+    let stats = await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    assert.ok(!found.adresse);
+    assert.strictEqual(found._meta.anomalies.length, 1);
+    assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "adresse_31 B RUE DES LILAS 75001 PARIS",
+      sources: ["sirene"],
+      type: "etablissement_geoloc_impossible",
+      job: "collect",
+      details: "Score 0 trop faible pour l'adresse 31 B RUE DES LILAS 75001 PARIS / 2.396444,48.879706",
+    });
+    assert.deepStrictEqual(stats, {
+      sirene: {
+        total: 1,
+        updated: 1,
+        unknown: 0,
+        anomalies: 1,
+        failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on utilise la géolocalisation de la commune quand le score de l'adresse est trop faible", async () => {
+    await insertOrganisme({ siret: "11111111100006" }, (o) => omit(o, ["adresse"]));
+    await insertCommunes({
+      properties: {
+        codgeo: "75000",
+        libgeo: "Paris",
+        dep: "75",
+        reg: "11",
+        xcl2154: 636317,
+        ycl2154: 6204292,
+      },
+    });
+    let source = createSource("sirene");
+    withSireneApiMocks();
+    mockGeoAddresseApi((client, responses) => {
+      client
+        .get((uri) => uri.includes("search"))
+        .query(() => true)
+        .reply(
+          200,
+          responses.search({
+            features: [
+              {
+                properties: {
+                  score: 0,
+                },
+              },
+            ],
+          })
+        );
+    });
+
+    await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    assert.deepStrictEqual(found.adresse, {
+      label: "31 B RUE DES LILAS 75001 PARIS",
+      localite: "Paris",
+      region: {
+        code: "11",
+        nom: "Île-de-France",
+      },
+      academie: {
+        code: "01",
+        nom: "Paris",
+      },
+      code_insee: "75000",
+      code_postal: "75001",
+      departement: {
+        code: "75",
+        nom: "Paris",
+      },
+      geojson: {
+        type: "Feature",
+        properties: {
+          source: "commune",
+        },
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [2.2007059510300557, 42.950340977698936],
+              [2.1962711908151356, 42.9445451370596],
+              [2.19721475681831, 42.940810039758695],
+              [2.1998567416271984, 42.937718924751046],
+              [2.199196245424976, 42.934370216826096],
+              [2.1957994078135483, 42.9296691460853],
+              [2.1961768342148185, 42.92374450898732],
+              [2.2100472544614824, 42.926191641701706],
+              [2.217123999485291, 42.92870317264541],
+              [2.21938855789291, 42.92664242930699],
+              [2.2198603408944972, 42.92065339397967],
+              [2.2218418295011633, 42.91827065949461],
+              [2.2257104501141782, 42.915501535633595],
+              [2.2299564971284633, 42.91112245603943],
+              [2.2384485911570335, 42.909061712700996],
+              [2.2442987003767154, 42.912410420625946],
+              [2.245147909779573, 42.91459996042303],
+              [2.2439212739754453, 42.91685389844944],
+              [2.245525336180842, 42.922649739088776],
+              [2.2421284985694143, 42.92702881868294],
+              [2.241562358967509, 42.92902516379205],
+              [2.2423172117700494, 42.9326314646343],
+              [2.2369388855519547, 42.93353303984486],
+              [2.235051753545606, 42.9361089690179],
+              [2.2367501723513197, 42.93836290704431],
+              [2.235146110145923, 42.93926448225487],
+              [2.23156055933386, 42.938234110585654],
+              [2.2266540161173527, 42.94422314591297],
+              [2.218822418291005, 42.94860222550714],
+              [2.2136328052735452, 42.95027657946961],
+              [2.204951998044341, 42.948731021965784],
+              [2.2007059510300557, 42.950340977698936],
+            ],
+          ],
+        },
+      },
+    });
+  });
+
   it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver la catégorie juridique", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
+    let source = createSource("sirene");
+    withGeoApiMock();
     mockSireneApi((client, responses) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -552,15 +472,15 @@ describe("sirene", () => {
         .reply(200, responses.unitesLegales({ unite_legale: { categorie_juridique: "INVALID" } }));
     });
 
-    let source = createSireneSource({ withPredefinedMocks: ["geoMocks"] });
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "categorie_juridique_INVALID",
+      type: "categorie_juridique_inconnue",
+      sources: ["sirene"],
       job: "collect",
-      source: "sirene",
-      code: "categorie_juridique_inconnue",
       details: "Impossible de trouver la catégorie juridique de l'entreprise : INVALID",
     });
     assert.deepStrictEqual(stats, {
@@ -575,8 +495,10 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on met en cache les données de l'API sirene", async () => {
-    await importOrganismesForTest();
-    let source = createSireneSource({ withPredefinedMocks: ["geoMocks", "sireneMocks"] });
+    await insertOrganisme({ siret: "11111111100006" });
+    let source = createSource("sirene");
+    withGeoApiMock();
+    withSireneApiMocks();
 
     await collectSources(source);
 
@@ -587,7 +509,9 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on met en cache les erreurs 4xx de l'API sirene", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
+    let source = createSource("sirene");
+    withGeoApiMock();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -595,7 +519,6 @@ describe("sirene", () => {
         .reply(404, {});
     });
 
-    let source = createSireneSource();
     await collectSources(source);
 
     let found = await dbCollection("cache").findOne({ _id: "sirene_111111111" });
@@ -605,7 +528,9 @@ describe("sirene", () => {
   });
 
   it("Vérifie qu'on ne met pas en cache les erreurs 5xx de l'API sirene", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
+    let source = createSource("sirene");
+    withGeoApiMock();
     mockSireneApi((client) => {
       client
         .get((uri) => uri.includes("unites_legales"))
@@ -613,7 +538,6 @@ describe("sirene", () => {
         .reply(500, {});
     });
 
-    let source = createSireneSource();
     await collectSources(source);
 
     let found = await dbCollection("cache").findOne({ _id: "sirene_111111111" });

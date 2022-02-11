@@ -3,7 +3,7 @@ import { Button } from "../elements/Button";
 
 const LinkButton = styled(Button)`
   &&& {
-    background-color: var(--background-default-grey);
+    background-color: inherit;
     color: var(--blue-france-sun-113-625);
     padding: 0;
     background-image: none;

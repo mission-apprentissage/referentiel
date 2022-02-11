@@ -6,6 +6,7 @@ const importCFD = require("./importCFD");
 const consolidate = require("./consolidate");
 const { clearCollection } = require("../common/db/mongodb");
 const importDatagouv = require("./importDatagouv");
+const importCommunes = require("./importCommunes");
 
 async function build(options = {}) {
   let referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv", "mna"];
@@ -20,31 +21,21 @@ async function build(options = {}) {
     await clearCollection("cache");
   }
 
-  if (options.removeAll) {
-    await clearCollection("organismes");
-  }
-
-  await Promise.all([importCFD(), importDatagouv()]).then(([cfd, datagouv]) => {
-    return stats.push({ imports: { cfd, datagouv } });
+  await Promise.all([importCFD(), importDatagouv(), importCommunes()]).then(([cfd, datagouv, communes]) => {
+    return stats.push({ imports: { cfd, datagouv, communes } });
   });
 
   let sources = referentiels.map((name) => createSource(name));
   await importOrganismes(sources).then((res) => stats.push({ importOrganismes: res }));
 
   await collectAll([
-    "agri",
-    "anasup",
-    "compagnons-du-devoir",
     "deca",
     "catalogue-etablissements",
     "tableau-de-bord",
-    "gesti",
     "opcoep",
-    "promotrans",
     "sifa-ramsese",
     "depp",
     "refea",
-    "uimm",
     "ymag",
     "mna",
   ]);
@@ -58,7 +49,7 @@ async function build(options = {}) {
   await consolidate().then((res) => stats.push({ consolidate: res }));
 
   //Theses sources use uai as selector, so we need to consolidate UAI before running them
-  await collectAll(["ccca-btp", "cci-france", "cma", "mfr", "acce", "voeux-affelnet"]);
+  await collectAll(["acce", "voeux-affelnet"]);
 
   return stats;
 }

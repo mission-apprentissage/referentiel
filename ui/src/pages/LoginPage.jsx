@@ -1,16 +1,16 @@
-import { Navigate } from "react-router-dom";
-import useNavigation from "../common/hooks/useNavigation";
+import { Navigate, useSearchParams } from "react-router-dom";
 import { isAnonymous, setAuth } from "../common/api/auth";
 import Alert from "../common/dsfr/elements/Alert";
 import { Col, Container, GridRow } from "../common/dsfr/fondamentaux";
 
 export default function Login() {
-  let { params } = useNavigation();
-  if (params.token) {
-    setAuth(params.token);
+  let [searchParams] = useSearchParams();
+  let token = searchParams.get("token");
+  if (token) {
+    setAuth(token);
   }
 
-  if (isAnonymous() && !params.token) {
+  if (isAnonymous() && !token) {
     return (
       <Container>
         <GridRow className={"fr-mb-10w"}>

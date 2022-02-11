@@ -4,6 +4,7 @@ const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
 const { dbCollection } = require("../../common/db/mongodb");
 const { omitNil } = require("../../common/utils/objectUtils");
+const { compact } = require("lodash");
 
 function fetchFormations(api, options = {}) {
   let siret = options.siret;
@@ -33,12 +34,12 @@ function fetchFormations(api, options = {}) {
   });
 }
 
-function buildRelation(formation, natures) {
+function buildRelation(formation, nature) {
   if (formation.etablissement_gestionnaire_siret === formation.etablissement_formateur_siret) {
     return null;
   }
 
-  if (natures.includes("responsable")) {
+  if (nature === "responsable->formateur") {
     return omitNil({
       type: "responsable->formateur",
       siret: formation.etablissement_formateur_siret,
@@ -78,16 +79,14 @@ function buildCertification(formation) {
   };
 }
 
-async function buildLieuDeFormation(formation, getAdresseFromCoordinates) {
+async function buildLieuDeFormation(formation, { reverseGeocode }) {
   if (!formation.lieu_formation_geo_coordonnees) {
     return {};
   }
 
   try {
     let [latitude, longitude] = formation.lieu_formation_geo_coordonnees.split(",");
-    let adresse = await getAdresseFromCoordinates(longitude, latitude, {
-      adresse: formation.lieu_formation_adresse,
-    });
+    let adresse = await reverseGeocode(longitude, latitude);
 
     return {
       lieu: {
@@ -99,8 +98,9 @@ async function buildLieuDeFormation(formation, getAdresseFromCoordinates) {
   } catch (e) {
     return {
       anomalie: {
-        code: "lieudeformation_geoloc_impossible",
-        message: `Lieu de formation inconnu : ${formation.lieu_formation_adresse}. ${e.message}`,
+        key: `lieudeformation_${formation.lieu_formation_adresse}`,
+        type: "lieudeformation_geoloc_impossible",
+        details: `Lieu de formation inconnu : ${formation.lieu_formation_adresse}. ${e.message}`,
       },
     };
   }
@@ -108,7 +108,7 @@ async function buildLieuDeFormation(formation, getAdresseFromCoordinates) {
 
 function buildContacts(formation) {
   if (!formation.email) {
-    return null;
+    return [];
   }
 
   return formation.email.split("##").map((email) => {
@@ -121,57 +121,7 @@ function buildContacts(formation) {
 
 module.exports = (custom = {}) => {
   let api = custom.catalogueAPI || new CatalogueApi();
-  let { getAdresseFromCoordinates } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
-
-  async function extractData(formation, natures) {
-    try {
-      let res = {
-        relations: [],
-        contacts: [],
-        diplomes: [],
-        certifications: [],
-        lieux_de_formation: [],
-        anomalies: [],
-        natures,
-      };
-
-      let contacts = buildContacts(formation);
-      if (contacts) {
-        res.contacts = contacts;
-      }
-
-      let relation = buildRelation(formation, natures);
-      if (relation) {
-        res.relations.push(relation);
-      }
-
-      if (natures.includes("formateur")) {
-        let diplome = await buildDiplome(formation);
-        if (diplome) {
-          res.diplomes.push(diplome);
-        }
-
-        let certification = buildCertification(formation);
-        if (certification) {
-          res.certifications.push(certification);
-        }
-
-        let { lieu, anomalie } = await buildLieuDeFormation(formation, getAdresseFromCoordinates);
-        if (lieu) {
-          res.lieux_de_formation.push(lieu);
-        }
-        if (anomalie) {
-          res.anomalies.push(anomalie);
-        }
-      }
-
-      return res;
-    } catch (e) {
-      return {
-        anomalies: [e],
-      };
-    }
-  }
+  let adresseResolver = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
   return {
     name: "catalogue",
@@ -179,31 +129,26 @@ module.exports = (custom = {}) => {
       return compose(
         fetchFormations(api, options.filters),
         transformData(async (formation) => {
-          if (formation.etablissement_formateur_siret === formation.etablissement_gestionnaire_siret) {
-            return [
-              {
-                from: "catalogue",
-                selector: formation.etablissement_formateur_siret,
-                ...(await extractData(formation, ["responsable", "formateur"])),
-              },
-            ];
-          }
-
-          let [responsable, formateur] = await Promise.all([
-            extractData(formation, ["responsable"]),
-            extractData(formation, ["formateur"]),
-          ]);
+          let { lieu, anomalie } = await buildLieuDeFormation(formation, adresseResolver);
 
           return [
             {
               from: "catalogue",
               selector: formation.etablissement_gestionnaire_siret,
-              ...responsable,
+              natures: ["responsable"],
+              relations: compact([buildRelation(formation, "responsable->formateur")]),
+              contacts: buildContacts(formation),
             },
             {
               from: "catalogue",
               selector: formation.etablissement_formateur_siret,
-              ...formateur,
+              natures: ["formateur"],
+              relations: compact([buildRelation(formation, "formateur->responsable")]),
+              contacts: buildContacts(formation),
+              diplomes: compact([await buildDiplome(formation)]),
+              certifications: compact([buildCertification(formation)]),
+              lieux_de_formation: compact([lieu]),
+              anomalies: compact([anomalie]),
             },
           ];
         }),

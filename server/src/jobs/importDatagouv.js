@@ -1,4 +1,4 @@
-const logger = require("../common/logger");
+const logger = require("../common/logger").child({ context: "import" });
 const { getFileAsStream } = require("../common/utils/httpUtils");
 const { oleoduc, writeData } = require("oleoduc");
 const { dbCollection } = require("../common/db/mongodb");
@@ -25,7 +25,8 @@ function parseNumber(value) {
 
 async function importDatagouv(options = {}) {
   let stats = { total: 0, created: 0, updated: 0, failed: 0 };
-  let stream = options.input || (await getListePubliqueDesOrganismesDeFormationAsStream());
+  let stream = options.input || getListePubliqueDesOrganismesDeFormationAsStream();
+  logger.info(`Import de la Liste Publique des Organismes de Formation...`);
 
   await oleoduc(
     stream,
@@ -81,7 +82,7 @@ async function importDatagouv(options = {}) {
             },
           };
 
-          logger.debug(`Import de l'organisme de formation ${nda}`);
+          logger.debug(`Import de l'organisme de formation ${nda}...`);
           let res = await dbCollection("datagouv").updateOne(
             {
               numeroDeclarationActivite: nda,

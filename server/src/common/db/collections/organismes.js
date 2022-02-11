@@ -25,7 +25,7 @@ module.exports = {
         siege_social: boolean(),
         numero_declaration_activite: string(),
         etat_administratif: string({ enum: ["actif", "fermé"] }),
-        natures: arrayOf(string({ enum: ["gestionnaire", "responsable", "formateur"] })),
+        natures: arrayOf(string({ enum: ["responsable", "formateur"] })),
         adresse: adresseSchema,
         forme_juridique: object(
           {
@@ -41,10 +41,9 @@ module.exports = {
           object(
             {
               uai: string(),
-              valide: boolean(),
               sources: arrayOf(string()),
             },
-            { required: ["uai", "valide"] }
+            { required: ["uai"] }
           )
         ),
         contacts: arrayOf(
@@ -62,14 +61,14 @@ module.exports = {
           object(
             {
               type: string({
-                enum: ["gestionnaire", "formateur", "formateur->responsable", "responsable->formateur", "entreprise"],
+                enum: ["formateur->responsable", "responsable->formateur", "entreprise"],
               }),
               siret: string(),
               referentiel: boolean(),
               label: string(),
               sources: arrayOf(string()),
             },
-            { required: ["siret", "referentiel", "sources"] }
+            { required: ["siret", "referentiel", "sources", "type"] }
           )
         ),
         lieux_de_formation: arrayOf(
@@ -112,13 +111,15 @@ module.exports = {
             anomalies: arrayOf(
               object(
                 {
+                  key: string(),
+                  type: string(),
                   job: string(),
-                  source: string(),
+                  sources: arrayOf(string()),
                   date: date(),
                   code: string(),
                   details: string(),
                 },
-                { required: ["job", "source", "date"] }
+                { required: ["key", "job", "sources", "date"] }
               )
             ),
           },

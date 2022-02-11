@@ -1,4 +1,4 @@
-const { object, string, arrayOf, number } = require("./jsonSchemaTypes");
+const { object, string, array, number } = require("./jsonSchemaTypes");
 
 const geojsonSchema = () => {
   let required = ["type", "geometry"];
@@ -9,11 +9,14 @@ const geojsonSchema = () => {
       geometry: object(
         {
           type: string(),
-          coordinates: arrayOf(number()),
+          coordinates: array(),
         },
         { required: ["type", "coordinates"] }
       ),
-      properties: object({}, { additionalProperties: true }),
+      properties: object({
+        score: number(),
+        source: string(),
+      }),
     },
     { required }
   );

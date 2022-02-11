@@ -225,12 +225,10 @@ describe("organismesRoutes", () => {
         {
           sources: ["sifa-ramsese"],
           uai: "0751234J",
-          valide: true,
         },
         {
           sources: ["other"],
           uai: "0751234X",
-          valide: true,
         },
       ],
     });
@@ -249,7 +247,6 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
-          valide: true,
         },
       ],
     });
@@ -270,7 +267,6 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
-          valide: true,
         },
       ],
     });
@@ -280,7 +276,6 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234X",
-          valide: true,
         },
       ],
     });
@@ -302,7 +297,6 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
-          valide: true,
         },
       ],
     });
@@ -323,13 +317,117 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
-          valide: true,
         },
       ],
     });
     await insertOrganisme({ siret: "22222222200002" });
 
     let response = await httpClient.get("/api/v1/organismes?uai_potentiels=false");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "22222222200002");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes qui un type de relation", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      relations: [
+        {
+          type: "responsable->formateur",
+          siret: "33333333300003",
+          label: "Organisme de formation",
+          sources: ["aSource"],
+          referentiel: false,
+        },
+      ],
+    });
+    await insertOrganisme({ siret: "22222222200002" });
+
+    let response = await httpClient.get("/api/v1/organismes?relations=responsable->formateur");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes avec plusieurs type de relations", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      relations: [
+        {
+          type: "responsable->formateur",
+          siret: "33333333300003",
+          label: "Organisme de formation",
+          sources: ["aSource"],
+          referentiel: false,
+        },
+      ],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      relations: [
+        {
+          type: "formateur->responsable",
+          siret: "44444444400004",
+          label: "Organisme de formation",
+          sources: ["aSource"],
+          referentiel: false,
+        },
+      ],
+    });
+    await insertOrganisme({ siret: "55555555500005" });
+
+    let response = await httpClient.get("/api/v1/organismes?relations=responsable->formateur,formateur->responsable");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 2);
+    ok(response.data.organismes.find((o) => o.siret === "11111111100006"));
+    ok(response.data.organismes.find((o) => o.siret === "22222222200002"));
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes qui ont des relations", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      relations: [
+        {
+          type: "responsable->formateur",
+          siret: "33333333300003",
+          label: "Organisme de formation",
+          sources: ["aSource"],
+          referentiel: false,
+        },
+      ],
+    });
+    await insertOrganisme();
+
+    let response = await httpClient.get("/api/v1/organismes?relations=true");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes qui n'ont pas de relations", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      relations: [
+        {
+          type: "responsable->formateur",
+          siret: "33333333300003",
+          label: "Organisme de formation",
+          sources: ["aSource"],
+          referentiel: false,
+        },
+      ],
+    });
+    await insertOrganisme({ siret: "22222222200002" });
+
+    let response = await httpClient.get("/api/v1/organismes?relations=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -679,8 +777,10 @@ describe("organismesRoutes", () => {
         _meta: {
           anomalies: [
             {
+              key: "123456",
+              type: "dummy",
+              sources: ["test"],
               job: "collect",
-              source: "sirene",
               date: new Date("2021-02-10T08:31:58.572Z"),
             },
           ],

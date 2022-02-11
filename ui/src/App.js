@@ -1,13 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Navigate, Outlet, Route, Routes } from "react-router-dom";
-import "@gouvfr/dsfr/dist/dsfr/dsfr.css";
-import OrganismePage from "./pages/organisme/OrganismePage";
+import OrganismePage from "./pages/OrganismePage";
 import Layout from "./common/layout/Layout";
 import DesignPage from "./pages/DesignPage";
-import OrganismesPage from "./pages/organismes/OrganismesPage";
+import OrganismesPage from "./pages/OrganismesPage";
 import Login from "./pages/LoginPage";
 import TableauDeBordPage from "./pages/TableauDeBordPage";
-import ValidationPage from "./pages/validation/ValidationPage";
+import ValidationPage from "./pages/ValidationPage";
 import useData, { DataContext } from "./common/hooks/useData";
 import AuthRoutes from "./common/AuthRoutes";
 
@@ -28,9 +27,15 @@ function App() {
                 <Route path="/" element={<TableauDeBordPage />} />
                 <Route path="/validation" element={<Navigate replace to="/" />} />
                 <Route path="/validation/:type" element={<ValidationPage />} />
-                <Route path="/validation/:type/:siret" element={<OrganismePage />} />
+                <Route path="/validation/:type/:siret">
+                  <Route path=":tab" element={<OrganismePage />} />
+                  <Route path="" element={<OrganismePage />} />
+                </Route>
                 <Route path="/organismes" element={<OrganismesPage />} />
-                <Route path="/organismes/:siret" element={<OrganismePage />} />
+                <Route path="/organismes/:siret">
+                  <Route path=":tab" element={<OrganismePage />} />
+                  <Route path="" element={<OrganismePage />} />
+                </Route>
               </Route>
             </Route>
           </Routes>

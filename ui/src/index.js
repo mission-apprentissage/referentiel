@@ -4,7 +4,6 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { subscribeToHttpEvent } from "./common/api/httpClient";
 import { logout } from "./common/api/auth";
-import "./xfr.scss";
 import GridDisplayer from "./common/dsfr/GridDisplayer";
 import { bootstrapDsfr } from "./common/dsfr/dsfr";
 

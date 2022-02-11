@@ -1,8 +1,7 @@
-const queryString = require("query-string");
-const logger = require("../logger");
 const RateLimitedApi = require("./RateLimitedApi");
-const { getFileAsStream } = require("../utils/httpUtils");
+const { getFileAsStream, fetch } = require("../utils/httpUtils");
 const { compose, readLineByLine, transformData } = require("oleoduc");
+const convertQueryIntoParams = require("./utils/convertQueryIntoParams");
 
 class CatalogueApi extends RateLimitedApi {
   constructor(options = {}) {
@@ -14,20 +13,7 @@ class CatalogueApi extends RateLimitedApi {
   }
 
   streamFormations(query, options) {
-    let params = queryString.stringify(
-      {
-        query: JSON.stringify(query),
-        ...Object.keys(options).reduce((acc, key) => {
-          return {
-            ...acc,
-            [key]: JSON.stringify(options[key]),
-          };
-        }, {}),
-      },
-      { encode: false }
-    );
-
-    logger.debug(`[${this.name}] Fetching formations with params ${params}...`);
+    let params = convertQueryIntoParams(query, options);
     let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations.ndjson?${params}`, {
       highWaterMark: 1048576 * 10, //MiB
     });
@@ -38,23 +24,10 @@ class CatalogueApi extends RateLimitedApi {
       transformData((data) => JSON.parse(data))
     );
   }
-
-  streamEtablissements(query, options = {}) {
+  streamEtablissements(query, options) {
     return this.execute(async () => {
-      let params = queryString.stringify(
-        {
-          query: JSON.stringify(query),
-          ...Object.keys(options).reduce((acc, key) => {
-            return {
-              ...acc,
-              [key]: JSON.stringify(options[key]),
-            };
-          }, {}),
-        },
-        { encode: false }
-      );
+      let params = convertQueryIntoParams(query, options);
 
-      logger.debug(`[${this.name}] Fetching etablissements with params ${params}...`);
       let response = await getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/etablissements.ndjson?${params}`, {
         timeout: 5000,
       });
@@ -62,8 +35,17 @@ class CatalogueApi extends RateLimitedApi {
       return compose(
         response,
         readLineByLine(),
-        transformData((data) => JSON.parse(data))
+        transformData((data) => (data ? JSON.parse(data) : data))
       );
+    });
+  }
+  getEtablissement(query, options) {
+    return this.execute(async () => {
+      let params = convertQueryIntoParams(query, options);
+
+      let response = await fetch(`${CatalogueApi.baseApiUrl}/entity/etablissement?${params}`);
+
+      return response.data;
     });
   }
 }

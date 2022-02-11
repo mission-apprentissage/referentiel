@@ -1,13 +1,14 @@
 const path = require("path");
 const { readFileSync } = require("fs");
 const axios = require("axios");
+const nock = require("nock"); // eslint-disable-line node/no-unpublished-require
 const MockAdapter = require("axios-mock-adapter"); // eslint-disable-line node/no-unpublished-require
 const AcceApi = require("../../src/common/apis/AcceApi");
 const { merge, omit } = require("lodash");
 const CatalogueApi = require("../../src/common/apis/CatalogueApi");
 const GeoAdresseApi = require("../../src/common/apis/GeoAdresseApi");
 const SireneApi = require("../../src/common/apis/SireneApi");
-const nock = require("nock"); // eslint-disable-line node/no-unpublished-require
+const TableauDeBordApi = require("../../src/common/apis/TableauDeBordApi"); // eslint-disable-line node/no-unpublished-require
 
 function createAxios(Api, responses, callback, options) {
   let instance = axios.create(options);
@@ -414,6 +415,140 @@ module.exports = {
           }) + `\n`
         );
       },
+      etablissement(custom) {
+        return merge(
+          {},
+          {
+            _id: "5e8df8d120ff3b216126808a",
+            siege_social: true,
+            etablissement_siege_siret: "11111111100006",
+            siret: "11111111100006",
+            siren: "111111111",
+            naf_code: "9411Z",
+            naf_libelle: "Activités des organisations patronales et consulaires",
+            date_creation: "1970-01-15T20:16:40.800Z",
+            date_mise_a_jour: "1970-01-19T15:50:56.983Z",
+            diffusable_commercialement: true,
+            enseigne: "CMA",
+            adresse: "RUE DE LA FORMATION",
+            numero_voie: "4",
+            type_voie: "AV",
+            nom_voie: "DU GENERAL LECLERC",
+            complement_adresse: "Paris",
+            code_postal: "75001",
+            num_departement: "75",
+            nom_departement: "Paris",
+            localite: "PARIS",
+            code_insee_localite: "7001",
+            cedex: null,
+            date_fermeture: "2020-12-30T23:00:00.000Z",
+            ferme: true,
+            region_implantation_code: "11",
+            region_implantation_nom: "Île-de-France",
+            commune_implantation_code: "75001",
+            commune_implantation_nom: "Paris",
+            pays_implantation_code: "FR",
+            pays_implantation_nom: "FRANCE",
+            num_academie: 1,
+            nom_academie: "Paris",
+            uai: "0751111A",
+            uai_potentiels: [],
+            info_depp: 1,
+            info_dgefp: 1,
+            info_datagouv_ofs: 1,
+            info_datadock: 2,
+            info_depp_info: "Ok",
+            info_dgefp_info: "Ok siren",
+            info_datagouv_ofs_info: "Ok",
+            info_datadock_info: "Ok",
+            computed_type: "CFA",
+            computed_declare_prefecture: "OUI",
+            computed_conventionne: "OUI",
+            computed_info_datadock: "datadocké",
+            api_entreprise_reference: true,
+            parcoursup_a_charger: true,
+            affelnet_a_charger: true,
+            entreprise_siren: "111111111",
+            entreprise_procedure_collective: false,
+            entreprise_enseigne: "CMA",
+            entreprise_numero_tva_intracommunautaire: "FR17111111111",
+            entreprise_code_effectif_entreprise: "31",
+            entreprise_forme_juridique_code: "7381",
+            entreprise_forme_juridique: "Organisme consulaire",
+            entreprise_raison_sociale: "CHAMBRE DE METIERS ET DE L'ARTISANAT DE LA SEINE ET MARNE",
+            entreprise_nom_commercial: "",
+            entreprise_capital_social: null,
+            entreprise_date_creation: "1970-01-15T20:16:40.800Z",
+            entreprise_date_radiation: null,
+            entreprise_naf_code: "9411Z",
+            entreprise_naf_libelle: "Activités des organisations patronales et consulaires",
+            entreprise_date_fermeture: "1970-01-19T15:02:49.200Z",
+            entreprise_ferme: true,
+            entreprise_siret_siege_social: "13001301400019",
+            entreprise_nom: null,
+            entreprise_prenom: null,
+            entreprise_categorie: "PME",
+            formations_attachees: true,
+            formations_ids: ["5e8df94920ff3b2161268944"],
+            formations_uais: ["0751112B"],
+            formations_n3: true,
+            formations_n4: true,
+            formations_n5: true,
+            formations_n6: true,
+            formations_n7: false,
+            ds_id_dossier: "1342611",
+            ds_questions_siren: "130013014",
+            ds_questions_nom: "Henru",
+            ds_questions_email: "robert@formation.fr",
+            ds_questions_uai: "0751111A",
+            ds_questions_has_agrement_cfa: "true",
+            ds_questions_has_certificaton_2015: "true",
+            ds_questions_has_ask_for_certificaton: "false",
+            ds_questions_ask_for_certificaton_date: null,
+            ds_questions_declaration_code: null,
+            ds_questions_has_2020_training: "true",
+            catalogue_published: true,
+            published: false,
+            updates_history: [],
+            update_error: "error: Siret non trouvé.",
+            tags: ["2020", "2021"],
+            rco_uai: "0751111A",
+            rco_adresse: null,
+            rco_code_postal: "75001",
+            rco_code_insee_localite: "77288",
+            created_at: "2020-02-29T17:32:22.497Z",
+            last_update_at: "2021-09-12T01:03:30.593Z",
+            __v: 0,
+            entreprise_tranche_effectif_salarie: {
+              de: 200,
+              a: 249,
+              code: "31",
+              date_reference: "2018",
+              intitule: "200 à 249 salariés",
+            },
+            etablissement_siege_id: null,
+            tranche_effectif_salarie: {
+              de: 50,
+              a: 99,
+              code: "21",
+              date_reference: "2018",
+              intitule: "50 à 99 salariés",
+            },
+            geo_coordonnees: "48.52,2.6528",
+            rco_geo_coordonnees: null,
+            onisep_code_postal: null,
+            onisep_nom: null,
+            onisep_url: null,
+            idcc: null,
+            info_qualiopi: 0,
+            info_qualiopi_info: "NON",
+            opco_nom: null,
+            opco_siren: null,
+            nda: "1177P001111",
+          },
+          custom
+        );
+      },
     });
   },
   mockGeoAddresseApi(callback) {
@@ -711,6 +846,40 @@ module.exports = {
             },
           },
           custom
+        );
+      },
+    });
+  },
+  mockTableauDeBordApi(callback) {
+    let client = createNock(TableauDeBordApi.baseApiUrl);
+    callback(client, {
+      cfas(custom = {}) {
+        return (
+          JSON.stringify(
+            merge(
+              {},
+              {
+                cfas: [
+                  {
+                    uai: "0751234J",
+                    sirets: ["11111111100001"],
+                    nom: "Organisme de formation",
+                    reseaux: ["cfa-reseau"],
+                    region_nom: "Normandie",
+                    region_num: "28",
+                    metiers: ["Vente en magasin : produits non alimentaires (vêtements, équipement, livres, …)"],
+                  },
+                ],
+                pagination: {
+                  page: 1,
+                  resultats_par_page: 1,
+                  nombre_de_page: 1,
+                  total: 1,
+                },
+              },
+              custom
+            )
+          ) + "\n"
         );
       },
     });

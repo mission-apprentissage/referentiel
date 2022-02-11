@@ -1,29 +1,30 @@
-const { compose, transformData } = require("oleoduc");
-const { getFromStorage } = require("../../common/utils/ovhUtils");
-const { parseCsv } = require("../../common/utils/csvUtils");
+const { compose, transformData, flattenArray } = require("oleoduc");
+const TableauDeBordApi = require("../../common/apis/TableauDeBordApi");
 
 module.exports = (custom = {}) => {
   let name = "tableau-de-bord";
+  let api = custom.tableauDeBordApi || new TableauDeBordApi();
 
   return {
     name,
     async stream() {
-      let input =
-        custom.input ||
-        (await getFromStorage("support/tdb_uaisSiretsCouples_1630597270816.csv", {
-          storage: "mna-tableau-de-bord",
-        }));
-
       return compose(
-        input,
-        parseCsv(),
-        transformData(({ siret, uai }) => {
-          return {
-            from: name,
-            selector: siret,
-            uai_potentiels: [uai],
-          };
-        })
+        await api.streamCfas({}, { limit: 10000 }),
+        transformData((data) => {
+          if (!data.sirets) {
+            return null;
+          }
+
+          return data.sirets.map((siret) => {
+            return {
+              from: name,
+              selector: siret,
+              uai_potentiels: [data.uai],
+              reseaux: data.reseaux?.map((r) => r.toLowerCase()) || [],
+            };
+          });
+        }),
+        flattenArray()
       );
     },
   };

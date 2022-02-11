@@ -2,9 +2,8 @@ const assert = require("assert");
 const { omit } = require("lodash");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
-const { importOrganismesForTest } = require("../../utils/testUtils");
 const { mockCatalogueApi, mockGeoAddresseApi } = require("../../utils/apiMocks");
-const { insertOrganisme, insertCFD } = require("../../utils/fakeData");
+const { insertOrganisme, insertCFD, insertDatagouv } = require("../../utils/fakeData");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 
 function mockApis(custom = {}) {
@@ -20,17 +19,13 @@ function mockApis(custom = {}) {
       .get((uri) => uri.includes("reverse"))
       .query(() => true)
       .reply(200, responses.reverse(custom.reverse));
-
-    client
-      .get((uri) => uri.includes("search"))
-      .query(() => true)
-      .reply(200, responses.search());
   });
 }
 
 describe("catalogue", () => {
   it("Vérifie qu'on peut collecter les natures", async () => {
-    await importOrganismesForTest([{ siret: "11111111100006" }, { siret: "22222222200002" }]);
+    await insertOrganisme({ siret: "11111111100006" });
+    await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -60,7 +55,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter les natures responsable et formateur", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -78,7 +73,8 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des relations (responsable->formateur)", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
+    await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -104,23 +100,25 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des relations (formateur->responsable)", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "22222222200002" });
+    await insertDatagouv({ siren: "111111111", siretEtablissementDeclarant: "11111111100006" });
+    await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
-        etablissement_gestionnaire_siret: "22222222200002",
+        etablissement_gestionnaire_siret: "11111111100006",
         etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-        etablissement_formateur_siret: "11111111100006",
+        etablissement_formateur_siret: "22222222200002",
         etablissement_formateur_entreprise_raison_sociale: "Etablissement",
       },
     });
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
+    let found = await dbCollection("organismes").findOne({ siret: "22222222200002" });
     assert.deepStrictEqual(found.relations, [
       {
-        siret: "22222222200002",
+        siret: "11111111100006",
         label: "Entreprise",
         referentiel: false,
         type: "formateur->responsable",
@@ -129,8 +127,8 @@ describe("catalogue", () => {
     ]);
   });
 
-  it("Vérifie qu'on peut ignore les relations quand l'établisssement est responsable et formateur", async () => {
-    await importOrganismesForTest();
+  it("Vérifie qu'on ignore les relations quand l'établisssement est responsable et formateur", async () => {
+    await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -147,8 +145,28 @@ describe("catalogue", () => {
     assert.deepStrictEqual(found.relations, []);
   });
 
+  it("Vérifie qu'on peut détecter des relations avec des organismes déjà présents", async () => {
+    await insertOrganisme({ siret: "11111111100006" });
+    await insertOrganisme({ siret: "22222222200002", raison_sociale: "Mon centre de formation" });
+    await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
+    let source = createSource("catalogue");
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "11111111100006",
+        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+        etablissement_formateur_siret: "22222222200002",
+        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+      },
+    });
+
+    await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    assert.strictEqual(found.relations[0].referentiel, true);
+  });
+
   it("Vérifie qu'on peut collecter des diplômes (cfd)", async () => {
-    await importOrganismesForTest([{ siret: "22222222200002" }]);
+    await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -186,7 +204,7 @@ describe("catalogue", () => {
       NIVEAU_FORMATION_DIPLOME: "26C",
       LIBELLE_COURT: "FORMATION",
     });
-    await importOrganismesForTest([{ siret: "22222222200002" }]);
+    await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
       etablissement_formateur_siret: "22222222200002",
@@ -209,7 +227,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on ne collecte pas de diplômes pour les organismes responsables", async () => {
-    await importOrganismesForTest([{ siret: "11111111100006" }]);
+    await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -235,7 +253,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des certifications (rncp)", async () => {
-    await importOrganismesForTest([{ siret: "22222222200002" }]);
+    await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -269,7 +287,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on ne collecte pas de certifications pour les organismes responsables", async () => {
-    await importOrganismesForTest([{ siret: "11111111100006" }]);
+    await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -296,7 +314,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des lieux de formation", async () => {
-    await importOrganismesForTest([{ siret: "22222222200002" }]);
+    await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -338,7 +356,7 @@ describe("catalogue", () => {
         geojson: {
           type: "Feature",
           geometry: { coordinates: [2.396444, 48.879706], type: "Point" },
-          properties: { score: 0.88 },
+          properties: { score: 0.88, source: "geo-adresse-api" },
         },
         departement: {
           code: "75",
@@ -366,7 +384,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on ne collecte pas des lieux de formation pour les organismes responsables", async () => {
-    await importOrganismesForTest([{ siret: "11111111100006" }]);
+    await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -392,80 +410,8 @@ describe("catalogue", () => {
     });
   });
 
-  it("Vérifie qu'on cherche une adresse quand on ne peut pas reverse-geocoder un lieu de formation", async () => {
-    await importOrganismesForTest([{ siret: "22222222200002" }]);
-    let source = createSource("catalogue");
-    mockCatalogueApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("formations.ndjson"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.formations({
-            etablissement_formateur_siret: "22222222200002",
-          })
-        );
-    });
-    mockGeoAddresseApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("reverse"))
-        .query(() => true)
-        .reply(400, {});
-
-      client
-        .get((uri) => uri.includes("search"))
-        .query(() => true)
-        .reply(200, responses.search());
-    });
-
-    let stats = await collectSources(source);
-
-    let found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
-    assert.deepStrictEqual(found.lieux_de_formation[0], {
-      code: "2.396444_48.879706",
-      sources: ["catalogue"],
-      adresse: {
-        geojson: {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [2.396444, 48.879706],
-          },
-          properties: {
-            score: 0.88,
-          },
-        },
-        label: "31 Rue des lilas 75019 Paris",
-        code_postal: "75019",
-        code_insee: "75119",
-        localite: "Paris",
-        departement: {
-          code: "75",
-          nom: "Paris",
-        },
-        region: {
-          code: "11",
-          nom: "Île-de-France",
-        },
-        academie: {
-          code: "01",
-          nom: "Paris",
-        },
-      },
-    });
-    assert.deepStrictEqual(stats, {
-      catalogue: {
-        total: 2,
-        updated: 1,
-        unknown: 1,
-        anomalies: 0,
-        failed: 0,
-      },
-    });
-  });
-
-  it("Vérifie qu'on créer une anomalie quand on ne peut pas trouver l'adresse d'un lieu de formation", async () => {
-    await importOrganismesForTest([{ siret: "22222222200002" }]);
+  it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver l'adresse d'un lieu de formation", async () => {
+    await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockCatalogueApi((client, responses) => {
       client
@@ -483,11 +429,6 @@ describe("catalogue", () => {
         .get((uri) => uri.includes("reverse"))
         .query(() => true)
         .reply(400, {});
-
-      client
-        .get((uri) => uri.includes("search"))
-        .query(() => true)
-        .reply(400, {});
     });
 
     let stats = await collectSources(source);
@@ -497,10 +438,13 @@ describe("catalogue", () => {
     assert.strictEqual(found.lieux_de_formation.length, 0);
     assert.strictEqual(found._meta.anomalies.length, 1);
     assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "lieudeformation_31 rue des lilas",
+      type: "lieudeformation_geoloc_impossible",
+      sources: ["catalogue"],
       job: "collect",
-      source: "catalogue",
-      code: "lieudeformation_geoloc_impossible",
-      details: "Lieu de formation inconnu : 31 rue des lilas. [2.396444,48.879706]",
+      details:
+        "Lieu de formation inconnu : 31 rue des lilas. Coordonnées inconnues [2.396444,48.879706] " +
+        "(cause: [GeoAdresseApi] Request failed with status code 400)",
     });
     assert.deepStrictEqual(stats, {
       catalogue: {
@@ -514,7 +458,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des contacts", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -546,7 +490,7 @@ describe("catalogue", () => {
   });
 
   it("Vérifie qu'on peut collecter des emails multiples", async () => {
-    await importOrganismesForTest();
+    await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
       formation: {
@@ -599,24 +543,5 @@ describe("catalogue", () => {
         failed: 0,
       },
     });
-  });
-
-  it("Vérifie qu'on peut détecter des relations avec des organismes déjà présents", async () => {
-    await importOrganismesForTest();
-    await insertOrganisme({ siret: "22222222200002", raison_sociale: "Mon centre de formation" });
-    let source = createSource("catalogue");
-    mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-        etablissement_formateur_siret: "22222222200002",
-        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-      },
-    });
-
-    await collectSources(source);
-
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.strictEqual(found.relations[0].referentiel, true);
   });
 });

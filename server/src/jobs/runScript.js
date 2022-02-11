@@ -1,4 +1,4 @@
-const logger = require("../common/logger");
+const logger = require("../common/logger").child({ context: "script" });
 const { closeMongodbConnection, connectToMongodb, configureValidation } = require("../common/db/mongodb");
 const prettyMilliseconds = require("pretty-ms");
 const { isEmpty } = require("lodash");

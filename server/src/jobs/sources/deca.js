@@ -8,7 +8,7 @@ module.exports = (custom = {}) => {
   return {
     name,
     async stream() {
-      let input = custom.input || (await getFromStorage("liste_etab_SIA_Dares.csv"));
+      let input = custom.input || (await getFromStorage("liste_etab_SIA_Dares_v2.csv"));
 
       return compose(
         input,

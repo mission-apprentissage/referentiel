@@ -12,6 +12,12 @@ module.exports = {
       items,
     };
   },
+  array: (custom = {}) => {
+    return {
+      bsonType: "array",
+      ...custom,
+    };
+  },
   object: (properties, custom = {}) => {
     return {
       bsonType: "object",

@@ -36,9 +36,16 @@ function prettyPrintStream(outputName) {
         "err.message",
         "err.code",
         "err.signal",
+        //Misc
+        "context",
       ]);
 
-      let params = [util.format("[%s][%s] %s", raw.time.toISOString()), levels[raw.level], message];
+      let params = [
+        util.format("[%s][%s][%s] %s", raw.time.toISOString()),
+        levels[raw.level],
+        raw.context || "global",
+        message,
+      ];
       if (!isEmpty(rest)) {
         params.push(chalk.gray(`\n${util.inspect(rest, { depth: null })}`));
       }

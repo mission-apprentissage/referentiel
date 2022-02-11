@@ -59,6 +59,7 @@ module.exports = () => {
       text,
       anomalies,
       uai_potentiels,
+      relations,
       etat_administratif,
       qualiopi,
       numero_declaration_activite: nda,
@@ -80,6 +81,11 @@ module.exports = () => {
       ...(text ? { $text: { $search: text } } : {}),
       ...(!isNil(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
       ...(!isNil(qualiopi) ? { qualiopi } : {}),
+      ...(!isNil(relations)
+        ? isBoolean(relations)
+          ? { "relations.0": { $exists: relations } }
+          : { "relations.type": { $in: relations } }
+        : {}),
       ...(!isNil(uai_potentiels)
         ? isBoolean(uai_potentiels)
           ? { "uai_potentiels.0": { $exists: uai_potentiels } }
@@ -108,6 +114,12 @@ module.exports = () => {
         regions: arrayOf(Joi.string().valid(...getRegions().map((r) => r.code))),
         academies: arrayOf(Joi.string().valid(...getAcademies().map((r) => r.code))),
         departements: arrayOf(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
+        relations: Joi.alternatives()
+          .try(
+            Joi.boolean(),
+            arrayOf(Joi.string().valid("formateur->responsable", "responsable->formateur", "entreprise"))
+          )
+          .default(null),
         anomalies: Joi.boolean().default(null),
         qualiopi: Joi.boolean().default(null),
         text: Joi.string(),

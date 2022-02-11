@@ -1,36 +1,41 @@
 import { Col, GridRow } from "../common/dsfr/fondamentaux";
 import React, { useContext } from "react";
-import ValidationCard from "./validation/fragments/ValidationCard";
-import DepartementAuthSelector from "./validation/fragments/DepartementAuthSelector";
-import useNavigation from "../common/hooks/useNavigation";
-import LayoutTitle from "../common/layout/LayoutTitle";
+import TableauDeBordCard from "./components/TableauDeBordCard";
+import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
+import TitleLayout from "../common/layout/TitleLayout";
 import { AuthContext } from "../common/AuthRoutes";
-import LayoutContent from "../common/layout/LayoutContent";
+import ContentLayout from "../common/layout/ContentLayout";
+import { useQuery } from "../common/hooks/useQuery";
 
 export default function TableauDeBordPage() {
   let [auth] = useContext(AuthContext);
+  let { query, setQuery } = useQuery();
   let title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
-  let { navigate } = useNavigation();
 
   return (
     <>
-      <LayoutTitle
+      <TitleLayout
         title={title}
-        selector={<DepartementAuthSelector onChange={(code) => navigate({ departements: code })} />}
+        selector={
+          <DepartementAuthSelector
+            departement={query.departement}
+            onChange={(code) => setQuery({ ...query, departements: code })}
+          />
+        }
       />
-      <LayoutContent>
+      <ContentLayout>
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_VALIDER"} label={"Organismes à vérifier"} />
+            <TableauDeBordCard type={"A_VALIDER"} label={"Organismes à vérifier"} />
           </Col>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_RENSEIGNER"} label={"Organismes à identifier"} />
+            <TableauDeBordCard type={"A_RENSEIGNER"} label={"Organismes à identifier"} />
           </Col>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"VALIDE"} label={"Organismes validés"} />
+            <TableauDeBordCard type={"VALIDE"} label={"Organismes validés"} />
           </Col>
         </GridRow>
-      </LayoutContent>
+      </ContentLayout>
     </>
   );
 }

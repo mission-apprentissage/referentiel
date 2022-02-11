@@ -4,7 +4,6 @@ const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
 const categoriesJuridiques = require("../../common/categoriesJuridiques");
 const { dbCollection } = require("../../common/db/mongodb");
-const createDatagouvSource = require("../sources/datagouv");
 const caches = require("../../common/caches/caches");
 
 function getRaisonSociale(uniteLegale) {
@@ -37,29 +36,19 @@ function getRelationLabel(e, raisonSociale) {
   return `${raisonSociale} ${localisation}`.replace(/ +/g, " ").trim();
 }
 
-async function getAdresse(adresseResolver, data) {
-  let { getAdresseFromCoordinates, geocodeAdresse } = adresseResolver;
-  const addr = (
-    `${data.numero_voie || ""} ${data.indice_repetition || ""} ` +
-    `${data.type_voie || ""} ${data.libelle_voie || ""} ` +
-    `${data.code_postal || ""} ${data.libelle_commune || ""} `
+function getAdresseAsString(etablissement) {
+  return (
+    `${etablissement.numero_voie || ""} ${etablissement.indice_repetition || ""} ` +
+    `${etablissement.type_voie || ""} ${etablissement.libelle_voie || ""} ` +
+    `${etablissement.code_postal || ""} ${etablissement.libelle_commune || ""}`
   )
     .replace(/\s{2,}/g, " ")
     .trim();
-
-  if (data.longitude) {
-    return getAdresseFromCoordinates(parseFloat(data.longitude), parseFloat(data.latitude), {
-      code_postal: data.code_postal,
-      adresse: addr,
-    });
-  } else {
-    return geocodeAdresse(addr);
-  }
 }
 
-function getRelations(uniteLegale, siret, sirets) {
+function getRelations(uniteLegale, siret) {
   return uniteLegale.etablissements
-    .filter((e) => e.siret !== siret && e.etat_administratif === "A" && sirets.includes(e.siret))
+    .filter((e) => e.siret !== siret && e.etat_administratif === "A")
     .map((e) => {
       return {
         type: "entreprise",
@@ -73,17 +62,15 @@ module.exports = (custom = {}) => {
   let name = "sirene";
   let api = custom.sireneApi || new SireneApi();
   let sireneApiCache = caches.sireneApiCache();
-  let adresseResolver = adresses(custom.geoAdresseApi || new GeoAdresseApi());
+  let { geocode } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
   return {
     name,
     async stream(options = {}) {
       let filters = options.filters || {};
-      let datagouv = createDatagouvSource();
-      let sirets = await datagouv.loadSirets();
 
       return compose(
-        dbCollection("organismes").find(filters, { siret: 1 }).batchSize(20).stream(),
+        dbCollection("organismes").find(filters, { siret: 1, "adresse.code_insee": 1 }).batchSize(20).stream(),
         transformData(
           async ({ siret }) => {
             try {
@@ -98,29 +85,42 @@ module.exports = (custom = {}) => {
                 return {
                   selector: siret,
                   anomalies: [
-                    { code: "etablissement_inconnu", message: `Etablissement inconnu pour l'entreprise ${siren}` },
+                    {
+                      key: `etablissement_inconnu_${siren}`,
+                      type: "etablissement_inconnu",
+                      details: `Etablissement inconnu pour l'entreprise ${siren}`,
+                    },
                   ],
                 };
               }
 
-              let adresse = await getAdresse(adresseResolver, etablissement).catch((e) => {
+              let addresseAsString = getAdresseAsString(etablissement);
+              let adresse = await geocode(addresseAsString, {
+                fallback: {
+                  codeInsee: etablissement.code_commune,
+                  codePostal: etablissement.code_postal,
+                },
+              }).catch((e) => {
                 anomalies.push({
-                  code: "etablissement_geoloc_impossible",
-                  message: `Impossible de géolocaliser l'adresse de l'organisme. ${e.message}`,
+                  key: `adresse_${addresseAsString}`,
+                  type: "etablissement_geoloc_impossible",
+                  details: e.message,
                 });
+                return e.commune;
               });
 
               let formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);
               if (!formeJuridique) {
                 anomalies.push({
-                  code: "categorie_juridique_inconnue",
-                  message: `Impossible de trouver la catégorie juridique de l'entreprise : ${uniteLegale.categorie_juridique}`,
+                  key: `categorie_juridique_${uniteLegale.categorie_juridique}`,
+                  type: "categorie_juridique_inconnue",
+                  details: `Impossible de trouver la catégorie juridique de l'entreprise : ${uniteLegale.categorie_juridique}`,
                 });
               }
 
               return {
                 selector: siret,
-                relations: await getRelations(uniteLegale, siret, sirets),
+                relations: await getRelations(uniteLegale, siret),
                 anomalies,
                 data: {
                   raison_sociale: raisonSociale,
@@ -135,7 +135,9 @@ module.exports = (custom = {}) => {
               return {
                 selector: siret,
                 anomalies: [
-                  e.httpStatusCode === 404 ? { code: "entreprise_inconnue", message: `Entreprise inconnue` } : e,
+                  e.httpStatusCode === 404
+                    ? { key: "404", type: "entreprise_inconnue", details: "Entreprise inconnue" }
+                    : e,
                 ],
               };
             }
