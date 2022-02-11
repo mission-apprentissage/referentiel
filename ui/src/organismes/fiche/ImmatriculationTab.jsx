@@ -54,6 +54,7 @@ export default function ImmatriculationTab({ organisme }) {
       <Box direction={"column"} className={"fr-mt-5w"}>
         <Field label={"Enseigne"} value={organisme.enseigne} />
         <Field label={"Raison sociale"} value={organisme.raison_sociale} />
+        <Field label={"Réseaux"} value={organisme.reseaux.join(" ,")} />
         <Field label={"Adresse"} value={adresse?.label || `${adresse?.code_postal} ${adresse?.localite}`} />
         <Field label={"Région"} value={adresse?.region?.nom} />
         <Field label={"Académie"} value={adresse?.academie?.nom} />
