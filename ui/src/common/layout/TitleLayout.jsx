@@ -46,7 +46,7 @@ export default function TitleLayout({ title, message, back, selector, children }
       {back && (
         <GridRow modifiers={"gutters"}>
           <Col>
-            <Back icons={"arrow-left-line"} onClick={() => navigate(-1)}>
+            <Back icons={"arrow-left-line"} onClick={() => navigate("./..")}>
               {back}
             </Back>
           </Col>
