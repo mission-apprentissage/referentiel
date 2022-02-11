@@ -6,13 +6,14 @@ import TitleLayout from "../common/layout/TitleLayout";
 import ContentLayout from "../common/layout/ContentLayout";
 import { useFetch } from "../common/hooks/useFetch";
 import Fiche from "../organismes/fiche/Fiche";
+import RaisonSociale from "../organismes/common/RaisonSociale";
 
 export const OrganismeContext = createContext(null);
 
 export function OrganismeTitle() {
   let { organisme } = useContext(OrganismeContext);
 
-  return <span>{organisme.enseigne || organisme.raison_sociale}</span>;
+  return <RaisonSociale organisme={organisme} />;
 }
 
 export default function OrganismePage() {

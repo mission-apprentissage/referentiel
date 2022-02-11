@@ -1,7 +1,7 @@
 import React from "react";
 import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
-import ImmatriculationTab from "./ImmatriculationTab";
-import RelationsTab from "./RelationsTab";
+import ImmatriculationTab from "./immatriculation/ImmatriculationTab";
+import RelationsTab from "./relations/RelationsTab";
 import WideTabs from "../../common/dsfr/custom/WideTabs";
 import { useNavigate, useParams } from "react-router-dom";
 

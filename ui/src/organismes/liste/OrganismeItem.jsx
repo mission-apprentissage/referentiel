@@ -6,6 +6,7 @@ import ClickableItem from "../../common/ClickableItem";
 import { Tag } from "../../common/dsfr/elements/Tag";
 import Natures from "../common/Natures";
 import Siret from "../common/Siret";
+import RaisonSociale from "../common/RaisonSociale";
 
 const Card = styled(Box)`
   padding: 1rem 2rem;
@@ -16,7 +17,7 @@ const Card = styled(Box)`
   }
 `;
 
-const RaisonSociale = styled.div`
+const Nom = styled.div`
   font-size: 1.25rem;
   line-height: 2rem;
   padding-bottom: 0.25rem;
@@ -72,9 +73,9 @@ export default function OrganismeItem({ organisme }) {
           </Box>
         )}
         <Box justify={"between"}>
-          <RaisonSociale className={"fr-text--bold"} style={{ width: "85%" }}>
-            {organisme.enseigne || organisme.raison_sociale || "Raison sociale inconnue"}
-          </RaisonSociale>
+          <Nom className={"fr-text--bold"} style={{ width: "85%" }}>
+            <RaisonSociale organisme={organisme} />
+          </Nom>
         </Box>
         <Adresse>{adresse}</Adresse>
         <Box justify={"between"} align={"center"} wrap={"nowrap"}>

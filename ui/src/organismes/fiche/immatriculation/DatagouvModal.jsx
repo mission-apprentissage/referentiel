@@ -1,11 +1,11 @@
-import { Button, ButtonGroup } from "../../common/dsfr/elements/Button";
-import Modal, { modalSizeModifiers } from "../../common/dsfr/elements/Modal";
-import BlueBox from "../../common/BlueBox";
-import { useFetch } from "../../common/hooks/useFetch";
-import Spinner from "../../common/Spinner";
-import { flattenObject } from "../../common/utils";
-import { Box } from "../../common/Flexbox";
-import Field from "../../common/Field";
+import { Button, ButtonGroup } from "../../../common/dsfr/elements/Button";
+import Modal, { modalSizeModifiers } from "../../../common/dsfr/elements/Modal";
+import BlueBox from "../../../common/BlueBox";
+import { useFetch } from "../../../common/hooks/useFetch";
+import Spinner from "../../../common/Spinner";
+import { flattenObject } from "../../../common/utils";
+import { Box } from "../../../common/Flexbox";
+import Field from "../../../common/Field";
 import React from "react";
 
 export default function DatagouvModal({ modal, siret }) {

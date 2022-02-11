@@ -1,20 +1,25 @@
-import useToggle from "../../common/hooks/useToggle";
-import { asSiren } from "../../common/utils";
-import { Box } from "../../common/Flexbox";
-import Fieldset from "../../common/dsfr/elements/Fieldset";
-import Checkbox from "../../common/dsfr/elements/Checkbox";
-import { Table, Thead } from "../../common/dsfr/elements/Table";
-import React from "react";
-import NA from "../common/NA";
-import { Tag } from "../../common/dsfr/elements/Tag";
-import Natures from "../common/Natures";
-import { Link } from "../../common/dsfr/elements/Link";
-import Siret from "../common/Siret";
+import useToggle from "../../../common/hooks/useToggle";
+import { asSiren } from "../../../common/utils";
+import { Box } from "../../../common/Flexbox";
+import Fieldset from "../../../common/dsfr/elements/Fieldset";
+import Checkbox from "../../../common/dsfr/elements/Checkbox";
+import { Table, Thead } from "../../../common/dsfr/elements/Table";
+import React, { useState } from "react";
+import NA from "../../common/NA";
+import { Tag } from "../../../common/dsfr/elements/Tag";
+import Natures from "../../common/Natures";
+import Siret from "../../common/Siret";
+import LinkButton from "../../../common/dsfr/custom/LinkButton";
+import { useModal } from "../../../common/dsfr/common/useModal";
+import OrganismeModal from "./OrganismeModal";
+import RaisonSociale from "../../common/RaisonSociale";
 
-function OrganismeRow({ organisme }) {
+function OrganismeRow({ organisme, show }) {
   return (
     <tr>
-      <td colSpan="2">{organisme.raison_sociale}</td>
+      <td colSpan="2">
+        <RaisonSociale organisme={organisme} />
+      </td>
       <td>
         <span>{organisme.uai || <NA />}</span>
       </td>
@@ -22,9 +27,9 @@ function OrganismeRow({ organisme }) {
         <Tag modifiers="sm">{<Natures organisme={organisme} />}</Tag>
       </td>
       <td>
-        <Link to={`/organismes/${organisme.siret}`}>
+        <LinkButton onClick={show}>
           <Siret organisme={organisme} />
-        </Link>
+        </LinkButton>
       </td>
     </tr>
   );
@@ -54,6 +59,12 @@ export function RelationsTable({ label, organisme, results }) {
   let presents = results.filter((item) => item.organisme);
   let absents = results.filter((item) => !item.organisme);
   let memeEntreprise = presents.filter((i) => asSiren(i.organisme.siret) === siren);
+  let [selectedOrganisme, setSelectedOrganisme] = useState(null);
+  let modal = useModal();
+  function showOrganisme(organisme) {
+    setSelectedOrganisme(organisme);
+    modal.open();
+  }
 
   if (results.length === 0) {
     return <></>;
@@ -97,7 +108,7 @@ export function RelationsTable({ label, organisme, results }) {
               .filter((o) => (sirenFilter ? siren === asSiren(o.siret) : true))
               .filter((o) => (fermésFilter ? true : o.etat_administratif === "actif"))
               .map((o, index) => {
-                return <OrganismeRow key={index} organisme={o} />;
+                return <OrganismeRow key={index} organisme={o} show={() => showOrganisme(o)} />;
               })}
           </Table>
         </>
@@ -122,6 +133,7 @@ export function RelationsTable({ label, organisme, results }) {
           </Table>
         </>
       )}
+      {<OrganismeModal modal={modal} organisme={selectedOrganisme} />}
     </>
   );
 }

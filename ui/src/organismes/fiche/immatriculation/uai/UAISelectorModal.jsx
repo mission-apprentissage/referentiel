@@ -1,15 +1,15 @@
 import React, { useContext } from "react";
-import Modal from "../../../common/dsfr/elements/Modal";
-import { Button, ButtonGroup } from "../../../common/dsfr/elements/Button";
-import useForm from "../../../common/form/useForm";
+import Modal from "../../../../common/dsfr/elements/Modal";
+import { Button, ButtonGroup } from "../../../../common/dsfr/elements/Button";
+import useForm from "../../../../common/form/useForm";
 import * as yup from "yup";
-import { Form } from "../../../common/form/Form";
-import { _get, _put } from "../../../common/api/httpClient";
+import { Form } from "../../../../common/form/Form";
+import { _get, _put } from "../../../../common/api/httpClient";
 import { UAIPotentielsRadios } from "./UAIPotentielsRadios";
 import { UAICustom } from "./UAICustom";
-import Alert from "../../../common/dsfr/elements/Alert";
-import { OrganismeContext } from "../../../pages/OrganismePage";
-import BlueBox from "../../../common/BlueBox";
+import Alert from "../../../../common/dsfr/elements/Alert";
+import { OrganismeContext } from "../../../../pages/OrganismePage";
+import BlueBox from "../../../../common/BlueBox";
 
 const validators = yup.object({
   uai: yup.string(),

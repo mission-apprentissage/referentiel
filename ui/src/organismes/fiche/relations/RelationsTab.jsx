@@ -1,10 +1,10 @@
 import React, { useReducer, useState } from "react";
-import { useOrganismes } from "../../common/hooks/useOrganismes";
-import Spinner from "../../common/Spinner";
-import { TagButton, TagGroup } from "../../common/dsfr/elements/Tag";
-import { Col, GridRow } from "../../common/dsfr/fondamentaux";
+import { useOrganismes } from "../../../common/hooks/useOrganismes";
+import Spinner from "../../../common/Spinner";
+import { TagButton, TagGroup } from "../../../common/dsfr/elements/Tag";
+import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
 import styled from "styled-components";
-import { Box } from "../../common/Flexbox";
+import { Box } from "../../../common/Flexbox";
 import { RelationsTable } from "./RelationsTable";
 import { uniq, without } from "lodash-es";
 
@@ -96,7 +96,7 @@ export default function RelationsTab({ organisme }) {
         </Box>
       </h4>
       {(tables.length === 0 || tables.includes("responsable")) && (
-        <GridRow>
+        <GridRow className={"fr-mb-6w"}>
           <Col>
             <RelationsTable
               label={"Cet organisme est responsable des organismes suivants"}
@@ -107,32 +107,24 @@ export default function RelationsTab({ organisme }) {
         </GridRow>
       )}
       {(tables.length === 0 || tables.includes("formateur")) && (
-        <GridRow>
+        <GridRow className={"fr-mb-6w"}>
           <Col>
-            <GridRow>
-              <Col>
-                <RelationsTable
-                  label={"Cet organisme dispense des formations pour"}
-                  organisme={organisme}
-                  results={dispenseDesFormationsPour}
-                />
-              </Col>
-            </GridRow>
+            <RelationsTable
+              label={"Cet organisme dispense des formations pour"}
+              organisme={organisme}
+              results={dispenseDesFormationsPour}
+            />
           </Col>
         </GridRow>
       )}
       {(tables.length === 0 || tables.includes("autres")) && (
-        <GridRow>
+        <GridRow className={"fr-mb-6w"}>
           <Col>
-            <GridRow>
-              <Col>
-                <RelationsTable
-                  label={"Autres organismes qui font partie de la même entreprise"}
-                  organisme={organisme}
-                  results={autres}
-                />
-              </Col>
-            </GridRow>
+            <RelationsTable
+              label={"Autres organismes qui font partie de la même entreprise"}
+              organisme={organisme}
+              results={autres}
+            />
           </Col>
         </GridRow>
       )}
