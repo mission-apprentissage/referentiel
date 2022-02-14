@@ -1,0 +1,20 @@
+http:
+  routers:
+    dashboard:
+      tls: true
+      rule: "PathPrefix(`/traefik`) || HeadersRegexp(`Referer`, `https://.*/traefik/dashboard/`)"
+      service: api@internal
+      middlewares:
+        - auth
+        - removePrefix
+
+  middlewares:
+    removePrefix:
+      stripPrefix:
+        prefixes:
+          - "/traefik"
+    auth:
+      basicAuth:
+        users:
+          - "admin:$2y$10$iPpt4uBWaEsrqIuAgJkbqeral5bqTU1BX808nvtgUI2CCLTKxrT8O"
+

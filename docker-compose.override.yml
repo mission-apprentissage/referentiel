@@ -1,9 +1,12 @@
 #Override containers for dev
 version: "2.4"
 services:
+
   reverse_proxy:
     volumes:
-      - .local/nginx:/data
+      - ./traefik/traefik.yaml:/etc/traefik/traefik.yaml
+      - ./traefik/config:/etc/traefik/config
+      - ./.local/certs:/certs
 
   ui:
     command: yarn start
@@ -13,9 +16,13 @@ services:
       - ./ui:/app #Allows source folders to be watched
     environment:
       - FAST_REFRESH=false
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ui.tls=true"
+      - "traefik.http.routers.ui.rule=Host(`localhost`) && PathPrefix(`/`)"
 
   server:
-    command: ["yarn", "debug"]
+    command: [ "yarn", "debug" ]
     ports:
       - "127.0.0.1:9229:9229" #Allows remote debugging
     volumes:
@@ -25,6 +32,10 @@ services:
       - REFERENTIEL_ENV=dev
       - REFERENTIEL_LOG_LEVEL=debug
       - REFERENTIEL_LOG_DESTINATIONS=stdout,mongodb
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.server.rule=Host(`localhost`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.server.tls=true"
 
   mongodb:
     ports:

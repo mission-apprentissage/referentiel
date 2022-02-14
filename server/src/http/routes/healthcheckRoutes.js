@@ -25,6 +25,7 @@ module.exports = () => {
 
       return res.json({
         healthcheck: mongodbStatus,
+        headers: req.headers,
       });
     })
   );

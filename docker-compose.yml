@@ -2,19 +2,16 @@ version: "2.4"
 services:
 
   reverse_proxy:
-    image: referentiel_reverse_proxy
-    container_name: referentiel_reverse_proxy
-    build:
-      context: reverse_proxy
-    mem_limit: 96m
+    image: "traefik:v2.6.0"
+    container_name: "referentiel_reverse_proxy"
     restart: unless-stopped
     ports:
-      - 80:80
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - referentiel_network
-    depends_on:
-      - server
-      - ui
 
   ui:
     image: referentiel_ui

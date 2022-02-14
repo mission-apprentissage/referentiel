@@ -1,5 +1,5 @@
 
-install: install-server install-ui generate-dotenv hooks
+install: install-server install-ui generate-dotenv generate-tls-certificate hooks
 
 start:
 	docker-compose up --build --force-recreate
@@ -32,6 +32,10 @@ generate-dotenv:
 	echo "Generating JWT secret..."
 	grep -sqF 'REFERENTIEL_AUTH_API_JWT_SECRET' server/.env || \
 		echo "REFERENTIEL_AUTH_API_JWT_SECRET=$$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '')" >> server/.env
+
+generate-tls-certificate:
+	mkdir -p .local/certs
+	mkcert -cert-file .local/certs/local-cert.pem -key-file .local/certs/local-key.pem "localhost" "admin.localhost"
 
 hooks:
 	git config core.hooksPath misc/git-hooks
