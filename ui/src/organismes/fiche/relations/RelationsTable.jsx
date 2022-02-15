@@ -3,39 +3,47 @@ import { asSiren } from "../../../common/utils";
 import { Box } from "../../../common/Flexbox";
 import Fieldset from "../../../common/dsfr/elements/Fieldset";
 import Checkbox from "../../../common/dsfr/elements/Checkbox";
-import { Table, Thead } from "../../../common/dsfr/elements/Table";
+import { Thead } from "../../../common/dsfr/elements/Table";
 import React, { useState } from "react";
 import NA from "../../common/NA";
 import { Tag } from "../../../common/dsfr/elements/Tag";
 import Natures from "../../common/Natures";
 import Siret from "../../common/Siret";
-import LinkButton from "../../../common/dsfr/custom/LinkButton";
 import { useModal } from "../../../common/dsfr/common/useModal";
-import OrganismeModal from "./OrganismeModal";
+import RelationModal from "./RelationModal";
 import RaisonSociale from "../../common/RaisonSociale";
+import { Button } from "../../../common/dsfr/elements/Button";
+import Adresse from "../../common/Adresse";
+import CustomTable from "../../../common/dsfr/custom/CustomTable";
 
-function OrganismeRow({ organisme, show }) {
+function RelationRow({ organisme, show }) {
   return (
     <tr>
-      <td colSpan="2">
-        <RaisonSociale organisme={organisme} />
+      <td onClick={show} colSpan="2">
+        <Box direction={"column"}>
+          <RaisonSociale className={"fr-text--bold"} organisme={organisme} />
+          <Adresse organisme={organisme} />
+        </Box>
       </td>
-      <td>
-        <span>{organisme.uai || <NA />}</span>
-      </td>
-      <td>
+      <td onClick={show}>
         <Tag modifiers="sm">{<Natures organisme={organisme} />}</Tag>
       </td>
-      <td>
-        <LinkButton onClick={show}>
-          <Siret organisme={organisme} />
-        </LinkButton>
+      <td onClick={show}>
+        <span>{organisme.uai || <NA />}</span>
+      </td>
+      <td onClick={show} colSpan="2">
+        <Siret organisme={organisme} />
+      </td>
+      <td style={{ textAlign: "right" }}>
+        <Button onClick={show} modifiers={"icon secondary"} icons={"eye-fill"} title="Label bouton">
+          Label bouton
+        </Button>
       </td>
     </tr>
   );
 }
 
-function RelationRow({ relation }) {
+function AbsentRow({ relation }) {
   return (
     <tr>
       <td colSpan="2">{relation.label}</td>
@@ -92,14 +100,15 @@ export function RelationsTable({ label, organisme, results }) {
               />
             </Fieldset>
           </Box>
-          <Table
+          <CustomTable
             modifiers={"bordered layout-fixed"}
             thead={
               <Thead>
                 <td colSpan="2">Raison sociale</td>
-                <td>UAI</td>
                 <td>Natures</td>
-                <td>SIRET</td>
+                <td>UAI</td>
+                <td colSpan="2">SIRET</td>
+                <td />
               </Thead>
             }
           >
@@ -108,15 +117,15 @@ export function RelationsTable({ label, organisme, results }) {
               .filter((o) => (sirenFilter ? siren === asSiren(o.siret) : true))
               .filter((o) => (fermésFilter ? true : o.etat_administratif === "actif"))
               .map((o, index) => {
-                return <OrganismeRow key={index} organisme={o} show={() => showOrganisme(o)} />;
+                return <RelationRow key={index} organisme={o} show={() => showOrganisme(o)} />;
               })}
-          </Table>
+          </CustomTable>
         </>
       )}
       {absents.length > 0 && (
         <>
           <div>Les 2 organismes suivants sont absents du référentiel national</div>
-          <Table
+          <CustomTable
             modifiers={"bordered layout-fixed"}
             thead={
               <Thead>
@@ -128,12 +137,12 @@ export function RelationsTable({ label, organisme, results }) {
             }
           >
             {absents.map((result, index) => {
-              return <RelationRow key={index} relation={result.relation} />;
+              return <AbsentRow key={index} relation={result.relation} />;
             })}
-          </Table>
+          </CustomTable>
         </>
       )}
-      {<OrganismeModal modal={modal} organisme={selectedOrganisme} />}
+      {<RelationModal modal={modal} organisme={selectedOrganisme} />}
     </>
   );
 }

@@ -11,6 +11,7 @@ import Siret from "../../common/Siret";
 import { DateTime } from "luxon";
 import styled from "styled-components";
 import useAuthContext from "../../../common/hooks/useAuthContext";
+import Adresse from "../../common/Adresse";
 
 const referentielsMapper = {
   "catalogue-etablissements": "Catalogue de formation",
@@ -49,16 +50,7 @@ export default function ImmatriculationTab({ organisme }) {
             </Field>
             <Field label={"Nature"} value={<Natures organisme={organisme} />} />
             <Field label={"SIREN"} value={organisme.siret.substring(0, 9)} />
-            <Field
-              label={"SIRET"}
-              value={
-                <Siret organisme={organisme}>
-                  <span className={"fr-ml-1w"}>
-                    {organisme.etat_administratif === "actif" ? "en activité" : "fermé"}
-                  </span>
-                </Siret>
-              }
-            />
+            <Field label={"SIRET"} value={<Siret organisme={organisme} />} />
             <Field label={"NDA"} value={organisme.numero_declaration_activite} />
             <Field label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
           </Box>
@@ -66,10 +58,7 @@ export default function ImmatriculationTab({ organisme }) {
             <Field label={"Enseigne"} value={organisme.enseigne} />
             <Field label={"Raison sociale"} value={organisme.raison_sociale} />
             <Field label={"Réseaux"} value={organisme.reseaux.join(" ,")} />
-            <Field
-              label={"Adresse"}
-              value={organisme.adresse?.label || `${organisme.adresse?.code_postal} ${organisme.adresse?.localite}`}
-            />
+            <Field label={"Adresse"} value={<Adresse organisme={organisme} />} />
             <Field label={"Région"} value={organisme.adresse?.region?.nom} />
             <Field label={"Académie"} value={organisme.adresse?.academie?.nom} />
           </Box>

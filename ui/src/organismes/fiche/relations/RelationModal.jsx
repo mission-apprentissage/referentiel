@@ -8,7 +8,7 @@ import Natures from "../../common/Natures";
 import Siret from "../../common/Siret";
 import RaisonSociale from "../../common/RaisonSociale";
 
-export default function OrganismeModal({ modal, organisme }) {
+export default function RelationModal({ modal, organisme }) {
   return (
     <Modal
       title={"UAI"}
@@ -26,16 +26,7 @@ export default function OrganismeModal({ modal, organisme }) {
                 <Field label={"UAI"} value={organisme.uai} />
                 <Field label={"Nature"} value={<Natures organisme={organisme} />} />
                 <Field label={"SIREN"} value={organisme.siret.substring(0, 9)} />
-                <Field
-                  label={"SIRET"}
-                  value={
-                    <Siret organisme={organisme}>
-                      <span className={"fr-ml-1w"}>
-                        {organisme.etat_administratif === "actif" ? "en activité" : "fermé"}
-                      </span>
-                    </Siret>
-                  }
-                />
+                <Field label={"SIRET"} value={<Siret organisme={organisme} />} />
                 <Field label={"NDA"} value={organisme.numero_declaration_activite} />
                 <Field label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
               </Box>
