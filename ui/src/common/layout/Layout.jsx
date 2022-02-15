@@ -2,15 +2,18 @@ import { Header } from "../dsfr/elements/Header";
 import { Nav, NavLink } from "../dsfr/elements/Nav";
 import { Footer, FooterLink, FooterList } from "../dsfr/elements/Footer";
 import React from "react";
+import useAuthContext from "../hooks/useAuthContext";
 
 export default function Layout({ children }) {
+  let { isAnonymous } = useAuthContext();
+
   return (
     <>
       <Header
         title={"Référentiel"}
         nav={
           <Nav>
-            <NavLink to={"/"}>Tableau de bord</NavLink>
+            {!isAnonymous() && <NavLink to={"/tableau-de-bord"}>Tableau de bord</NavLink>}
             <NavLink to={"/organismes"}>Référentiel national</NavLink>
           </Nav>
         }

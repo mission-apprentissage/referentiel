@@ -2,11 +2,11 @@ import Select from "../../common/dsfr/elements/Select";
 import { useContext, useState } from "react";
 import { Box, Item } from "../../common/Flexbox";
 import { DataContext } from "../../common/hooks/useData";
-import { AuthContext } from "../../common/AuthRoutes";
+import useAuthContext from "../../common/hooks/useAuthContext";
 
 export default function DepartementAuthSelector({ departement, onChange }) {
-  let [data] = useContext(DataContext);
-  let [auth] = useContext(AuthContext);
+  let data = useContext(DataContext);
+  let { auth } = useAuthContext();
   let [selected, setSelected] = useState(departement || "");
   let departements = data[`${auth.type}s`].find((r) => r.code === auth.code)?.departements || [];
 

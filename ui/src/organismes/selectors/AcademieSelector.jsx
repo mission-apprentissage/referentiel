@@ -5,7 +5,7 @@ import { DataContext } from "../../common/hooks/useData";
 import { useQuery } from "../../common/hooks/useQuery";
 
 export default function AcademieSelector({ onChange }) {
-  let [{ academies }] = useContext(DataContext);
+  let { academies } = useContext(DataContext);
   let { query } = useQuery();
   let [selected, setSelected] = useState(query.academie || "");
 

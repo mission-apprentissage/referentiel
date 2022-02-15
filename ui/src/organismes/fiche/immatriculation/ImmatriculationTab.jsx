@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Box } from "../../../common/Flexbox";
 import LinkButton from "../../../common/dsfr/custom/LinkButton";
 import { useModal } from "../../../common/dsfr/common/useModal";
@@ -10,7 +10,7 @@ import Natures from "../../common/Natures";
 import Siret from "../../common/Siret";
 import { DateTime } from "luxon";
 import styled from "styled-components";
-import { AuthContext } from "../../../common/AuthRoutes";
+import useAuthContext from "../../../common/hooks/useAuthContext";
 
 const referentielsMapper = {
   "catalogue-etablissements": "Catalogue de formation",
@@ -24,7 +24,8 @@ const Meta = styled("div")`
 
 export default function ImmatriculationTab({ organisme }) {
   let datagouvModal = useModal();
-  let [auth] = useContext(AuthContext);
+  let { auth, isAnonymous } = useAuthContext();
+
   return (
     <>
       <Box justify={"between"}>
@@ -42,7 +43,7 @@ export default function ImmatriculationTab({ organisme }) {
         <Col modifiers={"12 sm-8"}>
           <Box direction={"column"}>
             <Field label={"UAI"} value={organisme.uai}>
-              {organisme.adresse && organisme.adresse[auth.type].code === auth.code && (
+              {!isAnonymous() && organisme.adresse && organisme.adresse[auth.type].code === auth.code && (
                 <UAIValidator className="fr-ml-3v" organisme={organisme} />
               )}
             </Field>
