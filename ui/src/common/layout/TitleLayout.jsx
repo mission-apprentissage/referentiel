@@ -27,6 +27,8 @@ export default function TitleLayout({ title, message, back, selector, children }
         <Col>
           <FilAriane
             routes={[
+              { path: "/", breadcrumb: "Accueil" },
+              { path: "/construction", breadcrumb: "Construction du référentiel" },
               { path: "/organismes", breadcrumb: "Liste des organismes" },
               { path: "/organismes/:siret", breadcrumb: OrganismeTitle },
               { path: "/tableau-de-bord", breadcrumb: `Tableau de bord (${authTitle})` },

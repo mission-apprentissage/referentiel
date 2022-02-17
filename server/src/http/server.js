@@ -13,6 +13,7 @@ module.exports = async () => {
   app.use(require("./routes/uaisRoutes")());
   app.use(require("./routes/datagouvRoutes")());
   app.use(require("./routes/dataRoutes")());
+  app.use(require("./routes/statsRoutes")());
   app.use(require("./routes/swaggerRoutes")());
 
   app.use(errorMiddleware());

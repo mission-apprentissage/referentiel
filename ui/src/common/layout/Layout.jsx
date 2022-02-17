@@ -13,8 +13,10 @@ export default function Layout({ children }) {
         title={"Référentiel"}
         nav={
           <Nav>
+            <NavLink to={"/"}>Accueil</NavLink>
             {!isAnonymous() && <NavLink to={"/tableau-de-bord"}>Tableau de bord</NavLink>}
             <NavLink to={"/organismes"}>Référentiel national</NavLink>
+            <NavLink to={"/construction"}>Construction du référentiel</NavLink>
           </Nav>
         }
       />

@@ -4,12 +4,14 @@ import OrganismePage from "./pages/OrganismePage";
 import Layout from "./common/layout/Layout";
 import DesignPage from "./pages/DesignPage";
 import OrganismesPage from "./pages/OrganismesPage";
-import Login from "./pages/LoginPage";
+import LoginPage from "./pages/LoginPage";
 import TableauDeBordPage from "./pages/TableauDeBordPage";
 import ValidationPage from "./pages/ValidationPage";
 import useData, { DataContext } from "./common/hooks/useData";
 import AuthShield from "./common/AuthShield";
 import { AuthContext, useAuth } from "./common/hooks/useAuth";
+import AccueilPage from "./pages/AccueilPage";
+import ConstructionPage from "./pages/ConstructionPage";
 
 function App() {
   let data = useData();
@@ -25,7 +27,9 @@ function App() {
             </Routes>
             <Routes>
               <Route element={<Layout children={<Outlet />} />}>
-                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<AccueilPage />} />
+                <Route path="/construction" element={<ConstructionPage />} />
+                <Route path="/login" element={<LoginPage />} />
                 <Route path="/organismes" element={<OrganismesPage />} />
                 <Route path="/organismes/:siret">
                   <Route path="" element={<OrganismePage />} />
