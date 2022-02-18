@@ -1,9 +1,9 @@
-import { AuthContext } from "../AuthRoutes";
-import { useContext } from "react";
 import { useOrganismes } from "./useOrganismes";
+import { ApiContext } from "../ApiProvider";
+import { useContext } from "react";
 
 export function useValidation(type, custom = {}) {
-  let [auth] = useContext(AuthContext);
+  let { auth } = useContext(ApiContext);
   let params = {
     [`${auth.type}s`]: auth.code,
     etat_administratif: "actif",

@@ -1,28 +1,17 @@
 import { Navigate, useSearchParams } from "react-router-dom";
-import { isAnonymous, setAuth } from "../common/api/auth";
-import Alert from "../common/dsfr/elements/Alert";
-import { Col, Container, GridRow } from "../common/dsfr/fondamentaux";
+import { useContext, useEffect } from "react";
+import { ApiContext } from "../common/ApiProvider";
 
 export default function Login() {
   let [searchParams] = useSearchParams();
+  let { login } = useContext(ApiContext);
   let token = searchParams.get("token");
-  if (token) {
-    setAuth(token);
-  }
 
-  if (isAnonymous() && !token) {
-    return (
-      <Container>
-        <GridRow className={"fr-mb-10w"}>
-          <Col>
-            <Alert modifiers={"info"}>
-              Pour vous connecter à l'application, veuillez utiliser le lien qui vous a été communiqué.
-            </Alert>
-          </Col>
-        </GridRow>
-      </Container>
-    );
-  }
+  useEffect(() => {
+    if (token) {
+      login(token);
+    }
+  }, [token, login]);
 
-  return <Navigate to="/" replace={true} />;
+  return <Navigate to={token ? "/tableau-de-bord" : "/organismes"} replace={true} />;
 }

@@ -84,7 +84,6 @@ export default function OrganismeItem({ organisme }) {
             <div className={"siret"}>
               <span>SIRET : </span>
               <Siret organisme={organisme} />
-              <span>{organisme.etat_administratif === "actif" ? "(en activité)" : "(fermé)"}</span>
             </div>
           </Identifiants>
           <Link as={"span"} modifiers={"lg icon-right"} icons="arrow-right-line" />

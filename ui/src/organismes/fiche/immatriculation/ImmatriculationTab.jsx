@@ -10,7 +10,8 @@ import Natures from "../../common/Natures";
 import Siret from "../../common/Siret";
 import { DateTime } from "luxon";
 import styled from "styled-components";
-import { AuthContext } from "../../../common/AuthRoutes";
+import Adresse from "../../common/Adresse";
+import { ApiContext } from "../../../common/ApiProvider";
 
 const referentielsMapper = {
   "catalogue-etablissements": "Catalogue de formation",
@@ -24,7 +25,8 @@ const Meta = styled("div")`
 
 export default function ImmatriculationTab({ organisme }) {
   let datagouvModal = useModal();
-  let [auth] = useContext(AuthContext);
+  let { auth, isAnonymous } = useContext(ApiContext);
+
   return (
     <>
       <Box justify={"between"}>
@@ -42,22 +44,13 @@ export default function ImmatriculationTab({ organisme }) {
         <Col modifiers={"12 sm-8"}>
           <Box direction={"column"}>
             <Field label={"UAI"} value={organisme.uai}>
-              {organisme.adresse && organisme.adresse[auth.type].code === auth.code && (
+              {!isAnonymous() && organisme.adresse && organisme.adresse[auth.type].code === auth.code && (
                 <UAIValidator className="fr-ml-3v" organisme={organisme} />
               )}
             </Field>
             <Field label={"Nature"} value={<Natures organisme={organisme} />} />
             <Field label={"SIREN"} value={organisme.siret.substring(0, 9)} />
-            <Field
-              label={"SIRET"}
-              value={
-                <Siret organisme={organisme}>
-                  <span className={"fr-ml-1w"}>
-                    {organisme.etat_administratif === "actif" ? "en activité" : "fermé"}
-                  </span>
-                </Siret>
-              }
-            />
+            <Field label={"SIRET"} value={<Siret organisme={organisme} />} />
             <Field label={"NDA"} value={organisme.numero_declaration_activite} />
             <Field label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
           </Box>
@@ -65,10 +58,7 @@ export default function ImmatriculationTab({ organisme }) {
             <Field label={"Enseigne"} value={organisme.enseigne} />
             <Field label={"Raison sociale"} value={organisme.raison_sociale} />
             <Field label={"Réseaux"} value={organisme.reseaux.join(" ,")} />
-            <Field
-              label={"Adresse"}
-              value={organisme.adresse?.label || `${organisme.adresse?.code_postal} ${organisme.adresse?.localite}`}
-            />
+            <Field label={"Adresse"} value={<Adresse organisme={organisme} />} />
             <Field label={"Région"} value={organisme.adresse?.region?.nom} />
             <Field label={"Académie"} value={organisme.adresse?.academie?.nom} />
           </Box>

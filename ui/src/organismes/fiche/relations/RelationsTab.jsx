@@ -15,7 +15,6 @@ const RelationTagButton = styled(({ label, results, onChange }) => {
   return (
     <TagButton
       label={label}
-      nbElements={nbElements}
       aria-pressed={pressed}
       onClick={() => {
         onChange && onChange(!pressed);

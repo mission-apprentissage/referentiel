@@ -34,3 +34,16 @@ export function buildUrl(base, data) {
   let params = `${queryString.stringify(data, { skipNull: true, skipEmptyString: true })}`;
   return `${base}?${params}`;
 }
+
+export const divide = (dividend, divisor) => {
+  if (dividend && divisor !== 0) {
+    let value = dividend / divisor;
+    return Number(Math.round(value + "e1") + "e-1");
+  } else {
+    return 0;
+  }
+};
+
+export const percentage = (dividend, divisor) => {
+  return divide(dividend * 100, divisor);
+};

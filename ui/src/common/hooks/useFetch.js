@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useReducer } from "react";
-import { _get } from "../api/httpClient";
+import { useCallback, useContext, useEffect, useReducer } from "react";
+import { ApiContext } from "../ApiProvider";
 
 export function useFetch(url, initialState = {}) {
+  let { httpClient } = useContext(ApiContext);
+
   function fetchReducer(state, action) {
     switch (action.type) {
       case "error":
@@ -25,12 +27,13 @@ export function useFetch(url, initialState = {}) {
     try {
       console.info(`Requesting ${url}`);
       dispatch({ type: "loading" });
-      const data = await _get(url);
+      const data = await httpClient._get(url);
       dispatch({ type: "data", data });
     } catch (error) {
+      console.error(error);
       dispatch({ type: "error", error });
     }
-  }, [url]);
+  }, [httpClient, url]);
 
   useEffect(() => {
     async function fetchData() {

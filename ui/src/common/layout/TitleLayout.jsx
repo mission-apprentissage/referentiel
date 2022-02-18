@@ -6,7 +6,7 @@ import LinkButton from "../dsfr/custom/LinkButton";
 import { useNavigate } from "react-router-dom";
 import { ValidationTitle } from "../../pages/ValidationPage";
 import { OrganismeTitle } from "../../pages/OrganismePage";
-import { AuthContext } from "../AuthRoutes";
+import { ApiContext } from "../ApiProvider";
 
 const Back = styled(LinkButton)`
   margin-bottom: 1.5rem;
@@ -18,7 +18,7 @@ const Message = styled("div")`
 
 export default function TitleLayout({ title, message, back, selector, children }) {
   let navigate = useNavigate();
-  let [auth] = useContext(AuthContext);
+  let { auth } = useContext(ApiContext);
   let authTitle = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
 
   return (
@@ -27,11 +27,13 @@ export default function TitleLayout({ title, message, back, selector, children }
         <Col>
           <FilAriane
             routes={[
-              { path: "/", breadcrumb: `Tableau de bord (${authTitle})` },
-              { path: "/validation/:type", breadcrumb: ValidationTitle },
-              { path: "/validation/:type/:siret", breadcrumb: OrganismeTitle },
+              { path: "/", breadcrumb: "Accueil" },
+              { path: "/construction", breadcrumb: "Construction du référentiel" },
               { path: "/organismes", breadcrumb: "Liste des organismes" },
               { path: "/organismes/:siret", breadcrumb: OrganismeTitle },
+              { path: "/tableau-de-bord", breadcrumb: `Tableau de bord (${authTitle})` },
+              { path: "/validation/:type", breadcrumb: ValidationTitle },
+              { path: "/validation/:type/:siret", breadcrumb: OrganismeTitle },
             ]}
           />
         </Col>

@@ -3,12 +3,12 @@ import React, { useContext } from "react";
 import TableauDeBordCard from "./components/TableauDeBordCard";
 import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
 import TitleLayout from "../common/layout/TitleLayout";
-import { AuthContext } from "../common/AuthRoutes";
 import ContentLayout from "../common/layout/ContentLayout";
 import { useQuery } from "../common/hooks/useQuery";
+import { ApiContext } from "../common/ApiProvider";
 
 export default function TableauDeBordPage() {
-  let [auth] = useContext(AuthContext);
+  let { auth } = useContext(ApiContext);
   let { query, setQuery } = useQuery();
   let title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
 

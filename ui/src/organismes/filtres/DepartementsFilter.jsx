@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { DataContext } from "../../common/hooks/useData";
 import { Filter } from "./Filter";
+import { DataContext } from "../../common/DataProvider";
 
 export default function DepartementsFilter() {
-  let [{ departements }] = useContext(DataContext);
+  let { departements } = useContext(DataContext);
 
   return (
     <Filter
