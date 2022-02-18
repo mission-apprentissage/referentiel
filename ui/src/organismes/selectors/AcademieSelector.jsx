@@ -1,8 +1,8 @@
 import Select from "../../common/dsfr/elements/Select";
 import { useContext, useState } from "react";
 import { Box, Item } from "../../common/Flexbox";
-import { DataContext } from "../../common/hooks/useData";
 import { useQuery } from "../../common/hooks/useQuery";
+import { DataContext } from "../../common/DataProvider";
 
 export default function AcademieSelector({ onChange }) {
   let { academies } = useContext(DataContext);

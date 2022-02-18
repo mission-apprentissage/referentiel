@@ -7,20 +7,17 @@ import OrganismesPage from "./pages/OrganismesPage";
 import LoginPage from "./pages/LoginPage";
 import TableauDeBordPage from "./pages/TableauDeBordPage";
 import ValidationPage from "./pages/ValidationPage";
-import useData, { DataContext } from "./common/hooks/useData";
 import AuthShield from "./common/AuthShield";
-import { AuthContext, useAuth } from "./common/hooks/useAuth";
 import AccueilPage from "./pages/AccueilPage";
 import ConstructionPage from "./pages/ConstructionPage";
+import DataProvider from "./common/DataProvider";
+import ApiProvider from "./common/ApiProvider";
 
 function App() {
-  let data = useData();
-  let auth = useAuth();
-
   return (
     <div className="App">
-      <AuthContext.Provider value={auth}>
-        <DataContext.Provider value={data}>
+      <ApiProvider>
+        <DataProvider>
           <Router>
             <Routes>
               <Route path="/dsfr" element={<DesignPage />} />
@@ -48,8 +45,8 @@ function App() {
               </Route>
             </Routes>
           </Router>
-        </DataContext.Provider>
-      </AuthContext.Provider>
+        </DataProvider>
+      </ApiProvider>
     </div>
   );
 }

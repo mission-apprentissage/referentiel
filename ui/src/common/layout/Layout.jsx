@@ -1,11 +1,11 @@
 import { Header } from "../dsfr/elements/Header";
 import { Nav, NavLink } from "../dsfr/elements/Nav";
 import { Footer, FooterLink, FooterList } from "../dsfr/elements/Footer";
-import React from "react";
-import useAuthContext from "../hooks/useAuthContext";
+import React, { useContext } from "react";
+import { ApiContext } from "../ApiProvider";
 
 export default function Layout({ children }) {
-  let { isAnonymous } = useAuthContext();
+  let { isAnonymous } = useContext(ApiContext);
 
   return (
     <>

@@ -9,7 +9,7 @@ import { UAICustom } from "./UAICustom";
 import Alert from "../../../../common/dsfr/elements/Alert";
 import { OrganismeContext } from "../../../../pages/OrganismePage";
 import BlueBox from "../../../../common/BlueBox";
-import useHttpClient from "../../../../common/hooks/useHttpClient";
+import { ApiContext } from "../../../../common/ApiProvider";
 
 const validators = (httpClient) => {
   return yup.object({
@@ -43,9 +43,9 @@ const validators = (httpClient) => {
 };
 
 export function UAISelectorModal({ modal, organisme, action }) {
-  let httpClient = useHttpClient();
-  let hasPotentiels = organisme.uai_potentiels.length > 0;
+  let { httpClient } = useContext(ApiContext);
   let { updateOrganisme } = useContext(OrganismeContext);
+  let hasPotentiels = organisme.uai_potentiels.length > 0;
   let form = useForm({
     initialValues: hasPotentiels ? { uai: organisme.uai || "", custom: "" } : { uai: "custom", custom: "" },
     yup: validators(httpClient),

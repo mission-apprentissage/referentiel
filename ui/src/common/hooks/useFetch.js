@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useReducer } from "react";
-import useHttpClient from "./useHttpClient";
+import { useCallback, useContext, useEffect, useReducer } from "react";
+import { ApiContext } from "../ApiProvider";
 
 export function useFetch(url, initialState = {}) {
-  let httpClient = useHttpClient();
+  let { httpClient } = useContext(ApiContext);
 
   function fetchReducer(state, action) {
     switch (action.type) {
@@ -30,6 +30,7 @@ export function useFetch(url, initialState = {}) {
       const data = await httpClient._get(url);
       dispatch({ type: "data", data });
     } catch (error) {
+      console.error(error);
       dispatch({ type: "error", error });
     }
   }, [httpClient, url]);

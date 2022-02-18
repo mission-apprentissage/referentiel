@@ -19,14 +19,13 @@ export default function AccueilPage() {
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
           <Col modifiers={"sm-3"} className={"xfr-display-none xfr-display-sm-block"}>
             <Summary>
-              <div>Référentiel national</div>
-              <div>Construction du référentiel</div>
-              <div>Journal des modifications</div>
+              <a href={"#référentiel"}>Référentiel national</a>
+              <a href={"#construction"}>Construction du référentiel</a>
             </Summary>
           </Col>
           <Col modifiers={"12 sm-9"}>
             <h2>Bienvenue sur le Référentiel des organismes de formation en apprentissage</h2>
-            <h6>
+            <h6 id={"référentiel"}>
               Aujourd’hui, le référentiel est en cours d’expérimentation sur 3 régions.{" "}
               {stats && (
                 <div>
@@ -51,7 +50,9 @@ export default function AccueilPage() {
             <Button className={"fr-mt-3w"} onClick={() => navigate("/organismes")}>
               Consulter le référentiel national
             </Button>
-            <h6 className={"fr-mt-6w"}>Construction du référentiel</h6>
+            <h6 id={"construction"} className={"fr-mt-6w"}>
+              Construction du référentiel
+            </h6>
             <div className={"fr-mt-3w"}>
               <span className={"fr-text--bold"}>
                 La construction du référentiel national permet de constituer une liste d’organismes avec les

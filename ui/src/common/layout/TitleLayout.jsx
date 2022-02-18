@@ -1,12 +1,12 @@
 import { Col, Container, GridRow } from "../dsfr/fondamentaux";
-import React from "react";
+import React, { useContext } from "react";
 import FilAriane from "./FilAriane";
 import styled from "styled-components";
 import LinkButton from "../dsfr/custom/LinkButton";
 import { useNavigate } from "react-router-dom";
 import { ValidationTitle } from "../../pages/ValidationPage";
 import { OrganismeTitle } from "../../pages/OrganismePage";
-import useAuthContext from "../hooks/useAuthContext";
+import { ApiContext } from "../ApiProvider";
 
 const Back = styled(LinkButton)`
   margin-bottom: 1.5rem;
@@ -18,7 +18,7 @@ const Message = styled("div")`
 
 export default function TitleLayout({ title, message, back, selector, children }) {
   let navigate = useNavigate();
-  let { auth } = useAuthContext();
+  let { auth } = useContext(ApiContext);
   let authTitle = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
 
   return (

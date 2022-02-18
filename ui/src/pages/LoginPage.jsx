@@ -1,10 +1,10 @@
 import { Navigate, useSearchParams } from "react-router-dom";
-import useAuthContext from "../common/hooks/useAuthContext";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { ApiContext } from "../common/ApiProvider";
 
 export default function Login() {
   let [searchParams] = useSearchParams();
-  let { login } = useAuthContext();
+  let { login } = useContext(ApiContext);
   let token = searchParams.get("token");
 
   useEffect(() => {

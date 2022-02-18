@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box } from "../../../common/Flexbox";
 import LinkButton from "../../../common/dsfr/custom/LinkButton";
 import { useModal } from "../../../common/dsfr/common/useModal";
@@ -10,8 +10,8 @@ import Natures from "../../common/Natures";
 import Siret from "../../common/Siret";
 import { DateTime } from "luxon";
 import styled from "styled-components";
-import useAuthContext from "../../../common/hooks/useAuthContext";
 import Adresse from "../../common/Adresse";
+import { ApiContext } from "../../../common/ApiProvider";
 
 const referentielsMapper = {
   "catalogue-etablissements": "Catalogue de formation",
@@ -25,7 +25,7 @@ const Meta = styled("div")`
 
 export default function ImmatriculationTab({ organisme }) {
   let datagouvModal = useModal();
-  let { auth, isAnonymous } = useAuthContext();
+  let { auth, isAnonymous } = useContext(ApiContext);
 
   return (
     <>

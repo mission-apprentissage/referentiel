@@ -1,14 +1,14 @@
 import { Col, GridRow } from "../common/dsfr/fondamentaux";
-import React from "react";
+import React, { useContext } from "react";
 import TableauDeBordCard from "./components/TableauDeBordCard";
 import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
 import TitleLayout from "../common/layout/TitleLayout";
 import ContentLayout from "../common/layout/ContentLayout";
 import { useQuery } from "../common/hooks/useQuery";
-import useAuthContext from "../common/hooks/useAuthContext";
+import { ApiContext } from "../common/ApiProvider";
 
 export default function TableauDeBordPage() {
-  let { auth } = useAuthContext();
+  let { auth } = useContext(ApiContext);
   let { query, setQuery } = useQuery();
   let title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
 
