@@ -42,7 +42,7 @@ export default function AccueilPage() {
             <ol>
               <li>identifiés par un SIRET</li>
               <li>
-                trouvés dans la Liste publique des organisme de formation, la base RAMSESE et le Catalogue des
+                trouvés dans la Liste publique des organisme de formation, la base RAMSESE ou le catalogue des
                 formations en apprentissage
               </li>
               <li>en lien avec des formations en apprentissage à un moment donné</li>

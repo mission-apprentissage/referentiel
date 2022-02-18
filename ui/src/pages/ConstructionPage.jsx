@@ -40,8 +40,8 @@ export default function ConstructionPage() {
                         <ul>
                           <li>identifiés par un SIRET ;</li>
                           <li>
-                            trouvés dans la Liste publique des Organismes de Formation (data.gouv), la base ACCES et le
-                            Catalogue des formations en apprentissage (base des Carif-Oref) ;
+                            trouvés dans la Liste publique des Organismes de Formation (data.gouv), la base RAMSESE ou
+                            le catalogue des formations en apprentissage (base des Carif-Oref) ;
                           </li>
                           <li>en lien avec des formations en apprentissage à un moment donné.</li>
                         </ul>
