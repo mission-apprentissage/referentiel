@@ -19,6 +19,10 @@ Custom DSFR classes.
   --color-box-background-hover: #E4E3E1;
 }
 
+.xfr-tabs__panel--fix {
+  z-index: 1000;
+}
+
 .xfr-display-inline-block {
   display: inline-block;
 }
