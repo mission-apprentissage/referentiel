@@ -7,13 +7,14 @@ import { useContext } from "react";
 import { FilterContext } from "./Filters";
 import { ariaExpanded } from "../../common/dsfr/dsfr";
 import { useQuery } from "../../common/hooks/useQuery";
+import { Box } from "../../common/Flexbox";
 
 const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   return (
-    <div {...rest}>
-      <span>{label}</span>
+    <Box align={"baseline"} {...rest}>
+      {label}
       {nbCheckedElements > 0 && <Tag>{nbCheckedElements}</Tag>}
-    </div>
+    </Box>
   );
 })`
   .fr-tag {

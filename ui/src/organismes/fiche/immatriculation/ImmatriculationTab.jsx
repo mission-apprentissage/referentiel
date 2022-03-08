@@ -12,6 +12,7 @@ import { DateTime } from "luxon";
 import styled from "styled-components";
 import Adresse from "../../common/Adresse";
 import { ApiContext } from "../../../common/ApiProvider";
+import definitions from "../../../common/definitions.json";
 
 const referentielsMapper = {
   "catalogue-etablissements": "Catalogue de formation",
@@ -43,24 +44,28 @@ export default function ImmatriculationTab({ organisme }) {
       <GridRow>
         <Col modifiers={"12 sm-8"}>
           <Box direction={"column"}>
-            <Field label={"UAI"} value={organisme.uai}>
+            <Field label={"UAI"} value={organisme.uai} tooltip={definitions.organisme}>
               {!isAnonymous() && organisme.adresse && organisme.adresse[auth.type].code === auth.code && (
                 <UAIValidator className="fr-ml-3v" organisme={organisme} />
               )}
             </Field>
-            <Field label={"Nature"} value={<Natures organisme={organisme} />} />
-            <Field label={"SIREN"} value={organisme.siret.substring(0, 9)} />
-            <Field label={"SIRET"} value={<Siret organisme={organisme} />} />
-            <Field label={"NDA"} value={organisme.numero_declaration_activite} />
-            <Field label={"Certifié Qualiopi"} value={organisme.qualiopi ? "Oui" : "Non"} />
+            <Field label={"Nature"} value={<Natures organisme={organisme} />} tooltip={definitions.nature} />
+            <Field label={"SIREN"} value={organisme.siret.substring(0, 9)} tooltip={definitions.siren} />
+            <Field label={"SIRET"} value={<Siret organisme={organisme} />} tooltip={definitions.siret} />
+            <Field label={"NDA"} value={organisme.numero_declaration_activite} tooltip={definitions.nda} />
+            <Field
+              label={"Certifié Qualiopi"}
+              value={organisme.qualiopi ? "Oui" : "Non"}
+              tooltip={definitions.qualiopi}
+            />
           </Box>
           <Box direction={"column"} className={"fr-mt-5w"}>
-            <Field label={"Enseigne"} value={organisme.enseigne} />
-            <Field label={"Raison sociale"} value={organisme.raison_sociale} />
-            <Field label={"Réseaux"} value={organisme.reseaux.join(" ,")} />
-            <Field label={"Adresse"} value={<Adresse organisme={organisme} />} />
-            <Field label={"Région"} value={organisme.adresse?.region?.nom} />
-            <Field label={"Académie"} value={organisme.adresse?.academie?.nom} />
+            <Field label={"Enseigne"} value={organisme.enseigne} tooltip={definitions.enseigne} />
+            <Field label={"Raison sociale"} value={organisme.raison_sociale} tooltip={definitions.raison_sociale} />
+            <Field label={"Réseaux"} value={organisme.reseaux.join(" ,")} tooltip={definitions.reseau} />
+            <Field label={"Adresse"} value={<Adresse organisme={organisme} />} tooltip={definitions.adresse} />
+            <Field label={"Région"} value={organisme.adresse?.region?.nom} tooltip={definitions.region} />
+            <Field label={"Académie"} value={organisme.adresse?.academie?.nom} tooltip={definitions.academie} />
           </Box>
         </Col>
         <Col modifiers={"sm-4"} className={"xfr-display-xs-none xfr-display-sm-block"} style={{ textAlign: "right" }}>

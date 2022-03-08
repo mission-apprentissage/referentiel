@@ -5,6 +5,7 @@ import { Tab, TabPanel } from "../common/dsfr/elements/Tabs";
 import WideTabs from "../common/dsfr/custom/WideTabs";
 import { Table, Thead } from "../common/dsfr/elements/Table";
 import { Tag, TagGroup } from "../common/dsfr/elements/Tag";
+import definitions from "../common/definitions.json";
 
 export default function ConstructionPage() {
   return (
@@ -34,7 +35,7 @@ export default function ConstructionPage() {
                   >
                     <tr>
                       <td>Organisme de formation</td>
-                      <td>La donnée "organisme" provient de différentes sources.</td>
+                      <td>{definitions.organisme}</td>
                       <td colSpan="2">
                         <span className={"fr-text--bold"}>Les organismes référencés dans le référentiel sont :</span>
                         <ul>
@@ -49,10 +50,7 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>Relations entre les organismes</td>
-                      <td>
-                        Les relations entre les organismes sont identifiées via le Catalogue des formations en
-                        apprentissage (base des Carif-Oref)
-                      </td>
+                      <td>{definitions.relations}</td>
                       <td colSpan="2">
                         <span className={"fr-text--bold"}>
                           Les relations entres les organismes sont identifiées au niveau de l’offre de formation en
@@ -75,7 +73,7 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>Nature de l’organisme</td>
-                      <td>La donnée "Nature" est déduite des relations entre les organismes (base des Carif-Oref)</td>
+                      <td>{definitions.nature}</td>
                       <td colSpan="2">
                         <span className={"fr-text--bold"}>
                           Trois natures d’organismes peuvent être observées via le Catalogue des formations en
@@ -123,7 +121,7 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>Lieu de formation</td>
-                      <td>La donnée "lieu de formation" provient des Carif-Oref</td>
+                      <td>{definitions.lieu}</td>
                       <td colSpan="2">
                         Les lieux de formations sont caractérisés par une adresse postale et des coordonnées de
                         géolocalisation et toujours rattaché à un organisme de formation
@@ -131,7 +129,7 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>UAI</td>
-                      <td>La donnée "UAI" provient de différentes sources.</td>
+                      <td>{definitions.uai}</td>
                       <td colSpan="2">
                         Les UAI peuvent avoir différents status en fonction de l’état d’avancement de leur validation :
                         <ul>
@@ -146,85 +144,62 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>Réseau</td>
-                      <td>
-                        La donnée "Réseau" provient des Réseaux qui ont transmis leur liste d’organismes au Tableau de
-                        bord.
-                      </td>
+                      <td>{definitions.reseau}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>SIREN</td>
-                      <td>
-                        La donnée "SIREN" provient de l’INSEE. Si cette information est erronée, merci de leur signaler
-                      </td>
+                      <td>{definitions.siren}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>SIRET (en activité, fermé)</td>
-                      <td>
-                        La donnée "SIRET" et l’état administratif de l’organisme "en activité" ou "fermé" provient de
-                        l’INSEE. Si cette information est erronée, merci de leur signaler.
-                      </td>
+                      <td>{definitions.siret}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>Numéro de déclaration d’activité (NDA)</td>
-                      <td>
-                        La donnée "NDA" provient de la Liste Publique des Organismes de Formations. Si cette information
-                        est erronée, merci de leur signaler.
-                      </td>
+                      <td>{definitions.nda}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>Certifié qualiopi (oui, non)</td>
-                      <td>
-                        La donnée "Certifié qualiopi" provient de la Liste Publique des Organismes de Formations. Si
-                        cette information est erronée, merci de leur signaler.
-                      </td>
+                      <td>{definitions.qualiopi}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>Enseigne</td>
-                      <td>
-                        La donnée "Enseigne" provient de l’INSEE. Si cette information est erronée, merci de leur
-                        signaler
-                      </td>
+                      <td>{definitions.enseigne}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>Raison sociale</td>
-                      <td>
-                        La donnée "Raison sociale" provient de l’INSEE. Si cette information est erronée, merci de leur
-                        signaler
-                      </td>
+                      <td>{definitions.raison_sociale}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>Adresse postale</td>
-                      <td>
-                        La donnée "Adresse" provient de l’INSEE. Si cette information est erronée, merci de leur
-                        signaler
-                      </td>
+                      <td>{definitions.adresse}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>Région</td>
-                      <td>La donnée "Région" est déduite de la donnée "Adresse".</td>
+                      <td>{definitions.region}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>Académie</td>
-                      <td>La donnée "Académie" est déduite de la donnée "Adresse"</td>
+                      <td>{definitions.academie}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>RNCP</td>
-                      <td>La donnée "RNCP" provient des Carif-Oref</td>
+                      <td>{definitions.rncp}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
                       <td>CFD</td>
-                      <td>La donnée "CFD" provient des Carif-Oref</td>
+                      <td>{definitions.cfd}</td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
