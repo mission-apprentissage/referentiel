@@ -81,7 +81,13 @@ function buildCertification(formation) {
 
 async function buildLieuDeFormation(formation, { reverseGeocode }) {
   if (!formation.lieu_formation_geo_coordonnees) {
-    return {};
+    return {
+      anomalie: {
+        key: `lieudeformation_${formation.lieu_formation_adresse}`,
+        type: "lieudeformation_geoloc_inconnu",
+        details: `Lieu de formation inconnu : ${formation.lieu_formation_adresse}.`,
+      },
+    };
   }
 
   try {
@@ -100,7 +106,7 @@ async function buildLieuDeFormation(formation, { reverseGeocode }) {
       anomalie: {
         key: `lieudeformation_${formation.lieu_formation_adresse}`,
         type: "lieudeformation_geoloc_impossible",
-        details: `Lieu de formation inconnu : ${formation.lieu_formation_adresse}. ${e.message}`,
+        details: `Lieu de formation non géolocalisable : ${formation.lieu_formation_adresse}. ${e.message}`,
       },
     };
   }
