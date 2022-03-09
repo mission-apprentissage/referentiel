@@ -16,7 +16,7 @@ export default function Fiche({ organisme }) {
         {
           tab: (
             <Tab selected={!tab || tab === "identite"} onClick={() => navigate("../identite")}>
-              Identité
+              Identité à ne pas valider !
             </Tab>
           ),
           panel: (
