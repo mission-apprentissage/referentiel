@@ -23,7 +23,7 @@ export default function AccueilPage() {
               <a href={"#construction"}>Construction du référentiel</a>
             </Summary>
           </Col>
-          <Col modifiers={"12 sm-9"}>
+          <Col modifiers={"12 offset-sm-1 sm-8"}>
             <h2>Bienvenue sur le Référentiel des organismes de formation en apprentissage</h2>
             <h6 id={"référentiel"}>
               Aujourd’hui, le référentiel est en cours d’expérimentation sur 3 régions.{" "}
