@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { ValidationTitle } from "../../pages/ValidationPage";
 import { OrganismeTitle } from "../../pages/OrganismePage";
 import { ApiContext } from "../ApiProvider";
+import { Box } from "../Flexbox";
+import useToggle from "../hooks/useToggle";
 
 const Back = styled(LinkButton)`
   margin-bottom: 1.5rem;
@@ -16,8 +18,9 @@ const Message = styled("div")`
   margin-bottom: 1.5rem;
 `;
 
-export default function TitleLayout({ title, message, back, selector, children }) {
+export default function TitleLayout({ title, details, detailsMessage, message, back, selector }) {
   let navigate = useNavigate();
+  let [showDetails, toggleDetails] = useToggle(false);
   let { auth } = useContext(ApiContext);
   let authTitle = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
 
@@ -56,8 +59,20 @@ export default function TitleLayout({ title, message, back, selector, children }
       )}
       <GridRow className={"fr-pb-1w"}>
         <Col modifiers={"12 md-8"}>
-          {title && <h2>{title}</h2>}
-          {children}
+          <Box align={"baseline"}>
+            {title && <h2>{title}</h2>}
+            {details && (
+              <LinkButton
+                className={"fr-ml-2w"}
+                modifiers={"sm icon-right"}
+                icons={`arrow-${showDetails ? "up" : "down"}-s-line`}
+                onClick={() => toggleDetails()}
+              >
+                {detailsMessage || "Afficher le informations"}
+              </LinkButton>
+            )}
+          </Box>
+          {showDetails && details}
         </Col>
         {selector && <Col modifiers={"12 md-4"}>{selector}</Col>}
       </GridRow>

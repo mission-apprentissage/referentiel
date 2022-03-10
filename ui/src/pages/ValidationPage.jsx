@@ -9,27 +9,68 @@ import styled from "styled-components";
 import { useValidation } from "../common/hooks/useValidation";
 import Filters from "../organismes/filtres/Filters";
 import NatureFilter from "../organismes/filtres/NatureFilter";
+import React from "react";
+
+const MAPPER = {
+  A_VALIDER: {
+    title: "Organismes à vérifier",
+    critères: (
+      <ul className={"fr-text--sm fr-pl-3w"}>
+        <li>ne possèdent pas d’UAI ;</li>
+        <li>possèdent des UAI potentielles collectées dans différentes sources ;</li>
+        <li>sont identifiés par un SIRET en activité ;</li>
+        <li>sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide</li>
+        <li>ont la nature "responsable" uniquement ou "responsable et formateur"</li>
+      </ul>
+    ),
+  },
+  A_RENSEIGNER: {
+    title: "Organismes à identifier",
+    critères: (
+      <ul className={"fr-text--sm fr-pl-3w"}>
+        <li>ne possèdent pas d’UAI ;</li>
+        <li>ne possèdent pas d’UAI potentielles ;</li>
+        <li>sont identifiés par un SIRET en activité ;</li>
+        <li>sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide</li>
+        <li>ont la nature "responsable" uniquement ou "responsable et formateur"</li>
+      </ul>
+    ),
+  },
+  VALIDE: {
+    title: "Organismes validés",
+    critères: (
+      <ul className={"fr-text--sm fr-pl-3w"}>
+        <li>possèdent une UAI validée ;</li>
+        <li>sont identifiés par un SIRET en activité ;</li>
+        <li>sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide</li>
+        <li>ont la nature "responsable" uniquement ou "responsable et formateur"</li>
+      </ul>
+    ),
+  },
+};
 
 export function ValidationTitle() {
   let { type } = useParams();
-  let mapper = {
-    A_VALIDER: "Organismes à vérifier",
-    A_RENSEIGNER: "Organismes à identifier",
-    VALIDE: "Organismes validés",
-  };
 
-  return <span>{mapper[type]}</span>;
+  return <span>{MAPPER[type].title}</span>;
 }
 
-const ValidationLayoutTitle = styled(({ refine, children, className }) => {
+const ValidationLayoutTitle = styled(({ refine, className }) => {
+  let { type } = useParams();
+
   return (
     <div className={className}>
       <TitleLayout
         title={<ValidationTitle />}
+        detailsMessage={"afficher les critères"}
+        details={
+          <div>
+            <div className={"fr-text--sm fr-text--bold fr-mb-1v"}>Les organismes affichés dans ces listes sont :</div>
+            {MAPPER[type].critères}
+          </div>
+        }
         selector={<DepartementAuthSelector onChange={(code) => refine({ departements: code })} />}
-      >
-        {children}
-      </TitleLayout>
+      />
     </div>
   );
 })`
