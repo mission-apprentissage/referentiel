@@ -7,7 +7,7 @@ const { streamArray } = require("stream-json/streamers/StreamArray");
 
 function getContours() {
   return getFileAsStream(
-    "https://static.data.gouv.fr/resources/contours-des-communes-de-france-simplifie-avec-regions-et-departement-doutre-mer-rapproches/20220201-172242/a-com2022.json"
+    "https://static.data.gouv.fr/resources/contours-des-communes-de-france-simplifie-avec-regions-et-departement-doutre-mer-rapproches/20220219-095144/a-com2022.json"
   );
 }
 

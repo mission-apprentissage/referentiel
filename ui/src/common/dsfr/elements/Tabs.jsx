@@ -1,6 +1,7 @@
 import { classNames } from "../dsfr";
 import { cloneElement, createRef, forwardRef, useState } from "react";
 import useElementId from "../../hooks/useElementId";
+import cs from "classnames";
 
 export function Tabs({ label = "Système d'onglet", tabs, className }) {
   let clazz = classNames("fr-tabs", { className });
@@ -70,7 +71,7 @@ export function Tab({ children, modifiers, className, ...rest }) {
 }
 
 export const TabPanel = forwardRef(({ children, modifiers, className, ...rest }, ref) => {
-  let clazz = classNames("fr-tabs__panel", { modifiers, className });
+  let clazz = classNames("fr-tabs__panel", { modifiers, className: cs(className, "xfr-tabs__panel--fix") });
 
   return (
     <div className={clazz} role="tabpanel" ref={ref} {...rest}>
