@@ -104,11 +104,11 @@ export function RelationsTable({ label, organisme, results }) {
             modifiers={"bordered layout-fixed"}
             thead={
               <Thead>
-                <td colSpan="2">Raison sociale</td>
-                <td>Natures</td>
-                <td>UAI</td>
-                <td colSpan="2">SIRET</td>
-                <td />
+                <th colSpan="2">Raison sociale</th>
+                <th>Natures</th>
+                <th>UAI</th>
+                <th colSpan="2">SIRET</th>
+                <th />
               </Thead>
             }
           >

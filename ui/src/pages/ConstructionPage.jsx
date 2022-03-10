@@ -24,12 +24,12 @@ export default function ConstructionPage() {
                     informations suivantes :
                   </p>
                   <Table
-                    modifiers={"bordered layout-fixed"}
+                    modifiers={"layout-fixed"}
                     thead={
                       <Thead>
-                        <td>Donnée</td>
-                        <td>Source</td>
-                        <td colSpan="2">Périmètre</td>
+                        <th>Donnée</th>
+                        <th>Source</th>
+                        <th colSpan="2">Périmètre</th>
                       </Thead>
                     }
                   >
@@ -224,7 +224,7 @@ export default function ConstructionPage() {
                   <h6>Etape 1 : Import des SIRET (SIREN)</h6>
                   <p>Pour importer les organismes dans le référentiel, trois listes sont utilisées comme référence :</p>
                   <Table
-                    modifiers={"bordered layout-fixed"}
+                    modifiers={"layout-fixed"}
                     thead={
                       <Thead>
                         <td>Nom</td>
@@ -281,7 +281,7 @@ export default function ConstructionPage() {
                     organismes pour l’alimentation des plateformes éducatives (Parcoursup & Affelnet).
                   </p>
                   <Table
-                    modifiers={"bordered layout-fixed"}
+                    modifiers={"layout-fixed"}
                     thead={
                       <Thead>
                         <td>Nom</td>
