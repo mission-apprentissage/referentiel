@@ -1,16 +1,15 @@
 import { Filter } from "./Filter";
 import Tooltip from "../../common/Tooltip";
 import definitions from "../../common/definitions.json";
-import { Box } from "../../common/Flexbox";
 
 export default function NatureFilter({ items }) {
   return (
     <Filter
       label={
-        <Box>
+        <>
           <span>Nature</span>
           <Tooltip message={definitions.nature} />
-        </Box>
+        </>
       }
       paramName={"natures"}
       items={

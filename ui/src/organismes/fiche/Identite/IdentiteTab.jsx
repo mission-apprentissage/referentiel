@@ -24,14 +24,15 @@ const Meta = styled("div")`
   font-size: 0.75rem;
 `;
 
-export default function ImmatriculationTab({ organisme }) {
+export default function IdentiteTab({ organisme }) {
   let datagouvModal = useModal();
   let { auth, isAnonymous } = useContext(ApiContext);
+  let showValidator = !isAnonymous() && organisme.adresse && organisme.adresse[auth.type].code === auth.code;
 
   return (
     <>
       <Box justify={"between"}>
-        <h6>Immatriculation</h6>
+        <h6>Identité</h6>
         {organisme.uai_potentiels.length === 0 && (
           <>
             <LinkButton modifiers={"icon-right"} icons={"arrow-right-line"} onClick={() => datagouvModal.open()}>
@@ -45,9 +46,7 @@ export default function ImmatriculationTab({ organisme }) {
         <Col modifiers={"12 sm-8"}>
           <Box direction={"column"}>
             <Field label={"UAI"} value={organisme.uai} tooltip={definitions.organisme}>
-              {!isAnonymous() && organisme.adresse && organisme.adresse[auth.type].code === auth.code && (
-                <UAIValidator className="fr-ml-3v" organisme={organisme} />
-              )}
+              {showValidator && <UAIValidator className="fr-ml-3v" organisme={organisme} />}
             </Field>
             <Field label={"Nature"} value={<Natures organisme={organisme} />} tooltip={definitions.nature} />
             <Field label={"SIREN"} value={organisme.siret.substring(0, 9)} tooltip={definitions.siren} />
@@ -73,7 +72,7 @@ export default function ImmatriculationTab({ organisme }) {
             Date d’import de l’organisme :{" "}
             {DateTime.fromISO(organisme._meta.import_date).setLocale("fr").toFormat("dd/MM/yyyy")}
           </Meta>
-          <Meta>Source : {organisme.referentiels.map((r) => referentielsMapper[r]).join(",")}</Meta>
+          <Meta>Source : {organisme.referentiels.map((r) => referentielsMapper[r]).join(", ")}</Meta>
         </Col>
       </GridRow>
     </>

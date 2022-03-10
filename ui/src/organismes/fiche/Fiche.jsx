@@ -1,6 +1,6 @@
 import React from "react";
 import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
-import ImmatriculationTab from "./immatriculation/ImmatriculationTab";
+import IdentiteTab from "./Identite/IdentiteTab";
 import RelationsTab from "./relations/RelationsTab";
 import WideTabs from "../../common/dsfr/custom/WideTabs";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,7 +22,7 @@ export default function Fiche({ organisme }) {
           ),
           panel: (
             <TabPanel>
-              <ImmatriculationTab organisme={organisme} />
+              <IdentiteTab organisme={organisme} />
             </TabPanel>
           ),
         },
