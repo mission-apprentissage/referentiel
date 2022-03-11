@@ -5,6 +5,7 @@ const { Readable } = require("stream");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const { insertOrganisme, insertDatagouv } = require("../utils/fakeData");
 const collectSources = require("../../src/jobs/collectSources");
+const { DateTime } = require("luxon");
 
 describe("collectSources", () => {
   function createTestSource(array) {
@@ -663,5 +664,25 @@ describe("collectSources", () => {
         anomalies: 0,
       },
     });
+  });
+
+  it("Vérifie qu'on stocke la date de sortie de l'organisme quand l'organisme est fermé", async () => {
+    await insertOrganisme({
+      siret: "11111111100006",
+      etat_administratif: "actif",
+      _meta: { date_import: DateTime.fromISO("2022-01-01").toJSDate() },
+    });
+    let source = createTestSource([
+      {
+        selector: "11111111100006",
+        etat_administratif: "fermé",
+      },
+    ]);
+
+    await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    assert.deepStrictEqual(found.etat_administratif, "fermé");
+    assert.strictEqual(DateTime.fromJSDate(found._meta.date_sortie).toISODate(), DateTime.local().toISODate());
   });
 });

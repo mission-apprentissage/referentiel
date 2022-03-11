@@ -108,7 +108,7 @@ module.exports = {
         _meta: object(
           {
             date_import: date(),
-            date_de_fermeture: date(),
+            date_sortie: date(),
             anomalies: arrayOf(
               object(
                 {

@@ -34,6 +34,9 @@ async function renameFields() {
 async function tasks() {
   return {
     renameFields: await renameFields(),
+    dateSortie: await dbCollection("organismes").updateMany({ etat_administratif: "fermé" }, [
+      { $set: { "_meta.date_sortie": "$_meta.date_import" } },
+    ]),
   };
 }
 

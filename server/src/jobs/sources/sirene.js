@@ -78,9 +78,8 @@ module.exports = (custom = {}) => {
               let anomalies = [];
 
               let uniteLegale = await sireneApiCache.memo(siren, () => api.getUniteLegale(siren));
-              let raisonSociale = getRaisonSociale(uniteLegale);
-
               let etablissement = uniteLegale.etablissements.find((e) => e.siret === siret);
+
               if (!etablissement) {
                 return {
                   selector: siret,
@@ -121,12 +120,12 @@ module.exports = (custom = {}) => {
               return {
                 selector: siret,
                 relations: await getRelations(uniteLegale, siret),
+                etat_administratif: etablissement.etat_administratif === "A" ? "actif" : "fermé",
                 anomalies,
                 data: {
-                  raison_sociale: raisonSociale,
+                  raison_sociale: getRaisonSociale(uniteLegale),
                   enseigne: getEnseigne(etablissement),
                   siege_social: etablissement.etablissement_siege === "true",
-                  etat_administratif: etablissement.etat_administratif === "A" ? "actif" : "fermé",
                   ...(adresse ? { adresse } : {}),
                   ...(formeJuridique ? { forme_juridique: formeJuridique } : {}),
                 },
