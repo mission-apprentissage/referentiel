@@ -1,12 +1,12 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
 
-const VERSION = 4;
+const VERSION = 5;
 
 async function tasks() {
   return {
-    clearRelations: await dbCollection("organismes").updateMany(
+    renameImportDate: await dbCollection("organismes").updateMany(
       {},
-      { $set: { relations: [], "_meta.anomalies": [], uai_potentiels: [] }, $unset: { adresse: 1 } }
+      { $rename: { "_meta.import_date": "_meta.date_import" } }
     ),
   };
 }

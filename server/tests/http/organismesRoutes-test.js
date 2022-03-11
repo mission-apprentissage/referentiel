@@ -16,7 +16,7 @@ describe("organismesRoutes", () => {
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -69,7 +69,7 @@ describe("organismesRoutes", () => {
           },
           _meta: {
             anomalies: [],
-            import_date: "2021-02-10T16:39:13.064Z",
+            date_import: "2021-02-10T16:39:13.064Z",
           },
         },
       ],
@@ -730,7 +730,7 @@ describe("organismesRoutes", () => {
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -811,14 +811,14 @@ describe("organismesRoutes", () => {
       siret: "11111111100001",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
     await insertOrganisme({
       siret: "22222222200002",
       _meta: {
         anomalies: [],
-        import_date: new Date("2020-02-10T16:39:13.064Z"),
+        date_import: new Date("2020-02-10T16:39:13.064Z"),
       },
     });
 
@@ -835,14 +835,14 @@ describe("organismesRoutes", () => {
       siret: "11111111100001",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
     await insertOrganisme({
       siret: "22222222200002",
       _meta: {
         anomalies: [],
-        import_date: new Date("2020-02-10T16:39:13.064Z"),
+        date_import: new Date("2020-02-10T16:39:13.064Z"),
       },
     });
 
@@ -895,7 +895,7 @@ describe("organismesRoutes", () => {
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -946,7 +946,7 @@ describe("organismesRoutes", () => {
       },
       _meta: {
         anomalies: [],
-        import_date: "2021-02-10T16:39:13.064Z",
+        date_import: "2021-02-10T16:39:13.064Z",
       },
     });
   });
@@ -958,7 +958,7 @@ describe("organismesRoutes", () => {
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -1009,7 +1009,7 @@ describe("organismesRoutes", () => {
     deepStrictEqual(response.data.siret, "11111111100001");
     deepStrictEqual(response.data.uai, "0751234J");
     deepStrictEqual(
-      omitDeep(response.data, () => ["import_date"]),
+      omitDeep(response.data, () => ["date_import"]),
       {
         siret: "11111111100001",
         uai: "0751234J",
@@ -1174,13 +1174,13 @@ describe("organismesRoutes", () => {
     await insertOrganisme({
       siret: "11111111100006",
       _meta: {
-        import_date: new Date(),
+        date_import: new Date(),
       },
     });
     await insertOrganisme({
       siret: "22222222200006",
       _meta: {
-        import_date: DateTime.fromISO("1999-03-01").toJSDate(),
+        date_import: DateTime.fromISO("1999-03-01").toJSDate(),
       },
     });
 
@@ -1196,13 +1196,13 @@ describe("organismesRoutes", () => {
     await insertOrganisme({
       siret: "11111111100006",
       _meta: {
-        import_date: new Date(),
+        date_import: new Date(),
       },
     });
     await insertOrganisme({
       siret: "22222222200006",
       _meta: {
-        import_date: DateTime.fromISO("1999-03-01").toJSDate(),
+        date_import: DateTime.fromISO("1999-03-01").toJSDate(),
       },
     });
 

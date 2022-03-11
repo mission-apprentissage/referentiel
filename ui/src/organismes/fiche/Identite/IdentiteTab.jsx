@@ -70,7 +70,7 @@ export default function IdentiteTab({ organisme }) {
         <Col modifiers={"sm-4"} className={"xfr-display-xs-none xfr-display-sm-block"} style={{ textAlign: "right" }}>
           <Meta>
             Date d’import de l’organisme :{" "}
-            {DateTime.fromISO(organisme._meta.import_date).setLocale("fr").toFormat("dd/MM/yyyy")}
+            {DateTime.fromISO(organisme._meta.date_import).setLocale("fr").toFormat("dd/MM/yyyy")}
           </Meta>
           <Meta>Source : {organisme.referentiels.map((r) => referentielsMapper[r]).join(", ")}</Meta>
         </Col>

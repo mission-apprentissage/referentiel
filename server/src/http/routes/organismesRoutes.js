@@ -99,8 +99,8 @@ module.exports = () => {
       ...(hasValue(qualiopi) ? { qualiopi } : {}),
       ...(hasValue(nouveaux)
         ? nouveaux
-          ? { uai: { $exists: false }, "_meta.import_date": { $gt: minNewDate } }
-          : { $or: [{ uai: { $exists: true } }, { uai: { $exists: false }, "_meta.import_date": { $lt: minNewDate } }] }
+          ? { uai: { $exists: false }, "_meta.date_import": { $gt: minNewDate } }
+          : { $or: [{ uai: { $exists: true } }, { uai: { $exists: false }, "_meta.date_import": { $lt: minNewDate } }] }
         : {}),
     };
   }
@@ -146,7 +146,7 @@ module.exports = () => {
       let { find, pagination } = await findAndPaginate(dbCollection("organismes"), query, {
         page,
         limit: items_par_page,
-        sort: { ["_meta.import_date"]: ordre === "asc" ? 1 : -1 },
+        sort: { ["_meta.date_import"]: ordre === "asc" ? 1 : -1 },
         ...(isEmpty(projection) ? {} : { projection }),
       });
 

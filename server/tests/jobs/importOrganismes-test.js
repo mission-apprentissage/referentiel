@@ -37,7 +37,7 @@ describe("importOrganismes", () => {
       diplomes: [],
       certifications: [],
     });
-    assert.ok(found._meta.import_date);
+    assert.ok(found._meta.date_import);
     assert.deepStrictEqual(found._meta.anomalies, []);
     assert.deepStrictEqual(results, {
       dummy: {
