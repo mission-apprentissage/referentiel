@@ -5,6 +5,7 @@ const { dbCollection } = require("../../src/common/db/mongodb");
 const assert = require("assert");
 const { omitDeep } = require("../../src/common/utils/objectUtils");
 const { sortBy } = require("lodash");
+const { DateTime } = require("luxon");
 
 describe("organismesRoutes", () => {
   it("Vérifie qu'on peut lister des organismes", async () => {
@@ -1166,5 +1167,49 @@ describe("organismesRoutes", () => {
     );
 
     strictEqual(response.status, 400);
+  });
+
+  it("Vérifie qu'on peut rechercher des nouveaux organismes", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      _meta: {
+        import_date: new Date(),
+      },
+    });
+    await insertOrganisme({
+      siret: "22222222200006",
+      _meta: {
+        import_date: DateTime.fromISO("1999-03-01").toJSDate(),
+      },
+    });
+
+    let response = await httpClient.get("/api/v1/organismes?nouveaux=true");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des anciens organismes", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      _meta: {
+        import_date: new Date(),
+      },
+    });
+    await insertOrganisme({
+      siret: "22222222200006",
+      _meta: {
+        import_date: DateTime.fromISO("1999-03-01").toJSDate(),
+      },
+    });
+
+    let response = await httpClient.get("/api/v1/organismes?nouveaux=false");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "22222222200006");
   });
 });

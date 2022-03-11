@@ -29,7 +29,7 @@ const Counter = styled(({ response, className }) => {
   margin-bottom: 0.5rem;
 `;
 
-export default function TableauDeBordCard({ type, label, ...rest }) {
+export default function ValidationCard({ type, label, children, ...rest }) {
   let { response } = useValidation(type, {
     page: 1,
     items_par_page: 1,
@@ -43,6 +43,7 @@ export default function TableauDeBordCard({ type, label, ...rest }) {
           <Counter response={response} />
           <div className={"fr-text--bold"}>{label}</div>
         </div>
+        {children}
         <Link as="span" modifiers={"icon-right"} icons="arrow-right-line">
           Voir la liste
         </Link>

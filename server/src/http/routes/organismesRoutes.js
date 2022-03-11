@@ -3,6 +3,7 @@ const { isEmpty, omit, isNil, isBoolean } = require("lodash");
 const Boom = require("boom");
 const { oleoduc, transformIntoJSON, transformData } = require("oleoduc");
 const Joi = require("@hapi/joi");
+const { DateTime } = require("luxon");
 const { findAndPaginate } = require("../../common/utils/dbUtils");
 const { sendJsonStream } = require("../utils/httpUtils");
 const validators = require("../utils/validators");
@@ -54,8 +55,8 @@ module.exports = () => {
       uais,
       departements = [],
       natures = [],
-      regions,
-      academies,
+      regions = [],
+      academies = [],
       text,
       anomalies,
       uai_potentiels,
@@ -63,33 +64,43 @@ module.exports = () => {
       etat_administratif,
       qualiopi,
       numero_declaration_activite: nda,
+      nouveaux,
     } = params;
 
+    let hasValue = (v) => !isNil(v);
+    let hasElements = (array) => array.length > 0;
+    let minNewDate = DateTime.fromISO("2022-01-01").toJSDate();
+
     return {
-      ...(!isNil(sirets) ? (isBoolean(sirets) ? { siret: { $exists: true } } : { siret: { $in: sirets } }) : {}),
-      ...(!isNil(uais) ? (isBoolean(uais) ? { uai: { $exists: uais } } : { uai: { $in: uais } }) : {}),
-      ...(!isNil(nda)
+      ...(hasValue(sirets) ? (isBoolean(sirets) ? { siret: { $exists: true } } : { siret: { $in: sirets } }) : {}),
+      ...(hasValue(uais) ? (isBoolean(uais) ? { uai: { $exists: uais } } : { uai: { $in: uais } }) : {}),
+      ...(hasValue(nda)
         ? isBoolean(nda)
           ? { numero_declaration_activite: { $exists: nda } }
           : { numero_declaration_activite: nda }
         : {}),
-      ...(departements.length === 0 ? {} : { "adresse.departement.code": { $in: departements } }),
-      ...(natures.length === 0 ? {} : convertNaturesIntoQuery(natures)),
-      ...(etat_administratif ? { etat_administratif: etat_administratif } : {}),
-      ...(regions ? { "adresse.region.code": { $in: regions } } : {}),
-      ...(academies ? { "adresse.academie.code": { $in: academies } } : {}),
-      ...(text ? { $text: { $search: text } } : {}),
-      ...(!isNil(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
-      ...(!isNil(qualiopi) ? { qualiopi } : {}),
-      ...(!isNil(relations)
+      ...(hasElements(departements) ? { "adresse.departement.code": { $in: departements } } : {}),
+      ...(hasElements(natures) ? convertNaturesIntoQuery(natures) : {}),
+      ...(hasElements(regions) ? { "adresse.region.code": { $in: regions } } : {}),
+      ...(hasElements(academies) ? { "adresse.academie.code": { $in: academies } } : {}),
+      ...(hasValue(relations)
         ? isBoolean(relations)
           ? { "relations.0": { $exists: relations } }
           : { "relations.type": { $in: relations } }
         : {}),
-      ...(!isNil(uai_potentiels)
+      ...(hasValue(uai_potentiels)
         ? isBoolean(uai_potentiels)
           ? { "uai_potentiels.0": { $exists: uai_potentiels } }
           : { "uai_potentiels.uai": { $in: uai_potentiels } }
+        : {}),
+      ...(hasValue(etat_administratif) ? { etat_administratif } : {}),
+      ...(hasValue(text) ? { $text: { $search: text } } : {}),
+      ...(hasValue(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
+      ...(hasValue(qualiopi) ? { qualiopi } : {}),
+      ...(hasValue(nouveaux)
+        ? nouveaux
+          ? { uai: { $exists: false }, "_meta.import_date": { $gt: minNewDate } }
+          : { $or: [{ uai: { $exists: true } }, { uai: { $exists: false }, "_meta.import_date": { $lt: minNewDate } }] }
         : {}),
     };
   }
@@ -122,6 +133,7 @@ module.exports = () => {
           .default(null),
         anomalies: Joi.boolean().default(null),
         qualiopi: Joi.boolean().default(null),
+        nouveaux: Joi.boolean().default(null),
         text: Joi.string(),
         ...validators.champs(),
         ...validators.pagination(),
