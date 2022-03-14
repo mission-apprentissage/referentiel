@@ -7,6 +7,7 @@ import ContentLayout from "../common/layout/ContentLayout";
 import { useQuery } from "../common/hooks/useQuery";
 import { ApiContext } from "../common/ApiProvider";
 import NouveauxCounter from "../organismes/validation/NouveauxCounter";
+import EntrantsSortant from "../stats/EntrantsSortants";
 
 export default function TableauDeBordPage() {
   let { auth } = useContext(ApiContext);
@@ -36,6 +37,11 @@ export default function TableauDeBordPage() {
           </Col>
           <Col modifiers={"12 sm-4"}>
             <ValidationCard type={"VALIDE"} label={"Organismes validés"} />
+          </Col>
+        </GridRow>
+        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
+          <Col modifiers={"12"}>
+            <EntrantsSortant />
           </Col>
         </GridRow>
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
