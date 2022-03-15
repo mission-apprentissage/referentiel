@@ -1,9 +1,7 @@
 import { useValidation } from "../../common/hooks/useValidation";
-import Icon from "../../common/dsfr/custom/Icon";
-import styled from "styled-components";
-import { Box } from "../../common/Flexbox";
+import Nouveau from "../common/Nouveau";
 
-const NouveauxCounter = styled(({ type, className }) => {
+export default function NouveauxCounter({ type }) {
   let { response } = useValidation(type, {
     nouveaux: true,
     page: 1,
@@ -16,16 +14,8 @@ const NouveauxCounter = styled(({ type, className }) => {
   }
 
   return (
-    <Box align={"start"} className={className}>
-      <Icon name={"info-fill"} className={"fr-mr-1w"} />
-      <span className={"fr-text--bold"}>{response.data.pagination.total} NOUVEAUX ORGANISMES</span>
-    </Box>
+    <div style={{ width: "85%" }}>
+      <Nouveau>{response.data.pagination.total} NOUVEAUX ORGANISMES</Nouveau>
+    </div>
   );
-})`
-  padding: 5px;
-  width: 80%;
-  color: #0063cb;
-  background-color: #e8edff;
-`;
-
-export default NouveauxCounter;
+}

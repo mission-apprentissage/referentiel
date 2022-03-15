@@ -22,6 +22,7 @@ const findBestUAIPotentiel = require("../../common/actions/findBestUAIPotentiel"
 
 module.exports = () => {
   const router = express.Router();
+  const nouveauFeatureDate = DateTime.fromISO("2022-01-01").toJSDate();
 
   function toDto(organisme) {
     const best = organisme.uai_potentiels && findBestUAIPotentiel(organisme);
@@ -32,6 +33,7 @@ module.exports = () => {
             _meta: {
               ...organisme._meta,
               ...(best ? { uai_probale: best.uai } : {}),
+              nouveau: !organisme.uai && organisme._meta.date_import > nouveauFeatureDate,
             },
           }
         : {}),
@@ -58,7 +60,6 @@ module.exports = () => {
 
     let hasValue = (v) => !isNil(v);
     let hasElements = (array) => array.length > 0;
-    let minNewDate = DateTime.fromISO("2022-01-01").toJSDate();
 
     return {
       ...(hasValue(sirets) ? (isBoolean(sirets) ? { siret: { $exists: true } } : { siret: { $in: sirets } }) : {}),
@@ -92,8 +93,13 @@ module.exports = () => {
       ...(hasValue(qualiopi) ? { qualiopi } : {}),
       ...(hasValue(nouveaux)
         ? nouveaux
-          ? { uai: { $exists: false }, "_meta.date_import": { $gt: minNewDate } }
-          : { $or: [{ uai: { $exists: true } }, { uai: { $exists: false }, "_meta.date_import": { $lt: minNewDate } }] }
+          ? { uai: { $exists: false }, "_meta.date_import": { $gt: nouveauFeatureDate } }
+          : {
+              $or: [
+                { uai: { $exists: true } },
+                { uai: { $exists: false }, "_meta.date_import": { $lt: nouveauFeatureDate } },
+              ],
+            }
         : {}),
     };
   }

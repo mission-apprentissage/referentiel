@@ -70,6 +70,7 @@ describe("organismesRoutes", () => {
           _meta: {
             anomalies: [],
             date_import: "2021-02-10T16:39:13.064Z",
+            nouveau: false,
           },
         },
       ],
@@ -945,6 +946,7 @@ describe("organismesRoutes", () => {
       _meta: {
         anomalies: [],
         date_import: "2021-02-10T16:39:13.064Z",
+        nouveau: false,
       },
     });
   });
@@ -1052,6 +1054,7 @@ describe("organismesRoutes", () => {
         },
         _meta: {
           anomalies: [],
+          nouveau: false,
         },
       }
     );

@@ -48,11 +48,31 @@ Custom DSFR classes.
   }
 }
 
+@mixin flexDirection($layout, $breakpoint ) {
+  @media (min-width: #{$breakpoint}em) {
+    .xfr-flex-direction-#{$layout}-column {
+      display: flex;
+      flex-direction: column !important;
+    }
+
+    .xfr-flex-direction-#{$layout}-row {
+      display: flex;
+      flex-direction: row !important;
+    }
+  }
+}
+
 @include display("xs", 0);
 @include display("sm", 36);
 @include display("md", 48);
 @include display("lg", 62);
 @include display("xl", 78);
+
+@include flexDirection("xs", 0);
+@include flexDirection("sm", 36);
+@include flexDirection("md", 48);
+@include flexDirection("lg", 62);
+@include flexDirection("xl", 78);
 
 
 

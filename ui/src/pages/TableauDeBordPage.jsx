@@ -50,8 +50,8 @@ export default function TableauDeBordPage() {
             <ul>
               <li>identifiés par un SIRET en activité ;</li>
               <li>
-                trouvés dans la Liste publique des OF, la base ACCES et le Catalogue des formations en apprentissage
-                avec une certification Qualiopi valide ;
+                trouvés dans la Liste publique des OF, la base ACCE et le Catalogue des formations en apprentissage avec
+                une certification Qualiopi valide ;
               </li>
               <li>en lien avec des formations en apprentissage à un moment donné ;</li>
               <li>de nature "responsable" uniquement ou "responsable et formateur"</li>

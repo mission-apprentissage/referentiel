@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import cs from "classnames";
 import { without } from "./utils";
 
 const div = without("div", [
@@ -18,8 +17,8 @@ const div = without("div", [
   "basis",
 ]);
 
-export const Box = styled(div).attrs(({ className }) => ({
-  className: cs("box", className),
+export const Box = styled(div).attrs(() => ({
+  className: "box",
 }))`
   display: flex;
   flex-direction: ${(props) => `${props.direction}${props.reverse ? "-reverse" : ""}`};
@@ -43,6 +42,7 @@ export const Box = styled(div).attrs(({ className }) => ({
     return align;
   }};
 `;
+
 Box.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
@@ -62,7 +62,7 @@ Box.defaultProps = {
   align: "stretch",
 };
 
-export const Item = styled(div).attrs(({ className }) => ({ className: `item ${className || ""}` }))`
+export const Item = styled(div).attrs(() => ({ className: "item" }))`
   flex: ${(props) => `${props.grow || 0} ${props.shrink || 1} auto`};
   align-self: ${(props) => props.alignSelf || "auto"};
   flex-basis: ${(props) => props.basis || "auto"};
