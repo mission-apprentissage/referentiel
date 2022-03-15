@@ -38,25 +38,14 @@ module.exports = () => {
     };
   }
 
-  function convertNaturesIntoQuery(criteria) {
-    return criteria.reduce(
-      (acc, c) => {
-        let results = c.split("|").filter((v) => !v.startsWith("-"));
-        acc.$or.push(results.length > 1 ? { natures: { $all: results } } : { natures: results });
-        return acc;
-      },
-      { $or: [] }
-    );
-  }
-
   function buildQuery(params) {
     let {
       sirets,
       uais,
       departements = [],
-      natures = [],
       regions = [],
       academies = [],
+      natures,
       text,
       anomalies,
       uai_potentiels,
@@ -79,8 +68,12 @@ module.exports = () => {
           ? { numero_declaration_activite: { $exists: nda } }
           : { numero_declaration_activite: nda }
         : {}),
+      ...(hasValue(natures)
+        ? isBoolean(natures)
+          ? { nature: { $exists: natures } }
+          : { nature: { $in: natures } }
+        : {}),
       ...(hasElements(departements) ? { "adresse.departement.code": { $in: departements } } : {}),
-      ...(hasElements(natures) ? convertNaturesIntoQuery(natures) : {}),
       ...(hasElements(regions) ? { "adresse.region.code": { $in: regions } } : {}),
       ...(hasElements(academies) ? { "adresse.academie.code": { $in: academies } } : {}),
       ...(hasValue(relations)
@@ -120,7 +113,9 @@ module.exports = () => {
           .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
           .default(null),
         numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
-        natures: arrayOf(Joi.string()).default([]),
+        natures: Joi.alternatives()
+          .try(Joi.boolean(), arrayOf(Joi.string().valid("responsable", "formateur", "responsable_formateur")))
+          .default(null),
         etat_administratif: Joi.string().valid("actif", "fermé"),
         regions: arrayOf(Joi.string().valid(...getRegions().map((r) => r.code))),
         academies: arrayOf(Joi.string().valid(...getAcademies().map((r) => r.code))),

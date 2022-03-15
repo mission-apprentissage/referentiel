@@ -141,14 +141,14 @@ module.exports = (custom = {}) => {
             {
               from: "catalogue",
               selector: formation.etablissement_gestionnaire_siret,
-              natures: ["responsable"],
+              nature: "responsable",
               relations: compact([buildRelation(formation, "responsable->formateur")]),
               contacts: buildContacts(formation),
             },
             {
               from: "catalogue",
               selector: formation.etablissement_formateur_siret,
-              natures: ["formateur"],
+              nature: "formateur",
               relations: compact([buildRelation(formation, "formateur->responsable")]),
               contacts: buildContacts(formation),
               diplomes: compact([await buildDiplome(formation)]),

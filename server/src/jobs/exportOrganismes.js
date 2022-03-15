@@ -24,7 +24,7 @@ async function exportOrganismes(options = {}) {
           const email = o.contacts.find((c) => c.confirmé === true)?.email || o.contacts[0]?.email || "";
           return email.split("##")[0];
         },
-        Natures: (o) => o.natures.sort().reverse().join(" et "),
+        Natures: (o) => o.nature.replace(/_/g, " et "),
         Académie: (o) => o.adresse?.academie.nom,
         Région: (o) => o?.adresse?.region.nom,
       },

@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "../../common/dsfr/elements/Link";
 import ClickableItem from "../../common/ClickableItem";
 import { Tag } from "../../common/dsfr/elements/Tag";
-import Natures from "../common/Natures";
+import Nature from "../common/Nature";
 import Siret from "../common/Siret";
 import RaisonSociale from "../common/RaisonSociale";
 
@@ -66,9 +66,9 @@ export default function OrganismeItem({ organisme }) {
   return (
     <ClickableItem to={organisme.siret}>
       <Card direction={"column"}>
-        {organisme.natures.length > 0 && (
+        {organisme.nature && (
           <Box justify={"between"}>
-            <Tag modifiers="sm">{<Natures organisme={organisme} />}</Tag>
+            <Tag modifiers="sm">{<Nature organisme={organisme} />}</Tag>
             <ValidationTag organisme={organisme} />
           </Box>
         )}

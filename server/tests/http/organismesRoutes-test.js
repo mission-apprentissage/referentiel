@@ -12,7 +12,7 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      natures: ["responsable", "formateur"],
+      nature: "responsable_formateur",
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
@@ -33,7 +33,7 @@ describe("organismesRoutes", () => {
           relations: [],
           lieux_de_formation: [],
           reseaux: [],
-          natures: ["responsable", "formateur"],
+          nature: "responsable_formateur",
           diplomes: [],
           certifications: [],
           siege_social: true,
@@ -646,11 +646,11 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      natures: ["responsable"],
+      nature: "responsable",
     });
     await insertOrganisme({
       siret: "22222222200002",
-      natures: ["formateur"],
+      nature: "formateur",
     });
 
     let response = await httpClient.get("/api/v1/organismes?natures=formateur");
@@ -660,18 +660,18 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].siret, "22222222200002");
   });
 
-  it("Vérifie qu'on peut rechercher des organismes responsable et formateur à partir de sa nature", async () => {
+  it("Vérifie qu'on peut rechercher des organismes responsable_formateur à partir de leur nature", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      natures: ["responsable", "formateur"],
+      nature: "responsable_formateur",
     });
     await insertOrganisme({
       siret: "22222222200002",
-      natures: ["formateur"],
+      nature: "formateur",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?natures=formateur|responsable");
+    let response = await httpClient.get("/api/v1/organismes?natures=responsable_formateur");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -682,18 +682,18 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      natures: ["responsable"],
+      nature: "responsable",
     });
     await insertOrganisme({
       siret: "22222222200002",
-      natures: ["responsable", "formateur"],
+      nature: "responsable_formateur",
     });
     await insertOrganisme({
       siret: "333333333000003",
-      natures: ["formateur"],
+      nature: "formateur",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?natures=formateur|-responsable,-formateur|responsable");
+    let response = await httpClient.get("/api/v1/organismes?natures=formateur,responsable");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 2);
@@ -705,18 +705,17 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      natures: [],
     });
     await insertOrganisme({
       siret: "22222222200002",
-      natures: ["responsable", "formateur"],
+      nature: "responsable_formateur",
     });
     await insertOrganisme({
       siret: "333333333000003",
-      natures: ["formateur"],
+      nature: "formateur",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?natures=-formateur|-responsable");
+    let response = await httpClient.get("/api/v1/organismes?natures=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -909,7 +908,6 @@ describe("organismesRoutes", () => {
       contacts: [],
       relations: [],
       reseaux: [],
-      natures: [],
       lieux_de_formation: [],
       diplomes: [],
       certifications: [],
@@ -1019,7 +1017,6 @@ describe("organismesRoutes", () => {
         relations: [],
         lieux_de_formation: [],
         reseaux: [],
-        natures: [],
         diplomes: [],
         certifications: [],
         siege_social: true,

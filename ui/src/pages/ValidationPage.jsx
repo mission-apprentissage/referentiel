@@ -95,8 +95,8 @@ export default function ValidationPage() {
             <Filters onChange={(filters) => refine({ ...filters })}>
               <NatureFilter
                 items={[
-                  { code: "formateur|responsable", label: "Responsable et formateur" },
-                  { code: "-formateur|responsable", label: "Responsable" },
+                  { code: "responsable_formateur", label: "Responsable et formateur" },
+                  { code: "responsable", label: "Responsable" },
                 ]}
               />
             </Filters>

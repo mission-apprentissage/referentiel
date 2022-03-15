@@ -6,7 +6,7 @@ import DatagouvModal from "./DatagouvModal";
 import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
 import Field from "../../../common/Field";
 import UAIValidator from "./uai/UAISelector";
-import Natures from "../../common/Natures";
+import Nature from "../../common/Nature";
 import Siret from "../../common/Siret";
 import { DateTime } from "luxon";
 import styled from "styled-components";
@@ -48,7 +48,7 @@ export default function IdentiteTab({ organisme }) {
             <Field label={"UAI"} value={organisme.uai} tooltip={definitions.organisme}>
               {showValidator && <UAIValidator className="fr-ml-3v" organisme={organisme} />}
             </Field>
-            <Field label={"Nature"} value={<Natures organisme={organisme} />} tooltip={definitions.nature} />
+            <Field label={"Nature"} value={<Nature organisme={organisme} />} tooltip={definitions.nature} />
             <Field label={"SIREN"} value={organisme.siret.substring(0, 9)} tooltip={definitions.siren} />
             <Field label={"SIRET"} value={<Siret organisme={organisme} />} tooltip={definitions.siret} />
             <Field label={"NDA"} value={organisme.numero_declaration_activite} tooltip={definitions.nda} />

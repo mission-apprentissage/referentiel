@@ -4,7 +4,7 @@ import BlueBox from "../../../common/BlueBox";
 import React from "react";
 import { Box } from "../../../common/Flexbox";
 import Field from "../../../common/Field";
-import Natures from "../../common/Natures";
+import Nature from "../../common/Nature";
 import Siret from "../../common/Siret";
 import RaisonSociale from "../../common/RaisonSociale";
 import definitions from "../../../common/definitions.json";
@@ -25,7 +25,7 @@ export default function RelationModal({ modal, organisme }) {
             <BlueBox>
               <Box direction={"column"}>
                 <Field label={"UAI"} value={organisme.uai} tooltip={definitions.uai} />
-                <Field label={"Nature"} value={<Natures organisme={organisme} />} tooltip={definitions.nature} />
+                <Field label={"Nature"} value={<Nature organisme={organisme} />} tooltip={definitions.nature} />
                 <Field label={"SIREN"} value={organisme.siret.substring(0, 9)} tooltip={definitions.siren} />
                 <Field label={"SIRET"} value={<Siret organisme={organisme} />} tooltip={definitions.siret} />
                 <Field label={"NDA"} value={organisme.numero_declaration_activite} tooltip={definitions.nda} />
