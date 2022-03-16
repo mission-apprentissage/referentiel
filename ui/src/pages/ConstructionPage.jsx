@@ -53,7 +53,7 @@ export default function ConstructionPage() {
                       <td>{definitions.relations}</td>
                       <td colSpan="2">
                         <span className={"fr-text--bold"}>
-                          Les relations entres les organismes sont identifiées au niveau de l’offre de formation en
+                          Les relations entre les organismes sont identifiées au niveau de l’offre de formation en
                           apprentissage collectée par les Carif-Oref.
                         </span>
                         En effet, chaque offre de formation est associée à un organisme responsable et un organisme

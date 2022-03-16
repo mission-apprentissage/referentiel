@@ -46,15 +46,14 @@ export default function TableauDeBordPage() {
         </GridRow>
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
           <Col modifiers={"12"}>
-            <div className={"fr-text--bold"}>Les organismes affichés dans ces listes sont :</div>
+            <div className={"fr-text--bold"}>Les organismes affichés dans ces listes :</div>
             <ul>
-              <li>identifiés par un SIRET en activité ;</li>
+              <li>sont identifiés par un SIRET en activité ;</li>
               <li>
-                trouvés dans la Liste publique des OF, la base ACCE et le Catalogue des formations en apprentissage avec
-                une certification Qualiopi valide ;
+                sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide
               </li>
-              <li>en lien avec des formations en apprentissage à un moment donné ;</li>
-              <li>de nature "responsable" uniquement ou "responsable et formateur"</li>
+              <li>ont eu un lien avec des formations en apprentissage à un moment donné ;</li>
+              <li>ont la nature "responsable" uniquement ou "responsable et formateur"</li>
             </ul>
           </Col>
         </GridRow>
