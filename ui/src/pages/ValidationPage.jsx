@@ -63,7 +63,7 @@ const ValidationLayoutTitle = styled(({ refine, className }) => {
     <div className={className}>
       <TitleLayout
         title={<ValidationTitle />}
-        detailsMessage={"afficher les critères"}
+        getDetailsMessage={(shown) => (shown ? "masquer les critères" : "afficher les critères")}
         details={
           <div>
             <div className={"fr-text--sm fr-text--bold fr-mb-1v"}>Les organismes affichés dans ces listes :</div>

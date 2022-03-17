@@ -18,7 +18,7 @@ const Message = styled("div")`
   margin-bottom: 1.5rem;
 `;
 
-export default function TitleLayout({ title, details, detailsMessage, message, back, selector }) {
+export default function TitleLayout({ title, details, getDetailsMessage, message, back, selector }) {
   let navigate = useNavigate();
   let [showDetails, toggleDetails] = useToggle(false);
   let { auth } = useContext(ApiContext);
@@ -69,7 +69,7 @@ export default function TitleLayout({ title, details, detailsMessage, message, b
                 icons={`arrow-${showDetails ? "up" : "down"}-s-line`}
                 onClick={() => toggleDetails()}
               >
-                {detailsMessage || "Afficher le informations"}
+                {getDetailsMessage ? getDetailsMessage(showDetails) : "Afficher les informations"}
               </LinkButton>
             )}
           </Box>
