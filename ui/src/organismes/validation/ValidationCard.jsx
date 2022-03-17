@@ -37,7 +37,7 @@ export default function ValidationCard({ type, label, children, ...rest }) {
   });
 
   return (
-    <ClickableItem to={`/validation/${type}`}>
+    <ClickableItem to={`/tableau-de-bord/validation/${type}`}>
       <StyledBox direction={"column"} justify={"between"} type={type} {...rest}>
         <div>
           <Counter response={response} />

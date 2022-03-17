@@ -36,8 +36,8 @@ export default function TitleLayout({ title, details, getDetailsMessage, message
               { path: "/organismes", breadcrumb: "Liste des organismes" },
               { path: "/organismes/:siret", breadcrumb: OrganismeTitle },
               { path: "/tableau-de-bord", breadcrumb: `Tableau de bord (${authTitle})` },
-              { path: "/validation/:type", breadcrumb: ValidationTitle },
-              { path: "/validation/:type/:siret", breadcrumb: OrganismeTitle },
+              { path: "/tableau-de-bord/validation/:type", breadcrumb: ValidationTitle },
+              { path: "/tableau-de-bord/validation/:type/:siret", breadcrumb: OrganismeTitle },
             ]}
           />
         </Col>

@@ -36,9 +36,9 @@ function App() {
                 </Route>
                 <Route element={<AuthShield />}>
                   <Route path="/tableau-de-bord" element={<TableauDeBordPage />} />
-                  <Route path="/validation" element={<Navigate replace to="/" />} />
-                  <Route path="/validation/:type" element={<ValidationPage />} />
-                  <Route path="/validation/:type/:siret">
+                  <Route path="/tableau-de-bord/validation" element={<Navigate replace to="/" />} />
+                  <Route path="/tableau-de-bord/validation/:type" element={<ValidationPage />} />
+                  <Route path="/tableau-de-bord/validation/:type/:siret">
                     <Route path="" element={<OrganismePage />} />
                     <Route path=":tab" element={<OrganismePage />} />
                   </Route>
