@@ -10,7 +10,7 @@ import { percentage } from "../common/utils";
 
 export default function AccueilPage() {
   let navigate = useNavigate();
-  let [{ data: stats }] = useFetch(`/api/v1/stats`, null);
+  let [{ data: stats }] = useFetch("/api/v1/stats/couverture", null);
 
   return (
     <>

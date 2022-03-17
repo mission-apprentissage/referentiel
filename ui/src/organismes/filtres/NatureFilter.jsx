@@ -1,6 +1,7 @@
 import { Filter } from "./Filter";
 import Tooltip from "../../common/Tooltip";
 import definitions from "../../common/definitions.json";
+import { getNatureLabel } from "../../common/natures";
 
 export default function NatureFilter({ items }) {
   return (
@@ -14,9 +15,9 @@ export default function NatureFilter({ items }) {
       paramName={"natures"}
       items={
         items || [
-          { code: "responsable_formateur", label: "Responsable et formateur" },
-          { code: "formateur", label: "Formateur" },
-          { code: "responsable", label: "Responsable" },
+          { code: "responsable_formateur", label: getNatureLabel("responsable_formateur") },
+          { code: "formateur", label: getNatureLabel("formateur") },
+          { code: "responsable", label: getNatureLabel("responsable") },
           { code: false, label: "N.A" },
         ]
       }

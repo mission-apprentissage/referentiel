@@ -12,7 +12,7 @@ const { arrayOf } = require("../utils/validators");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
 const setUAI = require("../../common/actions/setUAI");
-const { checkApiToken, checkOptionnalApiToken } = require("../middlewares/authMiddleware");
+const { checkApiToken } = require("../middlewares/authMiddleware");
 const canEditOrganisme = require("../middlewares/canEditOrganismeMiddleware");
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
@@ -106,7 +106,6 @@ module.exports = () => {
 
   router.get(
     "/api/v1/organismes",
-    checkOptionnalApiToken(),
     tryCatch(async (req, res) => {
       let { page, items_par_page, ordre, champs, ...params } = await Joi.object({
         sirets: Joi.alternatives()

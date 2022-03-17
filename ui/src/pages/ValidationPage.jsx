@@ -1,3 +1,4 @@
+import React from "react";
 import OrganismeList from "../organismes/liste/OrganismeList";
 import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
 import SearchForm from "../organismes/liste/SearchForm";
@@ -9,7 +10,7 @@ import styled from "styled-components";
 import { useValidation } from "../common/hooks/useValidation";
 import Filters from "../organismes/filtres/Filters";
 import NatureFilter from "../organismes/filtres/NatureFilter";
-import React from "react";
+import { getNatureLabel } from "../common/natures";
 
 const MAPPER = {
   A_VALIDER: {
@@ -95,8 +96,8 @@ export default function ValidationPage() {
             <Filters onChange={(filters) => refine({ ...filters })}>
               <NatureFilter
                 items={[
-                  { code: "responsable_formateur", label: "Responsable et formateur" },
-                  { code: "responsable", label: "Responsable" },
+                  { code: "responsable_formateur", label: getNatureLabel("responsable_formateur") },
+                  { code: "responsable", label: getNatureLabel("responsable") },
                 ]}
               />
             </Filters>

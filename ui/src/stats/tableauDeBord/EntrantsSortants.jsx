@@ -1,6 +1,6 @@
 import React from "react";
-import { ResponsiveBar } from "@nivo/bar";
-import { useFetch } from "../common/hooks/useFetch";
+import { useFetch } from "../../common/hooks/useFetch";
+import Histogram from "../Histogram";
 
 function getLastMonths() {
   let names = [
@@ -29,7 +29,7 @@ function getLastMonths() {
   return months;
 }
 
-function getHistogram(data) {
+function getHistogramData(data) {
   return getLastMonths().map((item) => {
     let entrants = data.entrants.find((e) => e.annee === item.annee && e.mois === item.mois);
     let sortants = data.sortants.find((s) => s.annee === item.annee && s.mois === item.mois);
@@ -38,31 +38,25 @@ function getHistogram(data) {
       ...item,
       key: `${item.annee}_${item.label}`,
       entrants: entrants?.total || 0,
-      entrants_color: "#0063CB",
       sortants: sortants?.total || 0,
-      sortants_color: "#B6CFFB",
     };
   });
 }
 export default function EntrantsSortant() {
   let [{ data }] = useFetch(`/api/v1/stats/entrants_sortants`, { entrants: [], sortants: [] });
+  let colors = {
+    entrants: "#0063CB",
+    sortants: "#B6CFFB",
+  };
 
   return (
     <div style={{ height: "500px" }}>
-      <ResponsiveBar
-        role="application"
+      <Histogram
         ariaLabel="Entrants et sortant sur les 6 derniers mois"
-        data={getHistogram(data)}
-        indexBy={"key"}
+        yLegend={"Nombre d'organisme"}
         keys={["entrants", "sortants"]}
-        enableGridY={false}
-        theme={{ background: "#F9F8F6" }}
-        margin={{ top: 75, right: 100, bottom: 125, left: 100 }}
-        padding={0.6}
-        colors={({ id, data }) => String(data[`${id}_color`])}
-        enableLabel={false}
-        axisTop={null}
-        axisRight={null}
+        data={getHistogramData(data)}
+        colors={({ id }) => colors[id]}
         axisBottom={{
           tickSize: 0,
           tickPadding: 25,
@@ -72,38 +66,6 @@ export default function EntrantsSortant() {
           legendOffset: 100,
           format: (key) => key.split("_").reverse().join(" "),
         }}
-        axisLeft={{
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          legend: "Nombre d'organisme",
-          legendPosition: "middle",
-          legendOffset: -75,
-        }}
-        legends={[
-          {
-            dataFrom: "keys",
-            anchor: "top-left",
-            direction: "row",
-            justify: false,
-            translateY: -50,
-            translateX: -75,
-            itemsSpacing: 2,
-            itemWidth: 100,
-            itemHeight: 20,
-            itemDirection: "left-to-right",
-            itemOpacity: 0.85,
-            symbolSize: 20,
-            effects: [
-              {
-                on: "hover",
-                style: {
-                  itemOpacity: 1,
-                },
-              },
-            ],
-          },
-        ]}
       />
     </div>
   );

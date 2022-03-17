@@ -12,6 +12,7 @@ import AccueilPage from "./pages/AccueilPage";
 import ConstructionPage from "./pages/ConstructionPage";
 import DataProvider from "./common/DataProvider";
 import ApiProvider from "./common/ApiProvider";
+import StatsPage from "./pages/StatsPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route element={<Layout children={<Outlet />} />}>
                 <Route path="/" element={<AccueilPage />} />
                 <Route path="/construction" element={<ConstructionPage />} />
+                <Route path="/stats" element={<StatsPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/organismes" element={<OrganismesPage />} />
                 <Route path="/organismes/:siret">

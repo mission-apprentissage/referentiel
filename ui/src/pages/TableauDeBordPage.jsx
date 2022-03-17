@@ -7,7 +7,7 @@ import ContentLayout from "../common/layout/ContentLayout";
 import { useQuery } from "../common/hooks/useQuery";
 import { ApiContext } from "../common/ApiProvider";
 import NouveauxCounter from "../organismes/validation/NouveauxCounter";
-import EntrantsSortant from "../stats/EntrantsSortants";
+import EntrantsSortant from "../stats/tableauDeBord/EntrantsSortants";
 
 export default function TableauDeBordPage() {
   let { auth } = useContext(ApiContext);
