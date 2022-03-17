@@ -4,7 +4,6 @@ import ContentLayout from "../common/layout/ContentLayout";
 import { Tab, TabPanel } from "../common/dsfr/elements/Tabs";
 import WideTabs from "../common/dsfr/custom/WideTabs";
 import { Table, Thead } from "../common/dsfr/elements/Table";
-import { Tag, TagGroup } from "../common/dsfr/elements/Tag";
 import definitions from "../common/definitions.json";
 
 export default function ConstructionPage() {
@@ -236,34 +235,19 @@ export default function ConstructionPage() {
                   >
                     <tr>
                       <td>Liste publique des organismes de formation</td>
-                      <td>
-                        <TagGroup>
-                          <Tag>SIRET</Tag>
-                          <Tag>SIREN</Tag>
-                        </TagGroup>
-                      </td>
+                      <td>SIRET, SIREN</td>
                       <td>Automatique Journalière</td>
                       <td>DGEFP</td>
                     </tr>
                     <tr>
                       <td>SIFA-RAMSESE</td>
-                      <td>
-                        <TagGroup>
-                          <Tag>SIRET</Tag>
-                          <Tag>SIREN</Tag>
-                        </TagGroup>
-                      </td>
+                      <td>SIRET, SIREN</td>
                       <td>A la demande</td>
                       <td>DEPP</td>
                     </tr>
                     <tr>
                       <td>Etablissements du catalogue</td>
-                      <td>
-                        <TagGroup>
-                          <Tag>SIRET</Tag>
-                          <Tag>SIREN</Tag>
-                        </TagGroup>
-                      </td>
+                      <td>SIRET, SIREN</td>
                       <td>Automatique Journalière</td>
                       <td>Mission Apprentissage</td>
                     </tr>
@@ -294,174 +278,101 @@ export default function ConstructionPage() {
                     <tr>
                       <td>catalogue</td>
                       <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                          <Tag>Nature</Tag>
-                          <Tag>Relation</Tag>
-                          <Tag>Diplômes</Tag>
-                          <Tag>Certification</Tag>
-                          <Tag>Lieux de formation</Tag>
-                          <Tag>Anomalies</Tag>
-                          <Tag>Contacts</Tag>
-                        </TagGroup>
+                        UAI potentielle, Nature, Relation, Diplômes, Certification, Lieux de formation, Anomalies,
+                        Contacts
                       </td>
                       <td>Automatique Journalière</td>
                       <td>RCO, Mission Apprentissage</td>
                     </tr>
                     <tr>
                       <td>datagouv</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>NDA</Tag>
-                          <Tag>Qualiopi</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">NDA, Qualiopi</td>
                       <td>Automatique Journalière</td>
                       <td>DGEFP</td>
                     </tr>
                     <tr>
                       <td>DECA</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
                       <td>DGEFP</td>
                     </tr>
                     <tr>
                       <td>DEPP</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
                       <td>DEPP</td>
                     </tr>
                     <tr>
                       <td>ideo2</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
                       <td>Onisep</td>
                     </tr>
                     <tr>
                       <td>mna</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
                       <td>Mission Apprentissage</td>
                     </tr>
                     <tr>
                       <td>onisep</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
                       <td>Onisep</td>
                     </tr>
                     <tr>
                       <td>onisep-structure</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
                       <td>Onisep</td>
                     </tr>
                     <tr>
                       <td>opcoep</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
                       <td>OPCO EP</td>
                     </tr>
                     <tr>
                       <td>refea</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
                       <td>DGER</td>
                     </tr>
                     <tr>
                       <td>SIFA RAMSESE</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
                       <td>DEPP</td>
                     </tr>
                     <tr>
                       <td>sirene</td>
                       <td colSpan="2">
-                        <TagGroup>
-                          <Tag>Raison sociale</Tag>
-                          <Tag>Relations</Tag>
-                          <Tag>Etat administratif</Tag>
-                          <Tag>Adresse</Tag>
-                          <Tag>Forme juridique</Tag>
-                          <Tag>Anomalies</Tag>
-                        </TagGroup>
+                        Raison sociale, Relations, Etat administratif, Adresse, Forme juridique, Anomalies
                       </td>
                       <td>Automatique Journalière</td>
                       <td>INSEE</td>
                     </tr>
                     <tr>
                       <td>tableau-de-bord</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                          <Tag>Réseau</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle, Réseau</td>
                       <td>Automatique Journalière</td>
                       <td>Mission Apprentissage</td>
                     </tr>
                     <tr>
                       <td>ymag</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>UAI potentielle</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
                       <td>Mission Apprentissage</td>
                     </tr>
                     <tr>
                       <td>acce</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>Contacts</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">Contacts</td>
                       <td>Automatique Journalière</td>
                       <td>DEPP</td>
                     </tr>
                     <tr>
                       <td>voeux-affelnet</td>
-                      <td colSpan="2">
-                        <TagGroup>
-                          <Tag>Contacts</Tag>
-                        </TagGroup>
-                      </td>
+                      <td colSpan="2">Contacts</td>
                       <td>A la demande</td>
                       <td>Mission Apprentissage</td>
                     </tr>
