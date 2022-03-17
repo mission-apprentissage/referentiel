@@ -1,4 +1,4 @@
-import { Box, Item } from "../../common/Flexbox";
+import { Box } from "../../common/Flexbox";
 import styled from "styled-components";
 import React from "react";
 import ClickableItem from "../../common/ClickableItem";
@@ -6,8 +6,8 @@ import { Tag } from "../../common/dsfr/elements/Tag";
 import Nature from "../common/Nature";
 import Siret from "../common/Siret";
 import RaisonSociale from "../common/RaisonSociale";
-import Nouveau from "../common/Nouveau";
 import { Link } from "../../common/dsfr/elements/Link";
+import Badge from "../../common/dsfr/elements/Badge";
 
 const CardBox = styled(Box)`
   padding: 1rem 2rem;
@@ -74,7 +74,7 @@ export default function OrganismeItem({ organisme }) {
               </Tag>
               <ValidationTag organisme={organisme} />
             </div>
-            {organisme._meta.nouveau && <Nouveau className={"fr-mb-1w"}>Nouvel organisme</Nouveau>}
+            {organisme._meta.nouveau && <Badge modifiers={"info"}>Nouvel organisme</Badge>}
           </Box>
         )}
         <Nom className={"fr-text--bold"}>

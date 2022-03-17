@@ -1,5 +1,5 @@
 import { useValidation } from "../../common/hooks/useValidation";
-import Nouveau from "../common/Nouveau";
+import Badge from "../../common/dsfr/elements/Badge";
 
 export default function NouveauxCounter({ type }) {
   let { response } = useValidation(type, {
@@ -15,7 +15,7 @@ export default function NouveauxCounter({ type }) {
 
   return (
     <div style={{ width: "85%" }}>
-      <Nouveau>{response.data.pagination.total} NOUVEAUX ORGANISMES</Nouveau>
+      <Badge modifiers={"info"}>{response.data.pagination.total} NOUVEAUX ORGANISMES</Badge>
     </div>
   );
 }
