@@ -61,11 +61,11 @@ export default function ConstructionPage() {
                         <ul>
                           <li>
                             Si les organismes associés à une offre de formation ont le même SIRET, on en déduit la
-                            nature "responsable et formateur" et on se génère pas de relation.
+                            nature "responsable et formateur" et on ne génère pas de relation.
                           </li>
                           <li>
                             Si les organismes associés à une offre de formation n’ont pas le même SIRET, on en déduit la
-                            nature "responsable"pour l’un et formateur" pour l’autre, et on génère une relation entre
+                            nature "responsable" pour l’un et "formateur" pour l’autre, et on génère une relation entre
                             eux.
                           </li>
                         </ul>
@@ -124,7 +124,7 @@ export default function ConstructionPage() {
                       <td>{definitions.lieu}</td>
                       <td colSpan="2">
                         Les lieux de formations sont caractérisés par une adresse postale et des coordonnées de
-                        géolocalisation et toujours rattaché à un organisme de formation
+                        géolocalisation et sont toujours rattachés à un organisme de formation
                       </td>
                     </tr>
                     <tr>
