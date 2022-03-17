@@ -45,7 +45,6 @@ export default function OrganismesPage() {
                 </TabPanel>
               ),
             },
-            { tab: <Tab disabled>Lexique</Tab>, panel: <TabPanel>-</TabPanel> },
           ]}
         />
       </ContentLayout>
