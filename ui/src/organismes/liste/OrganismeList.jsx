@@ -1,3 +1,4 @@
+import React from "react";
 import OrganismeItem from "./OrganismeItem";
 import ApiPagination from "../../common/ApiPagination";
 import { Box } from "../../common/Flexbox";

@@ -3,23 +3,25 @@ import React, { useContext } from "react";
 import FilAriane from "./FilAriane";
 import styled from "styled-components";
 import LinkButton from "../dsfr/custom/LinkButton";
-import { useNavigate } from "react-router-dom";
 import { ValidationTitle } from "../../pages/ValidationPage";
 import { OrganismeTitle } from "../../pages/OrganismePage";
 import { ApiContext } from "../ApiProvider";
 import { Box } from "../Flexbox";
 import useToggle from "../hooks/useToggle";
 
-const Back = styled(LinkButton)`
-  margin-bottom: 1.5rem;
-`;
+export function Back({ children, ...rest }) {
+  return (
+    <LinkButton icons={"arrow-left-line"} className={"fr-mb-3w"} {...rest}>
+      {children}
+    </LinkButton>
+  );
+}
 
 const Message = styled("div")`
   margin-bottom: 1.5rem;
 `;
 
 export default function TitleLayout({ title, details, getDetailsMessage, message, back, selector }) {
-  let navigate = useNavigate();
   let [showDetails, toggleDetails] = useToggle(false);
   let { auth } = useContext(ApiContext);
   let authTitle = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
@@ -51,11 +53,7 @@ export default function TitleLayout({ title, details, getDetailsMessage, message
       )}
       {back && (
         <GridRow modifiers={"gutters"}>
-          <Col>
-            <Back icons={"arrow-left-line"} onClick={() => navigate("./..")}>
-              {back}
-            </Back>
-          </Col>
+          <Col>{back}</Col>
         </GridRow>
       )}
       <GridRow className={"fr-pb-1w"}>

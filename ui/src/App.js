@@ -13,42 +13,45 @@ import ConstructionPage from "./pages/ConstructionPage";
 import DataProvider from "./common/DataProvider";
 import ApiProvider from "./common/ApiProvider";
 import StatsPage from "./pages/StatsPage";
+import PreviousSearchProvider from "./common/PreviousSearchProvider";
 
 function App() {
   return (
     <div className="App">
-      <ApiProvider>
-        <DataProvider>
-          <Router>
-            <Routes>
-              <Route path="/dsfr" element={<DesignPage />} />
-            </Routes>
-            <Routes>
-              <Route element={<Layout children={<Outlet />} />}>
-                <Route path="/" element={<AccueilPage />} />
-                <Route path="/construction" element={<ConstructionPage />} />
-                <Route path="/stats" element={<StatsPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/organismes" element={<OrganismesPage />} />
-                <Route path="/organismes/:siret">
-                  <Route path="" element={<OrganismePage />} />
-                  <Route path=":tab" element={<OrganismePage />} />
-                </Route>
-                <Route element={<AuthShield />}>
-                  <Route path="/tableau-de-bord" element={<TableauDeBordPage />} />
-                  <Route path="/tableau-de-bord/validation" element={<Navigate replace to="/" />} />
-                  <Route path="/tableau-de-bord/validation/:type" element={<ValidationPage />} />
-                  <Route path="/tableau-de-bord/validation/:type/:siret">
+      <Router>
+        <ApiProvider>
+          <DataProvider>
+            <PreviousSearchProvider>
+              <Routes>
+                <Route path="/dsfr" element={<DesignPage />} />
+              </Routes>
+              <Routes>
+                <Route element={<Layout children={<Outlet />} />}>
+                  <Route path="/" element={<AccueilPage />} />
+                  <Route path="/construction" element={<ConstructionPage />} />
+                  <Route path="/stats" element={<StatsPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/organismes" element={<OrganismesPage />} />
+                  <Route path="/organismes/:siret">
                     <Route path="" element={<OrganismePage />} />
                     <Route path=":tab" element={<OrganismePage />} />
                   </Route>
+                  <Route element={<AuthShield />}>
+                    <Route path="/tableau-de-bord" element={<TableauDeBordPage />} />
+                    <Route path="/tableau-de-bord/validation" element={<Navigate replace to="/" />} />
+                    <Route path="/tableau-de-bord/validation/:type" element={<ValidationPage />} />
+                    <Route path="/tableau-de-bord/validation/:type/:siret">
+                      <Route path="" element={<OrganismePage />} />
+                      <Route path=":tab" element={<OrganismePage />} />
+                    </Route>
+                  </Route>
+                  <Route path="*" element={<Navigate to="/login" />} />
                 </Route>
-                <Route path="*" element={<Navigate to="/login" />} />
-              </Route>
-            </Routes>
-          </Router>
-        </DataProvider>
-      </ApiProvider>
+              </Routes>
+            </PreviousSearchProvider>
+          </DataProvider>
+        </ApiProvider>
+      </Router>
     </div>
   );
 }
