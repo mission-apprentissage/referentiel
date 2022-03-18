@@ -12,7 +12,7 @@ const Field = styled(({ label, value, tooltip, children, className, ...rest }) =
       {label && <span className={"fr-text--regular"}>{label} :&nbsp;</span>}
       {!isEmpty(value) ? <span className={"fr-text fr-text--bold fr-p-1v value"}>{value}</span> : <NA />}
       {children}
-      {tooltip && <Tooltip message={tooltip} />}
+      {tooltip && <Tooltip label={label} description={tooltip} />}
     </Box>
   );
 })`

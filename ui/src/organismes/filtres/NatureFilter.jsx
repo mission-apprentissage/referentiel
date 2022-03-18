@@ -2,6 +2,7 @@ import { Filter } from "./Filter";
 import Tooltip from "../../common/Tooltip";
 import definitions from "../../common/definitions.json";
 import { getNatureLabel } from "../../common/natures";
+import React from "react";
 
 export default function NatureFilter({ items }) {
   return (
@@ -9,7 +10,7 @@ export default function NatureFilter({ items }) {
       label={
         <>
           <span>Nature</span>
-          <Tooltip message={definitions.nature} />
+          <Tooltip label={"Nature"} description={definitions.nature} />
         </>
       }
       paramName={"natures"}

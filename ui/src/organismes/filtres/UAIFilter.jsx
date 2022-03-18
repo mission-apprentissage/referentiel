@@ -1,6 +1,7 @@
 import { Filter } from "./Filter";
 import Tooltip from "../../common/Tooltip";
 import { Box } from "../../common/Flexbox";
+import React from "react";
 
 export default function UAIFilter() {
   return (
@@ -8,7 +9,10 @@ export default function UAIFilter() {
       label={
         <Box>
           <span>UAI validée</span>
-          <Tooltip message={"L’UAI de cet organisme a été validée les utilisateurs du Référentiel"} />
+          <Tooltip
+            label={"UAI validée"}
+            description={"L’UAI de cet organisme a été validée les utilisateurs du Référentiel"}
+          />
         </Box>
       }
       paramName={"uais"}
