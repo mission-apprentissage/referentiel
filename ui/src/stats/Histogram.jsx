@@ -1,13 +1,14 @@
 import { ResponsiveBar } from "@nivo/bar";
 import { BasicTooltip } from "@nivo/tooltip";
+import { theme } from "./nivo";
 
 export default function Histogram({ xLegend, yLegend, getTooltipLabel, ...rest }) {
   return (
     <ResponsiveBar
+      theme={theme}
       role="application"
       indexBy={"key"}
       enableGridY={false}
-      theme={{ background: "#F9F8F6" }}
       margin={{ top: 75, right: 100, bottom: 125, left: 100 }}
       padding={0.6}
       enableLabel={false}

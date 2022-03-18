@@ -1,8 +1,10 @@
 import { ResponsivePie } from "@nivo/pie";
+import { theme } from "./nivo";
 
 export default function Pie(props) {
   return (
     <ResponsivePie
+      theme={theme}
       margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
       arcLinkLabelsColor={{ from: "color" }}
       arcLabelsTextColor={{
