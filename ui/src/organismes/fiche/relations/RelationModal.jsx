@@ -8,8 +8,12 @@ import Nature from "../../common/Nature";
 import Siret from "../../common/Siret";
 import RaisonSociale from "../../common/RaisonSociale";
 import definitions from "../../../common/definitions.json";
+import LinkButton from "../../../common/dsfr/custom/LinkButton";
+import { useNavigate } from "react-router-dom";
 
 export default function RelationModal({ modal, organisme }) {
+  let navigate = useNavigate();
+
   return (
     <Modal
       title={"UAI"}
@@ -23,18 +27,33 @@ export default function RelationModal({ modal, organisme }) {
             </h1>
 
             <BlueBox>
-              <Box direction={"column"}>
-                <Field label={"UAI"} value={organisme.uai} tooltip={definitions.uai} />
-                <Field label={"Nature"} value={<Nature organisme={organisme} />} tooltip={definitions.nature} />
-                <Field label={"SIREN"} value={organisme.siret.substring(0, 9)} tooltip={definitions.siren} />
-                <Field label={"SIRET"} value={<Siret organisme={organisme} />} tooltip={definitions.siret} />
-                <Field label={"NDA"} value={organisme.numero_declaration_activite} tooltip={definitions.nda} />
-                <Field
-                  label={"Certifié Qualiopi"}
-                  value={organisme.qualiopi ? "Oui" : "Non"}
-                  tooltip={definitions.qualiopi}
-                />
+              <Box justify={"between"}>
+                <Box direction={"column"}>
+                  <Field label={"UAI"} value={organisme.uai} tooltip={definitions.uai} />
+                  <Field label={"Nature"} value={<Nature organisme={organisme} />} tooltip={definitions.nature} />
+                  <Field label={"SIREN"} value={organisme.siret.substring(0, 9)} tooltip={definitions.siren} />
+                  <Field label={"SIRET"} value={<Siret organisme={organisme} />} tooltip={definitions.siret} />
+                  <Field label={"NDA"} value={organisme.numero_declaration_activite} tooltip={definitions.nda} />
+                  <Field
+                    label={"Certifié Qualiopi"}
+                    value={organisme.qualiopi ? "Oui" : "Non"}
+                    tooltip={definitions.qualiopi}
+                  />
+                </Box>
+                <div>
+                  <LinkButton
+                    modifiers={"sm icon-right"}
+                    icons={"arrow-right-line"}
+                    onClick={() => {
+                      modal.close();
+                      navigate(`/organismes/${organisme.siret}`);
+                    }}
+                  >
+                    Consulter la fiche
+                  </LinkButton>
+                </div>
               </Box>
+
               <Box direction={"column"} className={"fr-mt-5w"}>
                 <Field label={"Enseigne"} value={organisme.enseigne} tooltip={definitions.enseigne} />
                 <Field label={"Raison sociale"} value={organisme.raison_sociale} tooltip={definitions.raison_sociale} />

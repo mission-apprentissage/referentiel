@@ -11,6 +11,7 @@ import { useValidation } from "../common/hooks/useValidation";
 import Filters from "../organismes/filtres/Filters";
 import NatureFilter from "../organismes/filtres/NatureFilter";
 import { getNatureLabel } from "../common/natures";
+import Small from "../common/dsfr/custom/Small";
 
 const MAPPER = {
   A_VALIDER: {
@@ -66,7 +67,9 @@ const ValidationLayoutTitle = styled(({ refine, className }) => {
         getDetailsMessage={(shown) => (shown ? "masquer les critères" : "afficher les critères")}
         details={
           <div>
-            <div className={"fr-text--sm fr-text--bold fr-mb-1v"}>Les organismes affichés dans ces listes :</div>
+            <Small as={"div"} className={"fr-text--bold"}>
+              Les organismes affichés dans ces listes :
+            </Small>
             {MAPPER[type].critères}
           </div>
         }
