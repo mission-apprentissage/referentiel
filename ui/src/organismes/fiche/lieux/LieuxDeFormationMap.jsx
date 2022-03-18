@@ -101,50 +101,41 @@ async function onMapLoaded(map, source) {
   map.addImage("poi-blue", await loadImage(map, blue));
   map.addImage("poi-red", await loadImage(map, red));
   map.addSource("ecosysteme", source);
-
-  map.addLayer({
-    id: "layer-commune",
-    source: "ecosysteme",
-    filter: ["==", "$type", "Polygon"],
-    layout: {},
-    type: "fill",
-    paint: {
-      "fill-color": "#e1000f",
-      "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0.8, 0.5],
-    },
-  });
-
-  map.addLayer({
-    id: "layer-points",
-    source: "ecosysteme",
-    filter: ["==", "$type", "Point"],
-    type: "symbol",
-    "symbol-z-order": "source",
-    layout: {
-      "text-field": ["get", "label"],
-      "text-offset": [0, 1.25],
-      "text-anchor": "top",
-      "icon-image": "{icon}",
-      "icon-allow-overlap": true,
-    },
-  });
+  map
+    .addLayer({
+      id: "layer-commune",
+      source: "ecosysteme",
+      filter: ["==", "$type", "Polygon"],
+      layout: {},
+      type: "fill",
+      paint: {
+        "fill-color": "#e1000f",
+        "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0.8, 0.5],
+      },
+    })
+    .addLayer({
+      id: "layer-points",
+      source: "ecosysteme",
+      filter: ["==", "$type", "Point"],
+      type: "symbol",
+      "symbol-z-order": "source",
+      layout: {
+        "text-field": ["get", "label"],
+        "text-offset": [0, 1.25],
+        "text-anchor": "top",
+        "icon-image": "{icon}",
+        "icon-allow-overlap": true,
+      },
+    });
 
   let popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false });
   showPopupOnMouseHover(map, popup, "layer-points");
 
-  console.log(
-    source.data.features.flatMap((f) => {
-      if (f.geometry.type === "Polygon") {
-        return f.geometry.coordinates[0];
-      }
-      return [f.geometry.coordinates];
-    })
-  );
   map.fitBounds(
     source.data.features.map((f) => {
       return f.geometry.type === "Polygon" ? f.geometry.coordinates[0][0] : f.geometry.coordinates;
     }),
-    { padding: 150 }
+    { padding: 200, maxZoom: 7 }
   );
 }
 
@@ -156,8 +147,9 @@ export default function LieuxDeFormationMap({ organisme }) {
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/light-v10",
       center: getCenter(organisme),
-      zoom: 15,
+      zoom: 7,
     });
+
     map.on("load", () => {
       let source = buildSource(organisme);
       return onMapLoaded(map, source);
