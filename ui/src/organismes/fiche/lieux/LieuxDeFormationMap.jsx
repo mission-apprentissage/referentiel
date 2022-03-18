@@ -1,22 +1,22 @@
 import React, { useRef } from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import useOnce from "../../../common/hooks/useOnce"; // eslint-disable-line import/no-webpack-loader-syntax
-import blue from "./poi-blue.png";
-import red from "./poi-red.png";
+import blue from "./blue.svg";
+import red from "./red.svg";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Box } from "../../../common/Flexbox";
 import Legend from "./Legend";
 
 mapboxgl.accessToken = "pk.eyJ1IjoiYmd1ZXJvdXQiLCJhIjoiY2wwamM5bmMyMGI5cDNrcDZzeGE0Y3RuNyJ9.R3_znqXpyJ8_98pEUYQuwQ";
 
-function loadImage(map, url) {
-  return new Promise((resolve, reject) => {
-    map.loadImage(url, (err, image) => {
-      if (err) {
-        reject(err);
-      }
-      return resolve(image);
-    });
+function addSVGImage(map, name, file) {
+  return new Promise((resolve) => {
+    let img = new Image(30, 36);
+    img.src = file;
+    img.onload = () => {
+      map.addImage(name, img);
+      resolve();
+    };
   });
 }
 
@@ -73,7 +73,9 @@ function buildSource(organisme) {
   };
 }
 
-function showPopupOnMouseHover(map, popup, layerName) {
+function showPopupOnMouseHover(map, layerName) {
+  let popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false });
+
   map.on("mouseenter", layerName, (e) => {
     // Change the cursor style as a UI indicator.
     map.getCanvas().style.cursor = "pointer";
@@ -98,10 +100,13 @@ function showPopupOnMouseHover(map, popup, layerName) {
 }
 
 async function onMapLoaded(map, source) {
-  map.addImage("poi-blue", await loadImage(map, blue));
-  map.addImage("poi-red", await loadImage(map, red));
-  map.addSource("ecosysteme", source);
+  await Promise.all([addSVGImage(map, "poi-blue", blue), addSVGImage(map, "poi-red", red)]);
+
+  showPopupOnMouseHover(map, "layer-points");
+
   map
+    .addControl(new mapboxgl.NavigationControl())
+    .addSource("ecosysteme", source)
     .addLayer({
       id: "layer-commune",
       source: "ecosysteme",
@@ -126,17 +131,13 @@ async function onMapLoaded(map, source) {
         "icon-image": "{icon}",
         "icon-allow-overlap": true,
       },
-    });
-
-  let popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false });
-  showPopupOnMouseHover(map, popup, "layer-points");
-  map.addControl(new mapboxgl.NavigationControl());
-  map.fitBounds(
-    source.data.features.map((f) => {
-      return f.geometry.type === "Polygon" ? f.geometry.coordinates[0][0] : f.geometry.coordinates;
-    }),
-    { padding: 200, maxZoom: 7 }
-  );
+    })
+    .fitBounds(
+      source.data.features.map((f) => {
+        return f.geometry.type === "Polygon" ? f.geometry.coordinates[0][0] : f.geometry.coordinates;
+      }),
+      { padding: 200, maxZoom: 7 }
+    );
 }
 
 export default function LieuxDeFormationMap({ organisme }) {
