@@ -130,7 +130,7 @@ async function onMapLoaded(map, source) {
 
   let popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false });
   showPopupOnMouseHover(map, popup, "layer-points");
-
+  map.addControl(new mapboxgl.NavigationControl());
   map.fitBounds(
     source.data.features.map((f) => {
       return f.geometry.type === "Polygon" ? f.geometry.coordinates[0][0] : f.geometry.coordinates;
