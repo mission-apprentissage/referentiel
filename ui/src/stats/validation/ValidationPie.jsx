@@ -16,15 +16,7 @@ export function ValidationPie({ stats }) {
 
   return (
     <div style={{ height: "500px" }}>
-      <Pie
-        data={national}
-        arcLinkLabel={({ id }) => {
-          return getValidationLabel(id);
-        }}
-        colors={({ id }) => {
-          return getValidationColor(id);
-        }}
-      />
+      <Pie data={national} getLabel={(id) => getValidationLabel(id)} getColor={(id) => getValidationColor(id)} />
     </div>
   );
 }

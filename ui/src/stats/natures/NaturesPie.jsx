@@ -16,7 +16,7 @@ export function NaturesPie({ stats }) {
 
   return (
     <div style={{ height: "500px" }}>
-      <Pie data={national} colors={({ id }) => getNatureColor(id)} arcLinkLabel={(d) => getNatureLabel(d.id)} />
+      <Pie data={national} getLabel={(id) => getNatureLabel(id)} getColor={(id) => getNatureColor(id)} />
     </div>
   );
 }

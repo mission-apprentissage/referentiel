@@ -5,6 +5,6 @@ const MAPPER = {
   inconnu: { label: "Inconnu", color: "#003f7e" },
 };
 
+export const getNatureKeys = () => Object.keys(MAPPER);
 export const getNatureLabel = (id) => MAPPER[id].label;
 export const getNatureColor = (id) => MAPPER[id].color;
-export const getNatureValues = () => Object.keys(MAPPER);

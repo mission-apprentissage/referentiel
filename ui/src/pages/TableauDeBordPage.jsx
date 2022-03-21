@@ -7,7 +7,7 @@ import ContentLayout from "../common/layout/ContentLayout";
 import { useQuery } from "../common/hooks/useQuery";
 import { ApiContext } from "../common/ApiProvider";
 import NouveauxCounter from "../organismes/validation/NouveauxCounter";
-import EntrantsSortant from "../stats/tableauDeBord/EntrantsSortants";
+import TableauDeBordStats from "../stats/tableauDeBord/TableauDeBordStats";
 import useToggle from "../common/hooks/useToggle";
 import LinkButton from "../common/dsfr/custom/LinkButton";
 import styled from "styled-components";
@@ -94,7 +94,7 @@ export default function TableauDeBordPage() {
         </GridRow>
         <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
           <Col modifiers={"12"}>
-            <EntrantsSortant />
+            <TableauDeBordStats />
           </Col>
         </GridRow>
       </ContentLayout>

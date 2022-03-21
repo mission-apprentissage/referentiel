@@ -3,6 +3,7 @@ import { useFetch } from "../../common/hooks/useFetch";
 import Spinner from "../../common/Spinner";
 import { Col, GridRow } from "../../common/dsfr/fondamentaux";
 import Histogram from "../Histogram";
+import { getNatureLabel } from "../../common/natures";
 
 const MAPPER = {
   qualiopi: { label: "Qualiopi", color: "#bbd6f1" },
@@ -21,14 +22,14 @@ export default function QualiopiStats() {
       <Col>
         <div style={{ height: "500px" }}>
           <Histogram
-            indexBy={(item) => item.nature}
-            data={data}
             ariaLabel="Répartition des natures des organisme par académie"
+            data={data}
+            indexBy={(item) => getNatureLabel(item.nature)}
+            keys={["qualiopi", "non_qualiopi"]}
             xLegend={"Natures"}
             yLegend={"Nombre d'organisme"}
-            keys={["qualiopi", "non_qualiopi"]}
-            legendLabel={({ id }) => MAPPER[id].label}
-            getTooltipLabel={({ id }) => MAPPER[id].label}
+            getLabel={(id) => MAPPER[id].label}
+            getColor={(id) => MAPPER[id].color}
           />
         </div>
       </Col>

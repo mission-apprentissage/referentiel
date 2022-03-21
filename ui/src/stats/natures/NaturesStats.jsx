@@ -14,10 +14,10 @@ export default function NaturesStats() {
 
   return (
     <>
-      <GridRow>
+      <GridRow className={"fr-mb-3w"}>
         <Col>{stats.national && <NaturesPie stats={stats} />}</Col>
       </GridRow>
-      <GridRow>
+      <GridRow className={"fr-mb-3w"}>
         <Col>{stats.academies.length > 0 && <NaturesHistogram stats={stats} />}</Col>
       </GridRow>
     </>

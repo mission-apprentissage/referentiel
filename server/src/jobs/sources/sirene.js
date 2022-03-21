@@ -120,10 +120,10 @@ module.exports = (custom = {}) => {
               return {
                 selector: siret,
                 relations: await getRelations(uniteLegale, siret),
-                etat_administratif: etablissement.etat_administratif === "A" ? "actif" : "fermé",
                 anomalies,
                 data: {
                   raison_sociale: getRaisonSociale(uniteLegale),
+                  etat_administratif: etablissement.etat_administratif === "A" ? "actif" : "fermé",
                   enseigne: getEnseigne(etablissement),
                   siege_social: etablissement.etablissement_siege === "true",
                   ...(adresse ? { adresse } : {}),

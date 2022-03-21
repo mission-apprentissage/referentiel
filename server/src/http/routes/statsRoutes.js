@@ -3,7 +3,6 @@ const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
 const { promiseAllProps } = require("../../common/utils/asyncUtils");
 const { notEmpty, nullOrEmpty, arrayHasElements, arrayIsEmpty, sum } = require("../../common/db/aggregationUtils");
-const { checkApiToken } = require("../middlewares/authMiddleware");
 
 module.exports = () => {
   const router = express.Router();
@@ -163,6 +162,7 @@ module.exports = () => {
               },
             },
           },
+          { $sort: { nature: 1 } },
           {
             $project: {
               _id: 0,
@@ -176,48 +176,49 @@ module.exports = () => {
   );
 
   router.get(
-    "/api/v1/stats/entrants_sortants",
-    checkApiToken(),
+    "/api/v1/stats/nouveaux",
     tryCatch(async (req, res) => {
-      function groupByDate(fieldName, match = {}) {
-        return dbCollection("organismes")
-          .aggregate([
-            {
-              $match: {
-                qualiopi: true,
-                $or: [{ nature: "responsable" }, { nature: "responsable_formateur" }],
-                ...match,
-              },
+      let stats = await dbCollection("organismes")
+        .aggregate([
+          {
+            $match: {
+              qualiopi: true,
+              $or: [{ nature: "responsable" }, { nature: "responsable_formateur" }],
             },
-            {
-              $group: {
-                _id: {
-                  year: { $year: fieldName },
-                  month: { $month: fieldName },
-                },
-                total: { $sum: 1 },
+          },
+          {
+            $group: {
+              _id: {
+                year: { $year: "$_meta.date_import" },
+                month: { $month: "$_meta.date_import" },
               },
+              total: { $sum: 1 },
             },
-            {
-              $project: {
-                _id: 0,
-                annee: "$_id.year",
-                mois: "$_id.month",
-                total: 1,
-              },
+          },
+          {
+            $project: {
+              _id: 0,
+              annee: "$_id.year",
+              mois: "$_id.month",
+              total: 1,
             },
-          ])
-          .toArray();
-      }
-
-      let stats = await promiseAllProps({
-        entrants: groupByDate("$_meta.date_import"),
-        sortants: groupByDate("$_meta.date_sortie", {
-          etat_administratif: "fermé",
-        }),
-      });
+          },
+        ])
+        .toArray();
 
       res.json(stats);
+    })
+  );
+
+  router.get(
+    "/api/v1/stats/etat_administratif",
+    tryCatch(async (req, res) => {
+      res.json(
+        await promiseAllProps({
+          actif: dbCollection("organismes").count({ etat_administratif: "actif" }),
+          fermé: dbCollection("organismes").count({ etat_administratif: "fermé" }),
+        })
+      );
     })
   );
 

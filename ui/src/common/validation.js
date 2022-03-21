@@ -4,6 +4,6 @@ const MAPPER = {
   VALIDE: { label: "Validés", color: "#CEFDDC" },
 };
 
+export const getValidationKeys = () => Object.keys(MAPPER);
 export const getValidationLabel = (id) => MAPPER[id].label;
 export const getValidationColor = (id) => MAPPER[id].color;
-export const getValidationValues = () => Object.keys(MAPPER);

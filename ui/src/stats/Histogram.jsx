@@ -2,14 +2,14 @@ import { ResponsiveBar } from "@nivo/bar";
 import { BasicTooltip } from "@nivo/tooltip";
 import { theme } from "./nivo";
 
-export default function Histogram({ xLegend, yLegend, getTooltipLabel, ...rest }) {
+export default function Histogram({ xLegend, yLegend, getLabel, getColor, ...rest }) {
   return (
     <ResponsiveBar
       theme={theme}
       role="application"
       indexBy={"key"}
       enableGridY={false}
-      margin={{ top: 75, right: 100, bottom: 125, left: 100 }}
+      margin={{ top: 75, right: 50, bottom: 125, left: 100 }}
       padding={0.6}
       enableLabel={false}
       axisTop={null}
@@ -30,9 +30,10 @@ export default function Histogram({ xLegend, yLegend, getTooltipLabel, ...rest }
         legendPosition: "middle",
         legendOffset: -75,
       }}
+      colors={({ id }) => getColor(id)}
+      legendLabel={({ id }) => getLabel(id)}
       tooltip={({ id, value, color }) => {
-        let text = getTooltipLabel ? getTooltipLabel({ id }) : id;
-        return <BasicTooltip id={text} value={value} color={color} enableChip />;
+        return <BasicTooltip id={getLabel(id)} value={value} color={color} enableChip />;
       }}
       legends={[
         {
@@ -43,7 +44,7 @@ export default function Histogram({ xLegend, yLegend, getTooltipLabel, ...rest }
           translateY: -50,
           translateX: -75,
           itemsSpacing: 2,
-          itemWidth: 100,
+          itemWidth: 110,
           itemHeight: 20,
           itemDirection: "left-to-right",
           itemOpacity: 0.85,

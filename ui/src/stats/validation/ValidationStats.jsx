@@ -14,12 +14,12 @@ export default function ValidationStats() {
 
   return (
     <>
-      <GridRow>
+      <GridRow className={"fr-mb-3w"}>
         <Col>
           <ValidationPie stats={stats} />
         </Col>
       </GridRow>
-      <GridRow>
+      <GridRow className={"fr-mb-3w"}>
         <Col>
           <ValidationHistogram stats={stats} />
         </Col>

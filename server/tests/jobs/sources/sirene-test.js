@@ -203,41 +203,6 @@ describe("sirene", () => {
     assert.deepStrictEqual(found.relations, []);
   });
 
-  it("Vérifie qu'on stocke la date de sortie de l'organisme quand l'organisme est fermé", async () => {
-    await insertOrganisme({
-      siret: "11111111100006",
-      etat_administratif: "actif",
-      _meta: { date_import: DateTime.fromISO("2022-01-01").toJSDate() },
-    });
-    let source = createSource("sirene");
-    withGeoApiMock();
-    mockSireneApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("unites_legales"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.unitesLegales({
-            unite_legale: {
-              etablissements: [
-                {
-                  siret: "11111111100006",
-                  etat_administratif: "F",
-                  date_debut: "2022-02-02",
-                },
-              ],
-            },
-          })
-        );
-    });
-
-    await collectSources(source);
-
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    assert.deepStrictEqual(found.etat_administratif, "fermé");
-    assert.strictEqual(DateTime.fromJSDate(found._meta.date_sortie).toISODate(), DateTime.local().toISODate());
-  });
-
   it("Vérifie qu'on gère une erreur lors de la récupération des informations de l'API Sirene", async () => {
     await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("sirene");

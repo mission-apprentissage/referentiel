@@ -99,18 +99,6 @@ function mergeNature(current, newNature) {
   return newNature || current;
 }
 
-function getEtat(organisme, etat) {
-  if (!etat) {
-    return {};
-  }
-
-  let fermeture = organisme.etat_administratif === "actif" && etat === "fermé";
-  return {
-    etat_administratif: etat,
-    ...(fermeture ? { "_meta.date_sortie": new Date() } : {}),
-  };
-}
-
 function handleAnomalies(source, organisme, newAnomalies) {
   logger.warn({ anomalies: newAnomalies }, `Erreur lors de la collecte pour l'organisme ${organisme.siret}.`, {
     source,
@@ -184,7 +172,6 @@ module.exports = async (array, options = {}) => {
       diplomes = [],
       certifications = [],
       lieux_de_formation = [],
-      etat_administratif,
       nature,
       data = {},
       anomalies = [],
@@ -212,7 +199,6 @@ module.exports = async (array, options = {}) => {
       let res = await dbCollection("organismes").updateOne(query, {
         $set: omitNil({
           ...flattenObject(data),
-          ...getEtat(organisme, etat_administratif),
           nature: mergeNature(organisme.nature, nature),
           uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),
           relations: await mergeRelations(from, organisme.relations, relations, siretsFromDatagouv),

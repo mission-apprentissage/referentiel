@@ -11,19 +11,19 @@ export default function StatsPage() {
     <>
       <TitleLayout title={"Statistiques"} />
       <ContentLayout>
-        <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
+        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
           <Col modifiers={"12"}>
             <h6>Validation</h6>
             <ValidationStats />
           </Col>
         </GridRow>
-        <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
+        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
           <Col modifiers={"12"}>
             <h6>Natures</h6>
             <NaturesStats />
           </Col>
         </GridRow>
-        <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
+        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
           <Col modifiers={"12"}>
             <h6>Qualiopi</h6>
             <QualiopiStats />
