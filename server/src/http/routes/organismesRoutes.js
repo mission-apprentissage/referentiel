@@ -22,7 +22,7 @@ const findBestUAIPotentiel = require("../../common/actions/findBestUAIPotentiel"
 
 module.exports = () => {
   const router = express.Router();
-  const nouveauFeatureDate = DateTime.fromISO("2022-01-01").toJSDate();
+  const nouveauFeatureDate = DateTime.fromISO("2022-03-20").toJSDate();
 
   function toDto(organisme) {
     const best = organisme.uai_potentiels && findBestUAIPotentiel(organisme);
