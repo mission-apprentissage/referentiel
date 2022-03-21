@@ -1,5 +1,5 @@
 import { Col, GridRow } from "../common/dsfr/fondamentaux";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import ValidationCard from "../organismes/validation/ValidationCard";
 import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
 import TitleLayout from "../common/layout/TitleLayout";
@@ -61,6 +61,7 @@ export default function TableauDeBordPage() {
   let { auth } = useContext(ApiContext);
   let { query, setQuery } = useQuery();
   let title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
+  let [showStats] = useState(false);
 
   return (
     <>
@@ -92,11 +93,13 @@ export default function TableauDeBordPage() {
             <ValidationCard type={"VALIDE"} label={"Organismes validés"} />
           </Col>
         </GridRow>
-        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
-          <Col modifiers={"12"}>
-            <TableauDeBordStats />
-          </Col>
-        </GridRow>
+        {showStats && (
+          <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
+            <Col modifiers={"12"}>
+              <TableauDeBordStats />
+            </Col>
+          </GridRow>
+        )}
       </ContentLayout>
     </>
   );
