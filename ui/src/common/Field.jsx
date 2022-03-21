@@ -3,14 +3,17 @@ import cs from "classnames";
 import NA from "../organismes/common/NA";
 import React from "react";
 import { isEmpty } from "lodash-es";
+import { Box } from "./Flexbox";
+import Tooltip from "./Tooltip";
 
-const Field = styled(({ label, value, children, className, ...rest }) => {
+const Field = styled(({ label, value, tooltip, children, className, ...rest }) => {
   return (
-    <div className={cs(className, "fr-pb-6v")} {...rest}>
+    <Box align={"baseline"} className={cs(className, "fr-pb-6v")} {...rest}>
       {label && <span className={"fr-text--regular"}>{label} :&nbsp;</span>}
       {!isEmpty(value) ? <span className={"fr-text fr-text--bold fr-p-1v value"}>{value}</span> : <NA />}
       {children}
-    </div>
+      {tooltip && <Tooltip label={label} description={tooltip} />}
+    </Box>
   );
 })`
   .value {

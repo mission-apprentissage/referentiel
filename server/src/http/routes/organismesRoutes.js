@@ -3,6 +3,7 @@ const { isEmpty, omit, isNil, isBoolean } = require("lodash");
 const Boom = require("boom");
 const { oleoduc, transformIntoJSON, transformData } = require("oleoduc");
 const Joi = require("@hapi/joi");
+const { DateTime } = require("luxon");
 const { findAndPaginate } = require("../../common/utils/dbUtils");
 const { sendJsonStream } = require("../utils/httpUtils");
 const validators = require("../utils/validators");
@@ -11,7 +12,7 @@ const { arrayOf } = require("../utils/validators");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
 const setUAI = require("../../common/actions/setUAI");
-const { checkApiToken, checkOptionnalApiToken } = require("../middlewares/authMiddleware");
+const { checkApiToken } = require("../middlewares/authMiddleware");
 const canEditOrganisme = require("../middlewares/canEditOrganismeMiddleware");
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
@@ -21,6 +22,7 @@ const findBestUAIPotentiel = require("../../common/actions/findBestUAIPotentiel"
 
 module.exports = () => {
   const router = express.Router();
+  const nouveauFeatureDate = DateTime.fromISO("2022-03-20").toJSDate();
 
   function toDto(organisme) {
     const best = organisme.uai_potentiels && findBestUAIPotentiel(organisme);
@@ -31,21 +33,11 @@ module.exports = () => {
             _meta: {
               ...organisme._meta,
               ...(best ? { uai_probale: best.uai } : {}),
+              nouveau: !organisme.uai && organisme._meta.date_import > nouveauFeatureDate,
             },
           }
         : {}),
     };
-  }
-
-  function convertNaturesIntoQuery(criteria) {
-    return criteria.reduce(
-      (acc, c) => {
-        let results = c.split("|").filter((v) => !v.startsWith("-"));
-        acc.$or.push(results.length > 1 ? { natures: { $all: results } } : { natures: results });
-        return acc;
-      },
-      { $or: [] }
-    );
   }
 
   function buildQuery(params) {
@@ -53,9 +45,9 @@ module.exports = () => {
       sirets,
       uais,
       departements = [],
-      natures = [],
-      regions,
-      academies,
+      regions = [],
+      academies = [],
+      natures,
       text,
       anomalies,
       uai_potentiels,
@@ -63,40 +55,57 @@ module.exports = () => {
       etat_administratif,
       qualiopi,
       numero_declaration_activite: nda,
+      nouveaux,
     } = params;
 
+    let hasValue = (v) => !isNil(v);
+    let hasElements = (array) => array.length > 0;
+
     return {
-      ...(!isNil(sirets) ? (isBoolean(sirets) ? { siret: { $exists: true } } : { siret: { $in: sirets } }) : {}),
-      ...(!isNil(uais) ? (isBoolean(uais) ? { uai: { $exists: uais } } : { uai: { $in: uais } }) : {}),
-      ...(!isNil(nda)
+      ...(hasValue(sirets) ? (isBoolean(sirets) ? { siret: { $exists: true } } : { siret: { $in: sirets } }) : {}),
+      ...(hasValue(uais) ? (isBoolean(uais) ? { uai: { $exists: uais } } : { uai: { $in: uais } }) : {}),
+      ...(hasValue(nda)
         ? isBoolean(nda)
           ? { numero_declaration_activite: { $exists: nda } }
           : { numero_declaration_activite: nda }
         : {}),
-      ...(departements.length === 0 ? {} : { "adresse.departement.code": { $in: departements } }),
-      ...(natures.length === 0 ? {} : convertNaturesIntoQuery(natures)),
-      ...(etat_administratif ? { etat_administratif: etat_administratif } : {}),
-      ...(regions ? { "adresse.region.code": { $in: regions } } : {}),
-      ...(academies ? { "adresse.academie.code": { $in: academies } } : {}),
-      ...(text ? { $text: { $search: text } } : {}),
-      ...(!isNil(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
-      ...(!isNil(qualiopi) ? { qualiopi } : {}),
-      ...(!isNil(relations)
+      ...(hasValue(natures)
+        ? isBoolean(natures)
+          ? { nature: { $exists: natures } }
+          : { nature: { $in: natures } }
+        : {}),
+      ...(hasElements(departements) ? { "adresse.departement.code": { $in: departements } } : {}),
+      ...(hasElements(regions) ? { "adresse.region.code": { $in: regions } } : {}),
+      ...(hasElements(academies) ? { "adresse.academie.code": { $in: academies } } : {}),
+      ...(hasValue(relations)
         ? isBoolean(relations)
           ? { "relations.0": { $exists: relations } }
           : { "relations.type": { $in: relations } }
         : {}),
-      ...(!isNil(uai_potentiels)
+      ...(hasValue(uai_potentiels)
         ? isBoolean(uai_potentiels)
           ? { "uai_potentiels.0": { $exists: uai_potentiels } }
           : { "uai_potentiels.uai": { $in: uai_potentiels } }
+        : {}),
+      ...(hasValue(etat_administratif) ? { etat_administratif } : {}),
+      ...(hasValue(text) ? { $text: { $search: text } } : {}),
+      ...(hasValue(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
+      ...(hasValue(qualiopi) ? { qualiopi } : {}),
+      ...(hasValue(nouveaux)
+        ? nouveaux
+          ? { uai: { $exists: false }, "_meta.date_import": { $gt: nouveauFeatureDate } }
+          : {
+              $or: [
+                { uai: { $exists: true } },
+                { uai: { $exists: false }, "_meta.date_import": { $lt: nouveauFeatureDate } },
+              ],
+            }
         : {}),
     };
   }
 
   router.get(
     "/api/v1/organismes",
-    checkOptionnalApiToken(),
     tryCatch(async (req, res) => {
       let { page, items_par_page, ordre, champs, ...params } = await Joi.object({
         sirets: Joi.alternatives()
@@ -109,7 +118,9 @@ module.exports = () => {
           .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
           .default(null),
         numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
-        natures: arrayOf(Joi.string()).default([]),
+        natures: Joi.alternatives()
+          .try(Joi.boolean(), arrayOf(Joi.string().valid("responsable", "formateur", "responsable_formateur")))
+          .default(null),
         etat_administratif: Joi.string().valid("actif", "fermé"),
         regions: arrayOf(Joi.string().valid(...getRegions().map((r) => r.code))),
         academies: arrayOf(Joi.string().valid(...getAcademies().map((r) => r.code))),
@@ -122,6 +133,7 @@ module.exports = () => {
           .default(null),
         anomalies: Joi.boolean().default(null),
         qualiopi: Joi.boolean().default(null),
+        nouveaux: Joi.boolean().default(null),
         text: Joi.string(),
         ...validators.champs(),
         ...validators.pagination(),
@@ -134,7 +146,7 @@ module.exports = () => {
       let { find, pagination } = await findAndPaginate(dbCollection("organismes"), query, {
         page,
         limit: items_par_page,
-        sort: { ["_meta.import_date"]: ordre === "asc" ? 1 : -1 },
+        sort: { ["_meta.date_import"]: ordre === "asc" ? 1 : -1 },
         ...(isEmpty(projection) ? {} : { projection }),
       });
 

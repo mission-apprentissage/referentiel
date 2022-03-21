@@ -5,17 +5,18 @@ const { dbCollection } = require("../../src/common/db/mongodb");
 const assert = require("assert");
 const { omitDeep } = require("../../src/common/utils/objectUtils");
 const { sortBy } = require("lodash");
+const { DateTime } = require("luxon");
 
 describe("organismesRoutes", () => {
   it("Vérifie qu'on peut lister des organismes", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      natures: ["responsable", "formateur"],
+      nature: "responsable_formateur",
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -32,7 +33,7 @@ describe("organismesRoutes", () => {
           relations: [],
           lieux_de_formation: [],
           reseaux: [],
-          natures: ["responsable", "formateur"],
+          nature: "responsable_formateur",
           diplomes: [],
           certifications: [],
           siege_social: true,
@@ -68,7 +69,8 @@ describe("organismesRoutes", () => {
           },
           _meta: {
             anomalies: [],
-            import_date: "2021-02-10T16:39:13.064Z",
+            date_import: "2021-02-10T16:39:13.064Z",
+            nouveau: false,
           },
         },
       ],
@@ -645,11 +647,11 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      natures: ["responsable"],
+      nature: "responsable",
     });
     await insertOrganisme({
       siret: "22222222200002",
-      natures: ["formateur"],
+      nature: "formateur",
     });
 
     let response = await httpClient.get("/api/v1/organismes?natures=formateur");
@@ -659,18 +661,18 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes[0].siret, "22222222200002");
   });
 
-  it("Vérifie qu'on peut rechercher des organismes responsable et formateur à partir de sa nature", async () => {
+  it("Vérifie qu'on peut rechercher des organismes responsable_formateur à partir de leur nature", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      natures: ["responsable", "formateur"],
+      nature: "responsable_formateur",
     });
     await insertOrganisme({
       siret: "22222222200002",
-      natures: ["formateur"],
+      nature: "formateur",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?natures=formateur|responsable");
+    let response = await httpClient.get("/api/v1/organismes?natures=responsable_formateur");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -681,18 +683,18 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      natures: ["responsable"],
+      nature: "responsable",
     });
     await insertOrganisme({
       siret: "22222222200002",
-      natures: ["responsable", "formateur"],
+      nature: "responsable_formateur",
     });
     await insertOrganisme({
       siret: "333333333000003",
-      natures: ["formateur"],
+      nature: "formateur",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?natures=formateur|-responsable,-formateur|responsable");
+    let response = await httpClient.get("/api/v1/organismes?natures=formateur,responsable");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 2);
@@ -704,18 +706,17 @@ describe("organismesRoutes", () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
       siret: "11111111100001",
-      natures: [],
     });
     await insertOrganisme({
       siret: "22222222200002",
-      natures: ["responsable", "formateur"],
+      nature: "responsable_formateur",
     });
     await insertOrganisme({
       siret: "333333333000003",
-      natures: ["formateur"],
+      nature: "formateur",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?natures=-formateur|-responsable");
+    let response = await httpClient.get("/api/v1/organismes?natures=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -729,7 +730,7 @@ describe("organismesRoutes", () => {
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -810,14 +811,14 @@ describe("organismesRoutes", () => {
       siret: "11111111100001",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
     await insertOrganisme({
       siret: "22222222200002",
       _meta: {
         anomalies: [],
-        import_date: new Date("2020-02-10T16:39:13.064Z"),
+        date_import: new Date("2020-02-10T16:39:13.064Z"),
       },
     });
 
@@ -834,14 +835,14 @@ describe("organismesRoutes", () => {
       siret: "11111111100001",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
     await insertOrganisme({
       siret: "22222222200002",
       _meta: {
         anomalies: [],
-        import_date: new Date("2020-02-10T16:39:13.064Z"),
+        date_import: new Date("2020-02-10T16:39:13.064Z"),
       },
     });
 
@@ -894,7 +895,7 @@ describe("organismesRoutes", () => {
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -908,7 +909,6 @@ describe("organismesRoutes", () => {
       contacts: [],
       relations: [],
       reseaux: [],
-      natures: [],
       lieux_de_formation: [],
       diplomes: [],
       certifications: [],
@@ -945,7 +945,8 @@ describe("organismesRoutes", () => {
       },
       _meta: {
         anomalies: [],
-        import_date: "2021-02-10T16:39:13.064Z",
+        date_import: "2021-02-10T16:39:13.064Z",
+        nouveau: false,
       },
     });
   });
@@ -957,7 +958,7 @@ describe("organismesRoutes", () => {
       raison_sociale: "Centre de formation",
       _meta: {
         anomalies: [],
-        import_date: new Date("2021-02-10T16:39:13.064Z"),
+        date_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -1008,7 +1009,7 @@ describe("organismesRoutes", () => {
     deepStrictEqual(response.data.siret, "11111111100001");
     deepStrictEqual(response.data.uai, "0751234J");
     deepStrictEqual(
-      omitDeep(response.data, () => ["import_date"]),
+      omitDeep(response.data, () => ["date_import"]),
       {
         siret: "11111111100001",
         uai: "0751234J",
@@ -1018,7 +1019,6 @@ describe("organismesRoutes", () => {
         relations: [],
         lieux_de_formation: [],
         reseaux: [],
-        natures: [],
         diplomes: [],
         certifications: [],
         siege_social: true,
@@ -1054,6 +1054,7 @@ describe("organismesRoutes", () => {
         },
         _meta: {
           anomalies: [],
+          nouveau: false,
         },
       }
     );
@@ -1166,5 +1167,49 @@ describe("organismesRoutes", () => {
     );
 
     strictEqual(response.status, 400);
+  });
+
+  it("Vérifie qu'on peut rechercher des nouveaux organismes", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      _meta: {
+        date_import: new Date(),
+      },
+    });
+    await insertOrganisme({
+      siret: "22222222200006",
+      _meta: {
+        date_import: DateTime.fromISO("1999-03-01").toJSDate(),
+      },
+    });
+
+    let response = await httpClient.get("/api/v1/organismes?nouveaux=true");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100006");
+  });
+
+  it("Vérifie qu'on peut rechercher des anciens organismes", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      _meta: {
+        date_import: new Date(),
+      },
+    });
+    await insertOrganisme({
+      siret: "22222222200006",
+      _meta: {
+        date_import: DateTime.fromISO("1999-03-01").toJSDate(),
+      },
+    });
+
+    let response = await httpClient.get("/api/v1/organismes?nouveaux=false");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "22222222200006");
   });
 });

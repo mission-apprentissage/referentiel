@@ -1,14 +1,15 @@
 import { Box } from "../../common/Flexbox";
 import styled from "styled-components";
 import React from "react";
-import { Link } from "../../common/dsfr/elements/Link";
 import ClickableItem from "../../common/ClickableItem";
 import { Tag } from "../../common/dsfr/elements/Tag";
-import Natures from "../common/Natures";
+import Nature from "../common/Nature";
 import Siret from "../common/Siret";
 import RaisonSociale from "../common/RaisonSociale";
+import { Link } from "../../common/dsfr/elements/Link";
+import Badge from "../../common/dsfr/elements/Badge";
 
-const Card = styled(Box)`
+const CardBox = styled(Box)`
   padding: 1rem 2rem;
   margin-bottom: 1rem;
   background-color: var(--color-box-background);
@@ -32,13 +33,12 @@ const Adresse = styled.div`
 const Identifiants = styled(Box)`
   font-size: 0.875rem;
   line-height: 1.5rem;
-  width: 45%;
   .uai {
-    width: 30%;
+    width: 15%;
   }
   .siret {
     display: inline;
-    width: 70%;
+    width: 85%;
   }
 `;
 
@@ -65,30 +65,33 @@ export default function OrganismeItem({ organisme }) {
 
   return (
     <ClickableItem to={organisme.siret}>
-      <Card direction={"column"}>
-        {organisme.natures.length > 0 && (
-          <Box justify={"between"}>
-            <Tag modifiers="sm">{<Natures organisme={organisme} />}</Tag>
-            <ValidationTag organisme={organisme} />
+      <CardBox direction={"column"}>
+        {organisme.nature && (
+          <Box justify={"between"} align={"start"} className={"xfr-flex-direction-xs-column xfr-flex-direction-sm-row"}>
+            <div>
+              <Tag modifiers="sm" className={"fr-mr-1w fr-mb-1w"}>
+                {<Nature organisme={organisme} />}
+              </Tag>
+              <ValidationTag organisme={organisme} />
+            </div>
+            {organisme._meta.nouveau && <Badge modifiers={"info"}>Nouvel organisme</Badge>}
           </Box>
         )}
-        <Box justify={"between"}>
-          <Nom className={"fr-text--bold"} style={{ width: "85%" }}>
-            <RaisonSociale organisme={organisme} />
-          </Nom>
-        </Box>
+        <Nom className={"fr-text--bold"}>
+          <RaisonSociale organisme={organisme} />
+        </Nom>
         <Adresse>{adresse}</Adresse>
-        <Box justify={"between"} align={"center"} wrap={"nowrap"}>
-          <Identifiants justify={"start"}>
-            <span className={"uai"}>UAI : {organisme.uai || "N.A"}</span>
-            <div className={"siret"}>
-              <span>SIRET : </span>
-              <Siret organisme={organisme} />
-            </div>
-          </Identifiants>
+        <Identifiants>
+          <div className={"uai"}>UAI : {organisme.uai || "N.A"}</div>
+          <div className={"siret"}>
+            <span>SIRET : </span>
+            <Siret organisme={organisme} />
+          </div>
+        </Identifiants>
+        <Box direction={"column"} justify={"between"}>
           <Link as={"span"} modifiers={"lg icon-right"} icons="arrow-right-line" />
         </Box>
-      </Card>
+      </CardBox>
     </ClickableItem>
   );
 }

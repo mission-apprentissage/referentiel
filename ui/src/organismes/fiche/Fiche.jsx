@@ -1,9 +1,10 @@
 import React from "react";
 import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs";
-import ImmatriculationTab from "./immatriculation/ImmatriculationTab";
+import IdentiteTab from "./Identite/IdentiteTab";
 import RelationsTab from "./relations/RelationsTab";
 import WideTabs from "../../common/dsfr/custom/WideTabs";
 import { useNavigate, useParams } from "react-router-dom";
+import LieuxDeFormationTab from "./lieux/LieuxDeFormationTab";
 
 export default function Fiche({ organisme }) {
   let navigate = useNavigate();
@@ -21,7 +22,7 @@ export default function Fiche({ organisme }) {
           ),
           panel: (
             <TabPanel>
-              <ImmatriculationTab organisme={organisme} />
+              <IdentiteTab organisme={organisme} />
             </TabPanel>
           ),
         },
@@ -38,6 +39,22 @@ export default function Fiche({ organisme }) {
           panel: (
             <TabPanel>
               <RelationsTab organisme={organisme} />
+            </TabPanel>
+          ),
+        },
+        {
+          tab: (
+            <Tab
+              disabled={organisme.lieux_de_formation.length === 0}
+              selected={tab === "lieux"}
+              onClick={() => navigate("../lieux")}
+            >
+              Lieux de formation
+            </Tab>
+          ),
+          panel: (
+            <TabPanel>
+              <LieuxDeFormationTab organisme={organisme} />
             </TabPanel>
           ),
         },

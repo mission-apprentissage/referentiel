@@ -27,14 +27,12 @@ const actions = {
     legend: "Quelle UAI souhaitez-vous utiliser pour immatriculer cet organisme de formation ?",
     ActionButton: function ({ label, onClick, children }) {
       return (
-        <>
-          <div className={"fr-mt-3w"}>
-            <Button modifiers={"sm icon-left"} icons={"edit-line"} onClick={onClick}>
-              {label}
-            </Button>
-            {children}
-          </div>
-        </>
+        <div className={"fr-mt-3w"}>
+          <Button modifiers={"sm icon-left"} icons={"edit-line"} onClick={onClick}>
+            {label}
+          </Button>
+          {children}
+        </div>
       );
     },
   },
@@ -62,7 +60,7 @@ export default function UAIValidator({ organisme, ...rest }) {
   let { label, ActionButton } = action;
 
   return (
-    <div style={{ display: "inline" }} {...rest}>
+    <div {...rest}>
       <ValidationTag type={type} label={label} className="fr-mr-3v" />
       <ActionButton label={action.actionName} onClick={() => modal.open()}>
         <UAISelectorModal organisme={organisme} modal={modal} action={action} />

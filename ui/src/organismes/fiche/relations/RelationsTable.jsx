@@ -7,7 +7,7 @@ import { Thead } from "../../../common/dsfr/elements/Table";
 import React, { useState } from "react";
 import NA from "../../common/NA";
 import { Tag } from "../../../common/dsfr/elements/Tag";
-import Natures from "../../common/Natures";
+import Nature from "../../common/Nature";
 import Siret from "../../common/Siret";
 import { useModal } from "../../../common/dsfr/common/useModal";
 import RelationModal from "./RelationModal";
@@ -26,7 +26,7 @@ function RelationRow({ organisme, show }) {
         </Box>
       </td>
       <td onClick={show}>
-        <Tag modifiers="sm">{<Natures organisme={organisme} />}</Tag>
+        <Tag modifiers="sm">{<Nature organisme={organisme} />}</Tag>
       </td>
       <td onClick={show}>
         <span>{organisme.uai || <NA />}</span>
@@ -104,11 +104,11 @@ export function RelationsTable({ label, organisme, results }) {
             modifiers={"bordered layout-fixed"}
             thead={
               <Thead>
-                <td colSpan="2">Raison sociale</td>
-                <td>Natures</td>
-                <td>UAI</td>
-                <td colSpan="2">SIRET</td>
-                <td />
+                <th colSpan="2">Raison sociale</th>
+                <th>Nature</th>
+                <th>UAI</th>
+                <th colSpan="2">SIRET</th>
+                <th />
               </Thead>
             }
           >
@@ -131,7 +131,7 @@ export function RelationsTable({ label, organisme, results }) {
               <Thead>
                 <td colSpan="2">Raison sociale</td>
                 <td>UAI</td>
-                <td>Natures</td>
+                <td>Nature</td>
                 <td>SIRET</td>
               </Thead>
             }

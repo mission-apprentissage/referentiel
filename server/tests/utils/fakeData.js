@@ -142,7 +142,6 @@ module.exports = {
             relations: [],
             lieux_de_formation: [],
             reseaux: [],
-            natures: [],
             diplomes: [],
             certifications: [],
             referentiels: ["test"],
@@ -178,7 +177,7 @@ module.exports = {
             },
             _meta: {
               anomalies: [],
-              import_date: new Date(),
+              date_import: new Date(),
             },
           },
           custom

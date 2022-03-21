@@ -1,14 +1,14 @@
 import { Col, GridRow } from "../common/dsfr/fondamentaux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Alert from "../common/dsfr/elements/Alert";
-import React, { createContext, useContext, useState } from "react";
-import TitleLayout from "../common/layout/TitleLayout";
+import React, { useContext, useState } from "react";
+import TitleLayout, { Back } from "../common/layout/TitleLayout";
 import ContentLayout from "../common/layout/ContentLayout";
 import { useFetch } from "../common/hooks/useFetch";
 import Fiche from "../organismes/fiche/Fiche";
 import RaisonSociale from "../organismes/common/RaisonSociale";
-
-export const OrganismeContext = createContext(null);
+import OrganismeProvider, { OrganismeContext } from "../organismes/OrganismeProvider";
+import { SearchContext } from "../common/PreviousSearchProvider";
 
 export function OrganismeTitle() {
   let { organisme } = useContext(OrganismeContext);
@@ -18,21 +18,24 @@ export function OrganismeTitle() {
 
 export default function OrganismePage() {
   let { siret } = useParams();
+  let previousSearch = useContext(SearchContext);
+  let navigate = useNavigate();
   let [{ data: organisme, loading, error }, setData] = useFetch(`/api/v1/organismes/${siret}`);
   let [message, setMessage] = useState(null);
+
+  function onChange(organisme, options = {}) {
+    if (options.message) {
+      setMessage(options.message);
+      autoCloseMessage();
+    }
+    setData(organisme);
+  }
+
   function autoCloseMessage() {
     let timeout = setTimeout(() => {
       clearTimeout(timeout);
       setMessage(null);
     }, 5000);
-  }
-
-  async function updateOrganisme(organisme, options = {}) {
-    if (options.message) {
-      setMessage(options.message);
-      autoCloseMessage();
-    }
-    await setData(organisme);
   }
 
   if (error) {
@@ -56,11 +59,15 @@ export default function OrganismePage() {
   }
 
   return (
-    <OrganismeContext.Provider value={{ organisme, updateOrganisme }}>
-      <TitleLayout title={<OrganismeTitle />} message={message} back={"Retour à la liste"} />
+    <OrganismeProvider organisme={organisme} onChange={onChange}>
+      <TitleLayout
+        title={<OrganismeTitle />}
+        message={message}
+        back={<Back onClick={() => navigate(previousSearch)}>Retour à la liste</Back>}
+      />
       <ContentLayout>
         <Fiche organisme={organisme} />
       </ContentLayout>
-    </OrganismeContext.Provider>
+    </OrganismeProvider>
   );
 }

@@ -81,7 +81,13 @@ function buildCertification(formation) {
 
 async function buildLieuDeFormation(formation, { reverseGeocode }) {
   if (!formation.lieu_formation_geo_coordonnees) {
-    return {};
+    return {
+      anomalie: {
+        key: `lieudeformation_${formation.lieu_formation_adresse}`,
+        type: "lieudeformation_geoloc_inconnu",
+        details: `Lieu de formation inconnu : ${formation.lieu_formation_adresse}.`,
+      },
+    };
   }
 
   try {
@@ -100,7 +106,7 @@ async function buildLieuDeFormation(formation, { reverseGeocode }) {
       anomalie: {
         key: `lieudeformation_${formation.lieu_formation_adresse}`,
         type: "lieudeformation_geoloc_impossible",
-        details: `Lieu de formation inconnu : ${formation.lieu_formation_adresse}. ${e.message}`,
+        details: `Lieu de formation non géolocalisable : ${formation.lieu_formation_adresse}. ${e.message}`,
       },
     };
   }
@@ -135,14 +141,14 @@ module.exports = (custom = {}) => {
             {
               from: "catalogue",
               selector: formation.etablissement_gestionnaire_siret,
-              natures: ["responsable"],
+              nature: "responsable",
               relations: compact([buildRelation(formation, "responsable->formateur")]),
               contacts: buildContacts(formation),
             },
             {
               from: "catalogue",
               selector: formation.etablissement_formateur_siret,
-              natures: ["formateur"],
+              nature: "formateur",
               relations: compact([buildRelation(formation, "formateur->responsable")]),
               contacts: buildContacts(formation),
               diplomes: compact([await buildDiplome(formation)]),

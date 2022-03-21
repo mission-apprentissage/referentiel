@@ -5,6 +5,7 @@ const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
 const { findRegionByCode } = require("../../common/regions");
 const { findAcademieByCode } = require("../../common/academies");
 
+passport.use(new AnonymousStrategy());
 passport.use(
   "api-token",
   new JwtStrategy(
@@ -30,8 +31,6 @@ passport.use(
     }
   )
 );
-
-passport.use(new AnonymousStrategy());
 
 function checkOptionnalApiToken() {
   return passport.authenticate(["api-token", "anonymous"], {

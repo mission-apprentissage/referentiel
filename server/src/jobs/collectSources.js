@@ -88,6 +88,17 @@ function mergeContacts(source, contacts, newContacts) {
   );
 }
 
+function mergeNature(current, newNature) {
+  if (
+    (current === "responsable" && newNature === "formateur") ||
+    (current === "formateur" && newNature === "responsable")
+  ) {
+    return "responsable_formateur";
+  }
+
+  return newNature || current;
+}
+
 function handleAnomalies(source, organisme, newAnomalies) {
   logger.warn({ anomalies: newAnomalies }, `Erreur lors de la collecte pour l'organisme ${organisme.siret}.`, {
     source,
@@ -161,8 +172,8 @@ module.exports = async (array, options = {}) => {
       diplomes = [],
       certifications = [],
       lieux_de_formation = [],
+      nature,
       data = {},
-      natures = [],
       anomalies = [],
     } = res;
 
@@ -186,21 +197,19 @@ module.exports = async (array, options = {}) => {
       }
 
       let res = await dbCollection("organismes").updateOne(query, {
-        $set: {
-          ...omitNil(flattenObject(data)),
+        $set: omitNil({
+          ...flattenObject(data),
+          nature: mergeNature(organisme.nature, nature),
           uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),
           relations: await mergeRelations(from, organisme.relations, relations, siretsFromDatagouv),
           contacts: mergeContacts(from, organisme.contacts, contacts),
           diplomes: mergeArray(from, organisme.diplomes, "code", diplomes),
           certifications: mergeArray(from, organisme.certifications, "code", certifications),
           lieux_de_formation: mergeArray(from, organisme.lieux_de_formation, "code", lieux_de_formation),
-        },
+        }),
         $addToSet: {
           reseaux: {
             $each: reseaux,
-          },
-          natures: {
-            $each: natures,
           },
         },
       });

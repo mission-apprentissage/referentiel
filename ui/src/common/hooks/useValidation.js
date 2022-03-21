@@ -8,7 +8,7 @@ export function useValidation(type, custom = {}) {
     [`${auth.type}s`]: auth.code,
     etat_administratif: "actif",
     qualiopi: true,
-    natures: "-formateur|responsable,formateur|responsable",
+    natures: "responsable,responsable_formateur",
     ...custom,
   };
 

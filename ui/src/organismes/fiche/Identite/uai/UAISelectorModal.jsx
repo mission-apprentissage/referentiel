@@ -7,9 +7,9 @@ import { Form } from "../../../../common/form/Form";
 import { UAIPotentielsRadios } from "./UAIPotentielsRadios";
 import { UAICustom } from "./UAICustom";
 import Alert from "../../../../common/dsfr/elements/Alert";
-import { OrganismeContext } from "../../../../pages/OrganismePage";
 import BlueBox from "../../../../common/BlueBox";
 import { ApiContext } from "../../../../common/ApiProvider";
+import { OrganismeContext } from "../../../OrganismeProvider";
 
 const validators = (httpClient) => {
   return yup.object({
@@ -44,7 +44,7 @@ const validators = (httpClient) => {
 
 export function UAISelectorModal({ modal, organisme, action }) {
   let { httpClient } = useContext(ApiContext);
-  let { updateOrganisme } = useContext(OrganismeContext);
+  let { onChange } = useContext(OrganismeContext);
   let hasPotentiels = organisme.uai_potentiels.length > 0;
   let form = useForm({
     initialValues: hasPotentiels ? { uai: organisme.uai || "", custom: "" } : { uai: "custom", custom: "" },
@@ -57,7 +57,7 @@ export function UAISelectorModal({ modal, organisme, action }) {
       ._put(`/api/v1/organismes/${organisme.siret}/setUAI`, { uai })
       .then((updated) => {
         modal.close();
-        updateOrganisme(updated, {
+        onChange(updated, {
           message: (
             <Alert modifiers={"success"}>
               <p>L’UAI que vous avez renseignée pour cet organisme a bien été enregistré</p>

@@ -58,10 +58,9 @@ module.exports = async (array) => {
             relations: [],
             lieux_de_formation: [],
             reseaux: [],
-            natures: [],
             diplomes: [],
             certifications: [],
-            "_meta.import_date": new Date(),
+            "_meta.date_import": new Date(),
             "_meta.anomalies": [],
           },
           $addToSet: {

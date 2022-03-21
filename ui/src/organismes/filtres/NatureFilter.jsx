@@ -1,16 +1,25 @@
 import { Filter } from "./Filter";
+import Tooltip from "../../common/Tooltip";
+import definitions from "../../common/definitions.json";
+import { getNatureLabel } from "../../common/enums/natures";
+import React from "react";
 
 export default function NatureFilter({ items }) {
   return (
     <Filter
-      label={"Nature des organismes"}
+      label={
+        <>
+          <span>Nature</span>
+          <Tooltip label={"Nature"} description={definitions.nature} />
+        </>
+      }
       paramName={"natures"}
       items={
         items || [
-          { code: "formateur|responsable", label: "Responsable et formateur" },
-          { code: "formateur|-responsable", label: "Formateur" },
-          { code: "-formateur|responsable", label: "Responsable" },
-          { code: "-formateur|-responsable", label: "N.A" },
+          { code: "responsable_formateur", label: getNatureLabel("responsable_formateur") },
+          { code: "formateur", label: getNatureLabel("formateur") },
+          { code: "responsable", label: getNatureLabel("responsable") },
+          { code: false, label: "N.A" },
         ]
       }
     />

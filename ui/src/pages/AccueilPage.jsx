@@ -10,7 +10,7 @@ import { percentage } from "../common/utils";
 
 export default function AccueilPage() {
   let navigate = useNavigate();
-  let [{ data: stats }] = useFetch(`/api/v1/stats`, null);
+  let [{ data: stats }] = useFetch("/api/v1/stats/couverture", null);
 
   return (
     <>
@@ -23,7 +23,7 @@ export default function AccueilPage() {
               <a href={"#construction"}>Construction du référentiel</a>
             </Summary>
           </Col>
-          <Col modifiers={"12 sm-9"}>
+          <Col modifiers={"12 offset-sm-1 sm-8"}>
             <h2>Bienvenue sur le Référentiel des organismes de formation en apprentissage</h2>
             <h6 id={"référentiel"}>
               Aujourd’hui, le référentiel est en cours d’expérimentation sur 3 régions.{" "}
@@ -42,8 +42,8 @@ export default function AccueilPage() {
             <ol>
               <li>identifiés par un SIRET</li>
               <li>
-                trouvés dans la Liste publique des organisme de formation, la base RAMSESE ou le catalogue des
-                formations en apprentissage
+                trouvés dans la Liste publique des Organismes de Formation (Data.gouv), la base ACCE et le Catalogue des
+                formations en apprentissage (base des Carif-Oref)
               </li>
               <li>en lien avec des formations en apprentissage à un moment donné</li>
             </ol>

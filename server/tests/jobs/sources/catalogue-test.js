@@ -39,10 +39,10 @@ describe("catalogue", () => {
     let stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found.natures, ["responsable"]);
+    assert.deepStrictEqual(found.nature, "responsable");
 
     found = await dbCollection("organismes").findOne({ siret: "22222222200002" });
-    assert.deepStrictEqual(found.natures, ["formateur"]);
+    assert.deepStrictEqual(found.nature, "formateur");
     assert.deepStrictEqual(stats, {
       catalogue: {
         total: 2,
@@ -54,7 +54,7 @@ describe("catalogue", () => {
     });
   });
 
-  it("Vérifie qu'on peut collecter les natures responsable et formateur", async () => {
+  it("Vérifie qu'on peut collecter la nature responsable_formateur", async () => {
     await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
@@ -69,7 +69,7 @@ describe("catalogue", () => {
     await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.deepStrictEqual(found.natures, ["responsable", "formateur"]);
+    assert.deepStrictEqual(found.nature, "responsable_formateur");
   });
 
   it("Vérifie qu'on peut collecter des relations (responsable->formateur)", async () => {
@@ -443,7 +443,7 @@ describe("catalogue", () => {
       sources: ["catalogue"],
       job: "collect",
       details:
-        "Lieu de formation inconnu : 31 rue des lilas. Coordonnées inconnues [2.396444,48.879706] " +
+        "Lieu de formation non géolocalisable : 31 rue des lilas. Coordonnées inconnues [2.396444,48.879706] " +
         "(cause: [GeoAdresseApi] Request failed with status code 400)",
     });
     assert.deepStrictEqual(stats, {
@@ -454,6 +454,31 @@ describe("catalogue", () => {
         anomalies: 1,
         failed: 0,
       },
+    });
+  });
+
+  it("Vérifie qu'on crée une anomalie quand il n'y a pas de geoloc pour le lieu de formation", async () => {
+    await insertOrganisme({ siret: "22222222200002" });
+    let source = createSource("catalogue");
+    mockApis({
+      formation: {
+        etablissement_gestionnaire_siret: "11111111100006",
+        lieu_formation_siret: "33333333300008",
+        lieu_formation_geo_coordonnees: null,
+      },
+    });
+
+    await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
+    assert.strictEqual(found.lieux_de_formation.length, 0);
+    assert.strictEqual(found._meta.anomalies.length, 1);
+    assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
+      key: "lieudeformation_31 rue des lilas",
+      type: "lieudeformation_geoloc_inconnu",
+      sources: ["catalogue"],
+      job: "collect",
+      details: "Lieu de formation inconnu : 31 rue des lilas.",
     });
   });
 
