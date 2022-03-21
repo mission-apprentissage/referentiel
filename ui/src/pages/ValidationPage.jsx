@@ -10,7 +10,7 @@ import styled from "styled-components";
 import { useValidation } from "../common/hooks/useValidation";
 import Filters from "../organismes/filtres/Filters";
 import NatureFilter from "../organismes/filtres/NatureFilter";
-import { getNatureLabel } from "../common/natures";
+import { getNatureLabel } from "../common/enums/natures";
 import Small from "../common/dsfr/custom/Small";
 
 const MAPPER = {

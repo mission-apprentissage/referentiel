@@ -1,11 +1,7 @@
 import React from "react";
 import { useFetch } from "../../common/hooks/useFetch";
 import Pie from "../Pie";
-
-const MAPPER = {
-  actif: { label: "En activité", color: "#0f9d58" },
-  fermé: { label: "Fermé", color: "#e1000f" },
-};
+import { getEtatAdministratifColor, getEtatAdministratifLabel } from "../../common/enums/etat_administratif";
 
 export default function EtatAdministratifPie() {
   let [{ data }] = useFetch(`/api/v1/stats/etat_administratif`, []);
@@ -14,7 +10,7 @@ export default function EtatAdministratifPie() {
       ...acc,
       {
         id: key,
-        label: MAPPER[key].label,
+        label: getEtatAdministratifLabel(key),
         value: data[key],
       },
     ];
@@ -22,7 +18,11 @@ export default function EtatAdministratifPie() {
 
   return (
     <div style={{ height: "500px" }}>
-      <Pie data={stats} getLabel={(id) => MAPPER[id].label} getColor={(id) => MAPPER[id].color} />
+      <Pie
+        data={stats}
+        getLabel={(id) => getEtatAdministratifLabel(id)}
+        getColor={(id) => getEtatAdministratifColor(id)}
+      />
     </div>
   );
 }

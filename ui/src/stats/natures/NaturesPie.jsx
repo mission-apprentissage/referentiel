@@ -1,4 +1,4 @@
-import { getNatureColor, getNatureLabel } from "../../common/natures";
+import { getNatureColor, getNatureLabel } from "../../common/enums/natures";
 import Pie from "../Pie";
 import React from "react";
 

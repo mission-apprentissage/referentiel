@@ -1,7 +1,7 @@
 import { Filter } from "./Filter";
 import Tooltip from "../../common/Tooltip";
 import definitions from "../../common/definitions.json";
-import { getNatureLabel } from "../../common/natures";
+import { getNatureLabel } from "../../common/enums/natures";
 import React from "react";
 
 export default function NatureFilter({ items }) {

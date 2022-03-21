@@ -1,6 +1,6 @@
 import Histogram from "../Histogram";
 import React from "react";
-import { getValidationColor, getValidationLabel, getValidationKeys } from "../../common/validation";
+import { getValidationColor, getValidationLabel, getValidationKeys } from "../../common/enums/validation";
 
 export function ValidationHistogram({ stats }) {
   return (
@@ -10,8 +10,8 @@ export function ValidationHistogram({ stats }) {
         xLegend={"Académie"}
         yLegend={"Nombre d'organisme"}
         data={stats.academies}
-        indexBy={({ academie }) => academie.nom}
         keys={getValidationKeys()}
+        indexBy={({ academie }) => academie.nom}
         getLabel={(id) => getValidationLabel(id)}
         getColor={(id) => getValidationColor(id)}
       />

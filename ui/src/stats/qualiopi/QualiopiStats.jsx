@@ -3,12 +3,8 @@ import { useFetch } from "../../common/hooks/useFetch";
 import Spinner from "../../common/Spinner";
 import { Col, GridRow } from "../../common/dsfr/fondamentaux";
 import Histogram from "../Histogram";
-import { getNatureLabel } from "../../common/natures";
-
-const MAPPER = {
-  qualiopi: { label: "Qualiopi", color: "#bbd6f1" },
-  non_qualiopi: { label: "Non Qualiopi", color: "#69a4e0" },
-};
+import { getNatureLabel } from "../../common/enums/natures";
+import { getQualiopiColor, getQualiopiLabel } from "../../common/enums/qualiopi";
 
 export default function QualiopiStats() {
   let [{ data, loading, error }] = useFetch(`/api/v1/stats/qualiopi`, []);
@@ -23,13 +19,13 @@ export default function QualiopiStats() {
         <div style={{ height: "500px" }}>
           <Histogram
             ariaLabel="Répartition des natures des organisme par académie"
-            data={data}
-            indexBy={(item) => getNatureLabel(item.nature)}
-            keys={["qualiopi", "non_qualiopi"]}
             xLegend={"Natures"}
             yLegend={"Nombre d'organisme"}
-            getLabel={(id) => MAPPER[id].label}
-            getColor={(id) => MAPPER[id].color}
+            data={data}
+            keys={["qualiopi", "non_qualiopi"]}
+            indexBy={(item) => getNatureLabel(item.nature)}
+            getLabel={(id) => getQualiopiLabel(id)}
+            getColor={(id) => getQualiopiColor(id)}
           />
         </div>
       </Col>

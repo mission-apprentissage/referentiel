@@ -1,5 +1,5 @@
 import Histogram from "../Histogram";
-import { getNatureColor, getNatureLabel, getNatureKeys } from "../../common/natures";
+import { getNatureColor, getNatureLabel, getNatureKeys } from "../../common/enums/natures";
 import React from "react";
 
 export function NaturesHistogram({ stats }) {
@@ -10,8 +10,8 @@ export function NaturesHistogram({ stats }) {
         xLegend={"Académie"}
         yLegend={"Nombre d'organisme"}
         data={stats.academies}
-        indexBy={({ academie }) => academie.nom}
         keys={getNatureKeys()}
+        indexBy={({ academie }) => academie.nom}
         getLabel={(id) => getNatureLabel(id)}
         getColor={(id) => getNatureColor(id)}
       />
