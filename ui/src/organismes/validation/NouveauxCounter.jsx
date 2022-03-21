@@ -9,7 +9,7 @@ export default function NouveauxCounter({ type }) {
     champs: "siret",
   });
 
-  if (response.loading) {
+  if (response.loading || response.data.pagination.total === 0) {
     return <div />;
   }
 
