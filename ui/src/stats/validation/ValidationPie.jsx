@@ -1,4 +1,4 @@
-import Pie from "../Pie";
+import Pie from "../../common/nivo/Pie";
 import React from "react";
 import { getValidationColor, getValidationLabel } from "../../common/enums/validation";
 
@@ -14,9 +14,5 @@ export function ValidationPie({ stats }) {
     ];
   }, []);
 
-  return (
-    <div style={{ height: "500px" }}>
-      <Pie data={national} getLabel={(id) => getValidationLabel(id)} getColor={(id) => getValidationColor(id)} />
-    </div>
-  );
+  return <Pie data={national} getLabel={(id) => getValidationLabel(id)} getColor={(id) => getValidationColor(id)} />;
 }

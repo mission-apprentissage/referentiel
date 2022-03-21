@@ -7,6 +7,6 @@ const MAPPER = {
   inconnu: { label: "N.A", color: "#003f7e", order: 3 },
 };
 
-export const getNatureKeys = () => sortBy(Object.keys(MAPPER), (key) => MAPPER[key].order);
+export const getNatureTypes = () => sortBy(Object.keys(MAPPER), (key) => MAPPER[key].order);
 export const getNatureLabel = (id) => MAPPER[id].label;
 export const getNatureColor = (id) => MAPPER[id].color;

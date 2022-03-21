@@ -6,6 +6,6 @@ const MAPPER = {
   VALIDE: { label: "Validés", color: "#CEFDDC", order: 0 },
 };
 
-export const getValidationKeys = () => sortBy(Object.keys(MAPPER), (key) => MAPPER[key].order);
+export const getValidationTypes = () => sortBy(Object.keys(MAPPER), (key) => MAPPER[key].order);
 export const getValidationLabel = (key) => MAPPER[key].label;
 export const getValidationColor = (key) => MAPPER[key].color;

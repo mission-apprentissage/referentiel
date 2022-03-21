@@ -1,5 +1,5 @@
 import { getNatureColor, getNatureLabel } from "../../common/enums/natures";
-import Pie from "../Pie";
+import Pie from "../../common/nivo/Pie";
 import React from "react";
 
 export function NaturesPie({ stats }) {
@@ -14,9 +14,5 @@ export function NaturesPie({ stats }) {
     ];
   }, []);
 
-  return (
-    <div style={{ height: "500px" }}>
-      <Pie data={national} getLabel={(id) => getNatureLabel(id)} getColor={(id) => getNatureColor(id)} />
-    </div>
-  );
+  return <Pie data={national} getLabel={(id) => getNatureLabel(id)} getColor={(id) => getNatureColor(id)} />;
 }

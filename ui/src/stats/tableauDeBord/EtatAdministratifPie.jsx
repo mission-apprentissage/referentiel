@@ -1,6 +1,6 @@
 import React from "react";
 import { useFetch } from "../../common/hooks/useFetch";
-import Pie from "../Pie";
+import Pie from "../../common/nivo/Pie";
 import { getEtatAdministratifColor, getEtatAdministratifLabel } from "../../common/enums/etat_administratif";
 
 export default function EtatAdministratifPie() {
@@ -17,12 +17,10 @@ export default function EtatAdministratifPie() {
   }, []);
 
   return (
-    <div style={{ height: "500px" }}>
-      <Pie
-        data={stats}
-        getLabel={(id) => getEtatAdministratifLabel(id)}
-        getColor={(id) => getEtatAdministratifColor(id)}
-      />
-    </div>
+    <Pie
+      data={stats}
+      getLabel={(id) => getEtatAdministratifLabel(id)}
+      getColor={(id) => getEtatAdministratifColor(id)}
+    />
   );
 }

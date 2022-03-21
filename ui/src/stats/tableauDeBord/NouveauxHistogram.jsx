@@ -1,6 +1,6 @@
 import React from "react";
 import { useFetch } from "../../common/hooks/useFetch";
-import Histogram from "../Histogram";
+import Histogram from "../../common/nivo/Histogram";
 
 function getLastMonths(nbMonths) {
   let names = [
@@ -53,12 +53,12 @@ export default function NouveauxHistogram() {
   return (
     <div style={{ height: "500px" }}>
       <Histogram
-        ariaLabel="Entrants sur les 6 derniers mois"
-        yLegend={"Organismes"}
+        title="Entrants sur les 6 derniers mois"
+        yLegend={"Oorganismes"}
         data={last6Months}
-        keys={["nbOrganismes"]}
-        getLabel={() => "Organismes"}
-        getColor={() => "#0063CB"}
+        series={["nbOrganismes"]}
+        getSerieLabel={() => "Nouveaux organismes"}
+        getSerieColor={() => "#0063CB"}
         axisBottom={customXLegend}
       />
     </div>
