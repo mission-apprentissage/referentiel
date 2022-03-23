@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 /**
  * A custom hook to detect when the user is pressing a specific key or a collection of keys
  * @author Melvyn Phillips (Numel2020)
  * @link https://github.com/Numel2020
- * @param options -  User options
+ * @param {object} -  User options
  * @returns {boolean} - TRUE returns a match.
  */
 function useAllKeysPress(options) {
