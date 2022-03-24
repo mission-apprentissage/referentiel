@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import useOnce from "../../../common/hooks/useOnce"; // eslint-disable-line import/no-webpack-loader-syntax
-import blue from "./blue.svg";
-import red from "./red.svg";
+import bluePin from "./map-pin-blue.svg";
+import redPin from "./map-pin-red.svg";
+import redBluePin from "./map-pin-red-blue.svg";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Box } from "../../../common/Flexbox";
 import Legend from "./Legend";
@@ -46,14 +47,38 @@ function getCenter(organisme) {
   return organisme.lieux_de_formation[0].adresse?.geojson.geometry.coordinates;
 }
 
+function degreesToRadians(degrees) {
+  return (degrees * Math.PI) / 180;
+}
+
+function distanceInKmBetweenCoords(coords1, coords2) {
+  let earthRadiusKm = 6371;
+  let dLat = degreesToRadians(coords2[1] - coords1[1]);
+  let dLon = degreesToRadians(coords2[0] - coords1[0]);
+  let lat1 = degreesToRadians(coords1[1]);
+  let lat2 = degreesToRadians(coords2[1]);
+
+  let a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return earthRadiusKm * c;
+}
+
 function buildSource(organisme) {
   let features = [];
+  let lieux = organisme.lieux_de_formation;
+
   if (organisme.adresse) {
+    let coords = organisme.adresse.geojson.geometry.coordinates;
+    lieux = lieux.filter(({ adresse }) => {
+      return distanceInKmBetweenCoords(coords, adresse.geojson.geometry.coordinates) !== 0;
+    });
+
     features.push(
       adaptGeojson(organisme.adresse, {
         label: organisme.enseigne || organisme.raison_sociale,
         popup: organisme.adresse?.label,
-        icon: "poi-red",
+        icon: organisme.lieux_de_formation.length !== lieux.length ? "map-pin-red-blue" : "map-pin-red",
         sortKey: 1,
       })
     );
@@ -65,10 +90,10 @@ function buildSource(organisme) {
       type: "FeatureCollection",
       features: [
         ...features,
-        ...organisme.lieux_de_formation.map((l) => {
+        ...lieux.map((l) => {
           return adaptGeojson(l.adresse, {
             popup: l.adresse?.label,
-            icon: "poi-blue",
+            icon: "map-pin-blue",
             sortKey: 2,
           });
         }),
@@ -113,8 +138,12 @@ function getBounds(source) {
   return bounds;
 }
 
-async function onMapLoaded(map, source) {
-  await Promise.all([addSVGImage(map, "poi-blue", blue), addSVGImage(map, "poi-red", red)]);
+async function configureMap(map, source) {
+  await Promise.all([
+    addSVGImage(map, "map-pin-blue", bluePin),
+    addSVGImage(map, "map-pin-red", redPin),
+    addSVGImage(map, "map-pin-red-blue", redBluePin),
+  ]);
 
   showPopupOnMouseHover(map, "layer-points");
 
@@ -162,7 +191,7 @@ export default function LieuxDeFormationMap({ organisme }) {
 
     map.on("load", () => {
       let source = buildSource(organisme);
-      return onMapLoaded(map, source);
+      return configureMap(map, source);
     });
   });
 
