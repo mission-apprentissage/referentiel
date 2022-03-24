@@ -20,7 +20,7 @@ function addSVGImage(map, name, file) {
   });
 }
 
-function getGeojson(adresse, props = {}) {
+function adaptGeojson(adresse, props = {}) {
   let geojson = adresse.geojson;
 
   return {
@@ -32,11 +32,15 @@ function getGeojson(adresse, props = {}) {
   };
 }
 
+function getCoordinates(geojson) {
+  let { geometry } = geojson;
+  return geometry.type === "Polygon" ? geometry.coordinates[0][0] : geometry.coordinates;
+}
+
 function getCenter(organisme) {
   let adresse = organisme.adresse;
   if (adresse) {
-    let geometry = adresse.geojson.geometry;
-    return geometry.type === "Polygon" ? geometry.coordinates[0][0] : geometry.coordinates;
+    return getCoordinates(adresse.geojson);
   }
 
   return organisme.lieux_de_formation[0].adresse?.geojson.geometry.coordinates;
@@ -46,7 +50,7 @@ function buildSource(organisme) {
   let features = [];
   if (organisme.adresse) {
     features.push(
-      getGeojson(organisme.adresse, {
+      adaptGeojson(organisme.adresse, {
         label: organisme.enseigne || organisme.raison_sociale,
         popup: organisme.adresse?.label,
         icon: "poi-red",
@@ -62,7 +66,7 @@ function buildSource(organisme) {
       features: [
         ...features,
         ...organisme.lieux_de_formation.map((l) => {
-          return getGeojson(l.adresse, {
+          return adaptGeojson(l.adresse, {
             popup: l.adresse?.label,
             icon: "poi-blue",
             sortKey: 2,
@@ -99,6 +103,16 @@ function showPopupOnMouseHover(map, layerName) {
   });
 }
 
+function getBounds(source) {
+  let first = source.data.features[0];
+  let coords = getCoordinates(first);
+  let bounds = new mapboxgl.LngLatBounds(coords, coords);
+
+  source.data.features.forEach((geojson) => bounds.extend(getCoordinates(geojson)));
+
+  return bounds;
+}
+
 async function onMapLoaded(map, source) {
   await Promise.all([addSVGImage(map, "poi-blue", blue), addSVGImage(map, "poi-red", red)]);
 
@@ -132,12 +146,7 @@ async function onMapLoaded(map, source) {
         "icon-allow-overlap": true,
       },
     })
-    .fitBounds(
-      source.data.features.map((f) => {
-        return f.geometry.type === "Polygon" ? f.geometry.coordinates[0][0] : f.geometry.coordinates;
-      }),
-      { padding: 200, maxZoom: 7 }
-    );
+    .fitBounds(getBounds(source), { padding: 200, maxZoom: 8 });
 }
 
 export default function LieuxDeFormationMap({ organisme }) {
