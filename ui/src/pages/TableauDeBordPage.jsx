@@ -1,5 +1,5 @@
 import { Col, GridRow } from "../common/dsfr/fondamentaux";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import ValidationCard from "../organismes/validation/ValidationCard";
 import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
 import TitleLayout from "../common/layout/TitleLayout";
@@ -11,6 +11,7 @@ import TableauDeBordStats from "../stats/tableauDeBord/TableauDeBordStats";
 import useToggle from "../common/hooks/useToggle";
 import LinkButton from "../common/dsfr/custom/LinkButton";
 import styled from "styled-components";
+import useAllKeysPress from "../common/hooks/useAllKeysPress";
 
 const Presentation = styled(({ className }) => {
   let [showDetails, toggleDetails] = useToggle(false);
@@ -61,7 +62,13 @@ export default function TableauDeBordPage() {
   let { auth } = useContext(ApiContext);
   let { query, setQuery } = useQuery();
   let title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
-  let [showStats] = useState(false);
+  const isShorcutPress = useAllKeysPress({ userKeys: ["Alt", "ArrowUp"] });
+  let [showStats, toggleStats] = useToggle(false);
+  useEffect(() => {
+    if (isShorcutPress) {
+      toggleStats(isShorcutPress);
+    }
+  }, [isShorcutPress, toggleStats]);
 
   return (
     <>
