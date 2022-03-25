@@ -18,6 +18,7 @@ export default function NatureFilter({ items }) {
           { label: getNatureLabel("responsable_formateur"), paramName: "natures", value: "responsable_formateur" },
           { label: getNatureLabel("formateur"), paramName: "natures", value: "formateur" },
           { label: getNatureLabel("responsable"), paramName: "natures", value: "responsable" },
+          { label: "N.A", paramName: "natures", value: "inconnue" },
         ]
       }
     />

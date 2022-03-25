@@ -78,6 +78,12 @@ describe("statsRoutes", () => {
           academie: { code: "01", nom: "Paris" },
         },
       }),
+      insertOrganisme({
+        nature: "inconnue",
+        adresse: {
+          academie: { code: "01", nom: "Paris" },
+        },
+      }),
     ]);
 
     let response = await httpClient.get("/api/v1/stats/natures");
@@ -91,7 +97,7 @@ describe("statsRoutes", () => {
             nom: "Aix-Marseille",
           },
           formateur: 0,
-          inconnu: 0,
+          inconnue: 0,
           responsable: 1,
           responsable_formateur: 0,
         },
@@ -101,14 +107,14 @@ describe("statsRoutes", () => {
             nom: "Paris",
           },
           formateur: 1,
-          inconnu: 0,
+          inconnue: 1,
           responsable: 1,
           responsable_formateur: 1,
         },
       ],
       national: {
         formateur: 1,
-        inconnu: 0,
+        inconnue: 1,
         responsable: 2,
         responsable_formateur: 1,
       },
@@ -196,7 +202,7 @@ describe("statsRoutes", () => {
     await insertOrganisme({ nature: "responsable", qualiopi: true });
     await insertOrganisme({ nature: "responsable", qualiopi: true });
     await insertOrganisme({ nature: "formateur", qualiopi: true });
-    await insertOrganisme({ qualiopi: false });
+    await insertOrganisme({ nature: "inconnue", qualiopi: false });
 
     let response = await httpClient.get("/api/v1/stats/qualiopi");
 
@@ -208,7 +214,7 @@ describe("statsRoutes", () => {
         qualiopi: 1,
       },
       {
-        nature: "inconnu",
+        nature: "inconnue",
         non_qualiopi: 1,
         qualiopi: 0,
       },

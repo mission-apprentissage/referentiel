@@ -702,27 +702,6 @@ describe("organismesRoutes", () => {
     ok(response.data.organismes.find((o) => o.siret === "333333333000003"));
   });
 
-  it("Vérifie qu'on peut rechercher des organismes sans nature", async () => {
-    const { httpClient } = await startServer();
-    await insertOrganisme({
-      siret: "11111111100001",
-    });
-    await insertOrganisme({
-      siret: "22222222200002",
-      nature: "responsable_formateur",
-    });
-    await insertOrganisme({
-      siret: "333333333000003",
-      nature: "formateur",
-    });
-
-    let response = await httpClient.get("/api/v1/organismes?natures=false");
-
-    strictEqual(response.status, 200);
-    strictEqual(response.data.organismes.length, 1);
-    ok(response.data.organismes.find((o) => o.siret === "11111111100001"));
-  });
-
   it("Vérifie qu'on peut limiter les champs renvoyés pour la liste des organismes", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
@@ -905,6 +884,7 @@ describe("organismesRoutes", () => {
     deepStrictEqual(response.data, {
       siret: "11111111100001",
       raison_sociale: "Centre de formation",
+      nature: "inconnue",
       uai_potentiels: [],
       contacts: [],
       relations: [],
@@ -1013,6 +993,7 @@ describe("organismesRoutes", () => {
       {
         siret: "11111111100001",
         uai: "0751234J",
+        nature: "inconnue",
         raison_sociale: "Centre de formation",
         uai_potentiels: [],
         contacts: [],

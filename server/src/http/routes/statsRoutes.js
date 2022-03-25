@@ -60,8 +60,8 @@ module.exports = () => {
                 responsable_formateur: {
                   $sum: sum({ $eq: ["$nature", "responsable_formateur"] }),
                 },
-                inconnu: {
-                  $sum: sum(nullOrEmpty("$nature")),
+                inconnue: {
+                  $sum: sum({ $eq: ["$nature", "inconnue"] }),
                 },
               },
             },
@@ -148,17 +148,6 @@ module.exports = () => {
               },
               non_qualiopi: {
                 $sum: sum({ $eq: ["$qualiopi", false] }),
-              },
-            },
-          },
-          {
-            $set: {
-              nature: {
-                $cond: {
-                  if: nullOrEmpty("$nature"),
-                  then: "inconnu",
-                  else: "$nature",
-                },
               },
             },
           },
