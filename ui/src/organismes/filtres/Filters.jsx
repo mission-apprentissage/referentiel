@@ -10,7 +10,7 @@ export default function Filters({ children, onChange: handleChange }) {
   let filters = [];
 
   function onChange(data) {
-    const arrayAsString = Object.keys(data).reduce((acc, key) => {
+    const withArrayValueAsString = Object.keys(data).reduce((acc, key) => {
       const array = data[key];
       return {
         ...acc,
@@ -18,7 +18,8 @@ export default function Filters({ children, onChange: handleChange }) {
       };
     }, {});
 
-    handleChange(arrayAsString);
+    console.log(withArrayValueAsString);
+    handleChange(withArrayValueAsString);
   }
 
   function register(paramName) {

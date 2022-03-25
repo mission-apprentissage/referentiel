@@ -28,6 +28,7 @@ describe("importOrganismes", () => {
     assert.deepStrictEqual(omit(found, ["_meta"]), {
       siret: "11111111100006",
       referentiels: ["dummy"],
+      nature: "inconnue",
       uai_potentiels: [],
       reseaux: [],
       contacts: [],

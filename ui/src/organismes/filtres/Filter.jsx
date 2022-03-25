@@ -8,6 +8,7 @@ import { FilterContext } from "./Filters";
 import { ariaExpanded } from "../../common/dsfr/dsfr";
 import { useQuery } from "../../common/hooks/useQuery";
 import { Box } from "../../common/Flexbox";
+import { isEqual } from "lodash-es";
 
 const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   return (
@@ -24,30 +25,48 @@ const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   }
 `;
 
-export function Filter({ label, paramName, items, expanded = false }) {
+function getParamFromQuery(query, paramName) {
+  let param = query[paramName];
+  return param ? param.split(",") : [];
+}
+
+export function Filter({ label, items, expanded = false }) {
   let { query } = useQuery();
-  let { onChange, register } = useContext(FilterContext);
-  let array = query[paramName] ? query[paramName].split(",") : [];
-  register(paramName);
+  let { onChange: onFilterChange } = useContext(FilterContext);
+  let selectedItems = items.filter((item) => {
+    return getParamFromQuery(query, item.paramName).includes(item.value);
+  });
 
   return (
     <GreyAccordionItem
       {...ariaExpanded(expanded)}
-      label={<FilterTitle label={label} nbCheckedElements={array.length} />}
+      label={<FilterTitle label={label} nbCheckedElements={selectedItems.length} />}
     >
       <Fieldset>
         {items.map((item, index) => {
-          let checked = array.includes(item.code);
+          let isSelected = !!selectedItems.find((i) => isEqual(i, item));
+
           return (
             <SmallCheckbox
               key={index}
-              name={paramName}
+              name={"filter"}
               label={item.label}
-              value={item.code}
-              checked={checked}
+              value={item.value}
+              checked={isSelected}
               onChange={() => {
-                let elements = checked ? array.filter((i) => i !== item.code) : [...array, item.code];
-                onChange({ [paramName]: elements });
+                let paramName = item.paramName;
+                let params = getParamFromQuery(query, paramName);
+
+                let changes;
+                if (isSelected) {
+                  changes = params.filter((v) => v !== item.value);
+                } else {
+                  changes = [...params, item.value];
+                }
+
+                onFilterChange({
+                  [paramName]: changes,
+                });
               }}
             />
           );

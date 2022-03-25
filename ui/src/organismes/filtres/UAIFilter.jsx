@@ -15,10 +15,9 @@ export default function UAIFilter() {
           />
         </Box>
       }
-      paramName={"uais"}
       items={[
-        { code: "true", label: "Oui" },
-        { code: "false", label: "Non" },
+        { label: "Oui", paramName: "uais", value: "true" },
+        { label: "Non", paramName: "uais", value: "false" },
       ]}
     />
   );

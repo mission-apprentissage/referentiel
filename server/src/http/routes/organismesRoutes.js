@@ -47,7 +47,7 @@ module.exports = () => {
       departements = [],
       regions = [],
       academies = [],
-      natures,
+      natures = [],
       text,
       anomalies,
       uai_potentiels,
@@ -69,11 +69,7 @@ module.exports = () => {
           ? { numero_declaration_activite: { $exists: nda } }
           : { numero_declaration_activite: nda }
         : {}),
-      ...(hasValue(natures)
-        ? isBoolean(natures)
-          ? { nature: { $exists: natures } }
-          : { nature: { $in: natures } }
-        : {}),
+      ...(hasElements(natures) ? { nature: { $in: natures } } : {}),
       ...(hasElements(departements) ? { "adresse.departement.code": { $in: departements } } : {}),
       ...(hasElements(regions) ? { "adresse.region.code": { $in: regions } } : {}),
       ...(hasElements(academies) ? { "adresse.academie.code": { $in: academies } } : {}),
@@ -118,13 +114,11 @@ module.exports = () => {
           .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
           .default(null),
         numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
-        natures: Joi.alternatives()
-          .try(Joi.boolean(), arrayOf(Joi.string().valid("responsable", "formateur", "responsable_formateur")))
-          .default(null),
+        natures: arrayOf(Joi.string().valid("responsable", "formateur", "responsable_formateur", "inconnue")),
         etat_administratif: Joi.string().valid("actif", "fermé"),
         regions: arrayOf(Joi.string().valid(...getRegions().map((r) => r.code))),
         academies: arrayOf(Joi.string().valid(...getAcademies().map((r) => r.code))),
-        departements: arrayOf(Joi.string().valid(...getDepartements().map((d) => d.code))).default([]),
+        departements: arrayOf(Joi.string().valid(...getDepartements().map((d) => d.code))),
         relations: Joi.alternatives()
           .try(
             Joi.boolean(),

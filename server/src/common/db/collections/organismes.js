@@ -6,6 +6,7 @@ module.exports = {
   schema: () => {
     let required = [
       "siret",
+      "nature",
       "uai_potentiels",
       "contacts",
       "relations",
@@ -25,7 +26,7 @@ module.exports = {
         siege_social: boolean(),
         numero_declaration_activite: string(),
         etat_administratif: string({ enum: ["actif", "fermé"] }),
-        nature: string({ enum: ["responsable", "formateur", "responsable_formateur"] }),
+        nature: string({ enum: ["responsable", "formateur", "responsable_formateur", "inconnue"] }),
         adresse: adresseSchema,
         forme_juridique: object(
           {

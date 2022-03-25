@@ -137,6 +137,7 @@ module.exports = {
           {
             siret: faker.helpers.replaceSymbols("#########00015"),
             raison_sociale: faker.company.companyName(),
+            nature: "inconnue",
             uai_potentiels: [],
             contacts: [],
             relations: [],

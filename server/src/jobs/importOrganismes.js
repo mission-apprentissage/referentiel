@@ -53,6 +53,7 @@ module.exports = async (array) => {
             siret,
           },
           $setOnInsert: {
+            nature: "inconnue",
             uai_potentiels: [],
             contacts: [],
             relations: [],

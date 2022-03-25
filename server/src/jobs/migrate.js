@@ -1,39 +1,13 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
-const { oleoduc, writeData } = require("oleoduc");
 
-const VERSION = 5;
-
-async function renameFields() {
-  let stats = { updated: 0 };
-  return oleoduc(
-    dbCollection("organismes").find().stream(),
-    writeData(async (organisme) => {
-      let nbNatures = organisme.natures.length;
-
-      let res = await dbCollection("organismes").updateOne(
-        { siret: organisme.siret },
-        {
-          $unset: { natures: 1 },
-          $rename: { "_meta.import_date": "_meta.date_import" },
-          ...(nbNatures > 0
-            ? { $set: { nature: nbNatures === 1 ? organisme.natures[0] : "responsable_formateur" } }
-            : {}),
-        }
-      );
-
-      if (res.modifiedCount) {
-        stats.updated++;
-      }
-
-      return stats;
-    }),
-    { parallel: 5 }
-  );
-}
+const VERSION = 6;
 
 async function tasks() {
   return {
-    renameFields: await renameFields(),
+    renameFields: await dbCollection("organismes").updateMany(
+      { nature: { $exists: false } },
+      { $set: { nature: "inconnue" } }
+    ),
   };
 }
 

@@ -8,17 +8,17 @@ export default function NdaFilter() {
     <Filter
       label={
         <Box align={"end"}>
-          <span>Déclaré en tant qu'Organisme Formateur</span>
+          <span>Liste publique des organismes de formation</span>
           <Tooltip
-            label={"Déclaré en tant qu'Organisme Formateur"}
+            label={"Liste publique des organismes de formation"}
             description={"L'organisme est présent dans la Liste publique des Organisme de Formation (base data.gouv)"}
           />
         </Box>
       }
-      paramName={"numero_declaration_activite"}
       items={[
-        { code: "true", label: "Oui" },
-        { code: "false", label: "Non" },
+        { label: "Oui", paramName: "numero_declaration_activite", value: "true" },
+        { label: "Qualiopi", paramName: "qualiopi", value: "true" },
+        { label: "Non", paramName: "numero_declaration_activite", value: "false" },
       ]}
     />
   );
