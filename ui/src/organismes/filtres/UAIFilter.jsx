@@ -17,8 +17,8 @@ export default function UAIFilter() {
       }
       paramName={"uais"}
       items={[
-        { code: "true", label: "Oui" },
-        { code: "false", label: "Non" },
+        { label: "Oui", value: "true" },
+        { label: "Non", value: "false" },
       ]}
     />
   );

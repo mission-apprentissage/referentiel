@@ -26,28 +26,28 @@ const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
 
 export function Filter({ label, paramName, items, expanded = false }) {
   let { query } = useQuery();
-  let { onChange, register } = useContext(FilterContext);
-  let array = query[paramName] ? query[paramName].split(",") : [];
-  register(paramName);
+  let { onChange: onFilterChange } = useContext(FilterContext);
+  let params = query[paramName] ? query[paramName].split(",") : [];
 
   return (
     <GreyAccordionItem
       {...ariaExpanded(expanded)}
-      label={<FilterTitle label={label} nbCheckedElements={array.length} />}
+      label={<FilterTitle label={label} nbCheckedElements={params.length} />}
     >
       <Fieldset>
         {items.map((item, index) => {
-          let checked = array.includes(item.code);
+          let checked = params.includes(item.value);
+
           return (
             <SmallCheckbox
               key={index}
-              name={paramName}
+              name={"filter"}
               label={item.label}
-              value={item.code}
+              value={item.value}
               checked={checked}
               onChange={() => {
-                let elements = checked ? array.filter((i) => i !== item.code) : [...array, item.code];
-                onChange({ [paramName]: elements });
+                let values = checked ? params.filter((p) => p !== item.value) : [...params, item.value];
+                onFilterChange({ [paramName]: values });
               }}
             />
           );

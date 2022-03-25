@@ -16,10 +16,10 @@ export default function NatureFilter({ items }) {
       paramName={"natures"}
       items={
         items || [
-          { code: "responsable_formateur", label: getNatureLabel("responsable_formateur") },
-          { code: "formateur", label: getNatureLabel("formateur") },
-          { code: "responsable", label: getNatureLabel("responsable") },
-          { code: false, label: "N.A" },
+          { label: getNatureLabel("responsable_formateur"), value: "responsable_formateur" },
+          { label: getNatureLabel("formateur"), value: "formateur" },
+          { label: getNatureLabel("responsable"), value: "responsable" },
+          { label: "N.A", value: false },
         ]
       }
     />

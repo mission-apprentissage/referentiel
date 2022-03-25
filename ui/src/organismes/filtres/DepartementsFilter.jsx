@@ -11,8 +11,8 @@ export default function DepartementsFilter() {
       paramName={"departements"}
       items={departements.map((d) => {
         return {
-          code: d.code,
           label: d.nom,
+          value: d.code,
         };
       })}
     />
