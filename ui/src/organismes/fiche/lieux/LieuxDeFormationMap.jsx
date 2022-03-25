@@ -175,7 +175,7 @@ async function configureMap(map, source) {
         "icon-allow-overlap": true,
       },
     })
-    .fitBounds(getBounds(source), { padding: 200, maxZoom: 8 });
+    .fitBounds(getBounds(source), { padding: 200, maxZoom: 12 });
 }
 
 export default function LieuxDeFormationMap({ organisme }) {
