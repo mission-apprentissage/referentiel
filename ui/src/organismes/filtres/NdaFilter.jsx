@@ -15,10 +15,10 @@ export default function NdaFilter() {
           />
         </Box>
       }
-      paramName={"numero_declaration_activite"}
       items={[
-        { label: "Oui", value: "true" },
-        { label: "Non", value: "false" },
+        { label: "Oui", paramName: "numero_declaration_activite", value: "true" },
+        { label: "Qualiopi", paramName: "qualiopi", value: "true" },
+        { label: "Non", paramName: "numero_declaration_activite", value: "false" },
       ]}
     />
   );

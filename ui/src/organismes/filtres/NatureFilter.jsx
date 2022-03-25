@@ -13,13 +13,11 @@ export default function NatureFilter({ items }) {
           <Tooltip label={"Nature"} description={definitions.nature} />
         </>
       }
-      paramName={"natures"}
       items={
         items || [
-          { label: getNatureLabel("responsable_formateur"), value: "responsable_formateur" },
-          { label: getNatureLabel("formateur"), value: "formateur" },
-          { label: getNatureLabel("responsable"), value: "responsable" },
-          { label: "N.A", value: false },
+          { label: getNatureLabel("responsable_formateur"), paramName: "natures", value: "responsable_formateur" },
+          { label: getNatureLabel("formateur"), paramName: "natures", value: "formateur" },
+          { label: getNatureLabel("responsable"), paramName: "natures", value: "responsable" },
         ]
       }
     />

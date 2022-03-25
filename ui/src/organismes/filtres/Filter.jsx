@@ -8,6 +8,7 @@ import { FilterContext } from "./Filters";
 import { ariaExpanded } from "../../common/dsfr/dsfr";
 import { useQuery } from "../../common/hooks/useQuery";
 import { Box } from "../../common/Flexbox";
+import { isEqual } from "lodash-es";
 
 const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   return (
@@ -24,19 +25,26 @@ const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   }
 `;
 
-export function Filter({ label, paramName, items, expanded = false }) {
+function getParamFromQuery(query, paramName) {
+  let param = query[paramName];
+  return param ? param.split(",") : [];
+}
+
+export function Filter({ label, items, expanded = false }) {
   let { query } = useQuery();
   let { onChange: onFilterChange } = useContext(FilterContext);
-  let params = query[paramName] ? query[paramName].split(",") : [];
+  let selectedItems = items.filter((item) => {
+    return getParamFromQuery(query, item.paramName).includes(item.value);
+  });
 
   return (
     <GreyAccordionItem
       {...ariaExpanded(expanded)}
-      label={<FilterTitle label={label} nbCheckedElements={params.length} />}
+      label={<FilterTitle label={label} nbCheckedElements={selectedItems.length} />}
     >
       <Fieldset>
         {items.map((item, index) => {
-          let checked = params.includes(item.value);
+          let isSelected = !!selectedItems.find((i) => isEqual(i, item));
 
           return (
             <SmallCheckbox
@@ -44,10 +52,21 @@ export function Filter({ label, paramName, items, expanded = false }) {
               name={"filter"}
               label={item.label}
               value={item.value}
-              checked={checked}
+              checked={isSelected}
               onChange={() => {
-                let values = checked ? params.filter((p) => p !== item.value) : [...params, item.value];
-                onFilterChange({ [paramName]: values });
+                let paramName = item.paramName;
+                let params = getParamFromQuery(query, paramName);
+
+                let changes;
+                if (isSelected) {
+                  changes = params.filter((v) => v !== item.value);
+                } else {
+                  changes = [...params, item.value];
+                }
+
+                onFilterChange({
+                  [paramName]: changes,
+                });
               }}
             />
           );

@@ -8,10 +8,10 @@ export default function DepartementsFilter() {
   return (
     <Filter
       label={"Départements"}
-      paramName={"departements"}
       items={departements.map((d) => {
         return {
           label: d.nom,
+          paramName: "departements",
           value: d.code,
         };
       })}
