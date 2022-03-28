@@ -1193,4 +1193,32 @@ describe("organismesRoutes", () => {
     strictEqual(response.data.organismes.length, 1);
     strictEqual(response.data.organismes[0].siret, "22222222200006");
   });
+
+  it("Vérifie qu'on peut obtenir les résultats au format CSV", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100006",
+      raison_sociale: "Centre de formation",
+      uai_potentiels: [
+        {
+          sources: ["dummy"],
+          uai: "0751234J",
+        },
+        {
+          sources: ["sifa-ramsese"],
+          uai: "0751234X",
+        },
+      ],
+    });
+
+    let response = await httpClient.get("/api/v1/organismes.csv");
+
+    strictEqual(response.status, 200);
+    strictEqual(
+      response.data,
+      `"Siret","UAI validée","Raison sociale","Enseigne","numero_declaration_activite","etat_administratif","Nature","Adresse","Académie","Région","Qualiopi","Réseaux","Nombre de relations","Nombre de lieux de formation","Date d'import","UAI potentielle 1","UAI potentielle 2","UAI potentielle 3","UAI potentielle 4","UAI potentielle 5","UAI potentielle 6","UAI potentielle 7","UAI potentielle 8","UAI potentielle 9","UAI potentielle 10","UAI potentielle 11","UAI potentielle 12","UAI potentielle 13","UAI potentielle 14","UAI potentielle 15","UAI potentielle 16","UAI potentielle 17","UAI potentielle 18","UAI potentielle 19","UAI potentielle 20","UAI potentielle 21","UAI potentielle 22","UAI potentielle 23","UAI potentielle 24","UAI potentielle 25","UAI potentielle 26","UAI potentielle 27","UAI potentielle 28","UAI potentielle 29","UAI potentielle 30","UAI potentielle 31","UAI potentielle 32","UAI potentielle 33","UAI potentielle 34","UAI potentielle 35","UAI potentielle 36","UAI potentielle 37","UAI potentielle 38","UAI potentielle 39","UAI potentielle 40","UAI potentielle 41","UAI potentielle 42","UAI potentielle 43","UAI potentielle 44","UAI potentielle 45","UAI potentielle 46","UAI potentielle 47","UAI potentielle 48","UAI potentielle 49","UAI potentielle 50","UAI potentielle 51","UAI potentielle 52","UAI potentielle 53","UAI potentielle 54","UAI potentielle 55","UAI potentielle 56","UAI potentielle 57","UAI potentielle 58","UAI potentielle 59","UAI potentielle 60"
+"11111111100006","","Centre de formation","Centre de formation","","actif","inconnue","31 rue des lilas Paris 75019","Paris","Île-de-France","Non","","","","2022-03-31","0751234X","0751234J","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+`
+    );
+  });
 });
