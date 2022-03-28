@@ -4,7 +4,7 @@ import styled from "styled-components";
 import ClickableItem from "../../common/ClickableItem";
 import { without } from "../../common/utils";
 import Spinner from "../../common/Spinner";
-import { useValidation } from "../../common/hooks/useValidation";
+import { useValidationSearch } from "../../common/hooks/useValidationSearch";
 
 const StyledBox = styled(without(Box, ["type"]))`
   padding: 1.5rem;
@@ -30,7 +30,7 @@ const Counter = styled(({ response, className }) => {
 `;
 
 export default function ValidationCard({ type, label, children, ...rest }) {
-  let { response } = useValidation(type, {
+  let { response } = useValidationSearch(type, {
     page: 1,
     items_par_page: 1,
     champs: "siret",
