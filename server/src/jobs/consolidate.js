@@ -1,6 +1,6 @@
 const logger = require("../common/logger").child({ context: "consolidate" });
 const { dbCollection } = require("../common/db/mongodb");
-const findBestUAIPotentiel = require("../common/actions/findBestUAIPotentiel");
+const findUAIProbable = require("../common/actions/findUAIProbable");
 
 // eslint-disable-next-line no-unused-vars
 async function validateUAI() {
@@ -8,10 +8,10 @@ async function validateUAI() {
   for await (const organisme of dbCollection("organismes").find().stream()) {
     try {
       stats.total++;
-      let best = findBestUAIPotentiel(organisme);
+      let probable = findUAIProbable(organisme);
 
-      if (best) {
-        await dbCollection("organismes").updateOne({ siret: organisme.siret }, { $set: { uai: best.uai } });
+      if (probable) {
+        await dbCollection("organismes").updateOne({ siret: organisme.siret }, { $set: { uai: probable.uai } });
         stats.modifications++;
       } else {
         stats.unknown++;

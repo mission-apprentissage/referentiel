@@ -2,7 +2,7 @@ const { transformIntoCSV, transformData, compose, mergeStreams, writeData, oleod
 const { dbCollection } = require("../../common/db/mongodb");
 const { parseCsv } = require("../../common/utils/csvUtils");
 const { pick } = require("lodash");
-const findBestUAIPotentiel = require("../../common/actions/findBestUAIPotentiel");
+const findUAIProbable = require("../../common/actions/findUAIProbable");
 
 function getUAI(source, organisme) {
   let potentiels = organisme.uai_potentiels.filter((u) => u.sources.includes(source));
@@ -25,8 +25,8 @@ function getTask(organisme) {
     return "inconnu";
   }
 
-  let uai = findBestUAIPotentiel(organisme);
-  return uai ? "à valider" : "à expertiser";
+  let probable = findUAIProbable(organisme);
+  return probable ? "à valider" : "à expertiser";
 }
 
 function sanitize(value) {
@@ -88,7 +88,7 @@ async function experimentationCsvStream(options = {}) {
         DECA: ({ organisme }) => getUAI("deca", organisme),
         "SIFA RAMSESE": ({ organisme }) => getUAI("sifa-ramsese", organisme),
         Catalogue: ({ organisme }) => getUAI("catalogue-organismes", organisme),
-        UAI: ({ organisme }) => findBestUAIPotentiel(organisme)?.uai,
+        UAI: ({ organisme }) => findUAIProbable(organisme)?.uai,
         Tache: ({ task }) => task,
         Précédent: ({ organisme }) => {
           let found = previous.find((p) => p.SIRET === organisme.siret);

@@ -18,21 +18,23 @@ const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
 const addModification = require("../../common/actions/addModification");
-const findBestUAIPotentiel = require("../../common/actions/findBestUAIPotentiel");
+const findUAIProbable = require("../../common/actions/findUAIProbable");
+const { setCsvHeaders } = require("../../common/utils/httpUtils");
+const transformOrganismeIntoCsv = require("../../common/actions/transformOrganismeIntoCsv");
 
 module.exports = () => {
   const router = express.Router();
   const nouveauFeatureDate = DateTime.fromISO("2022-03-20").toJSDate();
 
   function toDto(organisme) {
-    const best = organisme.uai_potentiels && findBestUAIPotentiel(organisme);
+    const probable = organisme.uai_potentiels && findUAIProbable(organisme);
     return {
       ...omit(organisme, ["_id"]),
       ...(organisme._meta
         ? {
             _meta: {
               ...organisme._meta,
-              ...(best ? { uai_probale: best.uai } : {}),
+              ...(probable ? { uai_probale: probable.uai } : {}),
               nouveau: !organisme.uai && organisme._meta.date_import > nouveauFeatureDate,
             },
           }
@@ -101,9 +103,9 @@ module.exports = () => {
   }
 
   router.get(
-    "/api/v1/organismes",
+    "/api/v1/organismes.:ext?",
     tryCatch(async (req, res) => {
-      let { page, items_par_page, ordre, champs, ...params } = await Joi.object({
+      let { page, items_par_page, ordre, champs, ext, ...params } = await Joi.object({
         sirets: Joi.alternatives()
           .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/)))
           .default(null),
@@ -132,7 +134,8 @@ module.exports = () => {
         ...validators.champs(),
         ...validators.pagination(),
         ...validators.tri(),
-      }).validateAsync(req.query, { abortEarly: false });
+        ...validators.exports(),
+      }).validateAsync({ ...req.query, ...req.params }, { abortEarly: false });
 
       let query = buildQuery(params);
       let projection = buildProjection(champs);
@@ -144,16 +147,22 @@ module.exports = () => {
         ...(isEmpty(projection) ? {} : { projection }),
       });
 
+      if (ext === "csv") {
+        setCsvHeaders("organismes.csv", res);
+      }
+
       sendJsonStream(
         oleoduc(
           find.stream(),
           transformData((data) => toDto(data)),
-          transformIntoJSON({
-            arrayPropertyName: "organismes",
-            arrayWrapper: {
-              pagination,
-            },
-          })
+          ext === "csv"
+            ? transformOrganismeIntoCsv()
+            : transformIntoJSON({
+                arrayPropertyName: "organismes",
+                arrayWrapper: {
+                  pagination,
+                },
+              })
         ),
         res
       );

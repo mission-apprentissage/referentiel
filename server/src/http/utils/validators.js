@@ -32,6 +32,12 @@ function tri() {
   };
 }
 
+function exports() {
+  return {
+    ext: Joi.string().valid("json", "csv").default("json"),
+  };
+}
+
 function champs() {
   return {
     champs: arrayOf(Joi.string()).default([]),
@@ -44,4 +50,5 @@ module.exports = {
   pagination,
   tri,
   champs,
+  exports,
 };

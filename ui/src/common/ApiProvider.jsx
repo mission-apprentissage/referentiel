@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import jwt from "jsonwebtoken";
 import queryString from "querystring";
+import { buildUrl } from "./utils";
 
 const anonymous = { sub: "anonymous" };
 
@@ -104,6 +105,12 @@ export default function ApiProvider({ children }) {
           headers: getHeaders(),
         }).then((res) => handleResponse(path, res));
       },
+    },
+    buildLink: (url, data) => {
+      return buildUrl(url, {
+        ...(auth.sub !== "anonymous" ? { token: auth.token } : {}),
+        ...data,
+      });
     },
   };
 
