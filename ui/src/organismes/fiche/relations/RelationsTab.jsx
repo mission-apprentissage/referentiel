@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from "react";
-import { useOrganismes } from "../../../common/hooks/useOrganismes";
+import { useSearch } from "../../../common/hooks/useSearch";
 import Spinner from "../../../common/Spinner";
 import { TagButton, TagGroup } from "../../../common/dsfr/elements/Tag";
 import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
@@ -31,7 +31,7 @@ const RelationTagButton = styled(({ label, results, onChange }) => {
 export default function RelationsTab({ organisme }) {
   let {
     response: { data, loading, error },
-  } = useOrganismes({
+  } = useSearch({
     page: 1,
     sirets: organisme.relations.filter((r) => r.referentiel).map((r) => r.siret),
     items_par_page: Number.MAX_SAFE_INTEGER,

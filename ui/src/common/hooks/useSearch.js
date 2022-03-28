@@ -14,7 +14,7 @@ function adaptQueryForAPI(params) {
   }, {});
 }
 
-export function useOrganismes(defaults = {}) {
+export function useSearch(defaults = {}) {
   let { query, setQuery } = useQuery();
 
   let url = buildUrl(`/api/v1/organismes`, { ...defaults, ...adaptQueryForAPI(query) });
