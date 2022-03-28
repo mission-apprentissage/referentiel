@@ -18,7 +18,6 @@ export default function Filters({ children, onChange: handleChange }) {
       };
     }, {});
 
-    console.log(withArrayValueAsString);
     handleChange(withArrayValueAsString);
   }
 
