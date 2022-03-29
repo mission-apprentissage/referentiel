@@ -21,7 +21,7 @@ const Presentation = styled(({ className }) => {
       <p className={"text"}>
         Ce tableau de bord permet de consulter les organismes du référentiel dont les UAI sont à vérifier, à identifier
         ou validées sur le territoire sélectionné. Une fois tous les organismes validés ou expertisés vous pouvez
-        adresser un mail à refentiel@apprentissage.beta.gouv.fr pour nous informer de la fin de vos travaux.
+        adresser un mail à referentiel@apprentissage.beta.gouv.fr pour nous informer de la fin de vos travaux.
       </p>
       <div className={"details"}>
         <LinkButton
