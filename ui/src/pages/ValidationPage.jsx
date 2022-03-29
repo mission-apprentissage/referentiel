@@ -99,8 +99,12 @@ export default function ValidationPage() {
             <Filters onChange={(filters) => refine({ ...filters })}>
               <NatureFilter
                 items={[
-                  { code: "responsable_formateur", label: getNatureLabel("responsable_formateur") },
-                  { code: "responsable", label: getNatureLabel("responsable") },
+                  {
+                    label: getNatureLabel("responsable_formateur"),
+                    paramName: "natures",
+                    value: "responsable_formateur",
+                  },
+                  { label: getNatureLabel("responsable"), paramName: "natures", value: "responsable" },
                 ]}
               />
             </Filters>
