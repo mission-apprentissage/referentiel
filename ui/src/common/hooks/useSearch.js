@@ -1,11 +1,17 @@
 import { useFetch } from "./useFetch";
 import { buildUrl } from "../utils";
 import { useQuery } from "./useQuery";
+import { useContext, useEffect, useMemo } from "react";
+import { SearchContext } from "../SearchProvider";
+import { useLocation } from "react-router-dom";
+import usePrevious from "./usePrevious";
+import { isEqual } from "lodash-es";
 
-function adaptQueryForAPI(params) {
+function adaptParamsForAPI(params) {
   return Object.keys(params).reduce((acc, key) => {
     let value = params[key];
-    let shouldIgnoreParam = value.indexOf(",") !== -1 && value.includes("true") && value.includes("false");
+    let shouldIgnoreParam =
+      value instanceof String && value.indexOf(",") !== -1 && value.includes("true") && value.includes("false");
 
     return {
       ...acc,
@@ -16,8 +22,20 @@ function adaptQueryForAPI(params) {
 
 export function useSearch(defaults = {}) {
   let { query, setQuery } = useQuery();
+  let location = useLocation();
+  let { setSearch } = useContext(SearchContext);
+  let search = useMemo(() => {
+    return { page: location.pathname, params: { ...defaults, ...query } };
+  }, [location.pathname, defaults, query]);
+  let previous = usePrevious(search);
 
-  let url = buildUrl(`/api/v1/organismes`, { ...defaults, ...adaptQueryForAPI(query) });
+  useEffect(() => {
+    if (!isEqual(previous, search)) {
+      setSearch(search);
+    }
+  }, [previous, search, setSearch]);
+
+  let url = buildUrl(`/api/v1/organismes`, adaptParamsForAPI(search.params));
   let [response] = useFetch(url, {
     organismes: [],
     pagination: {
@@ -32,5 +50,6 @@ export function useSearch(defaults = {}) {
     response,
     search: (params = {}) => setQuery({ ...params }),
     refine: (params = {}) => setQuery({ ...query, ...params }),
+    params: search.params,
   };
 }

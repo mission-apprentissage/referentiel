@@ -13,7 +13,7 @@ import ConstructionPage from "./pages/ConstructionPage";
 import DataProvider from "./common/DataProvider";
 import ApiProvider from "./common/ApiProvider";
 import StatsPage from "./pages/StatsPage";
-import PreviousSearchProvider from "./common/PreviousSearchProvider";
+import SearchProvider from "./common/SearchProvider";
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
       <Router>
         <ApiProvider>
           <DataProvider>
-            <PreviousSearchProvider>
+            <SearchProvider>
               <Routes>
                 <Route path="/dsfr" element={<DesignPage />} />
               </Routes>
@@ -48,7 +48,7 @@ function App() {
                   <Route path="*" element={<Navigate to="/login" />} />
                 </Route>
               </Routes>
-            </PreviousSearchProvider>
+            </SearchProvider>
           </DataProvider>
         </ApiProvider>
       </Router>

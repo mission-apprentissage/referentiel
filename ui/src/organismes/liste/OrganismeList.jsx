@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import OrganismeItem from "./OrganismeItem";
 import ApiPagination from "../../common/ApiPagination";
 import { Box } from "../../common/Flexbox";
 import Spinner from "../../common/Spinner";
 import { Link } from "../../common/dsfr/elements/Link";
-import useExport from "../../common/hooks/useExport";
+import { SearchContext } from "../../common/SearchProvider";
+import { buildUrl } from "../../common/utils";
 
 export default function OrganismeList({ response }) {
   let { data, loading, error } = response;
-  let exportUrl = useExport();
+  let { search } = useContext(SearchContext);
+  let exportUrl = buildUrl(`/api/v1/organismes.csv`, { ...search.params, page: 0, items_par_page: 100000 });
   let pagination = data.pagination;
 
   return (
