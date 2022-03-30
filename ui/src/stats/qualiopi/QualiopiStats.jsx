@@ -3,8 +3,9 @@ import { useFetch } from "../../common/hooks/useFetch";
 import Spinner from "../../common/Spinner";
 import { Col, GridRow } from "../../common/dsfr/fondamentaux";
 import Histogram from "../../common/nivo/Histogram";
-import { getNatureLabel } from "../../common/enums/natures";
-import { getQualiopiColor, getQualiopiLabel } from "../../common/enums/qualiopi";
+import { getNatureLabel, getNatureParams } from "../../common/enums/natures";
+import { getQualiopiColor, getQualiopiLabel, getQualiopiParams } from "../../common/enums/qualiopi";
+import { openNewTab } from "../../common/utils";
 
 export default function QualiopiStats() {
   let [{ data, loading, error }] = useFetch(`/api/v1/stats/qualiopi`, []);
@@ -25,6 +26,9 @@ export default function QualiopiStats() {
           getSerieLabel={(id) => getQualiopiLabel(id)}
           getSerieColor={(id) => getQualiopiColor(id)}
           groupBy={(item) => getNatureLabel(item.nature)}
+          onClick={({ id, data }) => {
+            openNewTab({ ...getQualiopiParams(id), ...getNatureParams(data.nature) });
+          }}
         />
       </Col>
     </GridRow>

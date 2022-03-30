@@ -1,6 +1,7 @@
 import Pie from "../../common/nivo/Pie";
 import React from "react";
-import { getValidationColor, getValidationLabel } from "../../common/enums/validation";
+import { getValidationColor, getValidationLabel, getValidationParams } from "../../common/enums/validation";
+import { openNewTab } from "../../common/utils";
 
 export function ValidationPie({ stats }) {
   let national = Object.keys(stats.national).reduce((acc, key) => {
@@ -14,5 +15,12 @@ export function ValidationPie({ stats }) {
     ];
   }, []);
 
-  return <Pie data={national} getLabel={(id) => getValidationLabel(id)} getColor={(id) => getValidationColor(id)} />;
+  return (
+    <Pie
+      data={national}
+      getLabel={(id) => getValidationLabel(id)}
+      getColor={(id) => getValidationColor(id)}
+      onClick={({ id }) => openNewTab(getValidationParams(id))}
+    />
+  );
 }
