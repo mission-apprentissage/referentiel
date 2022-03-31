@@ -6,11 +6,11 @@ import Spinner from "../../common/Spinner";
 import { Link } from "../../common/dsfr/elements/Link";
 import { SearchContext } from "../../common/SearchProvider";
 import { buildUrl } from "../../common/utils";
+import DropdownButton from "../../common/dsfr/custom/DropdownButton";
 
 export default function OrganismeList({ response }) {
   let { data, loading, error } = response;
   let { search } = useContext(SearchContext);
-  let exportUrl = buildUrl(`/api/v1/organismes.csv`, { ...search.params, page: 0, items_par_page: 100000 });
   let pagination = data.pagination;
 
   return (
@@ -18,9 +18,34 @@ export default function OrganismeList({ response }) {
       <Spinner error={error} loading={loading} />
       <Box align={"baseline"} justify={"between"}>
         <div className={"fr-mb-3v fr-mr-1w"}>{pagination.total} organismes</div>
-        <Link as={"a"} modifiers={"icon-left md"} icons="file-download-line" href={exportUrl} target={"_blank"}>
+        <DropdownButton
+          icons="file-download-line"
+          modifiers={"secondary sm icon-left"}
+          links={
+            <>
+              <Link
+                as={"a"}
+                modifiers={"icon-left sm"}
+                icons="file-download-line"
+                href={buildUrl(`/api/v1/organismes.csv`, { ...search.params, page: 0, items_par_page: 100000 })}
+                target={"_blank"}
+              >
+                CSV
+              </Link>
+              <Link
+                as={"a"}
+                modifiers={"icon-left sm"}
+                icons="file-download-line"
+                href={buildUrl(`/api/v1/organismes.xls`, { ...search.params, page: 0, items_par_page: 100000 })}
+                target={"_blank"}
+              >
+                XLS
+              </Link>
+            </>
+          }
+        >
           Export
-        </Link>
+        </DropdownButton>
       </Box>
       {data.organismes.map((organisme, index) => {
         return <OrganismeItem key={index} organisme={organisme} />;

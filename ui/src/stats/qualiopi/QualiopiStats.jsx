@@ -27,7 +27,7 @@ export default function QualiopiStats() {
           getSerieColor={(id) => getQualiopiColor(id)}
           groupBy={(item) => getNatureLabel(item.nature)}
           onClick={({ id, data }) => {
-            openNewTab({ ...getQualiopiParams(id), ...getNatureParams(data.nature) });
+            openNewTab("/organismes", { ...getQualiopiParams(id), ...getNatureParams(data.nature) });
           }}
         />
       </Col>

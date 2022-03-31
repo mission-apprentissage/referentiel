@@ -19,8 +19,8 @@ const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
 const addModification = require("../../common/actions/addModification");
 const findUAIProbable = require("../../common/actions/findUAIProbable");
-const { setCsvHeaders } = require("../../common/utils/httpUtils");
-const transformOrganismeIntoCsv = require("../../common/actions/transformOrganismeIntoCsv");
+const transformOrganisme = require("../../common/actions/transformOrganisme");
+const { addCsvHeaders } = require("../../common/utils/httpUtils");
 
 module.exports = () => {
   const router = express.Router();
@@ -147,22 +147,31 @@ module.exports = () => {
         ...(isEmpty(projection) ? {} : { projection }),
       });
 
-      if (ext === "csv") {
-        setCsvHeaders("organismes.csv", res);
+      let transformResponse;
+
+      switch (ext) {
+        case "xls":
+          addCsvHeaders("organismes.csv", "UTF-16", res);
+          transformResponse = transformOrganisme.intoXls();
+          break;
+        case "csv":
+          addCsvHeaders("organismes.csv", "UTF-8", res);
+          transformResponse = transformOrganisme.intoCsv();
+          break;
+        default:
+          transformResponse = transformIntoJSON({
+            arrayPropertyName: "organismes",
+            arrayWrapper: {
+              pagination,
+            },
+          });
       }
 
       sendJsonStream(
         oleoduc(
           find.stream(),
           transformData((data) => toDto(data)),
-          ext === "csv"
-            ? transformOrganismeIntoCsv()
-            : transformIntoJSON({
-                arrayPropertyName: "organismes",
-                arrayWrapper: {
-                  pagination,
-                },
-              })
+          transformResponse
         ),
         res
       );

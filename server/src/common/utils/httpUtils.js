@@ -5,12 +5,12 @@ const logger = require("../logger").child({ context: "http" });
 module.exports = {
   fetch,
   getFileAsStream,
-  setCsvHeaders,
+  addCsvHeaders,
 };
 
-function setCsvHeaders(filename, res) {
+function addCsvHeaders(filename, encoding, res) {
   res.setHeader("Content-disposition", `attachment; filename=${filename}`);
-  res.setHeader("Content-Type", `text/csv; charset=UTF-8`);
+  res.setHeader("Content-Type", `text/csv; charset=${encoding}`);
 }
 
 function getFileAsStream(url, options = {}) {

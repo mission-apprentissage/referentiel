@@ -20,7 +20,7 @@ export function ValidationHistogram({ stats }) {
       getSerieColor={(id) => getValidationColor(id)}
       groupBy={({ academie }) => academie.nom}
       onClick={({ id, data }) => {
-        openNewTab({ ...getValidationParams(id), academies: data.academie.code });
+        openNewTab("/organismes", { ...getValidationParams(id), academies: data.academie.code });
       }}
     />
   );

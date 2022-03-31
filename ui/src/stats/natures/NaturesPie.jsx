@@ -20,7 +20,7 @@ export function NaturesPie({ stats }) {
       data={national}
       getLabel={(id) => getNatureLabel(id)}
       getColor={(id) => getNatureColor(id)}
-      onClick={({ id }) => openNewTab(getNatureParams(id))}
+      onClick={({ id }) => openNewTab("/organismes", getNatureParams(id))}
     />
   );
 }

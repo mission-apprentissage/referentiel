@@ -35,9 +35,8 @@ export function buildUrl(url, data) {
   return `${url}?${params}`;
 }
 
-export function openNewTab(params) {
-  let url = buildUrl("/organismes", params);
-  window.open(url, "_blank");
+export function openNewTab(url, params) {
+  window.open(buildUrl(url, params), "_blank");
 }
 
 export const divide = (dividend, divisor) => {

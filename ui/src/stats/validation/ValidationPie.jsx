@@ -20,7 +20,7 @@ export function ValidationPie({ stats }) {
       data={national}
       getLabel={(id) => getValidationLabel(id)}
       getColor={(id) => getValidationColor(id)}
-      onClick={({ id }) => openNewTab(getValidationParams(id))}
+      onClick={({ id }) => openNewTab("/organismes", getValidationParams(id))}
     />
   );
 }

@@ -34,7 +34,7 @@ function tri() {
 
 function exports() {
   return {
-    ext: Joi.string().valid("json", "csv").default("json"),
+    ext: Joi.string().valid("json", "csv", "xls").default("json"),
   };
 }
 
