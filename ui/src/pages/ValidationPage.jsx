@@ -12,6 +12,7 @@ import Filters from "../organismes/filtres/Filters";
 import NatureFilter from "../organismes/filtres/NatureFilter";
 import { getNatureLabel } from "../common/enums/natures";
 import Small from "../common/dsfr/custom/Small";
+import Page from "../common/Page";
 
 const MAPPER = {
   A_VALIDER: {
@@ -90,7 +91,7 @@ export default function ValidationPage() {
   });
 
   return (
-    <>
+    <Page>
       <ValidationLayoutTitle refine={refine} type={type} />
       <ContentLayout>
         <Results
@@ -112,6 +113,6 @@ export default function ValidationPage() {
           results={<OrganismeList response={response} />}
         />
       </ContentLayout>
-    </>
+    </Page>
   );
 }

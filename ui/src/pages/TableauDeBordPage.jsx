@@ -12,6 +12,7 @@ import useToggle from "../common/hooks/useToggle";
 import LinkButton from "../common/dsfr/custom/LinkButton";
 import styled from "styled-components";
 import useAllKeysPress from "../common/hooks/useAllKeysPress";
+import Page from "../common/Page";
 
 const Presentation = styled(({ className }) => {
   let [showDetails, toggleDetails] = useToggle(false);
@@ -71,7 +72,7 @@ export default function TableauDeBordPage() {
   }, [isShorcutPress, toggleStats]);
 
   return (
-    <>
+    <Page>
       <TitleLayout
         title={title}
         selector={
@@ -108,6 +109,6 @@ export default function TableauDeBordPage() {
           </GridRow>
         )}
       </ContentLayout>
-    </>
+    </Page>
   );
 }

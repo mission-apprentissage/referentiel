@@ -24,8 +24,6 @@ function App() {
             <SearchProvider>
               <Routes>
                 <Route path="/dsfr" element={<DesignPage />} />
-              </Routes>
-              <Routes>
                 <Route element={<Layout children={<Outlet />} />}>
                   <Route path="/" element={<AccueilPage />} />
                   <Route path="/construction" element={<ConstructionPage />} />

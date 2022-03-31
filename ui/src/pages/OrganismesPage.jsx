@@ -13,12 +13,13 @@ import NatureFilter from "../organismes/filtres/NatureFilter";
 import NdaFilter from "../organismes/filtres/NdaFilter";
 import DepartementsFilter from "../organismes/filtres/DepartementsFilter";
 import UAIFilter from "../organismes/filtres/UAIFilter";
+import Page from "../common/Page";
 
 export default function OrganismesPage() {
   let { response, search, refine } = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
 
   return (
-    <>
+    <Page>
       <TitleLayout
         title={"Référentiel national"}
         selector={<AcademieSelector onChange={(code) => refine({ academies: code })} />}
@@ -48,6 +49,6 @@ export default function OrganismesPage() {
           ]}
         />
       </ContentLayout>
-    </>
+    </Page>
   );
 }

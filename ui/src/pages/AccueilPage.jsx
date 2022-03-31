@@ -7,13 +7,14 @@ import { Button } from "../common/dsfr/elements/Button";
 import { useNavigate } from "react-router-dom";
 import { useFetch } from "../common/hooks/useFetch";
 import { percentage } from "../common/utils";
+import Page from "../common/Page";
 
 export default function AccueilPage() {
   let navigate = useNavigate();
   let [{ data: stats }] = useFetch("/api/v1/stats/couverture", null);
 
   return (
-    <>
+    <Page>
       <TitleLayout />
       <ContentLayout>
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
@@ -71,6 +72,6 @@ export default function AccueilPage() {
           </Col>
         </GridRow>
       </ContentLayout>
-    </>
+    </Page>
   );
 }
