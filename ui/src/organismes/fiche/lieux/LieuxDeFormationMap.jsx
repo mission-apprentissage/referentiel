@@ -10,10 +10,10 @@ import Legend from "./Legend";
 
 mapboxgl.accessToken = "pk.eyJ1IjoiYmd1ZXJvdXQiLCJhIjoiY2wwamM5bmMyMGI5cDNrcDZzeGE0Y3RuNyJ9.R3_znqXpyJ8_98pEUYQuwQ";
 
-function addSVGImage(map, name, file) {
+function addSVGImage(map, name, definitions) {
   return new Promise((resolve) => {
-    let img = new Image(30, 36);
-    img.src = file;
+    let img = new Image(definitions.width, definitions.height);
+    img.src = definitions.file;
     img.onload = () => {
       map.addImage(name, img);
       resolve();
@@ -140,9 +140,9 @@ function getBounds(source) {
 
 async function configureMap(map, source) {
   await Promise.all([
-    addSVGImage(map, "map-pin-blue", bluePin),
-    addSVGImage(map, "map-pin-red", redPin),
-    addSVGImage(map, "map-pin-red-blue", redBluePin),
+    addSVGImage(map, "map-pin-blue", { file: bluePin, width: 30, height: 36 }),
+    addSVGImage(map, "map-pin-red", { file: redPin, width: 30, height: 36 }),
+    addSVGImage(map, "map-pin-red-blue", { file: redBluePin, width: 40, height: 41 }),
   ]);
 
   showPopupOnMouseHover(map, "layer-points");

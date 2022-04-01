@@ -5,10 +5,11 @@ import ContentLayout from "../common/layout/ContentLayout";
 import NaturesStats from "../stats/natures/NaturesStats";
 import ValidationStats from "../stats/validation/ValidationStats";
 import QualiopiStats from "../stats/qualiopi/QualiopiStats";
+import Page from "../common/Page";
 
 export default function StatsPage() {
   return (
-    <>
+    <Page>
       <TitleLayout title={"Statistiques"} />
       <ContentLayout>
         <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
@@ -30,6 +31,6 @@ export default function StatsPage() {
           </Col>
         </GridRow>
       </ContentLayout>
-    </>
+    </Page>
   );
 }

@@ -1,6 +1,12 @@
 import Histogram from "../../common/nivo/Histogram";
 import React from "react";
-import { getValidationColor, getValidationLabel, getValidationTypes } from "../../common/enums/validation";
+import { openNewTab } from "../../common/utils";
+import {
+  getValidationColor,
+  getValidationLabel,
+  getValidationParams,
+  getValidationTypes,
+} from "../../common/enums/validation";
 
 export function ValidationHistogram({ stats }) {
   return (
@@ -13,6 +19,9 @@ export function ValidationHistogram({ stats }) {
       getSerieLabel={(id) => getValidationLabel(id)}
       getSerieColor={(id) => getValidationColor(id)}
       groupBy={({ academie }) => academie.nom}
+      onClick={({ id, data }) => {
+        openNewTab("/organismes", { ...getValidationParams(id), academies: data.academie.code });
+      }}
     />
   );
 }

@@ -27,7 +27,6 @@ cli
   .description("Construit le référentiel")
   .argument("[names]", "La liste des sources servant de référence d'organismes", asArray)
   .option("--clearCache", "Supprime les données stockées en cache")
-  .option("--removeAll", "Supprime tous les établissements")
   .action((names, options) => {
     runScript(() => {
       return build({ referentiels: names, ...options });
@@ -79,7 +78,6 @@ cli
   .description("Importe les organismes contenus dans les référentiels")
   .argument("<names>", "la liste des sources à importer", asArray)
   .argument("[file]", "Le nom du fichier utilisé par la source")
-  .option("--removeAll", "Supprimes tous les organismes avant import")
   .action((names, file, options) => {
     runScript(async () => {
       let input = file ? createReadStream(file) : null;

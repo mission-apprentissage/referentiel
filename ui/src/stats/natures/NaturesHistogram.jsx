@@ -1,6 +1,7 @@
 import Histogram from "../../common/nivo/Histogram";
-import { getNatureColor, getNatureLabel, getNatureTypes } from "../../common/enums/natures";
+import { getNatureColor, getNatureLabel, getNatureParams, getNatureTypes } from "../../common/enums/natures";
 import React from "react";
+import { openNewTab } from "../../common/utils";
 
 export function NaturesHistogram({ stats }) {
   return (
@@ -13,6 +14,9 @@ export function NaturesHistogram({ stats }) {
       getSerieLabel={(id) => getNatureLabel(id)}
       getSerieColor={(id) => getNatureColor(id)}
       groupBy={({ academie }) => academie.nom}
+      onClick={({ id, data }) => {
+        openNewTab({ ...getNatureParams(id), academies: data.academie.code });
+      }}
     />
   );
 }

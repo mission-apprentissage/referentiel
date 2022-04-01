@@ -51,6 +51,13 @@ export default function Layout({ children }) {
             </FooterList>
           ),
         }}
+        bottom={{
+          list: (
+            <FooterList>
+              <FooterLink to={"/stats"}>Statistiques</FooterLink>
+            </FooterList>
+          ),
+        }}
       />
     </>
   );

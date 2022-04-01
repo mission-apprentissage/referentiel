@@ -8,7 +8,9 @@ import { useFetch } from "../common/hooks/useFetch";
 import Fiche from "../organismes/fiche/Fiche";
 import RaisonSociale from "../organismes/common/RaisonSociale";
 import OrganismeProvider, { OrganismeContext } from "../organismes/OrganismeProvider";
-import { SearchContext } from "../common/PreviousSearchProvider";
+import { SearchContext } from "../common/SearchProvider";
+import { buildUrl } from "../common/utils";
+import Page from "../common/Page";
 
 export function OrganismeTitle() {
   let { organisme } = useContext(OrganismeContext);
@@ -18,7 +20,7 @@ export function OrganismeTitle() {
 
 export default function OrganismePage() {
   let { siret } = useParams();
-  let previousSearch = useContext(SearchContext);
+  let { search } = useContext(SearchContext);
   let navigate = useNavigate();
   let [{ data: organisme, loading, error }, setData] = useFetch(`/api/v1/organismes/${siret}`);
   let [message, setMessage] = useState(null);
@@ -59,15 +61,17 @@ export default function OrganismePage() {
   }
 
   return (
-    <OrganismeProvider organisme={organisme} onChange={onChange}>
-      <TitleLayout
-        title={<OrganismeTitle />}
-        message={message}
-        back={<Back onClick={() => navigate(previousSearch)}>Retour à la liste</Back>}
-      />
-      <ContentLayout>
-        <Fiche organisme={organisme} />
-      </ContentLayout>
-    </OrganismeProvider>
+    <Page>
+      <OrganismeProvider organisme={organisme} onChange={onChange}>
+        <TitleLayout
+          title={<OrganismeTitle />}
+          message={message}
+          back={<Back onClick={() => navigate(buildUrl(search.page, search.params))}>Retour à la liste</Back>}
+        />
+        <ContentLayout>
+          <Fiche organisme={organisme} />
+        </ContentLayout>
+      </OrganismeProvider>
+    </Page>
   );
 }

@@ -35,8 +35,8 @@ export default function Histogram({
           axisTop={null}
           axisRight={null}
           axisBottom={{
-            tickSize: 20,
-            tickPadding: 5,
+            tickSize: 0,
+            tickPadding: 25,
             tickRotation: -25,
             legend: xLegend,
             legendPosition: "middle",

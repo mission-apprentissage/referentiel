@@ -1,6 +1,7 @@
-import { getNatureColor, getNatureLabel } from "../../common/enums/natures";
 import Pie from "../../common/nivo/Pie";
 import React from "react";
+import { openNewTab } from "../../common/utils";
+import { getNatureColor, getNatureLabel, getNatureParams } from "../../common/enums/natures";
 
 export function NaturesPie({ stats }) {
   let national = Object.keys(stats.national).reduce((acc, key) => {
@@ -14,5 +15,12 @@ export function NaturesPie({ stats }) {
     ];
   }, []);
 
-  return <Pie data={national} getLabel={(id) => getNatureLabel(id)} getColor={(id) => getNatureColor(id)} />;
+  return (
+    <Pie
+      data={national}
+      getLabel={(id) => getNatureLabel(id)}
+      getColor={(id) => getNatureColor(id)}
+      onClick={({ id }) => openNewTab("/organismes", getNatureParams(id))}
+    />
+  );
 }

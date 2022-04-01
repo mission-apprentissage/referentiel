@@ -7,11 +7,12 @@ import TitleLayout from "../common/layout/TitleLayout";
 import Results from "../common/Results";
 import ContentLayout from "../common/layout/ContentLayout";
 import styled from "styled-components";
-import { useValidation } from "../common/hooks/useValidation";
+import { useValidationSearch } from "../common/hooks/useValidationSearch";
 import Filters from "../organismes/filtres/Filters";
 import NatureFilter from "../organismes/filtres/NatureFilter";
 import { getNatureLabel } from "../common/enums/natures";
 import Small from "../common/dsfr/custom/Small";
+import Page from "../common/Page";
 
 const MAPPER = {
   A_VALIDER: {
@@ -83,14 +84,14 @@ const ValidationLayoutTitle = styled(({ refine, className }) => {
 
 export default function ValidationPage() {
   let { type } = useParams();
-  let { response, search, refine } = useValidation(type, {
+  let { response, search, refine } = useValidationSearch(type, {
     ordre: "desc",
     page: 1,
     items_par_page: 25,
   });
 
   return (
-    <>
+    <Page>
       <ValidationLayoutTitle refine={refine} type={type} />
       <ContentLayout>
         <Results
@@ -99,8 +100,12 @@ export default function ValidationPage() {
             <Filters onChange={(filters) => refine({ ...filters })}>
               <NatureFilter
                 items={[
-                  { code: "responsable_formateur", label: getNatureLabel("responsable_formateur") },
-                  { code: "responsable", label: getNatureLabel("responsable") },
+                  {
+                    label: getNatureLabel("responsable_formateur"),
+                    paramName: "natures",
+                    value: "responsable_formateur",
+                  },
+                  { label: getNatureLabel("responsable"), paramName: "natures", value: "responsable" },
                 ]}
               />
             </Filters>
@@ -108,6 +113,6 @@ export default function ValidationPage() {
           results={<OrganismeList response={response} />}
         />
       </ContentLayout>
-    </>
+    </Page>
   );
 }

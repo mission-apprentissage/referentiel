@@ -5,10 +5,11 @@ import { Tab, TabPanel } from "../common/dsfr/elements/Tabs";
 import WideTabs from "../common/dsfr/custom/WideTabs";
 import { Table, Thead } from "../common/dsfr/elements/Table";
 import definitions from "../common/definitions.json";
+import Page from "../common/Page";
 
 export default function ConstructionPage() {
   return (
-    <>
+    <Page>
       <TitleLayout title={"Construction du référentiel national"} />
       <ContentLayout>
         <WideTabs
@@ -383,6 +384,6 @@ export default function ConstructionPage() {
           ]}
         />
       </ContentLayout>
-    </>
+    </Page>
   );
 }

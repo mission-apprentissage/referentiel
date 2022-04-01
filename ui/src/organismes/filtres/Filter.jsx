@@ -32,7 +32,8 @@ function getParamFromQuery(query, paramName) {
 
 export function Filter({ label, items, expanded = false }) {
   let { query } = useQuery();
-  let { onChange: onFilterChange } = useContext(FilterContext);
+  let { onChange: onFilterChange, register } = useContext(FilterContext);
+  items.forEach((item) => register(item.paramName));
   let selectedItems = items.filter((item) => {
     return getParamFromQuery(query, item.paramName).includes(item.value);
   });

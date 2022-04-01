@@ -1,5 +1,5 @@
 import { Col, GridRow } from "../common/dsfr/fondamentaux";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import ValidationCard from "../organismes/validation/ValidationCard";
 import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
 import TitleLayout from "../common/layout/TitleLayout";
@@ -11,7 +11,7 @@ import TableauDeBordStats from "../stats/tableauDeBord/TableauDeBordStats";
 import useToggle from "../common/hooks/useToggle";
 import LinkButton from "../common/dsfr/custom/LinkButton";
 import styled from "styled-components";
-import useAllKeysPress from "../common/hooks/useAllKeysPress";
+import Page from "../common/Page";
 
 const Presentation = styled(({ className }) => {
   let [showDetails, toggleDetails] = useToggle(false);
@@ -21,7 +21,7 @@ const Presentation = styled(({ className }) => {
       <p className={"text"}>
         Ce tableau de bord permet de consulter les organismes du référentiel dont les UAI sont à vérifier, à identifier
         ou validées sur le territoire sélectionné. Une fois tous les organismes validés ou expertisés vous pouvez
-        adresser un mail à refentiel@apprentissage.beta.gouv.fr pour nous informer de la fin de vos travaux.
+        adresser un mail à referentiel@apprentissage.beta.gouv.fr pour nous informer de la fin de vos travaux.
       </p>
       <div className={"details"}>
         <LinkButton
@@ -62,16 +62,9 @@ export default function TableauDeBordPage() {
   let { auth } = useContext(ApiContext);
   let { query, setQuery } = useQuery();
   let title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
-  const isShorcutPress = useAllKeysPress({ userKeys: ["Alt", "ArrowUp"] });
-  let [showStats, toggleStats] = useToggle(false);
-  useEffect(() => {
-    if (isShorcutPress) {
-      toggleStats(isShorcutPress);
-    }
-  }, [isShorcutPress, toggleStats]);
 
   return (
-    <>
+    <Page>
       <TitleLayout
         title={title}
         selector={
@@ -100,14 +93,12 @@ export default function TableauDeBordPage() {
             <ValidationCard type={"VALIDE"} label={"Organismes validés"} />
           </Col>
         </GridRow>
-        {showStats && (
-          <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
-            <Col modifiers={"12"}>
-              <TableauDeBordStats />
-            </Col>
-          </GridRow>
-        )}
+        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
+          <Col modifiers={"12"}>
+            <TableauDeBordStats />
+          </Col>
+        </GridRow>
       </ContentLayout>
-    </>
+    </Page>
   );
 }

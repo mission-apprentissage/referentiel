@@ -1,6 +1,7 @@
 const { strictEqual, deepStrictEqual } = require("assert");
 const { insertOrganisme } = require("../utils/fakeData");
 const { startServer } = require("../utils/testUtils");
+const { DateTime } = require("luxon");
 
 describe("statsRoutes", () => {
   it("Vérifie qu'on peut obtenir des stats de couverture", async () => {
@@ -22,7 +23,7 @@ describe("statsRoutes", () => {
       adresse: {
         academie: { code: "01", nom: "Paris" },
       },
-      _meta: { date_import: new Date() },
+      _meta: { date_import: DateTime.fromISO("2022-03-20").toJSDate() },
     });
 
     let response = await httpClient.get("/api/v1/stats/nouveaux");

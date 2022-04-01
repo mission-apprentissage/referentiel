@@ -30,9 +30,13 @@ export function asSiren(siret) {
   return siret.substring(0, 9);
 }
 
-export function buildUrl(base, data) {
+export function buildUrl(url, data) {
   let params = `${queryString.stringify(data, { skipNull: true, skipEmptyString: true })}`;
-  return `${base}?${params}`;
+  return `${url}?${params}`;
+}
+
+export function openNewTab(url, params) {
+  window.open(buildUrl(url, params), "_blank");
 }
 
 export const divide = (dividend, divisor) => {

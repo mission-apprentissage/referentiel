@@ -1,4 +1,4 @@
-function findBestUAIPotentiel(organisme) {
+function findUAIProbable(organisme) {
   let potentiels = organisme.uai_potentiels.filter((item) => {
     let sources = item.sources.filter((s) => s.includes("sifa-ramsese") || s.includes("catalogue-etablissements"));
     return sources.length >= 1;
@@ -11,4 +11,4 @@ function findBestUAIPotentiel(organisme) {
   return potentiels.reduce((acc, u) => (acc.sources.length < u.sources.length ? u : acc));
 }
 
-module.exports = findBestUAIPotentiel;
+module.exports = findUAIProbable;
