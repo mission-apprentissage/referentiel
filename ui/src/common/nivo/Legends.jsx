@@ -9,6 +9,7 @@ const Color = styled("span")`
     vertical-align: middle;
     background: ${(props) => props.color};
     content: "";
+    border-radius: 10px;
     display: inline-block;
     width: 20px;
     height: 20px;

@@ -3,7 +3,7 @@ import { sortBy } from "lodash-es";
 const MAPPER = {
   A_VALIDER: {
     label: "À vérifier",
-    color: "#FEECD3",
+    color: "#FCC63A",
     order: 2,
     params: {
       etat_administratif: "actif",
@@ -15,7 +15,7 @@ const MAPPER = {
   },
   A_RENSEIGNER: {
     label: "À identifier",
-    color: "#FEE3DD",
+    color: "#F99389",
     order: 1,
     params: {
       etat_administratif: "actif",
@@ -26,7 +26,7 @@ const MAPPER = {
   },
   VALIDE: {
     label: "Validés",
-    color: "#CEFDDC",
+    color: "#52CD80",
     order: 0,
     params: {
       etat_administratif: "actif",

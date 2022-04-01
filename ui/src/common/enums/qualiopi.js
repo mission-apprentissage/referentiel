@@ -1,8 +1,8 @@
 import { sortBy } from "lodash-es";
 
 const MAPPER = {
-  qualiopi: { label: "Qualiopi", color: "#bbd6f1", order: 0, params: { qualiopi: true } },
-  non_qualiopi: { label: "Non Qualiopi", color: "#69a4e0", order: 1, params: { qualiopi: false } },
+  qualiopi: { label: "Qualiopi", color: "#568D88", order: 0, params: { qualiopi: true } },
+  non_qualiopi: { label: "Non Qualiopi", color: "#56C8B6", order: 1, params: { qualiopi: false } },
 };
 
 export const getQualiopiTypes = () => sortBy(Object.keys(MAPPER), (key) => MAPPER[key].order);

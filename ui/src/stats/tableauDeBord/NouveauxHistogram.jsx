@@ -58,7 +58,7 @@ export default function NouveauxHistogram() {
         data={last6Months}
         series={["nbOrganismes"]}
         getSerieLabel={() => "Nouveaux organismes"}
-        getSerieColor={() => "#0063CB"}
+        getSerieColor={() => "#417DC4"}
         axisBottom={customXLegend}
       />
     </div>

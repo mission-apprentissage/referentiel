@@ -1,5 +1,5 @@
 import { Col, GridRow } from "../common/dsfr/fondamentaux";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import ValidationCard from "../organismes/validation/ValidationCard";
 import DepartementAuthSelector from "../organismes/selectors/DepartementAuthSelector";
 import TitleLayout from "../common/layout/TitleLayout";
@@ -11,7 +11,6 @@ import TableauDeBordStats from "../stats/tableauDeBord/TableauDeBordStats";
 import useToggle from "../common/hooks/useToggle";
 import LinkButton from "../common/dsfr/custom/LinkButton";
 import styled from "styled-components";
-import useAllKeysPress from "../common/hooks/useAllKeysPress";
 import Page from "../common/Page";
 
 const Presentation = styled(({ className }) => {
@@ -63,13 +62,6 @@ export default function TableauDeBordPage() {
   let { auth } = useContext(ApiContext);
   let { query, setQuery } = useQuery();
   let title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
-  const isShorcutPress = useAllKeysPress({ userKeys: ["Alt", "ArrowUp"] });
-  let [showStats, toggleStats] = useToggle(false);
-  useEffect(() => {
-    if (isShorcutPress) {
-      toggleStats(isShorcutPress);
-    }
-  }, [isShorcutPress, toggleStats]);
 
   return (
     <Page>
@@ -101,13 +93,11 @@ export default function TableauDeBordPage() {
             <ValidationCard type={"VALIDE"} label={"Organismes validés"} />
           </Col>
         </GridRow>
-        {showStats && (
-          <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
-            <Col modifiers={"12"}>
-              <TableauDeBordStats />
-            </Col>
-          </GridRow>
-        )}
+        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
+          <Col modifiers={"12"}>
+            <TableauDeBordStats />
+          </Col>
+        </GridRow>
       </ContentLayout>
     </Page>
   );

@@ -1,8 +1,8 @@
 import { sortBy } from "lodash-es";
 
 const MAPPER = {
-  actif: { label: "En activité", color: "#0f9d58", order: 0 },
-  fermé: { label: "Fermé", color: "#e1000f", order: 1 },
+  actif: { label: "En activité", color: "#56C8B6", order: 0 },
+  fermé: { label: "Fermé", color: "#568D88", order: 1 },
 };
 
 export const getEtatAdministratifTypes = () => sortBy(Object.keys(MAPPER), (key) => MAPPER[key].order);
