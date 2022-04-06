@@ -1,13 +1,23 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
+const collectSources = require("./collectSources");
+const { createSource } = require("./sources/sources");
+const importDatagouv = require("./importDatagouv");
 
-const VERSION = 6;
+const VERSION = 7;
 
 async function tasks() {
+  await importDatagouv();
+
+  let { modifiedCount } = await dbCollection("organismes").updateMany(
+    {},
+    { $unset: { numero_declaration_activite: 1, qualiopi: 1 } }
+  );
+
+  let collected = await collectSources(createSource("datagouv"));
+
   return {
-    renameFields: await dbCollection("organismes").updateMany(
-      { nature: { $exists: false } },
-      { $set: { nature: "inconnue" } }
-    ),
+    unset: modifiedCount,
+    collected,
   };
 }
 

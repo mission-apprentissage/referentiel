@@ -6,7 +6,7 @@ const { insertOrganisme, insertDatagouv } = require("../../utils/fakeData");
 const { dbCollection } = require("../../../src/common/db/mongodb");
 
 describe("datagouv", () => {
-  it("Vérifie que peut convertir la source en référentiel", async () => {
+  it("Vérifie qu'on peut convertir la source en référentiel", async () => {
     await Promise.all([
       insertDatagouv({
         siren: "111111111",
@@ -53,20 +53,67 @@ describe("datagouv", () => {
 
     let stats = await collectSources(source);
 
-    let docs = await dbCollection("organismes").find({}, { _id: 0 }).sort({ siret: 1 }).toArray();
-    assert.deepStrictEqual(docs[0].numero_declaration_activite, "88888888888");
-    assert.deepStrictEqual(docs[0].qualiopi, true);
-    assert.deepStrictEqual(docs[1].numero_declaration_activite, undefined);
-    assert.deepStrictEqual(docs[1].qualiopi, undefined);
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    assert.deepStrictEqual(found.numero_declaration_activite, "88888888888");
+    assert.deepStrictEqual(found.qualiopi, true);
+    found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
+    assert.deepStrictEqual(found.numero_declaration_activite, undefined);
+    assert.deepStrictEqual(found.qualiopi, undefined);
     assert.deepStrictEqual(stats, {
       datagouv: {
-        total: 1,
+        total: 2,
         updated: 1,
-        unknown: 0,
+        unknown: 1,
         anomalies: 0,
         failed: 0,
       },
     });
+  });
+
+  it("Vérifie qu'on déduit les données nda/qualiopi pour les organismes avec le même siren", async () => {
+    await Promise.all([
+      insertOrganisme({ siret: "11111111100006" }),
+      insertOrganisme({ siret: "11111111100007" }),
+      insertDatagouv({
+        numeroDeclarationActivite: "88888888888",
+        siren: "111111111",
+        siretEtablissementDeclarant: "11111111100006",
+        certifications: { actionsDeFormationParApprentissage: true },
+      }),
+    ]);
+    let source = createSource("datagouv");
+
+    await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100007" }, { _id: 0 });
+    assert.deepStrictEqual(found.numero_declaration_activite, "88888888888");
+    assert.deepStrictEqual(found.qualiopi, true);
+  });
+
+  it("Vérifie qu'on privilégie les données datagouv pour les organismes avec le même siren", async () => {
+    await Promise.all([
+      insertOrganisme({ siret: "11111111100006" }),
+      insertOrganisme({ siret: "11111111100007" }),
+      insertDatagouv({
+        numeroDeclarationActivite: "88888888888",
+        siren: "111111111",
+        siretEtablissementDeclarant: "11111111100006",
+        certifications: { actionsDeFormationParApprentissage: true },
+      }),
+      insertDatagouv({
+        numeroDeclarationActivite: "99999999999",
+        siren: "111111111",
+        siretEtablissementDeclarant: "11111111100007",
+        certifications: { actionsDeFormationParApprentissage: false },
+      }),
+    ]);
+    let source = createSource("datagouv");
+
+    await collectSources(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100007" }, { _id: 0 });
+    assert.deepStrictEqual(found.numero_declaration_activite, "99999999999");
+    assert.deepStrictEqual(found.qualiopi, false);
   });
 
   it("Vérifie que peut charger en mémoire la liste des organismes de formation", async () => {
