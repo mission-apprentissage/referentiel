@@ -5,13 +5,12 @@ import { useContext, useEffect, useMemo } from "react";
 import { SearchContext } from "../SearchProvider";
 import { useLocation } from "react-router-dom";
 import usePrevious from "./usePrevious";
-import { isEqual } from "lodash-es";
+import { isEqual, isString } from "lodash-es";
 
 function adaptParamsForAPI(params) {
   return Object.keys(params).reduce((acc, key) => {
     let value = params[key];
-    let shouldIgnoreParam =
-      value instanceof String && value.indexOf(",") !== -1 && value.includes("true") && value.includes("false");
+    let shouldIgnoreParam = isString(value) && value.includes(",") && value.includes("true") && value.includes("false");
 
     return {
       ...acc,
