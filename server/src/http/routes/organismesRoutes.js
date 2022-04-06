@@ -151,11 +151,11 @@ module.exports = () => {
 
       switch (ext) {
         case "xls":
-          addCsvHeaders("organismes.csv", "UTF-16", res);
+          addCsvHeaders(`organismes-${DateTime.now().toISODate()}.csv`, "UTF-16", res);
           transformResponse = transformOrganisme.intoXls();
           break;
         case "csv":
-          addCsvHeaders("organismes.csv", "UTF-8", res);
+          addCsvHeaders(`organismes-${DateTime.now().toISODate()}.csv`, "UTF-8", res);
           transformResponse = transformOrganisme.intoCsv();
           break;
         default:
