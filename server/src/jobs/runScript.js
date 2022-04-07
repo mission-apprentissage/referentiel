@@ -3,8 +3,8 @@ const { closeMongodbConnection, connectToMongodb, configureValidation } = requir
 const prettyMilliseconds = require("pretty-ms");
 const { isEmpty } = require("lodash");
 
-process.on("unhandledRejection", (e) => console.error(e));
-process.on("uncaughtException", (e) => console.error(e));
+process.on("unhandledRejection", (e) => logger.error(e));
+process.on("uncaughtException", (e) => logger.error(e));
 process.stdout.on("error", function (err) {
   if (err.code === "EPIPE") {
     // eslint-disable-next-line no-process-exit
