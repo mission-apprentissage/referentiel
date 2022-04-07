@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useFetch } from "../common/hooks/useFetch";
 import { percentage } from "../common/utils";
 import Page from "../common/Page";
+import { modifications } from "./ModificationsPage";
 
 export default function AccueilPage() {
   let navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function AccueilPage() {
             <Summary>
               <a href={"#référentiel"}>Référentiel national</a>
               <a href={"#construction"}>Construction du référentiel</a>
+              <a href={"#modifications"}>Journal des modifications</a>
             </Summary>
           </Col>
           <Col modifiers={"12 offset-sm-1 sm-8"}>
@@ -69,6 +71,20 @@ export default function AccueilPage() {
                 En savoir plus
               </Button>
             </div>
+            <h6 id={"modifications"} className={"fr-mt-6w"}>
+              Dernière modification
+            </h6>
+            <div className={"fr-mt-3w"}>{modifications[0]}</div>
+            <Button
+              className={"fr-mt-3w"}
+              modifiers={"secondary"}
+              onClick={() => {
+                window.scrollTo(0, 0);
+                return navigate("/modifications");
+              }}
+            >
+              Voir toutes les modifications
+            </Button>
           </Col>
         </GridRow>
       </ContentLayout>
