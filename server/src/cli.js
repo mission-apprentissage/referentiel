@@ -79,7 +79,7 @@ cli
   .argument("<names>", "la liste des sources à importer", asArray)
   .argument("[file]", "Le nom du fichier utilisé par la source")
   .action((names, file, options) => {
-    runScript(async () => {
+    runScript(() => {
       let input = file ? createReadStream(file) : null;
 
       let mainSources = names.map((name) => createSource(name, { input }));
