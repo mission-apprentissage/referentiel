@@ -18,6 +18,7 @@ export function ValidationPie({ stats }) {
   return (
     <Pie
       data={national}
+      direction={"column"}
       getLabel={(id) => getValidationLabel(id)}
       getColor={(id) => getValidationColor(id)}
       onClick={({ id }) => openNewTab("/organismes", getValidationParams(id))}
