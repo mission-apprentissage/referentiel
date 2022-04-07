@@ -21,7 +21,8 @@ const MAPPER = {
       etat_administratif: "actif",
       qualiopi: true,
       natures: "responsable,responsable_formateur",
-      uais: true,
+      uais: false,
+      uai_potentiels: false,
     },
   },
   VALIDE: {
@@ -32,8 +33,7 @@ const MAPPER = {
       etat_administratif: "actif",
       qualiopi: true,
       natures: "responsable,responsable_formateur",
-      uais: false,
-      uai_potentiels: false,
+      uais: true,
     },
   },
 };
