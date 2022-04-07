@@ -319,8 +319,9 @@ describe("catalogue", () => {
     mockApis({
       formation: {
         etablissement_formateur_siret: "22222222200002",
-        lieu_formation_siret: "33333333300008",
         lieu_formation_geo_coordonnees: "48.879706,2.396444",
+        uai_formation: "0751234J",
+        lieu_formation_siret: "33333333300008",
       },
       reverse: {
         features: [
@@ -346,6 +347,7 @@ describe("catalogue", () => {
 
     assert.deepStrictEqual(found.lieux_de_formation[0], {
       sources: ["catalogue"],
+      uai: "0751234J",
       siret: "33333333300008",
       code: "2.396444_48.879706",
       adresse: {
@@ -389,7 +391,6 @@ describe("catalogue", () => {
     mockApis({
       formation: {
         etablissement_gestionnaire_siret: "11111111100006",
-        lieu_formation_siret: "33333333300008",
         lieu_formation_geo_coordonnees: "48.879706,2.396444",
       },
     });
@@ -463,7 +464,6 @@ describe("catalogue", () => {
     mockApis({
       formation: {
         etablissement_gestionnaire_siret: "11111111100006",
-        lieu_formation_siret: "33333333300008",
         lieu_formation_geo_coordonnees: null,
       },
     });

@@ -20,6 +20,7 @@ function fetchFormations(api, options = {}) {
       etablissement_gestionnaire_entreprise_raison_sociale: 1,
       etablissement_formateur_siret: 1,
       etablissement_formateur_entreprise_raison_sociale: 1,
+      uai_formation: 1,
       lieu_formation_adresse: 1,
       lieu_formation_siret: 1,
       lieu_formation_geo_coordonnees: 1,
@@ -99,6 +100,7 @@ async function buildLieuDeFormation(formation, { reverseGeocode }) {
         code: `${longitude}_${latitude}`,
         adresse,
         ...(formation.lieu_formation_siret ? { siret: formation.lieu_formation_siret } : {}),
+        ...(formation.uai_formation ? { uai: formation.uai_formation } : {}),
       },
     };
   } catch (e) {

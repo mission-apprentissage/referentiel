@@ -77,6 +77,7 @@ module.exports = {
             {
               code: string(),
               siret: string(),
+              uai: string(),
               adresse: adresseSchema,
               sources: arrayOf(string()),
             },
