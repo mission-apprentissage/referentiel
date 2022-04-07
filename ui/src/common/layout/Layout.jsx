@@ -54,7 +54,9 @@ export default function Layout({ children }) {
         bottom={{
           list: (
             <FooterList>
-              <FooterLink to={"/stats"}>Statistiques</FooterLink>
+              <FooterLink to={"/stats"} onClick={() => window.scrollTo(0, 0)}>
+                Statistiques
+              </FooterLink>
             </FooterList>
           ),
         }}
