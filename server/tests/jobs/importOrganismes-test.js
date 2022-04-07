@@ -4,9 +4,10 @@ const { Readable } = require("stream");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const importOrganismes = require("../../src/jobs/importOrganismes");
 const { compose, transformData } = require("oleoduc");
+const { insertOrganisme } = require("../utils/fakeData");
 
-function createTestSource(array) {
-  let name = "dummy";
+function createTestSource(array, options = {}) {
+  let name = options.name || "dummy";
   return {
     name,
     referentiel() {
@@ -44,6 +45,25 @@ describe("importOrganismes", () => {
         total: 1,
         created: 1,
         updated: 0,
+        invalid: 0,
+        failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on peut mettre à jour un organisme", async () => {
+    let source = createTestSource([{ siret: "11111111100006" }]);
+    await insertOrganisme({ siret: "11111111100006", referentiels: ["test"] });
+
+    let results = await importOrganismes(source);
+
+    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
+    assert.deepStrictEqual(found.referentiels, ["test", "dummy"]);
+    assert.deepStrictEqual(results, {
+      dummy: {
+        total: 1,
+        created: 0,
+        updated: 1,
         invalid: 0,
         failed: 0,
       },
@@ -99,6 +119,22 @@ describe("importOrganismes", () => {
         updated: 0,
         invalid: 1,
         failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on ignore un organisme avec un siret invalide", async () => {
+    let source = createTestSource([{ siret: "11111111100006" }], { name: 666 });
+
+    let results = await importOrganismes(source);
+
+    assert.deepStrictEqual(results, {
+      666: {
+        total: 1,
+        created: 0,
+        updated: 0,
+        invalid: 0,
+        failed: 1,
       },
     });
   });

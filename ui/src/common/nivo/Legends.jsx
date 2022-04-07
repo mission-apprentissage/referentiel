@@ -17,9 +17,9 @@ const Color = styled("span")`
   }
 `;
 
-export const Legends = styled(({ direction = "row", definitions, className }) => {
+export const Legends = styled(({ definitions, className, ...rest }) => {
   return (
-    <Box direction={direction} className={className}>
+    <Box className={className} {...rest}>
       {definitions.map(({ label, color }) => {
         return (
           <Color color={color} key={label}>

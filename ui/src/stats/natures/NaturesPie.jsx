@@ -21,6 +21,7 @@ export function NaturesPie({ stats }) {
       getLabel={(id) => getNatureLabel(id)}
       getColor={(id) => getNatureColor(id)}
       onClick={({ id }) => openNewTab("/organismes", getNatureParams(id))}
+      arcLabelsTextColor="white"
     />
   );
 }
