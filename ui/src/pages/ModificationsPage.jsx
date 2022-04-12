@@ -32,7 +32,7 @@ export const modifications = [
     titre={"Ajout de l'export"}
     texte={
       <div>
-        <p>Il est désormais possible d'export la liste des organismes.</p>
+        <p>Il est désormais possible d'exporter la liste des organismes.</p>
       </div>
     }
   />,

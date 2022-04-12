@@ -29,7 +29,7 @@ export default function AccueilPage() {
           <Col modifiers={"12 offset-sm-1 sm-8"}>
             <h2>Bienvenue sur le Référentiel des organismes de formation en apprentissage</h2>
             <h6 id={"référentiel"}>
-              Aujourd’hui, le référentiel est en cours d’expérimentation sur 3 régions.{" "}
+              Aujourd’hui, des travaux d'expertise sont en cours dans chaque académie.
               {stats && (
                 <div>
                   Il contient {Math.round(percentage(stats.valides, stats.total))}% d’organismes validés sur le
