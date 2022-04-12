@@ -10,7 +10,7 @@ import Results from "../common/Results";
 import WideTabs from "../common/dsfr/custom/WideTabs";
 import ContentLayout from "../common/layout/ContentLayout";
 import NatureFilter from "../organismes/filtres/NatureFilter";
-import NdaFilter from "../organismes/filtres/NdaFilter";
+import DatagouvFilter from "../organismes/filtres/DatagouvFilter";
 import DepartementsFilter from "../organismes/filtres/DepartementsFilter";
 import UAIFilter from "../organismes/filtres/UAIFilter";
 import Page from "../common/Page";
@@ -37,7 +37,7 @@ export default function OrganismesPage() {
                       <Filters onChange={(filters) => refine({ ...filters })}>
                         <DepartementsFilter />
                         <NatureFilter />
-                        <NdaFilter />
+                        <DatagouvFilter />
                         <UAIFilter />
                       </Filters>
                     }

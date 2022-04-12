@@ -3,7 +3,7 @@ import Tooltip from "../../common/Tooltip";
 import { Box } from "../../common/Flexbox";
 import React from "react";
 
-export default function NdaFilter() {
+export default function DatagouvFilter() {
   return (
     <Filter
       label={
@@ -16,9 +16,9 @@ export default function NdaFilter() {
         </Box>
       }
       items={[
-        { label: "Oui", paramName: "numero_declaration_activite", value: "true" },
+        { label: "Oui", paramName: "referentiels", value: "datagouv" },
         { label: "Qualiopi", paramName: "qualiopi", value: "true" },
-        { label: "Non", paramName: "numero_declaration_activite", value: "false" },
+        { label: "Non", paramName: "referentiels", value: "-datagouv" },
       ]}
     />
   );

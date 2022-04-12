@@ -42,6 +42,22 @@ module.exports = () => {
     };
   }
 
+  function convertCriteriaIntoQuery(fieldName, criteria) {
+    let query = { $and: [] };
+
+    let includes = criteria.filter((v) => !v.startsWith("-"));
+    if (includes.length > 0) {
+      query.$and.push({ [fieldName]: { $in: includes } });
+    }
+
+    let excludes = criteria.filter((v) => v.startsWith("-")).map((v) => v.substring(1, v.length));
+    if (excludes.length > 0) {
+      query.$and.push({ [fieldName]: { $nin: excludes } });
+    }
+
+    return query;
+  }
+
   function buildQuery(params) {
     let {
       sirets,
@@ -50,6 +66,7 @@ module.exports = () => {
       regions = [],
       academies = [],
       natures = [],
+      referentiels = [],
       text,
       anomalies,
       uai_potentiels,
@@ -72,6 +89,7 @@ module.exports = () => {
           : { numero_declaration_activite: nda }
         : {}),
       ...(hasElements(natures) ? { nature: { $in: natures } } : {}),
+      ...(hasElements(referentiels) ? convertCriteriaIntoQuery("referentiels", referentiels) : {}),
       ...(hasElements(departements) ? { "adresse.departement.code": { $in: departements } } : {}),
       ...(hasElements(regions) ? { "adresse.region.code": { $in: regions } } : {}),
       ...(hasElements(academies) ? { "adresse.academie.code": { $in: academies } } : {}),
@@ -127,6 +145,7 @@ module.exports = () => {
             arrayOf(Joi.string().valid("formateur->responsable", "responsable->formateur", "entreprise"))
           )
           .default(null),
+        referentiels: Joi.alternatives().try(Joi.boolean(), arrayOf(Joi.string())),
         anomalies: Joi.boolean().default(null),
         qualiopi: Joi.boolean().default(null),
         nouveaux: Joi.boolean().default(null),
