@@ -33,7 +33,7 @@ export default function IdentiteTab({ organisme }) {
     <>
       <Box justify={"between"}>
         <h6>Identité</h6>
-        {organisme.uai_potentiels.length === 0 && (
+        {organisme.referentiels.includes("datagouv") && organisme.uai_potentiels.length === 0 && (
           <>
             <LinkButton modifiers={"icon-right"} icons={"arrow-right-line"} onClick={() => datagouvModal.open()}>
               Afficher les données de la Liste publique des Organismes de Formations

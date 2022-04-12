@@ -12,18 +12,20 @@ import useToggle from "../common/hooks/useToggle";
 import LinkButton from "../common/dsfr/custom/LinkButton";
 import styled from "styled-components";
 import Page from "../common/Page";
+import Highlight from "../common/dsfr/elements/Highlight";
 
 const Presentation = styled(({ className }) => {
   let [showDetails, toggleDetails] = useToggle(false);
 
   return (
     <div className={className}>
-      <p className={"text"}>
+      <Highlight>
         Ce tableau de bord permet de consulter les organismes du référentiel dont les UAI sont à vérifier, à identifier
         ou validées sur le territoire sélectionné. Une fois tous les organismes validés ou expertisés vous pouvez
         adresser un mail à referentiel@apprentissage.beta.gouv.fr pour nous informer de la fin de vos travaux.
-      </p>
-      <div className={"details"}>
+      </Highlight>
+
+      <div className={"details fr-mt-2w"}>
         <LinkButton
           className={"fr-mb-2w"}
           modifiers={"sm icon-right"}
@@ -49,8 +51,8 @@ const Presentation = styled(({ className }) => {
     </div>
   );
 })`
-  .text {
-    border-left: solid 4px #6a6af4;
+  .fr-highlight {
+    margin-left: 0;
     padding-left: 2rem;
   }
   .details {

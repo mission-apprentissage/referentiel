@@ -14,6 +14,7 @@ import DataProvider from "./common/DataProvider";
 import ApiProvider from "./common/ApiProvider";
 import StatsPage from "./pages/StatsPage";
 import SearchProvider from "./common/SearchProvider";
+import ModificationsPage from "./pages/ModificationsPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
                 <Route element={<Layout children={<Outlet />} />}>
                   <Route path="/" element={<AccueilPage />} />
                   <Route path="/construction" element={<ConstructionPage />} />
+                  <Route path="/modifications" element={<ModificationsPage />} />
                   <Route path="/stats" element={<StatsPage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/organismes" element={<OrganismesPage />} />

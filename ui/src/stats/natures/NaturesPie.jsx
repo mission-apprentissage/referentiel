@@ -18,6 +18,7 @@ export function NaturesPie({ stats }) {
   return (
     <Pie
       data={national}
+      direction={"column"}
       getLabel={(id) => getNatureLabel(id)}
       getColor={(id) => getNatureColor(id)}
       onClick={({ id }) => openNewTab("/organismes", getNatureParams(id))}

@@ -703,6 +703,68 @@ describe("organismesRoutes", () => {
     ok(response.data.organismes.find((o) => o.siret === "333333333000003"));
   });
 
+  it("Vérifie qu'on peut rechercher des organismes avec un référentiel dans lequel ils apparaissent", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100001",
+      referentiels: ["ref1"],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      referentiels: ["ref2"],
+    });
+    let response = await httpClient.get("/api/v1/organismes?referentiels=ref1");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    ok(response.data.organismes.find((o) => o.siret === "11111111100001"));
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes avec des référentiels dans lequel ils apparaissent", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100001",
+      referentiels: ["ref1"],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      referentiels: ["ref2"],
+    });
+    await insertOrganisme({
+      siret: "333333333000003",
+      referentiels: ["ref3"],
+    });
+
+    let response = await httpClient.get("/api/v1/organismes?referentiels=ref1,ref3");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 2);
+    ok(response.data.organismes.find((o) => o.siret === "11111111100001"));
+    ok(response.data.organismes.find((o) => o.siret === "333333333000003"));
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes qui n'apparaissent pas dans un référentiel", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100001",
+      referentiels: ["ref1"],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      referentiels: ["ref2"],
+    });
+    await insertOrganisme({
+      siret: "333333333000003",
+      referentiels: ["ref3"],
+    });
+
+    let response = await httpClient.get("/api/v1/organismes?referentiels=-ref2,ref1");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    ok(response.data.organismes.find((o) => o.siret === "11111111100001"));
+  });
+
   it("Vérifie qu'on peut limiter les champs renvoyés pour la liste des organismes", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
