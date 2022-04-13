@@ -76,7 +76,6 @@ export default function AccueilPage() {
             </h6>
             <div className={"fr-mt-3w"}>{modifications[0]}</div>
             <Button
-              className={"fr-mt-3w"}
               modifiers={"secondary"}
               onClick={() => {
                 window.scrollTo(0, 0);
