@@ -2,6 +2,7 @@ import React from "react";
 import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
 import LieuxDeFormationMap from "./LieuxDeFormationMap";
 import { Table, Thead } from "../../../common/dsfr/elements/Table";
+import NA from "../../common/NA";
 
 export default function LieuxDeFormationTab({ organisme }) {
   let nbLieux = organisme.lieux_de_formation.length;
@@ -33,7 +34,7 @@ export default function LieuxDeFormationTab({ organisme }) {
             {organisme.lieux_de_formation.map((lieu) => {
               return (
                 <tr key={lieu.code}>
-                  <td>{lieu.uai}</td>
+                  <td>{lieu.uai ? lieu.uai : <NA />}</td>
                   <td>{lieu.adresse.label}</td>
                 </tr>
               );

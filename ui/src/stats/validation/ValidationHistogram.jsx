@@ -12,8 +12,8 @@ export function ValidationHistogram({ stats }) {
   return (
     <Histogram
       title="Répartition des natures des organisme par académie"
-      xLegend={"Académie"}
-      yLegend={"Nombre d'organisme"}
+      xLegend={"Académies"}
+      yLegend={"Nombre d'organismes"}
       data={stats.academies}
       series={getValidationTypes()}
       getSerieLabel={(id) => getValidationLabel(id)}

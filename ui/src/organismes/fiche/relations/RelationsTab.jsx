@@ -8,7 +8,7 @@ import { Box } from "../../../common/Flexbox";
 import { RelationsTable } from "./RelationsTable";
 import { uniq, without } from "lodash-es";
 
-const RelationTagButton = styled(({ label, results, onChange }) => {
+const RelationTagButton = styled(({ label, results, onChange, disabled = false }) => {
   let [pressed, setPressed] = useState(false);
   let nbElements = results.length;
 
@@ -16,6 +16,7 @@ const RelationTagButton = styled(({ label, results, onChange }) => {
     <TagButton
       label={label}
       aria-pressed={pressed}
+      disabled={disabled}
       onClick={() => {
         onChange && onChange(!pressed);
         return setPressed(!pressed);
@@ -70,31 +71,28 @@ export default function RelationsTab({ organisme }) {
         <Box>
           <span className={"fr-mr-1w"}>Relations :</span>
           <TagGroup>
-            {estResponsableDe.length > 0 && (
-              <RelationTagButton
-                label={"Responsable"}
-                results={estResponsableDe}
-                onChange={(pressed) => filter({ name: "responsable", pressed })}
-              />
-            )}
-            {dispenseDesFormationsPour.length > 0 && (
-              <RelationTagButton
-                label={"Formateur"}
-                results={dispenseDesFormationsPour}
-                onChange={(pressed) => filter({ name: "formateur", pressed })}
-              />
-            )}
-            {autres.length > 0 && (
-              <RelationTagButton
-                label={"Autres relations"}
-                results={autres}
-                onChange={(pressed) => filter({ name: "autres", pressed })}
-              />
-            )}
+            <RelationTagButton
+              label={"Responsable"}
+              results={estResponsableDe}
+              disabled={estResponsableDe.length === 0}
+              onChange={(pressed) => filter({ name: "responsable", pressed })}
+            />
+            <RelationTagButton
+              label={"Formateur"}
+              results={dispenseDesFormationsPour}
+              disabled={dispenseDesFormationsPour.length === 0}
+              onChange={(pressed) => filter({ name: "formateur", pressed })}
+            />
+            <RelationTagButton
+              label={"Autres relations"}
+              results={autres}
+              disabled={autres.length === 0}
+              onChange={(pressed) => filter({ name: "autres", pressed })}
+            />
           </TagGroup>
         </Box>
       </h4>
-      {(tables.length === 0 || tables.includes("responsable")) && (
+      {((tables.length === 0 && estResponsableDe.length > 0) || tables.includes("responsable")) && (
         <GridRow className={"fr-mb-6w"}>
           <Col>
             <RelationsTable
@@ -105,7 +103,7 @@ export default function RelationsTab({ organisme }) {
           </Col>
         </GridRow>
       )}
-      {(tables.length === 0 || tables.includes("formateur")) && (
+      {((tables.length === 0 && dispenseDesFormationsPour.length > 0) || tables.includes("formateur")) && (
         <GridRow className={"fr-mb-6w"}>
           <Col>
             <RelationsTable
@@ -116,7 +114,7 @@ export default function RelationsTab({ organisme }) {
           </Col>
         </GridRow>
       )}
-      {(tables.length === 0 || tables.includes("autres")) && (
+      {((tables.length === 0 && autres.length > 0) || tables.includes("autres")) && (
         <GridRow className={"fr-mb-6w"}>
           <Col>
             <RelationsTable
