@@ -1,204 +1,1201 @@
-#Can be edited online with https://editor.swagger.io/
-swagger: "2.0"
+openapi: 3.0.1
 info:
-  description: Documentation de l'API publique d'Anotéa
-  version: 1.0.0
   title: Référentiel
-  termsOfService: http://swagger.io/terms/
+  description: Documentation de l'API publique du référentiel
   license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-schemes:
-  - https
-  - http
-securityDefinitions:
-  Authorization:
-    type: apiKey
-    in: header
-    name: Authorization
-    description: |
-      Pour plus d'informations voir :
-      https://github.com/mission-apprentissage/referentiel
-responses:
-  OrganismeResponse:
-    description: Un organisme
-    schema:
-      $ref: "#/definitions/Organisme"
-  OrganismesResponse:
-    description: La liste des organismes formateurs
-    schema:
-      type: object
-      properties:
-        organismes:
-          type: array
-          items:
-            $ref: "#/definitions/Organisme"
-        meta:
-          type: object
-          description: Informations complémentaires
-          properties:
-            pagination:
-              $ref: "#/definitions/Pagination"
-
-  UnauthorizedErrorResponse:
-    description: Le header Authorization header est manquant ou invalide
-    schema:
-      $ref: "#/definitions/Error"
-
-  BadRequestErrorResponse:
-    description: Bad Request
-    schema:
-      $ref: "#/definitions/Error"
-
-  NotFoundErrorResponse:
-    description: Not Found
-    schema:
-      $ref: "#/definitions/Error"
-
-definitions:
-  Error:
-    type: object
-    properties:
-      statusCode:
-        type: integer
-        example: 5xx/4xx
-      error:
-        type: string
-        example: Internal Server Error
-      message:
-        type: string
-        example: An internal server error occurred
-
-  Pagination:
-    type: object
-    description: Statut de la pagination
-    properties:
-      page:
-        type: string
-      resultats_par_page:
-        type: number
-      nombre_de_page:
-        type: number
-      total:
-        type: number
-
-  Organisme:
-    type: object
-    properties:
-      TODO:
-        type: string
-        description: L'identifiant unique de l'action
+    name: GNU AFFERO GENERAL PUBLIC LICENSE 3
+    url: https://raw.githubusercontent.com/mission-apprentissage/referentiel/main/LICENCE
+  version: 1.0.0
+servers:
+  - url: https://referentiel.apprentissage.beta.gouv.fr/api
+  - url: https://referentiel-recette.apprentissage.beta.gouv.fr/api
 
 paths:
   /api/v1/organismes:
     get:
-      description: >
-        Récupérer la liste des organismes
-      produces:
-        - application/json
-      parameters:
-        - in: query
-          name: siret
-          description: Retourne uniquement l'établissement ayant ce siren/siret
-          type: string
-          required: false
-        - in: query
-          name: text
-          description: Retourne uniquement l'établissement ayant cet uai.
-          type: string
-          required: false
-        - in: query
-          name: text
-          description: Permet de faire une recherche sur tous les champs texte d'un établissement
-          type: string
-          required: false
-        - in: query
-          name: anomalies
-          description: Si true renvoie uniquement les établissements contenant des anomalies
-          type: string
-          required: false
-        - in: query
-          name: page
-          description: Le numéro de la page désirée
-          type: string
-          required: false
-        - in: query
-          name: items_par_page
-          default: 10
-          description: Le nombre maximum d'éléments dans la page
-          type: string
-        - in: query
-          name: tri
-          description: Le champ utilisé pour trier la liste des résultats
-          type: string
-        - in: query
-          name: ordre
-          description: L'ordre du tri
-          default: desc
-          type: string
-          required: false
-        - in: query
-          name: champs
-          description: |
-            La liste des champs séparés par des virgules à inclure ou exclure dans la réponse.
-            Exemple :
-              - inclusion `champs=siret,uai`
-              - exclusion `champs=-siret,uai`
-          type: string
-          required: false
-      security:
-        - Authorization: [ ]
-      responses:
-        200:
-          $ref: "#/responses/OrganismesResponse"
-        400:
-          $ref: "#/responses/BadRequestErrorResponse"
-        401:
-          $ref: "#/responses/UnauthorizedErrorResponse"
-        404:
-          $ref: "#/responses/NotFoundErrorResponse"
       tags:
         - Publique
-
-  /api/v1/organismes/{siret}:
-    get:
-      description: >
-        Récupérer les informations d'un établissement
-      produces:
-        - application/json
+      description: Rechercher des organismes dans la référentiel
       parameters:
-        - in: path
-          name: siret
+        - $ref: "#/components/parameters/sirets"
+        - $ref: "#/components/parameters/uais"
+        - $ref: "#/components/parameters/uai_potentiels"
+        - $ref: "#/components/parameters/numero_declaration_activite"
+        - $ref: "#/components/parameters/natures"
+        - $ref: "#/components/parameters/etat_administratif"
+        - $ref: "#/components/parameters/regions"
+        - $ref: "#/components/parameters/academies"
+        - $ref: "#/components/parameters/departements"
+        - $ref: "#/components/parameters/relations"
+        - $ref: "#/components/parameters/referentiels"
+        - $ref: "#/components/parameters/nouveaux"
+        - $ref: "#/components/parameters/qualiopi"
+        - $ref: "#/components/parameters/text"
+        - $ref: "#/components/parameters/anomalies"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/items_par_page"
+        - $ref: "#/components/parameters/ordre"
+        - $ref: "#/components/parameters/champs"
+      responses:
+        200:
+          $ref: "#/components/responses/organismes"
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+
+  /api/v1/organismes.{ext}:
+    get:
+      tags:
+        - Publique
+      description: Exporter des organismes du référentiel
+      parameters:
+        - name: ext
+          in: path
           required: true
           schema:
             type: string
-            example: "42476141900045"
-        - in: query
-          name: champs
-          description: |
-            La liste des champs séparés par des virgules à inclure ou exclure dans la réponse.
-            Exemple :
-              - Retourne uniquement les champs uai et siret `champs=siret,uai`
-              - Retourne tous les champs sauf uai et siret `champs=-siret,uai`
-          type: string
-          required: false
-      security:
-        - Authorization: [ ]
+            enum: [ "json", "csv", "xls" ]
+            default: json
+        - $ref: "#/components/parameters/sirets"
+        - $ref: "#/components/parameters/uais"
+        - $ref: "#/components/parameters/uai_potentiels"
+        - $ref: "#/components/parameters/numero_declaration_activite"
+        - $ref: "#/components/parameters/natures"
+        - $ref: "#/components/parameters/etat_administratif"
+        - $ref: "#/components/parameters/regions"
+        - $ref: "#/components/parameters/academies"
+        - $ref: "#/components/parameters/departements"
+        - $ref: "#/components/parameters/relations"
+        - $ref: "#/components/parameters/referentiels"
+        - $ref: "#/components/parameters/nouveaux"
+        - $ref: "#/components/parameters/qualiopi"
+        - $ref: "#/components/parameters/text"
+        - $ref: "#/components/parameters/anomalies"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/items_par_page"
+        - $ref: "#/components/parameters/ordre"
+        - $ref: "#/components/parameters/champs"
       responses:
         200:
-          $ref: "#/responses/OrganismeResponse"
+          $ref: "#/components/responses/organismes"
         400:
-          $ref: "#/responses/BadRequestErrorResponse"
+          $ref: "#/components/responses/400"
         401:
-          $ref: "#/responses/UnauthorizedErrorResponse"
+          $ref: "#/components/responses/401"
         404:
-          $ref: "#/responses/NotFoundErrorResponse"
+          $ref: "#/components/responses/404"
+
+  /api/v1/organismes/{siret}:
+    get:
       tags:
         - Publique
+      description: |
+        Récupérer les informations d'un établissement
+      parameters:
+        - name: siret
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/champs"
+      responses:
+        200:
+          $ref: "#/components/responses/organisme"
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+
+components:
+  parameters:
+    sirets:
+      name: sirets
+      in: query
+      description: Permet de filtrer la recherche avec un ou plusieurs sirets.
+      schema:
+        type: string
+      examples:
+        unique:
+          value: 11111111100006
+          summary: Organismes ayant un siret spécifique
+        multiple:
+          value: 11111111100006,22222222200002
+          summary: Organismes ayant l'un des sirets de la liste
+
+    uais:
+      name: uais
+      in: query
+      description: Permet de filtrer la recherche avec un ou plusieurs UAI.
+      schema:
+        oneOf:
+          - type: string
+          - type: boolean
+      examples:
+        unique:
+          value: 0751234J
+          summary: Organismes ayant une UAI spécifique
+        multiple:
+          value: 0751234J,0931234L
+          summary: Organismes ayant l'une des UAI de la liste
+        true:
+          value: true
+          summary: Organismes avec UAI
+        false:
+          value: false
+          summary: Organismes sans UAI
+
+    uai_potentiels:
+      name: uai_potentiels
+      in: query
+      description: Permet de filtrer la recherche avec une ou plusieurs UAI potentielles.
+      schema:
+        oneOf:
+          - type: string
+          - type: boolean
+      examples:
+        unique:
+          value: 0751234J
+          summary: Organismes ayant une UAI potentielle spécifique
+        multiple:
+          value: 0751234J,0931234L
+          summary: Organismes ayant l'une des UAI potentielles de la liste
+        true:
+          value: true
+          summary: Organismes des UAI potentielles
+        false:
+          value: false
+          summary: Organismes sans UAI potentielles
+
+    numero_declaration_activite:
+      name: numero_declaration_activite
+      in: query
+      description: Permet de filtrer la recherche avec un numero de declaration d'activité.
+      schema:
+        oneOf:
+          - type: string
+          - type: boolean
+      examples:
+        unique:
+          value: 12345678901
+          summary: Organismes ayant un numero de declaration d'activité spécifique.
+        true:
+          value: true
+          summary: Organismes ayant un numero de declaration d'activité.
+        false:
+          value: false
+          summary: Organismes sans un numero de declaration d'activité.
+
+    natures:
+      name: natures
+      in: query
+      description: Permet de filtrer la recherche en fonction de la nature des organismes.
+      schema:
+        type: string
+        enum: [ "responsable", "formateur", "responsable_formateur", "inconnue" ]
+
+    etat_administratif:
+      name: etat_administratif
+      in: query
+      description: Permet de filtrer la recherche en fonction de l'état administratif de l'entreprise.
+      schema:
+        type: string
+        enum: [ "actif", "fermé" ]
+
+    regions:
+      name: regions
+      in: query
+      description: Permet de trouver les organismes d'une région
+      schema:
+        type: string
+      examples:
+        84:
+          value: '84'
+          summary: Auvergne-Rhône-Alpes
+        27:
+          value: '27'
+          summary: Bourgogne-Franche-Comté
+        53:
+          value: '53'
+          summary: Bretagne
+        24:
+          value: '24'
+          summary: Centre-Val de Loire
+        00:
+          value: '00'
+          summary: Collectivités d'outre-mer
+        94:
+          value: '94'
+          summary: Corse
+        44:
+          value: '44'
+          summary: Grand Est
+        01:
+          value: '01'
+          summary: Guadeloupe
+        03:
+          value: '03'
+          summary: Guyane
+        32:
+          value: '32'
+          summary: Hauts-de-France
+        04:
+          value: '04'
+          summary: La Réunion
+        02:
+          value: '02'
+          summary: Martinique
+        06:
+          value: '06'
+          summary: Mayotte
+        28:
+          value: '28'
+          summary: Normandie
+        75:
+          value: '75'
+          summary: Nouvelle-Aquitaine
+        76:
+          value: '76'
+          summary: Occitanie
+        52:
+          value: '52'
+          summary: Pays de la Loire
+        93:
+          value: '93'
+          summary: Provence-Alpes-Côte d'Azur
+        11:
+          value: '11'
+          summary: Île-de-France
+
+    academies:
+      name: academies
+      in: query
+      description: Permet de trouver les organismes d'une académie
+      schema:
+        type: string
+      examples:
+        02:
+          value: '02'
+          summary: Aix-Marseille
+        20:
+          value: '20'
+          summary: Amiens
+        03:
+          value: '03'
+          summary: Besançon
+        04:
+          value: '04'
+          summary: Bordeaux
+        06:
+          value: '06'
+          summary: Clermont-Ferrand
+        27:
+          value: '27'
+          summary: Corse
+        24:
+          value: '24'
+          summary: Créteil
+        07:
+          value: '07'
+          summary: Dijon
+        08:
+          value: '08'
+          summary: Grenoble
+        32:
+          value: '32'
+          summary: Guadeloupe
+        33:
+          value: '33'
+          summary: Guyane
+        28:
+          value: '28'
+          summary: La Réunion
+        09:
+          value: '09'
+          summary: Lille
+        22:
+          value: '22'
+          summary: Limoges
+        10:
+          value: '10'
+          summary: Lyon
+        31:
+          value: '31'
+          summary: Martinique
+        43:
+          value: '43'
+          summary: Mayotte
+        11:
+          value: '11'
+          summary: Montpellier
+        12:
+          value: '12'
+          summary: Nancy-Metz
+        17:
+          value: '17'
+          summary: Nantes
+        23:
+          value: '23'
+          summary: Nice
+        70:
+          value: '70'
+          summary: Normandie
+        40:
+          value: '40'
+          summary: Nouvelle-Calédonie
+        18:
+          value: '18'
+          summary: Orléans-Tours
+        01:
+          value: '01'
+          summary: Paris
+        13:
+          value: '13'
+          summary: Poitiers
+        41:
+          value: '41'
+          summary: Polynésie Française
+        19:
+          value: '19'
+          summary: Reims
+        14:
+          value: '14'
+          summary: Rennes
+        77:
+          value: '77'
+          summary: Saint-Barthélemy
+        78:
+          value: '78'
+          summary: Saint-Martin
+        44:
+          value: '44'
+          summary: Saint-Pierre-et-Miquelon
+        15:
+          value: '15'
+          summary: Strasbourg
+        16:
+          value: '16'
+          summary: Toulouse
+        25:
+          value: '25'
+          summary: Versailles
+        42:
+          value: '42'
+          summary: Wallis et Futuna
+        00:
+          value: '00'
+          summary: Étranger
 
 
 
+    departements:
+      name: departements
+      in: query
+      description: Permet de trouver les organismes d'un département
+      schema:
+        type: string
+      examples:
+        01:
+          value: '01'
+          summary: Ain
+        02:
+          value: '02'
+          summary: Aisne
+        03:
+          value: '03'
+          summary: Allier
+        06:
+          value: '06'
+          summary: Alpes-Maritimes
+        04:
+          value: '04'
+          summary: Alpes-de-Haute-Provence
+        08:
+          value: '08'
+          summary: Ardennes
+        07:
+          value: '07'
+          summary: Ardèche
+        09:
+          value: '09'
+          summary: Ariège
+        10:
+          value: '10'
+          summary: Aube
+        11:
+          value: '11'
+          summary: Aude
+        12:
+          value: '12'
+          summary: Aveyron
+        67:
+          value: '67'
+          summary: Bas-Rhin
+        13:
+          value: '13'
+          summary: Bouches-du-Rhône
+        14:
+          value: '14'
+          summary: Calvados
+        15:
+          value: '15'
+          summary: Cantal
+        16:
+          value: '16'
+          summary: Charente
+        17:
+          value: '17'
+          summary: Charente-Maritime
+        18:
+          value: '18'
+          summary: Cher
+        19:
+          value: '19'
+          summary: Corrèze
+        20:
+          value: '20'
+          summary: Corse
+        2A:
+          value: 2A
+          summary: Corse-du-Sud
+        23:
+          value: '23'
+          summary: Creuse
+        21:
+          value: '21'
+          summary: Côte-d'Or
+        22:
+          value: '22'
+          summary: Côtes-d'Armor
+        79:
+          value: '79'
+          summary: Deux-Sèvres
+        24:
+          value: '24'
+          summary: Dordogne
+        25:
+          value: '25'
+          summary: Doubs
+        26:
+          value: '26'
+          summary: Drôme
+        91:
+          value: '91'
+          summary: Essonne
+        27:
+          value: '27'
+          summary: Eure
+        28:
+          value: '28'
+          summary: Eure-et-Loir
+        29:
+          value: '29'
+          summary: Finistère
+        30:
+          value: '30'
+          summary: Gard
+        32:
+          value: '32'
+          summary: Gers
+        33:
+          value: '33'
+          summary: Gironde
+        971:
+          value: '971'
+          summary: Guadeloupe
+        973:
+          value: '973'
+          summary: Guyane
+        68:
+          value: '68'
+          summary: Haut-Rhin
+        2B:
+          value: 2B
+          summary: Haute-Corse
+        31:
+          value: '31'
+          summary: Haute-Garonne
+        43:
+          value: '43'
+          summary: Haute-Loire
+        52:
+          value: '52'
+          summary: Haute-Marne
+        74:
+          value: '74'
+          summary: Haute-Savoie
+        70:
+          value: '70'
+          summary: Haute-Saône
+        87:
+          value: '87'
+          summary: Haute-Vienne
+        05:
+          value: '05'
+          summary: Hautes-Alpes
+        65:
+          value: '65'
+          summary: Hautes-Pyrénées
+        92:
+          value: '92'
+          summary: Hauts-de-Seine
+        34:
+          value: '34'
+          summary: Hérault
+        35:
+          value: '35'
+          summary: Ille-et-Vilaine
+        36:
+          value: '36'
+          summary: Indre
+        37:
+          value: '37'
+          summary: Indre-et-Loire
+        38:
+          value: '38'
+          summary: Isère
+        39:
+          value: '39'
+          summary: Jura
+        974:
+          value: '974'
+          summary: La Réunion
+        40:
+          value: '40'
+          summary: Landes
+        41:
+          value: '41'
+          summary: Loir-et-Cher
+        42:
+          value: '42'
+          summary: Loire
+        44:
+          value: '44'
+          summary: Loire-Atlantique
+        45:
+          value: '45'
+          summary: Loiret
+        46:
+          value: '46'
+          summary: Lot
+        47:
+          value: '47'
+          summary: Lot-et-Garonne
+        48:
+          value: '48'
+          summary: Lozère
+        49:
+          value: '49'
+          summary: Maine-et-Loire
+        50:
+          value: '50'
+          summary: Manche
+        51:
+          value: '51'
+          summary: Marne
+        972:
+          value: '972'
+          summary: Martinique
+        53:
+          value: '53'
+          summary: Mayenne
+        976:
+          value: '976'
+          summary: Mayotte
+        54:
+          value: '54'
+          summary: Meurthe-et-Moselle
+        55:
+          value: '55'
+          summary: Meuse
+        56:
+          value: '56'
+          summary: Morbihan
+        57:
+          value: '57'
+          summary: Moselle
+        58:
+          value: '58'
+          summary: Nièvre
+        59:
+          value: '59'
+          summary: Nord
+        988:
+          value: '988'
+          summary: Nouvelle-Calédonie
+        60:
+          value: '60'
+          summary: Oise
+        61:
+          value: '61'
+          summary: Orne
+        75:
+          value: '75'
+          summary: Paris
+        62:
+          value: '62'
+          summary: Pas-de-Calais
+        987:
+          value: '987'
+          summary: Polynésie Française
+        63:
+          value: '63'
+          summary: Puy-de-Dôme
+        64:
+          value: '64'
+          summary: Pyrénées-Atlantiques
+        66:
+          value: '66'
+          summary: Pyrénées-Orientales
+        69:
+          value: '69'
+          summary: Rhône
+        977:
+          value: '977'
+          summary: Saint-Barthélemy
+        978:
+          value: '978'
+          summary: Saint-Martin
+        975:
+          value: '975'
+          summary: Saint-Pierre-et-Miquelon
+        72:
+          value: '72'
+          summary: Sarthe
+        73:
+          value: '73'
+          summary: Savoie
+        71:
+          value: '71'
+          summary: Saône-et-Loire
+        76:
+          value: '76'
+          summary: Seine-Maritime
+        93:
+          value: '93'
+          summary: Seine-Saint-Denis
+        77:
+          value: '77'
+          summary: Seine-et-Marne
+        80:
+          value: '80'
+          summary: Somme
+        81:
+          value: '81'
+          summary: Tarn
+        82:
+          value: '82'
+          summary: Tarn-et-Garonne
+        984:
+          value: '984'
+          summary: Terres australes et antarctiques françaises
+        90:
+          value: '90'
+          summary: Territoire de Belfort
+        95:
+          value: '95'
+          summary: Val-d'Oise
+        94:
+          value: '94'
+          summary: Val-de-Marne
+        83:
+          value: '83'
+          summary: Var
+        84:
+          value: '84'
+          summary: Vaucluse
+        85:
+          value: '85'
+          summary: Vendée
+        86:
+          value: '86'
+          summary: Vienne
+        88:
+          value: '88'
+          summary: Vosges
+        986:
+          value: '986'
+          summary: Wallis et Futuna
+        89:
+          value: '89'
+          summary: Yonne
+        78:
+          value: '78'
+          summary: Yvelines
+        989:
+          value: '989'
+          summary: Île de Clipperton
+
+
+    relations:
+      name: relations
+      in: query
+      description: Permet de chercher des organismes en fonction de leurs relations.
+      schema:
+        type: string
+        enum: [ "formateur->responsable", "responsable->formateur", "entreprise", "true", "false" ]
+      examples:
+        multiple:
+          value: "formateur->responsable,entreprise"
+          summary: Organismes avec des relations de type formateur->responsable ou entreprise
+        true:
+          value: true
+          summary: Organismes avec des relations
+        false:
+          value: false
+          summary: Organismes sans relations
+
+    referentiels:
+      name: referentiels
+      in: query
+      description: Permet de chercher des organismes qui apparaisent dans certains référentiels.
+      schema:
+        type: string
+      examples:
+        catalogue:
+          value: catalogue-etablissements
+          summary: Organismes qui sont présents dans le catalogue
+
+    nouveaux:
+      name: nouveaux
+      in: query
+      description: Permet de rechercher les nouveaux organismes.
+      schema:
+        type: boolean
+
+    qualiopi:
+      name: qualiopi
+      in: query
+      description: Permet de rechercher les organismes qui ont la certification Qualiopi
+      schema:
+        type: boolean
+
+    text:
+      name: text
+      in: query
+      description: Permet de réaliser une recherche textuelle sur les champs uai, siret et raison sociale.
+      schema:
+        type: string
+
+    anomalies:
+      name: anomalies
+      in: query
+      description: Permet de rechercher les organismes avec ou sans anomalies
+      schema:
+        type: boolean
+
+    page:
+      name: page
+      in: query
+      description: Le numéro de la page désirée
+      schema:
+        type: integer
+
+    items_par_page:
+      name: items_par_page
+      in: query
+      description: Le nombre maximum d'éléments dans la page
+      schema:
+        type: integer
+        default: 10
+
+    ordre:
+      name: ordre
+      in: query
+      description: L'ordre du tri des organismes
+      schema:
+        type: string
+        enum: [ "asc", "desc" ]
+        default: desc
+
+    champs:
+      name: champs
+      in: query
+      description: Limite le nombre de champs renvoyés pour chaque organismes
+      schema:
+        type: string
+      examples:
+        projection:
+          value: siret,uai
+          summary: Obtenir uniquement le siret et l'uai
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: string
+        resultats_par_page:
+          type: number
+        nombre_de_page:
+          type: number
+        total:
+          type: number
+      description: Statut de la pagination
+    Organisme:
+      type: object
+      properties:
+        siret:
+          type: string
+        uai:
+          type: string
+        raison_sociale:
+          type: string
+        enseigne:
+          type: string
+        siege_social:
+          type: boolean
+        numero_declaration_activite:
+          type: string
+        etat_administratif:
+          type: string
+          enum:
+            - actif
+            - fermé
+        nature:
+          type: string
+          enum:
+            - responsable
+            - formateur
+            - responsable_formateur
+            - inconnue
+        forme_juridique:
+          type: object
+          required:
+            - code
+            - label
+          properties:
+            code:
+              type: string
+            label:
+              type: string
+        referentiels:
+          type: array
+          items:
+            type: string
+        reseaux:
+          type: array
+          items:
+            type: string
+        qualiopi:
+          type: boolean
+        uai_potentiels:
+          type: array
+          items:
+            type: object
+            required:
+              - uai
+            properties:
+              uai:
+                type: string
+              sources:
+                type: array
+                items:
+                  type: string
+        contacts:
+          type: array
+          items:
+            type: object
+            required:
+              - email
+              - confirmé
+              - sources
+            properties:
+              email:
+                type: string
+              confirmé:
+                type: boolean
+              sources:
+                type: array
+                items:
+                  type: string
+              _extras:
+                type: object
+                properties: { }
+        relations:
+          type: array
+          items:
+            type: object
+            required:
+              - siret
+              - referentiel
+              - sources
+              - type
+            properties:
+              type:
+                type: string
+                enum:
+                  - formateur->responsable
+                  - responsable->formateur
+                  - entreprise
+              siret:
+                type: string
+              referentiel:
+                type: boolean
+              label:
+                type: string
+              sources:
+                type: array
+                items:
+                  type: string
+        lieux_de_formation:
+          type: array
+          items:
+            type: object
+            required:
+              - code
+              - adresse
+            properties:
+              code:
+                type: string
+              siret:
+                type: string
+              uai:
+                type: string
+              adresse:
+                type: object
+                required:
+                  - code_postal
+                  - code_insee
+                  - localite
+                  - region
+                  - academie
+                properties:
+                  label:
+                    type: string
+                  code_postal:
+                    type: string
+                  code_insee:
+                    type: string
+                  localite:
+                    type: string
+                  departement:
+                    type: object
+                    required:
+                      - code
+                      - nom
+                    properties:
+                      code:
+                        type: string
+                      nom:
+                        type: string
+                  region:
+                    type: object
+                    required:
+                      - code
+                      - nom
+                    properties:
+                      code:
+                        type: string
+                      nom:
+                        type: string
+                  academie:
+                    type: object
+                    required:
+                      - code
+                      - nom
+                    properties:
+                      code:
+                        type: string
+                      nom:
+                        type: string
+                  geojson:
+                    type: object
+                    required:
+                      - type
+                      - geometry
+                    properties:
+                      type:
+                        type: string
+                      geometry:
+                        type: object
+                        required:
+                          - type
+                          - coordinates
+                        properties:
+                          type:
+                            type: string
+                          coordinates:
+                            type: array
+                            items:
+                              type: number
+                      properties:
+                        type: object
+                        properties:
+                          score:
+                            type: number
+                          source:
+                            type: string
+              sources:
+                type: array
+                items:
+                  type: string
+        certifications:
+          type: array
+          items:
+            type: object
+            required:
+              - code
+              - type
+            properties:
+              code:
+                type: string
+              type:
+                type: string
+                enum:
+                  - rncp
+              label:
+                type: string
+              sources:
+                type: array
+                items:
+                  type: string
+        diplomes:
+          type: array
+          items:
+            type: object
+            required:
+              - code
+              - type
+            properties:
+              code:
+                type: string
+              type:
+                type: string
+                enum:
+                  - cfd
+              niveau:
+                type: string
+              label:
+                type: string
+              sources:
+                type: array
+                items:
+                  type: string
+        _meta:
+          type: object
+          required:
+            - anomalies
+            - date_import
+          properties:
+            date_import:
+              type: string
+            anomalies:
+              type: array
+              items:
+                type: object
+                required:
+                  - key
+                  - job
+                  - sources
+                  - date
+                properties:
+                  key:
+                    type: string
+                  type:
+                    type: string
+                  job:
+                    type: string
+                  sources:
+                    type: array
+                    items:
+                      type: string
+                  date:
+                    type: string
+                  code:
+                    type: string
+                  details:
+                    type: string
 
 
 
+  responses:
+    organisme:
+      description: Un organisme
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Organisme'
+    organismes:
+      description: La liste des organismes formateurs
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              organismes:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organisme'
+              meta:
+                type: object
+                properties:
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                description: Informations complémentaires
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    401:
+      description: Le header Authorization header est manquant ou invalide
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    404:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
 
+    OrganismeResponse:
+      description: Un organisme
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/Organisme'
+
+    OrganismesResponse:
+      description: La liste des organismes formateurs
+      content:
+        '*/*':
+          schema:
+            type: object
+            properties:
+              organismes:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organisme'
+              meta:
+                type: object
+                properties:
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                description: Informations complémentaires
+
+
+  securitySchemes:
+    Authorization:
+      type: apiKey
+      description: |
+        Pour plus d'informations voir :
+        https://github.com/mission-apprentissage/referentiel
+      name: Authorization
+      in: header

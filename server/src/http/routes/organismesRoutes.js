@@ -137,7 +137,7 @@ module.exports = () => {
         natures: arrayOf(Joi.string().valid("responsable", "formateur", "responsable_formateur", "inconnue")),
         etat_administratif: Joi.string().valid("actif", "fermé"),
         regions: arrayOf(Joi.string().valid(...getRegions().map((r) => r.code))),
-        academies: arrayOf(Joi.string().valid(...getAcademies().map((r) => r.code))),
+        academies: arrayOf(Joi.string().valid(...getAcademies().map((a) => a.code))),
         departements: arrayOf(Joi.string().valid(...getDepartements().map((d) => d.code))),
         relations: Joi.alternatives()
           .try(
@@ -146,10 +146,10 @@ module.exports = () => {
           )
           .default(null),
         referentiels: Joi.alternatives().try(Joi.boolean(), arrayOf(Joi.string())),
-        anomalies: Joi.boolean().default(null),
-        qualiopi: Joi.boolean().default(null),
         nouveaux: Joi.boolean().default(null),
+        qualiopi: Joi.boolean().default(null),
         text: Joi.string(),
+        anomalies: Joi.boolean().default(null),
         ...validators.champs(),
         ...validators.pagination(),
         ...validators.tri(),
