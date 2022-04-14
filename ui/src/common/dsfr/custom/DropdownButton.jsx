@@ -31,7 +31,9 @@ const DropdownButton = styled(({ className, links, children, ...rest }) => {
       z-index: 1000;
 
       a {
+        background-image: none;
         padding-left: 1rem;
+        padding-top: 0.5rem;
         text-decoration: none;
       }
 

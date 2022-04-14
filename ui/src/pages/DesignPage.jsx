@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Children, useState } from "react";
 import { Accordion, AccordionItem } from "../common/dsfr/elements/Accordion";
 import SearchBar from "../common/dsfr/elements/SearchBar";
 import Alert from "../common/dsfr/elements/Alert";
@@ -26,12 +26,26 @@ function Composant({ children }) {
   return <GridRow className={"fr-pt-3w"}>{children}</GridRow>;
 }
 
-function Element({ children }) {
-  return <div className={"fr-pt-2w"}>{children}</div>;
+function Element({ title, children }) {
+  return (
+    <div className={"fr-mt-8w"}>
+      <h4>{title}</h4>
+      {children}
+    </div>
+  );
 }
 
-function Option({ children }) {
-  return <div className={"fr-pt-1w"}>{children}</div>;
+function Option({ title, children }) {
+  return (
+    <div className={"fr-mt-4w"}>
+      <h6>{title}</h6>
+      <GridRow modifiers={"gutters"}>
+        {Children.toArray(children).map((child) => (
+          <Col>{child}</Col>
+        ))}
+      </GridRow>
+    </div>
+  );
 }
 
 export default function DesignPage() {
@@ -71,10 +85,8 @@ export default function DesignPage() {
         <Composant>
           <Col>
             <h2>Fondamentaux</h2>
-            <Element>
-              <h3>Grille</h3>
-              <Option>
-                <h4>Défaut</h4>
+            <Element title={"Grille"}>
+              <Option title={"Défaut"}>
                 <Container>
                   <GridRow modifiers={"left gutters"}>
                     <Col modifiers={"2"}>
@@ -89,8 +101,7 @@ export default function DesignPage() {
                   </GridRow>
                 </Container>
               </Option>
-              <Option>
-                <h4>Fluide</h4>
+              <Option title={"Fluide"}>
                 <Container modifiers={"fluid"}>
                   <GridRow>
                     <Col>
@@ -107,10 +118,9 @@ export default function DesignPage() {
         </Composant>
         <Composant>
           <Col>
-            <h2>Éléments d'interface</h2>
+            <h2 className={"fr-mt-8w"}>Éléments d'interface</h2>
 
-            <Element>
-              <h3>Tabs</h3>
+            <Element title={"Tabs"}>
               <div>
                 <Tabs
                   tabs={[
@@ -121,8 +131,7 @@ export default function DesignPage() {
               </div>
             </Element>
 
-            <Element>
-              <h3>Accordéon</h3>
+            <Element title={"Accordéon"}>
               <div>
                 <Accordion>
                   <AccordionItem label={"Accordéon"}>
@@ -132,8 +141,7 @@ export default function DesignPage() {
               </div>
             </Element>
 
-            <Element>
-              <h3>Tableau</h3>
+            <Element title={"Tableau"}>
               <div>
                 <Table
                   caption={"Caption"}
@@ -157,10 +165,8 @@ export default function DesignPage() {
               </div>
             </Element>
 
-            <Element>
-              <h3>Alerte</h3>
-              <Option>
-                <h4>Type</h4>
+            <Element title={"Alerte"}>
+              <Option title={"Type"}>
                 <Alert title={"Défaut"}>
                   <p>message</p>
                 </Alert>
@@ -174,8 +180,7 @@ export default function DesignPage() {
                   <p>message</p>
                 </Alert>
               </Option>
-              <Option>
-                <h4>Taille</h4>
+              <Option title={"Taille"}>
                 <Alert className={"fr-alert--sm"}>
                   <p>sm</p>
                 </Alert>
@@ -183,8 +188,7 @@ export default function DesignPage() {
                   <p>md</p>
                 </Alert>
               </Option>
-              <Option>
-                <h4>Fermeture</h4>
+              <Option title={"Fermeture"}>
                 {showAlert && (
                   <Alert onClose={() => setShowAlert(false)}>
                     <p>closeable</p>
@@ -193,24 +197,26 @@ export default function DesignPage() {
               </Option>
             </Element>
 
-            <Element>
-              <h3>Boutons</h3>
-              <Option>
-                <h4>Taille</h4>
+            <Element title={"Boutons"}>
+              <Option title={"Taille"}>
                 <Button>default</Button>
                 <Button modifiers={"sm"}>sm</Button>
                 <Button modifiers={"md"}>md</Button>
                 <Button modifiers={"lg"}>lg</Button>
               </Option>
-              <Option>
-                <h4>Secondaire</h4>
+              <Option title={"Secondaire"}>
                 <Button modifiers={"secondary"}>Secondary</Button>
                 <Button modifiers={"secondary sm"}>Secondary sm</Button>
                 <Button modifiers={"secondary md"}>Secondary sm</Button>
                 <Button modifiers={"secondary lg"}>secondary lg</Button>
               </Option>
-              <Option>
-                <h4>Désactivé</h4>
+              <Option title={"Tertiaire"}>
+                <Button modifiers={"tertiary"}>Secondary</Button>
+                <Button modifiers={"tertiary sm"}>Secondary sm</Button>
+                <Button modifiers={"tertiary md"}>Secondary sm</Button>
+                <Button modifiers={"tertiary lg"}>secondary lg</Button>
+              </Option>
+              <Option title={"Désactivé"}>
                 <Button disabled={true}>Disabled</Button>
                 <Button disabled={true} modifiers={"sm"}>
                   Disabled sm
@@ -222,8 +228,7 @@ export default function DesignPage() {
                   Disabled lg
                 </Button>
               </Option>
-              <Option>
-                <h4>Boutons icône</h4>
+              <Option title={"Boutons"}>
                 <Button icons={"checkbox-circle-line"}>Icon</Button>
                 <Button modifiers={"icon-right"} icons={"checkbox-circle-line"}>
                   Icon right
@@ -234,10 +239,8 @@ export default function DesignPage() {
               </Option>
             </Element>
 
-            <Element>
-              <h3>Groupe de boutons</h3>
-              <Option>
-                <h4>Taille</h4>
+            <Element title={"Groupe de boutons"}>
+              <Option title={"Taille"}>
                 <ButtonGroup modifiers={"sm"}>
                   <Button>sm</Button>
                 </ButtonGroup>
@@ -248,8 +251,7 @@ export default function DesignPage() {
                   <Button>lg</Button>
                 </ButtonGroup>
               </Option>
-              <Option>
-                <h4>Inline</h4>
+              <Option title={"Inline"}>
                 <ButtonGroup modifiers={"inline"}>
                   <Button>Inline 1</Button>
                 </ButtonGroup>
@@ -262,64 +264,52 @@ export default function DesignPage() {
               </Option>
             </Element>
 
-            <Element>
-              <h3>Barre de recherche</h3>
-              <div>
+            <Element title={"Barre de recherche"}>
+              <Option title={"Tailles"}>
                 <SearchBar label={"Rechercher"} />
                 <SearchBar label={"Rechercher"} modifiers="lg" />
-              </div>
+              </Option>
             </Element>
 
-            <Element>
-              <h3>Champs de saisie</h3>
-              <Option>
-                <h4>Défaut</h4>
+            <Element title={"Champs de saisie"}>
+              <Option title={"Défaut"}>
                 <Input label={"Label"} />
               </Option>
-              <Option>
-                <h4>Aide</h4>
+              <Option title={"Aide"}>
                 <Input label={"Label"} hint={"hint"} />
               </Option>
-              <Option>
-                <h4>Désactivé</h4>
+              <Option title={"Désactivé"}>
                 <Input label={"Label"} disabled />
               </Option>
-              <Option>
-                <h4>Icône</h4>
+              <Option title={"Icône"}>
                 <Input label={"Label"} icons={"alert-line"} />
               </Option>
-              <Option>
-                <h4>Validation</h4>
+              <Option title={"Validation"}>
                 <Input label={"Label"} validation={{ type: "error", message: "une erreur" }} />
                 <Input label={"Label"} validation={{ type: "valid", message: "une validation" }} />
               </Option>
             </Element>
 
-            <Element>
-              <h3>Liste déroulante</h3>
-              <Option>
-                <h4>Défaut</h4>
+            <Element title={"Liste déroulante"}>
+              <Option title={"Défaut"}>
                 <Select label={"Label"}>
                   <option value="1">Option 1</option>
                   <option value="2">Option 2</option>
                 </Select>
               </Option>
-              <Option>
-                <h4>Aide</h4>
+              <Option title={"Aide"}>
                 <Select label={"Label"} hint={"hint"}>
                   <option value="1">Option 1</option>
                   <option value="2">Option 2</option>
                 </Select>
               </Option>
-              <Option>
-                <h4>Désactivé</h4>
+              <Option title={"Désactivé"}>
                 <Select label={"Label"} disabled>
                   <option value="1">Option 1</option>
                   <option value="2">Option 2</option>
                 </Select>
               </Option>
-              <Option>
-                <h4>Validation</h4>
+              <Option title={"Validation"}>
                 <Select label={"Label"} validation={{ type: "error", message: "une erreur" }}>
                   <option value="1">Option 1</option>
                   <option value="2">Option 2</option>
@@ -331,23 +321,19 @@ export default function DesignPage() {
               </Option>
             </Element>
 
-            <Element>
-              <h3>Radio</h3>
-              <Option>
-                <h4>Défaut</h4>
+            <Element title={"Radio"}>
+              <Option title={"Défaut"}>
                 <Fieldset legend={"legend"}>
                   <Radio label={"radio"} hint={"hint"} />
                 </Fieldset>
               </Option>
-              <Option>
-                <h4>Inline</h4>
+              <Option title={"Inline"}>
                 <Fieldset modifiers={"inline"} legend={"legend"}>
                   <Radio label={"radio"} name={"radio"} value={"1"} />
                   <Radio label={"radio"} name={"radio"} value={"2"} />
                 </Fieldset>
               </Option>
-              <Option>
-                <h4>Validation</h4>
+              <Option title={"Validation"}>
                 <Fieldset validation={{ type: "error", message: "une erreur" }}>
                   <Radio label={"radio"} name={"radio"} value={"1"} />
                   <Radio label={"radio"} name={"radio"} value={"2"} />
@@ -359,24 +345,20 @@ export default function DesignPage() {
               </Option>
             </Element>
 
-            <Element>
-              <h3>Case à cocher</h3>
-              <Option>
-                <h4>Défaut</h4>
+            <Element title={"Case à cocher"}>
+              <Option title={"Défaut"}>
                 <Fieldset legend={"legend"}>
                   <Checkbox label={"checkbox"} hint={"hint"} />
                   <Checkbox label={"checkbox"} hint={"hint"} />
                 </Fieldset>
               </Option>
-              <Option>
-                <h4>Inline</h4>
+              <Option title={"Inline"}>
                 <Fieldset modifiers={"inline"} legend={"legend"}>
                   <Checkbox label={"checkbox"} hint={"hint"} />
                   <Checkbox label={"checkbox"} hint={"hint"} />
                 </Fieldset>
               </Option>
-              <Option>
-                <h4>Validation</h4>
+              <Option title={"Validation"}>
                 <h5>Unique</h5>
                 <Checkbox label={"checkbox"} validation={{ type: "error", message: "une erreur" }} />
                 <Checkbox label={"checkbox"} validation={{ type: "valid", message: "une validation" }} />
@@ -388,16 +370,13 @@ export default function DesignPage() {
               </Option>
             </Element>
 
-            <Element>
-              <h3>Interrupteur</h3>
-              <Option>
-                <h4>Défaut</h4>
+            <Element title={"Interrupteur"}>
+              <Option title={"Défaut"}>
                 <ToggleSwitch label={"label"} />
                 <ToggleSwitch label={"label"} hint={"hint"} />
                 <ToggleSwitch label={"label"} modifiers={"label-left"} />
               </Option>
-              <Option>
-                <h4>Liste</h4>
+              <Option title={"Liste"}>
                 <ToggleList>
                   <ToggleSwitch label={"label 1"} modifiers={"border-bottom"} />
                   <ToggleSwitch label={"label 2"} modifiers={"border-bottom"} />

@@ -26,9 +26,9 @@ function HeaderSearch({ modal, children, ...rest }) {
   return (
     <div id={modal.id} ref={modal.ref} className="fr-header__search fr-modal" {...rest}>
       <div className="fr-container fr-container-lg--fluid">
-        <button className="fr-link--close fr-link" aria-controls={modal.id} onClick={modal.close}>
+        <Button modifiers={"close"} aria-controls={modal.id} title="Fermer" onClick={modal.close}>
           Fermer
-        </button>
+        </Button>
         {children}
       </div>
     </div>
@@ -39,9 +39,9 @@ function HeaderMenu({ modal, children, ...rest }) {
   return (
     <div id={modal.id} ref={modal.ref} className="fr-header__menu fr-modal" {...rest}>
       <div className="fr-container">
-        <button className="fr-link--close fr-link" aria-controls={modal.id} onClick={modal.close}>
+        <Button modifiers={"close"} aria-controls={modal.id} title="Fermer" onClick={modal.close}>
           Fermer
-        </button>
+        </Button>
         <div className="fr-header__menu-links" />
         {children}
       </div>

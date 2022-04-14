@@ -1,5 +1,6 @@
 import React from "react";
 import { classNames } from "../dsfr";
+import { Button } from "./Button";
 
 export default function Alert({ title, onClose, modifiers, className, children }) {
   let clazz = classNames("fr-alert", { modifiers, className });
@@ -9,9 +10,9 @@ export default function Alert({ title, onClose, modifiers, className, children }
       {title && <p className="fr-alert__title">{title}</p>}
       {children}
       {onClose && (
-        <button className="fr-link--close fr-link" title="Masquer le message" onClick={() => onClose()}>
+        <Button modifiers={"close"} title="Masquer le message" onClick={() => onClose()}>
           Masquer le message
-        </button>
+        </Button>
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { buildListComponent, classNames } from "../dsfr";
 import Hint from "./Hint";
 import useElementId from "../../hooks/useElementId";
 
-export const ToggleList = buildListComponent("fr-toggle__list");
+export const ToggleList = buildListComponent("ul", "fr-toggle__list");
 
 export function ToggleSwitch({ label, hint, modifiers, className, ...rest }) {
   let id = useElementId("toggle");
