@@ -2,15 +2,32 @@ const express = require("express");
 const YAML = require("yamljs");
 const path = require("path");
 const swagger = require("swagger-ui-express");
+const { watch } = require("fs");
+
+const yaml = path.join(__dirname, "./v1-swagger.yml");
+
+function buildHtml() {
+  return new Promise((resolve) => {
+    let apiSpecifications = YAML.load(yaml);
+    let generated = swagger.generateHTML(apiSpecifications);
+    resolve(generated);
+  });
+}
+
+let asyncHtml = buildHtml();
+
+watch(yaml, (eventType) => {
+  if (eventType === "change") {
+    asyncHtml = buildHtml();
+  }
+});
 
 module.exports = () => {
   // eslint-disable-next-line new-cap
   let router = express.Router();
-  let apiSpecifications = YAML.load(path.join(__dirname, "./v1-swagger.yml"));
 
-  router.use("/api/v1/doc", swagger.serve, (req, res) => {
-    let html = swagger.generateHTML(apiSpecifications);
-    res.send(html);
+  router.use("/api/v1/doc", swagger.serve, async (req, res) => {
+    res.send(await asyncHtml);
   });
 
   return router;
