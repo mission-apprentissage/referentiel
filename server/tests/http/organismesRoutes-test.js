@@ -1314,4 +1314,23 @@ describe("organismesRoutes", () => {
     let decoded = iconv.decode(response.data, "UTF-16");
     assert.ok(decoded.indexOf('="Siret"\t') !== -1);
   });
+
+  it("Vérifie qu'on peut chercher des organismes via la méthode POST", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({ siret: "11111111100001" });
+    await insertOrganisme({ siret: "22222222200006" });
+
+    let response = await httpClient.post("/api/v1/organismes", { sirets: "11111111100001", champs: "siret" });
+
+    strictEqual(response.status, 200);
+    deepStrictEqual(response.data, {
+      organismes: [{ siret: "11111111100001" }],
+      pagination: {
+        page: 1,
+        resultats_par_page: 10,
+        nombre_de_page: 1,
+        total: 1,
+      },
+    });
+  });
 });

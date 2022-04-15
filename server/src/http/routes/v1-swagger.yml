@@ -42,6 +42,44 @@ paths:
           $ref: "#/components/responses/401"
         404:
           $ref: "#/components/responses/404"
+    post:
+      tags:
+        - Publique
+      description: |
+        Rechercher des organismes dans la référentiel en utilisant la méthode POST
+        
+        Cette route permet de réaliser des recherches quand la taille totale des paramètres dépassent 8Kb (414 URI Too Long).
+      parameters:
+        - $ref: "#/components/parameters/sirets"
+        - $ref: "#/components/parameters/uais"
+        - $ref: "#/components/parameters/uai_potentiels"
+        - $ref: "#/components/parameters/numero_declaration_activite"
+        - $ref: "#/components/parameters/natures"
+        - $ref: "#/components/parameters/etat_administratif"
+        - $ref: "#/components/parameters/regions"
+        - $ref: "#/components/parameters/academies"
+        - $ref: "#/components/parameters/departements"
+        - $ref: "#/components/parameters/relations"
+        - $ref: "#/components/parameters/referentiels"
+        - $ref: "#/components/parameters/nouveaux"
+        - $ref: "#/components/parameters/qualiopi"
+        - $ref: "#/components/parameters/text"
+        - $ref: "#/components/parameters/anomalies"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/items_par_page"
+        - $ref: "#/components/parameters/ordre"
+        - $ref: "#/components/parameters/champs"
+      responses:
+        200:
+          $ref: "#/components/responses/organismes"
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+
+
 
   /api/v1/organismes.{ext}:
     get:
@@ -121,9 +159,9 @@ components:
       name: uais
       in: query
       description: |
-          Permet de filtrer la recherche avec une ou plusieurs UAI séparées par des virgules.
+        Permet de filtrer la recherche avec une ou plusieurs UAI séparées par des virgules.
         
-          Il est également possible de passer un booléen pour rechercher les organismes avec ou sans UAI
+        Il est également possible de passer un booléen pour rechercher les organismes avec ou sans UAI
       schema:
         oneOf:
           - type: string
@@ -132,7 +170,7 @@ components:
     uai_potentiels:
       name: uai_potentiels
       in: query
-      description: | 
+      description: |
         Permet de filtrer la recherche avec une ou plusieurs UAI potentielles séparées par des virgules.
         
         Il est également possible de passer un booléen pour rechercher les organismes avec ou sans UAI potentielles.
