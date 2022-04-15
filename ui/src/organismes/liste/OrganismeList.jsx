@@ -26,7 +26,6 @@ export default function OrganismeList({ response }) {
               <Link
                 as={"a"}
                 modifiers={"icon-left sm"}
-                icons="file-download-line"
                 href={buildUrl(`/api/v1/organismes.csv`, { ...search.params, page: 0, items_par_page: 100000 })}
                 target={"_blank"}
               >
@@ -35,7 +34,6 @@ export default function OrganismeList({ response }) {
               <Link
                 as={"a"}
                 modifiers={"icon-left sm"}
-                icons="file-download-line"
                 href={buildUrl(`/api/v1/organismes.xls`, { ...search.params, page: 0, items_par_page: 100000 })}
                 target={"_blank"}
               >

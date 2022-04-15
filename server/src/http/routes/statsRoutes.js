@@ -34,8 +34,8 @@ module.exports = () => {
     "/api/v1/stats/couverture",
     tryCatch(async (req, res) => {
       let stats = await promiseAllProps({
-        total: dbCollection("organismes").count(),
-        valides: dbCollection("organismes").count({ uai: { $exists: true } }),
+        total: dbCollection("organismes").countDocuments(),
+        valides: dbCollection("organismes").countDocuments({ uai: { $exists: true } }),
       });
 
       res.json(stats);

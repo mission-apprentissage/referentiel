@@ -6,9 +6,6 @@ info:
     name: GNU AFFERO GENERAL PUBLIC LICENSE 3
     url: https://raw.githubusercontent.com/mission-apprentissage/referentiel/main/LICENCE
   version: 1.0.0
-servers:
-  - url: https://referentiel.apprentissage.beta.gouv.fr/api
-  - url: https://referentiel-recette.apprentissage.beta.gouv.fr/api
 
 paths:
   /api/v1/organismes:
@@ -45,6 +42,44 @@ paths:
           $ref: "#/components/responses/401"
         404:
           $ref: "#/components/responses/404"
+    post:
+      tags:
+        - Publique
+      description: |
+        Rechercher des organismes dans la référentiel en utilisant la méthode POST
+        
+        Cette route permet de réaliser des recherches quand la taille totale des paramètres dépassent 8Kb (414 URI Too Long).
+      parameters:
+        - $ref: "#/components/parameters/sirets"
+        - $ref: "#/components/parameters/uais"
+        - $ref: "#/components/parameters/uai_potentiels"
+        - $ref: "#/components/parameters/numero_declaration_activite"
+        - $ref: "#/components/parameters/natures"
+        - $ref: "#/components/parameters/etat_administratif"
+        - $ref: "#/components/parameters/regions"
+        - $ref: "#/components/parameters/academies"
+        - $ref: "#/components/parameters/departements"
+        - $ref: "#/components/parameters/relations"
+        - $ref: "#/components/parameters/referentiels"
+        - $ref: "#/components/parameters/nouveaux"
+        - $ref: "#/components/parameters/qualiopi"
+        - $ref: "#/components/parameters/text"
+        - $ref: "#/components/parameters/anomalies"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/items_par_page"
+        - $ref: "#/components/parameters/ordre"
+        - $ref: "#/components/parameters/champs"
+      responses:
+        200:
+          $ref: "#/components/responses/organismes"
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+
+
 
   /api/v1/organismes.{ext}:
     get:
@@ -116,79 +151,45 @@ components:
     sirets:
       name: sirets
       in: query
-      description: Permet de filtrer la recherche avec un ou plusieurs sirets.
+      description: Permet de filtrer la recherche avec un ou plusieurs sirets séparés par des virgules.
       schema:
         type: string
-      examples:
-        unique:
-          value: 11111111100006
-          summary: Organismes ayant un siret spécifique
-        multiple:
-          value: 11111111100006,22222222200002
-          summary: Organismes ayant l'un des sirets de la liste
 
     uais:
       name: uais
       in: query
-      description: Permet de filtrer la recherche avec un ou plusieurs UAI.
+      description: |
+        Permet de filtrer la recherche avec une ou plusieurs UAI séparées par des virgules.
+        
+        Il est également possible de passer un booléen pour rechercher les organismes avec ou sans UAI
       schema:
         oneOf:
           - type: string
           - type: boolean
-      examples:
-        unique:
-          value: 0751234J
-          summary: Organismes ayant une UAI spécifique
-        multiple:
-          value: 0751234J,0931234L
-          summary: Organismes ayant l'une des UAI de la liste
-        true:
-          value: true
-          summary: Organismes avec UAI
-        false:
-          value: false
-          summary: Organismes sans UAI
 
     uai_potentiels:
       name: uai_potentiels
       in: query
-      description: Permet de filtrer la recherche avec une ou plusieurs UAI potentielles.
+      description: |
+        Permet de filtrer la recherche avec une ou plusieurs UAI potentielles séparées par des virgules.
+        
+        Il est également possible de passer un booléen pour rechercher les organismes avec ou sans UAI potentielles.
       schema:
         oneOf:
           - type: string
           - type: boolean
-      examples:
-        unique:
-          value: 0751234J
-          summary: Organismes ayant une UAI potentielle spécifique
-        multiple:
-          value: 0751234J,0931234L
-          summary: Organismes ayant l'une des UAI potentielles de la liste
-        true:
-          value: true
-          summary: Organismes des UAI potentielles
-        false:
-          value: false
-          summary: Organismes sans UAI potentielles
 
     numero_declaration_activite:
       name: numero_declaration_activite
       in: query
-      description: Permet de filtrer la recherche avec un numero de declaration d'activité.
+      description: |
+        Permet de filtrer la recherche avec un numero de declaration d'activité.
+        
+        Il est également possible de passer un booléen pour rechercher les organismes avec ou sans numéro.
       schema:
         oneOf:
           - type: string
           - type: boolean
-      examples:
-        unique:
-          value: 12345678901
-          summary: Organismes ayant un numero de declaration d'activité spécifique.
-        true:
-          value: true
-          summary: Organismes ayant un numero de declaration d'activité.
-        false:
-          value: false
-          summary: Organismes sans un numero de declaration d'activité.
 
     natures:
       name: natures
@@ -209,556 +210,227 @@ components:
     regions:
       name: regions
       in: query
-      description: Permet de trouver les organismes d'une région
+      description: |
+        Permet de trouver les organismes d'une région (code région)
+        
+        ```
+        84 Auvergne-Rhône-Alpes
+        27 Bourgogne-Franche-Comté
+        53 Bretagne
+        24 Centre-Val de Loire
+        00 Collectivités d'outre-mer
+        94 Corse
+        44 Grand Est
+        01 Guadeloupe
+        03 Guyane
+        32 Hauts-de-France
+        04 La Réunion
+        02 Martinique
+        06 Mayotte
+        28 Normandie
+        75 Nouvelle-Aquitaine
+        76 Occitanie
+        52 Pays de la Loire
+        93 Provence-Alpes-Côte d'Azur
+        11 Île-de-France
+        ```
       schema:
         type: string
-      examples:
-        84:
-          value: '84'
-          summary: Auvergne-Rhône-Alpes
-        27:
-          value: '27'
-          summary: Bourgogne-Franche-Comté
-        53:
-          value: '53'
-          summary: Bretagne
-        24:
-          value: '24'
-          summary: Centre-Val de Loire
-        00:
-          value: '00'
-          summary: Collectivités d'outre-mer
-        94:
-          value: '94'
-          summary: Corse
-        44:
-          value: '44'
-          summary: Grand Est
-        01:
-          value: '01'
-          summary: Guadeloupe
-        03:
-          value: '03'
-          summary: Guyane
-        32:
-          value: '32'
-          summary: Hauts-de-France
-        04:
-          value: '04'
-          summary: La Réunion
-        02:
-          value: '02'
-          summary: Martinique
-        06:
-          value: '06'
-          summary: Mayotte
-        28:
-          value: '28'
-          summary: Normandie
-        75:
-          value: '75'
-          summary: Nouvelle-Aquitaine
-        76:
-          value: '76'
-          summary: Occitanie
-        52:
-          value: '52'
-          summary: Pays de la Loire
-        93:
-          value: '93'
-          summary: Provence-Alpes-Côte d'Azur
-        11:
-          value: '11'
-          summary: Île-de-France
 
     academies:
       name: academies
       in: query
-      description: Permet de trouver les organismes d'une académie
+      description: |
+        Permet de trouver les organismes d'une académie
+        
+        ```
+        02 Aix-Marseille
+        20 Amiens
+        03 Besançon
+        04 Bordeaux
+        06 Clermont-Ferrand
+        27 Corse
+        24 Créteil
+        07 Dijon
+        08 Grenoble
+        32 Guadeloupe
+        33 Guyane
+        28 La Réunion
+        09 Lille
+        22 Limoges
+        10 Lyon
+        31 Martinique
+        43 Mayotte
+        11 Montpellier
+        12 Nancy-Metz
+        17 Nantes
+        23 Nice
+        70 Normandie
+        40 Nouvelle-Calédonie
+        18 Orléans-Tours
+        01 Paris
+        13 Poitiers
+        41 Polynésie Française
+        19 Reims
+        14 Rennes
+        77 Saint-Barthélemy
+        78 Saint-Martin
+        44 Saint-Pierre-et-Miquelon
+        15 Strasbourg
+        16 Toulouse
+        25 Versailles
+        42 Wallis et Futuna
+        00 Étranger
+        ```
       schema:
         type: string
-      examples:
-        02:
-          value: '02'
-          summary: Aix-Marseille
-        20:
-          value: '20'
-          summary: Amiens
-        03:
-          value: '03'
-          summary: Besançon
-        04:
-          value: '04'
-          summary: Bordeaux
-        06:
-          value: '06'
-          summary: Clermont-Ferrand
-        27:
-          value: '27'
-          summary: Corse
-        24:
-          value: '24'
-          summary: Créteil
-        07:
-          value: '07'
-          summary: Dijon
-        08:
-          value: '08'
-          summary: Grenoble
-        32:
-          value: '32'
-          summary: Guadeloupe
-        33:
-          value: '33'
-          summary: Guyane
-        28:
-          value: '28'
-          summary: La Réunion
-        09:
-          value: '09'
-          summary: Lille
-        22:
-          value: '22'
-          summary: Limoges
-        10:
-          value: '10'
-          summary: Lyon
-        31:
-          value: '31'
-          summary: Martinique
-        43:
-          value: '43'
-          summary: Mayotte
-        11:
-          value: '11'
-          summary: Montpellier
-        12:
-          value: '12'
-          summary: Nancy-Metz
-        17:
-          value: '17'
-          summary: Nantes
-        23:
-          value: '23'
-          summary: Nice
-        70:
-          value: '70'
-          summary: Normandie
-        40:
-          value: '40'
-          summary: Nouvelle-Calédonie
-        18:
-          value: '18'
-          summary: Orléans-Tours
-        01:
-          value: '01'
-          summary: Paris
-        13:
-          value: '13'
-          summary: Poitiers
-        41:
-          value: '41'
-          summary: Polynésie Française
-        19:
-          value: '19'
-          summary: Reims
-        14:
-          value: '14'
-          summary: Rennes
-        77:
-          value: '77'
-          summary: Saint-Barthélemy
-        78:
-          value: '78'
-          summary: Saint-Martin
-        44:
-          value: '44'
-          summary: Saint-Pierre-et-Miquelon
-        15:
-          value: '15'
-          summary: Strasbourg
-        16:
-          value: '16'
-          summary: Toulouse
-        25:
-          value: '25'
-          summary: Versailles
-        42:
-          value: '42'
-          summary: Wallis et Futuna
-        00:
-          value: '00'
-          summary: Étranger
-
-
 
     departements:
       name: departements
       in: query
-      description: Permet de trouver les organismes d'un département
+      description: |
+        Permet de trouver les organismes d'un département
+        
+        ```
+        01  Ain
+        02  Aisne
+        03  Allier
+        06  Alpes-Maritimes
+        04  Alpes-de-Haute-Provence
+        08  Ardennes
+        07  Ardèche
+        09  Ariège
+        10  Aube
+        11  Aude
+        12  Aveyron
+        67  Bas-Rhin
+        13  Bouches-du-Rhône
+        14  Calvados
+        15  Cantal
+        16  Charente
+        17  Charente-Maritime
+        18  Cher
+        19  Corrèze
+        20  Corse
+        2A  Corse-du-Sud
+        23  Creuse
+        21  Côte-d'Or
+        22  Côtes-d'Armor
+        79  Deux-Sèvres
+        24  Dordogne
+        25  Doubs
+        26  Drôme
+        91  Essonne
+        27  Eure
+        28  Eure-et-Loir
+        29  Finistère
+        30  Gard
+        32  Gers
+        33  Gironde
+        971 Guadeloupe
+        973 Guyane
+        68  Haut-Rhin
+        2B  Haute-Corse
+        31  Haute-Garonne
+        43  Haute-Loire
+        52  Haute-Marne
+        74  Haute-Savoie
+        70  Haute-Saône
+        87  Haute-Vienne
+        05  Hautes-Alpes
+        65  Hautes-Pyrénées
+        92  Hauts-de-Seine
+        34  Hérault
+        35  Ille-et-Vilaine
+        36  Indre
+        37  Indre-et-Loire
+        38  Isère
+        39  Jura
+        974 La Réunion
+        40  Landes
+        41  Loir-et-Cher
+        42  Loire
+        44  Loire-Atlantique
+        45  Loiret
+        46  Lot
+        47  Lot-et-Garonne
+        48  Lozère
+        49  Maine-et-Loire
+        50  Manche
+        51  Marne
+        972 Martinique
+        53  Mayenne
+        976 Mayotte
+        54  Meurthe-et-Moselle
+        55  Meuse
+        56  Morbihan
+        57  Moselle
+        58  Nièvre
+        59  Nord
+        988 Nouvelle-Calédonie
+        60  Oise
+        61  Orne
+        75  Paris
+        62  Pas-de-Calais
+        987 Polynésie Française
+        63  Puy-de-Dôme
+        64  Pyrénées-Atlantiques
+        66  Pyrénées-Orientales
+        69  Rhône
+        977 Saint-Barthélemy
+        978 Saint-Martin
+        975 Saint-Pierre-et-Miquelon
+        72  Sarthe
+        73  Savoie
+        71  Saône-et-Loire
+        76  Seine-Maritime
+        93  Seine-Saint-Denis
+        77  Seine-et-Marne
+        80  Somme
+        81  Tarn
+        82  Tarn-et-Garonne
+        984 Terres australes et antarctiques françaises
+        90  Territoire de Belfort
+        95  Val-d'Oise
+        94  Val-de-Marne
+        83  Var
+        84  Vaucluse
+        85  Vendée
+        86  Vienne
+        88  Vosges
+        986 Wallis et Futuna
+        89  Yonne
+        78  Yvelines
+        989 Île de Clipperton
+
+        ```
       schema:
         type: string
-      examples:
-        01:
-          value: '01'
-          summary: Ain
-        02:
-          value: '02'
-          summary: Aisne
-        03:
-          value: '03'
-          summary: Allier
-        06:
-          value: '06'
-          summary: Alpes-Maritimes
-        04:
-          value: '04'
-          summary: Alpes-de-Haute-Provence
-        08:
-          value: '08'
-          summary: Ardennes
-        07:
-          value: '07'
-          summary: Ardèche
-        09:
-          value: '09'
-          summary: Ariège
-        10:
-          value: '10'
-          summary: Aube
-        11:
-          value: '11'
-          summary: Aude
-        12:
-          value: '12'
-          summary: Aveyron
-        67:
-          value: '67'
-          summary: Bas-Rhin
-        13:
-          value: '13'
-          summary: Bouches-du-Rhône
-        14:
-          value: '14'
-          summary: Calvados
-        15:
-          value: '15'
-          summary: Cantal
-        16:
-          value: '16'
-          summary: Charente
-        17:
-          value: '17'
-          summary: Charente-Maritime
-        18:
-          value: '18'
-          summary: Cher
-        19:
-          value: '19'
-          summary: Corrèze
-        20:
-          value: '20'
-          summary: Corse
-        2A:
-          value: 2A
-          summary: Corse-du-Sud
-        23:
-          value: '23'
-          summary: Creuse
-        21:
-          value: '21'
-          summary: Côte-d'Or
-        22:
-          value: '22'
-          summary: Côtes-d'Armor
-        79:
-          value: '79'
-          summary: Deux-Sèvres
-        24:
-          value: '24'
-          summary: Dordogne
-        25:
-          value: '25'
-          summary: Doubs
-        26:
-          value: '26'
-          summary: Drôme
-        91:
-          value: '91'
-          summary: Essonne
-        27:
-          value: '27'
-          summary: Eure
-        28:
-          value: '28'
-          summary: Eure-et-Loir
-        29:
-          value: '29'
-          summary: Finistère
-        30:
-          value: '30'
-          summary: Gard
-        32:
-          value: '32'
-          summary: Gers
-        33:
-          value: '33'
-          summary: Gironde
-        971:
-          value: '971'
-          summary: Guadeloupe
-        973:
-          value: '973'
-          summary: Guyane
-        68:
-          value: '68'
-          summary: Haut-Rhin
-        2B:
-          value: 2B
-          summary: Haute-Corse
-        31:
-          value: '31'
-          summary: Haute-Garonne
-        43:
-          value: '43'
-          summary: Haute-Loire
-        52:
-          value: '52'
-          summary: Haute-Marne
-        74:
-          value: '74'
-          summary: Haute-Savoie
-        70:
-          value: '70'
-          summary: Haute-Saône
-        87:
-          value: '87'
-          summary: Haute-Vienne
-        05:
-          value: '05'
-          summary: Hautes-Alpes
-        65:
-          value: '65'
-          summary: Hautes-Pyrénées
-        92:
-          value: '92'
-          summary: Hauts-de-Seine
-        34:
-          value: '34'
-          summary: Hérault
-        35:
-          value: '35'
-          summary: Ille-et-Vilaine
-        36:
-          value: '36'
-          summary: Indre
-        37:
-          value: '37'
-          summary: Indre-et-Loire
-        38:
-          value: '38'
-          summary: Isère
-        39:
-          value: '39'
-          summary: Jura
-        974:
-          value: '974'
-          summary: La Réunion
-        40:
-          value: '40'
-          summary: Landes
-        41:
-          value: '41'
-          summary: Loir-et-Cher
-        42:
-          value: '42'
-          summary: Loire
-        44:
-          value: '44'
-          summary: Loire-Atlantique
-        45:
-          value: '45'
-          summary: Loiret
-        46:
-          value: '46'
-          summary: Lot
-        47:
-          value: '47'
-          summary: Lot-et-Garonne
-        48:
-          value: '48'
-          summary: Lozère
-        49:
-          value: '49'
-          summary: Maine-et-Loire
-        50:
-          value: '50'
-          summary: Manche
-        51:
-          value: '51'
-          summary: Marne
-        972:
-          value: '972'
-          summary: Martinique
-        53:
-          value: '53'
-          summary: Mayenne
-        976:
-          value: '976'
-          summary: Mayotte
-        54:
-          value: '54'
-          summary: Meurthe-et-Moselle
-        55:
-          value: '55'
-          summary: Meuse
-        56:
-          value: '56'
-          summary: Morbihan
-        57:
-          value: '57'
-          summary: Moselle
-        58:
-          value: '58'
-          summary: Nièvre
-        59:
-          value: '59'
-          summary: Nord
-        988:
-          value: '988'
-          summary: Nouvelle-Calédonie
-        60:
-          value: '60'
-          summary: Oise
-        61:
-          value: '61'
-          summary: Orne
-        75:
-          value: '75'
-          summary: Paris
-        62:
-          value: '62'
-          summary: Pas-de-Calais
-        987:
-          value: '987'
-          summary: Polynésie Française
-        63:
-          value: '63'
-          summary: Puy-de-Dôme
-        64:
-          value: '64'
-          summary: Pyrénées-Atlantiques
-        66:
-          value: '66'
-          summary: Pyrénées-Orientales
-        69:
-          value: '69'
-          summary: Rhône
-        977:
-          value: '977'
-          summary: Saint-Barthélemy
-        978:
-          value: '978'
-          summary: Saint-Martin
-        975:
-          value: '975'
-          summary: Saint-Pierre-et-Miquelon
-        72:
-          value: '72'
-          summary: Sarthe
-        73:
-          value: '73'
-          summary: Savoie
-        71:
-          value: '71'
-          summary: Saône-et-Loire
-        76:
-          value: '76'
-          summary: Seine-Maritime
-        93:
-          value: '93'
-          summary: Seine-Saint-Denis
-        77:
-          value: '77'
-          summary: Seine-et-Marne
-        80:
-          value: '80'
-          summary: Somme
-        81:
-          value: '81'
-          summary: Tarn
-        82:
-          value: '82'
-          summary: Tarn-et-Garonne
-        984:
-          value: '984'
-          summary: Terres australes et antarctiques françaises
-        90:
-          value: '90'
-          summary: Territoire de Belfort
-        95:
-          value: '95'
-          summary: Val-d'Oise
-        94:
-          value: '94'
-          summary: Val-de-Marne
-        83:
-          value: '83'
-          summary: Var
-        84:
-          value: '84'
-          summary: Vaucluse
-        85:
-          value: '85'
-          summary: Vendée
-        86:
-          value: '86'
-          summary: Vienne
-        88:
-          value: '88'
-          summary: Vosges
-        986:
-          value: '986'
-          summary: Wallis et Futuna
-        89:
-          value: '89'
-          summary: Yonne
-        78:
-          value: '78'
-          summary: Yvelines
-        989:
-          value: '989'
-          summary: Île de Clipperton
-
 
     relations:
       name: relations
       in: query
-      description: Permet de chercher des organismes en fonction de leurs relations.
+      description: |
+        Permet de chercher des organismes en fonction de leurs relations.
+        
+        Il est également possible de passer un booléen pour rechercher les organismes avec ou sans relations.
       schema:
         type: string
         enum: [ "formateur->responsable", "responsable->formateur", "entreprise", "true", "false" ]
-      examples:
-        multiple:
-          value: "formateur->responsable,entreprise"
-          summary: Organismes avec des relations de type formateur->responsable ou entreprise
-        true:
-          value: true
-          summary: Organismes avec des relations
-        false:
-          value: false
-          summary: Organismes sans relations
 
     referentiels:
       name: referentiels
       in: query
-      description: Permet de chercher des organismes qui apparaisent dans certains référentiels.
+      description: |
+        Permet de chercher des organismes qui apparaisent dans certains référentiels.
+        
+        ```
+        catalogue-etablissements
+        sifa-ramsese
+        datagouv
+        ```
       schema:
         type: string
-      examples:
-        catalogue:
-          value: catalogue-etablissements
-          summary: Organismes qui sont présents dans le catalogue
 
     nouveaux:
       name: nouveaux
@@ -815,13 +487,12 @@ components:
     champs:
       name: champs
       in: query
-      description: Limite le nombre de champs renvoyés pour chaque organismes
+      description: |
+        Limite le nombre de champs renvoyés pour chaque organismes
+        
+        Il est possible de passer un ou plusieurs noms de champs séparés par des virgules.
       schema:
         type: string
-      examples:
-        projection:
-          value: siret,uai
-          summary: Obtenir uniquement le siret et l'uai
 
   schemas:
     Error:

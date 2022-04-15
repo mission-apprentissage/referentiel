@@ -1,6 +1,7 @@
 import { classNames } from "../dsfr";
 import React from "react";
 import useElementId from "../../hooks/useElementId";
+import { Button } from "./Button";
 
 export const modalSizeModifiers = {
   sm: "md-4",
@@ -19,15 +20,9 @@ export default function Modal({ title, modal, content, footer, size, modifiers, 
           <div className={clazz}>
             <div className="fr-modal__body">
               <div className="fr-modal__header">
-                <button
-                  className="fr-link--close fr-link"
-                  title="Fermer la fenêtre modale"
-                  aria-controls={modal.id}
-                  onClick={modal.close}
-                  type={"button"}
-                >
+                <Button modifiers={"close"} aria-controls={modal.id} title="Fermer" onClick={modal.close}>
                   Fermer
-                </button>
+                </Button>
               </div>
               <div className="fr-modal__content" id={contentId}>
                 {content}

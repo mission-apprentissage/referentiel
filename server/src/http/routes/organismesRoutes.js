@@ -119,83 +119,84 @@ module.exports = () => {
         : {}),
     };
   }
+  ["get", "post"].forEach((method) => {
+    router[method](
+      "/api/v1/organismes.:ext?",
+      tryCatch(async (req, res) => {
+        let { page, items_par_page, ordre, champs, ext, ...params } = await Joi.object({
+          sirets: Joi.alternatives()
+            .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/)))
+            .default(null),
+          uais: Joi.alternatives()
+            .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
+            .default(null),
+          uai_potentiels: Joi.alternatives()
+            .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
+            .default(null),
+          numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
+          natures: arrayOf(Joi.string().valid("responsable", "formateur", "responsable_formateur", "inconnue")),
+          etat_administratif: Joi.string().valid("actif", "fermé"),
+          regions: arrayOf(Joi.string().valid(...getRegions().map((r) => r.code))),
+          academies: arrayOf(Joi.string().valid(...getAcademies().map((a) => a.code))),
+          departements: arrayOf(Joi.string().valid(...getDepartements().map((d) => d.code))),
+          relations: Joi.alternatives()
+            .try(
+              Joi.boolean(),
+              arrayOf(Joi.string().valid("formateur->responsable", "responsable->formateur", "entreprise"))
+            )
+            .default(null),
+          referentiels: Joi.alternatives().try(Joi.boolean(), arrayOf(Joi.string())),
+          nouveaux: Joi.boolean().default(null),
+          qualiopi: Joi.boolean().default(null),
+          text: Joi.string(),
+          anomalies: Joi.boolean().default(null),
+          ...validators.champs(),
+          ...validators.pagination(),
+          ...validators.tri(),
+          ...validators.exports(),
+        }).validateAsync({ ...req[method === "post" ? "body" : "query"], ...req.params }, { abortEarly: false });
 
-  router.get(
-    "/api/v1/organismes.:ext?",
-    tryCatch(async (req, res) => {
-      let { page, items_par_page, ordre, champs, ext, ...params } = await Joi.object({
-        sirets: Joi.alternatives()
-          .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/)))
-          .default(null),
-        uais: Joi.alternatives()
-          .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
-          .default(null),
-        uai_potentiels: Joi.alternatives()
-          .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^[0-9]{7}[A-Z]{1}$/)))
-          .default(null),
-        numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
-        natures: arrayOf(Joi.string().valid("responsable", "formateur", "responsable_formateur", "inconnue")),
-        etat_administratif: Joi.string().valid("actif", "fermé"),
-        regions: arrayOf(Joi.string().valid(...getRegions().map((r) => r.code))),
-        academies: arrayOf(Joi.string().valid(...getAcademies().map((a) => a.code))),
-        departements: arrayOf(Joi.string().valid(...getDepartements().map((d) => d.code))),
-        relations: Joi.alternatives()
-          .try(
-            Joi.boolean(),
-            arrayOf(Joi.string().valid("formateur->responsable", "responsable->formateur", "entreprise"))
-          )
-          .default(null),
-        referentiels: Joi.alternatives().try(Joi.boolean(), arrayOf(Joi.string())),
-        nouveaux: Joi.boolean().default(null),
-        qualiopi: Joi.boolean().default(null),
-        text: Joi.string(),
-        anomalies: Joi.boolean().default(null),
-        ...validators.champs(),
-        ...validators.pagination(),
-        ...validators.tri(),
-        ...validators.exports(),
-      }).validateAsync({ ...req.query, ...req.params }, { abortEarly: false });
+        let query = buildQuery(params);
+        let projection = buildProjection(champs);
 
-      let query = buildQuery(params);
-      let projection = buildProjection(champs);
+        let { find, pagination } = await findAndPaginate(dbCollection("organismes"), query, {
+          page,
+          limit: items_par_page,
+          sort: { ["_meta.date_import"]: ordre === "asc" ? 1 : -1 },
+          ...(isEmpty(projection) ? {} : { projection }),
+        });
 
-      let { find, pagination } = await findAndPaginate(dbCollection("organismes"), query, {
-        page,
-        limit: items_par_page,
-        sort: { ["_meta.date_import"]: ordre === "asc" ? 1 : -1 },
-        ...(isEmpty(projection) ? {} : { projection }),
-      });
+        let transformResponse;
 
-      let transformResponse;
+        switch (ext) {
+          case "xls":
+            addCsvHeaders(`organismes-${DateTime.now().toISODate()}.csv`, "UTF-16", res);
+            transformResponse = transformOrganisme.intoXls();
+            break;
+          case "csv":
+            addCsvHeaders(`organismes-${DateTime.now().toISODate()}.csv`, "UTF-8", res);
+            transformResponse = transformOrganisme.intoCsv();
+            break;
+          default:
+            transformResponse = transformIntoJSON({
+              arrayPropertyName: "organismes",
+              arrayWrapper: {
+                pagination,
+              },
+            });
+        }
 
-      switch (ext) {
-        case "xls":
-          addCsvHeaders(`organismes-${DateTime.now().toISODate()}.csv`, "UTF-16", res);
-          transformResponse = transformOrganisme.intoXls();
-          break;
-        case "csv":
-          addCsvHeaders(`organismes-${DateTime.now().toISODate()}.csv`, "UTF-8", res);
-          transformResponse = transformOrganisme.intoCsv();
-          break;
-        default:
-          transformResponse = transformIntoJSON({
-            arrayPropertyName: "organismes",
-            arrayWrapper: {
-              pagination,
-            },
-          });
-      }
-
-      sendJsonStream(
-        oleoduc(
-          find.stream(),
-          transformData((data) => toDto(data)),
-          transformResponse
-        ),
-        res
-      );
-    })
-  );
+        sendJsonStream(
+          oleoduc(
+            find.stream(),
+            transformData((data) => toDto(data)),
+            transformResponse
+          ),
+          res
+        );
+      })
+    );
+  });
 
   router.get(
     "/api/v1/organismes/:siret",

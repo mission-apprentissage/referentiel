@@ -1,13 +1,14 @@
 import styled from "styled-components";
+import { Button } from "../elements/Button";
 
 const FullModal = styled(({ modal, children, ...rest }) => {
   return (
     <div {...rest}>
       <div id={modal.id} ref={modal.ref} className={"fr-modal"}>
         <div className="fr-container fr-container-lg--fluid">
-          <button className="fr-link--close fr-link" aria-controls={modal.id} onClick={modal.close}>
+          <Button modifiers={"close"} aria-controls={modal.id} title="Fermer" onClick={modal.close}>
             Fermer
-          </button>
+          </Button>
           {children}
         </div>
       </div>
@@ -46,7 +47,7 @@ const FullModal = styled(({ modal, children, ...rest }) => {
     height: 100%;
   }
 
-  .fr-modal > * > .fr-link--close {
+  .fr-modal > * > .fr-btn--close {
     margin-bottom: 1.5rem;
   }
 `;

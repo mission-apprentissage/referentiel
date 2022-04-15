@@ -42,7 +42,7 @@ services:
       - REFERENTIEL_MONGODB_URI=mongodb://mongodb:27017/referentiel?retryWrites=true&w=majority
 
   mongodb:
-    image: mongo:5.0.5-focal
+    image: mongo:5.0.7-focal
     container_name: referentiel_mongodb
     command: --wiredTigerCacheSizeGB 3 --port 27017
     mem_limit: 3g

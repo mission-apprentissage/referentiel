@@ -30,14 +30,16 @@ const RelationTagButton = styled(({ label, results, onChange, disabled = false }
 `;
 
 export default function RelationsTab({ organisme }) {
-  let {
-    response: { data, loading, error },
-  } = useSearch({
-    page: 1,
-    sirets: organisme.relations.filter((r) => r.referentiel).map((r) => r.siret),
-    items_par_page: Number.MAX_SAFE_INTEGER,
-  });
+  let { response } = useSearch(
+    {
+      page: 1,
+      sirets: organisme.relations.filter((r) => r.referentiel).map((r) => r.siret),
+      items_par_page: Number.MAX_SAFE_INTEGER,
+    },
+    { silent: true }
+  );
 
+  let { data, loading, error } = response;
   let [tables, filter] = useReducer((state, action) => {
     if (action.pressed) {
       return uniq([...state, action.name]);
