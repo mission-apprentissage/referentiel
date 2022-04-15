@@ -19,7 +19,7 @@ function adaptParamsForAPI(params) {
   }, {});
 }
 
-export function useSearch(defaults = {}) {
+export function useSearch(defaults, options = {}) {
   let { query, setQuery } = useQuery();
   let location = useLocation();
   let { setSearch } = useContext(SearchContext);
@@ -29,10 +29,10 @@ export function useSearch(defaults = {}) {
   let previous = usePrevious(search);
 
   useEffect(() => {
-    if (!isEqual(previous, search)) {
+    if (!options.silent && !isEqual(previous, search)) {
       setSearch(search);
     }
-  }, [previous, search, setSearch]);
+  }, [options.silent, previous, search, setSearch]);
 
   let url = buildUrl(`/api/v1/organismes`, adaptParamsForAPI(search.params));
   let [response] = useFetch(url, {
