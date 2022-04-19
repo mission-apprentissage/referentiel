@@ -13,7 +13,7 @@ module.exports = () => {
     "/api/v1/healthcheck",
     tryCatch(async (req, res) => {
       let mongodbStatus;
-      await dbCollection("acce")
+      await dbCollection("organismes")
         .stats()
         .then(() => {
           mongodbStatus = true;
