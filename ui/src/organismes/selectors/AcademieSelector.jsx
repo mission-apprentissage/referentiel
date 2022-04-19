@@ -7,7 +7,7 @@ import { DataContext } from "../../common/DataProvider";
 export default function AcademieSelector({ onChange }) {
   let { academies } = useContext(DataContext);
   let { query } = useQuery();
-  let [selected, setSelected] = useState(query.academie || "");
+  let [selected, setSelected] = useState(query.academies || "");
 
   return (
     <Box align={"center"} justify={"start"} style={{ width: "100%" }}>
