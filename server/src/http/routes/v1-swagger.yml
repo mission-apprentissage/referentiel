@@ -48,7 +48,7 @@ paths:
       description: |
         Rechercher des organismes dans la référentiel en utilisant la méthode POST
         
-        Cette route permet de réaliser des recherches quand la taille totale des paramètres dépassent 8Kb (414 URI Too Long).
+        Cette route permet de réaliser des recherches quand la taille totale des paramètres dépasse 8Kb (414 URI Too Long).
       parameters:
         - $ref: "#/components/parameters/sirets"
         - $ref: "#/components/parameters/uais"
