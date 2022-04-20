@@ -1,24 +1,9 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
-const collectSources = require("./collectSources");
-const { createSource } = require("./sources/sources");
-const importDatagouv = require("./importDatagouv");
 
-const VERSION = 7;
+const VERSION = 8;
 
 async function tasks() {
-  await importDatagouv();
-
-  let { modifiedCount } = await dbCollection("organismes").updateMany(
-    {},
-    { $unset: { numero_declaration_activite: 1, qualiopi: 1 } }
-  );
-
-  let collected = await collectSources(createSource("datagouv"));
-
-  return {
-    unset: modifiedCount,
-    collected,
-  };
+  return {};
 }
 
 async function _ensureMigrationCanBeRun() {
