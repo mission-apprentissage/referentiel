@@ -28,7 +28,7 @@ module.exports = {
   auth: {
     api: {
       jwtSecret: env.get("REFERENTIEL_AUTH_API_JWT_SECRET").default(uuid.v4()).asString(),
-      expiresIn: "180d",
+      expiresIn: "1y",
     },
   },
 };
