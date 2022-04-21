@@ -4,6 +4,7 @@ services:
   reverse_proxy:
     volumes:
       - .local/nginx:/data
+      - ./reverse_proxy/dev/includes:/etc/nginx/templates/includes/env
 
   ui:
     command: yarn start
