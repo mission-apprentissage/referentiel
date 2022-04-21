@@ -10,11 +10,23 @@ services:
     restart: unless-stopped
     ports:
       - 80:80
+      - 443:443
     networks:
       - referentiel_network
     depends_on:
       - server
       - ui
+    environment:
+      - PARANOIA=1
+      - ANOMALY_INBOUND=5
+      - ANOMALY_OUTBOUND=4
+      - DNS_SERVER=127.0.0.11
+      - PROXY=1
+      - SERVERNAME=localhost
+      - ACCESSLOG=/data/access.log
+      - ERRORLOG=/data/error.log
+      - LOGLEVEL=warn
+      - NGINX_ALWAYS_TLS_REDIRECT=false
 
   ui:
     image: referentiel_ui
