@@ -26,7 +26,7 @@ RUN set -eux; \
 
 WORKDIR /sources
 
-# We use master
+# Build headers-more-nginx-module
 RUN set -eux; \
     git clone -b "${HEADERS_MORE_VERSION}" --depth 1 https://github.com/openresty/headers-more-nginx-module; \
     curl -sSL https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz -o nginx-${NGINX_VERSION}.tar.gz; \
