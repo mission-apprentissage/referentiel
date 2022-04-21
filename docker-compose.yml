@@ -27,6 +27,7 @@ services:
       - ERRORLOG=/data/error.log
       - LOGLEVEL=warn
       - NGINX_ALWAYS_TLS_REDIRECT=false
+      - ALLOWED_METHODS=GET HEAD POST OPTIONS PUT
 
   ui:
     image: referentiel_ui
