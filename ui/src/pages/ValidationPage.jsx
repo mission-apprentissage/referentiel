@@ -13,6 +13,7 @@ import NatureFilter from "../organismes/filtres/NatureFilter";
 import { getNatureLabel } from "../common/enums/natures";
 import Small from "../common/dsfr/custom/Small";
 import Page from "../common/Page";
+import { useQuery } from "../common/hooks/useQuery";
 
 const MAPPER = {
   A_VALIDER: {
@@ -84,6 +85,7 @@ const ValidationLayoutTitle = styled(({ refine, className }) => {
 
 export default function ValidationPage() {
   let { type } = useParams();
+  let { query } = useQuery();
   let { response, search, refine } = useValidationSearch(type, {
     ordre: "desc",
     page: 1,
@@ -95,7 +97,9 @@ export default function ValidationPage() {
       <ValidationLayoutTitle refine={refine} type={type} />
       <ContentLayout>
         <Results
-          search={<SearchForm onSubmit={(values) => search({ ...values, page: 1 })} />}
+          search={
+            <SearchForm onSubmit={(values) => search({ ...values, page: 1, departements: query.departements })} />
+          }
           filters={
             <Filters onChange={(filters) => refine({ ...filters })}>
               <NatureFilter

@@ -19,6 +19,10 @@ coverage:
 lint:
 	yarn --cwd server lint
 
+benchmark:
+	docker-compose --project-directory misc/benchmarks up -d
+	docker-compose --project-directory misc/benchmarks run k6 run /scripts/stress.js
+
 dataset:
 	docker exec referentiel_server yarn --silent --cwd server cli misc injectDataset
 

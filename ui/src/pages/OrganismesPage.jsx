@@ -14,9 +14,11 @@ import DatagouvFilter from "../organismes/filtres/DatagouvFilter";
 import DepartementsFilter from "../organismes/filtres/DepartementsFilter";
 import UAIFilter from "../organismes/filtres/UAIFilter";
 import Page from "../common/Page";
+import { useQuery } from "../common/hooks/useQuery";
 
 export default function OrganismesPage() {
   let { response, search, refine } = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
+  let { query } = useQuery();
 
   return (
     <Page>
@@ -32,7 +34,11 @@ export default function OrganismesPage() {
               panel: (
                 <TabPanel>
                   <Results
-                    search={<SearchForm onSubmit={(form) => search({ page: 1, text: form.text })} />}
+                    search={
+                      <SearchForm
+                        onSubmit={(form) => search({ page: 1, text: form.text, academies: query.academies })}
+                      />
+                    }
                     filters={
                       <Filters onChange={(filters) => refine({ ...filters })}>
                         <DepartementsFilter />
