@@ -2,8 +2,7 @@ const logger = require("../common/logger").child({ context: "import" });
 const { getFileAsStream } = require("../common/utils/httpUtils");
 const { oleoduc, writeData } = require("oleoduc");
 const { dbCollection } = require("../common/db/mongodb");
-const Pick = require("stream-json/filters/Pick");
-const { streamArray } = require("stream-json/streamers/StreamArray");
+const { streamNestedJsonArray } = require("../common/utils/streamUtils");
 
 function getContours() {
   return getFileAsStream(
@@ -20,10 +19,9 @@ async function importCommunes(options = {}) {
 
   await oleoduc(
     stream,
-    Pick.withParser({ filter: "features" }),
-    streamArray(),
+    streamNestedJsonArray("features"),
     writeData(
-      async ({ value: feature }) => {
+      async (feature) => {
         let codgeo = feature.properties.codgeo;
 
         try {

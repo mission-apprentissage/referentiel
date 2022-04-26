@@ -3,9 +3,9 @@ const RateLimiter = require("./RateLimiter");
 const ApiError = require("./ApiError");
 
 class RateLimitedApi {
-  constructor(name, client, options = {}) {
+  constructor(name, options = {}) {
     this.name = name;
-    this.rateLimiter = new RateLimiter(this.name, client, {
+    this.rateLimiter = new RateLimiter(this.name, {
       nbRequests: options.nbRequests || 1,
       durationInSeconds: options.durationInSeconds || 1,
     });
@@ -21,7 +21,7 @@ class RateLimitedApi {
     try {
       return await this.rateLimiter.execute(callback);
     } catch (e) {
-      throw new ApiError(this.name, e.message, e.code || e.response?.status, { cause: e });
+      throw new ApiError(this.name, e.message, e.response?.status || e.code, { cause: e });
     }
   }
 }
