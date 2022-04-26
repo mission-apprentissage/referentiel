@@ -8,7 +8,8 @@ window.dsfr = {
   mode: "manual",
 };
 require("@gouvfr/dsfr/dist/dsfr/dsfr.module");
-require("@gouvfr/dsfr/dist/dsfr/dsfr.nomodule");
+require("@gouvfr/dsfr/dist/utility/icons/icons-system/icons-system.css");
+require("@gouvfr/dsfr/dist/utility/icons/icons-design/icons-design.css");
 
 export function buildComponent(componentName, dsfrName, options = {}) {
   return forwardRef((props, ref) => {
@@ -50,7 +51,7 @@ export function classNames(baseClassName, { modifiers, icons, className, validat
 }
 
 function asIconClassName(name) {
-  return `fr-fi-${name}`;
+  return `fr-icon-${name}`;
 }
 
 export function ariaLabelledBy(...byIds) {
