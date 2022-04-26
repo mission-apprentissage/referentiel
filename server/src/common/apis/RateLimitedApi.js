@@ -3,9 +3,9 @@ const RateLimiter = require("./RateLimiter");
 const ApiError = require("./ApiError");
 
 class RateLimitedApi {
-  constructor(name, client, options = {}) {
+  constructor(name, options = {}) {
     this.name = name;
-    this.rateLimiter = new RateLimiter(this.name, client, {
+    this.rateLimiter = new RateLimiter(this.name, {
       nbRequests: options.nbRequests || 1,
       durationInSeconds: options.durationInSeconds || 1,
     });
