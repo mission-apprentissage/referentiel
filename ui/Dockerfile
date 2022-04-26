@@ -1,4 +1,4 @@
-FROM node:16.14.2-stretch
+FROM node:18-bullseye
 
 WORKDIR /app
 
@@ -12,6 +12,8 @@ ARG REFERENTIEL_SENTRY_DSN
 ARG REFERENTIEL_ENV
 ENV REACT_APP_REFERENTIEL_ENV=$REFERENTIEL_ENV
 ENV REACT_APP_REFERENTIEL_SENTRY_DSN=$REFERENTIEL_SENTRY_DSN
+#https://github.com/webpack/webpack/issues/14532
+ENV NODE_OPTIONS=--openssl-legacy-provider
 
 # Build site
 COPY . ./
