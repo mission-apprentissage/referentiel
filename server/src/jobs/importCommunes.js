@@ -1,11 +1,11 @@
 const logger = require("../common/logger").child({ context: "import" });
-const { getFileAsStream } = require("../common/utils/httpUtils");
+const { fetchStream } = require("../common/utils/httpUtils");
 const { oleoduc, writeData } = require("oleoduc");
 const { dbCollection } = require("../common/db/mongodb");
 const { streamNestedJsonArray } = require("../common/utils/streamUtils");
 
 function getContours() {
-  return getFileAsStream(
+  return fetchStream(
     "https://static.data.gouv.fr/resources/contours-des-communes-de-france-simplifie-avec-regions-et-departement-doutre-mer-rapproches/20220219-095144/a-com2022.json"
   );
 }

@@ -223,6 +223,8 @@ module.exports = async (array, options = {}) => {
           if (nbModifiedDocuments) {
             stats[from].updated += nbModifiedDocuments;
             logger.debug(`Organisme ${organisme.siret} mis à jour`, { source: from });
+          } else {
+            logger.trace(`Organisme ${organisme.siret} déjà à jour`, { source: from });
           }
         } catch (e) {
           stats[from].failed++;
