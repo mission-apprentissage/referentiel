@@ -89,10 +89,8 @@ function mergeContacts(source, contacts, newContacts) {
 }
 
 function mergeNature(current, newNature) {
-  if (
-    (current === "responsable" && newNature === "formateur") ||
-    (current === "formateur" && newNature === "responsable")
-  ) {
+  let all = [current, newNature];
+  if ((all.includes("responsable") && all.includes("formateur")) || all.includes("responsable_formateur")) {
     return "responsable_formateur";
   }
 
@@ -185,7 +183,7 @@ module.exports = async (array, options = {}) => {
 
       stats[from].total++;
       let query = buildQuery(selector);
-      let cursor = dbCollection("organismes").find(query);
+      let cursor = dbCollection("organismes").find(query).batchSize(1);
 
       if ((await cursor.count()) === 0) {
         logger.trace(`Organisme ${JSON.stringify(query)} inconnu`, { source: from });

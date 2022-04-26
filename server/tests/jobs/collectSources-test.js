@@ -596,9 +596,11 @@ describe("collectSources", () => {
   it("Vérifie qu'on peut fusionner les natures", async () => {
     await insertOrganisme({ siret: "11111111100006", nature: "responsable" });
     await insertOrganisme({ siret: "22222222200006", nature: "formateur" });
+    await insertOrganisme({ siret: "33333333300006", nature: "responsable_formateur" });
     let source = createTestSource([
       { selector: "11111111100006", nature: "formateur" },
       { selector: "22222222200006", nature: "responsable" },
+      { selector: "33333333300006", nature: "formateur" },
     ]);
 
     await collectSources(source);
@@ -606,6 +608,8 @@ describe("collectSources", () => {
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.nature, "responsable_formateur");
     found = await dbCollection("organismes").findOne({ siret: "22222222200006" }, { _id: 0 });
+    assert.deepStrictEqual(found.nature, "responsable_formateur");
+    found = await dbCollection("organismes").findOne({ siret: "33333333300006" }, { _id: 0 });
     assert.deepStrictEqual(found.nature, "responsable_formateur");
   });
 
