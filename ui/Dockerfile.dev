@@ -1,9 +1,0 @@
-FROM node:18-bullseye
-#https://github.com/webpack/webpack/issues/14532
-ENV NODE_OPTIONS=--openssl-legacy-provider
-
-WORKDIR /app
-
-EXPOSE 3000
-
-CMD yarn install && yarn start

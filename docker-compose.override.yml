@@ -9,12 +9,15 @@ services:
       - SERVERNAME=localhost
 
   ui:
+    command: yarn start
     build:
-      dockerfile: Dockerfile.dev
+      args:
+      - REFERENTIEL_ENV=dev
     mem_limit: 2g
     stdin_open: true
     volumes:
       - ./ui:/app #Allows source folders to be watched
+      - /app/node_modules/
     environment:
       - FAST_REFRESH=false
 
