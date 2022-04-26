@@ -1,5 +1,5 @@
 const RateLimitedApi = require("./RateLimitedApi");
-const { getFileAsStream } = require("../utils/httpUtils");
+const { fetch } = require("../utils/httpUtils");
 const Pick = require("stream-json/filters/Pick");
 const { streamArray } = require("stream-json/streamers/StreamArray");
 const { compose, transformData } = require("oleoduc");
@@ -14,10 +14,10 @@ class TableauDeBordApi extends RateLimitedApi {
     return "https://cfas.apprentissage.beta.gouv.fr/api";
   }
 
-  streamCfas(query, options) {
+  async streamCfas(query, options) {
     let params = convertQueryIntoParams(query, options);
 
-    let response = getFileAsStream(`${TableauDeBordApi.baseApiUrl}/cfas?${params}`);
+    let response = await fetch(`${TableauDeBordApi.baseApiUrl}/cfas?${params}`);
 
     return compose(
       response,

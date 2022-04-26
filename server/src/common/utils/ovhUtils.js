@@ -1,7 +1,7 @@
 // eslint-disable-next-line node/no-extraneous-require
 const axios = require("axios");
 const config = require("../../config");
-const { getFileAsStream } = require("./httpUtils");
+const { fetch } = require("./httpUtils");
 
 async function authenticate(uri) {
   let regExp = new RegExp(/^(https:\/\/)(.+):(.+):(.+)@(.*)$/);
@@ -49,7 +49,7 @@ async function requestObjectAccess(path, options = {}) {
 module.exports = {
   getFromStorage: async (path, options = {}) => {
     let { url, token } = await requestObjectAccess(path, options);
-    return getFileAsStream(url, {
+    return fetch(url, {
       method: "GET",
       headers: {
         "X-Auth-Token": token,

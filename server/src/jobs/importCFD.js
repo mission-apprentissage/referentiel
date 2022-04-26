@@ -1,5 +1,5 @@
 const logger = require("../common/logger").child({ context: "import" });
-const { getFileAsStream } = require("../common/utils/httpUtils");
+const { fetch } = require("../common/utils/httpUtils");
 const { oleoduc, writeData } = require("oleoduc");
 const { pick } = require("lodash");
 const { dbCollection } = require("../common/db/mongodb");
@@ -42,7 +42,7 @@ async function importCsv(csvStream) {
 }
 
 function getCsvExport(name) {
-  return getFileAsStream(`https://infocentre.pleiade.education.fr/bcn/index.php/export/CSV?n=${name}&separator=%7C`);
+  return fetch(`https://infocentre.pleiade.education.fr/bcn/index.php/export/CSV?n=${name}&separator=%7C`);
 }
 
 async function importCFD(options = {}) {

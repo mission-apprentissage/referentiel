@@ -1,5 +1,5 @@
 const RateLimitedApi = require("./RateLimitedApi");
-const { getFileAsStream, fetch } = require("../utils/httpUtils");
+const { fetch, getUrl } = require("../utils/httpUtils");
 const { compose, readLineByLine, transformData } = require("oleoduc");
 const convertQueryIntoParams = require("./utils/convertQueryIntoParams");
 
@@ -12,11 +12,9 @@ class CatalogueApi extends RateLimitedApi {
     return "https://catalogue.apprentissage.beta.gouv.fr/api";
   }
 
-  streamFormations(query, options) {
+  async streamFormations(query, options) {
     let params = convertQueryIntoParams(query, options);
-    let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations.ndjson?${params}`, {
-      highWaterMark: 1048576 * 10, //MiB
-    });
+    let response = await fetch(`${CatalogueApi.baseApiUrl}/entity/formations.ndjson?${params}`);
 
     return compose(
       response,
@@ -28,9 +26,7 @@ class CatalogueApi extends RateLimitedApi {
     return this.execute(async () => {
       let params = convertQueryIntoParams(query, options);
 
-      let response = await getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/etablissements.ndjson?${params}`, {
-        timeout: 5000,
-      });
+      let response = await fetch(`${CatalogueApi.baseApiUrl}/entity/etablissements.ndjson?${params}`);
 
       return compose(
         response,
@@ -43,7 +39,7 @@ class CatalogueApi extends RateLimitedApi {
     return this.execute(async () => {
       let params = convertQueryIntoParams(query, options);
 
-      let response = await fetch(`${CatalogueApi.baseApiUrl}/entity/etablissement?${params}`);
+      let response = await getUrl(`${CatalogueApi.baseApiUrl}/entity/etablissement?${params}`);
 
       return response.data;
     });

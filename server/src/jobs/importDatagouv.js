@@ -1,5 +1,5 @@
 const logger = require("../common/logger").child({ context: "import" });
-const { getFileAsStream } = require("../common/utils/httpUtils");
+const { fetch } = require("../common/utils/httpUtils");
 const { oleoduc, writeData } = require("oleoduc");
 const { dbCollection } = require("../common/db/mongodb");
 const { parseCsv } = require("../common/utils/csvUtils");
@@ -7,7 +7,7 @@ const { DateTime } = require("luxon");
 const { omitDeepNil } = require("../common/utils/objectUtils");
 
 function getListePubliqueDesOrganismesDeFormationAsStream() {
-  return getFileAsStream(
+  return fetch(
     "https://www.monactiviteformation.emploi.gouv.fr/mon-activite-formation/public/listePubliqueOF?format=csv"
   );
 }
@@ -25,7 +25,7 @@ function parseNumber(value) {
 
 async function importDatagouv(options = {}) {
   let stats = { total: 0, created: 0, updated: 0, failed: 0 };
-  let stream = options.input || getListePubliqueDesOrganismesDeFormationAsStream();
+  let stream = options.input || (await getListePubliqueDesOrganismesDeFormationAsStream());
   logger.info(`Import de la Liste Publique des Organismes de Formation...`);
 
   await oleoduc(
