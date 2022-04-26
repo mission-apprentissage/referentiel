@@ -1,9 +1,8 @@
 const RateLimitedApi = require("./RateLimitedApi");
 const { getFileAsStream } = require("../utils/httpUtils");
-const Pick = require("stream-json/filters/Pick");
-const { streamArray } = require("stream-json/streamers/StreamArray");
-const { compose, transformData } = require("oleoduc");
+const { compose } = require("oleoduc");
 const convertQueryIntoParams = require("./utils/convertQueryIntoParams");
+const { streamNestedJsonArray } = require("../utils/streamUtils");
 
 class TableauDeBordApi extends RateLimitedApi {
   constructor(options = {}) {
@@ -19,12 +18,7 @@ class TableauDeBordApi extends RateLimitedApi {
 
     let response = getFileAsStream(`${TableauDeBordApi.baseApiUrl}/cfas?${params}`);
 
-    return compose(
-      response,
-      Pick.withParser({ filter: "cfas" }),
-      streamArray(),
-      transformData((data) => data.value)
-    );
+    return compose(response, streamNestedJsonArray("cfas"));
   }
 }
 
