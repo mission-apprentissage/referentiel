@@ -8,6 +8,7 @@ window.dsfr = {
   mode: "manual",
 };
 require("@gouvfr/dsfr/dist/dsfr/dsfr.module");
+require("@gouvfr/dsfr/dist/dsfr/dsfr.nomodule");
 
 export function buildComponent(componentName, dsfrName, options = {}) {
   return forwardRef((props, ref) => {
