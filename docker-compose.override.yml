@@ -9,7 +9,8 @@ services:
       - SERVERNAME=localhost
 
   ui:
-    command: yarn start
+    build:
+      dockerfile: Dockerfile.dev
     mem_limit: 2g
     stdin_open: true
     volumes:
