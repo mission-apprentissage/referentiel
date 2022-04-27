@@ -16,7 +16,9 @@ module.exports = () => {
     name,
     async stream() {
       return compose(
-        dbCollection("acce").find({}, { _search: 0 }).stream(),
+        dbCollection("acce")
+          .find({}, { projection: { _search: 0 } })
+          .stream(),
         transformData((doc) => {
           if (!doc.uai) {
             return;

@@ -70,7 +70,9 @@ module.exports = (custom = {}) => {
       let filters = options.filters || {};
 
       return compose(
-        dbCollection("organismes").find(filters, { siret: 1, "adresse.code_insee": 1 }).batchSize(20).stream(),
+        dbCollection("organismes")
+          .find(filters, { projection: { siret: 1, "adresse.code_insee": 1 } })
+          .stream(),
         transformData(
           async ({ siret }) => {
             try {
