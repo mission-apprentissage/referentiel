@@ -10,9 +10,9 @@ describe("catalogue-etablissements", () => {
   it("Vérifie que peut convertir la source en référentiel", async () => {
     mockCatalogueApi((client, responses) => {
       client
-        .get("/entity/etablissements.ndjson")
+        .get("/entity/etablissements.json")
         .query(() => true)
-        .reply(200, responses.etablissements('{"siret":"11111111100006","uai":"0111111Y"}\n'));
+        .reply(200, responses.etablissements([{ siret: "11111111100006", uai: "0111111Y" }]));
     });
 
     let source = createSource("catalogue-etablissements");
@@ -36,9 +36,9 @@ describe("catalogue-etablissements", () => {
     await importOrganismesForTest();
     mockCatalogueApi((client, responses) => {
       client
-        .get("/entity/etablissements.ndjson")
+        .get("/entity/etablissements.json")
         .query(() => true)
-        .reply(200, responses.etablissements('{"siret":"11111111100006","uai":"0111111Y"}\n'));
+        .reply(200, responses.etablissements([{ siret: "11111111100006", uai: "0111111Y" }]));
     });
 
     let source = createSource("catalogue-etablissements");

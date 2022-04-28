@@ -1,7 +1,8 @@
 const RateLimitedApi = require("./RateLimitedApi");
 const { getFileAsStream, fetch } = require("../utils/httpUtils");
-const { compose, readLineByLine, transformData } = require("oleoduc");
+const { compose } = require("oleoduc");
 const convertQueryIntoParams = require("./utils/convertQueryIntoParams");
+const { streamJsonArray } = require("../utils/streamUtils");
 
 class CatalogueApi extends RateLimitedApi {
   constructor(options = {}) {
@@ -13,32 +14,28 @@ class CatalogueApi extends RateLimitedApi {
   }
 
   streamFormations(query, options) {
-    let params = convertQueryIntoParams(query, options);
-    let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations.ndjson?${params}`, {
-      highWaterMark: 1048576 * 10, //MiB
-    });
+    return this.execute(async () => {
+      let params = convertQueryIntoParams(query, options);
+      let response = getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/formations.json?${params}`, {
+        highWaterMark: 1024 * 1024, //MiB
+      });
 
-    return compose(
-      response,
-      readLineByLine(),
-      transformData((data) => JSON.parse(data))
-    );
+      return compose(response, streamJsonArray());
+    });
   }
+
   streamEtablissements(query, options) {
     return this.execute(async () => {
       let params = convertQueryIntoParams(query, options);
 
-      let response = await getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/etablissements.ndjson?${params}`, {
+      let response = await getFileAsStream(`${CatalogueApi.baseApiUrl}/entity/etablissements.json?${params}`, {
         timeout: 5000,
       });
 
-      return compose(
-        response,
-        readLineByLine(),
-        transformData((data) => (data ? JSON.parse(data) : data))
-      );
+      return compose(response, streamJsonArray());
     });
   }
+
   getEtablissement(query, options) {
     return this.execute(async () => {
       let params = convertQueryIntoParams(query, options);
