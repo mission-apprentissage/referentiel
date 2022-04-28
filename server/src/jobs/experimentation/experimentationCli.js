@@ -1,9 +1,13 @@
 const { program: cli } = require("commander");
 const { createWriteStream, createReadStream } = require("fs");
-const { oleoduc, writeToStdout } = require("oleoduc");
+const { Readable } = require("stream");
+const { oleoduc, writeToStdout, transformData, transformIntoCSV } = require("oleoduc");
 const experimentationCsvStream = require("./experimentationCsvStream");
 const addModifications = require("./addModifications");
 const runScript = require("../runScript");
+const { createSource } = require("../sources/sources");
+const { dbCollection } = require("../../common/db/mongodb");
+const { isEmpty } = require("lodash");
 
 cli
   .command("addModifications")
@@ -28,6 +32,71 @@ cli
       const options = { filter, limit, previous };
       const stream = await experimentationCsvStream(options);
       return oleoduc(stream, out || writeToStdout());
+    });
+  });
+
+cli
+  .command("analyzeAccePro")
+  .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
+  .action(({ out }) => {
+    runScript(async () => {
+      let ramsese = createSource("sifa-ramsese-pro");
+
+      return oleoduc(
+        await ramsese.raw(),
+        transformData(
+          async (line) => {
+            let siret = line.numero_siren_siret_uai;
+            let uai = line.numero_uai;
+            let columns = {
+              trouvé_dans_le_referentiel: "",
+              etat_administratif: "",
+              proposition_siret: "",
+              organismes_avec_siren_identique: "",
+              adresse_connue: "",
+            };
+
+            let found;
+            if (isEmpty(siret) && (found = await dbCollection("organismes").findOne({ uai }))) {
+              columns.trouvé_dans_le_referentiel = "Oui";
+              columns.etat_administratif = found.etat_administratif || "";
+              columns.proposition_siret = found.siret;
+            } else if ((found = await dbCollection("organismes").findOne({ siret }))) {
+              columns.trouvé_dans_le_referentiel = "Oui";
+              columns.etat_administratif = found.etat_administratif || "";
+            } else {
+              let sirene = createSource("sirene", { input: Readable.from([{ siret: siret }]) });
+              let nbSameSiren = await dbCollection("organismes").countDocuments({
+                siret: new RegExp(`^${siret.substring(0, 9)}.*`),
+              });
+
+              for await (const { data } of await sirene.stream()) {
+                columns.organismes_avec_siren_identique = nbSameSiren > 0 ? "Oui" : "Non";
+                columns.etat_administratif = data?.etat_administratif || "";
+                if (data?.adresse) {
+                  let coordinates = data.adresse.geojson.geometry.coordinates;
+                  let nbSimilaires = await dbCollection("organismes").countDocuments({
+                    $or: [
+                      { "adresse.geojson.geometry.coordinates": coordinates },
+                      { "lieux_de_formation.adresse.geojson.geometry.coordinates": coordinates },
+                    ],
+                  });
+                  columns.trouvé_dans_le_referentiel = nbSimilaires > 0 ? "Peut-être" : "Non";
+                  columns.adresse_connue = nbSimilaires > 0 ? "Oui" : "Non";
+                }
+              }
+            }
+
+            return {
+              ...line,
+              ...columns,
+            };
+          },
+          { parallel: 10 }
+        ),
+        transformIntoCSV({}),
+        out || writeToStdout()
+      );
     });
   });
 

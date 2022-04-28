@@ -69,10 +69,14 @@ module.exports = (custom = {}) => {
     async stream(options = {}) {
       const filters = options.filters || {};
 
-      return compose(
+      let input =
+        custom.input ||
         dbCollection("organismes")
           .find(filters, { projection: { siret: 1, "adresse.code_insee": 1 } })
-          .stream(),
+          .stream();
+
+      return compose(
+        input,
         transformData(
           async ({ siret }) => {
             try {
