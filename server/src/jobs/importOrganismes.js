@@ -79,6 +79,8 @@ module.exports = async (array) => {
         } else if (res.modifiedCount) {
           stats[from].updated += res.modifiedCount;
           logger.debug(`Organisme ${siret} mis à jour`);
+        } else {
+          logger.trace(`Organisme ${siret} déjà à jour`);
         }
       } catch (e) {
         stats[from].failed++;
