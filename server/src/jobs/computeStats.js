@@ -1,15 +1,14 @@
 const { oleoduc, writeData, mergeStreams } = require("oleoduc");
-const luhn = require("fast-luhn");
 const { intersection, union, range, uniq } = require("lodash");
 const logger = require("../common/logger");
 const SireneApi = require("../common/apis/SireneApi");
 const caches = require("../common/caches/caches");
-const { isUAIValid } = require("../common/utils/uaiUtils");
+const { isUAIValid, isSiretValid } = require("../common/utils/validationUtils");
 const { dbCollection } = require("../common/db/mongodb");
 
 // eslint-disable-next-line no-unused-vars
 async function validateSiretWithApi(siret, cache, sireneApi) {
-  if (!luhn(siret)) {
+  if (!isSiretValid(siret)) {
     return { isValid: false, category: "invalides" };
   }
 

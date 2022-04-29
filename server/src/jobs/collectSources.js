@@ -1,7 +1,7 @@
 const { mergeStreams, oleoduc, writeData } = require("oleoduc");
 const { uniq, isEmpty } = require("lodash");
 const { flattenObject, isError, omitNil } = require("../common/utils/objectUtils");
-const { isUAIValid } = require("../common/utils/uaiUtils");
+const { isUAIValid } = require("../common/utils/validationUtils");
 const logger = require("../common/logger").child({ context: "collect" });
 const { dbCollection } = require("../common/db/mongodb");
 const { sortBy } = require("lodash/collection");

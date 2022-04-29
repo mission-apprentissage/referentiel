@@ -1,6 +1,6 @@
 require("dotenv").config();
 const { program: cli } = require("commander");
-const { computeChecksum } = require("./common/utils/uaiUtils");
+const { computeChecksum } = require("./common/utils/validationUtils");
 const { createReadStream, createWriteStream } = require("fs");
 const runScript = require("./jobs/runScript");
 const { createSource } = require("./jobs/sources/sources");

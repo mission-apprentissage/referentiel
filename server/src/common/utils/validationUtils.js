@@ -1,3 +1,5 @@
+const { isEmpty } = require("lodash");
+const luhn = require("fast-luhn");
 const ALPHABET_23_LETTERS = [
   "a",
   "b",
@@ -36,6 +38,7 @@ function computeChecksum(numbers) {
  * https://blog.juliendelmas.fr/?qu-est-ce-que-le-code-rne-ou-uai
  */
 module.exports = {
+  computeChecksum,
   isUAIValid(code) {
     if (!code || code.length !== 8) {
       return false;
@@ -46,5 +49,7 @@ module.exports = {
 
     return checksum === computeChecksum(numbers);
   },
-  computeChecksum,
+  isSiretValid(siret) {
+    return !isEmpty(siret) && siret.length === 14 && luhn(siret);
+  },
 };
