@@ -183,15 +183,15 @@ module.exports = async (array, options = {}) => {
 
       stats[from].total++;
       let query = buildQuery(selector);
-      let cursor = dbCollection("organismes").find(query).batchSize(1);
+      let count = selector ? await dbCollection("organismes").countDocuments(query) : 0;
 
-      if ((await cursor.count()) === 0) {
+      if (count === 0) {
         logger.trace(`Organisme ${JSON.stringify(query)} inconnu`, { source: from });
         stats[from].unknown++;
         return;
       }
 
-      for await (const organisme of cursor.stream()) {
+      for await (const organisme of dbCollection("organismes").find(query).stream()) {
         try {
           if (anomalies.length > 0) {
             stats[from].anomalies++;
