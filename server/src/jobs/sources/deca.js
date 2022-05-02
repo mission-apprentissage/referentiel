@@ -7,12 +7,13 @@ module.exports = (custom = {}) => {
 
   return {
     name,
-    async stream() {
+    async raw() {
       const input = custom.input || (await getFromStorage("liste_etab_SIA_Dares_v2.csv"));
-
+      return compose(input, parseCsv());
+    },
+    async stream() {
       return compose(
-        input,
-        parseCsv(),
+        await this.raw(),
         transformData((data) => {
           return {
             from: name,

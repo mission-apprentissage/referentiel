@@ -8,6 +8,7 @@ const runScript = require("../runScript");
 const { createSource } = require("../sources/sources");
 const { dbCollection } = require("../../common/db/mongodb");
 const { isEmpty } = require("lodash");
+const { isUAIValid, isSiretValid } = require("../../common/utils/validationUtils");
 
 cli
   .command("addModifications")
@@ -95,6 +96,45 @@ cli
           { parallel: 10 }
         ),
         transformIntoCSV({}),
+        out || writeToStdout()
+      );
+    });
+  });
+
+cli
+  .command("analyzeDeca")
+  .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
+  .action(({ out }) => {
+    runScript(async () => {
+      let deca = createSource("deca");
+
+      return oleoduc(
+        await deca.raw(),
+        transformData(
+          async (line) => {
+            let uai = line.FORM_ETABUAI_R;
+            let siret = line.FORM_ETABSIRET;
+            let canValidate = uai && siret;
+            let [validation, parUai, parSiret] = await Promise.all([
+              ...(canValidate ? [dbCollection("organismes").findOne({ uai, siret })] : [Promise.resolve(null)]),
+              dbCollection("organismes").findOne({ uai }),
+              dbCollection("organismes").findOne({ siret }),
+            ]);
+
+            return {
+              FORM_ETABUAI_R: uai,
+              FORM_ETABSIRET: siret,
+              validation_uai: isUAIValid(uai) ? "Oui" : "Non",
+              validation_siret: siret ? (isSiretValid(siret) ? "Oui" : "Non") : "",
+              referentiel_valide: validation ? "Oui" : "Non",
+              referentiel_nature: validation?.nature || "",
+              referentiel_proposition_siret: !validation ? parUai?.siret : "",
+              referentiel_proposition_uai: !validation ? parSiret?.uai : "",
+            };
+          },
+          { parallel: 10 }
+        ),
+        transformIntoCSV(),
         out || writeToStdout()
       );
     });
