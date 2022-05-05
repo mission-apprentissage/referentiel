@@ -9,9 +9,9 @@ const { dbCollection } = require("../../../src/common/db/mongodb");
 function mockApis(custom = {}) {
   mockCatalogueApi((client, responses) => {
     client
-      .get((uri) => uri.includes("formations.ndjson"))
+      .get((uri) => uri.includes("formations.json"))
       .query(() => true)
-      .reply(200, responses.formations(custom.formation));
+      .reply(200, responses.formations(custom.formations));
   });
 
   mockGeoAddresseApi((client, responses) => {
@@ -28,12 +28,14 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-        etablissement_formateur_siret: "22222222200002",
-        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-      },
+      formations: [
+        {
+          etablissement_gestionnaire_siret: "11111111100006",
+          etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+          etablissement_formateur_siret: "22222222200002",
+          etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+        },
+      ],
     });
 
     let stats = await collectSources(source);
@@ -58,12 +60,14 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-        etablissement_formateur_siret: "11111111100006",
-        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-      },
+      formations: [
+        {
+          etablissement_gestionnaire_siret: "11111111100006",
+          etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+          etablissement_formateur_siret: "11111111100006",
+          etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+        },
+      ],
     });
 
     await collectSources(source);
@@ -77,12 +81,14 @@ describe("catalogue", () => {
     await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-        etablissement_formateur_siret: "22222222200002",
-        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-      },
+      formations: [
+        {
+          etablissement_gestionnaire_siret: "11111111100006",
+          etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+          etablissement_formateur_siret: "22222222200002",
+          etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+        },
+      ],
     });
 
     await collectSources(source);
@@ -105,12 +111,14 @@ describe("catalogue", () => {
     await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-        etablissement_formateur_siret: "22222222200002",
-        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-      },
+      formations: [
+        {
+          etablissement_gestionnaire_siret: "11111111100006",
+          etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+          etablissement_formateur_siret: "22222222200002",
+          etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+        },
+      ],
     });
 
     await collectSources(source);
@@ -131,12 +139,14 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-        etablissement_formateur_siret: "11111111100006",
-        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-      },
+      formations: [
+        {
+          etablissement_gestionnaire_siret: "11111111100006",
+          etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+          etablissement_formateur_siret: "11111111100006",
+          etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+        },
+      ],
     });
 
     await collectSources(source);
@@ -151,12 +161,14 @@ describe("catalogue", () => {
     await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-        etablissement_formateur_siret: "22222222200002",
-        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-      },
+      formations: [
+        {
+          etablissement_gestionnaire_siret: "11111111100006",
+          etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+          etablissement_formateur_siret: "22222222200002",
+          etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+        },
+      ],
     });
 
     await collectSources(source);
@@ -169,12 +181,14 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_formateur_siret: "22222222200002",
-        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-        cfd: "40030001",
-        cfd_specialite: null,
-      },
+      formations: [
+        {
+          etablissement_formateur_siret: "22222222200002",
+          etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+          cfd: "40030001",
+          cfd_specialite: null,
+        },
+      ],
     });
 
     let stats = await collectSources(source);
@@ -207,7 +221,7 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
-      etablissement_formateur_siret: "22222222200002",
+      etablissesment_formateur_siret: "22222222200002",
       etablissement_formateur_entreprise_raison_sociale: "Etablissement",
       cfd: "40030001",
     });
@@ -230,11 +244,13 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-        cfd: "40030001",
-      },
+      formations: [
+        {
+          etablissement_gestionnaire_siret: "11111111100006",
+          etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+          cfd: "40030001",
+        },
+      ],
     });
 
     let stats = await collectSources(source);
@@ -256,12 +272,14 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_formateur_siret: "22222222200002",
-        etablissement_formateur_entreprise_raison_sociale: "Etablissement",
-        rncp_code: "RNCP28662",
-        rncp_intitule: "Gestionnaire de l'administration des ventes et de la relation commerciale",
-      },
+      formations: [
+        {
+          etablissement_formateur_siret: "22222222200002",
+          etablissement_formateur_entreprise_raison_sociale: "Etablissement",
+          rncp_code: "RNCP28662",
+          rncp_intitule: "Gestionnaire de l'administration des ventes et de la relation commerciale",
+        },
+      ],
     });
 
     let stats = await collectSources(source);
@@ -290,12 +308,14 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
-        rncp_code: "RNCP28662",
-        rncp_intitule: "Gestionnaire de l'administration des ventes et de la relation commerciale",
-      },
+      formations: [
+        {
+          etablissement_gestionnaire_siret: "11111111100006",
+          etablissement_gestionnaire_entreprise_raison_sociale: "Entreprise",
+          rncp_code: "RNCP28662",
+          rncp_intitule: "Gestionnaire de l'administration des ventes et de la relation commerciale",
+        },
+      ],
     });
 
     let stats = await collectSources(source);
@@ -317,12 +337,14 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_formateur_siret: "22222222200002",
-        lieu_formation_geo_coordonnees: "48.879706,2.396444",
-        uai_formation: "0751234J",
-        lieu_formation_siret: "33333333300008",
-      },
+      formations: [
+        {
+          etablissement_formateur_siret: "22222222200002",
+          lieu_formation_geo_coordonnees: "48.879706,2.396444",
+          uai_formation: "0751234J",
+          lieu_formation_siret: "33333333300008",
+        },
+      ],
       reverse: {
         features: [
           {
@@ -389,10 +411,12 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        lieu_formation_geo_coordonnees: "48.879706,2.396444",
-      },
+      formations: [
+        {
+          etablissement_gestionnaire_siret: "11111111100006",
+          lieu_formation_geo_coordonnees: "48.879706,2.396444",
+        },
+      ],
     });
 
     let stats = await collectSources(source);
@@ -416,13 +440,15 @@ describe("catalogue", () => {
     let source = createSource("catalogue");
     mockCatalogueApi((client, responses) => {
       client
-        .get((uri) => uri.includes("formations.ndjson"))
+        .get((uri) => uri.includes("formations.json"))
         .query(() => true)
         .reply(
           200,
-          responses.formations({
-            etablissement_formateur_siret: "22222222200002",
-          })
+          responses.formations([
+            {
+              etablissement_formateur_siret: "22222222200002",
+            },
+          ])
         );
     });
     mockGeoAddresseApi((client) => {
@@ -462,10 +488,12 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "22222222200002" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        etablissement_gestionnaire_siret: "11111111100006",
-        lieu_formation_geo_coordonnees: null,
-      },
+      formations: [
+        {
+          etablissement_gestionnaire_siret: "11111111100006",
+          lieu_formation_geo_coordonnees: null,
+        },
+      ],
     });
 
     await collectSources(source);
@@ -486,11 +514,13 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        email: "robert@formation.fr",
-        id_rco_formation: "01_GE107880|01_GE339324|01_GE520062|76930",
-        etablissement_gestionnaire_siret: "11111111100006",
-      },
+      formations: [
+        {
+          email: "robert@formation.fr",
+          id_rco_formation: "01_GE107880|01_GE339324|01_GE520062|76930",
+          etablissement_gestionnaire_siret: "11111111100006",
+        },
+      ],
     });
 
     let stats = await collectSources(source);
@@ -518,10 +548,12 @@ describe("catalogue", () => {
     await insertOrganisme({ siret: "11111111100006" });
     let source = createSource("catalogue");
     mockApis({
-      formation: {
-        email: "robert@formation.fr##henri@formation.fr",
-        etablissement_gestionnaire_siret: "11111111100006",
-      },
+      formations: [
+        {
+          email: "robert@formation.fr##henri@formation.fr",
+          etablissement_gestionnaire_siret: "11111111100006",
+        },
+      ],
     });
 
     let stats = await collectSources(source);

@@ -135,7 +135,7 @@ module.exports = (custom = {}) => {
     name: "catalogue",
     async stream(options = {}) {
       return compose(
-        fetchFormations(api, options.filters),
+        await fetchFormations(api, options.filters),
         transformData(async (formation) => {
           let { lieu, anomalie } = await buildLieuDeFormation(formation, adresseResolver);
 
@@ -160,7 +160,8 @@ module.exports = (custom = {}) => {
             },
           ];
         }),
-        flattenArray()
+        flattenArray(),
+        { parallel: 10 }
       );
     },
   };
