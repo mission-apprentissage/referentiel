@@ -119,6 +119,7 @@ module.exports = () => {
         : {}),
     };
   }
+
   ["get", "post"].forEach((method) => {
     router[method](
       "/api/v1/organismes.:ext?",

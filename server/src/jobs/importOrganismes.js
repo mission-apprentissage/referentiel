@@ -1,8 +1,8 @@
 const { mergeStreams, oleoduc, writeData } = require("oleoduc");
-const { isEmpty, castArray } = require("lodash");
+const { castArray } = require("lodash");
 const logger = require("../common/logger").child({ context: "import" });
-const luhn = require("fast-luhn");
 const { dbCollection } = require("../common/db/mongodb");
+const { isSiretValid } = require("../common/utils/validationUtils");
 
 function createStats(sources) {
   return sources.reduce((acc, source) => {
@@ -17,10 +17,6 @@ function createStats(sources) {
       },
     };
   }, {});
-}
-
-function isSiretValid(siret) {
-  return !isEmpty(siret) && siret.length === 14 && luhn(siret);
 }
 
 function getStreams(sources) {
@@ -79,6 +75,8 @@ module.exports = async (array) => {
         } else if (res.modifiedCount) {
           stats[from].updated += res.modifiedCount;
           logger.debug(`Organisme ${siret} mis à jour`);
+        } else {
+          logger.trace(`Organisme ${siret} déjà à jour`);
         }
       } catch (e) {
         stats[from].failed++;
