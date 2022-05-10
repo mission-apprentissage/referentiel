@@ -9,15 +9,13 @@ services:
       - SERVERNAME=localhost
 
   ui:
-    command: yarn start
     build:
       args:
       - REFERENTIEL_ENV=dev
     mem_limit: 2g
     stdin_open: true
     volumes:
-      - ./ui:/app #Allows source folders to be watched
-      - /app/node_modules/
+      - ./ui/src:/app/src #Allows source folders to be watched
     environment:
       - FAST_REFRESH=false
 
