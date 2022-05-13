@@ -30,12 +30,21 @@ module.exports = () => {
     },
   };
 
+  const organismeValidableQuery = {
+    etat_administratif: "actif",
+    qualiopi: true,
+    $or: [{ nature: "responsable" }, { nature: "responsable_formateur" }],
+  };
+
   router.get(
     "/api/v1/stats/couverture",
     tryCatch(async (req, res) => {
-      let stats = await promiseAllProps({
-        total: dbCollection("organismes").countDocuments(),
-        valides: dbCollection("organismes").countDocuments({ uai: { $exists: true } }),
+      const stats = await promiseAllProps({
+        total: dbCollection("organismes").countDocuments(organismeValidableQuery),
+        valides: dbCollection("organismes").countDocuments({
+          ...organismeValidableQuery,
+          uai: { $exists: true },
+        }),
       });
 
       res.json(stats);
@@ -91,11 +100,7 @@ module.exports = () => {
         return dbCollection("organismes")
           .aggregate([
             {
-              $match: {
-                etat_administratif: "actif",
-                qualiopi: true,
-                $or: [{ nature: "responsable" }, { nature: "responsable_formateur" }],
-              },
+              $match: organismeValidableQuery,
             },
             {
               $group: {
@@ -137,7 +142,7 @@ module.exports = () => {
   router.get(
     "/api/v1/stats/qualiopi",
     tryCatch(async (req, res) => {
-      let results = await dbCollection("organismes")
+      const results = await dbCollection("organismes")
         .aggregate([
           {
             $group: {
@@ -167,7 +172,7 @@ module.exports = () => {
   router.get(
     "/api/v1/stats/nouveaux",
     tryCatch(async (req, res) => {
-      let stats = await dbCollection("organismes")
+      const stats = await dbCollection("organismes")
         .aggregate([
           {
             $match: {
