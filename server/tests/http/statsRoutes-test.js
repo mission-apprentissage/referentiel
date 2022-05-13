@@ -7,12 +7,12 @@ describe("statsRoutes", () => {
   it("Vérifie qu'on peut obtenir des stats de couverture", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme();
-    await insertOrganisme({ uai: "0751234J" });
+    await insertOrganisme({ uai: "0751234J", qualiopi: true, nature: "responsable", etat_administratif: "actif" });
 
     let response = await httpClient.get("/api/v1/stats/couverture");
 
     strictEqual(response.status, 200);
-    deepStrictEqual(response.data, { total: 2, valides: 1 });
+    deepStrictEqual(response.data, { total: 1, valides: 1 });
   });
 
   it("Vérifie qu'on peut obtenir les stats des nouveaux organismes", async () => {
