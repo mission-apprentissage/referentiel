@@ -15,7 +15,7 @@ class GeoAdresseApi extends RateLimitedApi {
 
   async search(q, options = {}) {
     return this.execute(async () => {
-      let params = queryString.stringify({ q, ...options });
+      const params = queryString.stringify({ q, ...options });
       logger.debug(`Searching adresse with parameters ${params}...`);
       const response = await this.client.get(`${GeoAdresseApi.baseApiUrl}/search?${params}`);
       return response.data;
@@ -24,7 +24,7 @@ class GeoAdresseApi extends RateLimitedApi {
 
   async reverse(lon, lat, options = {}) {
     return this.execute(async () => {
-      let params = queryString.stringify({ lon, lat, ...options });
+      const params = queryString.stringify({ lon, lat, ...options });
       logger.debug(`Reverse geocode with parameters ${params}...`);
       const response = await this.client.get(`${GeoAdresseApi.baseApiUrl}/reverse?${params}`);
       return response.data;

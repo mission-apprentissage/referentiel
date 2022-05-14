@@ -6,12 +6,12 @@ function isQualiopi(doc) {
 }
 
 module.exports = () => {
-  let name = "datagouv";
+  const name = "datagouv";
 
   return {
     name,
     async loadSirets() {
-      let organismes = await dbCollection("datagouv")
+      const organismes = await dbCollection("datagouv")
         .aggregate([{ $group: { _id: "$siretEtablissementDeclarant" } }])
         .toArray();
 
@@ -33,10 +33,10 @@ module.exports = () => {
         dbCollection("datagouv").find().stream(),
         filterData((doc) => doc.numeroDeclarationActivite),
         transformData(async (doc) => {
-          let siret = doc.siretEtablissementDeclarant;
-          let qualiopi = isQualiopi(doc);
+          const siret = doc.siretEtablissementDeclarant;
+          const qualiopi = isQualiopi(doc);
 
-          let array = [
+          const array = [
             {
               from: name,
               selector: {
@@ -50,8 +50,8 @@ module.exports = () => {
           ];
 
           if (qualiopi) {
-            let asSameSirenRegexp = new RegExp(`^${siret.substring(0, 9)}.*`);
-            let ignored = await dbCollection("datagouv")
+            const asSameSirenRegexp = new RegExp(`^${siret.substring(0, 9)}.*`);
+            const ignored = await dbCollection("datagouv")
               .find(
                 { siretEtablissementDeclarant: asSameSirenRegexp },
                 { projection: { siretEtablissementDeclarant: 1 } }

@@ -7,16 +7,16 @@ const { importOrganismesForTest, createStream } = require("../../utils/testUtils
 describe("refea", () => {
   it("Vérifie qu'on peut collecter des informations du fichier REFEA", async () => {
     await importOrganismesForTest();
-    let source = createSource("refea", {
+    const source = createSource("refea", {
       input: createStream(
         `uai_code_siret;uai_code_educnationale;uai_libelle_educnationale
 "11111111100006";"0111111Y";"Centre de formation"`
       ),
     });
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["refea"],

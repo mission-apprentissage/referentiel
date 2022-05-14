@@ -9,8 +9,9 @@ import { isEqual, isString } from "lodash-es";
 
 function adaptParamsForAPI(params) {
   return Object.keys(params).reduce((acc, key) => {
-    let value = params[key];
-    let shouldIgnoreParam = isString(value) && value.includes(",") && value.includes("true") && value.includes("false");
+    const value = params[key];
+    const shouldIgnoreParam =
+      isString(value) && value.includes(",") && value.includes("true") && value.includes("false");
 
     return {
       ...acc,
@@ -20,13 +21,13 @@ function adaptParamsForAPI(params) {
 }
 
 export function useSearch(defaults, options = {}) {
-  let { query, setQuery } = useQuery();
-  let location = useLocation();
-  let { setSearch } = useContext(SearchContext);
-  let search = useMemo(() => {
+  const { query, setQuery } = useQuery();
+  const location = useLocation();
+  const { setSearch } = useContext(SearchContext);
+  const search = useMemo(() => {
     return { page: location.pathname, params: { ...defaults, ...query } };
   }, [location.pathname, defaults, query]);
-  let previous = usePrevious(search);
+  const previous = usePrevious(search);
 
   useEffect(() => {
     if (!options.silent && !isEqual(previous, search)) {
@@ -34,8 +35,8 @@ export function useSearch(defaults, options = {}) {
     }
   }, [options.silent, previous, search, setSearch]);
 
-  let url = buildUrl(`/api/v1/organismes`, adaptParamsForAPI(search.params));
-  let [response] = useFetch(url, {
+  const url = buildUrl(`/api/v1/organismes`, adaptParamsForAPI(search.params));
+  const [response] = useFetch(url, {
     organismes: [],
     pagination: {
       page: 0,

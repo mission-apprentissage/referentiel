@@ -11,7 +11,7 @@ class MongodbCache {
   }
 
   async get(key) {
-    let res = await this.collection.findOne({ _id: `${this.cacheName}_${key}` });
+    const res = await this.collection.findOne({ _id: `${this.cacheName}_${key}` });
     if (!res) {
       return null;
     }
@@ -26,7 +26,7 @@ class MongodbCache {
 
   async add(key, value) {
     logger.trace(`Adding key '${key}' to cache ${this.cacheName}...`);
-    let isError = value instanceof Error;
+    const isError = value instanceof Error;
     await this.collection.updateOne(
       {
         _id: `${this.cacheName}_${key}`,
@@ -44,7 +44,7 @@ class MongodbCache {
   }
 
   async memo(key, callback) {
-    let found = await this.get(key);
+    const found = await this.get(key);
     if (found) {
       return found;
     }
@@ -55,7 +55,7 @@ class MongodbCache {
         return value;
       })
       .catch(async (err) => {
-        let cacheError = this.options.cacheError;
+        const cacheError = this.options.cacheError;
         if (cacheError && cacheError(err)) {
           await this.add(key, err);
         }

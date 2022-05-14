@@ -24,8 +24,8 @@ function parseNumber(value) {
 }
 
 async function importDatagouv(options = {}) {
-  let stats = { total: 0, created: 0, updated: 0, failed: 0 };
-  let stream = options.input || (await getListePubliqueDesOrganismesDeFormationAsStream());
+  const stats = { total: 0, created: 0, updated: 0, failed: 0 };
+  const stream = options.input || (await getListePubliqueDesOrganismesDeFormationAsStream());
   logger.info(`Import de la Liste Publique des Organismes de Formation...`);
 
   await oleoduc(
@@ -33,7 +33,7 @@ async function importDatagouv(options = {}) {
     parseCsv(),
     writeData(
       async (data) => {
-        let nda = data.numeroDeclarationActivite;
+        const nda = data.numeroDeclarationActivite;
 
         try {
           stats.total++;
@@ -83,7 +83,7 @@ async function importDatagouv(options = {}) {
           };
 
           logger.debug(`Import de l'organisme de formation ${nda}...`);
-          let res = await dbCollection("datagouv").updateOne(
+          const res = await dbCollection("datagouv").updateOne(
             {
               numeroDeclarationActivite: nda,
             },

@@ -3,7 +3,7 @@ const { object, objectId, number } = require("./schemas/jsonSchemaTypes");
 module.exports = {
   name: "migrations",
   schema: () => {
-    let required = ["version"];
+    const required = ["version"];
 
     return object(
       {

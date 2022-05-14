@@ -2,8 +2,8 @@ import { createRef } from "react";
 import useElementId from "../../hooks/useElementId";
 
 export function useCollapse() {
-  let collapseId = useElementId("collapse");
-  let collapseRef = createRef();
+  const collapseId = useElementId("collapse");
+  const collapseRef = createRef();
   function collapse() {
     dsfr(collapseRef.current).collapse.disclose();
   }

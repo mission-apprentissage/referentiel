@@ -22,9 +22,9 @@ const Message = styled("div")`
 `;
 
 export default function TitleLayout({ title, details, getDetailsMessage, message, back, selector }) {
-  let [showDetails, toggleDetails] = useToggle(false);
-  let { auth } = useContext(ApiContext);
-  let authTitle = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
+  const [showDetails, toggleDetails] = useToggle(false);
+  const { auth } = useContext(ApiContext);
+  const authTitle = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
 
   return (
     <Container>

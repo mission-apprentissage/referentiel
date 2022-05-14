@@ -116,8 +116,8 @@ function findDepartementByInsee(codeInsee) {
     return null;
   }
 
-  let code3 = codeInsee.substring(0, 3);
-  let code2 = codeInsee.substring(0, 2);
+  const code3 = codeInsee.substring(0, 3);
+  const code2 = codeInsee.substring(0, 2);
   return (
     DEPARTEMENTS.find((d) => d.code.startsWith(code3)) || DEPARTEMENTS.find((d) => d.code.startsWith(code2)) || null
   );

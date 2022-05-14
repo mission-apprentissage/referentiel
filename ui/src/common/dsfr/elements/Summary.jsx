@@ -3,7 +3,7 @@ import { classNames } from "../dsfr";
 import cs from "classnames";
 
 export function Summary({ title = "Sommaire", children, modifiers, className, ...rest }) {
-  let clazz = classNames("fr-summary", { modifiers, className });
+  const clazz = classNames("fr-summary", { modifiers, className });
 
   return (
     <nav className={clazz} role="navigation" aria-labelledby="fr-summary-title" {...rest}>

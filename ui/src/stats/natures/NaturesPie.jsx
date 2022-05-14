@@ -4,7 +4,7 @@ import { openNewTab } from "../../common/utils";
 import { getNatureColor, getNatureLabel, getNatureParams } from "../../common/enums/natures";
 
 export function NaturesPie({ stats }) {
-  let national = Object.keys(stats.national).reduce((acc, key) => {
+  const national = Object.keys(stats.national).reduce((acc, key) => {
     return [
       ...acc,
       {

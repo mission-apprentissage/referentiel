@@ -9,11 +9,11 @@ const importDatagouv = require("./importDatagouv");
 const importCommunes = require("./importCommunes");
 
 async function build(options = {}) {
-  let referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv", "mna"];
-  let stats = [];
+  const referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv", "mna"];
+  const stats = [];
 
   function collectAll(sourceNames, globalOptions = {}) {
-    let sources = sourceNames.map((sourceName) => createSource(sourceName, globalOptions));
+    const sources = sourceNames.map((sourceName) => createSource(sourceName, globalOptions));
     return collectSources(sources).then((res) => stats.push({ collect: res }));
   }
 
@@ -25,7 +25,7 @@ async function build(options = {}) {
     return stats.push({ imports: { cfd, datagouv, communes } });
   });
 
-  let sources = referentiels.map((name) => createSource(name));
+  const sources = referentiels.map((name) => createSource(name));
   await importOrganismes(sources).then((res) => stats.push({ importOrganismes: res }));
 
   await collectAll([

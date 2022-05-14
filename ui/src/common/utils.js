@@ -15,8 +15,8 @@ export function cloneNodes(nodes, propsCallback) {
 }
 
 export function flattenObject(obj, parent, res = {}) {
-  for (let key in obj) {
-    let propName = parent ? parent + "." + key : key;
+  for (const key in obj) {
+    const propName = parent ? parent + "." + key : key;
     if (typeof obj[key] == "object" && !Array.isArray(obj[key])) {
       flattenObject(obj[key], propName, res);
     } else {
@@ -31,7 +31,7 @@ export function asSiren(siret) {
 }
 
 export function buildUrl(url, data) {
-  let params = `${queryString.stringify(data, { skipNull: true, skipEmptyString: true })}`;
+  const params = `${queryString.stringify(data, { skipNull: true, skipEmptyString: true })}`;
   return `${url}?${params}`;
 }
 
@@ -41,7 +41,7 @@ export function openNewTab(url, params) {
 
 export const divide = (dividend, divisor) => {
   if (dividend && divisor !== 0) {
-    let value = dividend / divisor;
+    const value = dividend / divisor;
     return Number(Math.round(value + "e1") + "e-1");
   } else {
     return 0;

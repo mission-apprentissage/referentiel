@@ -80,9 +80,9 @@ cli
   .argument("[file]", "Le nom du fichier utilisé par la source")
   .action((names, file, options) => {
     runScript(() => {
-      let input = file ? createReadStream(file) : null;
+      const input = file ? createReadStream(file) : null;
 
-      let mainSources = names.map((name) => createSource(name, { input }));
+      const mainSources = names.map((name) => createSource(name, { input }));
       return importOrganismes(mainSources, options);
     });
   });
@@ -95,10 +95,10 @@ cli
   .option("--siret <siret>", "Limite la collecte pour le siret")
   .action((names, files, { siret }) => {
     runScript(() => {
-      let array = files.length > 0 ? files.map((f) => createReadStream(f)) : null;
-      let options = siret ? { filters: { siret } } : {};
+      const array = files.length > 0 ? files.map((f) => createReadStream(f)) : null;
+      const options = siret ? { filters: { siret } } : {};
 
-      let sources = names.map((name) => createSource(name, { input: array?.length === 1 ? array[0] : array }));
+      const sources = names.map((name) => createSource(name, { input: array?.length === 1 ? array[0] : array }));
       return collectSources(sources, options);
     });
   });
@@ -120,8 +120,8 @@ cli
   .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
   .action(({ filter, limit, out }) => {
     runScript(async () => {
-      let options = { filter, limit };
-      let stream = await exportOrganismes(options);
+      const options = { filter, limit };
+      const stream = await exportOrganismes(options);
       return oleoduc(stream, out || writeToStdout());
     });
   });
@@ -135,8 +135,8 @@ cli
   .option("--save", "Sauvegarde les résultats dans les stats")
   .action((options) => {
     runScript(async () => {
-      let sourceNames = ["deca", "catalogue-etablissements", "sifa-ramsese"];
-      let sources = sourceNames.map((name) => createSource(name));
+      const sourceNames = ["deca", "catalogue-etablissements", "sifa-ramsese"];
+      const sources = sourceNames.map((name) => createSource(name));
       return computeStats(sources, options);
     });
   });
@@ -160,8 +160,8 @@ cli
   .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
   .action((type, { url, out }) => {
     runScript(() => {
-      let csvStream = generateMagicLinks(type, { url });
-      let output = out || writeToStdout();
+      const csvStream = generateMagicLinks(type, { url });
+      const output = out || writeToStdout();
       return oleoduc(csvStream, output);
     });
   });

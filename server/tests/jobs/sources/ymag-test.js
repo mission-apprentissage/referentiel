@@ -8,16 +8,16 @@ const { insertOrganisme } = require("../../utils/fakeData");
 describe("ymag", () => {
   it("Vérifie qu'on peut collecter des informations du fichier ymag", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createSource("ymag", {
+    const source = createSource("ymag", {
       input: createStream(
         `siret;uai
 "11 111 111 100 006";"0111111Y"`
       ),
     });
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["ymag"],

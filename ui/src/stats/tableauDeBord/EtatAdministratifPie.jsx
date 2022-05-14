@@ -4,8 +4,8 @@ import Pie from "../../common/nivo/Pie";
 import { getEtatAdministratifColor, getEtatAdministratifLabel } from "../../common/enums/etat_administratif";
 
 export default function EtatAdministratifPie() {
-  let [{ data }] = useFetch(`/api/v1/stats/etat_administratif`, []);
-  let stats = Object.keys(data).reduce((acc, key) => {
+  const [{ data }] = useFetch(`/api/v1/stats/etat_administratif`, []);
+  const stats = Object.keys(data).reduce((acc, key) => {
     return [
       ...acc,
       {

@@ -11,8 +11,8 @@ import Page from "../common/Page";
 import { modifications } from "./ModificationsPage";
 
 export default function AccueilPage() {
-  let navigate = useNavigate();
-  let [{ data: stats }] = useFetch("/api/v1/stats/couverture", null);
+  const navigate = useNavigate();
+  const [{ data: stats }] = useFetch("/api/v1/stats/couverture", null);
 
   return (
     <Page>

@@ -29,9 +29,9 @@ function getStreams(sources) {
 }
 
 module.exports = async (array) => {
-  let sources = castArray(array);
-  let streams = await getStreams(sources);
-  let stats = createStats(sources);
+  const sources = castArray(array);
+  const streams = await getStreams(sources);
+  const stats = createStats(sources);
 
   await oleoduc(
     mergeStreams(streams),
@@ -44,7 +44,7 @@ module.exports = async (array) => {
       }
 
       try {
-        let res = await dbCollection("organismes").updateOne(
+        const res = await dbCollection("organismes").updateOne(
           { siret },
           {
             $set: {

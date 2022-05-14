@@ -8,7 +8,7 @@ import { getQualiopiColor, getQualiopiLabel, getQualiopiParams } from "../../com
 import { openNewTab } from "../../common/utils";
 
 export default function QualiopiStats() {
-  let [{ data, loading, error }] = useFetch(`/api/v1/stats/qualiopi`, []);
+  const [{ data, loading, error }] = useFetch(`/api/v1/stats/qualiopi`, []);
 
   if (loading || error) {
     return <Spinner loading={loading} error={error} />;

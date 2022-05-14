@@ -84,25 +84,25 @@ const natures = [
 ];
 
 async function importAcce(options = {}) {
-  let api = options.acceApi || new AcceApi();
-  let stats = {
+  const api = options.acceApi || new AcceApi();
+  const stats = {
     total: 0,
     created: 0,
     updated: 0,
     failed: 0,
   };
-  let { nbResults, session, searchParams } = await api.search({
+  const { nbResults, session, searchParams } = await api.search({
     ...(options.uai ? { uai: options.uai } : { natures }),
   });
-  let end = options.end || nbResults;
+  const end = options.end || nbResults;
 
   logger.info(`Import de ${end} établissements pour la session de recherche ${session.Cookie}...`);
   for (let index = options.start || 1; index <= end && index <= nbResults; index++) {
     stats.total++;
     try {
-      let data = await api.getEtablissement(session, index);
+      const data = await api.getEtablissement(session, index);
 
-      let res = await dbCollection("acce").updateOne(
+      const res = await dbCollection("acce").updateOne(
         { uai: data.uai },
         {
           $set: {

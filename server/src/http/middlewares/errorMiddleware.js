@@ -19,7 +19,7 @@ function boomify(rawError) {
 }
 
 module.exports = () => {
-  let sentry = createSentry();
+  const sentry = createSentry();
 
   // eslint-disable-next-line no-unused-vars
   return (rawError, req, res, next) => {
@@ -27,7 +27,7 @@ module.exports = () => {
 
     req.err = rawError;
 
-    let { output } = boomify(req.err);
+    const { output } = boomify(req.err);
     return res.status(output.statusCode).send(output.payload);
   };
 };

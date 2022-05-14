@@ -3,11 +3,11 @@ const { getFromStorage } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
 
 module.exports = (custom = {}) => {
-  let name = "ymag";
+  const name = "ymag";
   return {
     name,
     async stream() {
-      let input =
+      const input =
         custom.input || (await getFromStorage("cfas-clients-erps/referentielCfas_ymag.csv", { storage: "mna-flux" }));
 
       return compose(

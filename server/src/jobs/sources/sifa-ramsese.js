@@ -16,12 +16,12 @@ async function defaultStream() {
 }
 
 module.exports = (custom = {}) => {
-  let name = "sifa-ramsese";
+  const name = "sifa-ramsese";
 
   return {
     name,
     async referentiel() {
-      let input = custom.input ? readCsv(custom.input) : await defaultStream();
+      const input = custom.input ? readCsv(custom.input) : await defaultStream();
 
       return compose(
         input,
@@ -34,7 +34,7 @@ module.exports = (custom = {}) => {
       );
     },
     async stream() {
-      let input = custom.input ? readCsv(custom.input) : await defaultStream();
+      const input = custom.input ? readCsv(custom.input) : await defaultStream();
 
       return compose(
         input,

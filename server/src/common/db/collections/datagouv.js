@@ -3,7 +3,7 @@ const { object, objectId, string, boolean, number, date } = require("./schemas/j
 module.exports = {
   name: "datagouv",
   schema: () => {
-    let required = ["numeroDeclarationActivite"];
+    const required = ["numeroDeclarationActivite"];
 
     return object(
       {

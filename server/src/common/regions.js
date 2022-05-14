@@ -274,9 +274,9 @@ function findRegionByUai(uai) {
     return null;
   }
 
-  let metropole = ["0", "6", "7"].includes(uai.substring(0, 1));
-  let found = REGIONS.find((region) => {
-    let code = metropole ? uai.substring(1, 3) : uai.substring(0, 3);
+  const metropole = ["0", "6", "7"].includes(uai.substring(0, 1));
+  const found = REGIONS.find((region) => {
+    const code = metropole ? uai.substring(1, 3) : uai.substring(0, 3);
     return region.departements.map((d) => d.code).includes(code);
   });
 

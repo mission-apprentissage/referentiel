@@ -2,7 +2,7 @@ const { object, string } = require("./jsonSchemaTypes");
 const geojsonSchema = require("./geojsonSchema");
 
 const adresseSchema = () => {
-  let required = ["code_postal", "code_insee", "localite", "region", "academie"];
+  const required = ["code_postal", "code_insee", "localite", "region", "academie"];
 
   return object(
     {

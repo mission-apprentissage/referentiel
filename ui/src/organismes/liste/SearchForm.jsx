@@ -3,8 +3,8 @@ import useForm from "../../common/form/useForm";
 import { useQuery } from "../../common/hooks/useQuery";
 
 export default function SearchForm({ onSubmit }) {
-  let { query } = useQuery();
-  let { registerForm, registerField } = useForm({ initialValues: { text: query.text || "" } });
+  const { query } = useQuery();
+  const { registerForm, registerField } = useForm({ initialValues: { text: query.text || "" } });
 
   return (
     <form {...registerForm(onSubmit)}>

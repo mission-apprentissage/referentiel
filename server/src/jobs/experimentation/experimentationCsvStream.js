@@ -5,9 +5,9 @@ const { pick } = require("lodash");
 const findUAIProbable = require("../../common/actions/findUAIProbable");
 
 function getUAI(source, organisme) {
-  let potentiels = organisme.uai_potentiels.filter((u) => u.sources.includes(source));
+  const potentiels = organisme.uai_potentiels.filter((u) => u.sources.includes(source));
 
-  let found = potentiels.find((u) => u.uai === organisme.uai);
+  const found = potentiels.find((u) => u.uai === organisme.uai);
   if (organisme.uai && found) {
     return found.uai;
   } else {
@@ -25,7 +25,7 @@ function getTask(organisme) {
     return "inconnu";
   }
 
-  let probable = findUAIProbable(organisme);
+  const probable = findUAIProbable(organisme);
   return probable ? "à valider" : "à expertiser";
 }
 
@@ -48,7 +48,7 @@ async function loadPrevious(streams) {
     );
   }
 
-  let confirmed = [];
+  const confirmed = [];
   await oleoduc(
     mergeStreams(streams.map((s) => readCSV(s))),
     writeData((data) => confirmed.push(pick(data, ["SIRET", "UAI"])))
@@ -58,9 +58,9 @@ async function loadPrevious(streams) {
 }
 
 async function experimentationCsvStream(options = {}) {
-  let filter = options.filter || {};
-  let limit = options.limit || Number.MAX_SAFE_INTEGER;
-  let previous = options.previous ? await loadPrevious(options.previous) : [];
+  const filter = options.filter || {};
+  const limit = options.limit || Number.MAX_SAFE_INTEGER;
+  const previous = options.previous ? await loadPrevious(options.previous) : [];
 
   return compose(
     dbCollection("organismes")
@@ -69,7 +69,7 @@ async function experimentationCsvStream(options = {}) {
       .sort({ siret: 1 })
       .stream(),
     transformData((organisme) => {
-      let task = getTask(organisme);
+      const task = getTask(organisme);
       if (task !== "à valider") {
         return null;
       }
@@ -91,7 +91,7 @@ async function experimentationCsvStream(options = {}) {
         UAI: ({ organisme }) => findUAIProbable(organisme)?.uai,
         Tache: ({ task }) => task,
         Précédent: ({ organisme }) => {
-          let found = previous.find((p) => p.SIRET === organisme.siret);
+          const found = previous.find((p) => p.SIRET === organisme.siret);
           return found ? found.UAI : "";
         },
       },

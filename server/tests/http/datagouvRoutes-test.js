@@ -11,7 +11,7 @@ describe("datagouvRoutes", () => {
       numeroDeclarationActivite: "52318107632",
     });
 
-    let response = await httpClient.get("/api/v1/datagouv");
+    const response = await httpClient.get("/api/v1/datagouv");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -66,7 +66,7 @@ describe("datagouvRoutes", () => {
       numeroDeclarationActivite: "52318107632",
     });
 
-    let response = await httpClient.get("/api/v1/datagouv/11111111100006");
+    const response = await httpClient.get("/api/v1/datagouv/11111111100006");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -106,7 +106,7 @@ describe("datagouvRoutes", () => {
   it("Vérifie qu'on renvoie une 400 pour un siret invalide", async () => {
     const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/datagouv/INVALID");
+    const response = await httpClient.get("/api/v1/datagouv/INVALID");
 
     strictEqual(response.status, 400);
     deepStrictEqual(response.data, {
@@ -132,7 +132,7 @@ describe("datagouvRoutes", () => {
   it("Vérifie qu'on renvoie une 404 pour un siret", async () => {
     const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/datagouv/33333333333333");
+    const response = await httpClient.get("/api/v1/datagouv/33333333333333");
 
     strictEqual(response.status, 404);
     deepStrictEqual(response.data, {

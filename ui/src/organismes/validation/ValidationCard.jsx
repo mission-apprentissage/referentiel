@@ -17,7 +17,7 @@ const StyledBox = styled(without(Box, ["type"]))`
 `;
 
 const Counter = styled(({ response, className }) => {
-  let { data, loading, error } = response;
+  const { data, loading, error } = response;
   if (loading || error) {
     return <Spinner loading={loading} error={error} />;
   }
@@ -30,7 +30,7 @@ const Counter = styled(({ response, className }) => {
 `;
 
 export default function ValidationCard({ type, label, children, ...rest }) {
-  let { response } = useValidationSearch(type, {
+  const { response } = useValidationSearch(type, {
     page: 1,
     items_par_page: 1,
     champs: "siret",

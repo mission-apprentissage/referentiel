@@ -12,7 +12,7 @@ import LinkButton from "../../../common/dsfr/custom/LinkButton";
 import { useNavigate } from "react-router-dom";
 
 export default function RelationModal({ modal, organisme }) {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <Modal

@@ -3,7 +3,7 @@ import { classNames } from "../dsfr";
 import { Button } from "./Button";
 
 export default function Alert({ title, onClose, modifiers, className, children }) {
-  let clazz = classNames("fr-alert", { modifiers, className });
+  const clazz = classNames("fr-alert", { modifiers, className });
 
   return (
     <div className={clazz}>

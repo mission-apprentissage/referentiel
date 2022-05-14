@@ -4,10 +4,10 @@ import useElementId from "../../hooks/useElementId";
 import cs from "classnames";
 
 export function Tabs({ label = "Système d'onglet", tabs, className }) {
-  let clazz = classNames("fr-tabs", { className });
-  let tabsId = useElementId();
-  let [selectedTab, setSelectedTab] = useState(0);
-  let items = tabs.map((item, index) => {
+  const clazz = classNames("fr-tabs", { className });
+  const tabsId = useElementId();
+  const [selectedTab, setSelectedTab] = useState(0);
+  const items = tabs.map((item, index) => {
     return {
       tabId: `tab-${index}-${tabsId}`,
       panelId: `tab-panel-${index}-${tabsId}`,
@@ -28,7 +28,7 @@ export function Tabs({ label = "Système d'onglet", tabs, className }) {
     <div className={clazz}>
       <ul className="fr-tabs__list" role="tablist" aria-label={label}>
         {items.map((item) => {
-          let { tabId, panelId, tab, isSelected, ref, key } = item;
+          const { tabId, panelId, tab, isSelected, ref, key } = item;
           return (
             <li role="presentation" key={key}>
               {cloneElement(tab, {
@@ -61,7 +61,7 @@ export function Tabs({ label = "Système d'onglet", tabs, className }) {
 }
 
 export function Tab({ children, modifiers, className, ...rest }) {
-  let clazz = classNames("fr-tabs__tab", { modifiers, className });
+  const clazz = classNames("fr-tabs__tab", { modifiers, className });
 
   return (
     <button className={clazz} role="tab" {...rest}>
@@ -71,7 +71,7 @@ export function Tab({ children, modifiers, className, ...rest }) {
 }
 
 export const TabPanel = forwardRef(({ children, modifiers, className, ...rest }, ref) => {
-  let clazz = classNames("fr-tabs__panel", { modifiers, className: cs(className, "xfr-tabs__panel--fix") });
+  const clazz = classNames("fr-tabs__panel", { modifiers, className: cs(className, "xfr-tabs__panel--fix") });
 
   return (
     <div className={clazz} role="tabpanel" ref={ref} {...rest}>

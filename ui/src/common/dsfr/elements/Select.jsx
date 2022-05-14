@@ -5,11 +5,11 @@ import Hint from "./Hint";
 import useElementId from "../../hooks/useElementId";
 
 function Input({ label, hint, validation, children, modifiers, className, ...rest }) {
-  let id = useElementId("input");
-  let clazz = classNames("fr-select-group", { modifiers, className, validation });
-  let selectClass = classNames("fr-select", { validation });
-  let validationId = useElementId("validation");
-  let aria = validation ? ariaDescribedBy(validationId) : {};
+  const id = useElementId("input");
+  const clazz = classNames("fr-select-group", { modifiers, className, validation });
+  const selectClass = classNames("fr-select", { validation });
+  const validationId = useElementId("validation");
+  const aria = validation ? ariaDescribedBy(validationId) : {};
 
   return (
     <div className={clazz}>

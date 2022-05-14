@@ -5,7 +5,7 @@ import { Table, Thead } from "../../../common/dsfr/elements/Table";
 import NA from "../../common/NA";
 
 export default function LieuxDeFormationTab({ organisme }) {
-  let nbLieux = organisme.lieux_de_formation.length;
+  const nbLieux = organisme.lieux_de_formation.length;
 
   return (
     <>

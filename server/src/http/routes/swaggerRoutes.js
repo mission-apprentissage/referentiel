@@ -8,14 +8,13 @@ const yaml = path.join(__dirname, "./v1-swagger.yml");
 
 function buildHtml() {
   return new Promise((resolve) => {
-    let apiSpecifications = YAML.load(yaml);
-    let generated = swagger.generateHTML(apiSpecifications);
+    const apiSpecifications = YAML.load(yaml);
+    const generated = swagger.generateHTML(apiSpecifications);
     resolve(generated);
   });
 }
 
 let asyncHtml = buildHtml();
-
 watch(yaml, (eventType) => {
   if (eventType === "change") {
     asyncHtml = buildHtml();
@@ -24,7 +23,7 @@ watch(yaml, (eventType) => {
 
 module.exports = () => {
   // eslint-disable-next-line new-cap
-  let router = express.Router();
+  const router = express.Router();
 
   router.use("/api/v1/doc", swagger.serve, async (req, res) => {
     res.send(await asyncHtml);

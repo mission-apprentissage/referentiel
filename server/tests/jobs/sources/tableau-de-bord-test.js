@@ -30,10 +30,10 @@ describe("tableau-de-bord", () => {
         );
     });
 
-    let source = await createSource("tableau-de-bord");
-    let stats = await collectSources(source);
+    const source = await createSource("tableau-de-bord");
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["tableau-de-bord"],
@@ -72,10 +72,10 @@ describe("tableau-de-bord", () => {
         );
     });
 
-    let source = await createSource("tableau-de-bord");
-    let stats = await collectSources(source);
+    const source = await createSource("tableau-de-bord");
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["cfa-reseau"]);
     assert.deepStrictEqual(stats, {
       "tableau-de-bord": {

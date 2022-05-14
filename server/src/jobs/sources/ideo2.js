@@ -5,13 +5,13 @@ const { getFromStorage } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
 
 module.exports = (custom = {}) => {
-  let name = "ideo2";
+  const name = "ideo2";
 
   return {
     name,
     async stream() {
-      let input = custom.input || (await getFromStorage("ONISEP-Ideo2-T_Export_complet.csv"));
-      let memory = [];
+      const input = custom.input || (await getFromStorage("ONISEP-Ideo2-T_Export_complet.csv"));
+      const memory = [];
 
       return compose(
         input,
@@ -20,7 +20,7 @@ module.exports = (custom = {}) => {
           skip_lines_with_error: true,
         }),
         filterData((data) => {
-          let key = `${data["SIRET_gestionnaire"]}_${data["SIRET_lieu_enseignement"]}`;
+          const key = `${data["SIRET_gestionnaire"]}_${data["SIRET_lieu_enseignement"]}`;
           if (memory.includes(key)) {
             return null;
           }
@@ -28,10 +28,10 @@ module.exports = (custom = {}) => {
           return data;
         }),
         transformData(async (data) => {
-          let siretFormateur = data["SIRET_lieu_enseignement"];
-          let siretGestionnaire = data["SIRET_gestionnaire"];
-          let nomLieuEnseignement = data["nom_lieu_enseignement"];
-          let cfaGestionnaire = data["CFA_gestionnaire"];
+          const siretFormateur = data["SIRET_lieu_enseignement"];
+          const siretGestionnaire = data["SIRET_gestionnaire"];
+          const nomLieuEnseignement = data["nom_lieu_enseignement"];
+          const cfaGestionnaire = data["CFA_gestionnaire"];
 
           return [
             {

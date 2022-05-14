@@ -25,7 +25,7 @@ function retry(callback, options = {}) {
 
     async function execute(delay, maxRetries) {
       try {
-        let res = await callback();
+        const res = await callback();
         resolve(res);
       } catch (e) {
         if (retries++ > maxRetries) {

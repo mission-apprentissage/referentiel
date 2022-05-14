@@ -11,20 +11,20 @@ const SireneApi = require("../../src/common/apis/SireneApi");
 const TableauDeBordApi = require("../../src/common/apis/TableauDeBordApi"); // eslint-disable-line node/no-unpublished-require
 
 function createAxios(Api, responses, callback, options) {
-  let instance = axios.create(options);
-  let mock = new MockAdapter(instance);
+  const instance = axios.create(options);
+  const mock = new MockAdapter(instance);
   callback(mock, responses);
   return new Api({ axios: instance });
 }
 
 function createNock(baseUrl) {
-  let client = nock(baseUrl);
+  const client = nock(baseUrl);
   return client.persist();
 }
 
 module.exports = {
   mockCatalogueApi(callback) {
-    let client = createNock(CatalogueApi.baseApiUrl);
+    const client = createNock(CatalogueApi.baseApiUrl);
     callback(client, {
       formations(array = [{}]) {
         return array.map((custom) => {
@@ -420,8 +420,8 @@ module.exports = {
     });
   },
   mockGeoAddresseApi(callback) {
-    let client = nock(GeoAdresseApi.baseApiUrl);
-    let featureCollection = {
+    const client = nock(GeoAdresseApi.baseApiUrl);
+    const featureCollection = {
       type: "FeatureCollection",
       version: "draft",
       features: [
@@ -466,7 +466,7 @@ module.exports = {
     });
   },
   mockSireneApi(callback) {
-    let client = nock(SireneApi.baseApiUrl);
+    const client = nock(SireneApi.baseApiUrl);
 
     callback(client, {
       unitesLegales(custom = {}) {
@@ -719,7 +719,7 @@ module.exports = {
     });
   },
   mockTableauDeBordApi(callback) {
-    let client = createNock(TableauDeBordApi.baseApiUrl);
+    const client = createNock(TableauDeBordApi.baseApiUrl);
     callback(client, {
       cfas(custom = {}) {
         return (
@@ -753,7 +753,7 @@ module.exports = {
     });
   },
   getMockedAcceApi(callback, options = {}) {
-    let responses = {
+    const responses = {
       index(file = "./fixtures/acceIndexResponse.html") {
         return readFileSync(path.join(__dirname, file), "UTF-8");
       },

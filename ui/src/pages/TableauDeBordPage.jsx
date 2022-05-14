@@ -15,7 +15,7 @@ import Page from "../common/Page";
 import Highlight from "../common/dsfr/elements/Highlight";
 
 const Presentation = styled(({ className }) => {
-  let [showDetails, toggleDetails] = useToggle(false);
+  const [showDetails, toggleDetails] = useToggle(false);
 
   return (
     <div className={className}>
@@ -61,9 +61,9 @@ const Presentation = styled(({ className }) => {
 `;
 
 export default function TableauDeBordPage() {
-  let { auth } = useContext(ApiContext);
-  let { query, setQuery } = useQuery();
-  let title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
+  const { auth } = useContext(ApiContext);
+  const { query, setQuery } = useQuery();
+  const title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
 
   return (
     <Page>

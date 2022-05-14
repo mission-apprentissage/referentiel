@@ -8,7 +8,7 @@ const collectSources = require("../../src/jobs/collectSources");
 
 describe("collectSources", () => {
   function createTestSource(array) {
-    let name = "dummy";
+    const name = "dummy";
     return {
       name,
       stream() {
@@ -22,16 +22,16 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on peut collecter un uai", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         uai_potentiels: ["0111111Y"],
       },
     ]);
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["dummy"],
@@ -51,16 +51,16 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on teste la validité d'un UAI", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         uai_potentiels: ["INVALID"],
       },
     ]);
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, []);
     assert.deepStrictEqual(stats, {
       dummy: {
@@ -74,7 +74,7 @@ describe("collectSources", () => {
   });
 
   it("Vérifie qu'on ignore un uai quand il existe déjà dans la liste des uai_potentiels", async () => {
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         uai_potentiels: ["0111111Y"],
@@ -90,9 +90,9 @@ describe("collectSources", () => {
       ],
     });
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["dummy"],
@@ -120,7 +120,7 @@ describe("collectSources", () => {
         },
       ],
     });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         uai_potentiels: ["0111111Y"],
@@ -129,7 +129,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, found.uai_potentiels, [
       {
         sources: ["other", "dummy"],
@@ -140,16 +140,16 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on ignore un uai avec une donnée invalide", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         uai_potentiels: ["", null, "NULL"],
       },
     ]);
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, []);
     assert.deepStrictEqual(stats, {
       dummy: {
@@ -164,16 +164,16 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on ignore un organisme quand il est inconnu", async () => {
     await insertOrganisme({ siret: "222222222000022" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         uai_potentiels: ["", null, "NULL"],
       },
     ]);
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let count = await dbCollection("organismes").countDocuments({ siret: "11111111100006" });
+    const count = await dbCollection("organismes").countDocuments({ siret: "11111111100006" });
     assert.strictEqual(count, 0);
     assert.deepStrictEqual(stats, {
       dummy: {
@@ -188,17 +188,17 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on stocke une erreur survenue durant une collecte", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         anomalies: [new Error("Une erreur est survenue")],
       },
     ]);
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    let errors = found._meta.anomalies;
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const errors = found._meta.anomalies;
     assert.ok(errors[0].date);
     assert.deepStrictEqual(omit(errors[0], ["date"]), {
       key: "Une erreur est survenue",
@@ -220,17 +220,17 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on stocke une erreur technique", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         uai_potentiels: null,
       },
     ]);
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
-    let errors = found._meta.anomalies;
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const errors = found._meta.anomalies;
     assert.ok(errors[0].date);
     assert.deepStrictEqual(omit(errors[0], ["date"]), {
       key: "Cannot read properties of null (reading 'filter')",
@@ -266,7 +266,7 @@ describe("collectSources", () => {
         ],
       },
     });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         anomalies: [new Error("Une erreur est survenue")],
@@ -275,20 +275,20 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.strictEqual(found._meta.anomalies.length, 1);
   });
 
   it("Vérifie qu'on ignore un selecteur vide", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: {},
         uai_potentiels: [],
       },
     ]);
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
     assert.deepStrictEqual(stats, {
       dummy: {
@@ -303,7 +303,7 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on peut collecter des contacts", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         contacts: [{ email: "robert@formation.fr" }],
@@ -312,7 +312,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.contacts, [
       {
         email: "robert@formation.fr",
@@ -333,7 +333,7 @@ describe("collectSources", () => {
         },
       ],
     });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         contacts: [{ email: "jacques@dupont.fr", confirmé: false }],
@@ -342,7 +342,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.contacts[0].sources, ["other", "dummy"]);
   });
 
@@ -357,7 +357,7 @@ describe("collectSources", () => {
         },
       ],
     });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         relations: [{ siret: "22222222200002", referentiel: false, label: "test", type: "formateur->responsable" }],
@@ -366,13 +366,13 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.strictEqual(found.contacts.length, 1);
   });
 
   it("Vérifie qu'on peut collecter des diplomes", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         diplomes: [{ code: "13531445", type: "cfd", niveau: "135", label: "MASTER" }],
@@ -381,7 +381,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.diplomes, [
       {
         code: "13531445",
@@ -398,7 +398,7 @@ describe("collectSources", () => {
       siret: "11111111100006",
       diplomes: [{ code: "13531445", type: "cfd", niveau: "135", label: "MASTER", sources: ["other"] }],
     });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         diplomes: [{ code: "13531445", type: "cfd", niveau: "135", label: "MASTER" }],
@@ -407,7 +407,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.strictEqual(found.diplomes.length, 1);
     assert.deepStrictEqual(found.diplomes[0].sources, ["other", "dummy"]);
     assert.strictEqual(found.diplomes[0].type, "cfd");
@@ -415,7 +415,7 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on peut collecter des certifications", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         certifications: [{ code: "RNCP29746", type: "rncp", label: "SOCIOLOGIE" }],
@@ -424,7 +424,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.certifications, [
       {
         code: "RNCP29746",
@@ -440,7 +440,7 @@ describe("collectSources", () => {
       siret: "11111111100006",
       certifications: [{ code: "RNCP29746", type: "rncp", label: "SOCIOLOGIE", sources: ["other"] }],
     });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         certifications: [{ code: "RNCP29746", type: "rncp", label: "SOCIOLOGIE" }],
@@ -449,7 +449,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.strictEqual(found.certifications.length, 1);
     assert.deepStrictEqual(found.certifications[0].sources, ["other", "dummy"]);
   });
@@ -457,7 +457,7 @@ describe("collectSources", () => {
   it("Vérifie qu'on peut collecter des relations", async () => {
     await insertOrganisme({ siret: "11111111100006" });
     await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         relations: [
@@ -473,7 +473,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.relations, [
       {
         siret: "22222222200002",
@@ -487,7 +487,7 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on peut collecter des relations (referentiel)", async () => {
     await Promise.all([insertOrganisme({ siret: "11111111100006" }), insertOrganisme({ siret: "22222222200002" })]);
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         relations: [{ siret: "22222222200002", type: "entreprise", label: "test" }],
@@ -496,7 +496,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.strictEqual(found.relations[0].referentiel, true);
   });
 
@@ -514,7 +514,7 @@ describe("collectSources", () => {
       ],
     });
     await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         relations: [{ siret: "22222222200002", referentiel: false, label: "test", type: "entreprise" }],
@@ -523,7 +523,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.strictEqual(found.relations.length, 1);
     assert.strictEqual(found.relations[0].siret, "22222222200002");
     assert.strictEqual(found.relations[0].type, "formateur->responsable");
@@ -532,7 +532,7 @@ describe("collectSources", () => {
 
   it("Vérifie qu'on ignore les relations qui ne sont ni dans datagouv ni dans le referentiel", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         relations: [{ siret: "22222222200002", type: "entreprise", label: "test" }],
@@ -541,13 +541,13 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.relations, []);
   });
 
   it("Vérifie qu'on peut collecter des reseaux", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         reseaux: ["test"],
@@ -556,7 +556,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["test"]);
   });
 
@@ -565,7 +565,7 @@ describe("collectSources", () => {
       siret: "11111111100006",
       reseaux: ["test"],
     });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         reseaux: ["test"],
@@ -574,13 +574,13 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["test"]);
   });
 
   it("Vérifie qu'on peut collecter la nature", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         nature: "responsable",
@@ -589,7 +589,7 @@ describe("collectSources", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.nature, "responsable");
   });
 
@@ -597,7 +597,7 @@ describe("collectSources", () => {
     await insertOrganisme({ siret: "11111111100006", nature: "responsable" });
     await insertOrganisme({ siret: "22222222200006", nature: "formateur" });
     await insertOrganisme({ siret: "33333333300006", nature: "responsable_formateur" });
-    let source = createTestSource([
+    const source = createTestSource([
       { selector: "11111111100006", nature: "formateur" },
       { selector: "22222222200006", nature: "responsable" },
       { selector: "33333333300006", nature: "formateur" },
@@ -616,7 +616,7 @@ describe("collectSources", () => {
   it("Vérifie qu'on peut filter par siret", async () => {
     await insertOrganisme({ siret: "11111111100006" });
     await insertOrganisme({ siret: "33333333300008" });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "11111111100006",
         reseaux: ["test"],
@@ -627,9 +627,9 @@ describe("collectSources", () => {
       },
     ]);
 
-    let stats = await collectSources(source, { filters: { siret: "33333333300008" } });
+    const stats = await collectSources(source, { filters: { siret: "33333333300008" } });
 
-    let found = await dbCollection("organismes").findOne({ siret: "33333333300008" });
+    const found = await dbCollection("organismes").findOne({ siret: "33333333300008" });
     assert.deepStrictEqual(found.reseaux, ["test"]);
     assert.deepStrictEqual(stats, {
       dummy: {
@@ -647,16 +647,16 @@ describe("collectSources", () => {
       siret: "11111111100006",
       uai: "0011073X",
     });
-    let source = createTestSource([
+    const source = createTestSource([
       {
         selector: "0011073X",
         reseaux: ["test"],
       },
     ]);
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["test"]);
     assert.deepStrictEqual(stats, {
       dummy: {

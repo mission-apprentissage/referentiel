@@ -9,9 +9,9 @@ import Field from "../../../common/Field";
 import React from "react";
 
 export default function DatagouvModal({ modal, siret }) {
-  let [{ data: organisme, loading, error }] = useFetch(`/api/v1/datagouv/${siret}`, {});
-  let flatten = flattenObject(organisme);
-  let asShortKey = (key) => key.split(".")[key.split(".").length - 1];
+  const [{ data: organisme, loading, error }] = useFetch(`/api/v1/datagouv/${siret}`, {});
+  const flatten = flattenObject(organisme);
+  const asShortKey = (key) => key.split(".")[key.split(".").length - 1];
 
   return (
     <Modal

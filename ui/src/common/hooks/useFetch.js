@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useReducer } from "react";
 import { ApiContext } from "../ApiProvider";
 
 export function useFetch(url, initialState = {}) {
-  let { httpClient } = useContext(ApiContext);
+  const { httpClient } = useContext(ApiContext);
 
   function fetchReducer(state, action) {
     switch (action.type) {

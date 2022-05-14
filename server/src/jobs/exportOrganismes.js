@@ -3,8 +3,8 @@ const { dbCollection } = require("../common/db/mongodb");
 const transformOrganisme = require("../common/actions/transformOrganisme");
 
 async function exportOrganismes(options = {}) {
-  let filter = options.filter || {};
-  let limit = options.limit || Number.MAX_SAFE_INTEGER;
+  const filter = options.filter || {};
+  const limit = options.limit || Number.MAX_SAFE_INTEGER;
 
   return compose(
     dbCollection("organismes")

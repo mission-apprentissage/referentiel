@@ -54,10 +54,10 @@ const actions = {
 };
 
 export default function UAIValidator({ organisme, ...rest }) {
-  let modal = useModal();
-  let type = organisme.uai ? "VALIDE" : organisme.uai_potentiels.length > 0 ? "A_VALIDER" : "A_RENSEIGNER";
-  let action = actions[type];
-  let { label, ActionButton } = action;
+  const modal = useModal();
+  const type = organisme.uai ? "VALIDE" : organisme.uai_potentiels.length > 0 ? "A_VALIDER" : "A_RENSEIGNER";
+  const action = actions[type];
+  const { label, ActionButton } = action;
 
   return (
     <div {...rest}>

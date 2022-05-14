@@ -1,10 +1,10 @@
 module.exports = {
   findAndPaginate: async (collection, query, options = {}) => {
-    let page = options.page || 1;
-    let limit = options.limit || 10;
-    let skip = (page - 1) * limit;
+    const page = options.page || 1;
+    const limit = options.limit || 10;
+    const skip = (page - 1) * limit;
 
-    let total = await collection.count(query);
+    const total = await collection.count(query);
 
     return {
       find: collection

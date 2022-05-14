@@ -3,9 +3,9 @@ import { useQuery } from "./hooks/useQuery";
 import { buildUrl } from "./utils";
 
 export default function ApiPagination({ pagination }) {
-  let { query } = useQuery();
-  let nextPage = pagination.page + 1;
-  let previousPage = pagination.page - 1;
+  const { query } = useQuery();
+  const nextPage = pagination.page + 1;
+  const previousPage = pagination.page - 1;
 
   function to(data = {}) {
     return {

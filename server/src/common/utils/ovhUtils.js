@@ -4,14 +4,14 @@ const config = require("../../config");
 const { fetchStream } = require("./httpUtils");
 
 async function authenticate(uri) {
-  let regExp = new RegExp(/^(https:\/\/)(.+):(.+):(.+)@(.*)$/);
+  const regExp = new RegExp(/^(https:\/\/)(.+):(.+):(.+)@(.*)$/);
 
   if (!regExp.test(uri)) {
     throw new Error("Invalid OVH URI");
   }
 
-  let [, protocol, user, password, tenantId, authUrl] = uri.match(regExp);
-  let response = await axios.post(`${protocol}${authUrl}`, {
+  const [, protocol, user, password, tenantId, authUrl] = uri.match(regExp);
+  const response = await axios.post(`${protocol}${authUrl}`, {
     auth: {
       identity: {
         tenantId,
@@ -29,16 +29,16 @@ async function authenticate(uri) {
     },
   });
 
-  let token = response.headers["x-subject-token"];
-  let { endpoints } = response.data.token.catalog.find((c) => c.type === "object-store");
-  let { url: baseUrl } = endpoints.find((s) => s.region === "GRA");
+  const token = response.headers["x-subject-token"];
+  const { endpoints } = response.data.token.catalog.find((c) => c.type === "object-store");
+  const { url: baseUrl } = endpoints.find((s) => s.region === "GRA");
 
   return { baseUrl, token };
 }
 
 async function requestObjectAccess(path, options = {}) {
-  let storage = options.storage || config.ovh.storage.storageName;
-  let { baseUrl, token } = await authenticate(config.ovh.storage.uri);
+  const storage = options.storage || config.ovh.storage.storageName;
+  const { baseUrl, token } = await authenticate(config.ovh.storage.uri);
 
   return {
     url: encodeURI(`${baseUrl}/${storage}${path === "/" ? "" : `/${path}`}`),
@@ -48,7 +48,7 @@ async function requestObjectAccess(path, options = {}) {
 
 module.exports = {
   getFromStorage: async (path, options = {}) => {
-    let { url, token } = await requestObjectAccess(path, options);
+    const { url, token } = await requestObjectAccess(path, options);
     return fetchStream(url, {
       method: "GET",
       headers: {

@@ -11,7 +11,7 @@ module.exports = {
     new MongodbCache("adresses", {
       ttl: DateTime.now().plus({ month: 1 }).toJSDate(),
       cacheError: (err) => {
-        let apiError = err.cause;
+        const apiError = err.cause;
         return apiError && apiError.httpStatusCode <= 400;
       },
     }),

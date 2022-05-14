@@ -5,12 +5,12 @@ import Hint from "./Hint";
 import useElementId from "../../hooks/useElementId";
 
 function Input({ label, hint, icons, validation, modifiers, className, ...rest }) {
-  let id = useElementId("input");
-  let clazz = classNames("fr-input-group", { modifiers, className, validation });
-  let wrapperClazz = classNames("fr-input-wrap ", { icons });
-  let inputClass = classNames("fr-input", { validation });
-  let validationId = useElementId("validation");
-  let aria = validation ? ariaDescribedBy(validationId) : {};
+  const id = useElementId("input");
+  const clazz = classNames("fr-input-group", { modifiers, className, validation });
+  const wrapperClazz = classNames("fr-input-wrap ", { icons });
+  const inputClass = classNames("fr-input", { validation });
+  const validationId = useElementId("validation");
+  const aria = validation ? ariaDescribedBy(validationId) : {};
 
   return (
     <div className={clazz}>

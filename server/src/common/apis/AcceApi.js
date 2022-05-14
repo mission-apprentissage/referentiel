@@ -14,23 +14,23 @@ function omitNull(obj) {
 class AcceApi extends RateLimitedApi {
   constructor(options = {}) {
     super("AcceApi", options);
-    let client = options.axios || axios.create({ timeout: 10000 });
+    const client = options.axios || axios.create({ timeout: 10000 });
     client.defaults.headers.common["User-Agent"] = CHROME_USER_AGENT;
     this.client = client;
   }
 
   async search(options = {}) {
-    let { natures = [], uai = "" } = options;
+    const { natures = [], uai = "" } = options;
 
-    let response = await this.client.get("https://www.education.gouv.fr/acce_public/index.php");
+    const response = await this.client.get("https://www.education.gouv.fr/acce_public/index.php");
 
-    let cookie = response.headers["set-cookie"][0];
-    let sessionId = cookie.match(/PHPSESSID=(.*);/)[1];
-    let session = {
+    const cookie = response.headers["set-cookie"][0];
+    const sessionId = cookie.match(/PHPSESSID=(.*);/)[1];
+    const session = {
       Cookie: `PHPSESSID=${sessionId}`,
     };
 
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     params.append("action", "search");
     params.append("sub_action", "facet");
     params.append("page", "1");
@@ -64,14 +64,14 @@ class AcceApi extends RateLimitedApi {
     natures.forEach((nature) => params.append("f_nature_uai[]", nature));
     params.append("simple_public", uai);
 
-    let { data } = await this.client.post("https://www.education.gouv.fr/acce_public/search.php", params.toString(), {
+    const { data } = await this.client.post("https://www.education.gouv.fr/acce_public/search.php", params.toString(), {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         ...session,
       },
     });
 
-    let { searchPage } = acceHtmlParser(data);
+    const { searchPage } = acceHtmlParser(data);
 
     return {
       nbResults: searchPage.getNbResults(),
@@ -81,7 +81,7 @@ class AcceApi extends RateLimitedApi {
   }
   getEtablissement(session, id) {
     return this.execute(async () => {
-      let { data } = await this.client.get(
+      const { data } = await this.client.get(
         `https://www.education.gouv.fr/acce_public/uai.php?uai_mode=list&uai_ndx=${id}`,
         {
           headers: {
@@ -90,7 +90,7 @@ class AcceApi extends RateLimitedApi {
         }
       );
 
-      let { etablissementPage } = acceHtmlParser(data);
+      const { etablissementPage } = acceHtmlParser(data);
 
       return omitNull({
         ...etablissementPage.getForm1Properties(),

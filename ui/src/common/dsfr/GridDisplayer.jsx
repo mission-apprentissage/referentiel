@@ -5,7 +5,7 @@ import useAllKeysPress from "../hooks/useAllKeysPress";
 
 const GridDisplayer = ({ className, fluid = false, gutters = true }) => {
   const isShorcutPress = useAllKeysPress({ userKeys: ["Alt", "ArrowDown"] });
-  let [showGrid, setShowGrid] = useState(false);
+  const [showGrid, setShowGrid] = useState(false);
   useEffect(() => setShowGrid(isShorcutPress), [isShorcutPress]);
 
   if (!showGrid) {

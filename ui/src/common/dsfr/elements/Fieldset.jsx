@@ -4,10 +4,10 @@ import Validation from "../common/Validation";
 import useElementId from "../../hooks/useElementId";
 
 export default function Fieldset({ legend, validation, modifiers, className, children }) {
-  let clazz = classNames("fr-fieldset", { modifiers, className, validation });
-  let legendId = useElementId("legend");
-  let validationId = useElementId("validation");
-  let aria = validation ? ariaLabelledBy(validationId, legendId) : {};
+  const clazz = classNames("fr-fieldset", { modifiers, className, validation });
+  const legendId = useElementId("legend");
+  const validationId = useElementId("validation");
+  const aria = validation ? ariaLabelledBy(validationId, legendId) : {};
 
   return (
     <fieldset className={clazz} {...aria}>

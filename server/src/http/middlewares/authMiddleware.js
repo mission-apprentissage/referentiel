@@ -18,12 +18,12 @@ passport.use(
       passReqToCallback: true,
     },
     (req, jwt_payload, done) => {
-      let code = jwt_payload.sub;
-      let type = jwt_payload.type;
-      let found = type === "region" ? findRegionByCode(code) : findAcademieByCode(code);
+      const code = jwt_payload.sub;
+      const type = jwt_payload.type;
+      const found = type === "region" ? findRegionByCode(code) : findAcademieByCode(code);
 
       if (found) {
-        let user = { type, code, departements: found.departements };
+        const user = { type, code, departements: found.departements };
         done(null, user);
       } else {
         done(null, false);

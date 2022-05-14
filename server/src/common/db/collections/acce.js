@@ -4,7 +4,7 @@ const geojsonSchema = require("./schemas/geojsonSchema");
 module.exports = {
   name: "acce",
   schema: () => {
-    let required = ["uai", "specificites", "rattachements"];
+    const required = ["uai", "specificites", "rattachements"];
 
     return object(
       {

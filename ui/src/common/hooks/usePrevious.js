@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 export default function usePrevious(state) {
-  let ref = useRef();
+  const ref = useRef();
 
   useEffect(() => {
     ref.current = state;

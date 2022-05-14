@@ -7,8 +7,8 @@ const { omitNil } = require("../../common/utils/objectUtils");
 const { compact } = require("lodash");
 
 function fetchFormations(api, options = {}) {
-  let siret = options.siret;
-  let query = {
+  const siret = options.siret;
+  const query = {
     published: true,
     ...(siret ? { $or: [{ etablissement_formateur_siret: siret }, { etablissement_gestionnaire_siret: siret }] } : {}),
   };
@@ -60,7 +60,7 @@ async function buildDiplome(formation) {
     return null;
   }
 
-  let bcn = await dbCollection("cfd").findOne({ FORMATION_DIPLOME: formation.cfd });
+  const bcn = await dbCollection("cfd").findOne({ FORMATION_DIPLOME: formation.cfd });
   return {
     type: "cfd",
     code: formation.cfd,
@@ -92,8 +92,8 @@ async function buildLieuDeFormation(formation, { reverseGeocode }) {
   }
 
   try {
-    let [latitude, longitude] = formation.lieu_formation_geo_coordonnees.split(",");
-    let adresse = await reverseGeocode(longitude, latitude);
+    const [latitude, longitude] = formation.lieu_formation_geo_coordonnees.split(",");
+    const adresse = await reverseGeocode(longitude, latitude);
 
     return {
       lieu: {
@@ -128,8 +128,8 @@ function buildContacts(formation) {
 }
 
 module.exports = (custom = {}) => {
-  let api = custom.catalogueAPI || new CatalogueApi();
-  let adresseResolver = adresses(custom.geoAdresseApi || new GeoAdresseApi());
+  const api = custom.catalogueAPI || new CatalogueApi();
+  const adresseResolver = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
   return {
     name: "catalogue",
@@ -137,7 +137,7 @@ module.exports = (custom = {}) => {
       return compose(
         await fetchFormations(api, options.filters),
         transformData(async (formation) => {
-          let { lieu, anomalie } = await buildLieuDeFormation(formation, adresseResolver);
+          const { lieu, anomalie } = await buildLieuDeFormation(formation, adresseResolver);
 
           return [
             {

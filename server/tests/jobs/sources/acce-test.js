@@ -15,11 +15,11 @@ describe("acce", () => {
       email: "robert@formation.fr",
       rattachements: { fille: [], mere: [] },
     });
-    let source = createSource("acce");
+    const source = createSource("acce");
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.contacts, [
       {
         email: "robert@formation.fr",

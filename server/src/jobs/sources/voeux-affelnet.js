@@ -4,12 +4,13 @@ const { parseCsv } = require("../../common/utils/csvUtils");
 const { optionalItem } = require("../../common/utils/objectUtils");
 
 module.exports = (custom = {}) => {
-  let name = "voeux-affelnet";
+  const name = "voeux-affelnet";
 
   return {
     name,
     async stream() {
-      let input = custom.input || (await getFromStorage("voeux-affelnet-export-cfas-confirmes-actives-2021-09-03.csv"));
+      const input =
+        custom.input || (await getFromStorage("voeux-affelnet-export-cfas-confirmes-actives-2021-09-03.csv"));
 
       return compose(
         input,

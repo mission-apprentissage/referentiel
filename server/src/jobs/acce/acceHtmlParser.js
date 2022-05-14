@@ -28,7 +28,7 @@ function sanitize(txt) {
 function getTableColumnsAsProperties(tableEl) {
   return Array.from(tableEl.querySelectorAll("td")).reduce((acc, el, index, array) => {
     if (index % 2 === 0) {
-      let value = array[index + 1];
+      const value = array[index + 1];
       acc[sanitize(el.textContent)] = value ? value.textContent : null;
     }
     return acc;
@@ -36,13 +36,13 @@ function getTableColumnsAsProperties(tableEl) {
 }
 
 function getTableRowsAProperties(tableEl) {
-  let keys = Array.from(tableEl.querySelectorAll("thead th")).map((th) => th.textContent);
+  const keys = Array.from(tableEl.querySelectorAll("thead th")).map((th) => th.textContent);
   return Array.from(tableEl.querySelectorAll("tbody tr")).reduce((acc, tr) => {
     return [
       ...acc,
       Array.from(tr.querySelectorAll("td")).reduce((obj, td, index) => {
-        let value = td.textContent;
-        let props = {
+        const value = td.textContent;
+        const props = {
           ...obj,
           [sanitize(keys[index])]: value ? value.replace(/\n/g, "").trim() : null,
         };
@@ -58,7 +58,7 @@ function domify(html) {
   return {
     querySelector: (selector) => dom.window.document.querySelector(selector),
     textContent: (selector) => {
-      let selected = dom.window.document.querySelector(selector);
+      const selected = dom.window.document.querySelector(selector);
       if (!selected || selected.textContent === "\xa0") {
         return "";
       }
@@ -72,7 +72,7 @@ function domify(html) {
 }
 
 module.exports = function (html) {
-  let { querySelector, textContent } = domify(html);
+  const { querySelector, textContent } = domify(html);
 
   return {
     searchPage: {
@@ -82,16 +82,16 @@ module.exports = function (html) {
     },
     etablissementPage: {
       getForm1Properties() {
-        let h1 = textContent(`.form1 .section h1`)
+        const h1 = textContent(`.form1 .section h1`)
           .split("-")
           .map((v) => v.trim());
 
         function txt(selector, sanitizer = (v) => v) {
-          let content = textContent(selector);
+          const content = textContent(selector);
           return content === "" ? null : sanitizer(content);
         }
 
-        let div = ".form1 .section div:nth-of-type";
+        const div = ".form1 .section div:nth-of-type";
         return omitBy(
           {
             nom: h1[0],
@@ -131,7 +131,7 @@ module.exports = function (html) {
             return acc;
           }
 
-          let current = acc[rubrique] || {};
+          const current = acc[rubrique] || {};
 
           if (rubrique === "zones") {
             acc[rubrique] = {
@@ -158,10 +158,10 @@ module.exports = function (html) {
             return acc;
           }
 
-          let intro = el.querySelector(".intro");
+          const intro = el.querySelector(".intro");
           if (intro) {
-            let key = intro.textContent;
-            let value = el.querySelector(".corps").textContent;
+            const key = intro.textContent;
+            const value = el.querySelector(".corps").textContent;
             if (!key) {
               //Handle spécificités
               acc[rubrique] = [...(acc[rubrique] || []), ...(value === "Aucune spécificité" ? [] : [value])];
@@ -176,8 +176,8 @@ module.exports = function (html) {
         }, {});
       },
       getCoordinates() {
-        let groups = html.match(/buildStaticMap\(\[(.*)\]/);
-        let cache = querySelector(".map img");
+        const groups = html.match(/buildStaticMap\(\[(.*)\]/);
+        const cache = querySelector(".map img");
 
         if (groups && groups[1]) {
           return {
@@ -188,7 +188,7 @@ module.exports = function (html) {
             },
           };
         } else if (cache) {
-          let coords = cache.src
+          const coords = cache.src
             .split("/")
             .pop()
             .replace(/_400-400-15.png/g, "")

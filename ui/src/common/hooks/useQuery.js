@@ -2,8 +2,8 @@ import { useSearchParams } from "react-router-dom";
 import { fromPairs, isEmpty, isNil, omitBy } from "lodash-es";
 
 export function useQuery() {
-  let [searchParams, setSearchParams] = useSearchParams();
-  let query = fromPairs(Array.from(searchParams.entries()));
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = fromPairs(Array.from(searchParams.entries()));
 
   return {
     query,

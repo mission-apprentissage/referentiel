@@ -15,11 +15,11 @@ describe("catalogue-etablissements", () => {
         .reply(200, responses.etablissements([{ siret: "11111111100006", uai: "0111111Y" }]));
     });
 
-    let source = createSource("catalogue-etablissements");
+    const source = createSource("catalogue-etablissements");
 
-    let stats = await importOrganismes(source);
+    const stats = await importOrganismes(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.siret, "11111111100006");
     assert.deepStrictEqual(stats, {
       "catalogue-etablissements": {
@@ -41,11 +41,11 @@ describe("catalogue-etablissements", () => {
         .reply(200, responses.etablissements([{ siret: "11111111100006", uai: "0111111Y" }]));
     });
 
-    let source = createSource("catalogue-etablissements");
+    const source = createSource("catalogue-etablissements");
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["catalogue-etablissements"],

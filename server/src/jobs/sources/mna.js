@@ -2,13 +2,13 @@ const { compose, transformData } = require("oleoduc");
 const { Readable } = require("stream");
 
 module.exports = (custom = {}) => {
-  let name = "mna";
-  let array = [{ siret: "19750707200035", uai: "0755111Y" }];
+  const name = "mna";
+  const array = [{ siret: "19750707200035", uai: "0755111Y" }];
 
   return {
     name,
     async referentiel() {
-      let stream = custom.input || Readable.from(array);
+      const stream = custom.input || Readable.from(array);
 
       return compose(
         stream,
@@ -21,7 +21,7 @@ module.exports = (custom = {}) => {
       );
     },
     async stream() {
-      let stream = custom.input || Readable.from(array);
+      const stream = custom.input || Readable.from(array);
 
       return compose(
         stream,

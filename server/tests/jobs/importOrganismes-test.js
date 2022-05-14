@@ -7,7 +7,7 @@ const { compose, transformData } = require("oleoduc");
 const { insertOrganisme } = require("../utils/fakeData");
 
 function createTestSource(array, options = {}) {
-  let name = options.name || "dummy";
+  const name = options.name || "dummy";
   return {
     name,
     referentiel() {
@@ -21,11 +21,11 @@ function createTestSource(array, options = {}) {
 
 describe("importOrganismes", () => {
   it("Vérifie qu'on peut importer un référentiel", async () => {
-    let source = createTestSource([{ siret: "11111111100006" }]);
+    const source = createTestSource([{ siret: "11111111100006" }]);
 
-    let results = await importOrganismes(source);
+    const results = await importOrganismes(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
     assert.deepStrictEqual(omit(found, ["_meta"]), {
       siret: "11111111100006",
       referentiels: ["dummy"],
@@ -52,12 +52,12 @@ describe("importOrganismes", () => {
   });
 
   it("Vérifie qu'on peut mettre à jour un organisme", async () => {
-    let source = createTestSource([{ siret: "11111111100006" }]);
+    const source = createTestSource([{ siret: "11111111100006" }]);
     await insertOrganisme({ siret: "11111111100006", referentiels: ["test"] });
 
-    let results = await importOrganismes(source);
+    const results = await importOrganismes(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
     assert.deepStrictEqual(found.referentiels, ["test", "dummy"]);
     assert.deepStrictEqual(results, {
       dummy: {
@@ -71,9 +71,9 @@ describe("importOrganismes", () => {
   });
 
   it("Vérifie qu'on ignore les organismes en double", async () => {
-    let source = createTestSource([{ siret: "11111111100006" }, { siret: "11111111100006" }]);
+    const source = createTestSource([{ siret: "11111111100006" }, { siret: "11111111100006" }]);
 
-    let results = await importOrganismes(source);
+    const results = await importOrganismes(source);
 
     await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(results, {
@@ -88,11 +88,11 @@ describe("importOrganismes", () => {
   });
 
   it("Vérifie qu'on ignore un organisme avec un siret vide", async () => {
-    let source = createTestSource([{ siret: "" }]);
+    const source = createTestSource([{ siret: "" }]);
 
-    let results = await importOrganismes(source);
+    const results = await importOrganismes(source);
 
-    let count = await dbCollection("organismes").countDocuments({ siret: "11111111100006" });
+    const count = await dbCollection("organismes").countDocuments({ siret: "11111111100006" });
     assert.strictEqual(count, 0);
     assert.deepStrictEqual(results, {
       dummy: {
@@ -106,11 +106,11 @@ describe("importOrganismes", () => {
   });
 
   it("Vérifie qu'on ignore un organisme avec un siret invalide", async () => {
-    let source = createTestSource([{ siret: "" }]);
+    const source = createTestSource([{ siret: "" }]);
 
-    let results = await importOrganismes(source);
+    const results = await importOrganismes(source);
 
-    let count = await dbCollection("organismes").countDocuments({ siret: "7894766" });
+    const count = await dbCollection("organismes").countDocuments({ siret: "7894766" });
     assert.strictEqual(count, 0);
     assert.deepStrictEqual(results, {
       dummy: {
@@ -124,9 +124,9 @@ describe("importOrganismes", () => {
   });
 
   it("Vérifie qu'on ignore un organisme avec un siret invalide", async () => {
-    let source = createTestSource([{ siret: "11111111100006" }], { name: 666 });
+    const source = createTestSource([{ siret: "11111111100006" }], { name: 666 });
 
-    let results = await importOrganismes(source);
+    const results = await importOrganismes(source);
 
     assert.deepStrictEqual(results, {
       666: {

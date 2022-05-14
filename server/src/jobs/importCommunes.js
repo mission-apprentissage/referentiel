@@ -11,8 +11,8 @@ function getContours() {
 }
 
 async function importCommunes(options = {}) {
-  let stats = { total: 0, created: 0, updated: 0, failed: 0 };
-  let stream = options.input || (await getContours());
+  const stats = { total: 0, created: 0, updated: 0, failed: 0 };
+  const stream = options.input || (await getContours());
   logger.info(
     `Import des contours des communes de France simplifié, avec régions et département d'outre-mer rapprochés...`
   );
@@ -22,13 +22,13 @@ async function importCommunes(options = {}) {
     streamNestedJsonArray("features"),
     writeData(
       async (feature) => {
-        let codgeo = feature.properties.codgeo;
+        const codgeo = feature.properties.codgeo;
 
         try {
           stats.total++;
 
           logger.debug(`Import des données geojson pour le communes avec le code INSEE ${codgeo}...`);
-          let res = await dbCollection("communes").updateOne(
+          const res = await dbCollection("communes").updateOne(
             {
               _id: codgeo,
             },

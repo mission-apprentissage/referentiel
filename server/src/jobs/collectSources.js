@@ -16,8 +16,8 @@ function buildQuery(selector) {
 }
 
 function mergeArray(source, existingArray, discriminator, newArray, options = {}) {
-  let updated = newArray.map((element) => {
-    let previous = existingArray.find((e) => e[discriminator] === element[discriminator]) || {};
+  const updated = newArray.map((element) => {
+    const previous = existingArray.find((e) => e[discriminator] === element[discriminator]) || {};
     return {
       ...previous,
       ...element,
@@ -26,7 +26,7 @@ function mergeArray(source, existingArray, discriminator, newArray, options = {}
     };
   });
 
-  let untouched = existingArray.filter((p) => {
+  const untouched = existingArray.filter((p) => {
     return !updated.map((u) => u[discriminator]).includes(p[discriminator]);
   });
 
@@ -47,9 +47,9 @@ function mergeUAIPotentiels(source, potentiels, newPotentiels) {
 }
 
 async function mergeRelations(source, relations, newRelations, siretsFromDatagouv) {
-  let validatedNewRelations = await newRelations.reduce(async (acc, relation) => {
-    let isInReferentiel = (await dbCollection("organismes").countDocuments({ siret: relation.siret })) > 0;
-    let isInDatagouv = siretsFromDatagouv.includes(relation.siret);
+  const validatedNewRelations = await newRelations.reduce(async (acc, relation) => {
+    const isInReferentiel = (await dbCollection("organismes").countDocuments({ siret: relation.siret })) > 0;
+    const isInDatagouv = siretsFromDatagouv.includes(relation.siret);
 
     if (!isInReferentiel && !isInDatagouv) {
       return Promise.resolve(acc);
@@ -66,7 +66,7 @@ async function mergeRelations(source, relations, newRelations, siretsFromDatagou
 
   return mergeArray(source, relations, "siret", validatedNewRelations, {
     merge: (previous, relation) => {
-      let availables = uniq([relation.type, previous.type]);
+      const availables = uniq([relation.type, previous.type]);
       return {
         type: availables.find((v) => v?.indexOf("->") !== -1) || availables[0],
       };
@@ -89,7 +89,7 @@ function mergeContacts(source, contacts, newContacts) {
 }
 
 function mergeNature(current, newNature) {
-  let all = [current, newNature];
+  const all = [current, newNature];
   if ((all.includes("responsable") && all.includes("formateur")) || all.includes("responsable_formateur")) {
     return "responsable_formateur";
   }
@@ -111,7 +111,7 @@ function handleAnomalies(source, organisme, newAnomalies) {
           organisme._meta.anomalies,
           "key",
           newAnomalies.map((ano) => {
-            let error = isError(ano) && ano;
+            const error = isError(ano) && ano;
             return {
               key: error ? `${error.httpStatusCode || error.message}` : ano.key,
               type: error ? "erreur" : ano.type,
@@ -152,17 +152,17 @@ async function getStreams(sources, filters) {
 }
 
 module.exports = async (array, options = {}) => {
-  let sources = Array.isArray(array) ? array : [array];
-  let filters = options.filters || {};
-  let stats = createStats(sources);
-  let streams = await getStreams(sources, filters);
-  let datagouv = createDatagouvSource();
-  let siretsFromDatagouv = await datagouv.loadSirets();
+  const sources = Array.isArray(array) ? array : [array];
+  const filters = options.filters || {};
+  const stats = createStats(sources);
+  const streams = await getStreams(sources, filters);
+  const datagouv = createDatagouvSource();
+  const siretsFromDatagouv = await datagouv.loadSirets();
 
   await oleoduc(
     mergeStreams(streams),
     writeData(async (res) => {
-      let {
+      const {
         from,
         selector,
         uai_potentiels = [],
@@ -182,8 +182,8 @@ module.exports = async (array, options = {}) => {
       }
 
       stats[from].total++;
-      let query = buildQuery(selector);
-      let count = selector ? await dbCollection("organismes").countDocuments(query) : 0;
+      const query = buildQuery(selector);
+      const count = selector ? await dbCollection("organismes").countDocuments(query) : 0;
 
       if (count === 0) {
         logger.trace(`Organisme ${JSON.stringify(query)} inconnu`, { source: from });
@@ -198,7 +198,7 @@ module.exports = async (array, options = {}) => {
             await handleAnomalies(from, organisme, anomalies);
           }
 
-          let res = await dbCollection("organismes").updateOne(
+          const res = await dbCollection("organismes").updateOne(
             { siret: organisme.siret },
             {
               $set: omitNil({
@@ -219,7 +219,7 @@ module.exports = async (array, options = {}) => {
             }
           );
 
-          let nbModifiedDocuments = res.modifiedCount;
+          const nbModifiedDocuments = res.modifiedCount;
           if (nbModifiedDocuments) {
             stats[from].updated += nbModifiedDocuments;
             logger.debug(`Organisme ${organisme.siret} mis à jour`, { source: from });

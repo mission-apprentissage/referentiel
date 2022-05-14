@@ -5,9 +5,9 @@ import { useQuery } from "../../common/hooks/useQuery";
 import { DataContext } from "../../common/DataProvider";
 
 export default function AcademieSelector({ onChange }) {
-  let { academies } = useContext(DataContext);
-  let { query } = useQuery();
-  let [selected, setSelected] = useState(query.academies || "");
+  const { academies } = useContext(DataContext);
+  const { query } = useQuery();
+  const [selected, setSelected] = useState(query.academies || "");
 
   return (
     <Box align={"center"} justify={"start"} style={{ width: "100%" }}>
@@ -16,14 +16,14 @@ export default function AcademieSelector({ onChange }) {
         <Select
           value={selected}
           onChange={(e) => {
-            let code = e.target.value;
+            const code = e.target.value;
             setSelected(code);
             return onChange(code);
           }}
         >
           <option value="">Tous les académies</option>
           {academies.map((dep, index) => {
-            let code = dep.code;
+            const code = dep.code;
             return (
               <option key={index} value={code}>
                 {dep.nom}

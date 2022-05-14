@@ -14,7 +14,7 @@ describe("consolidate", () => {
       },
     });
 
-    let stats = await consolidate();
+    const stats = await consolidate();
 
     const found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
     assert.strictEqual(found.uai, "0751234J");
@@ -30,7 +30,7 @@ describe("consolidate", () => {
 
   it("Vérifie qu'on joue les modifications dans l'ordre chronologique", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let yesterday = DateTime.now().minus({ hour: 24 }).toJSDate();
+    const yesterday = DateTime.now().minus({ hour: 24 }).toJSDate();
     await insertModification({
       siret: "11111111100006",
       date: yesterday,
@@ -46,7 +46,7 @@ describe("consolidate", () => {
       },
     });
 
-    let stats = await consolidate();
+    const stats = await consolidate();
 
     const found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
     assert.strictEqual(found.uai, "0751234X");
@@ -68,7 +68,7 @@ describe("consolidate", () => {
       },
     });
 
-    let stats = await consolidate();
+    const stats = await consolidate();
 
     assert.deepStrictEqual(stats, {
       modifications: {

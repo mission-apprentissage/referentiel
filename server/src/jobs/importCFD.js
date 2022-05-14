@@ -7,7 +7,7 @@ const { parseCsv } = require("../common/utils/csvUtils");
 const { decodeStream } = require("iconv-lite");
 
 async function importCsv(csvStream) {
-  let stats = { total: 0, created: 0, updated: 0, failed: 0 };
+  const stats = { total: 0, created: 0, updated: 0, failed: 0 };
 
   await oleoduc(
     csvStream,
@@ -20,7 +20,7 @@ async function importCsv(csvStream) {
     writeData(async (data) => {
       try {
         stats.total++;
-        let res = await dbCollection("cfd").updateOne(
+        const res = await dbCollection("cfd").updateOne(
           {
             FORMATION_DIPLOME: data.FORMATION_DIPLOME,
           },
@@ -46,12 +46,12 @@ function getCsvExport(name) {
 }
 
 async function importCFD(options = {}) {
-  let stats = {};
+  const stats = {};
   logger.info("Import des CFD...");
-  let nFormationStream = options.nFormationDiplomeCsvStream || (await getCsvExport("N_FORMATION_DIPLOME"));
+  const nFormationStream = options.nFormationDiplomeCsvStream || (await getCsvExport("N_FORMATION_DIPLOME"));
   stats.N_FORMATION_DIPLOME = await importCsv(nFormationStream);
 
-  let vFormationStream = options.vFormationDiplomeCsvStream || (await getCsvExport("V_FORMATION_DIPLOME"));
+  const vFormationStream = options.vFormationDiplomeCsvStream || (await getCsvExport("V_FORMATION_DIPLOME"));
   stats.V_FORMATION_DIPLOME = await importCsv(vFormationStream);
 
   return stats;

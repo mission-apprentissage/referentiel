@@ -11,12 +11,12 @@ function sanitize(value) {
 function intoCsv(options = {}) {
   return compose(
     transformData((o) => {
-      let probable = findUAIProbable(o);
+      const probable = findUAIProbable(o);
       if (!probable) {
         return o;
       }
 
-      let index = findIndex(o.uai_potentiels, (p) => p.uai === probable.uai);
+      const index = findIndex(o.uai_potentiels, (p) => p.uai === probable.uai);
       return {
         ...o,
         uai_potentiels: [o.uai_potentiels[index], ...o.uai_potentiels.filter((p) => p.uai !== probable.uai)],

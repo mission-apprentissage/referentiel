@@ -5,7 +5,7 @@ import React, { useContext } from "react";
 import { ApiContext } from "../ApiProvider";
 
 export default function Layout({ children }) {
-  let { isAnonymous } = useContext(ApiContext);
+  const { isAnonymous } = useContext(ApiContext);
 
   return (
     <>

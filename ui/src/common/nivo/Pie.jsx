@@ -6,7 +6,7 @@ import { Col, GridRow } from "../dsfr/fondamentaux";
 import { cloneElement } from "react";
 
 export default function Pie({ data, direction, getLabel, getColor, getTooltipLabel, height = "500px", ...rest }) {
-  let pie = (
+  const pie = (
     <ResponsivePie
       theme={theme}
       data={data}
@@ -20,14 +20,14 @@ export default function Pie({ data, direction, getLabel, getColor, getTooltipLab
       arcLinkLabel={({ id }) => getLabel(id)}
       colors={({ id }) => getColor(id)}
       tooltip={({ datum }) => {
-        let { id, value, color } = datum;
+        const { id, value, color } = datum;
         return <BasicTooltip id={getLabel(id)} value={value} color={color} enableChip />;
       }}
       {...rest}
     />
   );
 
-  let legends = (
+  const legends = (
     <Legends
       definitions={data.map((item) => {
         return { label: item.label, color: getColor(item.id) };

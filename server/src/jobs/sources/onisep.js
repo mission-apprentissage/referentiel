@@ -27,7 +27,7 @@ async function defaultStream() {
 }
 
 module.exports = (custom = {}) => {
-  let name = "onisep";
+  const name = "onisep";
 
   return {
     name,
