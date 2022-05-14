@@ -9,7 +9,7 @@ describe("uaisRoutes", () => {
       uai: "0751234J",
     });
 
-    let response = await httpClient.get("/api/v1/uais");
+    const response = await httpClient.get("/api/v1/uais");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -33,7 +33,7 @@ describe("uaisRoutes", () => {
       uai: "0751234J",
     });
 
-    let response = await httpClient.get("/api/v1/uais/0751234J");
+    const response = await httpClient.get("/api/v1/uais/0751234J");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -44,7 +44,7 @@ describe("uaisRoutes", () => {
   it("Vérifie qu'on renvoie une 400 sur l'UAI a un format invalide", async () => {
     const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/uais/INVALID");
+    const response = await httpClient.get("/api/v1/uais/INVALID");
 
     strictEqual(response.status, 400);
     deepStrictEqual(response.data, {
@@ -70,7 +70,7 @@ describe("uaisRoutes", () => {
   it("Vérifie qu'on renvoie une 404 sur l'UAI est inconnu", async () => {
     const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/uais/0751234J");
+    const response = await httpClient.get("/api/v1/uais/0751234J");
 
     strictEqual(response.status, 404);
     deepStrictEqual(response.data, {

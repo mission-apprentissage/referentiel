@@ -9,8 +9,8 @@ import { RelationsTable } from "./RelationsTable";
 import { uniq, without } from "lodash-es";
 
 const RelationTagButton = styled(({ label, results, onChange, disabled = false }) => {
-  let [pressed, setPressed] = useState(false);
-  let nbElements = results.length;
+  const [pressed, setPressed] = useState(false);
+  const nbElements = results.length;
 
   return (
     <TagButton
@@ -30,7 +30,7 @@ const RelationTagButton = styled(({ label, results, onChange, disabled = false }
 `;
 
 export default function RelationsTab({ organisme }) {
-  let { response } = useSearch(
+  const { response } = useSearch(
     {
       page: 1,
       sirets: organisme.relations.filter((r) => r.referentiel).map((r) => r.siret),
@@ -39,8 +39,8 @@ export default function RelationsTab({ organisme }) {
     { silent: true }
   );
 
-  let { data, loading, error } = response;
-  let [tables, filter] = useReducer((state, action) => {
+  const { data, loading, error } = response;
+  const [tables, filter] = useReducer((state, action) => {
     if (action.pressed) {
       return uniq([...state, action.name]);
     } else {
@@ -59,9 +59,9 @@ export default function RelationsTab({ organisme }) {
       });
   }
 
-  let estResponsableDe = buildResults("responsable->formateur");
-  let dispenseDesFormationsPour = buildResults("formateur->responsable");
-  let autres = buildResults("entreprise");
+  const estResponsableDe = buildResults("responsable->formateur");
+  const dispenseDesFormationsPour = buildResults("formateur->responsable");
+  const autres = buildResults("entreprise");
 
   if (loading || error) {
     return <Spinner loading={loading} error={error} />;

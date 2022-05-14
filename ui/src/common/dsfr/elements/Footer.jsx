@@ -18,8 +18,8 @@ export function FooterList({ position, children, ...rest }) {
 }
 
 export function FooterLink({ as = Link, position, modifiers, children, className, ...rest }) {
-  let Component = as;
-  let clazz = classNames(`fr-footer__${position}-link`, { modifiers, className });
+  const Component = as;
+  const clazz = classNames(`fr-footer__${position}-link`, { modifiers, className });
 
   return (
     <Component className={clazz} {...rest}>

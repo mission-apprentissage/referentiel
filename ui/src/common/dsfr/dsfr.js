@@ -12,9 +12,9 @@ require("@gouvfr/dsfr/dist/dsfr/dsfr.nomodule");
 
 export function buildComponent(componentName, dsfrName, options = {}) {
   return forwardRef((props, ref) => {
-    let { as, modifiers, icons, className, children, ...rest } = props;
-    let Component = as || componentName;
-    let clazz = classNames(dsfrName, { modifiers, icons, className, ...options });
+    const { as, modifiers, icons, className, children, ...rest } = props;
+    const Component = as || componentName;
+    const clazz = classNames(dsfrName, { modifiers, icons, className, ...options });
 
     return (
       <Component className={clazz} {...rest} {...(ref ? { ref } : {})}>
@@ -26,8 +26,8 @@ export function buildComponent(componentName, dsfrName, options = {}) {
 
 export function buildListComponent(Tag, dsfrName, options = {}) {
   return forwardRef((props, ref) => {
-    let { modifiers, className, children, ...rest } = props;
-    let clazz = classNames(dsfrName, { modifiers, className, ...options });
+    const { modifiers, className, children, ...rest } = props;
+    const clazz = classNames(dsfrName, { modifiers, className, ...options });
 
     return (
       <Tag className={clazz} {...rest} {...(ref ? { ref } : {})}>
@@ -66,7 +66,7 @@ export function ariaExpanded(value) {
 }
 
 export function collapseElement(el) {
-  let height = el.offsetHeight;
+  const height = el.offsetHeight;
   el.style.setProperty("--collapser", "start-transition");
   el.style.setProperty("--collapse", -height + "px");
   el.style.setProperty("max-height", "none");

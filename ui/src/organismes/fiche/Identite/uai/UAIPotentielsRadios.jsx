@@ -6,8 +6,8 @@ import Fieldset from "../../../../common/dsfr/elements/Fieldset";
 import { sortBy } from "lodash-es";
 
 export function UAIPotentielsRadios({ organisme, action }) {
-  let { registerField, values, errors } = useFormContext();
-  let potentiels = sortBy(organisme.uai_potentiels, (p) => {
+  const { registerField, values, errors } = useFormContext();
+  const potentiels = sortBy(organisme.uai_potentiels, (p) => {
     return p.uai === organisme._meta.uai_probale ? "_first" : p.uai;
   }).reverse();
 

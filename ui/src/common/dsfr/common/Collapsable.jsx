@@ -9,8 +9,8 @@ export const Collapse = styled(buildComponent("div", "fr-collapse"))`
 `;
 
 export default function Collapsable({ id, children, modifiers, className }) {
-  let ref = useRef();
-  let expanded = modifiers.indexOf("expanded") !== -1;
+  const ref = useRef();
+  const expanded = modifiers.indexOf("expanded") !== -1;
   useEffect(() => collapseElement(ref.current), [expanded, ref]);
 
   return (

@@ -59,15 +59,15 @@ function getRelations(uniteLegale, siret) {
 }
 
 module.exports = (custom = {}) => {
-  let name = "sirene";
-  let api = custom.sireneApi || new SireneApi();
-  let sireneApiCache = caches.sireneApiCache();
-  let { geocode } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
+  const name = "sirene";
+  const api = custom.sireneApi || new SireneApi();
+  const sireneApiCache = caches.sireneApiCache();
+  const { geocode } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
   return {
     name,
     async stream(options = {}) {
-      let filters = options.filters || {};
+      const filters = options.filters || {};
 
       return compose(
         dbCollection("organismes")
@@ -76,11 +76,11 @@ module.exports = (custom = {}) => {
         transformData(
           async ({ siret }) => {
             try {
-              let siren = siret.substring(0, 9);
-              let anomalies = [];
+              const siren = siret.substring(0, 9);
+              const anomalies = [];
 
-              let uniteLegale = await sireneApiCache.memo(siren, () => api.getUniteLegale(siren));
-              let etablissement = uniteLegale.etablissements.find((e) => e.siret === siret);
+              const uniteLegale = await sireneApiCache.memo(siren, () => api.getUniteLegale(siren));
+              const etablissement = uniteLegale.etablissements.find((e) => e.siret === siret);
 
               if (!etablissement) {
                 return {
@@ -95,8 +95,8 @@ module.exports = (custom = {}) => {
                 };
               }
 
-              let addresseAsString = getAdresseAsString(etablissement);
-              let adresse = await geocode(addresseAsString, {
+              const addresseAsString = getAdresseAsString(etablissement);
+              const adresse = await geocode(addresseAsString, {
                 fallback: {
                   codeInsee: etablissement.code_commune,
                   codePostal: etablissement.code_postal,
@@ -110,7 +110,7 @@ module.exports = (custom = {}) => {
                 return e.commune;
               });
 
-              let formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);
+              const formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);
               if (!formeJuridique) {
                 anomalies.push({
                   key: `categorie_juridique_${uniteLegale.categorie_juridique}`,

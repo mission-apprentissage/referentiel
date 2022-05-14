@@ -3,9 +3,9 @@ import { useContext, useEffect } from "react";
 import { ApiContext } from "../common/ApiProvider";
 
 export default function Login() {
-  let [searchParams] = useSearchParams();
-  let { login } = useContext(ApiContext);
-  let token = searchParams.get("token");
+  const [searchParams] = useSearchParams();
+  const { login } = useContext(ApiContext);
+  const token = searchParams.get("token");
 
   useEffect(() => {
     if (token) {

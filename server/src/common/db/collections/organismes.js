@@ -4,7 +4,7 @@ const adresseSchema = require("./schemas/adresseSchema");
 module.exports = {
   name: "organismes",
   schema: () => {
-    let required = [
+    const required = [
       "siret",
       "nature",
       "uai_potentiels",

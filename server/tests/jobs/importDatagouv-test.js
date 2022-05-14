@@ -4,7 +4,7 @@ const { createStream } = require("../utils/testUtils");
 const importDatagouv = require("../../src/jobs/importDatagouv");
 const { dbCollection } = require("../../src/common/db/mongodb");
 
-let getDatagouvFile = (content) => {
+const getDatagouvFile = (content) => {
   return createStream(
     content ||
       `numeroDeclarationActivite;numerosDeclarationActivitePrecedent;denomination;siren;siretEtablissementDeclarant;adressePhysiqueOrganismeFormation.voie;adressePhysiqueOrganismeFormation.codePostal;adressePhysiqueOrganismeFormation.ville;adressePhysiqueOrganismeFormation.codeRegion;certifications.actionsDeFormation;certifications.bilansDeCompetences;certifications.VAE;certifications.actionsDeFormationParApprentissage;organismeEtrangerRepresente.denomination;organismeEtrangerRepresente.voie;organismeEtrangerRepresente.codePostal;organismeEtrangerRepresente.ville;organismeEtrangerRepresente.pays;informationsDeclarees.dateDerniereDeclaration;informationsDeclarees.debutExercice;informationsDeclarees.finExercice;informationsDeclarees.specialitesDeFormation.codeSpecialite1;informationsDeclarees.specialitesDeFormation.libelleSpecialite1;informationsDeclarees.specialitesDeFormation.codeSpecialite2;informationsDeclarees.specialitesDeFormation.libelleSpecialite2;informationsDeclarees.specialitesDeFormation.codeSpecialite3;informationsDeclarees.specialitesDeFormation.libelleSpecialite3;informationsDeclarees.nbStagiaires;informationsDeclarees.nbStagiairesConfiesParUnAutreOF;informationsDeclarees.effectifFormateurs;
@@ -15,7 +15,7 @@ let getDatagouvFile = (content) => {
 
 describe("importDatagouv", () => {
   it("Vérifie qu'on peut importer les organismes de formations", async () => {
-    let stats = await importDatagouv({
+    const stats = await importDatagouv({
       input: getDatagouvFile(),
     });
 

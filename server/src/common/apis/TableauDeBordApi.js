@@ -14,9 +14,9 @@ class TableauDeBordApi extends RateLimitedApi {
   }
 
   async streamCfas(query, options) {
-    let params = convertQueryIntoParams(query, options);
+    const params = convertQueryIntoParams(query, options);
 
-    let response = await fetchStream(`${TableauDeBordApi.baseApiUrl}/cfas?${params}`);
+    const response = await fetchStream(`${TableauDeBordApi.baseApiUrl}/cfas?${params}`);
 
     return compose(response, streamNestedJsonArray("cfas"));
   }

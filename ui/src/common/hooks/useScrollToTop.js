@@ -3,8 +3,8 @@ import { useLocation } from "react-router-dom";
 import usePrevious from "./usePrevious";
 
 export default function useScrollToTop() {
-  let location = useLocation();
-  let previous = usePrevious(location);
+  const location = useLocation();
+  const previous = usePrevious(location);
   useEffect(() => {
     if (previous && (previous.pathname !== location.pathname || previous.search !== location.search)) {
       window.scrollTo(0, 0);

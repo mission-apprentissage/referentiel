@@ -9,7 +9,7 @@ describe("enseignement-catholique", () => {
   it("Vérifie qu'on peut collecter les informations", async () => {
     await insertOrganisme({ siret: "11111111100006" });
     await insertOrganisme({ siret: "22222222200002" });
-    let source = createSource("enseignement-catholique", {
+    const source = createSource("enseignement-catholique", {
       input: [
         createStream(`"N° UAI CFA";"SIRET"
 "0111111Y";"11111111100006"`),
@@ -18,7 +18,7 @@ describe("enseignement-catholique", () => {
       ],
     });
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["enseignement-catholique"]);

@@ -10,9 +10,9 @@ describe("mna", () => {
   it("Vérifie qu'on peut importer des organismes", async () => {
     const source = createSource("mna", { input: Readable.from([{ siret: "11111111100006" }]) });
 
-    let stats = await importOrganismes(source);
+    const stats = await importOrganismes(source);
 
-    let count = await dbCollection("organismes").count({ siret: "11111111100006" });
+    const count = await dbCollection("organismes").count({ siret: "11111111100006" });
     assert.strictEqual(count, 1);
     assert.deepStrictEqual(stats, {
       mna: {
@@ -29,9 +29,9 @@ describe("mna", () => {
     await insertOrganisme({ siret: "11111111100006" });
     const source = createSource("mna", { input: Readable.from([{ siret: "11111111100006", uai: "0751234J" }]) });
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
     assert.deepStrictEqual(found.uai, "0751234J");
     assert.deepStrictEqual(stats, {
       mna: {

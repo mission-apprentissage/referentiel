@@ -3,20 +3,20 @@ const logger = require("../../common/logger");
 
 module.exports = () => {
   return (req, res, next) => {
-    let relativeUrl = (req.baseUrl || "") + (req.url || "");
-    let startTime = new Date().getTime();
-    let withoutSensibleFields = (obj) => {
+    const relativeUrl = (req.baseUrl || "") + (req.url || "");
+    const startTime = new Date().getTime();
+    const withoutSensibleFields = (obj) => {
       return _.omitBy(obj, (value, key) => {
-        let lower = key.toLowerCase();
+        const lower = key.toLowerCase();
         return lower.indexOf("token") !== -1 || ["authorization", "password", "newPassword"].includes(lower);
       });
     };
 
-    let log = () => {
+    const log = () => {
       try {
-        let error = req.err;
-        let statusCode = res.statusCode;
-        let data = {
+        const error = req.err;
+        const statusCode = res.statusCode;
+        const data = {
           type: "http",
           elapsedTime: new Date().getTime() - startTime,
           request: {
@@ -46,7 +46,7 @@ module.exports = () => {
             : {}),
         };
 
-        let level = error || (statusCode >= 400 && statusCode < 600) ? "error" : "info";
+        const level = error || (statusCode >= 400 && statusCode < 600) ? "error" : "info";
 
         logger[level](data, `Http Request ${level === "error" ? "KO" : "OK"}`);
       } finally {

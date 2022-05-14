@@ -10,14 +10,14 @@ describe("depp", () => {
     await insertOrganisme({
       siret: "11111111111111",
     });
-    let source = createSource("depp", {
+    const source = createSource("depp", {
       input: createStream(`"numero_uai";"numero_siren_siret_uai"
 "0011058V";"11111111111111"`),
     });
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111111111" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111111111" }, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["depp"],

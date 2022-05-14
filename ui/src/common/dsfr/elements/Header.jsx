@@ -4,7 +4,7 @@ import { Button } from "./Button";
 import { useModal } from "../common/useModal";
 
 function HeaderNavbar({ modals, showMenuButton, showSearchButton }) {
-  let { menu, search } = modals;
+  const { menu, search } = modals;
 
   return (
     <div className="fr-header__navbar">
@@ -50,8 +50,8 @@ function HeaderMenu({ modal, children, ...rest }) {
 }
 
 export function Header({ title, tagline, links, nav, search, modifiers, className, ...rest }) {
-  let clazz = classNames("fr-header", { modifiers, className });
-  let modals = {
+  const clazz = classNames("fr-header", { modifiers, className });
+  const modals = {
     menu: useModal(),
     search: useModal(),
   };

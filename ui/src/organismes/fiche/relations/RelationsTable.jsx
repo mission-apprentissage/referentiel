@@ -61,14 +61,14 @@ function AbsentRow({ relation }) {
 }
 
 export function RelationsTable({ label, organisme, results }) {
-  let [sirenFilter, toggleSirenFilter] = useToggle(false);
-  let [fermésFilter, toggleFermésFilter] = useToggle(false);
-  let siren = asSiren(organisme.siret);
-  let presents = results.filter((item) => item.organisme);
-  let absents = results.filter((item) => !item.organisme);
-  let memeEntreprise = presents.filter((i) => asSiren(i.organisme.siret) === siren);
-  let [selectedOrganisme, setSelectedOrganisme] = useState(null);
-  let modal = useModal();
+  const [sirenFilter, toggleSirenFilter] = useToggle(false);
+  const [fermésFilter, toggleFermésFilter] = useToggle(false);
+  const siren = asSiren(organisme.siret);
+  const presents = results.filter((item) => item.organisme);
+  const absents = results.filter((item) => !item.organisme);
+  const memeEntreprise = presents.filter((i) => asSiren(i.organisme.siret) === siren);
+  const [selectedOrganisme, setSelectedOrganisme] = useState(null);
+  const modal = useModal();
   function showOrganisme(organisme) {
     setSelectedOrganisme(organisme);
     modal.open();

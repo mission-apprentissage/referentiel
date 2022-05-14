@@ -3,12 +3,12 @@ const { getFromStorage } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
 
 module.exports = (custom = {}) => {
-  let name = "onisep-structure";
+  const name = "onisep-structure";
 
   return {
     name,
     async stream() {
-      let input = custom.input || (await getFromStorage("ONISEP-Structures-20012021PL.csv"));
+      const input = custom.input || (await getFromStorage("ONISEP-Structures-20012021PL.csv"));
 
       return compose(
         input,

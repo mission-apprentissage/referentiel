@@ -6,7 +6,7 @@ describe("academiesRoutes", () => {
   it("Vérifie qu'on peut lister les académies", async () => {
     const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/data");
+    const response = await httpClient.get("/api/v1/data");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.academies.length, 37);

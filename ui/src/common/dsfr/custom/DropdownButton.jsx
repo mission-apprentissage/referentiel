@@ -4,7 +4,7 @@ import useToggle from "../../hooks/useToggle";
 import { Box } from "../../Flexbox";
 
 const DropdownButton = styled(({ className, links, children, ...rest }) => {
-  let [showContent, toggleShowContent] = useToggle(false);
+  const [showContent, toggleShowContent] = useToggle(false);
   return (
     <div className={className}>
       <Button {...rest} onClick={() => toggleShowContent()} onBlur={() => setTimeout(toggleShowContent, 200)}>

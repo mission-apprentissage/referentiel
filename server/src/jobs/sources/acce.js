@@ -10,7 +10,7 @@ function buildContacts(email) {
 }
 
 module.exports = () => {
-  let name = "acce";
+  const name = "acce";
 
   return {
     name,

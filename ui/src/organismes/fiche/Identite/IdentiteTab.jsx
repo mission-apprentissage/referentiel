@@ -25,9 +25,9 @@ const Meta = styled("div")`
 `;
 
 export default function IdentiteTab({ organisme }) {
-  let datagouvModal = useModal();
-  let { auth, isAnonymous } = useContext(ApiContext);
-  let showValidator = !isAnonymous() && organisme.adresse && organisme.adresse[auth.type].code === auth.code;
+  const datagouvModal = useModal();
+  const { auth, isAnonymous } = useContext(ApiContext);
+  const showValidator = !isAnonymous() && organisme.adresse && organisme.adresse[auth.type].code === auth.code;
 
   return (
     <>

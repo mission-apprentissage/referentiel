@@ -17,8 +17,8 @@ import Page from "../common/Page";
 import { useQuery } from "../common/hooks/useQuery";
 
 export default function OrganismesPage() {
-  let { response, search, refine } = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
-  let { query } = useQuery();
+  const { response, search, refine } = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
+  const { query } = useQuery();
 
   return (
     <Page>

@@ -12,7 +12,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoiYmd1ZXJvdXQiLCJhIjoiY2wwamM5bmMyMGI5cDNrcDZze
 
 function addSVGImage(map, name, definitions) {
   return new Promise((resolve) => {
-    let img = new Image(definitions.width, definitions.height);
+    const img = new Image(definitions.width, definitions.height);
     img.src = definitions.file;
     img.onload = () => {
       map.addImage(name, img);
@@ -22,7 +22,7 @@ function addSVGImage(map, name, definitions) {
 }
 
 function adaptGeojson(adresse, props = {}) {
-  let geojson = adresse.geojson;
+  const geojson = adresse.geojson;
 
   return {
     ...geojson,
@@ -34,12 +34,12 @@ function adaptGeojson(adresse, props = {}) {
 }
 
 function getCoordinates(geojson) {
-  let { geometry } = geojson;
+  const { geometry } = geojson;
   return geometry.type === "Polygon" ? geometry.coordinates[0][0] : geometry.coordinates;
 }
 
 function getCenter(organisme) {
-  let adresse = organisme.adresse;
+  const adresse = organisme.adresse;
   if (adresse) {
     return getCoordinates(adresse.geojson);
   }
@@ -52,24 +52,24 @@ function degreesToRadians(degrees) {
 }
 
 function distanceInKmBetweenCoords(coords1, coords2) {
-  let earthRadiusKm = 6371;
-  let dLat = degreesToRadians(coords2[1] - coords1[1]);
-  let dLon = degreesToRadians(coords2[0] - coords1[0]);
-  let lat1 = degreesToRadians(coords1[1]);
-  let lat2 = degreesToRadians(coords2[1]);
+  const earthRadiusKm = 6371;
+  const dLat = degreesToRadians(coords2[1] - coords1[1]);
+  const dLon = degreesToRadians(coords2[0] - coords1[0]);
+  const lat1 = degreesToRadians(coords1[1]);
+  const lat2 = degreesToRadians(coords2[1]);
 
-  let a =
+  const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return earthRadiusKm * c;
 }
 
 function buildSource(organisme) {
-  let features = [];
+  const features = [];
   let lieux = organisme.lieux_de_formation;
 
   if (organisme.adresse) {
-    let coords = organisme.adresse.geojson.geometry.coordinates;
+    const coords = organisme.adresse.geojson.geometry.coordinates;
     lieux = lieux.filter(({ adresse }) => {
       return distanceInKmBetweenCoords(coords, adresse.geojson.geometry.coordinates) !== 0;
     });
@@ -103,7 +103,7 @@ function buildSource(organisme) {
 }
 
 function showPopupOnMouseHover(map, layerName) {
-  let popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false });
+  const popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false });
 
   map.on("mouseenter", layerName, (e) => {
     // Change the cursor style as a UI indicator.
@@ -129,9 +129,9 @@ function showPopupOnMouseHover(map, layerName) {
 }
 
 function getBounds(source) {
-  let first = source.data.features[0];
-  let coords = getCoordinates(first);
-  let bounds = new mapboxgl.LngLatBounds(coords, coords);
+  const first = source.data.features[0];
+  const coords = getCoordinates(first);
+  const bounds = new mapboxgl.LngLatBounds(coords, coords);
 
   source.data.features.forEach((geojson) => bounds.extend(getCoordinates(geojson)));
 
@@ -190,7 +190,7 @@ export default function LieuxDeFormationMap({ organisme }) {
     });
 
     map.on("load", () => {
-      let source = buildSource(organisme);
+      const source = buildSource(organisme);
       return configureMap(map, source);
     });
   });

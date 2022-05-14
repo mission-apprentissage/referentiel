@@ -8,7 +8,7 @@ function sanitize(v) {
 }
 
 async function readCSV(input) {
-  let stream = input || (await getFromStorage("enseignement-catholique.csv"));
+  const stream = input || (await getFromStorage("enseignement-catholique.csv"));
 
   return compose(
     stream,
@@ -25,7 +25,7 @@ async function readCSV(input) {
 }
 
 async function readCSVRelations(input) {
-  let stream = input || (await getFromStorage("enseignement-catholique-relations.csv"));
+  const stream = input || (await getFromStorage("enseignement-catholique-relations.csv"));
 
   return compose(
     stream,

@@ -25,17 +25,17 @@ class HTTPError extends Error {
 }
 
 function decodeJWT(token) {
-  let decoded = jwt.decode(token);
+  const decoded = jwt.decode(token);
   return { token, ...decoded };
 }
 
 function getAuthFromStorage() {
-  let initial = sessionStorage.getItem("referentiel:token");
+  const initial = sessionStorage.getItem("referentiel:token");
   return initial ? decodeJWT(initial) : anonymous;
 }
 
 export default function ApiProvider({ children }) {
-  let [auth, setAuth] = useState(getAuthFromStorage());
+  const [auth, setAuth] = useState(getAuthFromStorage());
 
   function logout() {
     sessionStorage.removeItem("referentiel:token");
@@ -43,8 +43,8 @@ export default function ApiProvider({ children }) {
   }
 
   async function handleResponse(path, response) {
-    let statusCode = response.status;
-    let json = await response.json();
+    const statusCode = response.status;
+    const json = await response.json();
     if (statusCode >= 400 && statusCode < 600) {
       if (response.status === 401) {
         logout();
@@ -65,7 +65,7 @@ export default function ApiProvider({ children }) {
     };
   };
 
-  let context = {
+  const context = {
     auth,
     isAnonymous() {
       return auth.sub === anonymous.sub;
@@ -77,7 +77,7 @@ export default function ApiProvider({ children }) {
     logout,
     httpClient: {
       _get(path, parameters = {}) {
-        let params = queryString.stringify(parameters, { skipNull: true });
+        const params = queryString.stringify(parameters, { skipNull: true });
 
         return fetch(`${path}${params ? `?${params}` : ""}`, {
           method: "GET",

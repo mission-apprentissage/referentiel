@@ -44,8 +44,8 @@ module.exports = {
       return false;
     }
 
-    let numbers = code.substring(0, 7);
-    let checksum = code.substring(7, 8).toLowerCase();
+    const numbers = code.substring(0, 7);
+    const checksum = code.substring(7, 8).toLowerCase();
 
     return checksum === computeChecksum(numbers);
   },

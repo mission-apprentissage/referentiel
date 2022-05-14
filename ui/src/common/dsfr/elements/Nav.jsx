@@ -6,8 +6,8 @@ import { NavLink as RouterNavLink } from "react-router-dom";
 import useElementId from "../../hooks/useElementId";
 
 export function Nav({ modifiers, className, children }) {
-  let clazz = classNames("fr-nav", { modifiers, className });
-  let id = useElementId("nav");
+  const clazz = classNames("fr-nav", { modifiers, className });
+  const id = useElementId("nav");
 
   return (
     <nav className={clazz} id={id} role="navigation" aria-label="Menu principal">
@@ -27,7 +27,7 @@ export function Nav({ modifiers, className, children }) {
 export const NavLink = buildComponent(RouterNavLink, "fr-nav__link");
 
 export function NavButton({ text, children, ...rest }) {
-  let { collapseId, collapseRef, collapse } = useCollapse();
+  const { collapseId, collapseRef, collapse } = useCollapse();
 
   return (
     <>

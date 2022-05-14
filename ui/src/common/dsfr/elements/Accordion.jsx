@@ -6,7 +6,7 @@ import { useCollapse } from "../common/useCollapse";
 const Accordion = buildComponent("ul", "fr-accordions-group");
 
 function AccordionItem({ label, children, className, ...rest }) {
-  let { collapseId, collapseRef, collapse } = useCollapse();
+  const { collapseId, collapseRef, collapse } = useCollapse();
 
   return (
     <li onClick={collapse} className={className}>

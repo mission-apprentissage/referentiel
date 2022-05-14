@@ -2,11 +2,11 @@ const { dbCollection } = require("../../common/db/mongodb");
 const Boom = require("boom");
 module.exports = () => {
   return async (req, res, next) => {
-    let user = req.user;
-    let siret = req.params.siret;
+    const user = req.user;
+    const siret = req.params.siret;
 
     try {
-      let organisme = await dbCollection("organismes").findOne({
+      const organisme = await dbCollection("organismes").findOne({
         siret,
         [`adresse.${user.type}.code`]: user.code,
       });

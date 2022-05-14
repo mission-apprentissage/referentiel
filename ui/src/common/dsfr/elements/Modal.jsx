@@ -10,8 +10,8 @@ export const modalSizeModifiers = {
 };
 
 export default function Modal({ title, modal, content, footer, size, modifiers, className, ...rest }) {
-  let clazz = classNames("fr-col", { modifiers: modifiers || modalSizeModifiers.md, className, bemDelimiter: "-" });
-  let contentId = useElementId("modal-content");
+  const clazz = classNames("fr-col", { modifiers: modifiers || modalSizeModifiers.md, className, bemDelimiter: "-" });
+  const contentId = useElementId("modal-content");
 
   return (
     <dialog className={"fr-modal"} id={modal.id} ref={modal.ref} aria-labelledby={contentId} role="dialog" {...rest}>

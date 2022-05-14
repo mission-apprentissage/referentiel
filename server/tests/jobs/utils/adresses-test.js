@@ -6,7 +6,7 @@ const GeoAdresseApi = require("../../../src/common/apis/GeoAdresseApi");
 
 describe("adresses", () => {
   it("Vérifie qu'on met en cache les erreurs 4xx de l'API sirene", async () => {
-    let { reverseGeocode } = adresses(new GeoAdresseApi());
+    const { reverseGeocode } = adresses(new GeoAdresseApi());
     mockGeoAddresseApi((client) => {
       client
         .get((uri) => uri.includes("reverse"))
@@ -23,7 +23,7 @@ describe("adresses", () => {
       await reverseGeocode(2, 48);
       assert.fail();
     } catch (e) {
-      let found = await dbCollection("cache").findOne({ _id: "adresses_2_48" });
+      const found = await dbCollection("cache").findOne({ _id: "adresses_2_48" });
       assert.strictEqual(found.type, "error");
       assert.deepStrictEqual(
         found.value.message,
@@ -33,7 +33,7 @@ describe("adresses", () => {
   });
 
   it("Vérifie qu'on ne met pas en cache les erreurs 5xx de l'API sirene", async () => {
-    let { reverseGeocode } = adresses(new GeoAdresseApi());
+    const { reverseGeocode } = adresses(new GeoAdresseApi());
     mockGeoAddresseApi((client) => {
       client
         .get((uri) => uri.includes("reverse"))
@@ -50,7 +50,7 @@ describe("adresses", () => {
       await reverseGeocode(2, 48);
       assert.fail();
     } catch (e) {
-      let found = await dbCollection("cache").findOne({ _id: "adresses_2_48" });
+      const found = await dbCollection("cache").findOne({ _id: "adresses_2_48" });
       assert.deepStrictEqual(found, null);
     }
   });

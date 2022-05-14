@@ -6,16 +6,16 @@ describe("healthcheckRoutes", () => {
   it("Vérifie que le server fonctionne", async () => {
     const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/healthcheck");
+    const response = await httpClient.get("/api/v1/healthcheck");
 
     assert.strictEqual(response.status, 200);
     assert.strictEqual(response.data.healthcheck, true);
   });
 
   it("Vérifie qu'on peut générer une erreur", async () => {
-    let { httpClient } = await startServer();
+    const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/healthcheck/error");
+    const response = await httpClient.get("/api/v1/healthcheck/error");
 
     assert.strictEqual(response.status, 500);
     assert.deepStrictEqual(response.data, {
@@ -26,18 +26,18 @@ describe("healthcheckRoutes", () => {
   });
 
   it("Vérifie qu'il faut un token pour accéder à une route protégée avec un token en paramètre (region)", async () => {
-    let { httpClient } = await startServer();
+    const { httpClient } = await startServer();
 
-    let response = await httpClient.get(`/api/v1/healthcheck/auth?token=${buildApiToken("region", "11")}`);
+    const response = await httpClient.get(`/api/v1/healthcheck/auth?token=${buildApiToken("region", "11")}`);
 
     assert.strictEqual(response.status, 200);
     assert.deepStrictEqual(response.data, { code: "11", type: "region" });
   });
 
   it("Vérifie qu'il faut un token pour accéder à une route protégée avec un header Authorization (région)", async () => {
-    let { httpClient } = await startServer();
+    const { httpClient } = await startServer();
 
-    let response = await httpClient.get(`/api/v1/healthcheck/auth`, {
+    const response = await httpClient.get(`/api/v1/healthcheck/auth`, {
       headers: {
         ...generateAuthHeader("region", "11"),
       },
@@ -48,18 +48,18 @@ describe("healthcheckRoutes", () => {
   });
 
   it("Vérifie qu'il faut un token pour accéder à une route protégée avec un token en paramètre (academie)", async () => {
-    let { httpClient } = await startServer();
+    const { httpClient } = await startServer();
 
-    let response = await httpClient.get(`/api/v1/healthcheck/auth?token=${buildApiToken("academie", "11")}`);
+    const response = await httpClient.get(`/api/v1/healthcheck/auth?token=${buildApiToken("academie", "11")}`);
 
     assert.strictEqual(response.status, 200);
     assert.deepStrictEqual(response.data, { code: "11", type: "academie" });
   });
 
   it("Vérifie qu'il faut un token pour accéder à une route protégée avec un header Authorization (academie)", async () => {
-    let { httpClient } = await startServer();
+    const { httpClient } = await startServer();
 
-    let response = await httpClient.get(`/api/v1/healthcheck/auth`, {
+    const response = await httpClient.get(`/api/v1/healthcheck/auth`, {
       headers: {
         ...generateAuthHeader("academie", "11"),
       },
@@ -70,9 +70,9 @@ describe("healthcheckRoutes", () => {
   });
 
   it("Vérifie qu'on ne peut pas accéder à une route protégée", async () => {
-    let { httpClient } = await startServer();
+    const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/healthcheck/auth");
+    const response = await httpClient.get("/api/v1/healthcheck/auth");
 
     assert.strictEqual(response.status, 401);
     assert.deepStrictEqual(response.data, {

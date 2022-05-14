@@ -7,7 +7,7 @@ class InMemoryCache {
   }
 
   get(key) {
-    let value = this.cache[key];
+    const value = this.cache[key];
     if (value) {
       logger.trace(`Value with key '${key}' retrieved from cache ${this.name}`);
     }

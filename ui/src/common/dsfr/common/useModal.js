@@ -2,8 +2,8 @@ import { createRef } from "react";
 import useElementId from "../../hooks/useElementId";
 
 export function useModal() {
-  let id = useElementId("modal");
-  let ref = createRef();
+  const id = useElementId("modal");
+  const ref = createRef();
   function open() {
     dsfr(ref.current).modal.disclose();
   }

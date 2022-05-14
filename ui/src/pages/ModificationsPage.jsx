@@ -69,7 +69,7 @@ export default function ModificationsPage() {
         <GridRow>
           <Col modifiers={"8"}>
             {cloneNodes(modifications, (modification) => {
-              let date = modification.props.date;
+              const date = modification.props.date;
               return { ...modification, key: date, id: date, className: "fr-mb-8w" };
             })}
           </Col>

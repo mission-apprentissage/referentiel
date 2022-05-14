@@ -4,10 +4,10 @@ const { findRegionByCode } = require("../../common/regions");
 const { findAcademieByCode } = require("../../common/academies");
 
 function createToken(type, subject, options = {}) {
-  let defaults = config.auth[type];
-  let secret = options.secret || defaults.jwtSecret;
-  let expiresIn = options.expiresIn || defaults.expiresIn;
-  let payload = options.payload || {};
+  const defaults = config.auth[type];
+  const secret = options.secret || defaults.jwtSecret;
+  const expiresIn = options.expiresIn || defaults.expiresIn;
+  const payload = options.payload || {};
 
   return jwt.sign(payload, secret, {
     issuer: "referentiel",
@@ -17,7 +17,7 @@ function createToken(type, subject, options = {}) {
 }
 
 function buildApiToken(type, code, options = {}) {
-  let found = type === "region" ? findRegionByCode(code) : findAcademieByCode(code);
+  const found = type === "region" ? findRegionByCode(code) : findAcademieByCode(code);
   return createToken("api", code, {
     payload: { code, type, nom: found.nom },
     ...options,

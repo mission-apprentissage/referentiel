@@ -6,9 +6,9 @@ import useElementId from "../../hooks/useElementId";
 export const ToggleList = buildListComponent("ul", "fr-toggle__list");
 
 export function ToggleSwitch({ label, hint, modifiers, className, ...rest }) {
-  let id = useElementId("toggle");
-  let hintId = useElementId("hint");
-  let clazz = classNames("fr-toggle", { modifiers, className });
+  const id = useElementId("toggle");
+  const hintId = useElementId("hint");
+  const clazz = classNames("fr-toggle", { modifiers, className });
 
   return (
     <div className={clazz}>

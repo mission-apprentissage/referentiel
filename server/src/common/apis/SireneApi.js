@@ -15,7 +15,7 @@ class SireneApi extends RateLimitedApi {
   getUniteLegale(siren) {
     return this.execute(async () => {
       logger.debug(`Fetch de l'unité légale ${siren}...`);
-      let response = await this.client.get(`${SireneApi.baseApiUrl}/unites_legales/${siren}`);
+      const response = await this.client.get(`${SireneApi.baseApiUrl}/unites_legales/${siren}`);
       return response.data.unite_legale;
     });
   }
@@ -23,7 +23,7 @@ class SireneApi extends RateLimitedApi {
   getEtablissement(siret) {
     return this.execute(async () => {
       logger.debug(`Fetch de l'établissement ${siret}...`);
-      let response = await this.client.get(`${SireneApi.baseApiUrl}/etablissements/${siret}`);
+      const response = await this.client.get(`${SireneApi.baseApiUrl}/etablissements/${siret}`);
 
       return response.data.etablissement;
     });

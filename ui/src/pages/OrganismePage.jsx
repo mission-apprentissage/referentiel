@@ -13,17 +13,17 @@ import { buildUrl } from "../common/utils";
 import Page from "../common/Page";
 
 export function OrganismeTitle() {
-  let { organisme } = useContext(OrganismeContext);
+  const { organisme } = useContext(OrganismeContext);
 
   return <RaisonSociale organisme={organisme} />;
 }
 
 export default function OrganismePage() {
-  let { siret } = useParams();
-  let { search } = useContext(SearchContext);
-  let navigate = useNavigate();
-  let [{ data: organisme, loading, error }, setData] = useFetch(`/api/v1/organismes/${siret}`);
-  let [message, setMessage] = useState(null);
+  const { siret } = useParams();
+  const { search } = useContext(SearchContext);
+  const navigate = useNavigate();
+  const [{ data: organisme, loading, error }, setData] = useFetch(`/api/v1/organismes/${siret}`);
+  const [message, setMessage] = useState(null);
 
   function onChange(organisme, options = {}) {
     if (options.message) {
@@ -34,7 +34,7 @@ export default function OrganismePage() {
   }
 
   function autoCloseMessage() {
-    let timeout = setTimeout(() => {
+    const timeout = setTimeout(() => {
       clearTimeout(timeout);
       setMessage(null);
     }, 5000);

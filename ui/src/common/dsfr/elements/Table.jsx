@@ -11,7 +11,7 @@ export function Thead({ children }) {
 }
 
 export function Table({ caption, modifiers, thead, children, className, ...rest }) {
-  let clazz = classNames("fr-table", { modifiers, className });
+  const clazz = classNames("fr-table", { modifiers, className });
 
   return (
     <div className={clazz} {...rest}>

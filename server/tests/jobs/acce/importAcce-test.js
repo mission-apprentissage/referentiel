@@ -6,7 +6,7 @@ const { dbCollection } = require("../../../src/common/db/mongodb");
 
 describe("importAcce", () => {
   it("Vérifie qu'on peut scrapper et importer un etablissement", async () => {
-    let api = getMockedAcceApi((mock, responses) => {
+    const api = getMockedAcceApi((mock, responses) => {
       mock.onGet(/.*index.php.*/).reply(200, responses.index(), {
         "set-cookie": ["PHPSESSID=123;"],
       });
@@ -14,9 +14,9 @@ describe("importAcce", () => {
       mock.onGet(/.*uai.php.*/).reply(200, responses.etablissement());
     });
 
-    let stats = await importAcce({ acceApi: api });
+    const stats = await importAcce({ acceApi: api });
 
-    let found = await dbCollection("acce").findOne({});
+    const found = await dbCollection("acce").findOne({});
     assert.deepStrictEqual(omit(found, ["_id"]), {
       nom: "Centre de Formation d'Apprentis transport et logistique",
       uai: "0511972S",
@@ -86,7 +86,7 @@ describe("importAcce", () => {
   });
 
   it("Vérifie qu'on peut importer un établissement sans coordonnées de géolocalisation", async () => {
-    let api = getMockedAcceApi((mock, responses) => {
+    const api = getMockedAcceApi((mock, responses) => {
       mock.onGet(/.*index.php.*/).reply(200, responses.index(), {
         "set-cookie": ["PHPSESSID=123;"],
       });
@@ -96,12 +96,12 @@ describe("importAcce", () => {
 
     await importAcce({ acceApi: api });
 
-    let found = await dbCollection("acce").findOne({});
+    const found = await dbCollection("acce").findOne({});
     assert.ok(found.geoloc === undefined);
   });
 
   it("Vérifie qu'on gère les erreurs durant le scrapping", async () => {
-    let api = getMockedAcceApi((mock, responses) => {
+    const api = getMockedAcceApi((mock, responses) => {
       mock.onGet(/.*index.php.*/).reply(200, responses.index(), {
         "set-cookie": ["PHPSESSID=123;"],
       });
@@ -109,9 +109,9 @@ describe("importAcce", () => {
       mock.onGet(/.*uai.php.*/).reply(500, "<html></html>");
     });
 
-    let stats = await importAcce({ acceApi: api });
+    const stats = await importAcce({ acceApi: api });
 
-    let count = await dbCollection("acce").countDocuments();
+    const count = await dbCollection("acce").countDocuments();
     assert.strictEqual(count, 0);
     assert.deepStrictEqual(stats, {
       total: 1,

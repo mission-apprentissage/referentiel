@@ -3,7 +3,7 @@ const config = require("../../config");
 const { init, captureException, configureScope } = require("@sentry/node");
 
 module.exports = () => {
-  let isEnabled = !_.isEmpty(config.sentry.dsn);
+  const isEnabled = !_.isEmpty(config.sentry.dsn);
 
   if (isEnabled) {
     init({ dsn: config.sentry.dsn, environment: config.env, tracesSampleRate: 1.0 });
@@ -11,8 +11,8 @@ module.exports = () => {
 
   return {
     sendError: (e, opts = {}) => {
-      let req = opts.req;
-      let options = req
+      const req = opts.req;
+      const options = req
         ? {
             user: {
               ...(req.user ? { id: req.user.username } : {}),

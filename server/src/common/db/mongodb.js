@@ -13,7 +13,7 @@ function ensureInitialization() {
 }
 
 async function connectToMongodb(uri = config.mongodb.uri) {
-  let client = await new MongoClient(uri, {
+  const client = await new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
@@ -53,8 +53,8 @@ function dbCollection(name) {
 }
 
 async function createCollectionIfNeeded(collection) {
-  let db = getDatabase();
-  let collections = await db.listCollections().toArray();
+  const db = getDatabase();
+  const collections = await db.listCollections().toArray();
 
   if (!collections.find((c) => c.name === collection.name)) {
     await db.createCollection(collection.name).catch(() => {});
@@ -72,8 +72,8 @@ async function configureIndexes(options = {}) {
   await ensureInitialization();
   await Promise.all(
     Object.values(collections).map(async (collection) => {
-      let shouldDropIndexes = options.dropIndexes || false;
-      let dbCol = dbCollection(collection.name);
+      const shouldDropIndexes = options.dropIndexes || false;
+      const dbCol = dbCollection(collection.name);
 
       logger.debug(`Configuring indexes for collection ${collection.name} (drop:${shouldDropIndexes})...`);
       if (shouldDropIndexes) {
@@ -84,7 +84,7 @@ async function configureIndexes(options = {}) {
         return;
       }
 
-      let indexes = collection.indexes();
+      const indexes = collection.indexes();
       await Promise.all(
         indexes.map(([index, options]) => {
           return dbCol.createIndex(index, options);
@@ -105,7 +105,7 @@ async function configureValidation() {
       }
 
       logger.debug(`Configuring validation for collection ${collection.name}...`);
-      let db = getDatabase();
+      const db = getDatabase();
       await db.command({
         collMod: collection.name,
         validationLevel: "strict",

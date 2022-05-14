@@ -2,12 +2,12 @@ import { useState } from "react";
 import { uniq } from "lodash-es";
 
 export default function useForm(options = {}) {
+  const schema = options.yup;
+  const [values, setValues] = useState(options.initialValues || {});
+  const [submitting, setSubmitting] = useState(false);
+  const [pristine, setPristine] = useState(true);
+  const [errors, setErrors] = useState(null);
   let fields = [];
-  let schema = options.yup;
-  let [values, setValues] = useState(options.initialValues || {});
-  let [submitting, setSubmitting] = useState(false);
-  let [pristine, setPristine] = useState(true);
-  let [errors, setErrors] = useState(null);
 
   function registerField(name) {
     fields = uniq([...fields, name]);
@@ -50,7 +50,7 @@ export default function useForm(options = {}) {
           setSubmitting(true);
 
           if (schema) {
-            let err = await validate();
+            const err = await validate();
             if (err) {
               setErrors(err);
               setSubmitting(false);

@@ -17,9 +17,9 @@ function getItems(type) {
 }
 
 function generateMagicLinks(type, options = {}) {
-  let url = options.url || config.publicUrl;
-  let links = getItems(type).map((item) => {
-    let token = buildApiToken(type, item.code);
+  const url = options.url || config.publicUrl;
+  const links = getItems(type).map((item) => {
+    const token = buildApiToken(type, item.code);
     return { Région: item.nom, Lien: `${url}/login?token=${token}` };
   });
 

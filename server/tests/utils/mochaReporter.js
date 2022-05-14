@@ -84,7 +84,7 @@ function logFailures(failures) {
 
     // indented test title
     var testTitle = "";
-    let titlePath = test.titlePath();
+    const titlePath = test.titlePath();
     titlePath[0] = chalk.magenta(titlePath[0]);
     titlePath.forEach(function (str, index) {
       if (index !== 0) {
@@ -96,7 +96,7 @@ function logFailures(failures) {
       testTitle += str;
     });
 
-    let errorAsString = err.name === "MongoServerError" ? chalk.grey(`${util.inspect(err, { depth: null })}`) : stack;
+    const errorAsString = err.name === "MongoServerError" ? chalk.grey(`${util.inspect(err, { depth: null })}`) : stack;
     log(...[fmt, i + 1, testTitle, msg, errorAsString]);
   });
   log();

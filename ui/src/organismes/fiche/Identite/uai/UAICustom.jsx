@@ -3,7 +3,7 @@ import React from "react";
 import useFormContext from "../../../../common/form/useFormContext";
 
 export function UAICustom({ action }) {
-  let { registerField, errors } = useFormContext();
+  const { registerField, errors } = useFormContext();
 
   return (
     <>

@@ -5,10 +5,10 @@ import { DataContext } from "../../common/DataProvider";
 import { ApiContext } from "../../common/ApiProvider";
 
 export default function DepartementAuthSelector({ departement, onChange }) {
-  let data = useContext(DataContext);
-  let { auth } = useContext(ApiContext);
-  let [selected, setSelected] = useState(departement || "");
-  let departements = data[`${auth.type}s`].find((r) => r.code === auth.code)?.departements || [];
+  const data = useContext(DataContext);
+  const { auth } = useContext(ApiContext);
+  const [selected, setSelected] = useState(departement || "");
+  const departements = data[`${auth.type}s`].find((r) => r.code === auth.code)?.departements || [];
 
   return (
     <Box align={"center"} justify={"start"} style={{ width: "100%" }}>
@@ -17,14 +17,14 @@ export default function DepartementAuthSelector({ departement, onChange }) {
         <Select
           value={selected}
           onChange={(e) => {
-            let code = e.target.value;
+            const code = e.target.value;
             setSelected(code);
             return onChange(code);
           }}
         >
           <option value="">Tous les départements</option>
           {departements.map((dep, index) => {
-            let code = dep.code;
+            const code = dep.code;
             return (
               <option key={index} value={code}>
                 {dep.nom}

@@ -13,13 +13,13 @@ module.exports = () => {
   router.get(
     "/api/v1/uais",
     tryCatch(async (req, res) => {
-      let { page, ordre, items_par_page } = await Joi.object({
+      const { page, ordre, items_par_page } = await Joi.object({
         page: Joi.number().default(1),
         items_par_page: Joi.number().default(10),
         ordre: Joi.string().valid("asc", "desc").default("desc"),
       }).validateAsync(req.query, { abortEarly: false });
 
-      let { find, pagination } = await findAndPaginate(
+      const { find, pagination } = await findAndPaginate(
         dbCollection("acce"),
         {},
         {
@@ -48,13 +48,13 @@ module.exports = () => {
   router.get(
     "/api/v1/uais/:uai",
     tryCatch(async (req, res) => {
-      let { uai } = await Joi.object({
+      const { uai } = await Joi.object({
         uai: Joi.string()
           .pattern(/^[0-9]{7}[A-Z]{1}$/)
           .required(),
       }).validateAsync(req.params, { abortEarly: false });
 
-      let found = await dbCollection("acce").findOne({ uai }, { projection: { _id: 0, uai: 1 } });
+      const found = await dbCollection("acce").findOne({ uai }, { projection: { _id: 0, uai: 1 } });
 
       if (!found) {
         throw Boom.notFound("UAI inconnu");

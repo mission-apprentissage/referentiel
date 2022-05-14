@@ -43,10 +43,10 @@ const validators = (httpClient) => {
 };
 
 export function UAISelectorModal({ modal, organisme, action }) {
-  let { httpClient } = useContext(ApiContext);
-  let { onChange } = useContext(OrganismeContext);
-  let hasPotentiels = organisme.uai_potentiels.length > 0;
-  let form = useForm({
+  const { httpClient } = useContext(ApiContext);
+  const { onChange } = useContext(OrganismeContext);
+  const hasPotentiels = organisme.uai_potentiels.length > 0;
+  const form = useForm({
     initialValues: hasPotentiels ? { uai: organisme.uai || "", custom: "" } : { uai: "custom", custom: "" },
     yup: validators(httpClient),
   });

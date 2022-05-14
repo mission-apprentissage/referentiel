@@ -9,7 +9,7 @@ describe("statsRoutes", () => {
     await insertOrganisme();
     await insertOrganisme({ uai: "0751234J", qualiopi: true, nature: "responsable", etat_administratif: "actif" });
 
-    let response = await httpClient.get("/api/v1/stats/couverture");
+    const response = await httpClient.get("/api/v1/stats/couverture");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, { total: 1, valides: 1 });
@@ -26,7 +26,7 @@ describe("statsRoutes", () => {
       _meta: { date_import: DateTime.fromISO("2022-03-20").toJSDate() },
     });
 
-    let response = await httpClient.get("/api/v1/stats/nouveaux");
+    const response = await httpClient.get("/api/v1/stats/nouveaux");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, [
@@ -43,7 +43,7 @@ describe("statsRoutes", () => {
     await insertOrganisme({ etat_administratif: "actif" });
     await insertOrganisme({ etat_administratif: "fermé" });
 
-    let response = await httpClient.get("/api/v1/stats/etat_administratif");
+    const response = await httpClient.get("/api/v1/stats/etat_administratif");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -87,7 +87,7 @@ describe("statsRoutes", () => {
       }),
     ]);
 
-    let response = await httpClient.get("/api/v1/stats/natures");
+    const response = await httpClient.get("/api/v1/stats/natures");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -166,7 +166,7 @@ describe("statsRoutes", () => {
       }),
     ]);
 
-    let response = await httpClient.get("/api/v1/stats/validation");
+    const response = await httpClient.get("/api/v1/stats/validation");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -205,7 +205,7 @@ describe("statsRoutes", () => {
     await insertOrganisme({ nature: "formateur", qualiopi: true });
     await insertOrganisme({ nature: "inconnue", qualiopi: false });
 
-    let response = await httpClient.get("/api/v1/stats/qualiopi");
+    const response = await httpClient.get("/api/v1/stats/qualiopi");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, [

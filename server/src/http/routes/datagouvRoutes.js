@@ -13,13 +13,13 @@ module.exports = () => {
   router.get(
     "/api/v1/datagouv",
     tryCatch(async (req, res) => {
-      let { page, ordre, items_par_page } = await Joi.object({
+      const { page, ordre, items_par_page } = await Joi.object({
         page: Joi.number().default(1),
         items_par_page: Joi.number().default(10),
         ordre: Joi.string().valid("asc", "desc").default("desc"),
       }).validateAsync(req.query, { abortEarly: false });
 
-      let { find, pagination } = await findAndPaginate(
+      const { find, pagination } = await findAndPaginate(
         dbCollection("datagouv"),
         {},
         {
@@ -48,13 +48,13 @@ module.exports = () => {
   router.get(
     "/api/v1/datagouv/:siret",
     tryCatch(async (req, res) => {
-      let { siret } = await Joi.object({
+      const { siret } = await Joi.object({
         siret: Joi.string()
           .pattern(/^([0-9]{9}|[0-9]{14})$/)
           .required(),
       }).validateAsync(req.params, { abortEarly: false });
 
-      let found = await dbCollection("datagouv").findOne(
+      const found = await dbCollection("datagouv").findOne(
         { siretEtablissementDeclarant: siret },
         { projection: { _id: 0 } }
       );

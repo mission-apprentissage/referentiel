@@ -8,9 +8,9 @@ export default function FilAriane({ routes }) {
   return (
     <Breadcrumb>
       {breadcrumbs.map(({ match, breadcrumb }, index) => {
-        let last = index === breadcrumbs.length - 1;
-        let Component = last ? BreadcrumbCurrent : BreadcrumbLink;
-        let props = last ? { "aria-current": "page" } : { to: match.pathname };
+        const last = index === breadcrumbs.length - 1;
+        const Component = last ? BreadcrumbCurrent : BreadcrumbLink;
+        const props = last ? { "aria-current": "page" } : { to: match.pathname };
 
         return (
           <Component key={index} {...props}>

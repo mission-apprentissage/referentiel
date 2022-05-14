@@ -9,9 +9,9 @@ import { buildUrl } from "../../common/utils";
 import DropdownButton from "../../common/dsfr/custom/DropdownButton";
 
 export default function OrganismeList({ response }) {
-  let { data, loading, error } = response;
-  let { search } = useContext(SearchContext);
-  let pagination = data.pagination;
+  const { data, loading, error } = response;
+  const { search } = useContext(SearchContext);
+  const pagination = data.pagination;
 
   return (
     <>

@@ -5,8 +5,8 @@ const axiosist = require("axiosist"); // eslint-disable-line node/no-unpublished
 const { compose, transformData } = require("oleoduc");
 const { buildApiToken } = require("../../src/common/utils/jwtUtils");
 
-let createStream = (content) => {
-  let stream = new Readable({
+const createStream = (content) => {
+  const stream = new Readable({
     objectMode: true,
     read() {},
   });

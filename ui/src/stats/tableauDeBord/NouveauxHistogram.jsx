@@ -3,7 +3,7 @@ import { useFetch } from "../../common/hooks/useFetch";
 import Histogram from "../../common/nivo/Histogram";
 
 function getLastMonths(nbMonths) {
-  let names = [
+  const names = [
     "Janvier",
     "Février",
     "Mars",
@@ -18,11 +18,11 @@ function getLastMonths(nbMonths) {
     "Decembre",
   ];
 
-  let today = new Date();
-  let months = [];
+  const today = new Date();
+  const months = [];
   for (let i = nbMonths; i > 0; i -= 1) {
-    let d = new Date(today.getFullYear(), today.getMonth() - i, 1);
-    let year = d.getFullYear();
+    const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    const year = d.getFullYear();
     months.push({ label: names[d.getMonth()], mois: d.getMonth() + 1, annee: year });
   }
 
@@ -30,9 +30,9 @@ function getLastMonths(nbMonths) {
 }
 
 export default function NouveauxHistogram() {
-  let [{ data }] = useFetch(`/api/v1/stats/nouveaux`, []);
-  let last6Months = getLastMonths(6).map(({ annee, mois, label }) => {
-    let found = data.find((e) => e.annee === annee && e.mois === mois);
+  const [{ data }] = useFetch(`/api/v1/stats/nouveaux`, []);
+  const last6Months = getLastMonths(6).map(({ annee, mois, label }) => {
+    const found = data.find((e) => e.annee === annee && e.mois === mois);
 
     return {
       key: `${annee}_${label}`,
@@ -40,7 +40,7 @@ export default function NouveauxHistogram() {
     };
   });
 
-  let customXLegend = {
+  const customXLegend = {
     tickSize: 0,
     tickPadding: 25,
     tickRotation: -25,

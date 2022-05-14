@@ -3,7 +3,7 @@ import { Filter } from "./Filter";
 import { DataContext } from "../../common/DataProvider";
 
 export default function DepartementsFilter() {
-  let { departements } = useContext(DataContext);
+  const { departements } = useContext(DataContext);
 
   return (
     <Filter

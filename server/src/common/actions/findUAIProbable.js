@@ -1,6 +1,6 @@
 function findUAIProbable(organisme) {
-  let potentiels = organisme.uai_potentiels.filter((item) => {
-    let sources = item.sources.filter((s) => s.includes("sifa-ramsese") || s.includes("catalogue-etablissements"));
+  const potentiels = organisme.uai_potentiels.filter((item) => {
+    const sources = item.sources.filter((s) => s.includes("sifa-ramsese") || s.includes("catalogue-etablissements"));
     return sources.length >= 1;
   });
 

@@ -8,14 +8,14 @@ const importOrganismes = require("../../../src/jobs/importOrganismes");
 
 describe("sifa-ramsese", () => {
   it("Vérifie que peut convertir la source en référentiel", async () => {
-    let source = createSource("sifa-ramsese", {
+    const source = createSource("sifa-ramsese", {
       input: createStream(`"numero_uai";"numero_siren_siret_uai"
 "0111111Y";"11111111100006"`),
     });
 
-    let stats = await importOrganismes(source);
+    const stats = await importOrganismes(source);
 
-    let found = await dbCollection("organismes").findOne({}, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({}, { _id: 0 });
     assert.deepStrictEqual(found.siret, "11111111100006");
     assert.deepStrictEqual(stats, {
       "sifa-ramsese": {
@@ -32,14 +32,14 @@ describe("sifa-ramsese", () => {
     await insertOrganisme({
       siret: "11111111100006",
     });
-    let source = createSource("sifa-ramsese", {
+    const source = createSource("sifa-ramsese", {
       input: createStream(`"numero_uai";"numero_siren_siret_uai"
 "0111111Y";"11111111100006"`),
     });
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["sifa-ramsese"],

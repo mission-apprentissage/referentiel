@@ -43,14 +43,14 @@ module.exports = () => {
   }
 
   function convertCriteriaIntoQuery(fieldName, criteria) {
-    let query = { $and: [] };
+    const query = { $and: [] };
 
-    let includes = criteria.filter((v) => !v.startsWith("-"));
+    const includes = criteria.filter((v) => !v.startsWith("-"));
     if (includes.length > 0) {
       query.$and.push({ [fieldName]: { $in: includes } });
     }
 
-    let excludes = criteria.filter((v) => v.startsWith("-")).map((v) => v.substring(1, v.length));
+    const excludes = criteria.filter((v) => v.startsWith("-")).map((v) => v.substring(1, v.length));
     if (excludes.length > 0) {
       query.$and.push({ [fieldName]: { $nin: excludes } });
     }
@@ -59,7 +59,7 @@ module.exports = () => {
   }
 
   function buildQuery(params) {
-    let {
+    const {
       sirets,
       uais,
       departements = [],
@@ -77,8 +77,8 @@ module.exports = () => {
       nouveaux,
     } = params;
 
-    let hasValue = (v) => !isNil(v);
-    let hasElements = (array) => array.length > 0;
+    const hasValue = (v) => !isNil(v);
+    const hasElements = (array) => array.length > 0;
 
     return {
       ...(hasValue(sirets) ? (isBoolean(sirets) ? { siret: { $exists: true } } : { siret: { $in: sirets } }) : {}),
@@ -124,7 +124,7 @@ module.exports = () => {
     router[method](
       "/api/v1/organismes.:ext?",
       tryCatch(async (req, res) => {
-        let { page, items_par_page, ordre, champs, ext, ...params } = await Joi.object({
+        const { page, items_par_page, ordre, champs, ext, ...params } = await Joi.object({
           sirets: Joi.alternatives()
             .try(Joi.boolean(), arrayOf(Joi.string().pattern(/^([0-9]{9}|[0-9]{14})$/)))
             .default(null),
@@ -157,10 +157,10 @@ module.exports = () => {
           ...validators.exports(),
         }).validateAsync({ ...req[method === "post" ? "body" : "query"], ...req.params }, { abortEarly: false });
 
-        let query = buildQuery(params);
-        let projection = buildProjection(champs);
+        const query = buildQuery(params);
+        const projection = buildProjection(champs);
 
-        let { find, pagination } = await findAndPaginate(dbCollection("organismes"), query, {
+        const { find, pagination } = await findAndPaginate(dbCollection("organismes"), query, {
           page,
           limit: items_par_page,
           sort: { ["_meta.date_import"]: ordre === "asc" ? 1 : -1 },
@@ -168,7 +168,6 @@ module.exports = () => {
         });
 
         let transformResponse;
-
         switch (ext) {
           case "xls":
             addCsvHeaders(`organismes-${DateTime.now().toISODate()}.csv`, "UTF-16", res);
@@ -202,15 +201,15 @@ module.exports = () => {
   router.get(
     "/api/v1/organismes/:siret",
     tryCatch(async (req, res) => {
-      let { siret, champs } = await Joi.object({
+      const { siret, champs } = await Joi.object({
         siret: Joi.string()
           .pattern(/^[0-9]{14}$/)
           .required(),
         champs: arrayOf().default([]),
       }).validateAsync({ ...req.params, ...req.query }, { abortEarly: false });
 
-      let projection = buildProjection(champs);
-      let organisme = await dbCollection("organismes").findOne({ siret }, { projection });
+      const projection = buildProjection(champs);
+      const organisme = await dbCollection("organismes").findOne({ siret }, { projection });
 
       if (!organisme) {
         throw Boom.notFound("Siret inconnu");
@@ -225,16 +224,16 @@ module.exports = () => {
     checkApiToken(),
     canEditOrganisme(),
     tryCatch(async (req, res) => {
-      let user = req.user;
-      let auteur = `${user.type}-${user.code}`;
-      let { uai } = await Joi.object({
+      const user = req.user;
+      const auteur = `${user.type}-${user.code}`;
+      const { uai } = await Joi.object({
         uai: Joi.string()
           .pattern(/^[0-9]{7}[A-Z]{1}$/)
           .required(),
       }).validateAsync(req.body, { abortEarly: false });
 
       await addModification(auteur, req.organisme, { uai });
-      let updated = await setUAI(req.organisme, uai, auteur);
+      const updated = await setUAI(req.organisme, uai, auteur);
 
       if (!updated) {
         throw Boom.notFound("Siret inconnu");

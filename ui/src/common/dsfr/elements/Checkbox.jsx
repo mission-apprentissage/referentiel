@@ -5,10 +5,10 @@ import Hint from "./Hint";
 import useElementId from "../../hooks/useElementId";
 
 export default function Checkbox({ label, hint, validation, modifiers, className, ...rest }) {
-  let id = useElementId("checkbox");
-  let validationId = useElementId("validation");
-  let aria = validation ? ariaDescribedBy(validationId) : {};
-  let clazz = classNames("fr-checkbox-group", {
+  const id = useElementId("checkbox");
+  const validationId = useElementId("validation");
+  const aria = validation ? ariaDescribedBy(validationId) : {};
+  const clazz = classNames("fr-checkbox-group", {
     modifiers,
     className,
     validation,

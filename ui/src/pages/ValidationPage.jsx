@@ -54,13 +54,13 @@ const MAPPER = {
 };
 
 export function ValidationTitle() {
-  let { type } = useParams();
+  const { type } = useParams();
 
   return <span>{MAPPER[type].title}</span>;
 }
 
 const ValidationLayoutTitle = styled(({ refine, className }) => {
-  let { type } = useParams();
+  const { type } = useParams();
 
   return (
     <div className={className}>
@@ -84,9 +84,9 @@ const ValidationLayoutTitle = styled(({ refine, className }) => {
 `;
 
 export default function ValidationPage() {
-  let { type } = useParams();
-  let { query } = useQuery();
-  let { response, search, refine } = useValidationSearch(type, {
+  const { type } = useParams();
+  const { query } = useQuery();
+  const { response, search, refine } = useValidationSearch(type, {
     ordre: "desc",
     page: 1,
     items_par_page: 25,

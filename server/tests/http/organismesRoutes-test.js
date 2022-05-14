@@ -21,7 +21,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes");
+    const response = await httpClient.get("/api/v1/organismes");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -89,7 +89,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme();
     await insertOrganisme({ uai: "0751234J" });
 
-    let response = await httpClient.get("/api/v1/organismes?uais=0751234J");
+    const response = await httpClient.get("/api/v1/organismes?uais=0751234J");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -102,10 +102,10 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ uai: "0751234J" });
     await insertOrganisme({ uai: "0751234X" });
 
-    let response = await httpClient.get("/api/v1/organismes?uais=0751234J,0751234X");
+    const response = await httpClient.get("/api/v1/organismes?uais=0751234J,0751234X");
 
     strictEqual(response.status, 200);
-    let organismes = sortBy(response.data.organismes, (o) => o.uai);
+    const organismes = sortBy(response.data.organismes, (o) => o.uai);
     strictEqual(organismes.length, 2);
     strictEqual(organismes[0].uai, "0751234J");
     strictEqual(organismes[1].uai, "0751234X");
@@ -116,7 +116,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ siret: "11111111100006", uai: "0751234J" });
     await insertOrganisme();
 
-    let response = await httpClient.get("/api/v1/organismes?uais=true");
+    const response = await httpClient.get("/api/v1/organismes?uais=true");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -128,7 +128,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ siret: "11111111100006", uai: "0751234J" });
     await insertOrganisme({ siret: "22222222200002" });
 
-    let response = await httpClient.get("/api/v1/organismes?uais=false");
+    const response = await httpClient.get("/api/v1/organismes?uais=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -140,7 +140,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme();
     await insertOrganisme({ siret: "11111111100006", numero_declaration_activite: "12345678901" });
 
-    let response = await httpClient.get("/api/v1/organismes?numero_declaration_activite=12345678901");
+    const response = await httpClient.get("/api/v1/organismes?numero_declaration_activite=12345678901");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -152,7 +152,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme();
     await insertOrganisme({ siret: "11111111100006", numero_declaration_activite: "12345678901" });
 
-    let response = await httpClient.get("/api/v1/organismes?numero_declaration_activite=true");
+    const response = await httpClient.get("/api/v1/organismes?numero_declaration_activite=true");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -164,7 +164,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ siret: "11111111100006", numero_declaration_activite: "12345678901" });
     await insertOrganisme({ siret: "22222222200002" });
 
-    let response = await httpClient.get("/api/v1/organismes?numero_declaration_activite=false");
+    const response = await httpClient.get("/api/v1/organismes?numero_declaration_activite=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -177,7 +177,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ qualiopi: false });
     await insertOrganisme({ siret: "11111111100006", qualiopi: true });
 
-    let response = await httpClient.get("/api/v1/organismes?qualiopi=true");
+    const response = await httpClient.get("/api/v1/organismes?qualiopi=true");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -189,7 +189,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ qualiopi: true });
     await insertOrganisme({ siret: "11111111100006", qualiopi: false });
 
-    let response = await httpClient.get("/api/v1/organismes?qualiopi=false");
+    const response = await httpClient.get("/api/v1/organismes?qualiopi=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -201,7 +201,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ siret: "11111111100006", etat_administratif: "actif" });
     await insertOrganisme({ etat_administratif: "fermé" });
 
-    let response = await httpClient.get("/api/v1/organismes?etat_administratif=actif");
+    const response = await httpClient.get("/api/v1/organismes?etat_administratif=actif");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -213,7 +213,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ siret: "11111111100006", etat_administratif: "fermé" });
     await insertOrganisme({ etat_administratif: "actif" });
 
-    let response = await httpClient.get("/api/v1/organismes?etat_administratif=fermé");
+    const response = await httpClient.get("/api/v1/organismes?etat_administratif=fermé");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -236,7 +236,7 @@ describe("organismesRoutes", () => {
       ],
     });
 
-    let response = await httpClient.get("/api/v1/organismes");
+    const response = await httpClient.get("/api/v1/organismes");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes[0]._meta.uai_probale, "0751234J");
@@ -255,7 +255,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme({ siret: "22222222200002" });
 
-    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=0751234J");
+    const response = await httpClient.get("/api/v1/organismes?uai_potentiels=0751234J");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -284,7 +284,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme({ siret: "33333333300003" });
 
-    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=0751234J,0751234X");
+    const response = await httpClient.get("/api/v1/organismes?uai_potentiels=0751234J,0751234X");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 2);
@@ -305,7 +305,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme();
 
-    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=true");
+    const response = await httpClient.get("/api/v1/organismes?uai_potentiels=true");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -325,7 +325,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme({ siret: "22222222200002" });
 
-    let response = await httpClient.get("/api/v1/organismes?uai_potentiels=false");
+    const response = await httpClient.get("/api/v1/organismes?uai_potentiels=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -348,7 +348,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme({ siret: "22222222200002" });
 
-    let response = await httpClient.get("/api/v1/organismes?relations=responsable->formateur");
+    const response = await httpClient.get("/api/v1/organismes?relations=responsable->formateur");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -383,7 +383,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme({ siret: "55555555500005" });
 
-    let response = await httpClient.get("/api/v1/organismes?relations=responsable->formateur,formateur->responsable");
+    const response = await httpClient.get("/api/v1/organismes?relations=responsable->formateur,formateur->responsable");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 2);
@@ -407,7 +407,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme();
 
-    let response = await httpClient.get("/api/v1/organismes?relations=true");
+    const response = await httpClient.get("/api/v1/organismes?relations=true");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -430,7 +430,7 @@ describe("organismesRoutes", () => {
     });
     await insertOrganisme({ siret: "22222222200002" });
 
-    let response = await httpClient.get("/api/v1/organismes?relations=false");
+    const response = await httpClient.get("/api/v1/organismes?relations=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -442,7 +442,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme();
     await insertOrganisme({ siret: "11111111100001" });
 
-    let response = await httpClient.get("/api/v1/organismes?sirets=11111111100001");
+    const response = await httpClient.get("/api/v1/organismes?sirets=11111111100001");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes[0].siret, "11111111100001");
@@ -454,10 +454,10 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ siret: "22222222200002" });
     await insertOrganisme({ siret: "33333333300003" });
 
-    let response = await httpClient.get("/api/v1/organismes?sirets=11111111100001,22222222200002");
+    const response = await httpClient.get("/api/v1/organismes?sirets=11111111100001,22222222200002");
 
     strictEqual(response.status, 200);
-    let organismes = sortBy(response.data.organismes, (o) => o.siret);
+    const organismes = sortBy(response.data.organismes, (o) => o.siret);
     strictEqual(organismes.length, 2);
     strictEqual(organismes[0].siret, "11111111100001");
     strictEqual(organismes[1].siret, "22222222200002");
@@ -470,7 +470,7 @@ describe("organismesRoutes", () => {
       uai: "0010856A",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?text=0010856A");
+    const response = await httpClient.get("/api/v1/organismes?text=0010856A");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes[0].uai, "0010856A");
@@ -483,7 +483,7 @@ describe("organismesRoutes", () => {
       siret: "11111111100001",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?text=11111111100001");
+    const response = await httpClient.get("/api/v1/organismes?text=11111111100001");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes[0].siret, "11111111100001");
@@ -506,7 +506,7 @@ describe("organismesRoutes", () => {
       }),
     ]);
 
-    let response = await httpClient.get("/api/v1/organismes?academies=01");
+    const response = await httpClient.get("/api/v1/organismes?academies=01");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -536,10 +536,10 @@ describe("organismesRoutes", () => {
       }),
     ]);
 
-    let response = await httpClient.get("/api/v1/organismes?academies=01,16");
+    const response = await httpClient.get("/api/v1/organismes?academies=01,16");
 
     strictEqual(response.status, 200);
-    let organismes = sortBy(response.data.organismes, (o) => o.siret);
+    const organismes = sortBy(response.data.organismes, (o) => o.siret);
     strictEqual(organismes.length, 2);
     strictEqual(organismes[0].siret, "11111111100001");
     strictEqual(organismes[1].siret, "22222222200002");
@@ -562,7 +562,7 @@ describe("organismesRoutes", () => {
       }),
     ]);
 
-    let response = await httpClient.get("/api/v1/organismes?regions=11");
+    const response = await httpClient.get("/api/v1/organismes?regions=11");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -592,10 +592,10 @@ describe("organismesRoutes", () => {
       }),
     ]);
 
-    let response = await httpClient.get("/api/v1/organismes?regions=11,76");
+    const response = await httpClient.get("/api/v1/organismes?regions=11,76");
 
     strictEqual(response.status, 200);
-    let organismes = sortBy(response.data.organismes, (o) => o.siret);
+    const organismes = sortBy(response.data.organismes, (o) => o.siret);
     strictEqual(organismes.length, 2);
     strictEqual(organismes[0].siret, "11111111100001");
     strictEqual(organismes[1].siret, "22222222200002");
@@ -616,7 +616,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes?departements=11");
+    const response = await httpClient.get("/api/v1/organismes?departements=11");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -638,7 +638,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes?departements=11,75");
+    const response = await httpClient.get("/api/v1/organismes?departements=11,75");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 2);
@@ -655,7 +655,7 @@ describe("organismesRoutes", () => {
       nature: "formateur",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?natures=formateur");
+    const response = await httpClient.get("/api/v1/organismes?natures=formateur");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -673,7 +673,7 @@ describe("organismesRoutes", () => {
       nature: "formateur",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?natures=responsable_formateur");
+    const response = await httpClient.get("/api/v1/organismes?natures=responsable_formateur");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -695,7 +695,7 @@ describe("organismesRoutes", () => {
       nature: "formateur",
     });
 
-    let response = await httpClient.get("/api/v1/organismes?natures=formateur,responsable");
+    const response = await httpClient.get("/api/v1/organismes?natures=formateur,responsable");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 2);
@@ -713,7 +713,7 @@ describe("organismesRoutes", () => {
       siret: "22222222200002",
       referentiels: ["ref2"],
     });
-    let response = await httpClient.get("/api/v1/organismes?referentiels=ref1");
+    const response = await httpClient.get("/api/v1/organismes?referentiels=ref1");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -735,7 +735,7 @@ describe("organismesRoutes", () => {
       referentiels: ["ref3"],
     });
 
-    let response = await httpClient.get("/api/v1/organismes?referentiels=ref1,ref3");
+    const response = await httpClient.get("/api/v1/organismes?referentiels=ref1,ref3");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 2);
@@ -758,7 +758,7 @@ describe("organismesRoutes", () => {
       referentiels: ["ref3"],
     });
 
-    let response = await httpClient.get("/api/v1/organismes?referentiels=-ref2,ref1");
+    const response = await httpClient.get("/api/v1/organismes?referentiels=-ref2,ref1");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -776,7 +776,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes?champs=siret,raison_sociale");
+    const response = await httpClient.get("/api/v1/organismes?champs=siret,raison_sociale");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -864,7 +864,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes?ordre=asc");
+    const response = await httpClient.get("/api/v1/organismes?ordre=asc");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes[0].siret, "22222222200002");
@@ -888,7 +888,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes?ordre=desc");
+    const response = await httpClient.get("/api/v1/organismes?ordre=desc");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes[0].siret, "11111111100001");
@@ -898,7 +898,7 @@ describe("organismesRoutes", () => {
   it("Vérifie que le service retourne une liste vide quand aucun organisme ne correspond", async () => {
     const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/organismes?text=XXX");
+    const response = await httpClient.get("/api/v1/organismes?text=XXX");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -915,7 +915,7 @@ describe("organismesRoutes", () => {
   it("Vérifie que le service retourne une 400 quand les paramètres sont inconnus", async () => {
     const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/organismes?invalid=XXX");
+    const response = await httpClient.get("/api/v1/organismes?invalid=XXX");
 
     strictEqual(response.status, 400);
     deepStrictEqual(response.data.details[0].path[0], "invalid");
@@ -924,7 +924,7 @@ describe("organismesRoutes", () => {
   it("Vérifie que le service retourne une 400 quand les paramètres sont invalides", async () => {
     const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/organismes?ordre=-1");
+    const response = await httpClient.get("/api/v1/organismes?ordre=-1");
 
     strictEqual(response.status, 400);
     deepStrictEqual(response.data.details[0].path[0], "ordre");
@@ -941,7 +941,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes/11111111100001");
+    const response = await httpClient.get("/api/v1/organismes/11111111100001");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -1005,7 +1005,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes/11111111100001?champs=siret,raison_sociale");
+    const response = await httpClient.get("/api/v1/organismes/11111111100001?champs=siret,raison_sociale");
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {
@@ -1017,7 +1017,7 @@ describe("organismesRoutes", () => {
   it("Vérifie qu'on renvoie une 404 si le siret n'est pas connu", async () => {
     const { httpClient } = await startServer();
 
-    let response = await httpClient.get("/api/v1/organismes/11111111100001");
+    const response = await httpClient.get("/api/v1/organismes/11111111100001");
 
     strictEqual(response.status, 404);
     deepStrictEqual(response.data, {
@@ -1038,7 +1038,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.put(
+    const response = await httpClient.put(
       "/api/v1/organismes/11111111100001/setUAI",
       { uai: "0751234J" },
       {
@@ -1103,9 +1103,9 @@ describe("organismesRoutes", () => {
       }
     );
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100001" });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100001" });
     deepStrictEqual(found.uai, "0751234J");
-    let { date, ...modification } = await dbCollection("modifications").findOne({}, { projection: { _id: 0 } });
+    const { date, ...modification } = await dbCollection("modifications").findOne({}, { projection: { _id: 0 } });
     assert.ok(date);
     deepStrictEqual(modification, {
       siret: "11111111100001",
@@ -1129,7 +1129,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.put(
+    const response = await httpClient.put(
       "/api/v1/organismes/11111111100001/setUAI",
       { uai: "0751234J" },
       {
@@ -1154,7 +1154,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.put(
+    const response = await httpClient.put(
       "/api/v1/organismes/22222222200002/setUAI",
       { uai: "0751234J" },
       {
@@ -1177,7 +1177,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.put(
+    const response = await httpClient.put(
       "/api/v1/organismes/22222222200002/setUAI",
       { uai: "0751234J" },
       {
@@ -1200,7 +1200,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.put(
+    const response = await httpClient.put(
       "/api/v1/organismes/22222222200002/setUAI",
       { uai: "0751234J" },
       {
@@ -1228,7 +1228,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes?nouveaux=true");
+    const response = await httpClient.get("/api/v1/organismes?nouveaux=true");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -1250,7 +1250,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes?nouveaux=false");
+    const response = await httpClient.get("/api/v1/organismes?nouveaux=false");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -1277,7 +1277,7 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes.csv");
+    const response = await httpClient.get("/api/v1/organismes.csv");
 
     strictEqual(response.status, 200);
     strictEqual(
@@ -1308,10 +1308,10 @@ describe("organismesRoutes", () => {
       },
     });
 
-    let response = await httpClient.get("/api/v1/organismes.xls");
+    const response = await httpClient.get("/api/v1/organismes.xls");
 
     strictEqual(response.status, 200);
-    let decoded = iconv.decode(response.data, "UTF-16");
+    const decoded = iconv.decode(response.data, "UTF-16");
     assert.ok(decoded.indexOf('="Siret"\t') !== -1);
   });
 
@@ -1320,7 +1320,7 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ siret: "11111111100001" });
     await insertOrganisme({ siret: "22222222200006" });
 
-    let response = await httpClient.post("/api/v1/organismes", { sirets: "11111111100001", champs: "siret" });
+    const response = await httpClient.post("/api/v1/organismes", { sirets: "11111111100001", champs: "siret" });
 
     strictEqual(response.status, 200);
     deepStrictEqual(response.data, {

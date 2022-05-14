@@ -49,7 +49,7 @@ function Option({ title, children }) {
 }
 
 export default function DesignPage() {
-  let [showAlert, setShowAlert] = useState(true);
+  const [showAlert, setShowAlert] = useState(true);
 
   return (
     <div>

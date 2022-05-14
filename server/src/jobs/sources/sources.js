@@ -1,7 +1,7 @@
 const fs = require("fs");
 
-let sources = fs.readdirSync(__dirname).reduce((acc, filename) => {
-  let type = filename.split(".")[0];
+const sources = fs.readdirSync(__dirname).reduce((acc, filename) => {
+  const type = filename.split(".")[0];
 
   return {
     ...acc,
@@ -10,7 +10,7 @@ let sources = fs.readdirSync(__dirname).reduce((acc, filename) => {
 }, {});
 
 function createSource(name, options) {
-  let create = sources[name];
+  const create = sources[name];
   if (!create) {
     throw new Error(`La source '${name}' n'existe pas`);
   }

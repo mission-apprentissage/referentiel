@@ -25,8 +25,8 @@ cli
   })
   .action(({ filter, limit, previous, out }) => {
     runScript(async () => {
-      let options = { filter, limit, previous };
-      let stream = await experimentationCsvStream(options);
+      const options = { filter, limit, previous };
+      const stream = await experimentationCsvStream(options);
       return oleoduc(stream, out || writeToStdout());
     });
   });

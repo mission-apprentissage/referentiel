@@ -2,8 +2,8 @@ const { compose, transformData, flattenArray } = require("oleoduc");
 const TableauDeBordApi = require("../../common/apis/TableauDeBordApi");
 
 module.exports = (custom = {}) => {
-  let name = "tableau-de-bord";
-  let api = custom.tableauDeBordApi || new TableauDeBordApi();
+  const name = "tableau-de-bord";
+  const api = custom.tableauDeBordApi || new TableauDeBordApi();
 
   return {
     name,

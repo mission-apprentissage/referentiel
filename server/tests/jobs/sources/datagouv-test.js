@@ -20,11 +20,11 @@ describe("datagouv", () => {
       }),
     ]);
 
-    let source = createSource("datagouv");
+    const source = createSource("datagouv");
 
-    let stats = await importOrganismes(source);
+    const stats = await importOrganismes(source);
 
-    let docs = await dbCollection("organismes").find({}, { _id: 0 }).toArray();
+    const docs = await dbCollection("organismes").find({}, { _id: 0 }).toArray();
     assert.deepStrictEqual(docs.length, 1);
     assert.deepStrictEqual(docs[0].siret, "11111111100006");
     assert.deepStrictEqual(stats, {
@@ -49,9 +49,9 @@ describe("datagouv", () => {
         certifications: { actionsDeFormationParApprentissage: true },
       }),
     ]);
-    let source = createSource("datagouv");
+    const source = createSource("datagouv");
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
     let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.numero_declaration_activite, "88888888888");
@@ -81,11 +81,11 @@ describe("datagouv", () => {
         certifications: { actionsDeFormationParApprentissage: true },
       }),
     ]);
-    let source = createSource("datagouv");
+    const source = createSource("datagouv");
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100007" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100007" }, { _id: 0 });
     assert.deepStrictEqual(found.numero_declaration_activite, "88888888888");
     assert.deepStrictEqual(found.qualiopi, true);
   });
@@ -107,11 +107,11 @@ describe("datagouv", () => {
         certifications: { actionsDeFormationParApprentissage: false },
       }),
     ]);
-    let source = createSource("datagouv");
+    const source = createSource("datagouv");
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100007" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100007" }, { _id: 0 });
     assert.deepStrictEqual(found.numero_declaration_activite, "99999999999");
     assert.deepStrictEqual(found.qualiopi, false);
   });
@@ -124,9 +124,9 @@ describe("datagouv", () => {
       certifications: { actionsDeFormationParApprentissage: true },
     });
 
-    let source = createSource("datagouv");
+    const source = createSource("datagouv");
 
-    let organismes = await source.loadSirets();
+    const organismes = await source.loadSirets();
 
     assert.strictEqual(organismes.length, 1);
     assert.deepStrictEqual(organismes[0], "11111111100006");

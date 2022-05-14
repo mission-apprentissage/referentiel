@@ -6,13 +6,13 @@ function streamEtablissements(api) {
 }
 
 module.exports = (custom = {}) => {
-  let name = "catalogue-etablissements";
-  let api = custom.catalogueAPI || new CatalogueApi();
+  const name = "catalogue-etablissements";
+  const api = custom.catalogueAPI || new CatalogueApi();
 
   return {
     name,
     async referentiel() {
-      let stream = await streamEtablissements(api);
+      const stream = await streamEtablissements(api);
 
       return compose(
         stream,
@@ -25,7 +25,7 @@ module.exports = (custom = {}) => {
       );
     },
     async stream() {
-      let stream = await streamEtablissements(api);
+      const stream = await streamEtablissements(api);
 
       return compose(
         stream,

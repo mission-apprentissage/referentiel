@@ -1,7 +1,7 @@
 const { object, string, array, number } = require("./jsonSchemaTypes");
 
 const geojsonSchema = () => {
-  let required = ["type", "geometry"];
+  const required = ["type", "geometry"];
 
   return object(
     {

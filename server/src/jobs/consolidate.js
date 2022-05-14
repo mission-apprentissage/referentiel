@@ -4,11 +4,11 @@ const findUAIProbable = require("../common/actions/findUAIProbable");
 
 // eslint-disable-next-line no-unused-vars
 async function validateUAI() {
-  let stats = { total: 0, modifications: 0, unknown: 0, failed: 0 };
+  const stats = { total: 0, modifications: 0, unknown: 0, failed: 0 };
   for await (const organisme of dbCollection("organismes").find().stream()) {
     try {
       stats.total++;
-      let probable = findUAIProbable(organisme);
+      const probable = findUAIProbable(organisme);
 
       if (probable) {
         await dbCollection("organismes").updateOne({ siret: organisme.siret }, { $set: { uai: probable.uai } });
@@ -25,12 +25,12 @@ async function validateUAI() {
 }
 
 async function applyModifcations() {
-  let stats = { total: 0, modifications: 0, unknown: 0, failed: 0 };
+  const stats = { total: 0, modifications: 0, unknown: 0, failed: 0 };
 
   for await (const { siret, changements } of dbCollection("modifications").find().sort({ date: 1 }).stream()) {
     try {
       stats.total++;
-      let res = await dbCollection("organismes").updateOne({ siret }, { $set: changements });
+      const res = await dbCollection("organismes").updateOne({ siret }, { $set: changements });
 
       if (res.modifiedCount) {
         stats.modifications++;
@@ -47,7 +47,7 @@ async function applyModifcations() {
 }
 
 async function consolidate() {
-  let stats = {};
+  const stats = {};
   //stats.uai = await validateUAI();
   stats.modifications = await applyModifcations();
   return stats;

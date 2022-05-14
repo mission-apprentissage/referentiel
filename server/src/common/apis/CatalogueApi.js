@@ -15,8 +15,8 @@ class CatalogueApi extends RateLimitedApi {
 
   streamFormations(query, options) {
     return this.execute(async () => {
-      let params = convertQueryIntoParams(query, options);
-      let response = await fetchStream(`${CatalogueApi.baseApiUrl}/entity/formations.json?${params}`);
+      const params = convertQueryIntoParams(query, options);
+      const response = await fetchStream(`${CatalogueApi.baseApiUrl}/entity/formations.json?${params}`);
 
       return compose(response, streamJsonArray());
     });
@@ -24,9 +24,9 @@ class CatalogueApi extends RateLimitedApi {
 
   streamEtablissements(query, options) {
     return this.execute(async () => {
-      let params = convertQueryIntoParams(query, options);
+      const params = convertQueryIntoParams(query, options);
 
-      let response = await fetchStream(`${CatalogueApi.baseApiUrl}/entity/etablissements.json?${params}`);
+      const response = await fetchStream(`${CatalogueApi.baseApiUrl}/entity/etablissements.json?${params}`);
 
       return compose(response, streamJsonArray());
     });
@@ -34,7 +34,7 @@ class CatalogueApi extends RateLimitedApi {
 
   getEtablissement(query, options) {
     return this.execute(async () => {
-      let params = convertQueryIntoParams(query, options);
+      const params = convertQueryIntoParams(query, options);
 
       return fetchJson(`${CatalogueApi.baseApiUrl}/entity/etablissement?${params}`);
     });

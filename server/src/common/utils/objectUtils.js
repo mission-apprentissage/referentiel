@@ -7,7 +7,7 @@ function omitNil(obj) {
 function omitDeep(collection, callback) {
   function clone(value) {
     if (isPlainObject(value)) {
-      let keysToDelete = callback(value);
+      const keysToDelete = callback(value);
       keysToDelete.forEach((key) => {
         delete value[key];
       });
@@ -26,7 +26,7 @@ function omitDeepNil(obj) {
 
 function flattenObject(obj, parent, res = {}) {
   for (let key in obj) {
-    let propName = parent ? parent + "." + key : key;
+    const propName = parent ? parent + "." + key : key;
     if (typeof obj[key] == "object" && !Array.isArray(obj[key]) && !(obj[key] instanceof Date)) {
       flattenObject(obj[key], propName, res);
     } else {

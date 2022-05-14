@@ -15,7 +15,7 @@ const SearchBox = styled(Box)`
 `;
 
 export default function Results({ search, filters, results }) {
-  let modal = useModal();
+  const modal = useModal();
 
   return (
     <>

@@ -4,7 +4,7 @@ const addModifications = require("../../src/jobs/experimentation/addModification
 const { dbCollection } = require("../../src/common/db/mongodb");
 const { insertOrganisme } = require("../utils/fakeData");
 
-let getCsvStream = (content) => {
+const getCsvStream = (content) => {
   return createStream(
     content ||
       `siret;uai
@@ -16,7 +16,7 @@ let getCsvStream = (content) => {
 describe("addModifications", () => {
   it("Vérifie qu'on peut ajouter des modifications", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let stats = await addModifications(
+    const stats = await addModifications(
       getCsvStream(`siret;uai
 11111111100006;0751234J
 `)
@@ -37,7 +37,7 @@ describe("addModifications", () => {
   });
 
   it("Vérifie qu'on ignore les lignes invalides", async () => {
-    let stats = await addModifications(
+    const stats = await addModifications(
       getCsvStream(`siret;uai
 11111111100006;
 ;INVALID

@@ -3,7 +3,7 @@ const { createStream } = require("../utils/testUtils");
 const importCommunes = require("../../src/jobs/importCommunes");
 const { dbCollection } = require("../../src/common/db/mongodb");
 
-let getDatagouvFile = (content) => {
+const getDatagouvFile = (content) => {
   return createStream(
     content ||
       `{"type":"FeatureCollection", "features": [
@@ -14,7 +14,7 @@ let getDatagouvFile = (content) => {
 
 describe("importCommunes", () => {
   it("Vérifie qu'on peut importer les communes", async () => {
-    let stats = await importCommunes({
+    const stats = await importCommunes({
       input: getDatagouvFile(),
     });
 

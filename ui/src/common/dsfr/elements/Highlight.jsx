@@ -2,7 +2,7 @@ import React from "react";
 import { classNames } from "../dsfr";
 
 export default function Highlight({ modifiers, className, children }) {
-  let clazz = classNames("fr-highlight", { modifiers, className });
+  const clazz = classNames("fr-highlight", { modifiers, className });
 
   return (
     <div className={clazz}>

@@ -26,15 +26,15 @@ const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
 `;
 
 function getParamFromQuery(query, paramName) {
-  let param = query[paramName];
+  const param = query[paramName];
   return param ? param.split(",") : [];
 }
 
 export function Filter({ label, items, expanded = false }) {
-  let { query } = useQuery();
-  let { onChange: onFilterChange, register } = useContext(FilterContext);
+  const { query } = useQuery();
+  const { onChange: onFilterChange, register } = useContext(FilterContext);
   items.forEach((item) => register(item.paramName));
-  let selectedItems = items.filter((item) => {
+  const selectedItems = items.filter((item) => {
     return getParamFromQuery(query, item.paramName).includes(item.value);
   });
 
@@ -45,7 +45,7 @@ export function Filter({ label, items, expanded = false }) {
     >
       <Fieldset>
         {items.map((item, index) => {
-          let isSelected = !!selectedItems.find((i) => isEqual(i, item));
+          const isSelected = !!selectedItems.find((i) => isEqual(i, item));
 
           return (
             <SmallCheckbox
@@ -55,8 +55,8 @@ export function Filter({ label, items, expanded = false }) {
               value={item.value}
               checked={isSelected}
               onChange={() => {
-                let paramName = item.paramName;
-                let params = getParamFromQuery(query, paramName);
+                const paramName = item.paramName;
+                const params = getParamFromQuery(query, paramName);
 
                 let changes;
                 if (isSelected) {

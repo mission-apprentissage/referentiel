@@ -12,7 +12,7 @@ describe("ideo2", () => {
     await insertOrganisme({ siret: "22222222200002" });
     await insertDatagouv({ siren: "111111111", siretEtablissementDeclarant: "11111111100006" });
     await insertDatagouv({ siren: "222222222", siretEtablissementDeclarant: "22222222200002" });
-    let source = createSource("ideo2", {
+    const source = createSource("ideo2", {
       input: createStream(
         `"UAI_gestionnaire";"SIRET_gestionnaire";"SIRET_lieu_enseignement";"UAI_lieu_enseignement"
 "0111111Y";"11111111100006";"22222222200002";"0011073X"`

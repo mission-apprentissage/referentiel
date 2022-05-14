@@ -22,7 +22,7 @@ class GeocodingError extends Error {
 }
 
 async function findCommune(label, fallback) {
-  let geojson = await dbCollection("communes").findOne(
+  const geojson = await dbCollection("communes").findOne(
     { "properties.codgeo": fallback.codeInsee },
     { projection: { _id: 0 } }
   );
@@ -46,9 +46,9 @@ async function findCommune(label, fallback) {
 }
 
 async function selectBestResult(label, results, fallback) {
-  let best = results.features[0];
-  let newGeocodingError = async (message) => {
-    let commune = fallback ? await findCommune(label, fallback) : null;
+  const best = results.features[0];
+  const newGeocodingError = async (message) => {
+    const commune = fallback ? await findCommune(label, fallback) : null;
     return new GeocodingError(message, { commune });
   };
 
@@ -83,11 +83,11 @@ function buildAdresse(data) {
 }
 
 module.exports = (geoAdresseApi) => {
-  let cache = caches.geoAdresseApiCache();
+  const cache = caches.geoAdresseApiCache();
 
   return {
     async geocode(adresse, options = {}) {
-      let results = await cache.memo(adresse, async () => {
+      const results = await cache.memo(adresse, async () => {
         return geoAdresseApi.search(adresse).catch((e) => {
           throw new GeocodingError(`Geocoding impossible pour l'adresse ${adresse}`, { cause: e });
         });
@@ -96,7 +96,7 @@ module.exports = (geoAdresseApi) => {
       return selectBestResult(adresse, results, options.fallback);
     },
     async reverseGeocode(longitude, latitude) {
-      let results = await cache.memo(`${longitude}_${latitude}`, async () => {
+      const results = await cache.memo(`${longitude}_${latitude}`, async () => {
         return geoAdresseApi.reverse(longitude, latitude).catch((e) => {
           throw new GeocodingError(`Coordonnées inconnues [${longitude},${latitude}]`, { cause: e });
         });

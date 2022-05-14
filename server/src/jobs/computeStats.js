@@ -13,8 +13,8 @@ async function validateSiretWithApi(siret, cache, sireneApi) {
   }
 
   try {
-    let etat_administratif = await cache.memo(siret, async () => {
-      let { etat_administratif } = await sireneApi.getEtablissement(siret);
+    const etat_administratif = await cache.memo(siret, async () => {
+      const { etat_administratif } = await sireneApi.getEtablissement(siret);
       return etat_administratif;
     });
 
@@ -31,13 +31,13 @@ async function validateSiretWithApi(siret, cache, sireneApi) {
 
 function buildMatrice(valides, field, mapValues = (values) => values) {
   return Object.keys(valides).reduce((matrice, sourceName) => {
-    let values = mapValues(Array.from(valides[sourceName][field]));
-    let otherSourceNames = Object.keys(valides).filter((name) => name !== sourceName);
+    const values = mapValues(Array.from(valides[sourceName][field]));
+    const otherSourceNames = Object.keys(valides).filter((name) => name !== sourceName);
 
     return {
       ...matrice,
       [sourceName]: otherSourceNames.reduce((acc, otherSourceName) => {
-        let otherValues = mapValues(Array.from(valides[otherSourceName][field]));
+        const otherValues = mapValues(Array.from(valides[otherSourceName][field]));
 
         return {
           ...acc,
@@ -56,10 +56,10 @@ function buildMatrice(valides, field, mapValues = (values) => values) {
 }
 
 function buildRecoupement(valides, field, mapValues = (values) => values) {
-  let data = Object.keys(valides).reduce((acc, sourceName) => {
-    let values = mapValues(Array.from(valides[sourceName][field]));
+  const data = Object.keys(valides).reduce((acc, sourceName) => {
+    const values = mapValues(Array.from(valides[sourceName][field]));
     values.forEach((value) => {
-      let found = acc.find((a) => a.value === value);
+      const found = acc.find((a) => a.value === value);
       if (found) {
         found.sources = uniq([...(found.sources || []), sourceName]);
       } else {
@@ -84,12 +84,12 @@ function buildRecoupement(valides, field, mapValues = (values) => values) {
 }
 
 async function validateSources(sources) {
-  let sireneApi = new SireneApi();
-  let cache = caches.sireneApiCache();
-  let validation = {};
-  let valides = {};
-  let createSourceUniques = () => ({ uais: new Set(), sirets: new Set(), uais_sirets: new Set() });
-  let createSourceStats = () => ({
+  const sireneApi = new SireneApi();
+  const cache = caches.sireneApiCache();
+  const validation = {};
+  const valides = {};
+  const createSourceUniques = () => ({ uais: new Set(), sirets: new Set(), uais_sirets: new Set() });
+  const createSourceStats = () => ({
     total: 0,
     sirets: {
       actifs: 0,
@@ -109,7 +109,7 @@ async function validateSources(sources) {
     },
   });
 
-  let stream = mergeStreams(
+  const stream = mergeStreams(
     sources.map((source) => {
       //Create a factory to build streams lazily
       return () => source.stream();
@@ -121,15 +121,14 @@ async function validateSources(sources) {
     stream,
     writeData(
       async ({ from, selector: siret, uai_potentiels = [] }) => {
-        let uai = uai_potentiels[0];
-        let isUaiValide = false;
-        let isSiretValide = false;
+        const uai = uai_potentiels[0];
         valides[from] = valides[from] || createSourceUniques();
         validation[from] = validation[from] || createSourceStats();
         validation[from].total++;
 
         logger.debug(`Validation de ${uai} ${siret}...`);
 
+        let isUaiValide = false;
         if (uai) {
           if (isUAIValid(uai)) {
             isUaiValide = true;
@@ -147,8 +146,9 @@ async function validateSources(sources) {
           validation[from].uais.absents++;
         }
 
+        let isSiretValide = false;
         if (siret) {
-          let { isValid, category } = await validateSiretWithApi(siret, cache, sireneApi);
+          const { isValid, category } = await validateSiretWithApi(siret, cache, sireneApi);
           validation[from].sirets[category]++;
           if (isValid) {
             isSiretValide = true;
@@ -175,8 +175,8 @@ async function validateSources(sources) {
 }
 
 async function computeStats(sources, options) {
-  let { validation, valides } = await validateSources(sources);
-  let stats = {
+  const { validation, valides } = await validateSources(sources);
+  const stats = {
     validation,
     matrices: {
       uais: buildMatrice(valides, "uais"),

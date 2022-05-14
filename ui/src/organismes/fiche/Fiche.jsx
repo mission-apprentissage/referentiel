@@ -7,8 +7,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import LieuxDeFormationTab from "./lieux/LieuxDeFormationTab";
 
 export default function Fiche({ organisme }) {
-  let navigate = useNavigate();
-  let { tab } = useParams();
+  const navigate = useNavigate();
+  const { tab } = useParams();
 
   return (
     <WideTabs

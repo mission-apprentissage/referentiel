@@ -8,7 +8,7 @@ class RateLimiter extends EventEmitter {
     this.maxQueueSize = options.maxQueueSize || 25;
     this.options = options;
 
-    let memoryRateLimiter = new RateLimiterMemory({
+    const memoryRateLimiter = new RateLimiterMemory({
       keyPrefix: name,
       points: options.nbRequests || 1,
       duration: options.durationInSeconds || 1,

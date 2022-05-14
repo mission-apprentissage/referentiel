@@ -8,14 +8,14 @@ const { insertOrganisme } = require("../../utils/fakeData");
 describe("ifocop", () => {
   it("Vérifie qu'on peut collecter l'UAI et le reseau", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    let source = createSource("ifocop", {
+    const source = createSource("ifocop", {
       input: createStream(`"SIRET";"UAI"
 "11111111100006";"0111111Y"`),
     });
 
-    let stats = await collectSources(source);
+    const stats = await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
     assert.deepStrictEqual(found.reseaux, ["ifocop"]);
     assert.deepStrictEqual(found.uai_potentiels, [
       {

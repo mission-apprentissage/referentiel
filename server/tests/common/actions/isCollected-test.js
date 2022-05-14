@@ -16,7 +16,7 @@ describe("catalogue", () => {
         );
     });
 
-    let collected = await isCollected({ siret: "11111111100006" }, "2022");
+    const collected = await isCollected({ siret: "11111111100006" }, "2022");
 
     assert.ok(collected);
   });
@@ -34,7 +34,7 @@ describe("catalogue", () => {
         );
     });
 
-    let collected = await isCollected({ siret: "11111111100006" }, "2022");
+    const collected = await isCollected({ siret: "11111111100006" }, "2022");
 
     assert.ok(!collected);
   });

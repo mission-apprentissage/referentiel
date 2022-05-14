@@ -1,4 +1,4 @@
-let { MongoMemoryServer } = require("mongodb-memory-server");
+const { MongoMemoryServer } = require("mongodb-memory-server");
 const { connectToMongodb, getDatabase, configureValidation, configureIndexes } = require("../../src/common/db/mongodb");
 
 let mongodHolder;
@@ -10,8 +10,8 @@ module.exports = {
         version: "5.0.2",
       },
     });
-    let uri = mongodHolder.getUri();
-    let client = await connectToMongodb(uri);
+    const uri = mongodHolder.getUri();
+    const client = await connectToMongodb(uri);
     await configureIndexes();
     await configureValidation();
     return client;
@@ -20,7 +20,7 @@ module.exports = {
     return mongodHolder.stop();
   },
   async removeAll() {
-    let collections = await getDatabase().collections();
+    const collections = await getDatabase().collections();
     return Promise.all(collections.map((c) => c.deleteMany({})));
   },
 };

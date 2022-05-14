@@ -59,7 +59,7 @@ const ValidationTag = styled(({ organisme, ...props }) => {
 `;
 
 export default function OrganismeItem({ organisme }) {
-  let adresse = !organisme.adresse
+  const adresse = !organisme.adresse
     ? "Adresse inconnue"
     : organisme.adresse.label || `${organisme.adresse.code_postal || ""} ${organisme.adresse.localite || ""}`;
 

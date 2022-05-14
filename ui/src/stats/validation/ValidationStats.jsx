@@ -6,7 +6,7 @@ import { ValidationHistogram } from "./ValidationHistogram";
 import { ValidationPie } from "./ValidationPie";
 
 export default function ValidationStats() {
-  let [{ data: stats, loading, error }] = useFetch(`/api/v1/stats/validation`, { national: {}, academies: [] });
+  const [{ data: stats, loading, error }] = useFetch(`/api/v1/stats/validation`, { national: {}, academies: [] });
 
   if (loading || error) {
     return <Spinner loading={loading} error={error} />;
