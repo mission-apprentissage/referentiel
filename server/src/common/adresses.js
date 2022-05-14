@@ -5,7 +5,7 @@ const caches = require("./caches/caches");
 const { findDepartementByInsee } = require("./departements");
 const { dbCollection } = require("./db/mongodb");
 const logger = require("./logger");
-const MIN_GEOCODE_SCORE = 0.6;
+const MIN_GEOCODE_SCORE = 0.5;
 
 class GeocodingError extends Error {
   constructor(message, options = {}) {
