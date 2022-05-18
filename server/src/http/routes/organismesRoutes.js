@@ -34,7 +34,7 @@ module.exports = () => {
         ? {
             _meta: {
               ...organisme._meta,
-              ...(probable ? { uai_probale: probable.uai } : {}),
+              ...(probable ? { uai_probable: probable.uai } : {}),
               nouveau: !organisme.uai && organisme._meta.date_import > nouveauFeatureDate,
             },
           }
