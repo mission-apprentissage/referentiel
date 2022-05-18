@@ -1,6 +1,7 @@
 const { merge } = require("lodash");
 const { dbCollection } = require("../../src/common/db/mongodb");
-const faker = require("faker");
+// eslint-disable-next-line node/no-unpublished-require
+const { helpers, company } = require("@faker-js/faker").faker;
 
 module.exports = {
   insertStats(custom) {
@@ -135,8 +136,8 @@ module.exports = {
         merge(
           {},
           {
-            siret: faker.helpers.replaceSymbols("#########00015"),
-            raison_sociale: faker.company.companyName(),
+            siret: helpers.replaceSymbols("#########00015"),
+            raison_sociale: company.companyName(),
             nature: "inconnue",
             uai_potentiels: [],
             contacts: [],
@@ -191,8 +192,8 @@ module.exports = {
       merge(
         {},
         {
-          FORMATION_DIPLOME: faker.helpers.replaceSymbols("########"),
-          NIVEAU_FORMATION_DIPLOME: faker.helpers.replaceSymbols("##?"),
+          FORMATION_DIPLOME: helpers.replaceSymbols("########"),
+          NIVEAU_FORMATION_DIPLOME: helpers.replaceSymbols("##?"),
           LIBELLE_COURT: "FORMATION",
         },
         custom
@@ -261,7 +262,7 @@ module.exports = {
       merge(
         {},
         {
-          siret: faker.helpers.replaceSymbols("#########00015"),
+          siret: helpers.replaceSymbols("#########00015"),
           date: new Date(),
           auteur: "test",
           original: {},
@@ -303,7 +304,7 @@ module.exports = {
               libelleSpecialite1: "Commerce, vente",
             },
           },
-          numeroDeclarationActivite: faker.helpers.replaceSymbols("###########"),
+          numeroDeclarationActivite: helpers.replaceSymbols("###########"),
           numerosDeclarationActivitePrecedent: "12345678900",
           organismeEtrangerRepresente: {},
           siren: "111111111",
