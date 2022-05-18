@@ -1,9 +1,11 @@
-const AcceApi = require("../../common/apis/AcceApi");
-const logger = require("../../common/logger").child({ context: "acce" });
-const { dbCollection } = require("../../common/db/mongodb");
-const { merge } = require("lodash");
+const logger = require("../common/logger").child({ context: "acce" });
+const { dbCollection } = require("../common/db/mongodb");
+const { getFromStorage } = require("../common/utils/ovhUtils");
+const { filterData, writeData, oleoduc, compose } = require("oleoduc");
+const { decodeStream } = require("iconv-lite");
+const { parseCsv } = require("../common/utils/csvUtils");
 
-const natures = [
+const NATURES = [
   "Annexe d'un organisme de formation - Centre de formation d'apprentis",
   "Antenne d'un établissement d'enseignement supérieur privé",
   "Antenne de centre de formation d'apprentis",
@@ -84,47 +86,52 @@ const natures = [
   "Unité de formation et de recherche (hors santé)",
 ];
 
+async function getDefaultFile() {
+  const stream = await getFromStorage("ACCE_UAI.csv");
+  return compose(stream, decodeStream("iso-8859-1"));
+}
 async function importAcce(options = {}) {
-  const api = options.acceApi || new AcceApi();
+  const input = options.input || (await getDefaultFile());
   const stats = {
     total: 0,
     created: 0,
     updated: 0,
     failed: 0,
   };
-  const { nbResults, session, searchParams } = await api.search({
-    ...(options.uai ? { uai: options.uai } : { natures }),
-  });
-  const end = options.end || nbResults;
 
-  logger.info(`Import de ${end} établissements pour la session de recherche ${session.Cookie}...`);
-  for (let index = options.start || 1; index <= end && index <= nbResults; index++) {
-    stats.total++;
-    try {
-      const data = await api.getEtablissement(session, index);
-
-      const res = await dbCollection("acce").updateOne(
-        { uai: data.uai },
-        {
-          $set: {
-            ...merge({ rattachements: { fille: [], mere: [] }, specificites: [] }, data),
-            _search: {
-              searchIndex: index,
-              searchParams: searchParams.toString(),
+  await oleoduc(
+    input,
+    parseCsv({
+      on_record: (record) => record,
+    }),
+    filterData((data) => {
+      stats.total++;
+      return ["Ouvert", "À ouvrir"].includes(data.etat_etablissement_libe) && NATURES.includes(data.nature_uai_libe);
+    }),
+    writeData(
+      async (data) => {
+        try {
+          const res = await dbCollection("acce").updateOne(
+            { numero_uai: data.numero_uai },
+            {
+              $set: {
+                ...data,
+              },
             },
-          },
-        },
-        { upsert: true }
-      );
+            { upsert: true }
+          );
 
-      stats.updated += res.modifiedCount;
-      stats.created += res.upsertedCount;
-      logger.info(`Etablissement ${index} importé`);
-    } catch (e) {
-      logger.error(e, `Impossible d'importer l'établissement ${index}`);
-      stats.failed++;
-    }
-  }
+          stats.updated += res.modifiedCount;
+          stats.created += res.upsertedCount;
+          logger.info(`Etablissement ${data.numero_uai} importé`);
+        } catch (e) {
+          logger.error(e, `Impossible d'importer l'établissement ${data.numero_uai}`);
+          stats.failed++;
+        }
+      },
+      { parallel: 1 }
+    )
+  );
 
   return stats;
 }

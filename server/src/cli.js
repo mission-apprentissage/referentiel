@@ -16,6 +16,7 @@ const { oleoduc, writeToStdout } = require("oleoduc");
 const generateMagicLinks = require("./jobs/generateMagicLinks");
 const exportOrganismes = require("./jobs/exportOrganismes");
 const importCommunes = require("./jobs/importCommunes");
+const importAcce = require("./jobs/importAcce");
 
 function asArray(v) {
   return v.split(",");
@@ -33,6 +34,15 @@ cli
   });
 
 cli
+  .command("importAcce")
+  .argument("[file]", "Le fichier export CSV", createReadStream)
+  .action((file) => {
+    runScript(() => {
+      return importAcce({ input: file });
+    });
+  });
+
+cli
   .command("importCommunes")
   .description(
     "Importe les coordonnées de géolocalisation des communes contenus dans le fichier 'Contours des communes de France simplifié, avec régions et département d'outre-mer rapprochés'"
@@ -40,9 +50,7 @@ cli
   .argument("[file]", "Le fichier JSON disponible sur Datagouv", createReadStream)
   .action((file) => {
     runScript(() => {
-      return importCommunes({
-        input: file,
-      });
+      return importCommunes({ input: file });
     });
   });
 
@@ -66,9 +74,7 @@ cli
   .argument("[file]", "Le fichier CSV disponible sur Datagouv", createReadStream)
   .action((file) => {
     runScript(() => {
-      return importDatagouv({
-        input: file,
-      });
+      return importDatagouv({ input: file });
     });
   });
 

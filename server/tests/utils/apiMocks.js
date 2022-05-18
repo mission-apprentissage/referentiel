@@ -1,21 +1,9 @@
-const path = require("path");
-const { readFileSync } = require("fs");
-const axios = require("axios");
 const nock = require("nock"); // eslint-disable-line node/no-unpublished-require
-const MockAdapter = require("axios-mock-adapter"); // eslint-disable-line node/no-unpublished-require
-const AcceApi = require("../../src/common/apis/AcceApi");
 const { merge, omit } = require("lodash");
 const CatalogueApi = require("../../src/common/apis/CatalogueApi");
 const GeoAdresseApi = require("../../src/common/apis/GeoAdresseApi");
 const SireneApi = require("../../src/common/apis/SireneApi");
 const TableauDeBordApi = require("../../src/common/apis/TableauDeBordApi"); // eslint-disable-line node/no-unpublished-require
-
-function createAxios(Api, responses, callback, options) {
-  const instance = axios.create(options);
-  const mock = new MockAdapter(instance);
-  callback(mock, responses);
-  return new Api({ axios: instance });
-}
 
 function createNock(baseUrl) {
   const client = nock(baseUrl);
@@ -751,23 +739,5 @@ module.exports = {
         );
       },
     });
-  },
-  getMockedAcceApi(callback, options = {}) {
-    const responses = {
-      index(file = "./fixtures/acceIndexResponse.html") {
-        return readFileSync(path.join(__dirname, file), "UTF-8");
-      },
-      search(file = "./fixtures/acceSearchResponse.html") {
-        return readFileSync(path.join(__dirname, file), "UTF-8");
-      },
-      etablissement(file = "./fixtures/acceEtablissementResponse.html") {
-        return readFileSync(path.join(__dirname, file), "UTF-8");
-      },
-      noGeoloc(file = "./fixtures/noGeoloc.html") {
-        return readFileSync(path.join(__dirname, file), "UTF-8");
-      },
-    };
-
-    return createAxios(AcceApi, responses, callback, options);
   },
 };

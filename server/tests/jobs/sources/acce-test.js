@@ -6,16 +6,15 @@ const { insertOrganisme, insertAcce } = require("../../utils/fakeData");
 
 describe("acce", () => {
   it("Vérifie qu'on peut collecter des contacts", async () => {
+    const source = createSource("acce");
     await insertOrganisme({
       siret: "11111111100006",
       uai: "0111111Y",
     });
     await insertAcce({
-      uai: "0111111Y",
-      email: "robert@formation.fr",
-      rattachements: { fille: [], mere: [] },
+      numero_uai: "0111111Y",
+      mel_uai: "robert@formation.fr",
     });
-    const source = createSource("acce");
 
     const stats = await collectSources(source);
 
