@@ -1,8 +1,7 @@
 const logger = require("../common/logger").child({ context: "acce" });
 const { dbCollection } = require("../common/db/mongodb");
 const { getFromStorage } = require("../common/utils/ovhUtils");
-const { filterData, writeData, oleoduc, compose } = require("oleoduc");
-const { decodeStream } = require("iconv-lite");
+const { filterData, writeData, oleoduc } = require("oleoduc");
 const { parseCsv } = require("../common/utils/csvUtils");
 
 const NATURES = [
@@ -86,12 +85,8 @@ const NATURES = [
   "Unité de formation et de recherche (hors santé)",
 ];
 
-async function getDefaultFile() {
-  const stream = await getFromStorage("ACCE_UAI.csv");
-  return compose(stream, decodeStream("iso-8859-1"));
-}
 async function importAcce(options = {}) {
-  const input = options.input || (await getDefaultFile());
+  const input = options.input || (await getFromStorage("ACCE_UAI_UTF8.csv"));
   const stats = {
     total: 0,
     created: 0,
@@ -129,7 +124,7 @@ async function importAcce(options = {}) {
           stats.failed++;
         }
       },
-      { parallel: 1 }
+      { parallel: 10 }
     )
   );
 
