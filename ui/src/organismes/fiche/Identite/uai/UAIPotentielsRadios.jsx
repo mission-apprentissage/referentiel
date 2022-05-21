@@ -8,7 +8,7 @@ import { sortBy } from "lodash-es";
 export function UAIPotentielsRadios({ organisme, action }) {
   const { registerField, values, errors } = useFormContext();
   const potentiels = sortBy(organisme.uai_potentiels, (p) => {
-    return p.uai === organisme._meta.uai_probale ? "_first" : p.uai;
+    return p.uai === organisme._meta.uai_probable ? "_first" : p.uai;
   }).reverse();
 
   return (

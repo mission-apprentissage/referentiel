@@ -35,11 +35,9 @@ paths:
         - $ref: "#/components/parameters/champs"
       responses:
         200:
-          $ref: "#/components/responses/organismes"
+          $ref: "#/components/responses/OrganismesResponse"
         400:
           $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
         404:
           $ref: "#/components/responses/404"
     post:
@@ -71,15 +69,11 @@ paths:
         - $ref: "#/components/parameters/champs"
       responses:
         200:
-          $ref: "#/components/responses/organismes"
+          $ref: "#/components/responses/OrganismesResponse"
         400:
           $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
         404:
           $ref: "#/components/responses/404"
-
-
 
   /api/v1/organismes.{ext}:
     get:
@@ -115,11 +109,9 @@ paths:
         - $ref: "#/components/parameters/champs"
       responses:
         200:
-          $ref: "#/components/responses/organismes"
+          $ref: "#/components/responses/OrganismesResponse"
         400:
           $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
         404:
           $ref: "#/components/responses/404"
 
@@ -138,11 +130,9 @@ paths:
         - $ref: "#/components/parameters/champs"
       responses:
         200:
-          $ref: "#/components/responses/organisme"
+          $ref: "#/components/responses/OrganismeResponse"
         400:
           $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
         404:
           $ref: "#/components/responses/404"
 
@@ -794,13 +784,13 @@ components:
 
 
   responses:
-    organisme:
+    OrganismeResponse:
       description: Un organisme
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Organisme'
-    organismes:
+    OrganismesResponse:
       description: La liste des organismes formateurs
       content:
         application/json:
@@ -823,50 +813,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    401:
-      description: Le header Authorization header est manquant ou invalide
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     404:
       description: Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-
-    OrganismeResponse:
-      description: Un organisme
-      content:
-        '*/*':
-          schema:
-            $ref: '#/components/schemas/Organisme'
-
-    OrganismesResponse:
-      description: La liste des organismes formateurs
-      content:
-        '*/*':
-          schema:
-            type: object
-            properties:
-              organismes:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Organisme'
-              meta:
-                type: object
-                properties:
-                  pagination:
-                    $ref: '#/components/schemas/Pagination'
-                description: Informations complémentaires
-
-
-  securitySchemes:
-    Authorization:
-      type: apiKey
-      description: |
-        Pour plus d'informations voir :
-        https://github.com/mission-apprentissage/referentiel
-      name: Authorization
-      in: header

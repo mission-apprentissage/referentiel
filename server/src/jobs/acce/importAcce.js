@@ -81,6 +81,7 @@ const natures = [
   "Rectorat",
   "Université",
   "Université de technologie",
+  "Unité de formation et de recherche (hors santé)",
 ];
 
 async function importAcce(options = {}) {
