@@ -16,18 +16,12 @@ module.exports = () => {
     name,
     async stream() {
       return compose(
-        dbCollection("acce")
-          .find({}, { projection: { _search: 0 } })
-          .stream(),
+        dbCollection("acce").find({}).stream(),
         transformData((doc) => {
-          if (!doc.uai) {
-            return;
-          }
-
           return {
             from: name,
-            selector: doc.uai,
-            contacts: buildContacts(doc.email),
+            selector: doc.numero_uai,
+            contacts: buildContacts(doc.mel_uai),
           };
         })
       );

@@ -2,7 +2,7 @@ const express = require("express");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
 const { sendJsonStream } = require("../utils/httpUtils");
-const { oleoduc, transformIntoJSON } = require("oleoduc");
+const { oleoduc, transformIntoJSON, transformData } = require("oleoduc");
 const { findAndPaginate } = require("../../common/utils/dbUtils");
 const Joi = require("@hapi/joi");
 const Boom = require("boom");
@@ -25,14 +25,19 @@ module.exports = () => {
         {
           page,
           limit: items_par_page,
-          sort: { uai: ordre === "asc" ? 1 : -1 },
-          projection: { _id: 0, uai: 1 },
+          sort: { numero_uai: ordre === "asc" ? 1 : -1 },
+          projection: { _id: 0, numero_uai: 1 },
         }
       );
 
       sendJsonStream(
         oleoduc(
           find.stream(),
+          transformData((data) => {
+            return {
+              uai: data.numero_uai,
+            };
+          }),
           transformIntoJSON({
             arrayPropertyName: "uais",
             arrayWrapper: {
@@ -54,13 +59,15 @@ module.exports = () => {
           .required(),
       }).validateAsync(req.params, { abortEarly: false });
 
-      const found = await dbCollection("acce").findOne({ uai }, { projection: { _id: 0, uai: 1 } });
+      const found = await dbCollection("acce").findOne({ numero_uai: uai }, { projection: { _id: 0, numero_uai: 1 } });
 
       if (!found) {
         throw Boom.notFound("UAI inconnu");
       }
 
-      res.json(found);
+      res.json({
+        uai: found.numero_uai,
+      });
     })
   );
 
