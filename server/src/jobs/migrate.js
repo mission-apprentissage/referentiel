@@ -1,6 +1,6 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
 
-const VERSION = 8;
+const VERSION = 9;
 
 async function tasks() {
   return {};

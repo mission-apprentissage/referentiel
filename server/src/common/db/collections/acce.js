@@ -77,6 +77,6 @@ module.exports = {
     );
   },
   indexes: () => {
-    return [[{ uai: 1 }]];
+    return [[{ numero_uai: 1 }, { unique: true }]];
   },
 };
