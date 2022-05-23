@@ -12,9 +12,8 @@ const importOrganismes = require("./jobs/importOrganismes");
 const build = require("./jobs/build");
 const migrate = require("./jobs/migrate");
 const consolidate = require("./jobs/consolidate");
-const { oleoduc } = require("oleoduc");
+const { oleoduc, writeToStdout } = require("oleoduc");
 const generateMagicLinks = require("./jobs/generateMagicLinks");
-const writeToStdout = require("oleoduc/lib/writeToStdout");
 const exportOrganismes = require("./jobs/exportOrganismes");
 const importCommunes = require("./jobs/importCommunes");
 
