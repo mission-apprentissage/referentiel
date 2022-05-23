@@ -1,6 +1,13 @@
 const _ = require("lodash");
 const logger = require("../../common/logger");
 
+function getLevel(error, statusCode) {
+  if (statusCode === 404) {
+    return "warn";
+  }
+
+  return error || (statusCode >= 400 && statusCode < 600) ? "error" : "info";
+}
 module.exports = () => {
   return (req, res, next) => {
     const relativeUrl = (req.baseUrl || "") + (req.url || "");
@@ -46,7 +53,7 @@ module.exports = () => {
             : {}),
         };
 
-        const level = error || (statusCode >= 400 && statusCode < 600) ? "error" : "info";
+        const level = getLevel(error, statusCode);
 
         logger[level](data, `Http Request ${level === "error" ? "KO" : "OK"}`);
       } finally {
