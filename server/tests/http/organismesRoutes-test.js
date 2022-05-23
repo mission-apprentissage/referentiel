@@ -5,7 +5,7 @@ const { startServer, generateAuthHeader } = require("../utils/testUtils");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const assert = require("assert");
 const { omitDeep } = require("../../src/common/utils/objectUtils");
-const { sortBy } = require("lodash");
+const { sortBy, omit } = require("lodash");
 const { DateTime } = require("luxon");
 
 describe("organismesRoutes", () => {
@@ -507,6 +507,36 @@ describe("organismesRoutes", () => {
     ]);
 
     const response = await httpClient.get("/api/v1/organismes?academies=01");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100001");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes qui n'ont pas d'académie", async () => {
+    const { httpClient } = await startServer();
+    await Promise.all([
+      insertOrganisme(
+        {
+          siret: "11111111100001",
+        },
+        (o) => omit(o, ["adresse"])
+      ),
+      insertOrganisme(),
+    ]);
+
+    const response = await httpClient.get("/api/v1/organismes?academies=false");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100001");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes qui ont une académie", async () => {
+    const { httpClient } = await startServer();
+    await Promise.all([insertOrganisme({ siret: "11111111100001" }), insertOrganisme({}, (o) => omit(o, ["adresse"]))]);
+
+    const response = await httpClient.get("/api/v1/organismes?academies=true");
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
