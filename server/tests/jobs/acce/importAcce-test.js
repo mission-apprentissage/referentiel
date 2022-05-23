@@ -8,7 +8,7 @@ describe("importAcce", () => {
   it("Vérifie qu'on peut scrapper et importer un etablissement", async () => {
     const api = getMockedAcceApi((mock, responses) => {
       mock.onGet(/.*index.php.*/).reply(200, responses.index(), {
-        "set-cookie": ["PHPSESSID=123;"],
+        "set-cookie": ["men_default=123;"],
       });
       mock.onPost(/.*search.php.*/).reply(200, responses.search());
       mock.onGet(/.*uai.php.*/).reply(200, responses.etablissement());
@@ -87,7 +87,7 @@ describe("importAcce", () => {
   it("Vérifie qu'on peut importer un établissement sans coordonnées de géolocalisation", async () => {
     const api = getMockedAcceApi((mock, responses) => {
       mock.onGet(/.*index.php.*/).reply(200, responses.index(), {
-        "set-cookie": ["PHPSESSID=123;"],
+        "set-cookie": ["men_default=123;"],
       });
       mock.onPost(/.*search.php.*/).reply(200, responses.search());
       mock.onGet(/.*uai.php.*/).reply(200, responses.noGeoloc());
@@ -102,7 +102,7 @@ describe("importAcce", () => {
   it("Vérifie qu'on gère les erreurs durant le scrapping", async () => {
     const api = getMockedAcceApi((mock, responses) => {
       mock.onGet(/.*index.php.*/).reply(200, responses.index(), {
-        "set-cookie": ["PHPSESSID=123;"],
+        "set-cookie": ["men_default=123;"],
       });
       mock.onPost(/.*search.php.*/).reply(200, responses.search());
       mock.onGet(/.*uai.php.*/).reply(500, "<html></html>");
