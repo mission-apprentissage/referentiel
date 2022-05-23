@@ -7,6 +7,8 @@ const { pickBy, identity } = require("lodash");
 const CHROME_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36";
 
+const SESSION_COOKIE_NAME = "men_default";
+
 function omitNull(obj) {
   return pickBy(obj, identity);
 }
@@ -25,9 +27,9 @@ class AcceApi extends RateLimitedApi {
     const response = await this.client.get("https://www.education.gouv.fr/acce_public/index.php");
 
     const cookie = response.headers["set-cookie"][0];
-    const sessionId = cookie.match(/PHPSESSID=(.*);/)[1];
+    const sessionId = cookie.match(new RegExp(`${SESSION_COOKIE_NAME}=(.*);`))[1];
     const session = {
-      Cookie: `PHPSESSID=${sessionId}`,
+      Cookie: `${SESSION_COOKIE_NAME}=${sessionId}`,
     };
 
     const params = new URLSearchParams();
