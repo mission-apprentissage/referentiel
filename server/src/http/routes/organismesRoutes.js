@@ -92,7 +92,11 @@ module.exports = () => {
       ...(hasElements(referentiels) ? convertCriteriaIntoQuery("referentiels", referentiels) : {}),
       ...(hasElements(departements) ? { "adresse.departement.code": { $in: departements } } : {}),
       ...(hasElements(regions) ? { "adresse.region.code": { $in: regions } } : {}),
-      ...(hasElements(academies) ? { "adresse.academie.code": { $in: academies } } : {}),
+      ...(hasValue(academies)
+        ? isBoolean(academies)
+          ? { "adresse.academie.code": { $exists: academies } }
+          : { "adresse.academie.code": { $in: academies } }
+        : {}),
       ...(hasValue(relations)
         ? isBoolean(relations)
           ? { "relations.0": { $exists: relations } }
@@ -138,7 +142,9 @@ module.exports = () => {
           natures: arrayOf(Joi.string().valid("responsable", "formateur", "responsable_formateur", "inconnue")),
           etat_administratif: Joi.string().valid("actif", "fermé"),
           regions: arrayOf(Joi.string().valid(...getRegions().map((r) => r.code))),
-          academies: arrayOf(Joi.string().valid(...getAcademies().map((a) => a.code))),
+          academies: Joi.alternatives()
+            .try(Joi.boolean(), arrayOf(Joi.string().valid(...getAcademies().map((a) => a.code))))
+            .default(null),
           departements: arrayOf(Joi.string().valid(...getDepartements().map((d) => d.code))),
           relations: Joi.alternatives()
             .try(

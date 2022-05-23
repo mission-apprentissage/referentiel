@@ -6,7 +6,7 @@ describe("uaisRoutes", () => {
   it("Vérifie qu'on peut lister des UAI", async () => {
     const { httpClient } = await startServer();
     await insertAcce({
-      uai: "0751234J",
+      numero_uai: "0751234J",
     });
 
     const response = await httpClient.get("/api/v1/uais");
@@ -30,7 +30,7 @@ describe("uaisRoutes", () => {
   it("Vérifie qu'on peut obtenir un UAI", async () => {
     const { httpClient } = await startServer();
     await insertAcce({
-      uai: "0751234J",
+      numero_uai: "0751234J",
     });
 
     const response = await httpClient.get("/api/v1/uais/0751234J");

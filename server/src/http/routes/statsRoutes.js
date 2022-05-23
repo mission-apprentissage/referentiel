@@ -19,7 +19,7 @@ module.exports = () => {
             academie: {
               $cond: {
                 if: nullOrEmpty("$_id"),
-                then: { code: "XX", nom: "Inconnu" },
+                then: { code: false, nom: "Inconnu" },
                 else: "$_id",
               },
             },
