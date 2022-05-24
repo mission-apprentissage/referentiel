@@ -60,6 +60,7 @@ export function ValidationTitle() {
 }
 
 const ValidationLayoutTitle = styled(({ refine, className }) => {
+  const { query } = useQuery();
   const { type } = useParams();
 
   return (
@@ -75,7 +76,12 @@ const ValidationLayoutTitle = styled(({ refine, className }) => {
             {MAPPER[type].critères}
           </div>
         }
-        selector={<DepartementAuthSelector onChange={(code) => refine({ departements: code })} />}
+        selector={
+          <DepartementAuthSelector
+            departement={query.departements}
+            onChange={(code) => refine({ departements: code })}
+          />
+        }
       />
     </div>
   );

@@ -1,9 +1,15 @@
 import { useContext } from "react";
 import { Filter } from "./Filter";
 import { DataContext } from "../../common/DataProvider";
+import { ApiContext } from "../../common/ApiProvider.jsx";
 
 export default function DepartementsFilter() {
-  const { departements } = useContext(DataContext);
+  const data = useContext(DataContext);
+  const { auth, isAnonymous } = useContext(ApiContext);
+
+  const departements = isAnonymous()
+    ? data.departements
+    : data[`${auth.type}s`].find((r) => r.code === auth.code)?.departements;
 
   return (
     <Filter

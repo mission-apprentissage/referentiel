@@ -1,13 +1,11 @@
 import Select from "../../common/dsfr/elements/Select";
 import { useContext, useState } from "react";
 import { Box, Item } from "../../common/Flexbox";
-import { useQuery } from "../../common/hooks/useQuery";
 import { DataContext } from "../../common/DataProvider";
 
-export default function AcademieSelector({ onChange }) {
+export default function AcademieSelector({ academie, onChange }) {
   const { academies } = useContext(DataContext);
-  const { query } = useQuery();
-  const [selected, setSelected] = useState(query.academies || "");
+  const [selected, setSelected] = useState(academie || "");
 
   return (
     <Box align={"center"} justify={"start"} style={{ width: "100%" }}>

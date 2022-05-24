@@ -2,9 +2,10 @@ import { Link } from "../../common/dsfr/elements/Link";
 import { Box } from "../../common/Flexbox";
 import styled from "styled-components";
 import ClickableItem from "../../common/ClickableItem";
-import { without } from "../../common/utils";
+import { buildUrl, without } from "../../common/utils";
 import Spinner from "../../common/Spinner";
 import { useValidationSearch } from "../../common/hooks/useValidationSearch";
+import { useQuery } from "../../common/hooks/useQuery.js";
 
 const StyledBox = styled(without(Box, ["type"]))`
   padding: 1.5rem;
@@ -30,6 +31,7 @@ const Counter = styled(({ response, className }) => {
 `;
 
 export default function ValidationCard({ type, label, children, ...rest }) {
+  const { query } = useQuery();
   const { response } = useValidationSearch(type, {
     page: 1,
     items_par_page: 1,
@@ -37,7 +39,7 @@ export default function ValidationCard({ type, label, children, ...rest }) {
   });
 
   return (
-    <ClickableItem to={`/tableau-de-bord/validation/${type}`}>
+    <ClickableItem to={buildUrl(`/tableau-de-bord/validation/${type}`, query)}>
       <StyledBox direction={"column"} justify={"between"} type={type} {...rest}>
         <div>
           <Counter response={response} />
