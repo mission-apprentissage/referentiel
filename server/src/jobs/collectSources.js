@@ -15,7 +15,7 @@ function buildQuery(selector) {
   return typeof selector === "object" ? selector : { $or: [{ siret: selector }, { uai: selector }] };
 }
 
-function mergeArray(source, existingArray, discriminator, newArray, options = {}) {
+function mergeArray(source, existingArray, newArray, discriminator, options = {}) {
   const updated = newArray.map((element) => {
     const previous = existingArray.find((e) => e[discriminator] === element[discriminator]) || {};
     return {
@@ -34,16 +34,13 @@ function mergeArray(source, existingArray, discriminator, newArray, options = {}
 }
 
 function mergeUAIPotentiels(source, potentiels, newPotentiels) {
-  return mergeArray(
-    source,
-    potentiels,
-    "uai",
-    newPotentiels
-      .filter((uai) => isUAIValid(uai))
-      .map((uai) => ({
-        uai,
-      }))
-  );
+  let newArray = newPotentiels
+    .filter((uai) => isUAIValid(uai))
+    .map((uai) => ({
+      uai,
+    }));
+
+  return mergeArray(source, potentiels, newArray, "uai");
 }
 
 async function mergeRelations(source, relations, newRelations, siretsFromDatagouv) {
@@ -64,7 +61,7 @@ async function mergeRelations(source, relations, newRelations, siretsFromDatagou
     ]);
   }, Promise.resolve([]));
 
-  return mergeArray(source, relations, "siret", validatedNewRelations, {
+  return mergeArray(source, relations, validatedNewRelations, "siret", {
     merge: (previous, relation) => {
       const availables = uniq([relation.type, previous.type]);
       return {
@@ -75,17 +72,14 @@ async function mergeRelations(source, relations, newRelations, siretsFromDatagou
 }
 
 function mergeContacts(source, contacts, newContacts) {
-  return mergeArray(
-    source,
-    contacts,
-    "email",
-    newContacts.map((contact) => {
-      return {
-        ...contact,
-        confirmé: contact.confirmé || false,
-      };
-    })
-  );
+  let newArray = newContacts.map((contact) => {
+    return {
+      ...contact,
+      confirmé: contact.confirmé || false,
+    };
+  });
+
+  return mergeArray(source, contacts, newArray, "email");
 }
 
 function mergeNature(current, newNature) {
@@ -102,25 +96,22 @@ function handleAnomalies(source, organisme, newAnomalies) {
     source,
   });
 
+  let newArray = newAnomalies.map((ano) => {
+    const error = isError(ano) && ano;
+    return {
+      key: error ? `${error.httpStatusCode || error.message}` : ano.key,
+      type: error ? "erreur" : ano.type,
+      details: error ? error.message : ano.details,
+      job: "collect",
+      date: new Date(),
+    };
+  });
+
   return dbCollection("organismes").updateOne(
     { siret: organisme.siret },
     {
       $set: {
-        "_meta.anomalies": mergeArray(
-          source,
-          organisme._meta.anomalies,
-          "key",
-          newAnomalies.map((ano) => {
-            const error = isError(ano) && ano;
-            return {
-              key: error ? `${error.httpStatusCode || error.message}` : ano.key,
-              type: error ? "erreur" : ano.type,
-              details: error ? error.message : ano.details,
-              job: "collect",
-              date: new Date(),
-            };
-          })
-        ),
+        "_meta.anomalies": mergeArray(source, organisme._meta.anomalies, newArray, "key"),
       },
     },
     { runValidators: true }
@@ -207,9 +198,9 @@ module.exports = async (array, options = {}) => {
                 uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),
                 relations: await mergeRelations(from, organisme.relations, relations, siretsFromDatagouv),
                 contacts: mergeContacts(from, organisme.contacts, contacts),
-                diplomes: mergeArray(from, organisme.diplomes, "code", diplomes),
-                certifications: mergeArray(from, organisme.certifications, "code", certifications),
-                lieux_de_formation: mergeArray(from, organisme.lieux_de_formation, "code", lieux_de_formation),
+                diplomes: mergeArray(from, organisme.diplomes, diplomes, "code"),
+                certifications: mergeArray(from, organisme.certifications, certifications, "code"),
+                lieux_de_formation: mergeArray(from, organisme.lieux_de_formation, lieux_de_formation, "code"),
               }),
               $addToSet: {
                 reseaux: {
