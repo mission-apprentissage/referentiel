@@ -24,7 +24,7 @@ export default function OrganismesPage() {
     <Page>
       <TitleLayout
         title={"Référentiel national"}
-        selector={<AcademieSelector onChange={(code) => refine({ academies: code })} />}
+        selector={<AcademieSelector academie={query.academies} onChange={(code) => refine({ academies: code })} />}
       />
       <ContentLayout>
         <WideTabs

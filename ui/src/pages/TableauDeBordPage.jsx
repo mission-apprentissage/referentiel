@@ -71,7 +71,7 @@ export default function TableauDeBordPage() {
         title={title}
         selector={
           <DepartementAuthSelector
-            departement={query.departement}
+            departement={query.departements}
             onChange={(code) => setQuery({ ...query, departements: code })}
           />
         }
