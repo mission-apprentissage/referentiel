@@ -83,6 +83,7 @@ const NATURES = [
   "Université",
   "Université de technologie",
   "Unité de formation et de recherche (hors santé)",
+  "Unité de formation et de recherche en santé",
 ];
 
 async function importAcce(options = {}) {
