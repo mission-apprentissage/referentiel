@@ -55,8 +55,9 @@ async function selectBestResult(label, results, fallback) {
   if (!best) {
     throw await newGeocodingError(`Pas de résultats pour l'adresse ${label}`);
   } else if (best.properties.score < MIN_GEOCODE_SCORE) {
+    const coords = best.geometry.coordinates;
     throw await newGeocodingError(
-      `Score ${best.properties.score} trop faible pour l'adresse ${label} / ${best.geometry.coordinates}`
+      `Score ${best.properties.score} trop faible pour l'adresse ${label} (lon:${coords[0]},lat:${coords[1]})`
     );
   }
 

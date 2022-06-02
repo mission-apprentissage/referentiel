@@ -348,7 +348,7 @@ describe("sirene", () => {
       sources: ["sirene"],
       type: "etablissement_geoloc_impossible",
       job: "collect",
-      details: "Score 0 trop faible pour l'adresse 31 B RUE DES LILAS 75001 PARIS / 2.396444,48.879706",
+      details: "Score 0 trop faible pour l'adresse 31 B RUE DES LILAS 75001 PARIS (lon:2.396444,lat:48.879706)",
     });
     assert.deepStrictEqual(stats, {
       sirene: {
