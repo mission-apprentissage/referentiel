@@ -8,7 +8,7 @@ import LieuxDeFormationTab from "./lieux/LieuxDeFormationTab";
 
 export default function Fiche({ organisme }) {
   const navigate = useNavigate();
-  const { tab } = useParams();
+  const { tab = "identite" } = useParams();
 
   return (
     <WideTabs
@@ -16,7 +16,7 @@ export default function Fiche({ organisme }) {
       tabs={[
         {
           tab: (
-            <Tab selected={!tab || tab === "identite"} onClick={() => navigate("../identite")}>
+            <Tab selected={tab === "identite"} onClick={() => navigate("../identite")}>
               Identité
             </Tab>
           ),
