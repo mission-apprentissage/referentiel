@@ -439,13 +439,13 @@ export default function ConstructionPage() {
                     thead={
                       <Thead>
                         <td>Base</td>
-                        <td colSpan="2">Impact</td>
+                        <td colSpan="4">Impact</td>
                       </Thead>
                     }
                   >
                     <tr>
                       <td>Catalogue</td>
-                      <td colSpan="2">
+                      <td colSpan="4">
                         Le flux direct entre le Référentiel et le Catalogue des formations en apprentissage permet une
                         mises à jour automatique des données, ainsi{" "}
                         <span className={"fr-text--bold"}>
@@ -466,13 +466,15 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>RAMSESE</td>
-                      <td colSpan="2">
+                      <td colSpan="4">
                         Il n'existe pas de liaison entre le Référentiel et RAMSESE qui permette une mise à jour
                         automatique des données,{" "}
                         <span className={"fr-text--bold"}>
                           ainsi pour réaliser les corrections de masse, un rapport est disponible au téléchargement :
                         </span>
-                        <ExportButton className={"fr-my-3w"} label={"Télécharger le rapport"} />
+                        <div>
+                          <ExportButton className={"fr-my-3w"} label={"Télécharger le rapport"} />
+                        </div>
                         <div>
                           Il contient pour chaque UAI, si il y a lieu :
                           <ul>
@@ -493,7 +495,7 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>Liste publique des OF</td>
-                      <td colSpan="2">
+                      <td colSpan="4">
                         Les validations d’UAI dans le Référentiel n’impactent pas directement la Liste publique des
                         organismes de formation étant donné que celle-ci ne référence pas les UAI. Cependant, sera
                         remonté à la DGEFP la présence de SIRET fermés.
@@ -507,19 +509,21 @@ export default function ConstructionPage() {
                     thead={
                       <Thead>
                         <td>Base</td>
-                        <td colSpan="2">Impact</td>
+                        <td colSpan="4">Impact</td>
                       </Thead>
                     }
                   >
                     <tr>
                       <td>DECA</td>
-                      <td colSpan="2">
+                      <td colSpan="4">
                         Il n’existe pas de liaison entre le Référentiel et DECA qui permette une mise à jour automatique
                         des données, ainsi{" "}
                         <span className={"fr-text--bold"}>
                           pour réaliser les corrections de masse, un rapport est disponible au téléchargement :
                         </span>
-                        <ExportButton className={"fr-my-3w"} label={"Télécharger le rapport"} />
+                        <div>
+                          <ExportButton className={"fr-my-3w"} label={"Télécharger le rapport"} />
+                        </div>
                         <div>
                           Il contient la liste des UAI dont la nature est uniquement “responsable” afin de pouvoir
                           supprimer les organismes formateurs de la base.
@@ -528,7 +532,7 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>TBA</td>
-                      <td colSpan="2">
+                      <td colSpan="4">
                         Le flux direct entre le Référentiel et le Tableau de bord des formations en apprentissage permet
                         une mises à jour automatique des données et donc une fiabilisation des données du Tableau de
                         bord :
@@ -540,7 +544,7 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>IDEO (Onisep)</td>
-                      <td colSpan="2">
+                      <td colSpan="4">
                         Le flux direct entre le Référentiel et IDEO permet une mises à jour automatique des données et
                         donc :
                         <ul>
