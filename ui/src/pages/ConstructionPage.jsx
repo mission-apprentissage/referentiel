@@ -426,7 +426,7 @@ export default function ConstructionPage() {
                         Le flux direct entre le Référentiel et le Catalogue des formations en apprentissage permet une
                         mises à jour automatique des données, ainsi{" "}
                         <span className={"fr-text--bold"}>
-                          dès qu'une UAI est validée dans le Référentiel, sont mis à jour dans le Catalogue des
+                          dès qu'une UAI est validée dans le Référentiel, sont mises à jour dans le Catalogue des
                           formations en apprentissage :
                         </span>
                         <ul>
@@ -511,8 +511,8 @@ export default function ConstructionPage() {
                       <td>TBA</td>
                       <td colSpan="4">
                         Le flux direct entre le Référentiel et le Tableau de bord des formations en apprentissage permet
-                        une mises à jour automatique des données et donc une fiabilisation des données du Tableau de
-                        bord :
+                        une mise à jour automatique des données et donc une fiabilisation des données du Tableau de bord
+                        :
                         <ul>
                           <li>par récupération des couples SIRET-UAI validés ;</li>
                           <li>par récupération des lieux de formations rattachés au couple SIRET-UAI.</li>
@@ -522,7 +522,7 @@ export default function ConstructionPage() {
                     <tr>
                       <td>IDEO (Onisep)</td>
                       <td colSpan="4">
-                        Le flux direct entre le Référentiel et IDEO permet une mises à jour automatique des données et
+                        Le flux direct entre le Référentiel et IDEO permet une mise à jour automatique des données et
                         donc :
                         <ul>
                           <li>la correction des couples SIRET-UAI ;</li>
