@@ -119,7 +119,6 @@ async function importAcce(options = {}) {
 
           stats.updated += res.modifiedCount;
           stats.created += res.upsertedCount;
-          logger.info(`Etablissement ${data.numero_uai} importé`);
         } catch (e) {
           logger.error(e, `Impossible d'importer l'établissement ${data.numero_uai}`);
           stats.failed++;

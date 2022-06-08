@@ -1,9 +1,11 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
 
-const VERSION = 9;
+const VERSION = 10;
 
 async function tasks() {
-  return {};
+  return {
+    clearAnomalies: await dbCollection("organismes").updateMany({}, { $set: { "_meta.anomalies": [] } }),
+  };
 }
 
 async function _ensureMigrationCanBeRun() {

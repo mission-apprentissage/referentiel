@@ -27,7 +27,10 @@ function App() {
                 <Route path="/dsfr" element={<DesignPage />} />
                 <Route element={<Layout children={<Outlet />} />}>
                   <Route path="/" element={<AccueilPage />} />
-                  <Route path="/construction" element={<ConstructionPage />} />
+                  <Route path="/construction">
+                    <Route path="" element={<ConstructionPage />} />
+                    <Route path=":tab" element={<ConstructionPage />} />
+                  </Route>
                   <Route path="/modifications" element={<ModificationsPage />} />
                   <Route path="/stats" element={<StatsPage />} />
                   <Route path="/login" element={<LoginPage />} />
