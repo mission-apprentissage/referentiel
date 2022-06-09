@@ -15,6 +15,7 @@ import ApiProvider from "./common/ApiProvider";
 import StatsPage from "./pages/StatsPage";
 import SearchProvider from "./common/SearchProvider";
 import ModificationsPage from "./pages/ModificationsPage";
+import CorrectionsPage from "./pages/CorrectionsPage.jsx";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
                     <Route path=":tab" element={<ConstructionPage />} />
                   </Route>
                   <Route path="/modifications" element={<ModificationsPage />} />
+                  <Route path="/corrections" element={<CorrectionsPage />} />
                   <Route path="/stats" element={<StatsPage />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/organismes" element={<OrganismesPage />} />
