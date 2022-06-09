@@ -10,11 +10,11 @@ import { Link } from "../common/dsfr/elements/Link.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import ExportButton from "../common/ExportButton.jsx";
 
-function Incoherence() {
+function Incoherence({ itemName }) {
   return (
     <div className={"fr-mt-3w"}>
       Si cette donnée est inconnue ou incorrecte,{" "}
-      <Link to="/corrections" modifiers={"sm"}>
+      <Link to={`/corrections?item=${itemName}`} modifiers={"sm"}>
         voir la marche à suivre
       </Link>
       .
@@ -74,7 +74,7 @@ export default function ConstructionPage() {
                       <td>Relations entre les organismes</td>
                       <td>
                         {definitions.relations}
-                        <Incoherence />
+                        <Incoherence itemName={"relations"} />
                       </td>
                       <td colSpan="2">
                         <span className={"fr-text--bold"}>
@@ -100,7 +100,7 @@ export default function ConstructionPage() {
                       <td>Nature de l'organisme</td>
                       <td>
                         {definitions.nature}
-                        <Incoherence />
+                        <Incoherence itemName={"nature"} />
                       </td>
                       <td colSpan="2">
                         <span className={"fr-text--bold"}>
@@ -151,7 +151,7 @@ export default function ConstructionPage() {
                       <td>Lieu de formation</td>
                       <td>
                         {definitions.lieu}
-                        <Incoherence />
+                        <Incoherence itemName={"lieu"} />
                       </td>
                       <td colSpan="2">
                         Les lieux de formations sont caractérisés par une adresse postale et des coordonnées de

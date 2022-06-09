@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TitleLayout from "../common/layout/TitleLayout";
 import ContentLayout from "../common/layout/ContentLayout";
 import Page from "../common/Page";
@@ -6,8 +6,14 @@ import { Accordion, AccordionItem } from "../common/dsfr/elements/Accordion.jsx"
 import { Col, GridRow } from "../common/dsfr/fondamentaux/index.js";
 import Highlight from "../common/dsfr/elements/Highlight.jsx";
 import Alert from "../common/dsfr/elements/Alert.jsx";
+import { useSearchParams } from "react-router-dom";
+import { useScrollToTop } from "../common/hooks/useScrollToTop.js";
 
 export default function CorrectionsPage() {
+  const [searchParams] = useSearchParams();
+  const item = searchParams.get("item");
+  useScrollToTop({ force: true });
+
   return (
     <Page>
       <TitleLayout title={"Correction et fiabilisation des données"} />
@@ -20,12 +26,15 @@ export default function CorrectionsPage() {
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
           <Col modifiers={"12"}>
             <Accordion>
-              <AccordionItem label={"La nature d’un organisme est inconnue ou incorrecte"}>
+              <AccordionItem
+                collapsed={item === "nature"}
+                label={"La nature d’un organisme est inconnue ou incorrecte"}
+              >
                 <div>
                   <Alert modifiers={"info sm"}>
                     <p>La modifications de la nature d’un organisme impacte ses relations avec les autres organismes</p>
                   </Alert>
-                  <p className={"fr-mt-3w"}>
+                  <div className={"fr-mt-3w"}>
                     <span className={"fr-text--bold fr-pr-1v"}>
                       Si un organisme a pour nature "N.A" (inconnue), c’est que l'offre de formation n’est pas collectée
                     </span>
@@ -44,9 +53,9 @@ export default function CorrectionsPage() {
                         </li>
                       </ul>
                     </ul>
-                  </p>
+                  </div>
 
-                  <p className={"fr-mt-3w"}>
+                  <div className={"fr-mt-3w"}>
                     <span className={"fr-text--bold fr-pr-1v"}>
                       Si un organisme à une nature incorrecte, c’est que l'offre de formation est mal collectée
                     </span>
@@ -66,10 +75,10 @@ export default function CorrectionsPage() {
                         </li>
                       </ul>
                     </ul>
-                  </p>
+                  </div>
                 </div>
               </AccordionItem>
-              <AccordionItem label={"Des relations entre organismes sont incorrectes"}>
+              <AccordionItem collapsed={item === "relations"} label={"Des relations entre organismes sont incorrectes"}>
                 <div>
                   <p className={"fr-mt-3w"}>
                     <span className={"fr-text--bold fr-pr-1v"}>
@@ -91,6 +100,7 @@ export default function CorrectionsPage() {
                 </div>
               </AccordionItem>
               <AccordionItem
+                collapsed={item === "lieu"}
                 label={"Des informations concernant un lieu de formation sont incorrectes (UAI ou adresse)"}
               >
                 <div>
@@ -98,7 +108,7 @@ export default function CorrectionsPage() {
                     <span className={"fr-text--bold fr-pr-1v"}>S’il s’agit d’une erreur sur l’adresse,</span> le CSAIO
                     devra demander à son Carif-Oref une modification de l’adresse postale du lieu de formation concerné.
                   </p>
-                  <p>
+                  <div>
                     <span className={"fr-text--bold fr-pr-1v"}>S’il s’agit d’une erreur sur UAI,</span> le CSAIO peut
                     faire la modification directement dans le Catalogue des formations en apprentissage :
                     <ol>
@@ -119,10 +129,13 @@ export default function CorrectionsPage() {
                         ></img>
                       </li>
                     </ol>
-                  </p>
+                  </div>
                 </div>
               </AccordionItem>
-              <AccordionItem label={"Un organisme ne devrait pas être présent dans le référentiel"}>
+              <AccordionItem
+                collapsed={item === "organisme"}
+                label={"Un organisme ne devrait pas être présent dans le référentiel"}
+              >
                 <div>
                   <p className={"fr-mt-3w"}>
                     Si un organisme ne devrait pas être présent dans le référentiel (par exemple s’il s’agit d’une école
