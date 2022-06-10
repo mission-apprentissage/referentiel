@@ -17,6 +17,7 @@ export function ValidationPie({ stats }) {
 
   return (
     <Pie
+      label="organismes"
       data={national}
       direction={"column"}
       getLabel={(id) => getValidationLabel(id)}

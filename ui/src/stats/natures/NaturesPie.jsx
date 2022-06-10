@@ -17,6 +17,7 @@ export function NaturesPie({ stats }) {
 
   return (
     <Pie
+      label="organismes"
       data={national}
       direction={"column"}
       getLabel={(id) => getNatureLabel(id)}

@@ -5,7 +5,40 @@ import { Legends } from "./Legends";
 import { Col, GridRow } from "../dsfr/fondamentaux";
 import { cloneElement } from "react";
 
-export default function Pie({ data, direction, getLabel, getColor, getTooltipLabel, height = "500px", ...rest }) {
+const buildTotalCentricLayer = (totalLabel = "") => {
+  return ({ dataWithArc, centerX, centerY }) => {
+    let total = 0;
+    dataWithArc.forEach((datum) => {
+      total += datum.value;
+    });
+
+    return (
+      <text
+        x={centerX}
+        y={centerY}
+        textAnchor="middle"
+        dominantBaseline="central"
+        style={{
+          fontSize: "0.875rem",
+          fill: "rgb(106, 106, 106)",
+        }}
+      >
+        {total} {totalLabel}
+      </text>
+    );
+  };
+};
+
+export default function Pie({
+  data,
+  direction,
+  label,
+  getLabel,
+  getColor,
+  getTooltipLabel,
+  height = "500px",
+  ...rest
+}) {
   const pie = (
     <ResponsivePie
       theme={theme}
@@ -23,6 +56,7 @@ export default function Pie({ data, direction, getLabel, getColor, getTooltipLab
         const { id, value, color } = datum;
         return <BasicTooltip id={getLabel(id)} value={value} color={color} enableChip />;
       }}
+      layers={["arcs", "arcLabels", "arcLinkLabels", "legends", buildTotalCentricLayer(label)]}
       {...rest}
     />
   );
