@@ -17,6 +17,7 @@ export default function Layout({ children }) {
             {!isAnonymous() && <NavLink to={"/tableau-de-bord"}>Tableau de bord</NavLink>}
             <NavLink to={"/organismes"}>Référentiel national</NavLink>
             <NavLink to={"/construction"}>Construction du référentiel</NavLink>
+            <NavLink to={"/corrections"}>Correction et fiabilisation des données</NavLink>
           </Nav>
         }
       />
