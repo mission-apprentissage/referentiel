@@ -430,7 +430,7 @@ export default function ConstructionPage() {
               ),
               panel: (
                 <TabPanel>
-                  <h4>Impact sur les sources de données entrantes une fois le couple UAI-SIRET validé</h4>
+                  <h4>Impacts sur les sources de données entrantes une fois le couple UAI-SIRET validé</h4>
 
                   <h6>Bases sources</h6>
                   <Table
