@@ -2442,10 +2442,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"
   integrity sha512-82cpyJyKRoQoRi+14ibCeGPu0CwypgtBAdBhq1WfvagpCZNKqwXbKwXllYSMG91DhmG4jt9gN8eP6lGOtozuaw==
 
-"@gouvfr/dsfr@1.4.1":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@gouvfr/dsfr/-/dsfr-1.4.1.tgz#71289a18a36f775d5dff46eefb9fc59cb19d6954"
-  integrity sha512-vYWqWall1p+UcyhFr/U/c6Xq4R/vh3Jk+9OEnRufUDiXi18G/mtshweJQLVpPaVMGDIK0EUEAUpd3kdD0D/x9w==
+"@gouvfr/dsfr@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@gouvfr/dsfr/-/dsfr-1.5.0.tgz#a627d7a9772e48aa42614e8e8bc292542a114df6"
+  integrity sha512-RboR8xAUV3sxF3qsM67ZxQPgBoE1+fLbv8f4LmGrmEJEsx0yLVAQxu51ALFcPMEop6qPgwaAIh7B4FxLyfTZlw==
 
 "@hapi/address@2.x.x":
   version "2.1.4"
