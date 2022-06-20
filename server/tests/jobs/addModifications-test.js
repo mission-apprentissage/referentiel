@@ -1,6 +1,6 @@
 const assert = require("assert");
 const { createStream } = require("../utils/testUtils");
-const addModifications = require("../../src/jobs/experimentation/addModifications");
+const addModifications = require("../../src/jobs/experimentation/importExperimentationUais.js");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const { insertOrganisme } = require("../utils/fakeData");
 

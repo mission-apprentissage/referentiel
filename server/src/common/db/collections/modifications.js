@@ -11,12 +11,8 @@ module.exports = {
         siret: string(),
         date: date(),
         auteur: string(),
-        original: object({
-          uai: string(),
-        }),
-        changements: object({
-          uai: string(),
-        }),
+        original: object({}, { additionalProperties: true }),
+        changements: object({}, { additionalProperties: true }),
       },
       { required }
     );

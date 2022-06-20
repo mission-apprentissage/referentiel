@@ -4,7 +4,7 @@ const logger = require("../../common/logger").child({ context: "experimentation"
 const { dbCollection } = require("../../common/db/mongodb");
 const addModification = require("../../common/actions/addModification");
 
-async function addModifications(stream) {
+async function importExperimentationUais(stream) {
   const stats = { total: 0, inserted: 0, invalid: 0, failed: 0 };
   const csvStream = compose(stream, parseCsv());
 
@@ -38,4 +38,4 @@ async function addModifications(stream) {
   return stats;
 }
 
-module.exports = addModifications;
+module.exports = importExperimentationUais;
