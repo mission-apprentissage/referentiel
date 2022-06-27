@@ -24,10 +24,11 @@ async function validateUAI() {
   return stats;
 }
 
-async function applyModifcations() {
+async function applyModifications(options = {}) {
   const stats = { total: 0, modifications: 0, unknown: 0, failed: 0 };
+  const filters = options.filters || {};
 
-  for await (const { siret, changements } of dbCollection("modifications").find().sort({ date: 1 }).stream()) {
+  for await (const { siret, changements } of dbCollection("modifications").find(filters).sort({ date: 1 }).stream()) {
     try {
       stats.total++;
       const res = await dbCollection("organismes").updateOne({ siret }, { $set: changements });
@@ -46,10 +47,10 @@ async function applyModifcations() {
   return stats;
 }
 
-async function consolidate() {
+async function consolidate(options) {
   const stats = {};
   //stats.uai = await validateUAI();
-  stats.modifications = await applyModifcations();
+  stats.modifications = await applyModifications(options);
   return stats;
 }
 

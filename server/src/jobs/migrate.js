@@ -1,10 +1,34 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
+const addModifications = require("../common/actions/addModification.js");
 
-const VERSION = 10;
+const VERSION = 11;
 
 async function tasks() {
+  const organisme = await dbCollection("organismes").findOne({ siret: "30721264700019" });
+
   return {
-    clearAnomalies: await dbCollection("organismes").updateMany({}, { $set: { "_meta.anomalies": [] } }),
+    addModifications: await addModifications("mna", organisme, {
+      adresse: {
+        label: "32 Place Pasteur 45230 Sainte-Geneviève-des-Bois",
+        localite: "Sainte-Geneviève-des-Bois",
+        code_insee: "45278",
+        code_postal: "45230",
+        departement: { code: "45", nom: "Loiret" },
+        academie: { code: "18", nom: "Orléans-Tours" },
+        region: { code: "24", nom: "Centre-Val de Loire" },
+        geojson: {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [2.8207461340447386, 47.8185712617384],
+          },
+          properties: {
+            score: 1,
+            source: "mna",
+          },
+        },
+      },
+    }),
   };
 }
 
