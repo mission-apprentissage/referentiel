@@ -18,6 +18,7 @@ export default function EtatAdministratifPie() {
 
   return (
     <Pie
+      label="organismes"
       data={stats}
       getLabel={(id) => getEtatAdministratifLabel(id)}
       getColor={(id) => getEtatAdministratifColor(id)}

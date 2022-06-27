@@ -2,15 +2,15 @@ const { program: cli } = require("commander");
 const { createWriteStream, createReadStream } = require("fs");
 const { oleoduc, writeToStdout } = require("oleoduc");
 const experimentationCsvStream = require("./experimentationCsvStream");
-const addModifications = require("./addModifications");
+const importExperimentationUais = require("./importExperimentationUais.js");
 const runScript = require("../runScript");
 
 cli
-  .command("addModifications")
+  .command("importExperimentationUais")
   .argument("<file>", "Le fichier avec les couples siret-uai validés", createReadStream)
   .action((file) => {
     runScript(() => {
-      return addModifications(file);
+      return importExperimentationUais(file);
     });
   });
 

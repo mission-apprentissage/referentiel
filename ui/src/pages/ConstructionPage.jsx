@@ -6,8 +6,21 @@ import WideTabs from "../common/dsfr/custom/WideTabs";
 import { Table, Thead } from "../common/dsfr/elements/Table";
 import definitions from "../common/definitions.json";
 import Page from "../common/Page";
+import { Link } from "../common/dsfr/elements/Link.jsx";
 import { useNavigate, useParams } from "react-router-dom";
 import ExportButton from "../common/ExportButton.jsx";
+
+function Incoherence({ itemName }) {
+  return (
+    <div className={"fr-mt-3w"}>
+      Si cette donnée est inconnue ou incorrecte,{" "}
+      <Link to={`/corrections?item=${itemName}`} modifiers={"sm"}>
+        voir la marche à suivre
+      </Link>
+      .
+    </div>
+  );
+}
 
 export default function ConstructionPage() {
   const navigate = useNavigate();
@@ -59,7 +72,10 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>Relations entre les organismes</td>
-                      <td>{definitions.relations}</td>
+                      <td>
+                        {definitions.relations}
+                        <Incoherence itemName={"relations"} />
+                      </td>
                       <td colSpan="2">
                         <span className={"fr-text--bold"}>
                           Les relations entre les organismes sont identifiées au niveau de l'offre de formation en
@@ -82,7 +98,10 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>Nature de l'organisme</td>
-                      <td>{definitions.nature}</td>
+                      <td>
+                        {definitions.nature}
+                        <Incoherence itemName={"nature"} />
+                      </td>
                       <td colSpan="2">
                         <span className={"fr-text--bold"}>
                           Trois natures d'organismes peuvent être observées via le Catalogue des formations en
@@ -130,7 +149,10 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>Lieu de formation</td>
-                      <td>{definitions.lieu}</td>
+                      <td>
+                        {definitions.lieu}
+                        <Incoherence itemName={"lieu"} />
+                      </td>
                       <td colSpan="2">
                         Les lieux de formations sont caractérisés par une adresse postale et des coordonnées de
                         géolocalisation et sont toujours rattachés à un organisme de formation
@@ -408,7 +430,7 @@ export default function ConstructionPage() {
               ),
               panel: (
                 <TabPanel>
-                  <h4>Impact sur les sources de données entrantes une fois le couple UAI-SIRET validé</h4>
+                  <h4>Impacts sur les sources de données entrantes une fois le couple UAI-SIRET validé</h4>
 
                   <h6>Bases sources</h6>
                   <Table

@@ -4,8 +4,39 @@ import { BasicTooltip } from "@nivo/tooltip";
 import { Legends } from "./Legends";
 import { Col, GridRow } from "../dsfr/fondamentaux";
 import { cloneElement } from "react";
+import { percentage } from "../utils.js";
 
-export default function Pie({ data, direction, getLabel, getColor, getTooltipLabel, height = "500px", ...rest }) {
+const buildTotalCentricLayer = (label, total) => {
+  return ({ centerX, centerY }) => {
+    return (
+      <text
+        x={centerX}
+        y={centerY}
+        textAnchor="middle"
+        dominantBaseline="central"
+        style={{
+          fontSize: "0.875rem",
+          fill: "rgb(106, 106, 106)",
+        }}
+      >
+        {total} {label || ""}
+      </text>
+    );
+  };
+};
+
+export default function Pie({
+  data,
+  direction,
+  label,
+  getLabel,
+  getColor,
+  getTooltipLabel,
+  height = "500px",
+  ...rest
+}) {
+  const total = data.reduce((acc, d) => acc + d.value, 0);
+
   const pie = (
     <ResponsivePie
       theme={theme}
@@ -21,8 +52,10 @@ export default function Pie({ data, direction, getLabel, getColor, getTooltipLab
       colors={({ id }) => getColor(id)}
       tooltip={({ datum }) => {
         const { id, value, color } = datum;
-        return <BasicTooltip id={getLabel(id)} value={value} color={color} enableChip />;
+        const v = `${Math.round(percentage(value, total))}% (${value})`;
+        return <BasicTooltip id={getLabel(id)} value={v} color={color} enableChip />;
       }}
+      layers={["arcs", "arcLabels", "arcLinkLabels", "legends", buildTotalCentricLayer(label, total)]}
       {...rest}
     />
   );

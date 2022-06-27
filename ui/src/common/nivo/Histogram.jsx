@@ -2,6 +2,7 @@ import { ResponsiveBar } from "@nivo/bar";
 import { BasicTooltip } from "@nivo/tooltip";
 import { theme } from "./nivo";
 import { Legends } from "./Legends";
+import { percentage } from "../utils.js";
 
 export default function Histogram({
   title,
@@ -52,8 +53,10 @@ export default function Histogram({
           }}
           colors={({ id }) => getSerieColor(id)}
           legendLabel={({ id }) => getSerieLabel(id)}
-          tooltip={({ id, value, color }) => {
-            return <BasicTooltip id={getSerieLabel(id)} value={value} color={color} enableChip />;
+          tooltip={({ id, value, color, data }) => {
+            const total = series.map((s) => data[s]).reduce((acc, v) => acc + v, 0);
+            const v = `${Math.round(percentage(value, total))}% (${value})`;
+            return <BasicTooltip id={getSerieLabel(id)} value={v} color={color} enableChip />;
           }}
           {...rest}
         />

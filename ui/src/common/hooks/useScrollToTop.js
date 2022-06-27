@@ -2,11 +2,12 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import usePrevious from "./usePrevious";
 
-export default function useScrollToTop() {
+export function useScrollToTop(options = {}) {
   const location = useLocation();
   const previous = usePrevious(location);
   useEffect(() => {
-    if (previous && (previous.pathname !== location.pathname || previous.search !== location.search)) {
+    const isNewPath = previous && (previous.pathname !== location.pathname || previous.search !== location.search);
+    if (options.force || isNewPath) {
       window.scrollTo(0, 0);
     }
   });

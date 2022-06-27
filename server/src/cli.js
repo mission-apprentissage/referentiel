@@ -110,10 +110,13 @@ cli
 
 cli
   .command("consolidate")
+  .option("--siret <siret>", "Limite la consolidation pour un siret")
   .description("Consolide les données précédement collectées")
-  .action(() => {
+  .action(({ siret }) => {
     runScript(() => {
-      return consolidate();
+      const options = siret ? { filters: { siret } } : {};
+
+      return consolidate(options);
     });
   });
 
