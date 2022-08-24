@@ -21,21 +21,21 @@ class GeocodingError extends Error {
   }
 }
 
-async function findCommune(label, fallback) {
+async function findCommune(codeInsee, codePostal, label) {
   const geojson = await dbCollection("communes").findOne(
-    { "properties.codgeo": fallback.codeInsee },
+    { "properties.codgeo": codeInsee },
     { projection: { _id: 0 } }
   );
 
   if (!geojson) {
-    logger.warn(`Commune ${fallback.codeInsee} inconnue`);
+    logger.warn(`Commune ${codeInsee} inconnue`);
     return null;
   }
 
   return buildAdresse({
     label,
-    code_postal: fallback.codePostal,
-    code_insee: fallback.codeInsee,
+    code_insee: codeInsee,
+    code_postal: codePostal,
     localite: geojson.properties.libgeo,
     geojson: {
       type: geojson.type,
@@ -48,7 +48,7 @@ async function findCommune(label, fallback) {
 async function selectBestResult(label, results, fallback) {
   const best = results.features[0];
   const newGeocodingError = async (message) => {
-    const commune = fallback ? await findCommune(label, fallback) : null;
+    const commune = fallback ? await findCommune(fallback.codeInsee, fallback.codePostal, label) : null;
     return new GeocodingError(message, { commune });
   };
 

@@ -7,7 +7,7 @@ class RateLimitedApi {
     this.name = name;
     this.rateLimiter = new RateLimiter(this.name, {
       nbRequests: options.nbRequests || 1,
-      durationInSeconds: options.durationInSeconds || 1,
+      perSeconds: options.perSeconds || 1,
     });
 
     this.rateLimiter.on("status", ({ queueSize, maxQueueSize }) => {

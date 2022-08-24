@@ -5,7 +5,7 @@ const RateLimitedApi = require("./RateLimitedApi");
 
 class GeoAdresseApi extends RateLimitedApi {
   constructor(options = {}) {
-    super("GeoAdresseApi", { nbRequests: 25, durationInSeconds: 1, ...options });
+    super("GeoAdresseApi", { nbRequests: 25, perSeconds: 1, ...options });
     this.client = options.axios || axios.create({ timeout: 5000 });
   }
 

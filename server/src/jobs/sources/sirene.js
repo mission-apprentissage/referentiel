@@ -1,152 +1,206 @@
-const { compose, transformData } = require("oleoduc");
-const SireneApi = require("../../common/apis/SireneApi");
+const { Readable } = require("stream");
+const { compose, transformData, groupData, flattenArray, flattenStream } = require("oleoduc");
 const GeoAdresseApi = require("../../common/apis/GeoAdresseApi");
 const adresses = require("../../common/adresses");
-const categoriesJuridiques = require("../../common/categoriesJuridiques");
 const { dbCollection } = require("../../common/db/mongodb");
-const caches = require("../../common/caches/caches");
+const { fincCategorieJuridiqueByCode } = require("../../common/categoriesJuridiques.js");
+const SireneApi = require("../../common/apis/SireneApi.js");
+const { asSiren } = require("../../common/utils/stringUtils.js");
+const { transformStream } = require("../../common/utils/streamUtils.js");
+const getAllSirets = require("../../common/actions/getAllSirets.js");
+const createDatagouvSource = require("./datagouv.js");
+
+function str(v) {
+  return v || "";
+}
 
 function getRaisonSociale(uniteLegale) {
   return (
-    uniteLegale.denomination ||
-    uniteLegale.denomination_usuelle_1 ||
-    uniteLegale.denomination_usuelle_2 ||
-    uniteLegale.denomination_usuelle_3 ||
-    uniteLegale.nom
+    uniteLegale.denominationUniteLegale ||
+    uniteLegale.denominationUsuelle1UniteLegale ||
+    uniteLegale.denominationUsuelle2UniteLegale ||
+    uniteLegale.denominationUsuelle3UniteLegale ||
+    uniteLegale.nomUniteLegale
   );
+}
+
+function getLatestPeriode(etablissement) {
+  return etablissement.periodesEtablissement.find((pe) => pe.dateFin === null);
 }
 
 function getEnseigne(etablissement) {
+  const periode = getLatestPeriode(etablissement);
   return (
-    etablissement.enseigne_1 ||
-    etablissement.enseigne_2 ||
-    etablissement.enseigne_3 ||
-    etablissement.denomination_usuelle
+    periode.enseigne1Etablissement ||
+    periode.enseigne2Etablissement ||
+    periode.enseigne3Etablissement ||
+    periode.denominationUsuelleEtablissement
   );
 }
 
-function getRelationLabel(e, raisonSociale) {
-  let localisation;
-  if (e.code_postal) {
-    localisation = `${e.numero_voie || ""} ${e.code_postal || ""} ${e.libelle_commune || ""}`;
-  } else {
-    localisation = `${e.libelle_commune_etranger || ""} ${e.code_pays_etranger || ""} ${e.libelle_pays_etranger || ""}`;
-  }
-
-  return `${raisonSociale} ${localisation}`.replace(/ +/g, " ").trim();
+function isActif(etablissement) {
+  const periode = getLatestPeriode(etablissement);
+  return periode.etatAdministratifEtablissement === "A";
 }
 
 function getAdresseAsString(etablissement) {
+  const { adresseEtablissement: adresse } = etablissement;
   return (
-    `${etablissement.numero_voie || ""} ${etablissement.indice_repetition || ""} ` +
-    `${etablissement.type_voie || ""} ${etablissement.libelle_voie || ""} ` +
-    `${etablissement.code_postal || ""} ${etablissement.libelle_commune || ""}`
+    `${str(adresse.numeroVoieEtablissement)} ` +
+    `${str(adresse.indiceRepetitionEtablissement)} ` +
+    `${str(adresse.typeVoieEtablissement)} ` +
+    `${str(adresse.libelleVoieEtablissement)} ` +
+    `${str(adresse.codePostalEtablissement)} ` +
+    `${str(adresse.libelleCommuneEtablissement)}`
   )
     .replace(/\s{2,}/g, " ")
     .trim();
 }
 
-function getRelations(uniteLegale, siret) {
-  return uniteLegale.etablissements
-    .filter((e) => e.siret !== siret && e.etat_administratif === "A")
-    .map((e) => {
-      return {
-        type: "entreprise",
-        siret: e.siret,
-        label: getRelationLabel(e, getRaisonSociale(uniteLegale)),
-      };
-    });
+function getRelationLabel(etablissement) {
+  const { uniteLegale, adresseEtablissement: adresse } = etablissement;
+  const raisonSociale = getRaisonSociale(uniteLegale);
+
+  let localisation;
+  if (adresse.codePostalEtablissement) {
+    localisation = `${str(adresse.codePostalEtablissement)} ` + `${str(adresse.libelleCommuneEtablissement)}`;
+  } else {
+    localisation =
+      `${str(adresse.libelleCommuneEtrangerEtablissement)} ` +
+      `${str(adresse.codePaysEtrangerEtablissement)} ` +
+      `${str(adresse.libellePaysEtrangerEtablissement)}`;
+  }
+
+  return `${raisonSociale} ${localisation}`.replace(/ +/g, " ").trim();
+}
+
+function handleApiError(err, sirets) {
+  const errors = sirets.map((siret) => {
+    return {
+      selector: siret,
+      anomalies: [err],
+    };
+  });
+  return Readable.from(errors);
 }
 
 module.exports = (custom = {}) => {
   const name = "sirene";
   const api = custom.sireneApi || new SireneApi();
-  const sireneApiCache = caches.sireneApiCache();
   const { geocode } = adresses(custom.geoAdresseApi || new GeoAdresseApi());
 
   return {
     name,
     async stream(options = {}) {
       const filters = options.filters || {};
+      const datagouv = createDatagouvSource();
+      const allSirets = [...(await getAllSirets()), ...(await datagouv.loadSirets())];
 
       return compose(
         dbCollection("organismes")
-          .find(filters, { projection: { siret: 1, "adresse.code_insee": 1 } })
+          .aggregate([
+            { $match: filters },
+            { $project: { siren: { $substr: ["$siret", 0, 9] }, siret: 1 } },
+            { $group: { _id: "$siren", siren: { $first: "$siren" }, sirets: { $push: "$siret" } } },
+          ])
           .stream(),
-        transformData(
-          async ({ siret }) => {
-            try {
-              const siren = siret.substring(0, 9);
-              const anomalies = [];
+        groupData({ size: 125 }),
+        transformStream(async (group) => {
+          const sirens = group.map((item) => item.siren);
+          const sirets = group.flatMap((item) => item.sirets);
 
-              const uniteLegale = await sireneApiCache.memo(siren, () => api.getUniteLegale(siren));
-              const etablissement = uniteLegale.etablissements.find((e) => e.siret === siret);
+          try {
+            const query = sirens.map((siren) => `siret:${siren}*`).join(" OR ");
+            const stream = await api.streamEtablissements(query, { nombre: 1000, tri: "siren" });
 
-              if (!etablissement) {
-                return {
-                  selector: siret,
-                  anomalies: [
-                    {
-                      key: `etablissement_inconnu_${siren}`,
-                      type: "etablissement_inconnu",
-                      details: `Etablissement inconnu pour l'entreprise ${siren}`,
-                    },
-                  ],
-                };
-              }
-
-              const addresseAsString = getAdresseAsString(etablissement);
-              const adresse = await geocode(addresseAsString, {
-                fallback: {
-                  codeInsee: etablissement.code_commune,
-                  codePostal: etablissement.code_postal,
-                },
-              }).catch((e) => {
-                anomalies.push({
-                  key: `adresse_${addresseAsString}`,
-                  type: "etablissement_geoloc_impossible",
-                  details: e.message,
-                });
-                return e.commune;
-              });
-
-              const formeJuridique = categoriesJuridiques.find((cj) => cj.code === uniteLegale.categorie_juridique);
-              if (!formeJuridique) {
-                anomalies.push({
-                  key: `categorie_juridique_${uniteLegale.categorie_juridique}`,
-                  type: "categorie_juridique_inconnue",
-                  details: `Impossible de trouver la catégorie juridique de l'entreprise : ${uniteLegale.categorie_juridique}`,
-                });
-              }
-
-              return {
-                selector: siret,
-                relations: await getRelations(uniteLegale, siret),
-                anomalies,
-                data: {
-                  raison_sociale: getRaisonSociale(uniteLegale),
-                  etat_administratif: etablissement.etat_administratif === "A" ? "actif" : "fermé",
-                  enseigne: getEnseigne(etablissement),
-                  siege_social: etablissement.etablissement_siege === "true",
-                  ...(adresse ? { adresse } : {}),
-                  ...(formeJuridique ? { forme_juridique: formeJuridique } : {}),
-                },
-              };
-            } catch (e) {
-              return {
-                selector: siret,
-                anomalies: [
-                  e.httpStatusCode === 404
-                    ? { key: "404", type: "entreprise_inconnue", details: "Entreprise inconnue" }
-                    : e,
-                ],
-              };
-            }
-          },
-          { parallel: 5 }
-        ),
+            return transformEtablissements(stream, (siret) => allSirets.includes(siret));
+          } catch (e) {
+            return handleApiError(e, sirets);
+          }
+        }),
+        flattenStream(),
         transformData((data) => ({ ...data, from: name }))
       );
+
+      async function transformEtablissements(stream, filter) {
+        return compose(
+          stream,
+          transformData(
+            async (etablissement) => {
+              try {
+                const anomalies = [];
+                const { siret, uniteLegale } = etablissement;
+                const addresseAsString = getAdresseAsString(etablissement);
+                const actif = isActif(etablissement);
+
+                if (!filter(siret)) {
+                  return null;
+                }
+
+                const adresse = await geocode(addresseAsString, {
+                  fallback: {
+                    codeInsee: etablissement.adresseEtablissement.codeCommuneEtablissement,
+                    codePostal: etablissement.adresseEtablissement.codePostalEtablissement,
+                  },
+                }).catch((e) => {
+                  anomalies.push({
+                    key: `adresse_${addresseAsString}`,
+                    type: "etablissement_geoloc_impossible",
+                    details: e.message,
+                  });
+                  return e.commune;
+                });
+
+                const formeJuridique = fincCategorieJuridiqueByCode(uniteLegale.categorieJuridiqueUniteLegale);
+                if (!formeJuridique) {
+                  anomalies.push({
+                    key: `categorie_juridique_${uniteLegale.categorieJuridiqueUniteLegale}`,
+                    type: "categorie_juridique_inconnue",
+                    details: `Impossible de trouver la catégorie juridique de l'entreprise : ${uniteLegale.categorieJuridiqueUniteLegale}`,
+                  });
+                }
+
+                const results = [
+                  {
+                    selector: siret,
+                    anomalies,
+                    data: {
+                      raison_sociale: getRaisonSociale(uniteLegale),
+                      etat_administratif: actif ? "actif" : "fermé",
+                      enseigne: getEnseigne(etablissement),
+                      siege_social: etablissement.etablissementSiege === true,
+                      ...(adresse ? { adresse } : {}),
+                      ...(formeJuridique ? { forme_juridique: formeJuridique } : {}),
+                    },
+                  },
+                ];
+
+                if (actif) {
+                  results.push({
+                    selector: { $and: [{ siret: new RegExp(`^${asSiren(siret)}.*`) }, { siret: { $ne: siret } }] },
+                    relations: [
+                      {
+                        type: "entreprise",
+                        siret,
+                        label: getRelationLabel(etablissement),
+                      },
+                    ],
+                  });
+                }
+
+                return results;
+              } catch (e) {
+                return {
+                  selector: etablissement.siret,
+                  anomalies: [e],
+                };
+              }
+            },
+            { parallel: 10 }
+          ),
+          flattenArray()
+        );
+      }
     },
   };
 };

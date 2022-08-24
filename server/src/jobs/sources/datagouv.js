@@ -1,5 +1,6 @@
 const { compose, transformData, filterData, flattenArray } = require("oleoduc");
 const { dbCollection } = require("../../common/db/mongodb");
+const { asSiren } = require("../../common/utils/stringUtils.js");
 
 function isQualiopi(doc) {
   return doc.certifications.actionsDeFormationParApprentissage === true;
@@ -50,7 +51,7 @@ module.exports = () => {
           ];
 
           if (qualiopi) {
-            const asSameSirenRegexp = new RegExp(`^${siret.substring(0, 9)}.*`);
+            const asSameSirenRegexp = new RegExp(`^${asSiren(siret)}.*`);
             const ignored = await dbCollection("datagouv")
               .find(
                 { siretEtablissementDeclarant: asSameSirenRegexp },

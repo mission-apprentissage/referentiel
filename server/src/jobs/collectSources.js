@@ -6,6 +6,8 @@ const logger = require("../common/logger").child({ context: "collect" });
 const { dbCollection } = require("../common/db/mongodb");
 const { sortBy } = require("lodash/collection");
 const createDatagouvSource = require("./sources/datagouv");
+const getAllSirets = require("../common/actions/getAllSirets.js");
+const { promiseAllProps } = require("../common/utils/asyncUtils.js");
 
 function buildQuery(selector) {
   if (isEmpty(selector)) {
@@ -43,10 +45,10 @@ function mergeUAIPotentiels(source, potentiels, newPotentiels) {
   return mergeArray(source, potentiels, newArray, "uai");
 }
 
-async function mergeRelations(source, relations, newRelations, siretsFromDatagouv) {
+async function mergeRelations(source, relations, newRelations, sirets) {
   const validatedNewRelations = await newRelations.reduce(async (acc, relation) => {
-    const isInReferentiel = (await dbCollection("organismes").countDocuments({ siret: relation.siret })) > 0;
-    const isInDatagouv = siretsFromDatagouv.includes(relation.siret);
+    const isInReferentiel = sirets.referentiel.includes(relation.siret);
+    const isInDatagouv = sirets.datagouv.includes(relation.siret);
 
     if (!isInReferentiel && !isInDatagouv) {
       return Promise.resolve(acc);
@@ -148,11 +150,11 @@ module.exports = async (array, options = {}) => {
   const stats = createStats(sources);
   const streams = await getStreams(sources, filters);
   const datagouv = createDatagouvSource();
-  const siretsFromDatagouv = await datagouv.loadSirets();
+  const sirets = await promiseAllProps({ referentiel: getAllSirets(), datagouv: datagouv.loadSirets() });
 
   await oleoduc(
     mergeStreams(streams),
-    writeData(async (res) => {
+    writeData(async (fragment) => {
       const {
         from,
         selector,
@@ -166,7 +168,7 @@ module.exports = async (array, options = {}) => {
         nature,
         data = {},
         anomalies = [],
-      } = res;
+      } = fragment;
 
       if (filters.siret && filters.siret !== selector) {
         return;
@@ -196,7 +198,7 @@ module.exports = async (array, options = {}) => {
                 ...flattenObject(data),
                 nature: mergeNature(organisme.nature, nature),
                 uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),
-                relations: await mergeRelations(from, organisme.relations, relations, siretsFromDatagouv),
+                relations: await mergeRelations(from, organisme.relations, relations, sirets),
                 contacts: mergeContacts(from, organisme.contacts, contacts),
                 diplomes: mergeArray(from, organisme.diplomes, diplomes, "code"),
                 certifications: mergeArray(from, organisme.certifications, certifications, "code"),

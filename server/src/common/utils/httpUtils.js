@@ -42,11 +42,22 @@ async function _fetch(url, options = {}) {
 }
 
 async function fetchStream(url, options = {}) {
-  const response = await _fetch(url, { ...options, responseType: "stream" });
-  return compose(
+  const { raw, ...rest } = options;
+  const response = await _fetch(url, { ...rest, responseType: "stream" });
+
+  const stream = compose(
     response.data,
     transformData((d) => d.toString())
   );
+
+  if (raw) {
+    return {
+      headers: response.headers,
+      stream: stream,
+    };
+  } else {
+    return stream;
+  }
 }
 
 async function fetchJson(url, options = {}) {
