@@ -1,7 +1,7 @@
 /**
  * Source https://www.insee.fr/fr/information/2028129+&cd=1&hl=fr&ct=clnk&gl=fr
  */
-module.exports = [
+const CATEGORIES = [
   {
     code: "0",
     label: "Organisme de placement collectif en valeurs mobilières sans personnalité morale",
@@ -291,3 +291,15 @@ module.exports = [
   { code: "9900", label: "Autre personne morale de droit privé" },
   { code: "9970", label: "Groupement de coopération sanitaire à gestion privée" },
 ];
+
+function fincCategorieJuridiqueByCode(code) {
+  if (!code) {
+    return null;
+  }
+
+  return CATEGORIES.find((cj) => cj.code === code) || null;
+}
+
+module.exports = {
+  fincCategorieJuridiqueByCode,
+};

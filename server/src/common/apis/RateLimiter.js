@@ -11,18 +11,22 @@ class RateLimiter extends EventEmitter {
     const memoryRateLimiter = new RateLimiterMemory({
       keyPrefix: name,
       points: options.nbRequests || 1,
-      duration: options.durationInSeconds || 1,
+      duration: options.perSeconds || 1,
     });
 
     this.queue = new RateLimiterQueue(memoryRateLimiter, { maxQueueSize: this.maxQueueSize });
   }
 
-  async execute(callback) {
+  async _waitUntilAvailable() {
     await this.queue.removeTokens(1);
     this.emit("status", {
       queueSize: this.queue._queueLimiters.limiter._queue.length,
       maxQueueSize: this.maxQueueSize,
     });
+  }
+
+  async execute(callback) {
+    await this._waitUntilAvailable();
     return callback();
   }
 }
