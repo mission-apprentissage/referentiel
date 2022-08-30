@@ -1,11 +1,11 @@
-import { Button, ButtonGroup } from "../../../common/dsfr/elements/Button";
-import Modal, { modalSizeModifiers } from "../../../common/dsfr/elements/Modal";
-import BlueBox from "../../../common/BlueBox";
-import { useFetch } from "../../../common/hooks/useFetch";
-import Spinner from "../../../common/Spinner";
-import { flattenObject } from "../../../common/utils";
-import { Box } from "../../../common/Flexbox";
-import Field from "../../../common/Field";
+import { Button, ButtonGroup } from "../../../common/dsfr/elements/Button.jsx";
+import Modal, { modalSizeModifiers } from "../../../common/dsfr/elements/Modal.jsx";
+import BlueBox from "../../../common/BlueBox.jsx";
+import { useFetch } from "../../../common/hooks/useFetch.js";
+import Spinner from "../../../common/Spinner.jsx";
+import { flattenObject } from "../../../common/utils.js";
+import { Box } from "../../../common/Flexbox.jsx";
+import Field from "../../../common/Field.jsx";
 import React from "react";
 
 export default function DatagouvModal({ modal, siret }) {
@@ -40,7 +40,7 @@ export default function DatagouvModal({ modal, siret }) {
 
               <a
                 title="consulter la fiche Data.gouv"
-                href="https://www.data.gouv.fr/fr/datasets/liste-publique-des-organismes-de-formation-l-6351-7-1-du-code-du-travail/"
+                href="ui/src/organismes/fiche/Identite/DatagouvModal.jsx"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="fr-text--sm"

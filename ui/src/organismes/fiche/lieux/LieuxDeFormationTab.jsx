@@ -1,8 +1,8 @@
 import React from "react";
-import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
-import LieuxDeFormationMap from "./LieuxDeFormationMap";
-import { Table, Thead } from "../../../common/dsfr/elements/Table";
-import NA from "../../common/NA";
+import { Col, GridRow } from "../../../common/dsfr/fondamentaux/index.js";
+import LieuxDeFormationMap from "./LieuxDeFormationMap.jsx";
+import { Table, Thead } from "../../../common/dsfr/elements/Table.jsx";
+import NA from "../../../common/organismes/NA.jsx";
 
 export default function LieuxDeFormationTab({ organisme }) {
   const nbLieux = organisme.lieux_de_formation.length;
