@@ -4,7 +4,7 @@ const VERSION = 12;
 
 async function tasks() {
   return {
-    updateIndexes: true,
+    removeOrganime: dbCollection("organismes").deleteOne({ siret: "13001727000674" }),
   };
 }
 
