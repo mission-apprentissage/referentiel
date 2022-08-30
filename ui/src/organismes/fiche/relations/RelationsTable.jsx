@@ -1,20 +1,20 @@
-import useToggle from "../../../common/hooks/useToggle";
-import { asSiren } from "../../../common/utils";
-import { Box } from "../../../common/Flexbox";
-import Fieldset from "../../../common/dsfr/elements/Fieldset";
-import Checkbox from "../../../common/dsfr/elements/Checkbox";
-import { Thead } from "../../../common/dsfr/elements/Table";
+import useToggle from "../../../common/hooks/useToggle.js";
+import { asSiren } from "../../../common/utils.js";
+import { Box } from "../../../common/Flexbox.jsx";
+import Fieldset from "../../../common/dsfr/elements/Fieldset.jsx";
+import Checkbox from "../../../common/dsfr/elements/Checkbox.jsx";
+import { Thead } from "../../../common/dsfr/elements/Table.jsx";
 import React, { useState } from "react";
-import NA from "../../common/NA";
-import { Tag } from "../../../common/dsfr/elements/Tag";
-import Nature from "../../common/Nature";
-import Siret from "../../common/Siret";
-import { useModal } from "../../../common/dsfr/common/useModal";
-import RelationModal from "./RelationModal";
-import RaisonSociale from "../../common/RaisonSociale";
-import { Button } from "../../../common/dsfr/elements/Button";
-import Adresse from "../../common/Adresse";
-import CustomTable from "../../../common/dsfr/custom/CustomTable";
+import NA from "../../../common/organismes/NA.jsx";
+import { Tag } from "../../../common/dsfr/elements/Tag.jsx";
+import Nature from "../../../common/organismes/Nature.jsx";
+import Siret from "../../../common/organismes/Siret.jsx";
+import { useModal } from "../../../common/dsfr/common/useModal.js";
+import RelationModal from "./RelationModal.jsx";
+import RaisonSociale from "../../../common/organismes/RaisonSociale.jsx";
+import { Button } from "../../../common/dsfr/elements/Button.jsx";
+import Adresse from "../../../common/organismes/Adresse.jsx";
+import CustomTable from "../../../common/dsfr/custom/CustomTable.jsx";
 
 function RelationRow({ organisme, show }) {
   return (

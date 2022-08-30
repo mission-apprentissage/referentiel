@@ -1,17 +1,17 @@
 import React, { useContext } from "react";
-import { Box } from "../../../common/Flexbox";
-import LinkButton from "../../../common/dsfr/custom/LinkButton";
-import { useModal } from "../../../common/dsfr/common/useModal";
-import DatagouvModal from "./DatagouvModal";
-import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
-import Field from "../../../common/Field";
-import UAIValidator from "./uai/UAISelector";
-import Nature from "../../common/Nature";
-import Siret from "../../common/Siret";
+import { Box } from "../../../common/Flexbox.jsx";
+import LinkButton from "../../../common/dsfr/custom/LinkButton.jsx";
+import { useModal } from "../../../common/dsfr/common/useModal.js";
+import DatagouvModal from "./DatagouvModal.jsx";
+import { Col, GridRow } from "../../../common/dsfr/fondamentaux/index.js";
+import Field from "../../../common/Field.jsx";
+import UAIValidator from "./uai/UAISelector.jsx";
+import Nature from "../../../common/organismes/Nature.jsx";
+import Siret from "../../../common/organismes/Siret.jsx";
 import { DateTime } from "luxon";
 import styled from "styled-components";
-import Adresse from "../../common/Adresse";
-import { ApiContext } from "../../../common/ApiProvider";
+import Adresse from "../../../common/organismes/Adresse.jsx";
+import { ApiContext } from "../../../common/ApiProvider.jsx";
 import definitions from "../../../common/definitions.json";
 
 const referentielsMapper = {
