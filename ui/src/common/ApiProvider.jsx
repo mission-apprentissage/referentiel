@@ -4,7 +4,7 @@ import queryString from "querystring";
 
 const anonymous = { sub: "anonymous" };
 
-export const ApiContext = createContext(anonymous);
+export const ApiContext = createContext(getAuthFromStorage());
 
 class AuthError extends Error {
   constructor(json, statusCode) {

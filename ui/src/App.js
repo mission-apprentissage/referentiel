@@ -16,46 +16,55 @@ import StatsPage from "./stats/StatsPage.jsx";
 import SearchProvider from "./common/SearchProvider";
 import ModificationsPage from "./ModificationsPage.jsx";
 import CorrectionsPage from "./CorrectionsPage.jsx";
+import { useScrollToTop } from "./common/hooks/useScrollToTop.js";
+
+function Providers({ children }) {
+  useScrollToTop();
+
+  return (
+    <ApiProvider>
+      <DataProvider>
+        <SearchProvider>{children}</SearchProvider>
+      </DataProvider>
+    </ApiProvider>
+  );
+}
 
 function App() {
   return (
     <div className="App">
       <Router>
-        <ApiProvider>
-          <DataProvider>
-            <SearchProvider>
-              <Routes>
-                <Route path="/dsfr" element={<DesignPage />} />
-                <Route element={<Layout children={<Outlet />} />}>
-                  <Route path="/" element={<AccueilPage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/organismes" element={<OrganismesPage />} />
-                  <Route path="/organismes/:siret">
-                    <Route path="" element={<OrganismePage />} />
-                    <Route path=":tab" element={<OrganismePage />} />
-                  </Route>
-                  <Route element={<AuthShield />}>
-                    <Route path="/tableau-de-bord" element={<TableauDeBordPage />} />
-                    <Route path="/tableau-de-bord/validation" element={<Navigate replace to="/" />} />
-                    <Route path="/tableau-de-bord/validation/:type" element={<ValidationPage />} />
-                    <Route path="/tableau-de-bord/validation/:type/:siret">
-                      <Route path="" element={<OrganismePage />} />
-                      <Route path=":tab" element={<OrganismePage />} />
-                    </Route>
-                  </Route>
-                  <Route path="/stats" element={<StatsPage />} />
-                  <Route path="/corrections" element={<CorrectionsPage />} />
-                  <Route path="/modifications" element={<ModificationsPage />} />
-                  <Route path="/construction">
-                    <Route path="" element={<ConstructionPage />} />
-                    <Route path=":tab" element={<ConstructionPage />} />
-                  </Route>
-                  <Route path="*" element={<Navigate to="/login" />} />
+        <Providers>
+          <Routes>
+            <Route element={<Layout children={<Outlet />} />}>
+              <Route path="/" element={<AccueilPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/organismes" element={<OrganismesPage />} />
+              <Route path="/organismes/:siret">
+                <Route path="" element={<OrganismePage />} />
+                <Route path=":tab" element={<OrganismePage />} />
+              </Route>
+              <Route element={<AuthShield />}>
+                <Route path="/tableau-de-bord" element={<TableauDeBordPage />} />
+                <Route path="/tableau-de-bord/validation" element={<Navigate replace to="/" />} />
+                <Route path="/tableau-de-bord/validation/:type" element={<ValidationPage />} />
+                <Route path="/tableau-de-bord/validation/:type/:siret">
+                  <Route path="" element={<OrganismePage />} />
+                  <Route path=":tab" element={<OrganismePage />} />
                 </Route>
-              </Routes>
-            </SearchProvider>
-          </DataProvider>
-        </ApiProvider>
+              </Route>
+              <Route path="/dsfr" element={<DesignPage />} />
+              <Route path="/stats" element={<StatsPage />} />
+              <Route path="/corrections" element={<CorrectionsPage />} />
+              <Route path="/modifications" element={<ModificationsPage />} />
+              <Route path="/construction">
+                <Route path="" element={<ConstructionPage />} />
+                <Route path=":tab" element={<ConstructionPage />} />
+              </Route>
+              <Route path="*" element={<Navigate to="/login" />} />
+            </Route>
+          </Routes>
+        </Providers>
       </Router>
     </div>
   );
