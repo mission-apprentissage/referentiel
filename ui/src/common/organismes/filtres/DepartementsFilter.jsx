@@ -9,7 +9,7 @@ export default function DepartementsFilter() {
 
   const departements = isAnonymous()
     ? data.departements
-    : data[`${auth.type}s`].find((r) => r.code === auth.code)?.departements;
+    : data[`${auth.type}s`].find((r) => r.code === auth.code)?.departements || [];
 
   return (
     <Filter
