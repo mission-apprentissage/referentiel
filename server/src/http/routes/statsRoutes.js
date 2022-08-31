@@ -177,7 +177,7 @@ module.exports = () => {
           {
             $match: {
               qualiopi: true,
-              $or: [{ nature: "responsable" }, { nature: "responsable_formateur" }],
+              nature: { $in: ["responsable", "responsable_formateur"] },
             },
           },
           {

@@ -7,12 +7,13 @@ import ContentLayout from "../common/layout/ContentLayout.jsx";
 import { useQuery } from "../common/hooks/useQuery.js";
 import { ApiContext } from "../common/ApiProvider.jsx";
 import NouveauxCounter from "./stats/NouveauxCounter.jsx";
-import TableauDeBordStats from "./stats/TableauDeBordStats.jsx";
 import useToggle from "../common/hooks/useToggle.js";
 import LinkButton from "../common/dsfr/custom/LinkButton.jsx";
 import styled from "styled-components";
 import Page from "../common/Page.jsx";
 import Highlight from "../common/dsfr/elements/Highlight.jsx";
+import NouveauxHistogram from "./stats/NouveauxHistogram.jsx";
+import EtatAdministratifPie from "./stats/EtatAdministratifPie.jsx";
 
 const Presentation = styled(({ className }) => {
   const [showDetails, toggleDetails] = useToggle(false);
@@ -82,22 +83,56 @@ export default function TableauDeBordPage() {
             <Presentation />
           </Col>
         </GridRow>
+
         <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
-          <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_VALIDER"} label={"Organismes à vérifier"}>
-              <NouveauxCounter type={"A_VALIDER"} />
-            </ValidationCard>
+          <Col modifiers={"12 sm-8"}>
+            <GridRow modifiers={"gutters"}>
+              <Col modifiers={"12 sm-6"}>
+                <ValidationCard
+                  type={"A_VALIDER"}
+                  natures={"responsable,responsable_formateur"}
+                  label={"Organismes à vérifier"}
+                >
+                  <NouveauxCounter type={"A_VALIDER"} natures={"responsable,responsable_formateur"} />
+                </ValidationCard>
+              </Col>
+              <Col modifiers={"12 sm-6"}>
+                <ValidationCard
+                  type={"A_RENSEIGNER"}
+                  natures={"responsable,responsable_formateur"}
+                  label={"Organismes à identifier"}
+                />
+              </Col>
+              <Col modifiers={"12 sm-6"}>
+                <ValidationCard type={"A_VALIDER"} natures={"formateur"} label={"Organismes formateurs à vérifier"}>
+                  <NouveauxCounter type={"A_VALIDER"} natures={"formateur"} />
+                </ValidationCard>
+              </Col>
+              <Col modifiers={"12 sm-6"}>
+                <ValidationCard
+                  type={"A_RENSEIGNER"}
+                  natures={"formateur"}
+                  label={"Organismes formateurs à identifier"}
+                />
+              </Col>
+            </GridRow>
           </Col>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_RENSEIGNER"} label={"Organismes à identifier"} />
-          </Col>
-          <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"VALIDE"} label={"Organismes validés"} />
+            <ValidationCard
+              type={"VALIDE"}
+              label={"Organismes validés"}
+              natures={"responsable,responsable_formateur,formateur"}
+              height={"100%"}
+            />
           </Col>
         </GridRow>
+
         <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
-          <Col modifiers={"12"}>
-            <TableauDeBordStats />
+          <Col modifiers={"12 sm-6"}>
+            <NouveauxHistogram />
+          </Col>
+          <Col modifiers={"12 sm-6"}>
+            <EtatAdministratifPie />
           </Col>
         </GridRow>
       </ContentLayout>

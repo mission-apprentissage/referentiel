@@ -1,8 +1,9 @@
 import { useValidationSearch } from "../../common/hooks/useValidationSearch.js";
 import Badge from "../../common/dsfr/elements/Badge.jsx";
 
-export default function NouveauxCounter({ type }) {
+export default function NouveauxCounter({ type, natures }) {
   const { response } = useValidationSearch(type, {
+    natures,
     nouveaux: true,
     page: 1,
     items_par_page: 1,
