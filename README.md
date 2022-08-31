@@ -64,8 +64,8 @@ L'application est ensuite accessible à l'url [http://localhost](http://localhos
 
 #### Construction du référentiel
 
-Avant de lancer les scripts, il nécessaire de configurer des variables d'environnement.
-En effet le référentiel utilise plusieurs API dont certaines requièrent une authentification.
+Une fois que l'application a été démarée, il faut construire le référentiel en lancant un script.
+Le référentiel utilise plusieurs API dont certaines requièrent une authentification il est donc nécessaire de configurer des variables d'environnement.
 
 Il faut donc éditer le fichier `server/.env` et ajouter les variables suivantes :
 
@@ -86,7 +86,7 @@ yarn cli build
 
 Cette commande va importer toutes les données nécessaires puis collecter les informations relatives aux organismes.
 
-Vous pouvez alors consulter les organismes à l'url [http://localhost/organismes](http://localhost/organismes)
+Un fois terminée, vous pourrez consulter les organismes à l'url [http://localhost/organismes](http://localhost/organismes)
 
 
 ![](https://avatars1.githubusercontent.com/u/63645182?s=200&v=4)
