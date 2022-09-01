@@ -44,7 +44,6 @@ const Presentation = styled(({ className }) => {
                 sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide
               </li>
               <li>ont eu un lien avec des formations en apprentissage à un moment donné ;</li>
-              <li>ont la nature "responsable" uniquement ou "responsable et formateur"</li>
             </ul>
           </>
         )}

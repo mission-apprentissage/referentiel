@@ -14,8 +14,14 @@ export default function StatsPage() {
       <ContentLayout>
         <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
           <Col modifiers={"12"}>
-            <h6>Validation</h6>
-            <ValidationStats />
+            <h6>Validation de organismes responsables et responsables et formateurs</h6>
+            <ValidationStats natures={"responsable,responsable_formateur"} />
+          </Col>
+        </GridRow>
+        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
+          <Col modifiers={"12"}>
+            <h6>Validation des organismes formateurs</h6>
+            <ValidationStats natures={"formateur"} />
           </Col>
         </GridRow>
         <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>

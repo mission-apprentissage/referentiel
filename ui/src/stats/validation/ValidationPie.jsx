@@ -4,7 +4,7 @@ import { getValidationColor, getValidationLabel, getValidationParams } from "../
 import { openNewTab } from "../../common/utils";
 
 export function ValidationPie({ stats }) {
-  const national = Object.keys(stats.national).reduce((acc, key) => {
+  const national = Object.keys(stats.national || {}).reduce((acc, key) => {
     return [
       ...acc,
       {

@@ -198,6 +198,51 @@ describe("statsRoutes", () => {
     });
   });
 
+  it("Vérifie qu'on peut obtenir les stats sur la validation pour une nature", async () => {
+    const { httpClient } = await startServer();
+    await Promise.all([
+      insertOrganisme({
+        etat_administratif: "actif",
+        qualiopi: true,
+        nature: "formateur",
+        uai: "0751234J",
+        adresse: {
+          academie: { code: "01", nom: "Paris" },
+        },
+      }),
+      insertOrganisme({
+        etat_administratif: "actif",
+        qualiopi: true,
+        nature: "responsable",
+        adresse: {
+          academie: { code: "01", nom: "Paris" },
+        },
+      }),
+    ]);
+
+    const response = await httpClient.get("/api/v1/stats/validation?natures=responsable");
+
+    strictEqual(response.status, 200);
+    deepStrictEqual(response.data, {
+      academies: [
+        {
+          A_RENSEIGNER: 1,
+          A_VALIDER: 0,
+          VALIDE: 0,
+          academie: {
+            code: "01",
+            nom: "Paris",
+          },
+        },
+      ],
+      national: {
+        A_RENSEIGNER: 1,
+        A_VALIDER: 0,
+        VALIDE: 0,
+      },
+    });
+  });
+
   it("Vérifie qu'on peut obtenir les stats qualiopi", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({ nature: "responsable", qualiopi: true });
