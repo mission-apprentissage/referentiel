@@ -90,7 +90,7 @@ export default function TableauDeBordPage() {
                 <ValidationCard
                   type={"A_VALIDER"}
                   natures={"responsable,responsable_formateur"}
-                  label={"Organismes à vérifier"}
+                  label={"Organismes responsables ou responsables et formateurs à vérifier"}
                 >
                   <NouveauxCounter type={"A_VALIDER"} natures={"responsable,responsable_formateur"} />
                 </ValidationCard>
@@ -99,7 +99,7 @@ export default function TableauDeBordPage() {
                 <ValidationCard
                   type={"A_RENSEIGNER"}
                   natures={"responsable,responsable_formateur"}
-                  label={"Organismes à identifier"}
+                  label={"Organismes responsables ou responsables et formateurs à identifier"}
                 />
               </Col>
               <Col modifiers={"12 sm-6"}>
