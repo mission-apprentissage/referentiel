@@ -30,16 +30,17 @@ const Counter = styled(({ response, className }) => {
   margin-bottom: 0.5rem;
 `;
 
-export default function ValidationCard({ type, label, children, ...rest }) {
+export default function ValidationCard({ type, natures, label, children, ...rest }) {
   const { query } = useQuery();
   const { response } = useValidationSearch(type, {
+    natures,
     page: 1,
     items_par_page: 1,
     champs: "siret",
   });
 
   return (
-    <ClickableItem to={buildUrl(`/tableau-de-bord/validation/${type}`, query)}>
+    <ClickableItem to={buildUrl(`/tableau-de-bord/validation/${type}|${natures}`, query)}>
       <StyledBox direction={"column"} justify={"between"} type={type} {...rest}>
         <div>
           <Counter response={response} />

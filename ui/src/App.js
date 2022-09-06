@@ -8,7 +8,7 @@ import LoginPage from "./LoginPage.jsx";
 import TableauDeBordPage from "./tableau-de-bord/TableauDeBordPage.jsx";
 import ValidationPage from "./tableau-de-bord/ValidationPage.jsx";
 import AuthShield from "./common/AuthShield";
-import AccueilPage from "./AccueilPage.jsx";
+import AccueilPage from "./accueil/AccueilPage.jsx";
 import ConstructionPage from "./ConstructionPage.jsx";
 import DataProvider from "./common/DataProvider";
 import ApiProvider from "./common/ApiProvider";
@@ -47,8 +47,8 @@ function App() {
               <Route element={<AuthShield />}>
                 <Route path="/tableau-de-bord" element={<TableauDeBordPage />} />
                 <Route path="/tableau-de-bord/validation" element={<Navigate replace to="/" />} />
-                <Route path="/tableau-de-bord/validation/:type" element={<ValidationPage />} />
-                <Route path="/tableau-de-bord/validation/:type/:siret">
+                <Route path="/tableau-de-bord/validation/:criteria" element={<ValidationPage />} />
+                <Route path="/tableau-de-bord/validation/:criteria/:siret">
                   <Route path="" element={<OrganismePage />} />
                   <Route path=":tab" element={<OrganismePage />} />
                 </Route>

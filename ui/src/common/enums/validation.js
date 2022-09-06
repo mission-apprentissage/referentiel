@@ -8,7 +8,6 @@ const MAPPER = {
     params: {
       etat_administratif: "actif",
       qualiopi: true,
-      natures: "responsable,responsable_formateur",
       uais: false,
       uai_potentiels: true,
     },
@@ -20,7 +19,6 @@ const MAPPER = {
     params: {
       etat_administratif: "actif",
       qualiopi: true,
-      natures: "responsable,responsable_formateur",
       uais: false,
       uai_potentiels: false,
     },
@@ -32,7 +30,6 @@ const MAPPER = {
     params: {
       etat_administratif: "actif",
       qualiopi: true,
-      natures: "responsable,responsable_formateur",
       uais: true,
     },
   },

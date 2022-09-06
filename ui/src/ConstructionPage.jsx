@@ -174,9 +174,6 @@ export default function ConstructionPage() {
                             </li>
                           </ul>
                         </div>
-                        <div className={"fr-mt-3w"}>
-                          Une fois le couple UAI-SIRET validé, quel est l'impact sur les sources de données entrantes ?
-                        </div>
                       </td>
                     </tr>
                     <tr>

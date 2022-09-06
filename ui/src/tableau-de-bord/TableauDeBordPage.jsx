@@ -6,8 +6,7 @@ import TitleLayout from "../common/layout/TitleLayout.jsx";
 import ContentLayout from "../common/layout/ContentLayout.jsx";
 import { useQuery } from "../common/hooks/useQuery.js";
 import { ApiContext } from "../common/ApiProvider.jsx";
-import NouveauxCounter from "./stats/NouveauxCounter.jsx";
-import TableauDeBordStats from "./stats/TableauDeBordStats.jsx";
+import NouveauxCounter from "./cards/NouveauxCounter.jsx";
 import useToggle from "../common/hooks/useToggle.js";
 import LinkButton from "../common/dsfr/custom/LinkButton.jsx";
 import styled from "styled-components";
@@ -43,7 +42,6 @@ const Presentation = styled(({ className }) => {
                 sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide
               </li>
               <li>ont eu un lien avec des formations en apprentissage à un moment donné ;</li>
-              <li>ont la nature "responsable" uniquement ou "responsable et formateur"</li>
             </ul>
           </>
         )}
@@ -82,22 +80,47 @@ export default function TableauDeBordPage() {
             <Presentation />
           </Col>
         </GridRow>
+
         <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
-          <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_VALIDER"} label={"Organismes à vérifier"}>
-              <NouveauxCounter type={"A_VALIDER"} />
-            </ValidationCard>
+          <Col modifiers={"12 sm-8"}>
+            <GridRow modifiers={"gutters"}>
+              <Col modifiers={"12 sm-6"}>
+                <ValidationCard
+                  type={"A_VALIDER"}
+                  natures={"responsable,responsable_formateur"}
+                  label={"Organismes responsables ou responsables et formateurs à vérifier"}
+                >
+                  <NouveauxCounter type={"A_VALIDER"} natures={"responsable,responsable_formateur"} />
+                </ValidationCard>
+              </Col>
+              <Col modifiers={"12 sm-6"}>
+                <ValidationCard
+                  type={"A_RENSEIGNER"}
+                  natures={"responsable,responsable_formateur"}
+                  label={"Organismes responsables ou responsables et formateurs à identifier"}
+                />
+              </Col>
+              <Col modifiers={"12 sm-6"}>
+                <ValidationCard type={"A_VALIDER"} natures={"formateur"} label={"Organismes formateurs à vérifier"}>
+                  <NouveauxCounter type={"A_VALIDER"} natures={"formateur"} />
+                </ValidationCard>
+              </Col>
+              <Col modifiers={"12 sm-6"}>
+                <ValidationCard
+                  type={"A_RENSEIGNER"}
+                  natures={"formateur"}
+                  label={"Organismes formateurs à identifier"}
+                />
+              </Col>
+            </GridRow>
           </Col>
           <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"A_RENSEIGNER"} label={"Organismes à identifier"} />
-          </Col>
-          <Col modifiers={"12 sm-4"}>
-            <ValidationCard type={"VALIDE"} label={"Organismes validés"} />
-          </Col>
-        </GridRow>
-        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
-          <Col modifiers={"12"}>
-            <TableauDeBordStats />
+            <ValidationCard
+              type={"VALIDE"}
+              label={"Organismes validés"}
+              natures={"responsable,responsable_formateur,formateur"}
+              height={"100%"}
+            />
           </Col>
         </GridRow>
       </ContentLayout>

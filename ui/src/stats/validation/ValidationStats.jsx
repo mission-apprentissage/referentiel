@@ -4,9 +4,18 @@ import Spinner from "../../common/Spinner";
 import { Col, GridRow } from "../../common/dsfr/fondamentaux";
 import { ValidationHistogram } from "./ValidationHistogram";
 import { ValidationPie } from "./ValidationPie";
+import { buildUrl } from "../../common/utils.js";
 
-export default function ValidationStats() {
-  const [{ data: stats, loading, error }] = useFetch(`/api/v1/stats/validation`, { national: {}, academies: [] });
+export default function ValidationStats({ natures }) {
+  const [{ data: stats, loading, error }] = useFetch(
+    buildUrl(`/api/v1/stats/validation`, {
+      natures,
+    }),
+    {
+      national: {},
+      academies: [],
+    }
+  );
 
   if (loading || error) {
     return <Spinner loading={loading} error={error} />;

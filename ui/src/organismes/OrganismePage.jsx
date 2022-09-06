@@ -12,12 +12,6 @@ import { SearchContext } from "../common/SearchProvider.jsx";
 import { buildUrl } from "../common/utils.js";
 import Page from "../common/Page.jsx";
 
-export function OrganismeTitle() {
-  const { organisme } = useContext(OrganismeContext);
-
-  return <RaisonSociale organisme={organisme} />;
-}
-
 export default function OrganismePage() {
   const { siret } = useParams();
   const { search } = useContext(SearchContext);
@@ -64,7 +58,7 @@ export default function OrganismePage() {
     <Page>
       <OrganismeProvider organisme={organisme} onChange={onChange}>
         <TitleLayout
-          title={<OrganismeTitle />}
+          title={<OrganismeBreadcrumb />}
           message={message}
           back={<Back onClick={() => navigate(buildUrl(search.page, search.params))}>Retour à la liste</Back>}
         />
@@ -74,4 +68,10 @@ export default function OrganismePage() {
       </OrganismeProvider>
     </Page>
   );
+}
+
+export function OrganismeBreadcrumb() {
+  const { organisme } = useContext(OrganismeContext);
+
+  return <RaisonSociale organisme={organisme} />;
 }

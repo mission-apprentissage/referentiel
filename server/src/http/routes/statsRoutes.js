@@ -3,6 +3,8 @@ const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
 const { promiseAllProps } = require("../../common/utils/asyncUtils");
 const { notEmpty, nullOrEmpty, arrayHasElements, arrayIsEmpty, sum } = require("../../common/db/aggregationUtils");
+const Joi = require("@hapi/joi");
+const { arrayOf } = require("../utils/validators.js");
 
 module.exports = () => {
   const router = express.Router();
@@ -30,19 +32,19 @@ module.exports = () => {
     },
   };
 
-  const organismeValidableQuery = {
-    etat_administratif: "actif",
-    qualiopi: true,
-    $or: [{ nature: "responsable" }, { nature: "responsable_formateur" }],
-  };
-
   router.get(
     "/api/v1/stats/couverture",
     tryCatch(async (req, res) => {
+      const validationQuery = {
+        etat_administratif: "actif",
+        qualiopi: true,
+        nature: { $in: ["responsable", "responsable_formateur"] },
+      };
+
       const stats = await promiseAllProps({
-        total: dbCollection("organismes").countDocuments(organismeValidableQuery),
+        total: dbCollection("organismes").countDocuments(validationQuery),
         valides: dbCollection("organismes").countDocuments({
-          ...organismeValidableQuery,
+          ...validationQuery,
           uai: { $exists: true },
         }),
       });
@@ -96,11 +98,23 @@ module.exports = () => {
   router.get(
     "/api/v1/stats/validation",
     tryCatch(async (req, res) => {
-      function groupValidationBy({ field, stages = [] }) {
+      const { natures } = await Joi.object({
+        natures: arrayOf(Joi.string().valid("responsable", "formateur", "responsable_formateur", "inconnue")).default(
+          []
+        ),
+      }).validateAsync(req.query, { abortEarly: false });
+
+      function groupValidationBy(group) {
+        const { field, stages = [] } = group;
+
         return dbCollection("organismes")
           .aggregate([
             {
-              $match: organismeValidableQuery,
+              $match: {
+                ...(natures.length > 0 ? { nature: { $in: natures } } : {}),
+                etat_administratif: "actif",
+                qualiopi: true,
+              },
             },
             {
               $group: {
@@ -177,7 +191,7 @@ module.exports = () => {
           {
             $match: {
               qualiopi: true,
-              $or: [{ nature: "responsable" }, { nature: "responsable_formateur" }],
+              nature: { $in: ["responsable", "responsable_formateur"] },
             },
           },
           {
