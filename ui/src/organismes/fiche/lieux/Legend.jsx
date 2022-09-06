@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Box } from "../../../common/Flexbox";
+import { Box } from "../../../common/Flexbox.jsx";
 
 const Legend = styled(({ children, className }) => {
   return (

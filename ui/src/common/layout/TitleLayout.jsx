@@ -3,8 +3,8 @@ import React, { useContext } from "react";
 import FilAriane from "./FilAriane";
 import styled from "styled-components";
 import LinkButton from "../dsfr/custom/LinkButton";
-import { ValidationTitle } from "../../pages/ValidationPage";
-import { OrganismeTitle } from "../../pages/OrganismePage";
+import { ValidationBreadcrumb } from "../../tableau-de-bord/ValidationPage.jsx";
+import { OrganismeBreadcrumb } from "../../organismes/OrganismePage.jsx";
 import { ApiContext } from "../ApiProvider";
 import { Box } from "../Flexbox";
 import useToggle from "../hooks/useToggle";
@@ -38,10 +38,10 @@ export default function TitleLayout({ title, details, getDetailsMessage, message
               { path: "/modifications", breadcrumb: "Journal des modifications" },
               { path: "/stats", breadcrumb: "Statistiques" },
               { path: "/organismes", breadcrumb: "Liste des organismes" },
-              { path: "/organismes/:siret", breadcrumb: OrganismeTitle },
+              { path: "/organismes/:siret", breadcrumb: OrganismeBreadcrumb },
               { path: "/tableau-de-bord", breadcrumb: `Tableau de bord (${authTitle})` },
-              { path: "/tableau-de-bord/validation/:type", breadcrumb: ValidationTitle },
-              { path: "/tableau-de-bord/validation/:type/:siret", breadcrumb: OrganismeTitle },
+              { path: "/tableau-de-bord/validation/:type", breadcrumb: ValidationBreadcrumb },
+              { path: "/tableau-de-bord/validation/:type/:siret", breadcrumb: OrganismeBreadcrumb },
             ]}
           />
         </Col>

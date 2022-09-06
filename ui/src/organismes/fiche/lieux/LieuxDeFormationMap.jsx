@@ -1,12 +1,12 @@
 import React, { useRef } from "react";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import useOnce from "../../../common/hooks/useOnce"; // eslint-disable-line import/no-webpack-loader-syntax
+import useOnce from "../../../common/hooks/useOnce.js"; // eslint-disable-line import/no-webpack-loader-syntax
 import bluePin from "./map-pin-blue.svg";
 import redPin from "./map-pin-red.svg";
 import redBluePin from "./map-pin-red-blue.svg";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { Box } from "../../../common/Flexbox";
-import Legend from "./Legend";
+import { Box } from "../../../common/Flexbox.jsx";
+import Legend from "./Legend.jsx";
 
 mapboxgl.accessToken = "pk.eyJ1IjoiYmd1ZXJvdXQiLCJhIjoiY2wwamM5bmMyMGI5cDNrcDZzeGE0Y3RuNyJ9.R3_znqXpyJ8_98pEUYQuwQ";
 

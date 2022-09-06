@@ -18,7 +18,7 @@ module.exports = {
   },
   ovh: {
     storage: {
-      uri: env.get("REFERENTIEL_OVH_STORAGE_URI").asString(),
+      uri: env.get("REFERENTIEL_OVH_STORAGE_URI").required().asString(),
       storageName: env.get("REFERENTIEL_OVH_STORAGE_NAME").default("mna-referentiel").asString(),
     },
   },
@@ -29,6 +29,12 @@ module.exports = {
     api: {
       jwtSecret: env.get("REFERENTIEL_AUTH_API_JWT_SECRET").default(uuid.v4()).asString(),
       expiresIn: "1y",
+    },
+  },
+  sirene: {
+    api: {
+      consumerKey: env.get("REFERENTIEL_SIRENE_API_CONSUMER_KEY").required().asString(),
+      consumerSecret: env.get("REFERENTIEL_SIRENE_API_CONSUMER_SECRET").required().asString(),
     },
   },
 };

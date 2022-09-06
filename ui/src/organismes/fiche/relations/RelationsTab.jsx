@@ -1,11 +1,11 @@
 import React, { useReducer, useState } from "react";
-import { useSearch } from "../../../common/hooks/useSearch";
-import Spinner from "../../../common/Spinner";
-import { TagButton, TagGroup } from "../../../common/dsfr/elements/Tag";
-import { Col, GridRow } from "../../../common/dsfr/fondamentaux";
+import { useSearch } from "../../../common/hooks/useSearch.js";
+import Spinner from "../../../common/Spinner.jsx";
+import { TagButton, TagGroup } from "../../../common/dsfr/elements/Tag.jsx";
+import { Col, GridRow } from "../../../common/dsfr/fondamentaux/index.js";
 import styled from "styled-components";
-import { Box } from "../../../common/Flexbox";
-import { RelationsTable } from "./RelationsTable";
+import { Box } from "../../../common/Flexbox.jsx";
+import { RelationsTable } from "./RelationsTable.jsx";
 import { uniq, without } from "lodash-es";
 
 const RelationTagButton = styled(({ label, results, onChange, disabled = false }) => {

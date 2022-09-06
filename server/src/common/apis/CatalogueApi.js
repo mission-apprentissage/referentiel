@@ -6,7 +6,7 @@ const { streamJsonArray } = require("../utils/streamUtils");
 
 class CatalogueApi extends RateLimitedApi {
   constructor(options = {}) {
-    super("CatalogueApi", { nbRequests: 5, durationInSeconds: 1, ...options });
+    super("CatalogueApi", { nbRequests: 5, perSeconds: 1, ...options });
   }
 
   static get baseApiUrl() {

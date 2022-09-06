@@ -6,7 +6,7 @@ const { streamNestedJsonArray } = require("../utils/streamUtils");
 
 class TableauDeBordApi extends RateLimitedApi {
   constructor(options = {}) {
-    super("TableauDeBordApi", { nbRequests: 5, durationInSeconds: 1, ...options });
+    super("TableauDeBordApi", { nbRequests: 5, perSeconds: 1, ...options });
   }
 
   static get baseApiUrl() {
