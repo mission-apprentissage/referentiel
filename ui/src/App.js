@@ -8,7 +8,7 @@ import LoginPage from "./LoginPage.jsx";
 import TableauDeBordPage from "./tableau-de-bord/TableauDeBordPage.jsx";
 import ValidationPage from "./tableau-de-bord/ValidationPage.jsx";
 import AuthShield from "./common/AuthShield";
-import AccueilPage from "./AccueilPage.jsx";
+import AccueilPage from "./accueil/AccueilPage.jsx";
 import ConstructionPage from "./ConstructionPage.jsx";
 import DataProvider from "./common/DataProvider";
 import ApiProvider from "./common/ApiProvider";

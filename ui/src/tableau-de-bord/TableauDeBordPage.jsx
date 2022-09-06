@@ -6,14 +6,12 @@ import TitleLayout from "../common/layout/TitleLayout.jsx";
 import ContentLayout from "../common/layout/ContentLayout.jsx";
 import { useQuery } from "../common/hooks/useQuery.js";
 import { ApiContext } from "../common/ApiProvider.jsx";
-import NouveauxCounter from "./stats/NouveauxCounter.jsx";
+import NouveauxCounter from "./cards/NouveauxCounter.jsx";
 import useToggle from "../common/hooks/useToggle.js";
 import LinkButton from "../common/dsfr/custom/LinkButton.jsx";
 import styled from "styled-components";
 import Page from "../common/Page.jsx";
 import Highlight from "../common/dsfr/elements/Highlight.jsx";
-import NouveauxHistogram from "./stats/NouveauxHistogram.jsx";
-import EtatAdministratifPie from "./stats/EtatAdministratifPie.jsx";
 
 const Presentation = styled(({ className }) => {
   const [showDetails, toggleDetails] = useToggle(false);
@@ -123,15 +121,6 @@ export default function TableauDeBordPage() {
               natures={"responsable,responsable_formateur,formateur"}
               height={"100%"}
             />
-          </Col>
-        </GridRow>
-
-        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
-          <Col modifiers={"12 sm-6"}>
-            <NouveauxHistogram />
-          </Col>
-          <Col modifiers={"12 sm-6"}>
-            <EtatAdministratifPie />
           </Col>
         </GridRow>
       </ContentLayout>
