@@ -113,11 +113,11 @@ module.exports = () => {
       ...(hasValue(qualiopi) ? { qualiopi } : {}),
       ...(hasValue(nouveaux)
         ? nouveaux
-          ? { uai: { $exists: false }, "_meta.date_import": { $gt: nouveauFeatureDate } }
+          ? { "uai": { $exists: false }, "_meta.date_import": { $gt: nouveauFeatureDate } }
           : {
               $or: [
                 { uai: { $exists: true } },
-                { uai: { $exists: false }, "_meta.date_import": { $lt: nouveauFeatureDate } },
+                { "uai": { $exists: false }, "_meta.date_import": { $lt: nouveauFeatureDate } },
               ],
             }
         : {}),

@@ -2,7 +2,7 @@ const axios = require("axios");
 const queryString = require("query-string");
 const config = require("../../config");
 const RateLimitedApi = require("./RateLimitedApi");
-const { fetchJson, fetchStream } = require("../utils/httpUtils.js");
+const { fetchData, fetchStream } = require("../utils/httpUtils.js");
 const { compose } = require("oleoduc");
 const { streamNestedJsonArray, concatStreams } = require("../utils/streamUtils.js");
 const { encodeToBase64 } = require("../utils/stringUtils.js");
@@ -21,11 +21,11 @@ class SireneApi extends RateLimitedApi {
   }
 
   async login() {
-    const data = await fetchJson(`${SireneApi.baseApiUrl}/token`, {
+    const data = await fetchData(`${SireneApi.baseApiUrl}/token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Basic ${encodeToBase64(
+        "Authorization": `Basic ${encodeToBase64(
           `${config.sirene.api.consumerKey}:${config.sirene.api.consumerSecret}`
         )}`,
       },
@@ -73,7 +73,7 @@ class SireneApi extends RateLimitedApi {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: `Bearer ${this.credentials.token}`,
+            "Authorization": `Bearer ${this.credentials.token}`,
           },
           data: queryString.stringify({ ...options, q: query, curseur: cursor }),
         });
