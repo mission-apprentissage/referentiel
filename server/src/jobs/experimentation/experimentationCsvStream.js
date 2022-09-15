@@ -81,16 +81,16 @@ async function experimentationCsvStream(options = {}) {
     transformIntoCSV({
       separator: ",",
       columns: {
-        Académie: ({ organisme }) => organisme.adresse?.academie.nom,
-        Siret: ({ organisme }) => organisme.siret,
+        "Académie": ({ organisme }) => organisme.adresse?.academie.nom,
+        "Siret": ({ organisme }) => organisme.siret,
         "Raison sociale": ({ organisme }) => sanitize(organisme.raison_sociale),
-        Nature: ({ organisme }) => organisme.nature.replace(/_/g, " et "),
-        DECA: ({ organisme }) => getUAI("deca", organisme),
+        "Nature": ({ organisme }) => organisme.nature.replace(/_/g, " et "),
+        "DECA": ({ organisme }) => getUAI("deca", organisme),
         "SIFA RAMSESE": ({ organisme }) => getUAI("sifa-ramsese", organisme),
-        Catalogue: ({ organisme }) => getUAI("catalogue-organismes", organisme),
-        UAI: ({ organisme }) => findUAIProbable(organisme)?.uai,
-        Tache: ({ task }) => task,
-        Précédent: ({ organisme }) => {
+        "Catalogue": ({ organisme }) => getUAI("catalogue-organismes", organisme),
+        "UAI": ({ organisme }) => findUAIProbable(organisme)?.uai,
+        "Tache": ({ task }) => task,
+        "Précédent": ({ organisme }) => {
           const found = previous.find((p) => p.SIRET === organisme.siret);
           return found ? found.UAI : "";
         },

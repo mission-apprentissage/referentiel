@@ -53,7 +53,7 @@ module.exports = {
       method: "GET",
       headers: {
         "X-Auth-Token": token,
-        Accept: "application/json",
+        "Accept": "application/json",
       },
     });
   },

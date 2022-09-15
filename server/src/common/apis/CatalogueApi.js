@@ -1,5 +1,5 @@
 const RateLimitedApi = require("./RateLimitedApi");
-const { fetchStream, fetchJson } = require("../utils/httpUtils");
+const { fetchStream, fetchData } = require("../utils/httpUtils");
 const { compose } = require("oleoduc");
 const convertQueryIntoParams = require("./utils/convertQueryIntoParams");
 const { streamJsonArray } = require("../utils/streamUtils");
@@ -36,7 +36,7 @@ class CatalogueApi extends RateLimitedApi {
     return this.execute(async () => {
       const params = convertQueryIntoParams(query, options);
 
-      return fetchJson(`${CatalogueApi.baseApiUrl}/entity/etablissement?${params}`);
+      return fetchData(`${CatalogueApi.baseApiUrl}/entity/etablissement?${params}`);
     });
   }
 }

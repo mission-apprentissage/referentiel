@@ -35,7 +35,7 @@ cli
 
 cli
   .command("importAcce")
-  .argument("[file]", "Le fichier export CSV", createReadStream)
+  .argument("[file]", "Le fichier extraction CSV", createReadStream)
   .action((file) => {
     runScript(() => {
       return importAcce({ input: file });
@@ -185,5 +185,4 @@ cli
     });
   });
 
-cli.command("acce", "Gestion de la base de données ACCE", { executableFile: "jobs/acce/acceCli" });
 cli.parse(process.argv);

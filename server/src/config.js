@@ -37,4 +37,10 @@ module.exports = {
       consumerSecret: env.get("REFERENTIEL_SIRENE_API_CONSUMER_SECRET").required().asString(),
     },
   },
+  api: {
+    acce: {
+      username: env.get("REFERENTIEL_API_ACCE_USERNAME").required().asString(),
+      password: env.get("REFERENTIEL_API_ACCE_PASSWORD").required().asString(),
+    },
+  },
 };
