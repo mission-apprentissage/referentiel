@@ -10,7 +10,11 @@
   ],
   "rules": {
     "mocha/no-skipped-tests": "error",
-    "mocha/no-exclusive-tests": "error"
+    "mocha/no-exclusive-tests": "error",
+    "quote-props": [
+      "error",
+      "consistent"
+    ]
   },
   "env": {
     "node": true,

@@ -1,9 +1,13 @@
 const nock = require("nock"); // eslint-disable-line node/no-unpublished-require
+const { encodeStream } = require("iconv-lite");
 const { merge, omit } = require("lodash");
 const CatalogueApi = require("../../src/common/apis/CatalogueApi");
 const GeoAdresseApi = require("../../src/common/apis/GeoAdresseApi");
 const TableauDeBordApi = require("../../src/common/apis/TableauDeBordApi");
-const SireneApi = require("../../src/common/apis/SireneApi.js"); // eslint-disable-line node/no-unpublished-require
+const SireneApi = require("../../src/common/apis/SireneApi.js");
+const { createStream } = require("./testUtils.js");
+const AcceApi = require("../../src/common/apis/AcceApi.js");
+const { compose } = require("oleoduc"); // eslint-disable-line node/no-unpublished-require
 
 function createNock(baseUrl) {
   const client = nock(baseUrl);
@@ -633,6 +637,33 @@ module.exports = {
               custom
             )
           ) + "\n"
+        );
+      },
+    });
+  },
+  mockAcceApi(callback) {
+    const client = createNock(AcceApi.baseApiUrl);
+    callback(client, {
+      getextract(extractionId) {
+        return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta http-equiv="refresh" content="2; url=getextract.php?ex_id=${extractionId}">
+  <title>acce</title>
+</head>
+<body>
+</body>
+</html>
+`;
+      },
+      pollextract(fileContent) {
+        return compose(
+          createStream(
+            fileContent ||
+              `numero_uai;nature_uai;nature_uai_libe;etat_etablissement;etat_etablissement_libe;mel_uai
+0751234J;320;Lycée professionnel;1;Ouvert;contact@organisme.fr`
+          ),
+          encodeStream("iso-8859-1")
         );
       },
     });

@@ -1,10 +1,10 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
 
-const VERSION = 12;
+const VERSION = 13;
 
 async function tasks() {
   return {
-    removeOrganime: dbCollection("organismes").deleteOne({ siret: "13001727000674" }),
+    clearAcceCollection: await dbCollection("acce").deleteMany({}),
   };
 }
 

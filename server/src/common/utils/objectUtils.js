@@ -46,9 +46,9 @@ function optionalItem(key, value) {
 
 module.exports = {
   flattenObject,
-  omitNil,
   isError,
-  optionalItem,
   omitDeep,
   omitDeepNil,
+  omitNil,
+  optionalItem,
 };

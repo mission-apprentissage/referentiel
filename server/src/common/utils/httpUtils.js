@@ -1,8 +1,9 @@
 const axios = require("axios");
-const { compose, transformData } = require("oleoduc");
+const { compose } = require("oleoduc");
 const logger = require("../logger").child({ context: "http" });
 const http = require("http");
 const https = require("https");
+const { decodeStream } = require("iconv-lite");
 
 class BufferedHttpAgent extends http.Agent {
   constructor({ highWaterMark = 16 * 1024, ...rest }) {
@@ -42,27 +43,34 @@ async function _fetch(url, options = {}) {
 }
 
 async function fetchStream(url, options = {}) {
-  const { raw, ...rest } = options;
-  const response = await _fetch(url, { ...rest, responseType: "stream" });
+  const { raw, encoding = "UTF-8", ...rest } = options;
+  const response = await _fetch(url, { responseType: "stream", ...rest });
 
-  const stream = compose(
-    response.data,
-    transformData((d) => d.toString())
-  );
+  const stream = compose(response.data, decodeStream(encoding));
 
   if (raw) {
     return {
       headers: response.headers,
-      stream: stream,
+      stream,
     };
   } else {
     return stream;
   }
 }
 
-async function fetchJson(url, options = {}) {
-  const response = await _fetch(url, { ...options, responseType: "json" });
-  return response.data;
+async function fetchData(url, options = {}) {
+  const { raw, ...rest } = options;
+  const response = await _fetch(url, { responseType: "json", ...rest });
+  const data = response.data;
+
+  if (raw) {
+    return {
+      headers: response.headers,
+      data,
+    };
+  } else {
+    return data;
+  }
 }
 
 function addCsvHeaders(filename, encoding, res) {
@@ -72,6 +80,6 @@ function addCsvHeaders(filename, encoding, res) {
 
 module.exports = {
   fetchStream,
-  fetchJson,
+  fetchData,
   addCsvHeaders,
 };
