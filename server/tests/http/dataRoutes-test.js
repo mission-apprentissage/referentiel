@@ -2,8 +2,8 @@ const { strictEqual, deepStrictEqual } = require("assert");
 const { startServer } = require("../utils/testUtils");
 const { last } = require("lodash");
 
-describe("academiesRoutes", () => {
-  it("Vérifie qu'on peut lister les académies", async () => {
+describe("dataRoutes", () => {
+  it("Vérifie qu'on peut lister les régions", async () => {
     const { httpClient } = await startServer();
 
     const response = await httpClient.get("/api/v1/data");
