@@ -40,6 +40,46 @@ const Modification = styled(({ titre, children }) => {
 `;
 
 export const modifications = [
+  <Modifications date={"2022-09-15"}>
+    <Modification>
+      <p>Automatisation de la récupération des UAI valides de la base ACCE PRO</p>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2022-09-06"}>
+    <Modification>
+      <ul>
+        <li>Remplacement de l’API entreprise.data.gouv.fr par l’api INSEE</li>
+        <li>Ajout des organismes formateurs dans la page Tableau de Bord (mode connecté)</li>
+        <li>Ajout des statistiques de validation des organismes formateurs dans la page "Statistiques"</li>
+      </ul>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2022-06-27"}>
+    <Modification>
+      <ul>
+        <li>Ajout de la page "Correction et fiabilisation des données"</li>
+        <li>Corrections de données pour certains sirets</li>
+      </ul>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2022-06-08"}>
+    <Modification>
+      <p>
+        Ajout de l’onglet "impact sur les sources de données entrantes" dans la page "Construction du référentiel
+        national"
+      </p>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2022-05-21"}>
+    <Modification>
+      <ul>
+        <li>Proposition d’UAI valides via un lien vers ACCE PRO</li>
+        <li>Correction d’un bug sur les statistiques de couverture</li>
+        <li>Ajout d’une recherche des organismes sans académies</li>
+        <li>Affichage des départements en fonction du lien de connexion utilisé.</li>
+      </ul>
+    </Modification>
+  </Modifications>,
   <Modifications date={"2022-04-04"}>
     <Modification titre={"Ajout de l'export"}>
       <p>Il est désormais possible d'exporter la liste des organismes.</p>
