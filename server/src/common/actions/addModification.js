@@ -14,4 +14,4 @@ function addModification(auteur, organisme, changements) {
   });
 }
 
-module.exports = addModification;
+module.exports = { addModification };

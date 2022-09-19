@@ -1,6 +1,6 @@
 const assert = require("assert");
 const { createStream } = require("../utils/testUtils");
-const addModifications = require("../../src/jobs/experimentation/importExperimentationUais.js");
+const importExperimentationUais = require("../../src/jobs/experimentation/importExperimentationUais.js");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const { insertOrganisme } = require("../utils/fakeData");
 
@@ -13,10 +13,10 @@ const getCsvStream = (content) => {
   );
 };
 
-describe("addModifications", () => {
+describe("importExperimentationUais", () => {
   it("Vérifie qu'on peut ajouter des modifications", async () => {
     await insertOrganisme({ siret: "11111111100006" });
-    const stats = await addModifications(
+    const stats = await importExperimentationUais(
       getCsvStream(`siret;uai
 11111111100006;0751234J
 `)
@@ -37,7 +37,7 @@ describe("addModifications", () => {
   });
 
   it("Vérifie qu'on ignore les lignes invalides", async () => {
-    const stats = await addModifications(
+    const stats = await importExperimentationUais(
       getCsvStream(`siret;uai
 11111111100006;
 ;INVALID
