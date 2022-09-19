@@ -1,10 +1,33 @@
 const { configureIndexes, configureValidation, dbCollection } = require("../common/db/mongodb");
+const { addModification } = require("../common/actions/addModification.js");
 
-const VERSION = 13;
+const VERSION = 14;
 
 async function tasks() {
+  const organisme = await dbCollection("organismes").findOne({ siret: "85124396400026" });
   return {
-    clearAcceCollection: await dbCollection("acce").deleteMany({}),
+    addModifications: await addModification("mna", organisme, {
+      adresse: {
+        label: "64 Av. Valéry Giscard d'Estaing 06200 Nice",
+        localite: "Nice",
+        code_insee: "06088",
+        code_postal: "06200",
+        departement: { code: "06", nom: "Alpes-Maritimes" },
+        academie: { code: "23", nom: "Nice" },
+        region: { code: "93", nom: "Provence-Alpes-Côte d'Azur" },
+        geojson: {
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [7.20849997129837, 43.671106059602884],
+          },
+          properties: {
+            score: 1,
+            source: "mna",
+          },
+        },
+      },
+    }),
   };
 }
 
