@@ -11,14 +11,17 @@ export default function DatagouvFilter() {
           <span>Liste publique des organismes de formation</span>
           <Tooltip
             label={"Liste publique des organismes de formation"}
-            description={"L'organisme est présent dans la Liste publique des Organisme de Formation (base data.gouv)"}
+            description={
+              "La certification qualiopi est portée par le SIREN + numéro de déclaration d’activité (NDA) ." +
+              "Il est possible que des sirets soient absents de la liste publique des OF mais hérite de la certification qualiopi via leur SIREN + NDA de rattachement."
+            }
           />
         </Box>
       }
       items={[
-        { label: "Oui", paramName: "referentiels", value: "datagouv" },
+        { label: "Présent", paramName: "referentiels", value: "datagouv" },
         { label: "Qualiopi", paramName: "qualiopi", value: "true" },
-        { label: "Non", paramName: "referentiels", value: "-datagouv" },
+        { label: "Non présent", paramName: "referentiels", value: "-datagouv" },
       ]}
     />
   );
