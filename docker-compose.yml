@@ -44,7 +44,7 @@ services:
     container_name: referentiel_server
     build:
       context: server
-    mem_limit: 512m
+    mem_limit: 768m
     restart: unless-stopped
     networks:
       - referentiel_network
