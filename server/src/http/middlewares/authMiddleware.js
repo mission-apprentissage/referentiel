@@ -11,11 +11,12 @@ passport.use(
   new JwtStrategy(
     {
       secretOrKey: config.auth.api.jwtSecret,
+      ignoreExpiration: true,
+      passReqToCallback: true,
       jwtFromRequest: ExtractJwt.fromExtractors([
         ExtractJwt.fromUrlQueryParameter("token"),
         ExtractJwt.fromAuthHeaderAsBearerToken(),
       ]),
-      passReqToCallback: true,
     },
     (req, jwt_payload, done) => {
       const code = jwt_payload.sub;
