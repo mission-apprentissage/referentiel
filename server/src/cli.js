@@ -17,6 +17,7 @@ const generateMagicLinks = require("./jobs/generateMagicLinks");
 const exportOrganismes = require("./jobs/exportOrganismes");
 const importCommunes = require("./jobs/importCommunes");
 const importAcce = require("./jobs/importAcce");
+const importSirene = require("./jobs/importSirene.js");
 
 function asArray(v) {
   return v.split(",");
@@ -182,6 +183,16 @@ cli
       return {
         uai: `${code}${computeChecksum(code)}`.toUpperCase(),
       };
+    });
+  });
+
+cli
+  .command("importSirene")
+  .option("--unitesLegales <unitesLegales>", "unitesLegales", createReadStream)
+  .option("--etablissements <etablissements>", "etablissements", createReadStream)
+  .action((options) => {
+    runScript(() => {
+      return importSirene(options);
     });
   });
 

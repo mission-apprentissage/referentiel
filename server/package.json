@@ -52,6 +52,7 @@
     "serialize-error": "8.1.0",
     "stream-json": "1.7.4",
     "swagger-ui-express": "4.3.0",
+    "unzip-stream": "0.3.1",
     "uuid": "8.3.2",
     "yamljs": "0.3.0"
   },
