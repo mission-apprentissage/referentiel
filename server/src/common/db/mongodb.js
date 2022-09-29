@@ -118,6 +118,22 @@ async function configureValidation() {
   );
 }
 
+async function migrateMongodb(version, callback, options = {}) {
+  let count = await dbCollection("migrations").count({ version });
+  if (count > 0) {
+    throw new Error(`La migration ${version} a déjà été réalisée`);
+  }
+
+  await configureIndexes({ dropIndexes: options.dropIndexes || false });
+  await configureValidation();
+
+  const res = await callback();
+
+  await dbCollection("migrations").insertOne({ version });
+
+  return res;
+}
+
 module.exports = {
   connectToMongodb,
   configureIndexes,
@@ -126,4 +142,5 @@ module.exports = {
   dbCollection,
   closeMongodbConnection,
   clearCollection,
+  migrateMongodb,
 };
