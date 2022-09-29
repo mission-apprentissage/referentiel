@@ -43,6 +43,7 @@ module.exports = {
             {
               uai: string(),
               sources: arrayOf(string()),
+              date_maj: date(),
             },
             { required: ["uai"] }
           )
@@ -53,6 +54,7 @@ module.exports = {
               email: string(),
               confirmé: boolean(),
               sources: arrayOf(string()),
+              date_maj: date(),
               _extras: object({}, { additionalProperties: true }),
             },
             { required: ["email", "confirmé", "sources"] }
@@ -68,6 +70,7 @@ module.exports = {
               referentiel: boolean(),
               label: string(),
               sources: arrayOf(string()),
+              date_maj: date(),
             },
             { required: ["siret", "referentiel", "sources", "type"] }
           )
@@ -80,6 +83,7 @@ module.exports = {
               uai: string(),
               adresse: adresseSchema,
               sources: arrayOf(string()),
+              date_maj: date(),
             },
             { required: ["code", "adresse"] }
           )
@@ -91,6 +95,7 @@ module.exports = {
               type: string({ enum: ["rncp"] }),
               label: string(),
               sources: arrayOf(string()),
+              date_maj: date(),
             },
             { required: ["code", "type"] }
           )
@@ -103,6 +108,7 @@ module.exports = {
               niveau: string(),
               label: string(),
               sources: arrayOf(string()),
+              date_maj: date(),
             },
             { required: ["code", "type"] }
           )
@@ -116,12 +122,12 @@ module.exports = {
                   key: string(),
                   type: string(),
                   job: string(),
-                  sources: arrayOf(string()),
-                  date: date(),
                   code: string(),
                   details: string(),
+                  sources: arrayOf(string()),
+                  date_maj: date(),
                 },
-                { required: ["key", "job", "sources", "date"] }
+                { required: ["key", "job", "sources", "date_maj"] }
               )
             ),
           },

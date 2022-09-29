@@ -22,7 +22,7 @@ describe("importExperimentationUais", () => {
 `)
     );
 
-    const found = await dbCollection("modifications").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("modifications").findOne({ siret: "11111111100006" });
     assert.ok(found.date);
     assert.strictEqual(found.siret, "11111111100006");
     assert.strictEqual(found.auteur, "experimentation");

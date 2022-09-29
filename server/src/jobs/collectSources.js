@@ -24,6 +24,7 @@ function _mergeArray(source, currentArray, newArray, discriminator, options = {}
       ...previous,
       ...element,
       sources: uniq([...(previous.sources || []), source]),
+      date_maj: new Date(),
       ...(options.mergeItemProps ? options.mergeItemProps(previous, element) : {}),
     };
   });
@@ -108,7 +109,6 @@ function handleAnomalies(source, organisme, newAnomalies) {
       type: error ? "erreur" : ano.type,
       details: error ? error.message : ano.details,
       job: "collect",
-      date: new Date(),
     };
   });
 
