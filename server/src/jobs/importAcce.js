@@ -78,6 +78,7 @@ const NATURES = {
   "Section d'enseignement général et professionnel adapté": "390",
   "Section d'enseignement général ou technologique": "335",
   "Section d'enseignement professionnel": "334",
+  "Service commun d'information et d'orientation": "525",
   "Service d'éducation spécialisée et de soins à domicile": "290",
   "Unité de formation et de recherche en santé": "537",
   "Unité de formation et de recherche (hors santé)": "539",
