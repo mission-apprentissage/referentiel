@@ -11,7 +11,7 @@ function createToken(type, subject, options = {}) {
 
   return jwt.sign(payload, secret, {
     issuer: "referentiel",
-    expiresIn: expiresIn,
+    expiresIn,
     subject,
   });
 }
