@@ -17,18 +17,18 @@ function buildQuery(selector) {
   return typeof selector === "object" ? selector : { $or: [{ siret: selector }, { uai: selector }] };
 }
 
-function mergeArray(source, existingArray, newArray, discriminator, options = {}) {
+function _mergeArray(source, currentArray, newArray, discriminator, options = {}) {
   const updated = newArray.map((element) => {
-    const previous = existingArray.find((e) => e[discriminator] === element[discriminator]) || {};
+    const previous = currentArray.find((e) => e[discriminator] === element[discriminator]) || {};
     return {
       ...previous,
       ...element,
       sources: uniq([...(previous.sources || []), source]),
-      ...(options.merge ? options.merge(previous, element) : {}),
+      ...(options.mergeItemProps ? options.mergeItemProps(previous, element) : {}),
     };
   });
 
-  const untouched = existingArray.filter((p) => {
+  const untouched = currentArray.filter((p) => {
     return !updated.map((u) => u[discriminator]).includes(p[discriminator]);
   });
 
@@ -36,13 +36,15 @@ function mergeArray(source, existingArray, newArray, discriminator, options = {}
 }
 
 function mergeUAIPotentiels(source, potentiels, newPotentiels) {
-  let newArray = newPotentiels
+  const newArray = newPotentiels
     .filter((uai) => isUAIValid(uai))
-    .map((uai) => ({
-      uai,
-    }));
+    .map((uai) => {
+      return {
+        uai,
+      };
+    });
 
-  return mergeArray(source, potentiels, newArray, "uai");
+  return _mergeArray(source, potentiels, newArray, "uai");
 }
 
 async function mergeRelations(source, relations, newRelations, sirets) {
@@ -50,7 +52,8 @@ async function mergeRelations(source, relations, newRelations, sirets) {
     const isInReferentiel = sirets.referentiel.includes(relation.siret);
     const isInDatagouv = sirets.datagouv.includes(relation.siret);
 
-    if (!isInReferentiel && !isInDatagouv) {
+    const mustBeIgnored = !isInReferentiel && !isInDatagouv;
+    if (mustBeIgnored) {
       return Promise.resolve(acc);
     }
 
@@ -63,9 +66,9 @@ async function mergeRelations(source, relations, newRelations, sirets) {
     ]);
   }, Promise.resolve([]));
 
-  return mergeArray(source, relations, validatedNewRelations, "siret", {
-    merge: (previous, relation) => {
-      const availables = uniq([relation.type, previous.type]);
+  return _mergeArray(source, relations, validatedNewRelations, "siret", {
+    mergeItemProps: (previous, newRelation) => {
+      const availables = uniq([newRelation.type, previous.type]);
       return {
         type: availables.find((v) => v?.indexOf("->") !== -1) || availables[0],
       };
@@ -74,23 +77,23 @@ async function mergeRelations(source, relations, newRelations, sirets) {
 }
 
 function mergeContacts(source, contacts, newContacts) {
-  let newArray = newContacts.map((contact) => {
+  const newArray = newContacts.map((contact) => {
     return {
       ...contact,
       confirmé: contact.confirmé || false,
     };
   });
 
-  return mergeArray(source, contacts, newArray, "email");
+  return _mergeArray(source, contacts, newArray, "email");
 }
 
-function mergeNature(current, newNature) {
-  const all = [current, newNature];
+function selectNature(nature, newNature) {
+  const all = [nature, newNature];
   if ((all.includes("responsable") && all.includes("formateur")) || all.includes("responsable_formateur")) {
     return "responsable_formateur";
   }
 
-  return newNature || current;
+  return newNature || nature;
 }
 
 function handleAnomalies(source, organisme, newAnomalies) {
@@ -98,7 +101,7 @@ function handleAnomalies(source, organisme, newAnomalies) {
     source,
   });
 
-  let newArray = newAnomalies.map((ano) => {
+  const newArray = newAnomalies.map((ano) => {
     const error = isError(ano) && ano;
     return {
       key: error ? `${error.httpStatusCode || error.message}` : ano.key,
@@ -113,7 +116,7 @@ function handleAnomalies(source, organisme, newAnomalies) {
     { siret: organisme.siret },
     {
       $set: {
-        "_meta.anomalies": mergeArray(source, organisme._meta.anomalies, newArray, "key"),
+        "_meta.anomalies": _mergeArray(source, organisme._meta.anomalies, newArray, "key"),
       },
     },
     { runValidators: true }
@@ -196,13 +199,13 @@ module.exports = async (array, options = {}) => {
             {
               $set: omitNil({
                 ...flattenObject(data),
-                nature: mergeNature(organisme.nature, nature),
+                nature: selectNature(organisme.nature, nature),
                 uai_potentiels: mergeUAIPotentiels(from, organisme.uai_potentiels, uai_potentiels),
                 relations: await mergeRelations(from, organisme.relations, relations, sirets),
                 contacts: mergeContacts(from, organisme.contacts, contacts),
-                diplomes: mergeArray(from, organisme.diplomes, diplomes, "code"),
-                certifications: mergeArray(from, organisme.certifications, certifications, "code"),
-                lieux_de_formation: mergeArray(from, organisme.lieux_de_formation, lieux_de_formation, "code"),
+                diplomes: _mergeArray(from, organisme.diplomes, diplomes, "code"),
+                certifications: _mergeArray(from, organisme.certifications, certifications, "code"),
+                lieux_de_formation: _mergeArray(from, organisme.lieux_de_formation, lieux_de_formation, "code"),
               }),
               $addToSet: {
                 reseaux: {
