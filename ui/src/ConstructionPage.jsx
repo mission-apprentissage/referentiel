@@ -336,12 +336,6 @@ export default function ConstructionPage() {
                       <td>DGEFP</td>
                     </tr>
                     <tr>
-                      <td>DEPP</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>DEPP</td>
-                    </tr>
-                    <tr>
                       <td>ideo2</td>
                       <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>

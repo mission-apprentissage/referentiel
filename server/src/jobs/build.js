@@ -37,7 +37,6 @@ async function build(options = {}) {
     "tableau-de-bord",
     "opcoep",
     "sifa-ramsese",
-    "depp",
     "refea",
     "ymag",
     "mna",
