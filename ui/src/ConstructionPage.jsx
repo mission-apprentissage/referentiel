@@ -281,7 +281,7 @@ export default function ConstructionPage() {
                     <tr>
                       <td>SIFA-RAMSESE</td>
                       <td>SIRET, SIREN</td>
-                      <td>A la demande</td>
+                      <td>06/2021 (liste désormais indisponible)</td>
                       <td>DEPP</td>
                     </tr>
                     <tr>
@@ -338,19 +338,31 @@ export default function ConstructionPage() {
                     <tr>
                       <td>ideo2</td>
                       <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
+                      <td>
+                        A la demande
+                        <br />
+                        <i>(dernière mise à jour 09/2021)</i>
+                      </td>
                       <td>Onisep</td>
                     </tr>
                     <tr>
                       <td>onisep</td>
                       <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
+                      <td>
+                        A la demande
+                        <br />
+                        <i>(dernière mise à jour 09/2021)</i>
+                      </td>
                       <td>Onisep</td>
                     </tr>
                     <tr>
                       <td>onisep-structure</td>
                       <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
+                      <td>
+                        A la demande
+                        <br />
+                        <i>(dernière mise à jour 09/2021)</i>
+                      </td>
                       <td>Onisep</td>
                     </tr>
                     <tr>
@@ -358,12 +370,6 @@ export default function ConstructionPage() {
                       <td colSpan="2">UAI potentielle</td>
                       <td>Automatique Journalière</td>
                       <td>DGER</td>
-                    </tr>
-                    <tr>
-                      <td>SIFA RAMSESE</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>DEPP</td>
                     </tr>
                     <tr>
                       <td>sirene</td>
@@ -388,7 +394,11 @@ export default function ConstructionPage() {
                     <tr>
                       <td>voeux-affelnet</td>
                       <td colSpan="2">Contacts</td>
-                      <td>A la demande</td>
+                      <td>
+                        A la demande
+                        <br />
+                        <i>(dernière mise à jour 09/2021)</i>
+                      </td>
                       <td>Mission Apprentissage</td>
                     </tr>
                   </Table>
