@@ -36,7 +36,6 @@ async function build(options = {}) {
     "catalogue-etablissements",
     "tableau-de-bord",
     "sifa-ramsese",
-    "depp",
     "refea",
     "mna",
   ]);
