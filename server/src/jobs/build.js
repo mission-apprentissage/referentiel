@@ -38,7 +38,6 @@ async function build(options = {}) {
     "sifa-ramsese",
     "depp",
     "refea",
-    "ymag",
     "mna",
   ]);
 
