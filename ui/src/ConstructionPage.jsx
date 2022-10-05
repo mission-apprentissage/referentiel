@@ -374,7 +374,7 @@ export default function ConstructionPage() {
                     <tr>
                       <td>refea</td>
                       <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
+                      <td>Automatique Journalière</td>
                       <td>DGER</td>
                     </tr>
                     <tr>

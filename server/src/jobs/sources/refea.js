@@ -1,6 +1,6 @@
 const { compose, transformData } = require("oleoduc");
-const { getFromStorage } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
+const { fetchStream } = require("../../common/utils/httpUtils.js");
 
 module.exports = (custom = {}) => {
   const name = "refea";
@@ -8,7 +8,11 @@ module.exports = (custom = {}) => {
   return {
     name,
     async stream() {
-      const input = custom.input || (await getFromStorage("REFEA-liste-uai-avec-coordonnees.csv"));
+      const input =
+        custom.input ||
+        (await fetchStream(
+          "http://enseignement-agricole.opendatasoft.com/explore/dataset/liste-uai-avec-coordonnees/download?format=csv&timezone=Europe/Berlin&use_labels_for_header=false"
+        ));
 
       return compose(
         input,
