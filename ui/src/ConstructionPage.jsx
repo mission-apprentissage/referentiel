@@ -397,7 +397,7 @@ export default function ConstructionPage() {
                       <td>
                         A la demande
                         <br />
-                        <i>(dernière mise à jour 09/2021)</i>
+                        <i>(dernière mise à jour 10/2022)</i>
                       </td>
                       <td>Mission Apprentissage</td>
                     </tr>
