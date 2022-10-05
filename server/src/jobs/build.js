@@ -35,7 +35,6 @@ async function build(options = {}) {
     "deca",
     "catalogue-etablissements",
     "tableau-de-bord",
-    "opcoep",
     "sifa-ramsese",
     "depp",
     "refea",

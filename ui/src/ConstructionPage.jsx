@@ -360,12 +360,6 @@ export default function ConstructionPage() {
                       <td>Onisep</td>
                     </tr>
                     <tr>
-                      <td>opcoep</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>OPCO EP</td>
-                    </tr>
-                    <tr>
                       <td>refea</td>
                       <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>
