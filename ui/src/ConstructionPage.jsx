@@ -348,12 +348,6 @@ export default function ConstructionPage() {
                       <td>Onisep</td>
                     </tr>
                     <tr>
-                      <td>mna</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>Mission Apprentissage</td>
-                    </tr>
-                    <tr>
                       <td>onisep</td>
                       <td colSpan="2">UAI potentielle</td>
                       <td>A la demande</td>

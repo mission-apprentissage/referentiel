@@ -10,7 +10,7 @@ const importCommunes = require("./importCommunes");
 const importAcce = require("./importAcce.js");
 
 async function build(options = {}) {
-  const referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv", "mna"];
+  const referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv"];
   const stats = [];
 
   function collectAll(sourceNames, globalOptions = {}) {
