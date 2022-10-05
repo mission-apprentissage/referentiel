@@ -1,7 +1,7 @@
-const { compose, transformData } = require("oleoduc");
+const { compose, transformData, filterData } = require("oleoduc");
 const { getFromStorage } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
-const { optionalItem } = require("../../common/utils/objectUtils");
+const { isEmpty } = require("lodash");
 
 module.exports = (custom = {}) => {
   const name = "voeux-affelnet";
@@ -9,18 +9,16 @@ module.exports = (custom = {}) => {
   return {
     name,
     async stream() {
-      const input =
-        custom.input || (await getFromStorage("voeux-affelnet-export-cfas-confirmes-actives-2021-09-03.csv"));
+      const input = custom.input || (await getFromStorage("voeux-affelnet-export-cfas-2022-10-05.csv"));
 
       return compose(
         input,
         parseCsv(),
-        transformData(({ uai, siret, email }) => {
+        filterData((data) => !isEmpty(data.siret) && data.dernier_email === "notification"),
+        transformData(({ siret, email }) => {
           return {
             from: name,
-            selector: {
-              $or: [...optionalItem("siret", siret), ...optionalItem("uai", uai)],
-            },
+            selector: siret,
             contacts: [{ email, confirmé: true }],
           };
         })

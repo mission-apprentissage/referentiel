@@ -31,16 +31,26 @@ async function build(options = {}) {
   const sources = referentiels.map((name) => createSource(name));
   await importOrganismes(sources).then((res) => stats.push({ importOrganismes: res }));
 
-  await collectAll(["deca", "catalogue-etablissements", "tableau-de-bord", "sifa-ramsese", "refea", "mna"]);
-  await collectAll(["onisep", "onisep-structure", "ideo2", "datagouv"]);
+  await collectAll([
+    "deca",
+    "catalogue-etablissements",
+    "tableau-de-bord",
+    "sifa-ramsese",
+    "refea",
+    "onisep",
+    "onisep-structure",
+    "ideo2",
+    "datagouv",
+  ]);
+
   await collectAll(["sirene", "catalogue"], {
-    //Allow all sources to share the same api instance (ie. rate limit)
+    //Permet de partager le rate limiting pour toutes les sources
     geoAdresseApi: new GeoAdresseApi(),
   });
 
   await consolidate().then((res) => stats.push({ consolidate: res }));
 
-  //Theses sources use uai as selector, so we need to consolidate UAI before running them
+  //Ces sources utilisent l'UAI comme selecteur donc il faut les collecter après la consolidation
   await collectAll(["acce", "voeux-affelnet"]);
 
   return stats;
