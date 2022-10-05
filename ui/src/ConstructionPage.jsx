@@ -398,12 +398,6 @@ export default function ConstructionPage() {
                       <td>Mission Apprentissage</td>
                     </tr>
                     <tr>
-                      <td>ymag</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>Mission Apprentissage</td>
-                    </tr>
-                    <tr>
                       <td>acce</td>
                       <td colSpan="2">Contacts</td>
                       <td>Automatique Journalière</td>
