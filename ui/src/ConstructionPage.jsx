@@ -281,7 +281,7 @@ export default function ConstructionPage() {
                     <tr>
                       <td>SIFA-RAMSESE</td>
                       <td>SIRET, SIREN</td>
-                      <td>A la demande</td>
+                      <td>06/2021 (liste désormais indisponible)</td>
                       <td>DEPP</td>
                     </tr>
                     <tr>
@@ -336,52 +336,40 @@ export default function ConstructionPage() {
                       <td>DGEFP</td>
                     </tr>
                     <tr>
-                      <td>DEPP</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>DEPP</td>
-                    </tr>
-                    <tr>
                       <td>ideo2</td>
                       <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
+                      <td>
+                        A la demande
+                        <br />
+                        <i>(dernière mise à jour 09/2021)</i>
+                      </td>
                       <td>Onisep</td>
-                    </tr>
-                    <tr>
-                      <td>mna</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>Mission Apprentissage</td>
                     </tr>
                     <tr>
                       <td>onisep</td>
                       <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
+                      <td>
+                        A la demande
+                        <br />
+                        <i>(dernière mise à jour 09/2021)</i>
+                      </td>
                       <td>Onisep</td>
                     </tr>
                     <tr>
                       <td>onisep-structure</td>
                       <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
+                      <td>
+                        A la demande
+                        <br />
+                        <i>(dernière mise à jour 09/2021)</i>
+                      </td>
                       <td>Onisep</td>
-                    </tr>
-                    <tr>
-                      <td>opcoep</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>OPCO EP</td>
                     </tr>
                     <tr>
                       <td>refea</td>
                       <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
+                      <td>Automatique Journalière</td>
                       <td>DGER</td>
-                    </tr>
-                    <tr>
-                      <td>SIFA RAMSESE</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>DEPP</td>
                     </tr>
                     <tr>
                       <td>sirene</td>
@@ -398,12 +386,6 @@ export default function ConstructionPage() {
                       <td>Mission Apprentissage</td>
                     </tr>
                     <tr>
-                      <td>ymag</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>Mission Apprentissage</td>
-                    </tr>
-                    <tr>
                       <td>acce</td>
                       <td colSpan="2">Contacts</td>
                       <td>Automatique Journalière</td>
@@ -412,7 +394,11 @@ export default function ConstructionPage() {
                     <tr>
                       <td>voeux-affelnet</td>
                       <td colSpan="2">Contacts</td>
-                      <td>A la demande</td>
+                      <td>
+                        A la demande
+                        <br />
+                        <i>(dernière mise à jour 09/2021)</i>
+                      </td>
                       <td>Mission Apprentissage</td>
                     </tr>
                   </Table>

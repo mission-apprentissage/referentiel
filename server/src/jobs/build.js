@@ -10,7 +10,7 @@ const importCommunes = require("./importCommunes");
 const importAcce = require("./importAcce.js");
 
 async function build(options = {}) {
-  const referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv", "mna"];
+  const referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv"];
   const stats = [];
 
   function collectAll(sourceNames, globalOptions = {}) {
@@ -31,18 +31,7 @@ async function build(options = {}) {
   const sources = referentiels.map((name) => createSource(name));
   await importOrganismes(sources).then((res) => stats.push({ importOrganismes: res }));
 
-  await collectAll([
-    "deca",
-    "catalogue-etablissements",
-    "tableau-de-bord",
-    "opcoep",
-    "sifa-ramsese",
-    "depp",
-    "refea",
-    "ymag",
-    "mna",
-  ]);
-
+  await collectAll(["deca", "catalogue-etablissements", "tableau-de-bord", "sifa-ramsese", "refea", "mna"]);
   await collectAll(["onisep", "onisep-structure", "ideo2", "datagouv"]);
   await collectAll(["sirene", "catalogue"], {
     //Allow all sources to share the same api instance (ie. rate limit)
