@@ -31,15 +31,7 @@ async function build(options = {}) {
   const sources = referentiels.map((name) => createSource(name));
   await importOrganismes(sources).then((res) => stats.push({ importOrganismes: res }));
 
-  await collectAll([
-    "deca",
-    "catalogue-etablissements",
-    "tableau-de-bord",
-    "sifa-ramsese",
-    "refea",
-    "mna",
-  ]);
-
+  await collectAll(["deca", "catalogue-etablissements", "tableau-de-bord", "sifa-ramsese", "refea", "mna"]);
   await collectAll(["onisep", "onisep-structure", "ideo2", "datagouv"]);
   await collectAll(["sirene", "catalogue"], {
     //Allow all sources to share the same api instance (ie. rate limit)
