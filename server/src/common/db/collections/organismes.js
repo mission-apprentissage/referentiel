@@ -36,7 +36,17 @@ module.exports = {
           { required: ["code", "label"] }
         ),
         referentiels: arrayOf(string()),
-        reseaux: arrayOf(string()),
+        reseaux: arrayOf(
+          object(
+            {
+              code: string(),
+              label: string(),
+              sources: arrayOf(string()),
+              date_maj: date(),
+            },
+            { required: ["code", "label"] }
+          )
+        ),
         qualiopi: boolean(),
         uai_potentiels: arrayOf(
           object(

@@ -57,7 +57,11 @@ export default function RelationModal({ modal, organisme }) {
               <Box direction={"column"} className={"fr-mt-5w"}>
                 <Field label={"Enseigne"} value={organisme.enseigne} tooltip={definitions.enseigne} />
                 <Field label={"Raison sociale"} value={organisme.raison_sociale} tooltip={definitions.raison_sociale} />
-                <Field label={"Réseaux"} value={organisme.reseaux.join(" ,")} tooltip={definitions.reseaux} />
+                <Field
+                  label={"Réseaux"}
+                  value={organisme.reseaux.map((r) => r.code).join(" ,")}
+                  tooltip={definitions.reseaux}
+                />
                 <Field
                   label={"Adresse"}
                   value={organisme.adresse?.label || `${organisme.adresse?.code_postal} ${organisme.adresse?.localite}`}

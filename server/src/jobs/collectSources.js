@@ -206,12 +206,8 @@ module.exports = async (array, options = {}) => {
                 diplomes: _mergeArray(from, organisme.diplomes, diplomes, "code"),
                 certifications: _mergeArray(from, organisme.certifications, certifications, "code"),
                 lieux_de_formation: _mergeArray(from, organisme.lieux_de_formation, lieux_de_formation, "code"),
+                reseaux: _mergeArray(from, organisme.reseaux, reseaux, "code"),
               }),
-              $addToSet: {
-                reseaux: {
-                  $each: reseaux,
-                },
-              },
             }
           );
 

@@ -548,9 +548,15 @@ components:
           items:
             type: string
         reseaux:
-          type: array
-          items:
-            type: string
+          type: object
+          required:
+            - code
+            - label
+          properties:
+            code:
+              type: string
+            label:
+              type: string
         qualiopi:
           type: boolean
         uai_potentiels:

@@ -10,13 +10,19 @@ async function migrate(options = {}) {
   async function addDateMaj(path) {
     const { modifiedCount } = await dbCollection("organismes").updateMany(
       { [`${path}.0`]: { $exists: true } },
-      { $set: { [`${path}.$[].date_maj`]: twoWeeksAgo } }
+      {
+        $set: {
+          reseaux: [],
+          [`${path}.$[].date_maj`]: twoWeeksAgo,
+        },
+      }
     );
     return modifiedCount;
   }
 
   async function updateAnomalies() {
-    let modifiedCount;
+    let modifiedCount = 0;
+
     await oleoduc(
       dbCollection("organismes")
         .find({ "_meta.anomalies": { $exists: true } })
@@ -26,6 +32,7 @@ async function migrate(options = {}) {
           { _id: organisme._id },
           {
             $set: {
+              "reseaux": [],
               "_meta.anomalies": organisme._meta.anomalies.map(({ date, ...rest }) => {
                 return {
                   ...rest,
@@ -52,6 +59,7 @@ async function migrate(options = {}) {
         relations: await addDateMaj("relations"),
         lieux_de_formation: await addDateMaj("lieux_de_formation"),
         certifications: await addDateMaj("certifications"),
+        reset_reseaux: (await dbCollection("organismes").updateMany({}, { $set: { reseaux: [] } })).modifiedCount,
       };
     },
     options
