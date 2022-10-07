@@ -27,6 +27,7 @@ cli
   .description("Construit le référentiel")
   .argument("[names]", "La liste des sources servant de référence d'organismes", asArray)
   .option("--clearCache", "Supprime les données stockées en cache")
+  .option("--skipImport", "Permet de ne pas réaliser les imports")
   .action((names, options) => {
     runScript(() => {
       return build({ referentiels: names, ...options });
