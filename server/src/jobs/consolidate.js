@@ -53,9 +53,13 @@ async function applyModifications(options = {}) {
   return stats;
 }
 
-async function removeObsoleteCollectedData() {
+async function removeObsoleteData() {
   const latestCollectDate = await getLatestCollectDate();
-  const $obsolete = { date_maj: { $lt: DateTime.fromJSDate(latestCollectDate).minus({ day: 7 }).toJSDate() } };
+  const $obsolete = { $lt: DateTime.fromJSDate(latestCollectDate).minus({ day: 7 }).toJSDate() };
+
+  const { deletedCount } = await dbCollection("organismes").remove({
+    "_meta.date_maj": $obsolete,
+  });
 
   const { modifiedCount } = await dbCollection("organismes").updateMany(
     {
@@ -63,23 +67,26 @@ async function removeObsoleteCollectedData() {
     },
     {
       $pull: {
-        uai_potentiels: $obsolete,
-        relations: $obsolete,
-        contacts: $obsolete,
-        diplomes: $obsolete,
-        certifications: $obsolete,
-        lieux_de_formation: $obsolete,
-        reseaux: $obsolete,
+        uai_potentiels: { date_maj: $obsolete },
+        relations: { date_maj: $obsolete },
+        contacts: { date_maj: $obsolete },
+        diplomes: { date_maj: $obsolete },
+        certifications: { date_maj: $obsolete },
+        lieux_de_formation: { date_maj: $obsolete },
+        reseaux: { date_maj: $obsolete },
       },
     }
   );
 
-  return modifiedCount;
+  return {
+    organismes: deletedCount,
+    collected: modifiedCount,
+  };
 }
 
 async function consolidate(options) {
   const stats = {};
-  stats.obsolete = await removeObsoleteCollectedData();
+  stats.obsolete = await removeObsoleteData();
   stats.modifications = await applyModifications(options);
   return stats;
 }
