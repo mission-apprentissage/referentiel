@@ -147,9 +147,19 @@ async function getStreams(sources, filters) {
   );
 }
 
+function markOrganismeAsUpdated(organisme, collectDate) {
+  return dbCollection("organismes").updateOne(
+    { siret: organisme.siret },
+    {
+      $set: { "_meta.date_maj": collectDate },
+    }
+  );
+}
+
 module.exports = async (array, options = {}) => {
   const sources = Array.isArray(array) ? array : [array];
   const filters = options.filters || {};
+  const collectDate = new Date();
   const stats = createStats(sources);
   const streams = await getStreams(sources, filters);
   const datagouv = createDatagouvSource();
@@ -214,6 +224,7 @@ module.exports = async (array, options = {}) => {
           const nbModifiedDocuments = res.modifiedCount;
           if (nbModifiedDocuments) {
             stats[from].updated += nbModifiedDocuments;
+            await markOrganismeAsUpdated(organisme, collectDate);
             logger.debug(`Organisme ${organisme.siret} mis à jour`, { source: from });
           } else {
             logger.trace(`Organisme ${organisme.siret} déjà à jour`, { source: from });

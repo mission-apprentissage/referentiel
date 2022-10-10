@@ -84,7 +84,8 @@ describe("consolidate", () => {
   });
 
   it("Vérifie qu'on supprimes les données obsolètes (10j)", async () => {
-    const _9daysAgo = DateTime.now().minus({ day: 9 }).toJSDate();
+    const collectDate = new Date();
+    const obsoleteDate = DateTime.now().minus({ day: 8 }).toJSDate();
     await insertOrganisme({
       siret: "11111111100006",
       relations: [
@@ -94,7 +95,7 @@ describe("consolidate", () => {
           label: "Organisme de formation",
           referentiel: true,
           sources: ["catalogue"],
-          date_maj: _9daysAgo,
+          date_maj: collectDate,
         },
         {
           type: "responsable->formateur",
@@ -102,9 +103,12 @@ describe("consolidate", () => {
           label: "Organisme de formation",
           referentiel: true,
           sources: ["catalogue"],
-          date_maj: new Date("2022-09-22T10:06:08.618Z"),
+          date_maj: obsoleteDate,
         },
       ],
+      _meta: {
+        date_maj: collectDate,
+      },
     });
 
     const stats = await consolidate();
@@ -117,11 +121,54 @@ describe("consolidate", () => {
         label: "Organisme de formation",
         referentiel: true,
         sources: ["catalogue"],
-        date_maj: _9daysAgo,
+        date_maj: collectDate,
       },
     ]);
     assert.deepStrictEqual(stats, {
       obsolete: 1,
+      modifications: {
+        total: 0,
+        modifications: 0,
+        unknown: 0,
+        failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on préserve les données obsolètes quand l'organisme n'a pas été mis à jour", async () => {
+    const obsoleteDate = DateTime.now().minus({ day: 11 }).toJSDate();
+    await insertOrganisme({
+      siret: "11111111100006",
+      relations: [
+        {
+          type: "responsable->formateur",
+          siret: "33333333300008",
+          label: "Organisme de formation",
+          referentiel: true,
+          sources: ["catalogue"],
+          date_maj: obsoleteDate,
+        },
+      ],
+      _meta: {
+        date_maj: obsoleteDate,
+      },
+    });
+
+    const stats = await consolidate();
+
+    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
+    assert.deepStrictEqual(found.relations, [
+      {
+        type: "responsable->formateur",
+        siret: "33333333300008",
+        label: "Organisme de formation",
+        referentiel: true,
+        sources: ["catalogue"],
+        date_maj: obsoleteDate,
+      },
+    ]);
+    assert.deepStrictEqual(stats, {
+      obsolete: 0,
       modifications: {
         total: 0,
         modifications: 0,

@@ -683,4 +683,28 @@ describe("collectSources", () => {
       },
     });
   });
+
+  it("Vérifie qu'on peut sauvegarde la date de mise à jour", async () => {
+    await insertOrganisme({ siret: "11111111100006" });
+    const source = createTestSource([
+      {
+        selector: "11111111100006",
+        uai_potentiels: ["0111111Y"],
+      },
+    ]);
+
+    const stats = await collectSources(source);
+
+    const found = await dbCollection("organismes").findOne({});
+    assert.ok(found._meta.date_maj);
+    assert.deepStrictEqual(stats, {
+      dummy: {
+        total: 1,
+        updated: 1,
+        unknown: 0,
+        failed: 0,
+        anomalies: 0,
+      },
+    });
+  });
 });

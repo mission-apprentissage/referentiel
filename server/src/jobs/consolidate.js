@@ -2,8 +2,8 @@ const logger = require("../common/logger").child({ context: "consolidate" });
 const { dbCollection } = require("../common/db/mongodb");
 const findUAIProbable = require("../common/actions/findUAIProbable");
 const { addModification } = require("../common/actions/addModification.js");
-const { oleoduc, writeData } = require("oleoduc");
 const { DateTime } = require("luxon");
+const { getLatestCollectDate } = require("../common/actions/getLatestCollectDate.js");
 
 /**
  * Permet de validation automatiquement les UAI sans passer par la validation manuelle
@@ -54,31 +54,27 @@ async function applyModifications(options = {}) {
 }
 
 async function removeObsoleteCollectedData() {
-  let updated = 0;
-  const $prune = { date_maj: { $lt: DateTime.now().minus({ day: 10 }).toJSDate() } };
+  const latestCollectDate = await getLatestCollectDate();
+  const $obsolete = { date_maj: { $lt: DateTime.fromJSDate(latestCollectDate).minus({ day: 7 }).toJSDate() } };
 
-  await oleoduc(
-    dbCollection("organismes").find().stream(),
-    writeData(async (organisme) => {
-      const { modifiedCount } = await dbCollection("organismes").updateOne(
-        { _id: organisme._id },
-        {
-          $pull: {
-            uai_potentiels: $prune,
-            relations: $prune,
-            contacts: $prune,
-            diplomes: $prune,
-            certifications: $prune,
-            lieux_de_formation: $prune,
-            reseaux: $prune,
-          },
-        }
-      );
-      updated += modifiedCount;
-    })
+  const { modifiedCount } = await dbCollection("organismes").updateMany(
+    {
+      "_meta.date_maj": { $gte: latestCollectDate },
+    },
+    {
+      $pull: {
+        uai_potentiels: $obsolete,
+        relations: $obsolete,
+        contacts: $obsolete,
+        diplomes: $obsolete,
+        certifications: $obsolete,
+        lieux_de_formation: $obsolete,
+        reseaux: $obsolete,
+      },
+    }
   );
 
-  return updated;
+  return modifiedCount;
 }
 
 async function consolidate(options) {

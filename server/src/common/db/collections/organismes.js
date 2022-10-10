@@ -126,6 +126,7 @@ module.exports = {
         _meta: object(
           {
             date_import: date(),
+            date_maj: date(),
             anomalies: arrayOf(
               object(
                 {
