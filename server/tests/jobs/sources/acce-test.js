@@ -20,7 +20,7 @@ describe("acce", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "11111111100006" },
-      { projection: { "contacts.date_maj": 0 } }
+      { projection: { "contacts.date_vue": 0 } }
     );
     assert.deepStrictEqual(found.contacts, [
       {

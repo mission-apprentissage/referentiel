@@ -3,6 +3,7 @@ const { castArray } = require("lodash");
 const logger = require("../common/logger").child({ context: "import" });
 const { dbCollection } = require("../common/db/mongodb");
 const { isSiretValid } = require("../common/utils/validationUtils");
+const { markOrganismeAsSeen } = require("../common/actions/markOrganismeAsSeen.js");
 
 function createStats(sources) {
   return sources.reduce((acc, source) => {
@@ -32,6 +33,7 @@ module.exports = async (array) => {
   const sources = castArray(array);
   const streams = await getStreams(sources);
   const stats = createStats(sources);
+  const importDate = new Date();
 
   await oleoduc(
     mergeStreams(streams),
@@ -59,7 +61,7 @@ module.exports = async (array) => {
               "reseaux": [],
               "diplomes": [],
               "certifications": [],
-              "_meta.date_import": new Date(),
+              "_meta.date_import": importDate,
               "_meta.anomalies": [],
             },
             $addToSet: {
@@ -69,6 +71,7 @@ module.exports = async (array) => {
           { upsert: true }
         );
 
+        await markOrganismeAsSeen(siret, importDate);
         if (res.upsertedCount) {
           logger.debug(`Organisme ${siret} créé`);
           stats[from].created += res.upsertedCount;

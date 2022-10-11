@@ -45,7 +45,7 @@ describe("catalogue-etablissements", () => {
 
     const stats = await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({}, { projection: { "uai_potentiels.date_maj": 0 } });
+    const found = await dbCollection("organismes").findOne({}, { projection: { "uai_potentiels.date_vue": 0 } });
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["catalogue-etablissements"],

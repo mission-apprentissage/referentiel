@@ -13,7 +13,7 @@ async function migrate(options = {}) {
       {
         $set: {
           reseaux: [],
-          [`${path}.$[].date_maj`]: twoWeeksAgo,
+          [`${path}.$[].date_vue`]: twoWeeksAgo,
         },
       }
     );
@@ -36,7 +36,7 @@ async function migrate(options = {}) {
               "_meta.anomalies": organisme._meta.anomalies.map(({ date, ...rest }) => {
                 return {
                   ...rest,
-                  date_maj: date,
+                  date_vue: date,
                 };
               }),
             },
@@ -60,6 +60,8 @@ async function migrate(options = {}) {
         lieux_de_formation: await addDateMaj("lieux_de_formation"),
         certifications: await addDateMaj("certifications"),
         reset_reseaux: (await dbCollection("organismes").updateMany({}, { $set: { reseaux: [] } })).modifiedCount,
+        add_maj_date: (await dbCollection("organismes").updateMany({}, { $set: { "_meta.date_vue": twoWeeksAgo } }))
+          .modifiedCount,
       };
     },
     options

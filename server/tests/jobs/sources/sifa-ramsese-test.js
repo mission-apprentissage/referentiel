@@ -41,7 +41,7 @@ describe("sifa-ramsese", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "11111111100006" },
-      { projection: { "uai_potentiels.date_maj": 0 } }
+      { projection: { "uai_potentiels.date_vue": 0 } }
     );
     assert.deepStrictEqual(found.uai_potentiels, [
       {

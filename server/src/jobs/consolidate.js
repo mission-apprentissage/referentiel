@@ -57,23 +57,24 @@ async function removeObsoleteData() {
   const latestCollectDate = await getLatestCollectDate();
   const $obsolete = { $lt: DateTime.fromJSDate(latestCollectDate).minus({ day: 7 }).toJSDate() };
 
-  const { deletedCount } = await dbCollection("organismes").remove({
-    "_meta.date_maj": $obsolete,
+  const { deletedCount } = await dbCollection("organismes").deleteMany({
+    "uai": { $exists: false },
+    "_meta.date_vue": $obsolete,
   });
 
   const { modifiedCount } = await dbCollection("organismes").updateMany(
     {
-      "_meta.date_maj": { $gte: latestCollectDate },
+      "_meta.date_vue": { $gte: latestCollectDate },
     },
     {
       $pull: {
-        uai_potentiels: { date_maj: $obsolete },
-        relations: { date_maj: $obsolete },
-        contacts: { date_maj: $obsolete },
-        diplomes: { date_maj: $obsolete },
-        certifications: { date_maj: $obsolete },
-        lieux_de_formation: { date_maj: $obsolete },
-        reseaux: { date_maj: $obsolete },
+        uai_potentiels: { date_vue: $obsolete },
+        relations: { date_vue: $obsolete },
+        contacts: { date_vue: $obsolete },
+        diplomes: { date_vue: $obsolete },
+        certifications: { date_vue: $obsolete },
+        lieux_de_formation: { date_vue: $obsolete },
+        reseaux: { date_vue: $obsolete },
       },
     }
   );

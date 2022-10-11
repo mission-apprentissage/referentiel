@@ -12,7 +12,7 @@ function fetchFormations(api, options = {}) {
   const lastYear = `${DateTime.now().minus({ year: 1 }).year}`;
   const query = {
     published: true,
-    tags: [lastYear],
+    tags: { $ne: [lastYear] }, //Exclusion des formations de l'année précédente
     ...(siret ? { $or: [{ etablissement_formateur_siret: siret }, { etablissement_gestionnaire_siret: siret }] } : {}),
   };
 

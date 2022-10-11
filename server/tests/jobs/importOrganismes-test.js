@@ -39,6 +39,7 @@ describe("importOrganismes", () => {
       certifications: [],
     });
     assert.ok(found._meta.date_import);
+    assert.ok(found._meta.date_vue);
     assert.deepStrictEqual(found._meta.anomalies, []);
     assert.deepStrictEqual(results, {
       dummy: {
@@ -59,6 +60,7 @@ describe("importOrganismes", () => {
 
     const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { projection: { _id: 0 } });
     assert.deepStrictEqual(found.referentiels, ["test", "dummy"]);
+    assert.ok(found._meta.date_vue);
     assert.deepStrictEqual(results, {
       dummy: {
         total: 1,

@@ -35,7 +35,7 @@ describe("tableau-de-bord", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "11111111100006" },
-      { projection: { "uai_potentiels.date_maj": 0, "reseaux.date_maj": 0 } }
+      { projection: { "uai_potentiels.date_vue": 0, "reseaux.date_vue": 0 } }
     );
     assert.deepStrictEqual(found.uai_potentiels, [
       {
@@ -80,7 +80,7 @@ describe("tableau-de-bord", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "11111111100006" },
-      { projection: { "reseaux.date_maj": 0 } }
+      { projection: { "reseaux.date_vue": 0 } }
     );
     assert.deepStrictEqual(found.reseaux, [
       { code: "cfa ec", label: "Enseignement catholique", sources: ["tableau-de-bord"] },

@@ -854,7 +854,7 @@ describe("organismesRoutes", () => {
               type: "dummy",
               sources: ["test"],
               job: "collect",
-              date_maj: new Date("2021-02-10T08:31:58.572Z"),
+              date_vue: new Date("2021-02-10T08:31:58.572Z"),
             },
           ],
         },

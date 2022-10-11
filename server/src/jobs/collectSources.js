@@ -8,6 +8,7 @@ const { sortBy } = require("lodash/collection");
 const createDatagouvSource = require("./sources/datagouv");
 const getAllSirets = require("../common/actions/getAllSirets.js");
 const { promiseAllProps } = require("../common/utils/asyncUtils.js");
+const { markOrganismeAsSeen } = require("../common/actions/markOrganismeAsSeen.js");
 
 function buildQuery(selector) {
   if (isEmpty(selector)) {
@@ -20,11 +21,12 @@ function buildQuery(selector) {
 function _mergeArray(source, currentArray, newArray, discriminator, options = {}) {
   const updated = newArray.map((element) => {
     const previous = currentArray.find((e) => e[discriminator] === element[discriminator]) || {};
+
     return {
       ...previous,
       ...element,
       sources: uniq([...(previous.sources || []), source]),
-      date_maj: new Date(),
+      date_vue: new Date(),
       ...(options.mergeItemProps ? options.mergeItemProps(previous, element) : {}),
     };
   });
@@ -147,15 +149,6 @@ async function getStreams(sources, filters) {
   );
 }
 
-function markOrganismeAsUpdated(organisme, collectDate) {
-  return dbCollection("organismes").updateOne(
-    { siret: organisme.siret },
-    {
-      $set: { "_meta.date_maj": collectDate },
-    }
-  );
-}
-
 module.exports = async (array, options = {}) => {
   const sources = Array.isArray(array) ? array : [array];
   const filters = options.filters || {};
@@ -221,10 +214,11 @@ module.exports = async (array, options = {}) => {
             }
           );
 
+          await markOrganismeAsSeen(organisme.siret, collectDate);
+
           const nbModifiedDocuments = res.modifiedCount;
           if (nbModifiedDocuments) {
             stats[from].updated += nbModifiedDocuments;
-            await markOrganismeAsUpdated(organisme, collectDate);
             logger.debug(`Organisme ${organisme.siret} mis à jour`, { source: from });
           } else {
             logger.trace(`Organisme ${organisme.siret} déjà à jour`, { source: from });

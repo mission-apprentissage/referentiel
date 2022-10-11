@@ -23,7 +23,7 @@ describe("ideo2", () => {
 
     let found = await dbCollection("organismes").findOne(
       { siret: "11111111100006" },
-      { projection: { "relations.date_maj": 0 } }
+      { projection: { "relations.date_vue": 0 } }
     );
     assert.deepStrictEqual(omit(found.relations[0], ["label"]), {
       siret: "22222222200002",
@@ -33,7 +33,7 @@ describe("ideo2", () => {
     });
     found = await dbCollection("organismes").findOne(
       { siret: "22222222200002" },
-      { projection: { "relations.date_maj": 0 } }
+      { projection: { "relations.date_vue": 0 } }
     );
     assert.deepStrictEqual(omit(found.relations[0], ["label"]), {
       siret: "11111111100006",

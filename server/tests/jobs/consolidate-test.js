@@ -104,7 +104,7 @@ describe("consolidate", () => {
           label: "Organisme de formation",
           referentiel: true,
           sources: ["catalogue"],
-          date_maj: collectDate,
+          date_vue: collectDate,
         },
         {
           type: "responsable->formateur",
@@ -112,11 +112,11 @@ describe("consolidate", () => {
           label: "Organisme de formation",
           referentiel: true,
           sources: ["catalogue"],
-          date_maj: obsoleteDate,
+          date_vue: obsoleteDate,
         },
       ],
       _meta: {
-        date_maj: collectDate,
+        date_vue: collectDate,
       },
     });
 
@@ -130,7 +130,7 @@ describe("consolidate", () => {
         label: "Organisme de formation",
         referentiel: true,
         sources: ["catalogue"],
-        date_maj: collectDate,
+        date_vue: collectDate,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -158,11 +158,11 @@ describe("consolidate", () => {
           label: "Organisme de formation",
           referentiel: true,
           sources: ["catalogue"],
-          date_maj: collectDate,
+          date_vue: collectDate,
         },
       ],
       _meta: {
-        date_maj: collectDate,
+        date_vue: collectDate,
       },
     });
 
@@ -176,7 +176,7 @@ describe("consolidate", () => {
         label: "Organisme de formation",
         referentiel: true,
         sources: ["catalogue"],
-        date_maj: collectDate,
+        date_vue: collectDate,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -195,23 +195,33 @@ describe("consolidate", () => {
 
   it("Vérifie qu'on supprime un organisme qui est obsolète (non mise à jour x jours avant la dernière collecte)", async () => {
     const obsoleteDate = DateTime.now().minus({ day: 10 }).toJSDate();
-    const lastCollectDate = new Date();
-    await insertOrganisme({
-      _meta: {
-        date_maj: lastCollectDate,
-      },
-    });
+    const recentDate = new Date();
     await insertOrganisme({
       siret: "11111111100006",
       _meta: {
-        date_maj: obsoleteDate,
+        date_vue: obsoleteDate,
+      },
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      _meta: {
+        date_vue: recentDate,
+      },
+    });
+    await insertOrganisme({
+      siret: "33333333300003",
+      uai: "0751234J",
+      _meta: {
+        date_vue: obsoleteDate,
       },
     });
 
     const stats = await consolidate();
 
-    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
-    assert.ok(!found);
+    assert.ok(!(await dbCollection("organismes").findOne({ siret: "11111111100006" })));
+    assert.ok(await dbCollection("organismes").findOne({ siret: "22222222200002" }));
+    assert.ok(await dbCollection("organismes").findOne({ siret: "33333333300003" }));
+
     assert.deepStrictEqual(stats, {
       obsolete: {
         organismes: 1,
