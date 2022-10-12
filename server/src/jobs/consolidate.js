@@ -57,11 +57,6 @@ async function removeObsoleteData() {
   const latestCollectDate = await getLatestCollectDate();
   const $obsolete = { $lt: DateTime.fromJSDate(latestCollectDate).minus({ day: 7 }).toJSDate() };
 
-  const { deletedCount } = await dbCollection("organismes").deleteMany({
-    "uai": { $exists: false },
-    "_meta.date_vue": $obsolete,
-  });
-
   const { modifiedCount } = await dbCollection("organismes").updateMany(
     {
       "_meta.date_vue": { $gte: latestCollectDate },
@@ -79,10 +74,7 @@ async function removeObsoleteData() {
     }
   );
 
-  return {
-    organismes: deletedCount,
-    collected: modifiedCount,
-  };
+  return modifiedCount;
 }
 
 async function consolidate(options) {

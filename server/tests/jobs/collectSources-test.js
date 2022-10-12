@@ -683,28 +683,4 @@ describe("collectSources", () => {
       },
     });
   });
-
-  it("Vérifie qu'on sauvegarde la date de mise à jour de l'organisme", async () => {
-    await insertOrganisme({ siret: "11111111100006" });
-    const source = createTestSource([
-      {
-        selector: "11111111100006",
-        uai_potentiels: ["0111111Y"],
-      },
-    ]);
-
-    const stats = await collectSources(source);
-
-    const found = await dbCollection("organismes").findOne({});
-    assert.ok(found._meta.date_vue);
-    assert.deepStrictEqual(stats, {
-      dummy: {
-        total: 1,
-        updated: 1,
-        unknown: 0,
-        failed: 0,
-        anomalies: 0,
-      },
-    });
-  });
 });

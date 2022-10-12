@@ -8,7 +8,6 @@ const { sortBy } = require("lodash/collection");
 const createDatagouvSource = require("./sources/datagouv");
 const getAllSirets = require("../common/actions/getAllSirets.js");
 const { promiseAllProps } = require("../common/utils/asyncUtils.js");
-const { markOrganismeAsSeen } = require("../common/actions/markOrganismeAsSeen.js");
 
 function buildQuery(selector) {
   if (isEmpty(selector)) {
@@ -152,7 +151,6 @@ async function getStreams(sources, filters) {
 module.exports = async (array, options = {}) => {
   const sources = Array.isArray(array) ? array : [array];
   const filters = options.filters || {};
-  const collectDate = new Date();
   const stats = createStats(sources);
   const streams = await getStreams(sources, filters);
   const datagouv = createDatagouvSource();
@@ -213,8 +211,6 @@ module.exports = async (array, options = {}) => {
               }),
             }
           );
-
-          await markOrganismeAsSeen(organisme.siret, collectDate);
 
           const nbModifiedDocuments = res.modifiedCount;
           if (nbModifiedDocuments) {

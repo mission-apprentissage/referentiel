@@ -19,10 +19,7 @@ describe("consolidate", () => {
     const found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
     assert.strictEqual(found.uai, "0751234J");
     assert.deepStrictEqual(stats, {
-      obsolete: {
-        organismes: 0,
-        collected: 0,
-      },
+      obsolete: 0,
       modifications: {
         total: 1,
         modifications: 1,
@@ -55,10 +52,7 @@ describe("consolidate", () => {
     const found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
     assert.strictEqual(found.uai, "0751234X");
     assert.deepStrictEqual(stats, {
-      obsolete: {
-        organismes: 0,
-        collected: 0,
-      },
+      obsolete: 0,
       modifications: {
         total: 2,
         modifications: 2,
@@ -79,10 +73,7 @@ describe("consolidate", () => {
     const stats = await consolidate();
 
     assert.deepStrictEqual(stats, {
-      obsolete: {
-        organismes: 0,
-        collected: 0,
-      },
+      obsolete: 0,
       modifications: {
         total: 1,
         modifications: 0,
@@ -134,10 +125,7 @@ describe("consolidate", () => {
       },
     ]);
     assert.deepStrictEqual(stats, {
-      obsolete: {
-        organismes: 0,
-        collected: 1,
-      },
+      obsolete: 1,
       modifications: {
         total: 0,
         modifications: 0,
@@ -180,53 +168,7 @@ describe("consolidate", () => {
       },
     ]);
     assert.deepStrictEqual(stats, {
-      obsolete: {
-        organismes: 0,
-        collected: 0,
-      },
-      modifications: {
-        total: 0,
-        modifications: 0,
-        unknown: 0,
-        failed: 0,
-      },
-    });
-  });
-
-  it("Vérifie qu'on supprime un organisme qui est obsolète (non mise à jour x jours avant la dernière collecte)", async () => {
-    const obsoleteDate = DateTime.now().minus({ day: 10 }).toJSDate();
-    const recentDate = new Date();
-    await insertOrganisme({
-      siret: "11111111100006",
-      _meta: {
-        date_vue: obsoleteDate,
-      },
-    });
-    await insertOrganisme({
-      siret: "22222222200002",
-      _meta: {
-        date_vue: recentDate,
-      },
-    });
-    await insertOrganisme({
-      siret: "33333333300003",
-      uai: "0751234J",
-      _meta: {
-        date_vue: obsoleteDate,
-      },
-    });
-
-    const stats = await consolidate();
-
-    assert.ok(!(await dbCollection("organismes").findOne({ siret: "11111111100006" })));
-    assert.ok(await dbCollection("organismes").findOne({ siret: "22222222200002" }));
-    assert.ok(await dbCollection("organismes").findOne({ siret: "33333333300003" }));
-
-    assert.deepStrictEqual(stats, {
-      obsolete: {
-        organismes: 1,
-        collected: 0,
-      },
+      obsolete: 0,
       modifications: {
         total: 0,
         modifications: 0,
