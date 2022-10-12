@@ -54,6 +54,7 @@ async function migrate(options = {}) {
     async () => {
       return {
         anomalies: await updateAnomalies(),
+        diplomes: await addDateMaj("diplomes"),
         uai_potentiels: await addDateMaj("uai_potentiels"),
         contacts: await addDateMaj("contacts"),
         relations: await addDateMaj("relations"),
