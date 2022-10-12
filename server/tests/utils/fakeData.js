@@ -180,6 +180,7 @@ module.exports = {
             _meta: {
               anomalies: [],
               date_import: new Date(),
+              date_dernier_import: new Date(),
             },
           },
           custom

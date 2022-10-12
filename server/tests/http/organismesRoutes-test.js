@@ -18,6 +18,7 @@ describe("organismesRoutes", () => {
       _meta: {
         anomalies: [],
         date_import: new Date("2021-02-10T16:39:13.064Z"),
+        date_dernier_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -71,6 +72,7 @@ describe("organismesRoutes", () => {
           _meta: {
             anomalies: [],
             date_import: "2021-02-10T16:39:13.064Z",
+            date_dernier_import: "2021-02-10T16:39:13.064Z",
             nouveau: false,
           },
         },
@@ -980,6 +982,7 @@ describe("organismesRoutes", () => {
       _meta: {
         anomalies: [],
         date_import: new Date("2021-02-10T16:39:13.064Z"),
+        date_dernier_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -1031,6 +1034,7 @@ describe("organismesRoutes", () => {
       _meta: {
         anomalies: [],
         date_import: "2021-02-10T16:39:13.064Z",
+        date_dernier_import: "2021-02-10T16:39:13.064Z",
         nouveau: false,
       },
     });
@@ -1094,7 +1098,7 @@ describe("organismesRoutes", () => {
     deepStrictEqual(response.data.siret, "11111111100001");
     deepStrictEqual(response.data.uai, "0751234J");
     deepStrictEqual(
-      omitDeep(response.data, () => ["date_import"]),
+      omitDeep(response.data, () => ["date_import", "date_dernier_import"]),
       {
         siret: "11111111100001",
         uai: "0751234J",

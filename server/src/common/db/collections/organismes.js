@@ -143,7 +143,7 @@ module.exports = {
               )
             ),
           },
-          { required: ["anomalies", "date_import"] }
+          { required: ["anomalies", "date_import", "date_dernier_import"] }
         ),
       },
       { required }
