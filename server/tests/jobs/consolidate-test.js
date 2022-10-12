@@ -196,45 +196,49 @@ describe("consolidate", () => {
   it("Vérifie qu'on supprime un organisme qui est obsolète (non importé depuis x jours)", async () => {
     const obsoleteDate = DateTime.now().minus({ day: 10 }).toJSDate();
     const recentDate = new Date();
-    await insertOrganisme({
-      siret: "11111111100006",
-      etat_administratif: "fermé",
-      _meta: {
-        date_dernier_import: obsoleteDate,
-      },
-    });
-    await insertOrganisme({
-      siret: "22222222200002",
-      etat_administratif: "fermé",
-      _meta: {
-        date_dernier_import: recentDate,
-      },
-    });
-    await insertOrganisme({
-      siret: "33333333300003",
-      uai: "0751234J",
-      _meta: {
-        date_dernier_import: obsoleteDate,
-      },
-    });
-    await insertOrganisme({
-      siret: "44444444400006",
-      etat_administratif: "actif",
-      _meta: {
-        date_dernier_import: obsoleteDate,
-      },
-    });
+    await Promise.all([
+      insertOrganisme({
+        siret: "11111111100006",
+        etat_administratif: "fermé",
+        _meta: {
+          date_dernier_import: recentDate,
+        },
+      }),
+      insertOrganisme({
+        siret: "22222222200002",
+        etat_administratif: "fermé",
+        _meta: {
+          date_dernier_import: obsoleteDate,
+        },
+      }),
+      insertOrganisme({
+        siret: "33333333300003",
+        etat_administratif: "actif",
+        uai: "0751234J",
+        _meta: {
+          date_dernier_import: obsoleteDate,
+        },
+      }),
+      insertOrganisme({
+        siret: "44444444400003",
+        etat_administratif: "fermé",
+        uai: "0751234J",
+        _meta: {
+          date_dernier_import: obsoleteDate,
+        },
+      }),
+    ]);
 
     const stats = await consolidate();
 
-    assert.ok(!(await dbCollection("organismes").findOne({ siret: "11111111100006" })));
-    assert.ok(await dbCollection("organismes").findOne({ siret: "22222222200002" }));
+    assert.ok(await dbCollection("organismes").findOne({ siret: "11111111100006" }));
+    assert.ok(!(await dbCollection("organismes").findOne({ siret: "22222222200002" })));
     assert.ok(await dbCollection("organismes").findOne({ siret: "33333333300003" }));
-    assert.ok(await dbCollection("organismes").findOne({ siret: "44444444400006" }));
+    assert.ok(!(await dbCollection("organismes").findOne({ siret: "44444444400006" })));
 
     assert.deepStrictEqual(stats, {
       obsolete: {
-        organismes: 1,
+        organismes: 2,
         collecte: 0,
       },
       modifications: {
