@@ -44,7 +44,7 @@ module.exports = {
               sources: arrayOf(string()),
               date_collecte: date(),
             },
-            { required: ["code", "label"] }
+            { required: ["code", "label", "sources", "date_collecte"] }
           )
         ),
         qualiopi: boolean(),
@@ -55,7 +55,7 @@ module.exports = {
               sources: arrayOf(string()),
               date_collecte: date(),
             },
-            { required: ["uai"] }
+            { required: ["uai", "sources", "date_collecte"] }
           )
         ),
         contacts: arrayOf(
@@ -67,7 +67,7 @@ module.exports = {
               date_collecte: date(),
               _extras: object({}, { additionalProperties: true }),
             },
-            { required: ["email", "confirmé", "sources"] }
+            { required: ["email", "confirmé", "sources", "date_collecte"] }
           )
         ),
         relations: arrayOf(
@@ -82,7 +82,7 @@ module.exports = {
               sources: arrayOf(string()),
               date_collecte: date(),
             },
-            { required: ["siret", "referentiel", "sources", "type"] }
+            { required: ["siret", "referentiel", "type", "sources", "date_collecte"] }
           )
         ),
         lieux_de_formation: arrayOf(
@@ -95,7 +95,7 @@ module.exports = {
               sources: arrayOf(string()),
               date_collecte: date(),
             },
-            { required: ["code", "adresse"] }
+            { required: ["code", "adresse", "sources", "date_collecte"] }
           )
         ),
         certifications: arrayOf(
@@ -107,7 +107,7 @@ module.exports = {
               sources: arrayOf(string()),
               date_collecte: date(),
             },
-            { required: ["code", "type"] }
+            { required: ["code", "type", "sources", "date_collecte"] }
           )
         ),
         diplomes: arrayOf(
@@ -120,7 +120,7 @@ module.exports = {
               sources: arrayOf(string()),
               date_collecte: date(),
             },
-            { required: ["code", "type"] }
+            { required: ["code", "type", "sources", "date_collecte"] }
           )
         ),
         _meta: object(
