@@ -4,9 +4,13 @@ const { dbCollection } = require("../common/db/mongodb");
 const { getLatestCollectDate } = require("../common/actions/getLatestCollectDate.js");
 const { getLatestImportDate } = require("../common/actions/getLatestImportDate.js");
 
+function getObsolescenceDate(from) {
+  return DateTime.fromJSDate(from).minus({ day: 7 }).toJSDate();
+}
+
 async function removeObsoleteCollectedData() {
   const latestCollectDate = await getLatestCollectDate();
-  const $obsolete = { $lt: DateTime.fromJSDate(latestCollectDate).minus({ day: 7 }).toJSDate() };
+  const $obsolete = { $lt: getObsolescenceDate(latestCollectDate) };
 
   const { modifiedCount } = await dbCollection("organismes").updateMany(
     {
@@ -30,10 +34,8 @@ async function removeObsoleteCollectedData() {
 
 async function removeObsoleteOrganismes() {
   const importDate = await getLatestImportDate();
-  const obsoleteDate = DateTime.fromJSDate(importDate).minus({ day: 7 }).toJSDate();
-
   const { deletedCount } = await dbCollection("organismes").deleteMany({
-    "_meta.date_dernier_import": { $lt: obsoleteDate },
+    "_meta.date_dernier_import": { $lt: getObsolescenceDate(importDate) },
     "$or": [{ etat_administratif: "fermé" }, { etat_administratif: "actif", uai: { $exists: false } }],
   });
 
