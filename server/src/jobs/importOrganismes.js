@@ -4,11 +4,11 @@ const logger = require("../common/logger").child({ context: "import" });
 const { dbCollection } = require("../common/db/mongodb");
 const { isSiretValid } = require("../common/utils/validationUtils");
 
-function markOrganismeAsSeen(siret, date) {
+function markOrganismeAsImported(siret, date) {
   return dbCollection("organismes").updateOne(
     { siret },
     {
-      $set: { "_meta.date_vue": date },
+      $set: { "_meta.date_dernier_import": date },
     }
   );
 }
@@ -79,7 +79,8 @@ module.exports = async (array) => {
           { upsert: true }
         );
 
-        await markOrganismeAsSeen(siret, importDate);
+        await markOrganismeAsImported(siret, importDate);
+
         if (res.upsertedCount) {
           logger.debug(`Organisme ${siret} créé`);
           stats[from].created += res.upsertedCount;

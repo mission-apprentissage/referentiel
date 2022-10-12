@@ -42,7 +42,7 @@ module.exports = {
               code: string(),
               label: string(),
               sources: arrayOf(string()),
-              date_vue: date(),
+              date_collecte: date(),
             },
             { required: ["code", "label"] }
           )
@@ -53,7 +53,7 @@ module.exports = {
             {
               uai: string(),
               sources: arrayOf(string()),
-              date_vue: date(),
+              date_collecte: date(),
             },
             { required: ["uai"] }
           )
@@ -64,7 +64,7 @@ module.exports = {
               email: string(),
               confirmé: boolean(),
               sources: arrayOf(string()),
-              date_vue: date(),
+              date_collecte: date(),
               _extras: object({}, { additionalProperties: true }),
             },
             { required: ["email", "confirmé", "sources"] }
@@ -80,7 +80,7 @@ module.exports = {
               referentiel: boolean(),
               label: string(),
               sources: arrayOf(string()),
-              date_vue: date(),
+              date_collecte: date(),
             },
             { required: ["siret", "referentiel", "sources", "type"] }
           )
@@ -93,7 +93,7 @@ module.exports = {
               uai: string(),
               adresse: adresseSchema,
               sources: arrayOf(string()),
-              date_vue: date(),
+              date_collecte: date(),
             },
             { required: ["code", "adresse"] }
           )
@@ -105,7 +105,7 @@ module.exports = {
               type: string({ enum: ["rncp"] }),
               label: string(),
               sources: arrayOf(string()),
-              date_vue: date(),
+              date_collecte: date(),
             },
             { required: ["code", "type"] }
           )
@@ -118,7 +118,7 @@ module.exports = {
               niveau: string(),
               label: string(),
               sources: arrayOf(string()),
-              date_vue: date(),
+              date_collecte: date(),
             },
             { required: ["code", "type"] }
           )
@@ -126,7 +126,7 @@ module.exports = {
         _meta: object(
           {
             date_import: date(),
-            date_vue: date(),
+            date_dernier_import: date(),
             date_collecte: date(),
             anomalies: arrayOf(
               object(
@@ -137,9 +137,9 @@ module.exports = {
                   code: string(),
                   details: string(),
                   sources: arrayOf(string()),
-                  date_vue: date(),
+                  date_collecte: date(),
                 },
-                { required: ["key", "job", "sources", "date_vue"] }
+                { required: ["key", "job", "sources", "date_collecte"] }
               )
             ),
           },

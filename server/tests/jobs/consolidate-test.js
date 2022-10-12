@@ -95,7 +95,7 @@ describe("consolidate", () => {
           label: "Organisme de formation",
           referentiel: true,
           sources: ["catalogue"],
-          date_vue: collectDate,
+          date_collecte: collectDate,
         },
         {
           type: "responsable->formateur",
@@ -103,7 +103,7 @@ describe("consolidate", () => {
           label: "Organisme de formation",
           referentiel: true,
           sources: ["catalogue"],
-          date_vue: obsoleteDate,
+          date_collecte: obsoleteDate,
         },
       ],
       _meta: {
@@ -121,7 +121,7 @@ describe("consolidate", () => {
         label: "Organisme de formation",
         referentiel: true,
         sources: ["catalogue"],
-        date_vue: collectDate,
+        date_collecte: collectDate,
       },
     ]);
     assert.deepStrictEqual(stats, {
@@ -146,11 +146,11 @@ describe("consolidate", () => {
           label: "Organisme de formation",
           referentiel: true,
           sources: ["catalogue"],
-          date_vue: collectDate,
+          date_collecte: collectDate,
         },
       ],
       _meta: {
-        date_vue: collectDate,
+        date_collecte: collectDate,
       },
     });
 
@@ -164,7 +164,7 @@ describe("consolidate", () => {
         label: "Organisme de formation",
         referentiel: true,
         sources: ["catalogue"],
-        date_vue: collectDate,
+        date_collecte: collectDate,
       },
     ]);
     assert.deepStrictEqual(stats, {

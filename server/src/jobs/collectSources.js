@@ -34,7 +34,7 @@ function _mergeArray(source, currentArray, newArray, discriminator, options = {}
       ...previous,
       ...element,
       sources: uniq([...(previous.sources || []), source]),
-      date_vue: new Date(),
+      date_collecte: new Date(),
       ...(options.mergeItemProps ? options.mergeItemProps(previous, element) : {}),
     };
   });

@@ -94,7 +94,7 @@ describe("catalogue", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "11111111100006" },
-      { projection: { "relations.date_vue": 0 } }
+      { projection: { "relations.date_collecte": 0 } }
     );
     assert.deepStrictEqual(found.relations, [
       {
@@ -127,7 +127,7 @@ describe("catalogue", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "22222222200002" },
-      { projection: { "relations.date_vue": 0 } }
+      { projection: { "relations.date_collecte": 0 } }
     );
     assert.deepStrictEqual(found.relations, [
       {
@@ -200,7 +200,7 @@ describe("catalogue", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "22222222200002" },
-      { projection: { "diplomes.date_vue": 0 } }
+      { projection: { "diplomes.date_collecte": 0 } }
     );
     assert.deepStrictEqual(found.diplomes, [
       {
@@ -238,7 +238,7 @@ describe("catalogue", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "22222222200002" },
-      { projection: { "diplomes.date_vue": 0 } }
+      { projection: { "diplomes.date_collecte": 0 } }
     );
     assert.deepStrictEqual(found.diplomes, [
       {
@@ -297,7 +297,7 @@ describe("catalogue", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "22222222200002" },
-      { projection: { "certifications.date_vue": 0 } }
+      { projection: { "certifications.date_collecte": 0 } }
     );
     assert.deepStrictEqual(found.certifications, [
       {
@@ -381,7 +381,7 @@ describe("catalogue", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "22222222200002" },
-      { projection: { "lieux_de_formation.date_vue": 0 } }
+      { projection: { "lieux_de_formation.date_collecte": 0 } }
     );
 
     assert.deepStrictEqual(found.lieux_de_formation[0], {
@@ -479,7 +479,7 @@ describe("catalogue", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "22222222200002" },
-      { projection: { "_meta.anomalies.date_vue": 0, "_meta.anomalies.date": 0 } }
+      { projection: { "_meta.anomalies.date_collecte": 0, "_meta.anomalies.date": 0 } }
     );
 
     assert.strictEqual(found.lieux_de_formation.length, 0);
@@ -521,7 +521,7 @@ describe("catalogue", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "22222222200002" },
-      { projection: { "_meta.anomalies.date_vue": 0, "_meta.anomalies.date": 0 } }
+      { projection: { "_meta.anomalies.date_collecte": 0, "_meta.anomalies.date": 0 } }
     );
     assert.strictEqual(found.lieux_de_formation.length, 0);
     assert.deepStrictEqual(found._meta.anomalies, [
@@ -552,7 +552,7 @@ describe("catalogue", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "11111111100006" },
-      { projection: { "contacts.date_vue": 0 } }
+      { projection: { "contacts.date_collecte": 0 } }
     );
     assert.deepStrictEqual(found.contacts, [
       {
@@ -588,7 +588,7 @@ describe("catalogue", () => {
 
     const found = await dbCollection("organismes").findOne(
       { siret: "11111111100006" },
-      { projection: { "contacts.date_vue": 0 } }
+      { projection: { "contacts.date_collecte": 0 } }
     );
     assert.deepStrictEqual(found.contacts, [
       {

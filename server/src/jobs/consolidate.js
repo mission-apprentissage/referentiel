@@ -40,13 +40,13 @@ async function removeObsoleteData() {
     },
     {
       $pull: {
-        uai_potentiels: { date_vue: $obsolete },
-        relations: { date_vue: $obsolete },
-        contacts: { date_vue: $obsolete },
-        diplomes: { date_vue: $obsolete },
-        certifications: { date_vue: $obsolete },
-        lieux_de_formation: { date_vue: $obsolete },
-        reseaux: { date_vue: $obsolete },
+        uai_potentiels: { date_collecte: $obsolete },
+        relations: { date_collecte: $obsolete },
+        contacts: { date_collecte: $obsolete },
+        diplomes: { date_collecte: $obsolete },
+        certifications: { date_collecte: $obsolete },
+        lieux_de_formation: { date_collecte: $obsolete },
+        reseaux: { date_collecte: $obsolete },
       },
     }
   );
