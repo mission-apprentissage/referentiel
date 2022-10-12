@@ -683,4 +683,18 @@ describe("collectSources", () => {
       },
     });
   });
+
+  it("Vérifie qu'on sauvegarde la date de collecte", async () => {
+    await insertOrganisme({ siret: "11111111100006" });
+    const source = createTestSource([
+      {
+        selector: "11111111100006",
+      },
+    ]);
+
+    await collectSources(source);
+
+    const found = await dbCollection("organismes").findOne({});
+    assert.ok(found._meta.date_collecte);
+  });
 });

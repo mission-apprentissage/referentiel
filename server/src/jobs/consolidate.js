@@ -30,6 +30,30 @@ async function validateAllUAI() {
   return stats;
 }
 
+async function removeObsoleteData() {
+  const latestCollectDate = await getLatestCollectDate();
+  const $obsolete = { $lt: DateTime.fromJSDate(latestCollectDate).minus({ day: 7 }).toJSDate() };
+
+  const { modifiedCount } = await dbCollection("organismes").updateMany(
+    {
+      "_meta.date_collecte": { $gte: latestCollectDate },
+    },
+    {
+      $pull: {
+        uai_potentiels: { date_vue: $obsolete },
+        relations: { date_vue: $obsolete },
+        contacts: { date_vue: $obsolete },
+        diplomes: { date_vue: $obsolete },
+        certifications: { date_vue: $obsolete },
+        lieux_de_formation: { date_vue: $obsolete },
+        reseaux: { date_vue: $obsolete },
+      },
+    }
+  );
+
+  return modifiedCount;
+}
+
 async function applyModifications(options = {}) {
   const stats = { total: 0, modifications: 0, unknown: 0, failed: 0 };
   const filters = options.filters || {};
@@ -51,30 +75,6 @@ async function applyModifications(options = {}) {
   }
 
   return stats;
-}
-
-async function removeObsoleteData() {
-  const latestCollectDate = await getLatestCollectDate();
-  const $obsolete = { $lt: DateTime.fromJSDate(latestCollectDate).minus({ day: 7 }).toJSDate() };
-
-  const { modifiedCount } = await dbCollection("organismes").updateMany(
-    {
-      "_meta.date_vue": { $gte: latestCollectDate },
-    },
-    {
-      $pull: {
-        uai_potentiels: { date_vue: $obsolete },
-        relations: { date_vue: $obsolete },
-        contacts: { date_vue: $obsolete },
-        diplomes: { date_vue: $obsolete },
-        certifications: { date_vue: $obsolete },
-        lieux_de_formation: { date_vue: $obsolete },
-        reseaux: { date_vue: $obsolete },
-      },
-    }
-  );
-
-  return modifiedCount;
 }
 
 async function consolidate(options) {

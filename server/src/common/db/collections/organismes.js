@@ -127,6 +127,7 @@ module.exports = {
           {
             date_import: date(),
             date_vue: date(),
+            date_collecte: date(),
             anomalies: arrayOf(
               object(
                 {

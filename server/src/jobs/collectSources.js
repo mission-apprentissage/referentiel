@@ -17,6 +17,15 @@ function buildQuery(selector) {
   return typeof selector === "object" ? selector : { $or: [{ siret: selector }, { uai: selector }] };
 }
 
+function markOrganismeAsCollected(siret, date) {
+  return dbCollection("organismes").updateOne(
+    { siret },
+    {
+      $set: { "_meta.date_collecte": date },
+    }
+  );
+}
+
 function _mergeArray(source, currentArray, newArray, discriminator, options = {}) {
   const updated = newArray.map((element) => {
     const previous = currentArray.find((e) => e[discriminator] === element[discriminator]) || {};
@@ -150,6 +159,7 @@ async function getStreams(sources, filters) {
 
 module.exports = async (array, options = {}) => {
   const sources = Array.isArray(array) ? array : [array];
+  const collectDate = new Date();
   const filters = options.filters || {};
   const stats = createStats(sources);
   const streams = await getStreams(sources, filters);
@@ -211,6 +221,8 @@ module.exports = async (array, options = {}) => {
               }),
             }
           );
+
+          await markOrganismeAsCollected(organisme.siret, collectDate);
 
           const nbModifiedDocuments = res.modifiedCount;
           if (nbModifiedDocuments) {

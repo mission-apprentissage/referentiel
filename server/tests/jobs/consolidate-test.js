@@ -85,7 +85,7 @@ describe("consolidate", () => {
 
   it("Vérifie qu'on supprime les données obsolètes (non mise à jour x jours avant la dernière collecte)", async () => {
     const collectDate = new Date();
-    const obsoleteDate = DateTime.now().minus({ day: 8 }).toJSDate();
+    const obsoleteDate = DateTime.fromJSDate(collectDate).minus({ day: 8 }).toJSDate();
     await insertOrganisme({
       siret: "11111111100006",
       relations: [
@@ -107,7 +107,7 @@ describe("consolidate", () => {
         },
       ],
       _meta: {
-        date_vue: collectDate,
+        date_collecte: collectDate,
       },
     });
 
