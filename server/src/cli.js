@@ -190,37 +190,6 @@ cli
   });
 
 cli
-  .command("burel")
-  .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
-  .description("Permet de générer un fichier pour Christian Burel")
-  .action(({ out }) => {
-    runScript(async () => {
-      const output = out || writeToStdout();
-
-      await oleoduc(
-        dbCollection("organismes")
-          .find({ uai: { $exists: true } })
-          .stream(),
-        transformData(
-          async (organisme) => {
-            const acce = await dbCollection("acce").findOne({ numero_uai: organisme.uai });
-            return {
-              siret: organisme.siret,
-              uai: organisme.uai,
-              raison_sociale: organisme.raison_sociale,
-              code_nature: acce?.nature_uai || "",
-              nature: acce?.nature_uai_libe || "",
-            };
-          },
-          { parallel: 10 }
-        ),
-        transformIntoCSV(),
-        output
-      );
-    });
-  });
-
-cli
   .command("obsoletes")
   .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
   .description("Permet de générer un fichier pour analyser les organismes obsolètes")
