@@ -34,6 +34,7 @@ async function removeObsoleteOrganismes() {
 
   const { deletedCount } = await dbCollection("organismes").deleteMany({
     "uai": { $exists: false },
+    "etat_administratif": "fermé",
     "_meta.date_dernier_import": { $lt: obsoleteDate },
   });
 

@@ -198,12 +198,14 @@ describe("consolidate", () => {
     const recentDate = new Date();
     await insertOrganisme({
       siret: "11111111100006",
+      etat_administratif: "fermé",
       _meta: {
         date_dernier_import: obsoleteDate,
       },
     });
     await insertOrganisme({
       siret: "22222222200002",
+      etat_administratif: "fermé",
       _meta: {
         date_dernier_import: recentDate,
       },
@@ -215,12 +217,20 @@ describe("consolidate", () => {
         date_dernier_import: obsoleteDate,
       },
     });
+    await insertOrganisme({
+      siret: "44444444400006",
+      etat_administratif: "actif",
+      _meta: {
+        date_dernier_import: obsoleteDate,
+      },
+    });
 
     const stats = await consolidate();
 
     assert.ok(!(await dbCollection("organismes").findOne({ siret: "11111111100006" })));
     assert.ok(await dbCollection("organismes").findOne({ siret: "22222222200002" }));
     assert.ok(await dbCollection("organismes").findOne({ siret: "33333333300003" }));
+    assert.ok(await dbCollection("organismes").findOne({ siret: "44444444400006" }));
 
     assert.deepStrictEqual(stats, {
       obsolete: {
