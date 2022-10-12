@@ -18,7 +18,10 @@ describe("acce", () => {
 
     const stats = await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "11111111100006" },
+      { projection: { "contacts.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(found.contacts, [
       {
         email: "robert@formation.fr",

@@ -1,9 +1,15 @@
 const logger = require("../common/logger").child({ context: "consolidate" });
 const { dbCollection } = require("../common/db/mongodb");
 const findUAIProbable = require("../common/actions/findUAIProbable");
+const { addModification } = require("../common/actions/addModification.js");
+const { DateTime } = require("luxon");
+const { getLatestCollectDate } = require("../common/actions/getLatestCollectDate.js");
 
+/**
+ * Permet de validation automatiquement les UAI sans passer par la validation manuelle
+ */
 // eslint-disable-next-line no-unused-vars
-async function validateUAI() {
+async function validateAllUAI() {
   const stats = { total: 0, modifications: 0, unknown: 0, failed: 0 };
   for await (const organisme of dbCollection("organismes").find().stream()) {
     try {
@@ -11,7 +17,7 @@ async function validateUAI() {
       const probable = findUAIProbable(organisme);
 
       if (probable) {
-        await dbCollection("organismes").updateOne({ siret: organisme.siret }, { $set: { uai: probable.uai } });
+        await addModification("consolidation", organisme, { uai: probable.uai });
         stats.modifications++;
       } else {
         stats.unknown++;
@@ -22,6 +28,30 @@ async function validateUAI() {
     }
   }
   return stats;
+}
+
+async function removeObsoleteData() {
+  const latestCollectDate = await getLatestCollectDate();
+  const $obsolete = { $lt: DateTime.fromJSDate(latestCollectDate).minus({ day: 7 }).toJSDate() };
+
+  const { modifiedCount } = await dbCollection("organismes").updateMany(
+    {
+      "_meta.date_collecte": { $gte: latestCollectDate },
+    },
+    {
+      $pull: {
+        uai_potentiels: { date_collecte: $obsolete },
+        relations: { date_collecte: $obsolete },
+        contacts: { date_collecte: $obsolete },
+        diplomes: { date_collecte: $obsolete },
+        certifications: { date_collecte: $obsolete },
+        lieux_de_formation: { date_collecte: $obsolete },
+        reseaux: { date_collecte: $obsolete },
+      },
+    }
+  );
+
+  return modifiedCount;
 }
 
 async function applyModifications(options = {}) {
@@ -49,7 +79,7 @@ async function applyModifications(options = {}) {
 
 async function consolidate(options) {
   const stats = {};
-  //stats.uai = await validateUAI();
+  stats.obsolete = await removeObsoleteData();
   stats.modifications = await applyModifications(options);
   return stats;
 }

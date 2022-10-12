@@ -1,5 +1,4 @@
 const assert = require("assert");
-const { omit } = require("lodash");
 const { createSource } = require("../../../src/jobs/sources/sources");
 const collectSources = require("../../../src/jobs/collectSources");
 const { mockCatalogueApi, mockGeoAddresseApi } = require("../../utils/apiMocks");
@@ -93,7 +92,10 @@ describe("catalogue", () => {
 
     await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "11111111100006" },
+      { projection: { "relations.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(found.relations, [
       {
         siret: "22222222200002",
@@ -123,7 +125,10 @@ describe("catalogue", () => {
 
     await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "22222222200002" });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "relations.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(found.relations, [
       {
         siret: "11111111100006",
@@ -193,7 +198,10 @@ describe("catalogue", () => {
 
     const stats = await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "diplomes.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(found.diplomes, [
       {
         code: "40030001",
@@ -228,7 +236,10 @@ describe("catalogue", () => {
 
     await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "diplomes.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(found.diplomes, [
       {
         code: "40030001",
@@ -284,7 +295,10 @@ describe("catalogue", () => {
 
     const stats = await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "certifications.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(found.certifications, [
       {
         code: "RNCP28662",
@@ -365,7 +379,10 @@ describe("catalogue", () => {
     });
     const stats = await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "lieux_de_formation.date_collecte": 0 } }
+    );
 
     assert.deepStrictEqual(found.lieux_de_formation[0], {
       sources: ["catalogue"],
@@ -460,19 +477,23 @@ describe("catalogue", () => {
 
     const stats = await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "_meta.anomalies.date_collecte": 0, "_meta.anomalies.date": 0 } }
+    );
 
     assert.strictEqual(found.lieux_de_formation.length, 0);
-    assert.strictEqual(found._meta.anomalies.length, 1);
-    assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
-      key: "lieudeformation_31 rue des lilas",
-      type: "lieudeformation_geoloc_impossible",
-      sources: ["catalogue"],
-      job: "collect",
-      details:
-        "Lieu de formation non géolocalisable : 31 rue des lilas. Coordonnées inconnues [2.396444,48.879706] " +
-        "(cause: [GeoAdresseApi] Request failed with status code 400)",
-    });
+    assert.deepStrictEqual(found._meta.anomalies, [
+      {
+        key: "lieudeformation_31 rue des lilas",
+        type: "lieudeformation_geoloc_impossible",
+        sources: ["catalogue"],
+        job: "collect",
+        details:
+          "Lieu de formation non géolocalisable : 31 rue des lilas. Coordonnées inconnues [2.396444,48.879706] " +
+          "(cause: [GeoAdresseApi] Request failed with status code 400)",
+      },
+    ]);
     assert.deepStrictEqual(stats, {
       catalogue: {
         total: 2,
@@ -498,16 +519,20 @@ describe("catalogue", () => {
 
     await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "_meta.anomalies.date_collecte": 0, "_meta.anomalies.date": 0 } }
+    );
     assert.strictEqual(found.lieux_de_formation.length, 0);
-    assert.strictEqual(found._meta.anomalies.length, 1);
-    assert.deepStrictEqual(omit(found._meta.anomalies[0], ["date"]), {
-      key: "lieudeformation_31 rue des lilas",
-      type: "lieudeformation_geoloc_inconnu",
-      sources: ["catalogue"],
-      job: "collect",
-      details: "Lieu de formation inconnu : 31 rue des lilas.",
-    });
+    assert.deepStrictEqual(found._meta.anomalies, [
+      {
+        key: "lieudeformation_31 rue des lilas",
+        type: "lieudeformation_geoloc_inconnu",
+        sources: ["catalogue"],
+        job: "collect",
+        details: "Lieu de formation inconnu : 31 rue des lilas.",
+      },
+    ]);
   });
 
   it("Vérifie qu'on peut collecter des contacts", async () => {
@@ -525,7 +550,10 @@ describe("catalogue", () => {
 
     const stats = await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "11111111100006" },
+      { projection: { "contacts.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(found.contacts, [
       {
         email: "robert@formation.fr",
@@ -558,7 +586,10 @@ describe("catalogue", () => {
 
     const stats = await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "11111111100006" },
+      { projection: { "contacts.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(found.contacts, [
       {
         email: "henri@formation.fr",

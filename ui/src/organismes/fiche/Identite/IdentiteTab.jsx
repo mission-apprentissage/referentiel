@@ -61,7 +61,11 @@ export default function IdentiteTab({ organisme }) {
           <Box direction={"column"} className={"fr-mt-5w"}>
             <Field label={"Enseigne"} value={organisme.enseigne} tooltip={definitions.enseigne} />
             <Field label={"Raison sociale"} value={organisme.raison_sociale} tooltip={definitions.raison_sociale} />
-            <Field label={"Réseaux"} value={organisme.reseaux.join(" ,")} tooltip={definitions.reseau} />
+            <Field
+              label={"Réseaux"}
+              value={organisme.reseaux.map((r) => r.code).join(" ,")}
+              tooltip={definitions.reseau}
+            />
             <Field label={"Adresse"} value={<Adresse organisme={organisme} />} tooltip={definitions.adresse} />
             <Field label={"Région"} value={organisme.adresse?.region?.nom} tooltip={definitions.region} />
             <Field label={"Académie"} value={organisme.adresse?.academie?.nom} tooltip={definitions.academie} />

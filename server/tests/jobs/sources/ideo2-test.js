@@ -21,14 +21,20 @@ describe("ideo2", () => {
 
     await collectSources(source);
 
-    let found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    let found = await dbCollection("organismes").findOne(
+      { siret: "11111111100006" },
+      { projection: { "relations.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(omit(found.relations[0], ["label"]), {
       siret: "22222222200002",
       referentiel: true,
       type: "responsable->formateur",
       sources: ["ideo2"],
     });
-    found = await dbCollection("organismes").findOne({ siret: "22222222200002" }, { _id: 0 });
+    found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "relations.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(omit(found.relations[0], ["label"]), {
       siret: "11111111100006",
       referentiel: true,

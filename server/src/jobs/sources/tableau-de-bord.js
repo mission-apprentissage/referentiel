@@ -1,6 +1,11 @@
 const { compose, transformData, flattenArray } = require("oleoduc");
 const TableauDeBordApi = require("../../common/apis/TableauDeBordApi");
 
+const RESEAU_LABELS = {
+  "cfa ec": "Enseignement catholique",
+  "compagnons-du-devoir": "Compagnons du devoir",
+};
+
 module.exports = (custom = {}) => {
   const name = "tableau-de-bord";
   const api = custom.tableauDeBordApi || new TableauDeBordApi();
@@ -20,7 +25,11 @@ module.exports = (custom = {}) => {
               from: name,
               selector: siret,
               uai_potentiels: [data.uai],
-              reseaux: data.reseaux?.map((r) => r.toLowerCase()) || [],
+              reseaux:
+                data.reseaux?.map((r) => {
+                  const code = r.toLowerCase();
+                  return { code, label: RESEAU_LABELS[code] || code };
+                }) || [],
             };
           });
         }),

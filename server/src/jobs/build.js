@@ -10,7 +10,6 @@ const importCommunes = require("./importCommunes");
 const importAcce = require("./importAcce.js");
 
 async function build(options = {}) {
-  const referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv"];
   const stats = [];
 
   function collectAll(sourceNames, globalOptions = {}) {
@@ -22,27 +21,20 @@ async function build(options = {}) {
     await clearCollection("cache");
   }
 
-  await Promise.all([importAcce(), importCFD(), importDatagouv(), importCommunes()]).then(
-    ([acce, cfd, datagouv, communes]) => {
-      return stats.push({ imports: { acce, cfd, datagouv, communes } });
-    }
-  );
+  if (!options.skipImport) {
+    await Promise.all([importAcce(), importCFD(), importDatagouv(), importCommunes()]).then(
+      ([acce, cfd, datagouv, communes]) => {
+        return stats.push({ imports: { acce, cfd, datagouv, communes } });
+      }
+    );
+  }
 
+  const referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv"];
   const sources = referentiels.map((name) => createSource(name));
   await importOrganismes(sources).then((res) => stats.push({ importOrganismes: res }));
 
-  await collectAll([
-    "deca",
-    "catalogue-etablissements",
-    "tableau-de-bord",
-    "sifa-ramsese",
-    "refea",
-    "onisep",
-    "onisep-structure",
-    "ideo2",
-    "datagouv",
-  ]);
-
+  await collectAll(["deca", "catalogue-etablissements", "tableau-de-bord", "sifa-ramsese", "refea"]);
+  await collectAll(["onisep", "onisep-structure", "ideo2", "datagouv"]);
   await collectAll(["sirene", "catalogue"], {
     //Permet de partager le rate limiting pour toutes les sources
     geoAdresseApi: new GeoAdresseApi(),
