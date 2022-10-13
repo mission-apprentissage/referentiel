@@ -4,6 +4,15 @@ const logger = require("../common/logger").child({ context: "import" });
 const { dbCollection } = require("../common/db/mongodb");
 const { isSiretValid } = require("../common/utils/validationUtils");
 
+function markOrganismeAsImported(siret, date) {
+  return dbCollection("organismes").updateOne(
+    { siret },
+    {
+      $set: { "_meta.date_dernier_import": date },
+    }
+  );
+}
+
 function createStats(sources) {
   return sources.reduce((acc, source) => {
     return {
@@ -32,6 +41,7 @@ module.exports = async (array) => {
   const sources = castArray(array);
   const streams = await getStreams(sources);
   const stats = createStats(sources);
+  const importDate = new Date();
 
   await oleoduc(
     mergeStreams(streams),
@@ -59,7 +69,7 @@ module.exports = async (array) => {
               "reseaux": [],
               "diplomes": [],
               "certifications": [],
-              "_meta.date_import": new Date(),
+              "_meta.date_import": importDate,
               "_meta.anomalies": [],
             },
             $addToSet: {
@@ -68,6 +78,8 @@ module.exports = async (array) => {
           },
           { upsert: true }
         );
+
+        await markOrganismeAsImported(siret, importDate);
 
         if (res.upsertedCount) {
           logger.debug(`Organisme ${siret} créé`);

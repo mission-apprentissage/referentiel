@@ -36,13 +36,24 @@ module.exports = {
           { required: ["code", "label"] }
         ),
         referentiels: arrayOf(string()),
-        reseaux: arrayOf(string()),
+        reseaux: arrayOf(
+          object(
+            {
+              code: string(),
+              label: string(),
+              sources: arrayOf(string()),
+              date_collecte: date(),
+            },
+            { required: ["code", "label"] }
+          )
+        ),
         qualiopi: boolean(),
         uai_potentiels: arrayOf(
           object(
             {
               uai: string(),
               sources: arrayOf(string()),
+              date_collecte: date(),
             },
             { required: ["uai"] }
           )
@@ -53,6 +64,7 @@ module.exports = {
               email: string(),
               confirmé: boolean(),
               sources: arrayOf(string()),
+              date_collecte: date(),
               _extras: object({}, { additionalProperties: true }),
             },
             { required: ["email", "confirmé", "sources"] }
@@ -68,6 +80,7 @@ module.exports = {
               referentiel: boolean(),
               label: string(),
               sources: arrayOf(string()),
+              date_collecte: date(),
             },
             { required: ["siret", "referentiel", "sources", "type"] }
           )
@@ -80,6 +93,7 @@ module.exports = {
               uai: string(),
               adresse: adresseSchema,
               sources: arrayOf(string()),
+              date_collecte: date(),
             },
             { required: ["code", "adresse"] }
           )
@@ -91,6 +105,7 @@ module.exports = {
               type: string({ enum: ["rncp"] }),
               label: string(),
               sources: arrayOf(string()),
+              date_collecte: date(),
             },
             { required: ["code", "type"] }
           )
@@ -103,6 +118,7 @@ module.exports = {
               niveau: string(),
               label: string(),
               sources: arrayOf(string()),
+              date_collecte: date(),
             },
             { required: ["code", "type"] }
           )
@@ -110,18 +126,20 @@ module.exports = {
         _meta: object(
           {
             date_import: date(),
+            date_dernier_import: date(),
+            date_collecte: date(),
             anomalies: arrayOf(
               object(
                 {
                   key: string(),
                   type: string(),
                   job: string(),
-                  sources: arrayOf(string()),
-                  date: date(),
                   code: string(),
                   details: string(),
+                  sources: arrayOf(string()),
+                  date_collecte: date(),
                 },
-                { required: ["key", "job", "sources", "date"] }
+                { required: ["key", "job", "sources", "date_collecte"] }
               )
             ),
           },

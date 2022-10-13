@@ -15,7 +15,10 @@ describe("deca", () => {
 
     const stats = await collectSources(source);
 
-    const found = await dbCollection("organismes").findOne({ siret: "11111111100006" }, { _id: 0 });
+    const found = await dbCollection("organismes").findOne(
+      { siret: "11111111100006" },
+      { projection: { "uai_potentiels.date_collecte": 0 } }
+    );
     assert.deepStrictEqual(found.uai_potentiels, [
       {
         sources: ["deca"],
