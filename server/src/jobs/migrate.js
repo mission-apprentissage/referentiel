@@ -1,66 +1,27 @@
 const { migrateMongodb, dbCollection } = require("../common/db/mongodb.js");
-const { DateTime } = require("luxon");
-const { oleoduc, writeData } = require("oleoduc");
+const { createSource } = require("./sources/sources.js");
+const importOrganismes = require("./importOrganismes.js");
+const consolidate = require("./consolidate.js");
 
-const VERSION = 15;
+const VERSION = 16;
 
 async function migrate(options = {}) {
-  const twoWeeksAgo = DateTime.now().minus({ day: 15 }).toJSDate();
-
-  async function addDateMaj(path) {
-    const { modifiedCount } = await dbCollection("organismes").updateMany(
-      { [`${path}.0`]: { $exists: true } },
-      {
-        $set: {
-          reseaux: [],
-          [`${path}.$[].date_collecte`]: twoWeeksAgo,
-        },
-      }
-    );
-    return modifiedCount;
-  }
-
-  async function updateAnomalies() {
-    let modifiedCount = 0;
-
-    await oleoduc(
-      dbCollection("organismes")
-        .find({ "_meta.anomalies": { $exists: true } })
-        .stream(),
-      writeData(async (organisme) => {
-        const res = await dbCollection("organismes").updateOne(
-          { _id: organisme._id },
-          {
-            $set: {
-              "reseaux": [],
-              "_meta.anomalies": organisme._meta.anomalies.map(({ date, ...rest }) => {
-                return {
-                  ...rest,
-                  date_collecte: date,
-                };
-              }),
-            },
-          }
-        );
-        modifiedCount += res.modifiedCount;
-      })
-    );
-
-    return modifiedCount;
-  }
-
   return migrateMongodb(
     VERSION,
     async () => {
+      const dernierImport = await dbCollection("organismes").updateMany({}, [
+        { $set: { "_meta.date_dernier_import": "$_meta.date_import" } },
+      ]);
+
+      const sources = ["catalogue-etablissements", "sifa-ramsese", "datagouv"].map((name) => createSource(name));
+      const stats = {
+        imports: await importOrganismes(sources),
+        consolidate: await consolidate(),
+      };
+
       return {
-        anomalies: await updateAnomalies(),
-        diplomes: await addDateMaj("diplomes"),
-        uai_potentiels: await addDateMaj("uai_potentiels"),
-        contacts: await addDateMaj("contacts"),
-        relations: await addDateMaj("relations"),
-        lieux_de_formation: await addDateMaj("lieux_de_formation"),
-        certifications: await addDateMaj("certifications"),
-        reset_reseaux: (await dbCollection("organismes").updateMany({}, { $set: { reseaux: [] } })).modifiedCount,
+        dernier_import: dernierImport,
+        ...stats,
       };
     },
     options

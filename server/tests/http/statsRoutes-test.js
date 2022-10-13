@@ -142,6 +142,7 @@ describe("statsRoutes", () => {
           {
             sources: ["dummy"],
             uai: "0751234J",
+            date_collecte: new Date(),
           },
         ],
         adresse: {
