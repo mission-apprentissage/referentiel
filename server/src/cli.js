@@ -12,14 +12,11 @@ const importOrganismes = require("./jobs/importOrganismes");
 const build = require("./jobs/build");
 const migrate = require("./jobs/migrate");
 const consolidate = require("./jobs/consolidate");
-const { oleoduc, writeToStdout, transformData, transformIntoCSV } = require("oleoduc");
+const { oleoduc, writeToStdout } = require("oleoduc");
 const generateMagicLinks = require("./jobs/generateMagicLinks");
 const exportOrganismes = require("./jobs/exportOrganismes");
 const importCommunes = require("./jobs/importCommunes");
 const importAcce = require("./jobs/importAcce");
-const { dbCollection } = require("./common/db/mongodb.js");
-const { DateTime } = require("luxon");
-const { getLatestImportDate } = require("./common/actions/getLatestImportDate.js");
 
 function asArray(v) {
   return v.split(",");
@@ -186,40 +183,6 @@ cli
       return {
         uai: `${code}${computeChecksum(code)}`.toUpperCase(),
       };
-    });
-  });
-
-cli
-  .command("obsoletes")
-  .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
-  .description("Permet de générer un fichier pour analyser les organismes obsolètes")
-  .action(({ out }) => {
-    runScript(async () => {
-      const output = out || writeToStdout();
-      const latestImportDate = await getLatestImportDate();
-
-      await oleoduc(
-        dbCollection("organismes")
-          .find({
-            "_meta.date_dernier_import": {
-              $lt: DateTime.fromJSDate(latestImportDate).minus({ day: 7 }).toJSDate(),
-            },
-          })
-          .stream(),
-        transformData(
-          (organisme) => {
-            return {
-              siret: organisme.siret,
-              uai: organisme.uai,
-              raison_sociale: organisme.raison_sociale,
-              etat_administratif: organisme.etat_administratif,
-            };
-          },
-          { parallel: 10 }
-        ),
-        transformIntoCSV(),
-        output
-      );
     });
   });
 
