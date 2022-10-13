@@ -85,6 +85,7 @@ describe("collectSources", () => {
       uai_potentiels: [
         {
           sources: ["dummy"],
+          date_collecte: new Date(),
           uai: "0111111Y",
         },
       ],
@@ -118,8 +119,9 @@ describe("collectSources", () => {
       siret: "11111111100006",
       uai_potentiels: [
         {
-          sources: ["other"],
           uai: "0111111Y",
+          sources: ["other"],
+          date_collecte: new Date(),
         },
       ],
     });
@@ -336,6 +338,7 @@ describe("collectSources", () => {
         {
           email: "jacques@dupont.fr",
           sources: ["other"],
+          date_collecte: new Date(),
           confirmé: false,
         },
       ],
@@ -360,6 +363,7 @@ describe("collectSources", () => {
         {
           email: "jacques@dupont.fr",
           sources: ["dummy"],
+          date_collecte: new Date(),
           confirmé: false,
         },
       ],
@@ -403,7 +407,16 @@ describe("collectSources", () => {
   it("Vérifie qu'on ne duplique pas les diplomes", async () => {
     await insertOrganisme({
       siret: "11111111100006",
-      diplomes: [{ code: "13531445", type: "cfd", niveau: "135", label: "MASTER", sources: ["other"] }],
+      diplomes: [
+        {
+          code: "13531445",
+          type: "cfd",
+          niveau: "135",
+          label: "MASTER",
+          sources: ["other"],
+          date_collecte: new Date(),
+        },
+      ],
     });
     const source = createTestSource([
       {
@@ -445,7 +458,15 @@ describe("collectSources", () => {
   it("Vérifie qu'on ne duplique pas les certifications", async () => {
     await insertOrganisme({
       siret: "11111111100006",
-      certifications: [{ code: "RNCP29746", type: "rncp", label: "SOCIOLOGIE", sources: ["other"] }],
+      certifications: [
+        {
+          code: "RNCP29746",
+          type: "rncp",
+          label: "SOCIOLOGIE",
+          sources: ["other"],
+          date_collecte: new Date(),
+        },
+      ],
     });
     const source = createTestSource([
       {
@@ -517,6 +538,7 @@ describe("collectSources", () => {
           label: "test",
           type: "formateur->responsable",
           sources: ["other"],
+          date_collecte: new Date(),
         },
       ],
     });
@@ -570,7 +592,14 @@ describe("collectSources", () => {
   it("Vérifie qu'on ne duplique pas les reseaux", async () => {
     await insertOrganisme({
       siret: "11111111100006",
-      reseaux: [{ code: "reseau-1", label: "Reseau 1" }],
+      reseaux: [
+        {
+          code: "reseau-1",
+          label: "Reseau 1",
+          sources: ["dummy"],
+          date_collecte: new Date(),
+        },
+      ],
     });
     const source = createTestSource([
       {

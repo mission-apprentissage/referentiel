@@ -18,6 +18,7 @@ describe("organismesRoutes", () => {
       _meta: {
         anomalies: [],
         date_import: new Date("2021-02-10T16:39:13.064Z"),
+        date_dernier_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -71,6 +72,7 @@ describe("organismesRoutes", () => {
           _meta: {
             anomalies: [],
             date_import: "2021-02-10T16:39:13.064Z",
+            date_dernier_import: "2021-02-10T16:39:13.064Z",
             nouveau: false,
           },
         },
@@ -228,10 +230,12 @@ describe("organismesRoutes", () => {
         {
           sources: ["sifa-ramsese"],
           uai: "0751234J",
+          date_collecte: new Date(),
         },
         {
           sources: ["other"],
           uai: "0751234X",
+          date_collecte: new Date(),
         },
       ],
     });
@@ -250,6 +254,7 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
+          date_collecte: new Date(),
         },
       ],
     });
@@ -268,8 +273,9 @@ describe("organismesRoutes", () => {
       siret: "11111111100006",
       uai_potentiels: [
         {
-          sources: ["dummy"],
           uai: "0751234J",
+          sources: ["dummy"],
+          date_collecte: new Date(),
         },
       ],
     });
@@ -277,8 +283,9 @@ describe("organismesRoutes", () => {
       siret: "22222222200002",
       uai_potentiels: [
         {
-          sources: ["dummy"],
           uai: "0751234X",
+          sources: ["dummy"],
+          date_collecte: new Date(),
         },
       ],
     });
@@ -300,6 +307,7 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
+          date_collecte: new Date(),
         },
       ],
     });
@@ -320,6 +328,7 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
+          date_collecte: new Date(),
         },
       ],
     });
@@ -342,6 +351,7 @@ describe("organismesRoutes", () => {
           siret: "33333333300003",
           label: "Organisme de formation",
           sources: ["aSource"],
+          date_collecte: new Date(),
           referentiel: false,
         },
       ],
@@ -365,6 +375,7 @@ describe("organismesRoutes", () => {
           siret: "33333333300003",
           label: "Organisme de formation",
           sources: ["aSource"],
+          date_collecte: new Date(),
           referentiel: false,
         },
       ],
@@ -377,6 +388,7 @@ describe("organismesRoutes", () => {
           siret: "44444444400004",
           label: "Organisme de formation",
           sources: ["aSource"],
+          date_collecte: new Date(),
           referentiel: false,
         },
       ],
@@ -401,6 +413,7 @@ describe("organismesRoutes", () => {
           siret: "33333333300003",
           label: "Organisme de formation",
           sources: ["aSource"],
+          date_collecte: new Date(),
           referentiel: false,
         },
       ],
@@ -424,6 +437,7 @@ describe("organismesRoutes", () => {
           siret: "33333333300003",
           label: "Organisme de formation",
           sources: ["aSource"],
+          date_collecte: new Date(),
           referentiel: false,
         },
       ],
@@ -968,6 +982,7 @@ describe("organismesRoutes", () => {
       _meta: {
         anomalies: [],
         date_import: new Date("2021-02-10T16:39:13.064Z"),
+        date_dernier_import: new Date("2021-02-10T16:39:13.064Z"),
       },
     });
 
@@ -1019,6 +1034,7 @@ describe("organismesRoutes", () => {
       _meta: {
         anomalies: [],
         date_import: "2021-02-10T16:39:13.064Z",
+        date_dernier_import: "2021-02-10T16:39:13.064Z",
         nouveau: false,
       },
     });
@@ -1082,7 +1098,7 @@ describe("organismesRoutes", () => {
     deepStrictEqual(response.data.siret, "11111111100001");
     deepStrictEqual(response.data.uai, "0751234J");
     deepStrictEqual(
-      omitDeep(response.data, () => ["date_import"]),
+      omitDeep(response.data, () => ["date_import", "date_dernier_import"]),
       {
         siret: "11111111100001",
         uai: "0751234J",
@@ -1296,10 +1312,12 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
+          date_collecte: new Date(),
         },
         {
           sources: ["sifa-ramsese"],
           uai: "0751234X",
+          date_collecte: new Date(),
         },
       ],
       _meta: {
@@ -1327,10 +1345,12 @@ describe("organismesRoutes", () => {
         {
           sources: ["dummy"],
           uai: "0751234J",
+          date_collecte: new Date(),
         },
         {
           sources: ["sifa-ramsese"],
           uai: "0751234X",
+          date_collecte: new Date(),
         },
       ],
       _meta: {
