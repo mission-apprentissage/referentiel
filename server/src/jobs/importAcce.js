@@ -60,6 +60,7 @@ const NATURES = {
   "GRETA": "710",
   "Institut d'admininistration des entreprises": "544",
   "Institut d'études politiques": "554",
+  "Institut externe d'un institut catholique": "562",
   "Institut médico-éducatif": "240",
   "Institut universitaire de technologie": "542",
   "Institut universitaire professionnalisé": "541",
