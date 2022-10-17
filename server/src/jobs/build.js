@@ -33,12 +33,11 @@ async function build(options = {}) {
   const sources = referentiels.map((name) => createSource(name));
   await importOrganismes(sources).then((res) => stats.push({ importOrganismes: res }));
 
+  const geoAdresseApi = new GeoAdresseApi(); //Permet de partager le rate limiting pour toutes les sources
   await collectAll(["deca", "catalogue-etablissements", "tableau-de-bord", "sifa-ramsese", "refea"]);
   await collectAll(["onisep", "onisep-structure", "ideo2", "datagouv"]);
-  await collectAll(["sirene", "catalogue"], {
-    //Permet de partager le rate limiting pour toutes les sources
-    geoAdresseApi: new GeoAdresseApi(),
-  });
+  await collectAll(["sirene"], { geoAdresseApi });
+  await collectAll(["catalogue"], { geoAdresseApi });
 
   await consolidate().then((res) => stats.push({ consolidate: res }));
 
