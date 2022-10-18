@@ -73,5 +73,8 @@ export default function useForm(options = {}) {
     values,
     pristine,
     errors,
+    reset: () => {
+      setValues(options.initialValues || {});
+    },
   };
 }
