@@ -57,6 +57,7 @@ export function UAISelectorModal({ modal, organisme, action }) {
       ._put(`/api/v1/organismes/${organisme.siret}/setUAI`, { uai })
       .then((updated) => {
         modal.close();
+        form.reset();
         onChange(updated, {
           message: (
             <Alert modifiers={"success"}>
