@@ -135,10 +135,6 @@ cli
     });
   });
 
-cli.command("experimentation", "Commandes qui concernent les expérimentations avec les régions tests", {
-  executableFile: "jobs/experimentation/experimentationCli.js",
-});
-
 cli
   .command("computeStats")
   .option("--save", "Sauvegarde les résultats dans les stats")
