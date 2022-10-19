@@ -610,29 +610,19 @@ module.exports = {
   mockTableauDeBordApi(callback) {
     const client = createNock(TableauDeBordApi.baseApiUrl);
     callback(client, {
-      cfas(custom = {}) {
+      siretUaiReseaux(custom = {}) {
         return (
           JSON.stringify(
             merge(
               {},
               {
-                cfas: [
+                organismes: [
                   {
+                    siret: "11111111100001",
                     uai: "0751234J",
-                    sirets: ["11111111100001"],
-                    nom: "Organisme de formation",
                     reseaux: ["cfa-reseau"],
-                    region_nom: "Normandie",
-                    region_num: "28",
-                    metiers: ["Vente en magasin : produits non alimentaires (vêtements, équipement, livres, …)"],
                   },
                 ],
-                pagination: {
-                  page: 1,
-                  resultats_par_page: 1,
-                  nombre_de_page: 1,
-                  total: 1,
-                },
               },
               custom
             )

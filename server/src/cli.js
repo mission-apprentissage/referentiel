@@ -1,6 +1,5 @@
 require("dotenv").config();
 const { program: cli } = require("commander");
-const { computeChecksum } = require("./common/utils/validationUtils");
 const { createReadStream, createWriteStream } = require("fs");
 const runScript = require("./jobs/runScript");
 const { createSource } = require("./jobs/sources/sources");
@@ -17,6 +16,7 @@ const generateMagicLinks = require("./jobs/generateMagicLinks");
 const exportOrganismes = require("./jobs/exportOrganismes");
 const importCommunes = require("./jobs/importCommunes");
 const importAcce = require("./jobs/importAcce");
+const exportReseaux = require("./jobs/exportReseaux.js");
 
 function asArray(v) {
   return v.split(",");
@@ -122,20 +122,6 @@ cli
   });
 
 cli
-  .command("exportOrganismes")
-  .description("Exporte la liste des organismes")
-  .option("--filter <filter>", "Filtre au format json", JSON.parse)
-  .option("--limit <limit>", "Nombre maximum d'éléments à exporter", parseInt)
-  .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
-  .action(({ filter, limit, out }) => {
-    runScript(async () => {
-      const options = { filter, limit };
-      const stream = await exportOrganismes(options);
-      return oleoduc(stream, out || writeToStdout());
-    });
-  });
-
-cli
   .command("computeStats")
   .option("--save", "Sauvegarde les résultats dans les stats")
   .action((options) => {
@@ -172,13 +158,30 @@ cli
   });
 
 cli
-  .command("uai <code>")
-  .description("Génère un uai valide")
-  .action((code) => {
+  .command("exportOrganismes")
+  .description("Exporte la liste des organismes")
+  .option("--filter <filter>", "Filtre au format json", JSON.parse)
+  .option("--limit <limit>", "Nombre maximum d'éléments à exporter", parseInt)
+  .option("--out <out>", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
+  .action(({ filter, limit, out }) => {
     runScript(() => {
-      return {
-        uai: `${code}${computeChecksum(code)}`.toUpperCase(),
-      };
+      const options = { filter, limit };
+      const stream = exportOrganismes(options);
+      return oleoduc(stream, out || writeToStdout());
+    });
+  });
+
+cli
+  .command("exportReseaux")
+  .argument("<reseaux>", "Le code du réseau", asArray)
+  .requiredOption("--natures <natures>", "Natures des organismes", asArray)
+  .option("--relations <relations>", "Le type de relations recherchées", asArray, [])
+  .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
+  .description("Permet de générer un fichier pour analyser les organismes obsolètes")
+  .action((reseaux, { natures, relations, out }) => {
+    runScript(() => {
+      const stream = exportReseaux(natures, reseaux, relations);
+      return oleoduc(stream, out || writeToStdout());
     });
   });
 
