@@ -2,7 +2,7 @@ const { compose, transformData } = require("oleoduc");
 const Pick = require("stream-json/filters/Pick");
 const { parser: jsonParser } = require("stream-json");
 const { streamArray } = require("stream-json/streamers/StreamArray");
-const { PassThrough, Transform } = require("stream");
+const { PassThrough, Transform, Readable } = require("stream");
 
 function transformStream(transform, options = {}) {
   return new Transform({
@@ -55,9 +55,17 @@ function streamNestedJsonArray(arrayPropertyName) {
   );
 }
 
+function streamString(value) {
+  const stream = new Readable();
+  stream.push(value);
+  stream.push(null);
+  return stream;
+}
+
 module.exports = {
   transformStream,
   streamNestedJsonArray,
   streamJsonArray,
   concatStreams,
+  streamString,
 };

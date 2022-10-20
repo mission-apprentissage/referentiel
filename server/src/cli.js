@@ -1,7 +1,6 @@
 require("dotenv").config();
 const { program: cli } = require("commander");
 const { createReadStream, createWriteStream } = require("fs");
-const { Readable } = require("stream");
 const runScript = require("./jobs/runScript");
 const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/collectSources");
@@ -17,7 +16,8 @@ const generateMagicLinks = require("./jobs/generateMagicLinks");
 const importCommunes = require("./jobs/importCommunes");
 const importAcce = require("./jobs/importAcce");
 const { exportOrganismes } = require("./jobs/exportOrganismes");
-const { exportReseaux, generateGraph } = require("./jobs/exportReseaux.js");
+const { exportReseauxAsCsv, exportReseauxAsGraph } = require("./jobs/exportReseaux.js");
+const { streamString } = require("./common/utils/streamUtils");
 
 function asArray(v) {
   return v.split(",");
@@ -175,30 +175,22 @@ cli
 cli
   .command("exportReseaux")
   .argument("<reseaux>", "Le code du réseau", asArray)
-  .requiredOption("--natures <natures>", "Natures des organismes", asArray)
-  .option("--relations <relations>", "Le type de relations recherchées", asArray, [])
-  .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
-  .description("Permet de générer un fichier pour analyser les organismes obsolètes")
-  .action((reseaux, { natures, relations, out }) => {
-    runScript(() => {
-      const stream = exportReseaux(natures, reseaux, relations);
-      return oleoduc(stream, out || writeToStdout());
-    });
-  });
-
-cli
-  .command("exportReseauxGraph")
-  .option("--reseaux [reseaux]", "Les reseaux recherchés", asArray)
+  .option("--natures <natures>", "Natures des organismes", asArray)
+  .option("--relations <relations>", "Le type de relations recherchées", asArray)
   .option("--academies [academies]", "Les académies recherchés", asArray)
+  .option("--regions [regions]", "Les régions recherchés", asArray)
+  .option("--graph", "Exporte les réseaux sous forme de graphe")
   .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
   .description("Permet de générer un fichier pour analyser les organismes obsolètes")
-  .action(({ reseaux, academies, out }) => {
+  .action((reseaux, { out, graph, ...rest }) => {
     runScript(async () => {
-      const graph = await generateGraph({ reseaux, academies });
-
-      const stream = new Readable();
-      stream.push(graph);
-      stream.push(null);
+      let stream;
+      if (graph) {
+        const graph = await exportReseauxAsGraph({ reseaux, ...rest });
+        stream = streamString(graph);
+      } else {
+        stream = exportReseauxAsCsv({ reseaux, ...rest });
+      }
 
       return oleoduc(stream, out || writeToStdout());
     });

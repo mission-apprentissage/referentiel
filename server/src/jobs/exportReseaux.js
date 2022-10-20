@@ -1,6 +1,16 @@
 const { compose, transformData, mergeStreams, transformIntoCSV } = require("oleoduc");
 const { dbCollection } = require("../common/db/mongodb");
 
+function buildQuery(filters) {
+  const { natures, reseaux, academies, regions, relations } = filters;
+  return {
+    ...(reseaux ? { "reseaux.code": { $in: reseaux } } : {}),
+    ...(academies ? { "adresse.academie.code": { $in: academies } } : {}),
+    ...(regions ? { "adresse.region.code": { $in: regions } } : {}),
+    ...(natures ? { nature: { $in: natures } } : {}),
+    ...(relations ? { "relations.type": { $in: relations } } : {}),
+  };
+}
 function streamOrganismesSansRelations(query) {
   return compose(
     dbCollection("organismes")
@@ -83,16 +93,18 @@ function streamOrganismesAvecRelations(query, relations) {
   );
 }
 
-async function generateGraph(options = {}) {
-  const organismes = await dbCollection("organismes")
-    .find(
-      {
-        ...(options.reseaux ? { "reseaux.code": { $in: options.reseaux } } : {}),
-        ...(options.academies ? { "adresse.academie.code": { $in: options.academies } } : {}),
-      },
-      { projection: { siret: 1, uai: 1, relations: 1, raison_sociale: 1, nature: 1 } }
-    )
-    .toArray();
+function exportReseauxAsCsv(options = {}) {
+  const { relations, ...filters } = options;
+  const query = buildQuery(filters);
+
+  return compose(
+    mergeStreams([streamOrganismesSansRelations(query), streamOrganismesAvecRelations(query, relations)]),
+    transformIntoCSV()
+  );
+}
+
+async function exportReseauxAsGraph(options = {}) {
+  const query = buildQuery(options);
 
   function getOrganismeLabel(organisme) {
     const raisonSociale = organisme.raison_sociale.replace(/"/g, "");
@@ -124,6 +136,10 @@ async function generateGraph(options = {}) {
     }
   }
 
+  const organismes = await dbCollection("organismes")
+    .find(query, { projection: { siret: 1, uai: 1, relations: 1, raison_sociale: 1, nature: 1 } })
+    .toArray();
+
   return `
 digraph D {
  
@@ -149,16 +165,4 @@ digraph D {
 `;
 }
 
-function exportReseaux(natures, reseaux, relations) {
-  const query = {
-    ...(reseaux ? { "reseaux.code": { $in: reseaux } } : {}),
-    nature: { $in: natures },
-  };
-
-  return compose(
-    mergeStreams([streamOrganismesSansRelations(query), streamOrganismesAvecRelations(query, relations)]),
-    transformIntoCSV()
-  );
-}
-
-module.exports = { exportReseaux, generateGraph };
+module.exports = { exportReseauxAsCsv, exportReseauxAsGraph };
