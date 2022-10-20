@@ -83,6 +83,72 @@ function streamOrganismesAvecRelations(query, relations) {
   );
 }
 
+async function generateGraph(options = {}) {
+  const organismes = await dbCollection("organismes")
+    .find(
+      {
+        ...(options.reseaux ? { "reseaux.code": { $in: options.reseaux } } : {}),
+        ...(options.academies ? { "adresse.academie.code": { $in: options.academies } } : {}),
+      },
+      { projection: { siret: 1, uai: 1, relations: 1, raison_sociale: 1, nature: 1 } }
+    )
+    .toArray();
+
+  function getOrganismeLabel(organisme) {
+    const raisonSociale = organisme.raison_sociale.replace(/"/g, "");
+    const uai = organisme.uai || "ND";
+    return `${organisme.siret}|{${uai}|${raisonSociale}|${organisme.nature}}`;
+  }
+
+  function getOrganismeColor(organisme) {
+    const nature = organisme.nature;
+    if (nature === "responsable") {
+      return "blue";
+    } else if (nature === "responsable_formateur") {
+      return "purple";
+    } else {
+      return "green";
+    }
+  }
+
+  function getRelationLine(relation) {
+    const type = relation.type;
+    if (type === "formateur->responsable") {
+      return "bold";
+    } else if (type === "responsable->formateur") {
+      return "dotted";
+    } else if (type === "entreprise") {
+      return "dashed";
+    } else {
+      return "dotted";
+    }
+  }
+
+  return `
+digraph D {
+ 
+    node [shape=hexagon color=red]
+ 
+    ${organismes
+      .map((o) => {
+        const href = `https://referentiel.apprentissage.onisep.fr/organismes/${o.siret}`;
+        const label = getOrganismeLabel(o);
+        const color = getOrganismeColor(o);
+        return `${o.siret} [shape=record color="${color}" label="${label}" href="${href}"]`;
+      })
+      .join("\n")}
+    
+    ${organismes
+      .flatMap((o) => {
+        return o.relations.map((r) => {
+          return `${o.siret} -> ${r.siret} [style=${getRelationLine(r)}]`;
+        });
+      })
+      .join("\n")}
+}  
+`;
+}
+
 function exportReseaux(natures, reseaux, relations) {
   const query = {
     ...(reseaux ? { "reseaux.code": { $in: reseaux } } : {}),
@@ -95,4 +161,4 @@ function exportReseaux(natures, reseaux, relations) {
   );
 }
 
-module.exports = exportReseaux;
+module.exports = { exportReseaux, generateGraph };

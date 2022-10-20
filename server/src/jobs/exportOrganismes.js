@@ -16,4 +16,4 @@ function exportOrganismes(options = {}) {
   );
 }
 
-module.exports = exportOrganismes;
+module.exports = { exportOrganismes };

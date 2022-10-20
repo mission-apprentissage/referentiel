@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { program: cli } = require("commander");
 const { createReadStream, createWriteStream } = require("fs");
+const { Readable } = require("stream");
 const runScript = require("./jobs/runScript");
 const { createSource } = require("./jobs/sources/sources");
 const collectSources = require("./jobs/collectSources");
@@ -13,10 +14,10 @@ const migrate = require("./jobs/migrate");
 const consolidate = require("./jobs/consolidate");
 const { oleoduc, writeToStdout } = require("oleoduc");
 const generateMagicLinks = require("./jobs/generateMagicLinks");
-const exportOrganismes = require("./jobs/exportOrganismes");
 const importCommunes = require("./jobs/importCommunes");
 const importAcce = require("./jobs/importAcce");
-const exportReseaux = require("./jobs/exportReseaux.js");
+const { exportOrganismes } = require("./jobs/exportOrganismes");
+const { exportReseaux, generateGraph } = require("./jobs/exportReseaux.js");
 
 function asArray(v) {
   return v.split(",");
@@ -181,6 +182,24 @@ cli
   .action((reseaux, { natures, relations, out }) => {
     runScript(() => {
       const stream = exportReseaux(natures, reseaux, relations);
+      return oleoduc(stream, out || writeToStdout());
+    });
+  });
+
+cli
+  .command("exportReseauxGraph")
+  .option("--reseaux [reseaux]", "Les reseaux recherchés", asArray)
+  .option("--academies [academies]", "Les académies recherchés", asArray)
+  .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
+  .description("Permet de générer un fichier pour analyser les organismes obsolètes")
+  .action(({ reseaux, academies, out }) => {
+    runScript(async () => {
+      const graph = await generateGraph({ reseaux, academies });
+
+      const stream = new Readable();
+      stream.push(graph);
+      stream.push(null);
+
       return oleoduc(stream, out || writeToStdout());
     });
   });
