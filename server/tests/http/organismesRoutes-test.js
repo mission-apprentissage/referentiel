@@ -747,6 +747,48 @@ describe("organismesRoutes", () => {
     ok(response.data.organismes.find((o) => o.siret === "333333333000003"));
   });
 
+  it("Vérifie qu'on peut rechercher des organismes à partir d'un reseau", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100001",
+      nature: "responsable",
+      reseaux: [{ code: "reseau-1", label: "Reseau 1", sources: ["dummy"], date_collecte: new Date() }],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      nature: "formateur",
+    });
+
+    const response = await httpClient.get("/api/v1/organismes?reseaux=reseau-1");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 1);
+    strictEqual(response.data.organismes[0].siret, "11111111100001");
+  });
+
+  it("Vérifie qu'on peut rechercher des organismes à partir de plusieurs reseaux", async () => {
+    const { httpClient } = await startServer();
+    await insertOrganisme({
+      siret: "11111111100001",
+      reseaux: [{ code: "reseau-1", label: "Reseau 1", sources: ["dummy"], date_collecte: new Date() }],
+    });
+    await insertOrganisme({
+      siret: "22222222200002",
+      reseaux: [{ code: "reseau-2", label: "Reseau 2", sources: ["dummy"], date_collecte: new Date() }],
+    });
+    await insertOrganisme({
+      siret: "333333333000003",
+      nature: "formateur",
+    });
+
+    const response = await httpClient.get("/api/v1/organismes?reseaux=reseau-1,reseau-2");
+
+    strictEqual(response.status, 200);
+    strictEqual(response.data.organismes.length, 2);
+    ok(response.data.organismes.find((o) => o.siret === "11111111100001"));
+    ok(response.data.organismes.find((o) => o.siret === "22222222200002"));
+  });
+
   it("Vérifie qu'on peut rechercher des organismes avec un référentiel dans lequel ils apparaissent", async () => {
     const { httpClient } = await startServer();
     await insertOrganisme({
