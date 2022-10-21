@@ -1,4 +1,4 @@
-FROM node:18-bullseye
+FROM node:18.4.0-bullseye
 
 #Install and cache node_modules
 COPY package.json yarn.lock /app/
