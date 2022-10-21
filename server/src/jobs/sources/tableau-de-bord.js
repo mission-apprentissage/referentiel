@@ -1,5 +1,6 @@
-const { compose, transformData, flattenArray } = require("oleoduc");
+const { compose, transformData } = require("oleoduc");
 const TableauDeBordApi = require("../../common/apis/TableauDeBordApi");
+const { uniq } = require("lodash");
 
 const RESEAU_LABELS = {
   "cfa ec": "Enseignement catholique",
@@ -14,26 +15,26 @@ module.exports = (custom = {}) => {
     name,
     async stream() {
       return compose(
-        await api.streamCfas({}, { limit: 10000 }),
-        transformData((data) => {
-          if (!data.sirets) {
-            return null;
-          }
-
-          return data.sirets.map((siret) => {
+        await api.streamReseaux(),
+        transformData(
+          ({ siret, uai, reseaux }) => {
             return {
               from: name,
               selector: siret,
-              uai_potentiels: [data.uai],
-              reseaux:
-                data.reseaux?.map((r) => {
-                  const code = r.toLowerCase();
-                  return { code, label: RESEAU_LABELS[code] || code };
-                }) || [],
+              ...(uai ? { uai_potentiels: [uai] } : {}),
+              ...(reseaux
+                ? {
+                    reseaux:
+                      uniq(reseaux).map((r) => {
+                        const code = r.toLowerCase();
+                        return { code, label: RESEAU_LABELS[code] || code };
+                      }) || [],
+                  }
+                : {}),
             };
-          });
-        }),
-        flattenArray()
+          },
+          { parallel: 10 }
+        )
       );
     },
   };

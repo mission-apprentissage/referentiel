@@ -1,7 +1,6 @@
 const RateLimitedApi = require("./RateLimitedApi");
 const { fetchStream } = require("../utils/httpUtils");
 const { compose } = require("oleoduc");
-const convertQueryIntoParams = require("./utils/convertQueryIntoParams");
 const { streamNestedJsonArray } = require("../utils/streamUtils");
 
 class TableauDeBordApi extends RateLimitedApi {
@@ -13,12 +12,10 @@ class TableauDeBordApi extends RateLimitedApi {
     return "https://cfas.apprentissage.beta.gouv.fr/api";
   }
 
-  async streamCfas(query, options) {
-    const params = convertQueryIntoParams(query, options);
+  async streamReseaux() {
+    const response = await fetchStream(`${TableauDeBordApi.baseApiUrl}/referentiel/siret-uai-reseaux`);
 
-    const response = await fetchStream(`${TableauDeBordApi.baseApiUrl}/cfas?${params}`);
-
-    return compose(response, streamNestedJsonArray("cfas"));
+    return compose(response, streamNestedJsonArray("organismes"));
   }
 }
 

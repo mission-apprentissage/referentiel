@@ -2776,6 +2776,10 @@ nock@13.2.4:
     lodash.set "^4.3.2"
     propagate "^2.0.0"
 
+node-graphviz@JosephusPaye/node-graphviz:
+  version "0.1.0"
+  resolved "https://codeload.github.com/JosephusPaye/node-graphviz/tar.gz/edf5ce1ffc9e7e4375a76e0f92d93758a2e9534a"
+
 node-preload@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/node-preload/-/node-preload-0.2.1.tgz#c03043bb327f417a18fee7ab7ee57b408a144301"

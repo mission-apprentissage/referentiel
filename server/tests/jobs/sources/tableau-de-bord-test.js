@@ -10,20 +10,16 @@ describe("tableau-de-bord", () => {
     await insertOrganisme({ siret: "11111111100006" });
     mockTableauDeBordApi((client, responses) => {
       client
-        .get((uri) => uri.includes("cfas"))
+        .get((uri) => uri.includes("siret-uai-reseaux"))
         .query(() => true)
         .reply(
           200,
-          responses.cfas({
-            cfas: [
+          responses.siretUaiReseaux({
+            organismes: [
               {
-                sirets: ["11111111100006"],
+                siret: "11111111100006",
                 uai: "0751234J",
-                nom: "Organisme de formation",
                 reseaux: ["cfa-reseau"],
-                region_nom: "Normandie",
-                region_num: "28",
-                metiers: ["Vente en magasin : produits non alimentaires (vêtements, équipement, livres, …)"],
               },
             ],
           })
@@ -48,47 +44,6 @@ describe("tableau-de-bord", () => {
       "tableau-de-bord": {
         total: 1,
         updated: 1,
-        unknown: 0,
-        anomalies: 0,
-        failed: 0,
-      },
-    });
-  });
-
-  it("Vérifie qu'on peut collecter des informations pour plusieurs organismes", async () => {
-    await insertOrganisme({ siret: "11111111100006" });
-    await insertOrganisme({ siret: "22222222200002" });
-    mockTableauDeBordApi((client, responses) => {
-      client
-        .get((uri) => uri.includes("cfas"))
-        .query(() => true)
-        .reply(
-          200,
-          responses.cfas({
-            cfas: [
-              {
-                sirets: ["11111111100006", "22222222200002"],
-                reseaux: ["cfa ec"],
-              },
-            ],
-          })
-        );
-    });
-
-    const source = await createSource("tableau-de-bord");
-    const stats = await collectSources(source);
-
-    const found = await dbCollection("organismes").findOne(
-      { siret: "11111111100006" },
-      { projection: { "reseaux.date_collecte": 0 } }
-    );
-    assert.deepStrictEqual(found.reseaux, [
-      { code: "cfa ec", label: "Enseignement catholique", sources: ["tableau-de-bord"] },
-    ]);
-    assert.deepStrictEqual(stats, {
-      "tableau-de-bord": {
-        total: 2,
-        updated: 2,
         unknown: 0,
         anomalies: 0,
         failed: 0,

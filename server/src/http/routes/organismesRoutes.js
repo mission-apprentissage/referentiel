@@ -66,6 +66,7 @@ module.exports = () => {
       regions = [],
       academies = [],
       natures = [],
+      reseaux = [],
       referentiels = [],
       text,
       anomalies,
@@ -89,6 +90,7 @@ module.exports = () => {
           : { numero_declaration_activite: nda }
         : {}),
       ...(hasElements(natures) ? { nature: { $in: natures } } : {}),
+      ...(hasElements(reseaux) ? { "reseaux.code": { $in: reseaux } } : {}),
       ...(hasElements(referentiels) ? convertCriteriaIntoQuery("referentiels", referentiels) : {}),
       ...(hasElements(departements) ? { "adresse.departement.code": { $in: departements } } : {}),
       ...(hasElements(regions) ? { "adresse.region.code": { $in: regions } } : {}),
@@ -140,6 +142,7 @@ module.exports = () => {
             .default(null),
           numero_declaration_activite: Joi.alternatives().try(Joi.boolean(), Joi.string()).default(null),
           natures: arrayOf(Joi.string().valid("responsable", "formateur", "responsable_formateur", "inconnue")),
+          reseaux: arrayOf(Joi.string()),
           etat_administratif: Joi.string().valid("actif", "fermé"),
           regions: arrayOf(Joi.string().valid(...getRegions().map((r) => r.code))),
           academies: Joi.alternatives()
