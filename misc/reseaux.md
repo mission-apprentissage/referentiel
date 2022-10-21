@@ -34,8 +34,26 @@ yarn --silent pipe exportReseaux nomDuReseau --regions codeInseeRegion --graph |
 
 *Pour information `yarn --silent pipe` permet de rediriger la sortie standard vers une autre commande*
 
-La commande `exportReseaux` peut-être appelée avec d'autres paramètres pour plus d'informations
+Exemples pour exporter le reseau "cfa ec" pour toutes les régions
 
 ```shell
-yarn cli exportReseaux --help
+yarn --silent pipe exportReseaux "cfa ec" --regions "01" --graph | fdp -Tsvg -o "relations-reseaux-Guadeloupe-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "02" --graph | fdp -Tsvg -o "relations-reseaux-Martinique-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "03" --graph | fdp -Tsvg -o "relations-reseaux-Guyane-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "04" --graph | fdp -Tsvg -o "relations-reseaux-La Réunion-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "06" --graph | fdp -Tsvg -o "relations-reseaux-Mayotte-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "11" --graph | fdp -Tsvg -o "relations-reseaux-Île-de-France-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "24" --graph | fdp -Tsvg -o "relations-reseaux-Centre-Val de Loire-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "27" --graph | fdp -Tsvg -o "relations-reseaux-Bourgogne-Franche-Comté-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "28" --graph | fdp -Tsvg -o "relations-reseaux-Normandie-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "32" --graph | fdp -Tsvg -o "relations-reseaux-Hauts-de-France-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "44" --graph | fdp -Tsvg -o "relations-reseaux-Grand Est-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "52" --graph | fdp -Tsvg -o "relations-reseaux-Pays de la Loire-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "53" --graph | fdp -Tsvg -o "relations-reseaux-Bretagne-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "75" --graph | fdp -Tsvg -o "relations-reseaux-Nouvelle-Aquitaine-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "76" --graph | fdp -Tsvg -o "relations-reseaux-Occitanie-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "84" --graph | fdp -Tsvg -o "relations-reseaux-Auvergne-Rhône-Alpes-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "93" --graph | fdp -Tsvg -o "relations-reseaux-Provence-Alpes-Côte d'Azur-$(date +'%Y-%m-%d_%H%M').svg"
+yarn --silent pipe exportReseaux "cfa ec" --regions "94" --graph | fdp -Tsvg -o "relations-reseaux-Corse-$(date +'%Y-%m-%d_%H%M').svg"
 ```
+
