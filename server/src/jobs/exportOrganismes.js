@@ -2,7 +2,7 @@ const { compose } = require("oleoduc");
 const { dbCollection } = require("../common/db/mongodb");
 const transformOrganisme = require("../common/actions/transformOrganisme");
 
-async function exportOrganismes(options = {}) {
+function exportOrganismes(options = {}) {
   const filter = options.filter || {};
   const limit = options.limit || Number.MAX_SAFE_INTEGER;
 
@@ -16,4 +16,4 @@ async function exportOrganismes(options = {}) {
   );
 }
 
-module.exports = exportOrganismes;
+module.exports = { exportOrganismes };

@@ -70,7 +70,7 @@ function clearCollection(name) {
 
 async function configureIndexes(options = {}) {
   await ensureInitialization();
-  await Promise.all(
+  return Promise.all(
     Object.values(collections).map(async (collection) => {
       const shouldDropIndexes = options.dropIndexes || false;
       const dbCol = dbCollection(collection.name);
@@ -84,12 +84,11 @@ async function configureIndexes(options = {}) {
         return;
       }
 
-      const indexes = collection.indexes();
-      await Promise.all(
-        indexes.map(([index, options]) => {
-          return dbCol.createIndex(index, options);
-        })
-      );
+      const indexes = collection.indexes().map(([index, options]) => {
+        return dbCol.createIndex(index, options);
+      });
+
+      return Promise.all(indexes);
     })
   );
 }
