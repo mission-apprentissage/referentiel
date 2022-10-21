@@ -13,7 +13,9 @@ class TableauDeBordApi extends RateLimitedApi {
   }
 
   async streamReseaux() {
-    const response = await fetchStream(`${TableauDeBordApi.baseApiUrl}/referentiel/siret-uai-reseaux`);
+    const response = await fetchStream(`${TableauDeBordApi.baseApiUrl}/referentiel/siret-uai-reseaux`, {
+      insecureHTTPParser: true,
+    });
 
     return compose(response, streamNestedJsonArray("organismes"));
   }
