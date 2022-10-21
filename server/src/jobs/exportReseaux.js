@@ -94,7 +94,7 @@ function streamOrganismesAvecRelations(query, relations) {
 }
 
 function exportReseauxAsCsv(options = {}) {
-  const { relations, ...filters } = options;
+  const { relations = [], ...filters } = options;
   const query = buildQuery(filters);
 
   return compose(
