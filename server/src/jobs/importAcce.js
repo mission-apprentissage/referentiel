@@ -85,6 +85,8 @@ const NATURES = {
   "Unité de formation et de recherche (hors santé)": "539",
   "Université": "523",
   "Université de technologie": "551",
+  "Service commun de formation continue": "528",
+  "Parties délocalisées des autres établissements du ministère en charge de l'enseignement supérieur": "507",
 };
 
 const ETATS = {
