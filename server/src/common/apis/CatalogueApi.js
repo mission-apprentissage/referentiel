@@ -10,7 +10,7 @@ class CatalogueApi extends RateLimitedApi {
   }
 
   static get baseApiUrl() {
-    return "https://catalogue.apprentissage.beta.gouv.fr/api";
+    return "https://catalogue-apprentissage.intercariforef.org/api";
   }
 
   streamFormations(query, options) {
