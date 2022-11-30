@@ -41,6 +41,7 @@ const NATURES = {
   "Ecole secondaire spécialisée (second cycle)": "312",
   "Ecole technico-professionnelle de production industrielle": "480",
   "Ecole technico-professionnelle des services": "440",
+  "Ecole professionnelle spécialisée dans l'accueil d'élèves en situation de handicap": "332",
   "Etablissement composé uniquement de STS et/ou de CPGE": "400",
   "Etablissement de formation aux métiers du sport": "730",
   "Etablissement de formation continue": "700",
@@ -87,6 +88,7 @@ const NATURES = {
   "Université de technologie": "551",
   "Service commun de formation continue": "528",
   "Parties délocalisées des autres établissements du ministère en charge de l'enseignement supérieur": "507",
+  "Observatoire des sciences de l'univers": "547",
 };
 
 const ETATS = {
