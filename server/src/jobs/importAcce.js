@@ -107,6 +107,7 @@ async function importAcce(options = {}) {
     updated: 0,
     failed: 0,
   };
+  logger.info("Import ACCE...");
 
   await oleoduc(
     stream,
