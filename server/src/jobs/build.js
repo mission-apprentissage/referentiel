@@ -22,11 +22,10 @@ async function build(options = {}) {
   }
 
   if (!options.skipImport) {
-    await Promise.all([importAcce(), importCFD(), importDatagouv(), importCommunes()]).then(
-      ([acce, cfd, datagouv, communes]) => {
-        return stats.push({ imports: { acce, cfd, datagouv, communes } });
-      }
-    );
+    await importAcce().then((res) => stats.push({ importAcce: res }));
+    await Promise.all([importCFD(), importDatagouv(), importCommunes()]).then(([cfd, datagouv, communes]) => {
+      return stats.push({ imports: { cfd, datagouv, communes } });
+    });
   }
 
   const referentiels = options.referentiels || ["catalogue-etablissements", "sifa-ramsese", "datagouv"];
