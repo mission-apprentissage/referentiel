@@ -49,7 +49,7 @@ module.exports = async (array) => {
       stats[from].total++;
       if (!isSiretValid(siret)) {
         stats[from].invalid++;
-        logger.warn(`Impossible d'importer le siret '${siret}' car il est invalide.`);
+        logger.warn(`[${from}] Impossible d'importer le siret '${siret}' car il est invalide.`);
         return;
       }
 
