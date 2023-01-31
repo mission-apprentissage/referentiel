@@ -2,6 +2,7 @@ const RateLimitedApi = require("./RateLimitedApi");
 const { fetchStream } = require("../utils/httpUtils");
 const { compose } = require("oleoduc");
 const { streamNestedJsonArray } = require("../utils/streamUtils");
+const config = require("../../config");
 
 class TableauDeBordApi extends RateLimitedApi {
   constructor(options = {}) {
@@ -13,8 +14,12 @@ class TableauDeBordApi extends RateLimitedApi {
   }
 
   async streamReseaux() {
-    const response = await fetchStream(`${TableauDeBordApi.baseApiUrl}/referentiel/siret-uai-reseaux`, {
+    const response = await fetchStream(`${TableauDeBordApi.baseApiUrl}/organismes`, {
+      method: "POST",
       insecureHTTPParser: true,
+      data: {
+        apiKey: config.api.tableauDeBordApiKey,
+      },
     });
 
     return compose(response, streamNestedJsonArray("organismes"));
