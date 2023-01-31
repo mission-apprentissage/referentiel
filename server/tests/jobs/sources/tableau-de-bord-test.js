@@ -10,11 +10,11 @@ describe("tableau-de-bord", () => {
     await insertOrganisme({ siret: "11111111100006" });
     mockTableauDeBordApi((client, responses) => {
       client
-        .get((uri) => uri.includes("organismes"))
+        .post((uri) => uri.includes("organismes"))
         .query(() => true)
         .reply(
           200,
-          responses.organismes({
+          responses.siretUaiReseaux({
             organismes: [
               {
                 siret: "11111111100006",
