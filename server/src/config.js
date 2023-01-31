@@ -42,5 +42,6 @@ module.exports = {
       username: env.get("REFERENTIEL_API_ACCE_USERNAME").required().asString(),
       password: env.get("REFERENTIEL_API_ACCE_PASSWORD").required().asString(),
     },
+    tableauDeBordApiKey: env.get("TABLEAU_DE_BORD_API_KEY").required().asString(),
   },
 };
