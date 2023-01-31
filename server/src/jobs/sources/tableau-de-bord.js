@@ -3,8 +3,8 @@ const TableauDeBordApi = require("../../common/apis/TableauDeBordApi");
 const { uniq } = require("lodash");
 
 const RESEAU_LABELS = {
-  "cfa ec": "Enseignement catholique",
-  "compagnons-du-devoir": "Compagnons du devoir",
+  cfa_ec: "Enseignement catholique",
+  COMP_DU_DEVOIR: "Compagnons du devoir",
 };
 
 module.exports = (custom = {}) => {
