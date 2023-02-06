@@ -7,7 +7,6 @@ const consolidate = require("./consolidate");
 const { clearCollection } = require("../common/db/mongodb");
 const importDatagouv = require("./importDatagouv");
 const importCommunes = require("./importCommunes");
-const importAcce = require("./importAcce.js");
 
 async function build(options = {}) {
   const stats = [];
@@ -22,7 +21,6 @@ async function build(options = {}) {
   }
 
   if (!options.skipImport) {
-    await importAcce().then((res) => stats.push({ importAcce: res }));
     await Promise.all([importCFD(), importDatagouv(), importCommunes()]).then(([cfd, datagouv, communes]) => {
       return stats.push({ imports: { cfd, datagouv, communes } });
     });
