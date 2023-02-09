@@ -13,8 +13,8 @@ class TableauDeBordApi extends RateLimitedApi {
     return "https://cfas.apprentissage.beta.gouv.fr/api";
   }
 
-  async streamReseaux() {
-    const response = await fetchStream(`${TableauDeBordApi.baseApiUrl}/organismes`, {
+  async streamReseaux(limit = 100000) {
+    const response = await fetchStream(`${TableauDeBordApi.baseApiUrl}/organismes?limit=${limit}`, {
       method: "POST",
       insecureHTTPParser: true,
       data: {
