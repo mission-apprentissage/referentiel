@@ -31,7 +31,7 @@ async function build(options = {}) {
   await importOrganismes(sources).then((res) => stats.push({ importOrganismes: res }));
 
   const geoAdresseApi = new GeoAdresseApi(); //Permet de partager le rate limiting pour toutes les sources
-  await collectAll(["deca", "catalogue-etablissements", "tableau-de-bord", "sifa-ramsese", "refea"]);
+  await collectAll(["deca", "catalogue-etablissements", "sifa-ramsese", "refea"]);
   await collectAll(["onisep", "onisep-structure", "ideo2", "datagouv"]);
   await collectAll(["sirene"], { geoAdresseApi });
   await collectAll(["catalogue"], { geoAdresseApi });
