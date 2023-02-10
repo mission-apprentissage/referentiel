@@ -18,10 +18,26 @@ const importAcce = require("./jobs/importAcce");
 const { exportOrganismes } = require("./jobs/exportOrganismes");
 const { exportReseauxAsCsv, exportReseauxAsGraph } = require("./jobs/exportReseaux.js");
 const { streamString } = require("./common/utils/streamUtils");
+const clearOrganismesReseaux = require("./jobs/clearReseaux.js");
 
 function asArray(v) {
   return v.split(",");
 }
+
+/**
+ * Script d'import des réseaux issus du tableau de bord
+ * En amont va supprimer tous réseaux des organismes pour s'assurer que les réseaux sont bien remis à [] avant import
+ */
+cli
+  .command("import:tableau-de-bord")
+  .description("Import de tous les réseaux des organismes depuis le tableau de bord")
+  .action(() => {
+    runScript(async () => {
+      await clearOrganismesReseaux();
+      const tdbSource = createSource("tableau-de-bord");
+      return collectSources(tdbSource);
+    });
+  });
 
 cli
   .command("build")
