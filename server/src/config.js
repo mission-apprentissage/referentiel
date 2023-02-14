@@ -43,5 +43,6 @@ module.exports = {
       password: env.get("REFERENTIEL_API_ACCE_PASSWORD").required().asString(),
     },
     tableauDeBordApiKey: env.get("TABLEAU_DE_BORD_API_KEY").required().asString(),
+    tableauDeBordApiUrl: env.get("TABLEAU_DE_BORD_PUBLIC_URL").required().asString(),
   },
 };
