@@ -10,7 +10,7 @@ class TableauDeBordApi extends RateLimitedApi {
   }
 
   static get baseApiUrl() {
-    return "https://cfas.apprentissage.beta.gouv.fr/api";
+    return config.api.tableauDeBordApiUrl;
   }
 
   async streamReseaux(limit = 100000) {
