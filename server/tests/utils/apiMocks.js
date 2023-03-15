@@ -17,6 +17,10 @@ function createNock(baseUrl) {
 module.exports = {
   mockCatalogueApi(callback) {
     const client = createNock(CatalogueApi.baseApiUrl);
+
+    // Mock login cookie
+    client.post((uri) => uri.includes("v1/auth/login")).reply(200, "OK", { "Set-Cookie": "sampleCookie" });
+
     callback(client, {
       formations(array = [{}]) {
         return array.map((custom) => {
