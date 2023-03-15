@@ -42,6 +42,10 @@ module.exports = {
       username: env.get("REFERENTIEL_API_ACCE_USERNAME").required().asString(),
       password: env.get("REFERENTIEL_API_ACCE_PASSWORD").required().asString(),
     },
+    catalogue: {
+      username: env.get("CATALOGUE_API_USERNAME").required().asString(),
+      password: env.get("CATALOGUE_API_PASSWORD").required().asString(),
+    },
     tableauDeBordApiKey: env.get("TABLEAU_DE_BORD_API_KEY").required().asString(),
     tableauDeBordApiUrl: env.get("TABLEAU_DE_BORD_PUBLIC_URL").required().asString(),
   },
