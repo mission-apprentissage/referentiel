@@ -39,6 +39,19 @@ cli
     });
   });
 
+/**
+ * Script de collecte des données issues du catalogue
+ */
+cli
+  .command("collect:catalogue")
+  .description("Collecte des données du catalogue")
+  .action(() => {
+    runScript(async () => {
+      const catalogueSource = createSource("catalogue");
+      return collectSources(catalogueSource);
+    });
+  });
+
 cli
   .command("build")
   .description("Construit le référentiel")
