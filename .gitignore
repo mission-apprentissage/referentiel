@@ -9,3 +9,6 @@ node_modules/
 .local/
 lib/
 .coverage/
+
+# User-specific launch
+.vscode/launch.json
