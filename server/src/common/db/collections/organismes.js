@@ -91,6 +91,7 @@ module.exports = {
               code: string(),
               siret: string(),
               uai: string(),
+              uai_fiable: boolean(),
               adresse: adresseSchema,
               sources: arrayOf(string()),
               date_collecte: date(),

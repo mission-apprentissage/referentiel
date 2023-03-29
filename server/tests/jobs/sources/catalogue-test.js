@@ -4,6 +4,7 @@ const collectSources = require("../../../src/jobs/collectSources");
 const { mockCatalogueApi, mockGeoAddresseApi } = require("../../utils/apiMocks");
 const { insertOrganisme, insertCFD, insertDatagouv } = require("../../utils/fakeData");
 const { dbCollection } = require("../../../src/common/db/mongodb");
+const { CATALOG_COMMON_STATUS } = require("../../../src/common/catalogStatuts.js");
 
 function mockApis(custom = {}) {
   mockCatalogueApi((client, responses) => {
@@ -347,7 +348,7 @@ describe("catalogue", () => {
     });
   });
 
-  it("Vérifie qu'on peut collecter des lieux de formation", async () => {
+  it("Vérifie qu'on peut collecter des lieux de formation non fiables", async () => {
     await insertOrganisme({ siret: "22222222200002" });
     const source = createSource("catalogue");
     mockApis({
@@ -357,6 +358,8 @@ describe("catalogue", () => {
           lieu_formation_geo_coordonnees: "48.879706,2.396444",
           uai_formation: "0751234J",
           lieu_formation_siret: "33333333300008",
+          parcoursup_statut: CATALOG_COMMON_STATUS.HORS_PERIMETRE,
+          affelnet_statut: CATALOG_COMMON_STATUS.HORS_PERIMETRE,
         },
       ],
       reverse: {
@@ -387,6 +390,327 @@ describe("catalogue", () => {
     assert.deepStrictEqual(found.lieux_de_formation[0], {
       sources: ["catalogue"],
       uai: "0751234J",
+      uai_fiable: false,
+      siret: "33333333300008",
+      code: "2.396444_48.879706",
+      adresse: {
+        label: "32 Rue des lilas 75019 Paris",
+        code_postal: "75019",
+        code_insee: "75119",
+        localite: "Paris",
+        geojson: {
+          type: "Feature",
+          geometry: { coordinates: [2.396444, 48.879706], type: "Point" },
+          properties: { score: 0.88, source: "geo-adresse-api" },
+        },
+        departement: {
+          code: "75",
+          nom: "Paris",
+        },
+        region: {
+          code: "11",
+          nom: "Île-de-France",
+        },
+        academie: {
+          code: "01",
+          nom: "Paris",
+        },
+      },
+    });
+    assert.deepStrictEqual(stats, {
+      catalogue: {
+        total: 2,
+        updated: 1,
+        unknown: 1,
+        anomalies: 0,
+        failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on peut collecter des lieux de formation fiables si la formation est publié sur parcoursup", async () => {
+    await insertOrganisme({ siret: "22222222200002" });
+    const source = createSource("catalogue");
+    mockApis({
+      formations: [
+        {
+          etablissement_formateur_siret: "22222222200002",
+          lieu_formation_geo_coordonnees: "48.879706,2.396444",
+          uai_formation: "0751234J",
+          lieu_formation_siret: "33333333300008",
+          parcoursup_statut: CATALOG_COMMON_STATUS.PUBLIE,
+          affelnet_statut: CATALOG_COMMON_STATUS.HORS_PERIMETRE,
+        },
+      ],
+      reverse: {
+        features: [
+          {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [2.396444, 48.879706],
+            },
+            properties: {
+              label: "32 Rue des lilas 75019 Paris",
+              score: 0.88,
+              name: "32 Rue des Lilas",
+              city: "Paris",
+            },
+          },
+        ],
+      },
+    });
+    const stats = await collectSources(source);
+
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "lieux_de_formation.date_collecte": 0 } }
+    );
+
+    assert.deepStrictEqual(found.lieux_de_formation[0], {
+      sources: ["catalogue"],
+      uai: "0751234J",
+      uai_fiable: true,
+      siret: "33333333300008",
+      code: "2.396444_48.879706",
+      adresse: {
+        label: "32 Rue des lilas 75019 Paris",
+        code_postal: "75019",
+        code_insee: "75119",
+        localite: "Paris",
+        geojson: {
+          type: "Feature",
+          geometry: { coordinates: [2.396444, 48.879706], type: "Point" },
+          properties: { score: 0.88, source: "geo-adresse-api" },
+        },
+        departement: {
+          code: "75",
+          nom: "Paris",
+        },
+        region: {
+          code: "11",
+          nom: "Île-de-France",
+        },
+        academie: {
+          code: "01",
+          nom: "Paris",
+        },
+      },
+    });
+    assert.deepStrictEqual(stats, {
+      catalogue: {
+        total: 2,
+        updated: 1,
+        unknown: 1,
+        anomalies: 0,
+        failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on peut collecter des lieux de formation fiables si la formation est en attente sur parcoursup", async () => {
+    await insertOrganisme({ siret: "22222222200002" });
+    const source = createSource("catalogue");
+    mockApis({
+      formations: [
+        {
+          etablissement_formateur_siret: "22222222200002",
+          lieu_formation_geo_coordonnees: "48.879706,2.396444",
+          uai_formation: "0751234J",
+          lieu_formation_siret: "33333333300008",
+          parcoursup_statut: CATALOG_COMMON_STATUS.EN_ATTENTE,
+          affelnet_statut: CATALOG_COMMON_STATUS.HORS_PERIMETRE,
+        },
+      ],
+      reverse: {
+        features: [
+          {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [2.396444, 48.879706],
+            },
+            properties: {
+              label: "32 Rue des lilas 75019 Paris",
+              score: 0.88,
+              name: "32 Rue des Lilas",
+              city: "Paris",
+            },
+          },
+        ],
+      },
+    });
+    const stats = await collectSources(source);
+
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "lieux_de_formation.date_collecte": 0 } }
+    );
+
+    assert.deepStrictEqual(found.lieux_de_formation[0], {
+      sources: ["catalogue"],
+      uai: "0751234J",
+      uai_fiable: true,
+      siret: "33333333300008",
+      code: "2.396444_48.879706",
+      adresse: {
+        label: "32 Rue des lilas 75019 Paris",
+        code_postal: "75019",
+        code_insee: "75119",
+        localite: "Paris",
+        geojson: {
+          type: "Feature",
+          geometry: { coordinates: [2.396444, 48.879706], type: "Point" },
+          properties: { score: 0.88, source: "geo-adresse-api" },
+        },
+        departement: {
+          code: "75",
+          nom: "Paris",
+        },
+        region: {
+          code: "11",
+          nom: "Île-de-France",
+        },
+        academie: {
+          code: "01",
+          nom: "Paris",
+        },
+      },
+    });
+    assert.deepStrictEqual(stats, {
+      catalogue: {
+        total: 2,
+        updated: 1,
+        unknown: 1,
+        anomalies: 0,
+        failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on peut collecter des lieux de formation fiables si la formation est publié sur affelnet", async () => {
+    await insertOrganisme({ siret: "22222222200002" });
+    const source = createSource("catalogue");
+    mockApis({
+      formations: [
+        {
+          etablissement_formateur_siret: "22222222200002",
+          lieu_formation_geo_coordonnees: "48.879706,2.396444",
+          uai_formation: "0751234J",
+          lieu_formation_siret: "33333333300008",
+          parcoursup_statut: CATALOG_COMMON_STATUS.HORS_PERIMETRE,
+          affelnet_statut: CATALOG_COMMON_STATUS.PUBLIE,
+        },
+      ],
+      reverse: {
+        features: [
+          {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [2.396444, 48.879706],
+            },
+            properties: {
+              label: "32 Rue des lilas 75019 Paris",
+              score: 0.88,
+              name: "32 Rue des Lilas",
+              city: "Paris",
+            },
+          },
+        ],
+      },
+    });
+    const stats = await collectSources(source);
+
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "lieux_de_formation.date_collecte": 0 } }
+    );
+
+    assert.deepStrictEqual(found.lieux_de_formation[0], {
+      sources: ["catalogue"],
+      uai: "0751234J",
+      uai_fiable: true,
+      siret: "33333333300008",
+      code: "2.396444_48.879706",
+      adresse: {
+        label: "32 Rue des lilas 75019 Paris",
+        code_postal: "75019",
+        code_insee: "75119",
+        localite: "Paris",
+        geojson: {
+          type: "Feature",
+          geometry: { coordinates: [2.396444, 48.879706], type: "Point" },
+          properties: { score: 0.88, source: "geo-adresse-api" },
+        },
+        departement: {
+          code: "75",
+          nom: "Paris",
+        },
+        region: {
+          code: "11",
+          nom: "Île-de-France",
+        },
+        academie: {
+          code: "01",
+          nom: "Paris",
+        },
+      },
+    });
+    assert.deepStrictEqual(stats, {
+      catalogue: {
+        total: 2,
+        updated: 1,
+        unknown: 1,
+        anomalies: 0,
+        failed: 0,
+      },
+    });
+  });
+
+  it("Vérifie qu'on peut collecter des lieux de formation fiables si la formation est en attente sur affelnet", async () => {
+    await insertOrganisme({ siret: "22222222200002" });
+    const source = createSource("catalogue");
+    mockApis({
+      formations: [
+        {
+          etablissement_formateur_siret: "22222222200002",
+          lieu_formation_geo_coordonnees: "48.879706,2.396444",
+          uai_formation: "0751234J",
+          lieu_formation_siret: "33333333300008",
+          parcoursup_statut: CATALOG_COMMON_STATUS.HORS_PERIMETRE,
+          affelnet_statut: CATALOG_COMMON_STATUS.EN_ATTENTE,
+        },
+      ],
+      reverse: {
+        features: [
+          {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [2.396444, 48.879706],
+            },
+            properties: {
+              label: "32 Rue des lilas 75019 Paris",
+              score: 0.88,
+              name: "32 Rue des Lilas",
+              city: "Paris",
+            },
+          },
+        ],
+      },
+    });
+    const stats = await collectSources(source);
+
+    const found = await dbCollection("organismes").findOne(
+      { siret: "22222222200002" },
+      { projection: { "lieux_de_formation.date_collecte": 0 } }
+    );
+
+    assert.deepStrictEqual(found.lieux_de_formation[0], {
+      sources: ["catalogue"],
+      uai: "0751234J",
+      uai_fiable: true,
       siret: "33333333300008",
       code: "2.396444_48.879706",
       adresse: {

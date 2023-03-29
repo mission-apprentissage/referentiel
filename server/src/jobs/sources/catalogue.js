@@ -6,6 +6,7 @@ const { dbCollection } = require("../../common/db/mongodb");
 const { omitNil } = require("../../common/utils/objectUtils");
 const { compact } = require("lodash");
 const { DateTime } = require("luxon");
+const { CATALOG_COMMON_STATUS } = require("../../common/catalogStatuts.js");
 
 function fetchFormations(api, options = {}) {
   const siret = options.siret;
@@ -34,6 +35,8 @@ function fetchFormations(api, options = {}) {
       email: 1,
       id_rco_formation: 1,
       tags: 1,
+      parcoursup_statut: 1,
+      affelnet_statut: 1,
     },
   });
 }
@@ -97,6 +100,9 @@ async function buildLieuDeFormation(formation, { reverseGeocode }) {
   try {
     const [latitude, longitude] = formation.lieu_formation_geo_coordonnees.split(",");
     const adresse = await reverseGeocode(longitude, latitude);
+    const uai_fiable =
+      [CATALOG_COMMON_STATUS.PUBLIE, CATALOG_COMMON_STATUS.EN_ATTENTE].includes(formation.parcoursup_statut) ||
+      [CATALOG_COMMON_STATUS.PUBLIE, CATALOG_COMMON_STATUS.EN_ATTENTE].includes(formation.affelnet_statut);
 
     return {
       lieu: {
@@ -104,6 +110,7 @@ async function buildLieuDeFormation(formation, { reverseGeocode }) {
         adresse,
         ...(formation.lieu_formation_siret ? { siret: formation.lieu_formation_siret } : {}),
         ...(formation.uai_formation ? { uai: formation.uai_formation } : {}),
+        uai_fiable,
       },
     };
   } catch (e) {
