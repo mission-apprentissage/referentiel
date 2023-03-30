@@ -34,7 +34,6 @@ async function build(options = {}) {
   await collectAll(["deca", "catalogue-etablissements", "sifa-ramsese", "refea"]);
   await collectAll(["onisep", "onisep-structure", "ideo2", "datagouv"]);
   await collectAll(["sirene"], { geoAdresseApi });
-  await collectAll(["catalogue"], { geoAdresseApi });
 
   await consolidate().then((res) => stats.push({ consolidate: res }));
 
