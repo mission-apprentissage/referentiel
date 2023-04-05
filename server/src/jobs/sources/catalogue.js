@@ -37,6 +37,7 @@ function fetchFormations(api, options = {}) {
       tags: 1,
       parcoursup_statut: 1,
       affelnet_statut: 1,
+      editedFields: 1,
     },
   });
 }
@@ -100,9 +101,11 @@ async function buildLieuDeFormation(formation, { reverseGeocode }) {
   try {
     const [latitude, longitude] = formation.lieu_formation_geo_coordonnees.split(",");
     const adresse = await reverseGeocode(longitude, latitude);
+    // L'UAI lieu est considéré comme fiable si la formation est en attente ou publié coté PARCOURSUP / AFFELNET ou si l'UAI a été éditée
     const uai_fiable =
       [CATALOG_COMMON_STATUS.PUBLIE, CATALOG_COMMON_STATUS.EN_ATTENTE].includes(formation.parcoursup_statut) ||
-      [CATALOG_COMMON_STATUS.PUBLIE, CATALOG_COMMON_STATUS.EN_ATTENTE].includes(formation.affelnet_statut);
+      [CATALOG_COMMON_STATUS.PUBLIE, CATALOG_COMMON_STATUS.EN_ATTENTE].includes(formation.affelnet_statut) ||
+      !!formation?.editedFields?.uai_formation;
 
     return {
       lieu: {
