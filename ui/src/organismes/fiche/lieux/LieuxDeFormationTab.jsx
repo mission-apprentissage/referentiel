@@ -5,8 +5,7 @@ import { Table, Thead } from "../../../common/dsfr/elements/Table.jsx";
 import NA from "../../../common/organismes/NA.jsx";
 
 export default function LieuxDeFormationTab({ organisme }) {
-  const lieuxDeFormationFiables = organisme.lieux_de_formation.filter((item) => item.uai_fiable);
-  const nbLieux = lieuxDeFormationFiables.length;
+  const nbLieux = organisme.lieux_de_formation.length;
 
   return (
     <>
@@ -32,10 +31,10 @@ export default function LieuxDeFormationTab({ organisme }) {
               </Thead>
             }
           >
-            {lieuxDeFormationFiables.map((lieu) => {
+            {organisme.lieux_de_formation.map((lieu) => {
               return (
                 <tr key={lieu.code}>
-                  <td>{lieu.uai ? lieu.uai : <NA />}</td>
+                  <td>{lieu.uai_fiable ? lieu.uai || <NA /> : <NA />}</td>
                   <td>{lieu.adresse.label}</td>
                 </tr>
               );
