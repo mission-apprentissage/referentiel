@@ -216,7 +216,7 @@ module.exports = async (array, options = {}) => {
                 contacts: mergeContacts(from, organisme.contacts, contacts),
                 diplomes: _mergeArray(from, organisme.diplomes, diplomes, "code"),
                 certifications: _mergeArray(from, organisme.certifications, certifications, "code"),
-                lieux_de_formation: _mergeArray(from, organisme.lieux_de_formation, lieux_de_formation, "code"),
+                lieux_de_formation: _mergeArray(from, organisme.lieux_de_formation, lieux_de_formation, "uai"),
                 reseaux: _mergeArray(from, organisme.reseaux, reseaux, "code"),
               }),
             }
