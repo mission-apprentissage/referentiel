@@ -18,6 +18,7 @@ export default function DatagouvModal({ modal, siret }) {
       title={"UAI"}
       modal={modal}
       modifiers={modalSizeModifiers.lg}
+      closeModal={modal.close}
       content={
         <>
           <h1 className="fr-modal__title">
