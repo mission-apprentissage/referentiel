@@ -5,10 +5,11 @@ import { Col, GridRow } from "../../common/dsfr/fondamentaux";
 import { ValidationHistogram } from "./ValidationHistogram";
 import { ValidationPie } from "./ValidationPie";
 import { buildUrl } from "../../common/utils.js";
+const config = require("../../config");
 
 export default function ValidationStats({ natures }) {
   const [{ data: stats, loading, error }] = useFetch(
-    buildUrl(`/api/v1/stats/validation`, {
+    buildUrl(config.apiUrl + `/stats/validation`, {
       natures,
     }),
     {

@@ -11,12 +11,13 @@ import OrganismeProvider, { OrganismeContext } from "../common/organismes/Organi
 import { SearchContext } from "../common/SearchProvider.jsx";
 import { buildUrl } from "../common/utils.js";
 import Page from "../common/Page.jsx";
+const config = require("../config");
 
 export default function OrganismePage() {
   const { siret } = useParams();
   const { search } = useContext(SearchContext);
   const navigate = useNavigate();
-  const [{ data: organisme, loading, error }, setData] = useFetch(`/api/v1/organismes/${siret}`);
+  const [{ data: organisme, loading, error }, setData] = useFetch(config.apiUrl + `/organismes/${siret}`);
   const [message, setMessage] = useState(null);
 
   function onChange(organisme, options = {}) {

@@ -26,7 +26,8 @@
     "styled-components": "5.3.5",
     "use-react-router-breadcrumbs": "3.2.1",
     "uuid": "8.3.2",
-    "yup": "0.32.11"
+    "yup": "0.32.11",
+    "env-var": "7.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

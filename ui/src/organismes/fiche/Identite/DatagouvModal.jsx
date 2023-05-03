@@ -7,9 +7,10 @@ import { flattenObject } from "../../../common/utils.js";
 import { Box } from "../../../common/Flexbox.jsx";
 import Field from "../../../common/Field.jsx";
 import React from "react";
+const config = require("../../../config");
 
 export default function DatagouvModal({ modal, siret }) {
-  const [{ data: organisme, loading, error }] = useFetch(`/api/v1/datagouv/${siret}`, {});
+  const [{ data: organisme, loading, error }] = useFetch(config.apiUrl + `/datagouv/${siret}`, {});
   const flatten = flattenObject(organisme);
   const asShortKey = (key) => key.split(".")[key.split(".").length - 1];
 

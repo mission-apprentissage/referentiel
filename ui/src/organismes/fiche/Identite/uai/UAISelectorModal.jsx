@@ -10,6 +10,7 @@ import Alert from "../../../../common/dsfr/elements/Alert.jsx";
 import BlueBox from "../../../../common/BlueBox.jsx";
 import { ApiContext } from "../../../../common/ApiProvider.jsx";
 import { OrganismeContext } from "../../../../common/organismes/OrganismeProvider.jsx";
+const config = require("../../../../config");
 
 const validators = (httpClient) => {
   return yup.object({
@@ -22,7 +23,7 @@ const validators = (httpClient) => {
         }
 
         return httpClient
-          ._get(`/api/v1/uais/${value}`)
+          ._get(config.apiUrl + `/uais/${value}`)
           .then(() => true)
           .catch((e) => {
             if (e.statusCode === 400) {
@@ -54,7 +55,7 @@ export function UAISelectorModal({ modal, organisme, action }) {
   function onSubmit(values) {
     const uai = values.uai === "custom" ? values.custom : values.uai;
     return httpClient
-      ._put(`/api/v1/organismes/${organisme.siret}/setUAI`, { uai })
+      ._put(config.apiUrl + `/organismes/${organisme.siret}/setUAI`, { uai })
       .then((updated) => {
         modal.close();
         form.reset();

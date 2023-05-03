@@ -35,7 +35,7 @@ install-ui:
 generate-dotenv:
 	echo "Generating JWT secret..."
 	grep -sqF 'REFERENTIEL_AUTH_API_JWT_SECRET' server/.env || \
-		echo "REFERENTIEL_AUTH_API_JWT_SECRET=$$(tr -dc A-Za-z0-9 </dev/urandom | head -c 13 ; echo '')" >> server/.env
+		echo "REFERENTIEL_AUTH_API_JWT_SECRET=$$(perl -pe 'binmode(STDIN, ":bytes"); tr/A-Za-z0-9//dc;' < /dev/urandom | head -c 13; echo '')" >> server/.env
 
 hooks:
 	git config core.hooksPath misc/git-hooks

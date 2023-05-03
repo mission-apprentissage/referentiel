@@ -90,3 +90,79 @@ Un fois terminée, vous pourrez consulter les organismes à l'url [http://localh
 
 
 ![](https://avatars1.githubusercontent.com/u/63645182?s=200&v=4)
+
+
+## Développement sans Docker
+
+Il est possible de faire tourner cette application en local sans Docker.
+Il est nécessaire d'installer un MongoDB "natif" sur la machine. Il est également possible de restaurer un dump de production pour pouvoir travailler sur les données:
+
+```bash
+mongorestore --host 127.0.0.1:27017 \
+--gzip \
+--archive=prodonisep-mongodb-2023-05-03_072312 \
+--db referentiel
+```
+
+Testé sour macOS et Ubuntu 22.
+
+Note: sous Ubuntu 22, il y a un soucis avec `mongodb-memory-server` qui nécessite une lib spécifique. Il faut l'installer "à la main":
+
+```bash
+wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+```
+
+
+### Installation
+
+```bash
+cd referentiel
+make install-server
+# yarn --cwd server install --frozen-lockfile
+make install-ui
+# yarn --cwd ui install --frozen-lockfile
+make generate-dotenv
+make hooks
+```
+
+### Lancement du serveur
+
+Ensuite, pour faire tourner le serveur, il est nécessaire de renseigner les valeurs pour le serveur Mongo et pour le port sur lequel il doit tourner (on prend ici 5001 car par exemple sous macOS le port 5000 est utilisé):
+
+```bash
+export REFERENTIEL_MONGODB_URI='mongodb://127.0.0.1:27017/referentiel?retryWrites=true&w=majority'
+export REFERENTIEL_PORT=5001
+```
+
+Il faut également renseigner les variables suivantes (il n'est nécessaire de les renseigner avec de vraies valeurs que si l'on veut faire une mise à jour):
+
+```bash
+export REFERENTIEL_OVH_STORAGE_URI=nope
+export REFERENTIEL_SIRENE_API_CONSUMER_KEY=nope
+export REFERENTIEL_SIRENE_API_CONSUMER_SECRET=nope
+export REFERENTIEL_API_ACCE_USERNAME=nope
+export REFERENTIEL_API_ACCE_PASSWORD=nope
+export CATALOGUE_API_USERNAME=nope
+export CATALOGUE_API_PASSWORD=nope
+export TABLEAU_DE_BORD_API_KEY=nope
+export TABLEAU_DE_BORD_PUBLIC_URL=nope
+```
+
+Pour lancer le serveur:
+
+```bash
+yarn --cwd server start
+```
+
+### Lancement du front
+
+Ici, comme il n'y a pas de "reverse proxy" comme dans la conf Docker, on précise l'URL complète de l'API qui sera utlisée par le front:
+
+```bash
+# export NODE_OPTIONS=--openssl-legacy-provider  # nécessaire sous macOS/Ubuntu22
+export REACT_APP_REFERENTIEL_API_URL=http://localhost:5001/api/v1  
+yarn --cwd ui start
+```
+
+

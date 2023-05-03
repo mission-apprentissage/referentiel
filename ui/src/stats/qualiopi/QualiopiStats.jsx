@@ -6,9 +6,10 @@ import Histogram from "../../common/nivo/Histogram";
 import { getNatureLabel, getNatureParams } from "../../common/enums/natures";
 import { getQualiopiColor, getQualiopiLabel, getQualiopiParams } from "../../common/enums/qualiopi";
 import { openNewTab } from "../../common/utils";
+const config = require("../../config");
 
 export default function QualiopiStats() {
-  const [{ data, loading, error }] = useFetch(`/api/v1/stats/qualiopi`, []);
+  const [{ data, loading, error }] = useFetch(config.apiUrl + `/stats/qualiopi`, []);
 
   if (loading || error) {
     return <Spinner loading={loading} error={error} />;
