@@ -76,6 +76,7 @@ export function UAISelectorModal({ modal, organisme, action }) {
       <Modal
         title={"UAI"}
         modal={modal}
+        closeModal={modal.close}
         content={
           <>
             <h1 className="fr-modal__title">

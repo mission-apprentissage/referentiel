@@ -19,6 +19,7 @@ export default function RelationModal({ modal, organisme }) {
       title={"UAI"}
       modal={modal}
       modifiers={modalSizeModifiers.lg}
+      closeModal={modal.close}
       content={
         organisme ? (
           <>
