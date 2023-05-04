@@ -19,6 +19,7 @@ const { exportOrganismes } = require("./jobs/exportOrganismes");
 const { exportReseauxAsCsv, exportReseauxAsGraph } = require("./jobs/exportReseaux.js");
 const { streamString } = require("./common/utils/streamUtils");
 const clearOrganismesReseaux = require("./jobs/clearReseaux.js");
+const modify = require("./jobs/modify");
 
 function asArray(v) {
   return v.split(",");
@@ -148,6 +149,17 @@ cli
       const options = siret ? { filters: { siret } } : {};
 
       return consolidate(options);
+    });
+  });
+
+cli
+  .command("modify")
+  .argument("<siret>", "Siret")
+  .argument("<uai>", "UAI")
+  .description("Ajoute une association SIRET/UAI")
+  .action((siret, uai) => {
+    runScript(() => {
+      return modify(siret, uai);
     });
   });
 
