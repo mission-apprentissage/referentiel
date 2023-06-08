@@ -140,7 +140,7 @@ export default function CorrectionsPage() {
                   <p className={"fr-mt-3w"}>
                     Si un organisme ne devrait pas être présent dans le référentiel (par exemple s’il s’agit d’une école
                     maternelle ou élémentaire), merci de le signaler à l’adresse mail suivante :
-                    referentiel@apprentissage.beta.gouv.fr pour demander le retrait des listes de cet organisme.
+                    referentiel-uai-siret@onisep.fr pour demander le retrait des listes de cet organisme.
                   </p>
                 </div>
               </AccordionItem>
