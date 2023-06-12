@@ -3,6 +3,7 @@ const uuid = require("uuid");
 
 module.exports = {
   env: env.get("REFERENTIEL_ENV").default("local").asString(),
+  port: env.get("REFERENTIEL_PORT").default(5000).asPortNumber(),
   publicUrl: env.get("REFERENTIEL_PUBLIC_URL").default("http://localhost").asString(),
   log: {
     level: env.get("REFERENTIEL_LOG_LEVEL").default("info").asString(),

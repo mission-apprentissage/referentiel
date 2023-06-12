@@ -2,10 +2,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const logMiddleware = require("./middlewares/logMiddleware");
 const errorMiddleware = require("./middlewares/errorMiddleware");
+const cors = require("cors");
+const config = require("../config");
 
 module.exports = async () => {
   const app = express();
 
+  if (config.env === "local") {
+    app.use(cors({ origin: "*" }));
+  }
   app.use(bodyParser.json());
   app.use(logMiddleware());
   app.use(require("./routes/healthcheckRoutes")());

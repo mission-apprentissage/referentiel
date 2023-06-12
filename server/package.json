@@ -53,7 +53,8 @@
     "stream-json": "1.7.4",
     "swagger-ui-express": "4.3.0",
     "uuid": "8.3.2",
-    "yamljs": "0.3.0"
+    "yamljs": "0.3.0",
+    "cors": "2.8.5"
   },
   "devDependencies": {
     "@faker-js/faker": "6.3.1",

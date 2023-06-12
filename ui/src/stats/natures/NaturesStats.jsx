@@ -4,9 +4,13 @@ import Spinner from "../../common/Spinner";
 import { Col, GridRow } from "../../common/dsfr/fondamentaux";
 import { NaturesPie } from "./NaturesPie";
 import { NaturesHistogram } from "./NaturesHistogram";
+const config = require("../../config");
 
 export default function NaturesStats() {
-  const [{ data: stats, loading, error }] = useFetch(`/api/v1/stats/natures`, { national: null, academies: [] });
+  const [{ data: stats, loading, error }] = useFetch(config.apiUrl + `/stats/natures`, {
+    national: null,
+    academies: [],
+  });
 
   if (loading || error) {
     return <Spinner loading={loading} error={error} />;

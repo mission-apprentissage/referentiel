@@ -1,6 +1,7 @@
 import React from "react";
 import { useFetch } from "../../common/hooks/useFetch.js";
 import Histogram from "../../common/nivo/Histogram.jsx";
+const config = require("../../config");
 
 function getLastMonths(nbMonths) {
   const names = [
@@ -30,7 +31,7 @@ function getLastMonths(nbMonths) {
 }
 
 export default function NouveauxHistogram() {
-  const [{ data }] = useFetch(`/api/v1/stats/nouveaux`, []);
+  const [{ data }] = useFetch(config.apiUrl + `/stats/nouveaux`, []);
   const last6Months = getLastMonths(6).map(({ annee, mois, label }) => {
     const found = data.find((e) => e.annee === annee && e.mois === mois);
 

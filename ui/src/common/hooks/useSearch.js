@@ -6,6 +6,7 @@ import { SearchContext } from "../SearchProvider";
 import { useLocation } from "react-router-dom";
 import usePrevious from "./usePrevious";
 import { isEqual, isString } from "lodash-es";
+const config = require("../../config");
 
 function adaptParamsForAPI(params) {
   return Object.keys(params).reduce((acc, key) => {
@@ -35,7 +36,7 @@ export function useSearch(defaults, options = {}) {
     }
   }, [options.silent, previous, search, setSearch]);
 
-  const url = buildUrl(`/api/v1/organismes`, adaptParamsForAPI(search.params));
+  const url = buildUrl(config.apiUrl + `/organismes`, adaptParamsForAPI(search.params));
   const [response] = useFetch(url, {
     organismes: [],
     pagination: {

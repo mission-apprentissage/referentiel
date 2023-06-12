@@ -12,12 +12,13 @@ import { modifications } from "../ModificationsPage.jsx";
 import NouveauxHistogram from "./stats/NouveauxHistogram.jsx";
 import EtatAdministratifPie from "./stats/EtatAdministratifPie.jsx";
 import { ApiContext } from "../common/ApiProvider.jsx";
+const config = require("../config");
 
 export default function AccueilPage() {
   const navigate = useNavigate();
   const { isAnonymous } = useContext(ApiContext);
 
-  const [{ data: stats }] = useFetch("/api/v1/stats/couverture", null);
+  const [{ data: stats }] = useFetch(config.apiUrl + "/stats/couverture", null);
 
   return (
     <Page>
