@@ -253,7 +253,7 @@ export default function ConstructionPage() {
               ),
               panel: (
                 <TabPanel>
-                  <h4>Import et complilation des données</h4>
+                  <h4>Import et compilation des données</h4>
                   <p>
                     La construction du référentiel se compose deux étapes qui sont exécutées les unes à la suite des
                     autres
