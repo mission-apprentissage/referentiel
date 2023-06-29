@@ -42,7 +42,7 @@ export default function DatagouvModal({ modal, siret }) {
 
               <a
                 title="consulter la fiche Data.gouv"
-                href="ui/src/organismes/fiche/Identite/DatagouvModal.jsx"
+                href="https://www.data.gouv.fr/fr/datasets/liste-publique-des-organismes-de-formation-l-6351-7-1-du-code-du-travail/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="fr-text--sm"
