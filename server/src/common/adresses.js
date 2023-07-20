@@ -33,7 +33,7 @@ async function findCommune(codeInsee, codePostal, label) {
   }
 
   return buildAdresse({
-    label,
+    label: label,
     code_insee: codeInsee,
     code_postal: codePostal,
     localite: geojson.properties.libgeo,
@@ -61,8 +61,13 @@ async function selectBestResult(label, results, fallback) {
     );
   }
 
+  let adresse_label = label;
+  if (label.match(/^[0-9._]+$/)) {
+    adresse_label = best.properties.label;
+  }
+
   return buildAdresse({
-    label: best.properties.label,
+    label: adresse_label,
     code_postal: best.properties.postcode,
     code_insee: best.properties.citycode,
     localite: best.properties.city,

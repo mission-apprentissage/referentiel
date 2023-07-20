@@ -57,7 +57,7 @@ describe("sirene", () => {
           source: "geo-adresse-api",
         },
       },
-      label: "31 Rue des lilas 75019 Paris",
+      label: "31 RUE DES LILAS 75019 PARIS",
       code_postal: "75019",
       code_insee: "75119",
       localite: "Paris",
