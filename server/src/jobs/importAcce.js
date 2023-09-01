@@ -89,6 +89,9 @@ const NATURES = {
   "Service commun de formation continue": "528",
   "Parties délocalisées des autres établissements du ministère en charge de l'enseignement supérieur": "507",
   "Observatoire des sciences de l'univers": "547",
+  "Institut de recherche sur l'enseignement des mathématiques": "557",
+  "Institut de rééducation": "241",
+  "Etablissement sans formation diplômante": "502",
 };
 
 const ETATS = {
