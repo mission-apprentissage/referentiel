@@ -2,7 +2,6 @@ const config = require("../../config");
 const passport = require("passport");
 const { Strategy: AnonymousStrategy } = require("passport-anonymous");
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
-const Boom = require("boom");
 const { findRegionByCode } = require("../../common/regions");
 const { findAcademieByCode } = require("../../common/academies");
 
@@ -54,7 +53,7 @@ function checkApiToken() {
 const passportCallback = (req, res, next) => {
   return (error, user) => {
     if (error || !user) {
-      return next(new Boom.unauthorized("Unauthorized"));
+      res.status(401).json({ success: false, message: "Email ou mot de passe incorrect" });
     }
     req.user = user;
     next();
