@@ -24,6 +24,23 @@ function buildApiToken(type, code, options = {}) {
   });
 }
 
+function buildJwtToken(email, type, code, options = {}) {
+  const found = type === "region" ? findRegionByCode(code) : findAcademieByCode(code);
+  return createToken("api", code, {
+    payload: { email, code, type, nom: found.nom },
+    ...options,
+  });
+}
+
+function buildRefreshToken(user) {
+  const refreshToken = jwt.sign(user, config.auth.api.refreshTokenSecret, {
+    expiresIn: config.auth.api.refreshTokenExpiry,
+  });
+  return refreshToken;
+}
+
 module.exports = {
   buildApiToken,
+  buildJwtToken,
+  buildRefreshToken,
 };
