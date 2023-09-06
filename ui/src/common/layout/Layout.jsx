@@ -58,6 +58,9 @@ export default function Layout({ children }) {
               <FooterLink to={"/stats"} onClick={() => window.scrollTo(0, 0)}>
                 Statistiques
               </FooterLink>
+              <FooterLink to={"/connexion"} onClick={() => window.scrollTo(0, 0)}>
+                Se connecter
+              </FooterLink>
             </FooterList>
           ),
         }}

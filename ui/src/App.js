@@ -5,6 +5,7 @@ import Layout from "./common/layout/Layout";
 import DesignPage from "./DesignPage.jsx";
 import OrganismesPage from "./organismes/OrganismesPage.jsx";
 import LoginPage from "./LoginPage.jsx";
+import ConnexionPage from "./ConnexionPage.jsx";
 import TableauDeBordPage from "./tableau-de-bord/TableauDeBordPage.jsx";
 import ValidationPage from "./tableau-de-bord/ValidationPage.jsx";
 import AuthShield from "./common/AuthShield";
@@ -39,6 +40,7 @@ function App() {
             <Route element={<Layout children={<Outlet />} />}>
               <Route path="/" element={<AccueilPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/connexion" element={<ConnexionPage />} />
               <Route path="/organismes" element={<OrganismesPage />} />
               <Route path="/organismes/:siret">
                 <Route path="" element={<OrganismePage />} />
