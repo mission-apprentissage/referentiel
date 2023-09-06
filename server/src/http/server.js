@@ -23,6 +23,7 @@ module.exports = async () => {
   app.use(require("./routes/dataRoutes")());
   app.use(require("./routes/statsRoutes")());
   app.use(require("./routes/swaggerRoutes")());
+  app.use(require("./routes/userRoutes")());
 
   app.use(errorMiddleware());
   app.use((req, res) => {
