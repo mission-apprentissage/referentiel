@@ -27,6 +27,7 @@
     "bunyan-slack": "0.0.10",
     "chalk": "4.1.2",
     "commander": "9.2.0",
+    "cookie-parser": "1.4.6",
     "cors": "2.8.5",
     "csv-parse": "5.0.4",
     "deep-object-diff": "1.1.7",
