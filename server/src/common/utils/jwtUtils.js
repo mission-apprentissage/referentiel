@@ -32,8 +32,8 @@ function buildJwtToken(email, type, code, options = {}) {
   });
 }
 
-function buildRefreshToken(user) {
-  const refreshToken = jwt.sign(user, config.auth.api.refreshTokenSecret, {
+function buildRefreshToken(email, type, code) {
+  const refreshToken = jwt.sign({ email, type, code }, config.auth.api.refreshTokenSecret, {
     expiresIn: config.auth.api.refreshTokenExpiry,
   });
   return refreshToken;
