@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const passport = require("passport");
 const logMiddleware = require("./middlewares/logMiddleware");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 const cors = require("cors");
@@ -13,6 +14,8 @@ module.exports = async () => {
   }
   app.use(bodyParser.json());
   app.use(logMiddleware());
+  require("../common/authLocalStrategy");
+  app.use(passport.initialize());
   app.use(require("./routes/healthcheckRoutes")());
   app.use(require("./routes/organismesRoutes")());
   app.use(require("./routes/uaisRoutes")());
