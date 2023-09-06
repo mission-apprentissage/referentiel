@@ -5,7 +5,7 @@ import DepartementAuthSelector from "../common/organismes/selectors/DepartementA
 import TitleLayout from "../common/layout/TitleLayout.jsx";
 import ContentLayout from "../common/layout/ContentLayout.jsx";
 import { useQuery } from "../common/hooks/useQuery.js";
-import { ApiContext } from "../common/ApiProvider.jsx";
+import { UserContext } from "../common/UserProvider.jsx";
 import NouveauxCounter from "./cards/NouveauxCounter.jsx";
 import useToggle from "../common/hooks/useToggle.js";
 import LinkButton from "../common/dsfr/custom/LinkButton.jsx";
@@ -59,9 +59,10 @@ const Presentation = styled(({ className }) => {
 `;
 
 export default function TableauDeBordPage() {
-  const { auth } = useContext(ApiContext);
+  const [userContext] = useContext(UserContext);
+
   const { query, setQuery } = useQuery();
-  const title = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
+  const title = `${userContext.type === "region" ? "Région" : "Académie"} : ${userContext.nom}`;
 
   return (
     <Page>

@@ -2,10 +2,10 @@ import { Header } from "../dsfr/elements/Header";
 import { Nav, NavLink } from "../dsfr/elements/Nav";
 import { Footer, FooterLink, FooterList } from "../dsfr/elements/Footer";
 import React, { useContext } from "react";
-import { ApiContext } from "../ApiProvider";
+import { UserContext } from "../UserProvider";
 
 export default function Layout({ children }) {
-  const { isAnonymous } = useContext(ApiContext);
+  const [userContext] = useContext(UserContext);
 
   return (
     <>
@@ -14,7 +14,7 @@ export default function Layout({ children }) {
         nav={
           <Nav>
             <NavLink to={"/"}>Accueil</NavLink>
-            {!isAnonymous() && <NavLink to={"/tableau-de-bord"}>Tableau de bord</NavLink>}
+            {!userContext.isAnonymous && <NavLink to={"/tableau-de-bord"}>Tableau de bord</NavLink>}
             <NavLink to={"/organismes"}>Référentiel national</NavLink>
             <NavLink to={"/construction"}>Construction du référentiel</NavLink>
             <NavLink to={"/corrections"}>Correction et fiabilisation des données</NavLink>
@@ -58,9 +58,15 @@ export default function Layout({ children }) {
               <FooterLink to={"/stats"} onClick={() => window.scrollTo(0, 0)}>
                 Statistiques
               </FooterLink>
-              <FooterLink to={"/connexion"} onClick={() => window.scrollTo(0, 0)}>
-                Se connecter
-              </FooterLink>
+              {userContext.isAnonymous ? (
+                <FooterLink to={"/connexion"} onClick={() => window.scrollTo(0, 0)}>
+                  Se connecter
+                </FooterLink>
+              ) : (
+                <FooterLink to={"/deconnexion"} onClick={() => window.scrollTo(0, 0)}>
+                  Se déconnecter
+                </FooterLink>
+              )}
             </FooterList>
           ),
         }}
