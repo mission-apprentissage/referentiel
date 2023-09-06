@@ -33,6 +33,7 @@ module.exports = {
       salt: env.get("REFERENTIEL_AUTH_API_SALT").default("abcdef").asString(),
       expiresIn: "1y",
     },
+    cookieSecret: env.get("REFERENTIEL_AUTH_COOKIE_SECRET").default("abcdef").asString(),
   },
   sirene: {
     api: {
