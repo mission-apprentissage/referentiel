@@ -2,8 +2,14 @@ const config = require("../../config");
 const passport = require("passport");
 const { Strategy: AnonymousStrategy } = require("passport-anonymous");
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
+const Boom = require("boom");
 const { findRegionByCode } = require("../../common/regions");
 const { findAcademieByCode } = require("../../common/academies");
+
+const STRATEGIES = {
+  local: "local",
+  jwt: "jwt",
+};
 
 passport.use(new AnonymousStrategy());
 passport.use(
@@ -45,7 +51,27 @@ function checkApiToken() {
   return passport.authenticate("api-token", { session: false, failWithError: true, assignProperty: "user" });
 }
 
+const passportCallback = (req, res, next) => {
+  return (error, user) => {
+    if (error || !user) {
+      return next(new Boom.unauthorized("Unauthorized"));
+    }
+    req.user = user;
+    next();
+  };
+};
+
+const verifyUser = (req, res, next) => {
+  const callback = passportCallback(req, res, next);
+
+  const strategy = req.url === "/api/v1/users/login" ? STRATEGIES.local : STRATEGIES.jwt;
+  return passport.authenticate(strategy, callback, { session: false })(req, res, next);
+};
+
 module.exports = {
   checkApiToken,
   checkOptionnalApiToken,
+  verifyUser,
+  STRATEGIES,
+  passportCallback,
 };
