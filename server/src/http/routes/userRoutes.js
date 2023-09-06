@@ -1,4 +1,5 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { verifyUser } = require("../middlewares/authMiddleware");
 const { buildJwtToken, buildRefreshToken } = require("../../common/utils/jwtUtils");
@@ -36,6 +37,34 @@ module.exports = () => {
 
       res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
       res.json({ success: true, token });
+    })
+  );
+
+  router.post(
+    "/api/v1/users/refreshToken/",
+    tryCatch(async (req, res) => {
+      const { signedCookies = {} } = req;
+      const { refreshToken } = signedCookies;
+
+      if (!refreshToken) {
+        res.status(401).json({ success: false, message: "Vous n'êtes pas autorisé." });
+      }
+
+      const payload = jwt.verify(refreshToken, config.auth.api.refreshTokenSecret);
+      const userEmail = payload.email;
+
+      const user = await dbCollection("users").findOne({ email: userEmail });
+
+      const tokenIndex = user.refreshToken.findIndex((item) => item.refreshToken === refreshToken);
+      const token = buildJwtToken(user.email, user.type, user.code);
+
+      const newRefreshToken = buildRefreshToken(user.email, user.type, user.code);
+      user.refreshToken[tokenIndex] = { refreshToken: newRefreshToken };
+
+      await dbCollection("users").updateOne({ email: user.email }, { $set: { ...user } });
+
+      res.cookie("refreshToken", newRefreshToken, COOKIE_OPTIONS);
+      res.status(200).json({ success: true, token });
     })
   );
 
