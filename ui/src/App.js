@@ -18,15 +18,18 @@ import SearchProvider from "./common/SearchProvider";
 import ModificationsPage from "./ModificationsPage.jsx";
 import CorrectionsPage from "./CorrectionsPage.jsx";
 import { useScrollToTop } from "./common/hooks/useScrollToTop.js";
+import { UserProvider } from "./common/UserProvider.jsx";
 
 function Providers({ children }) {
   useScrollToTop();
 
   return (
     <ApiProvider>
-      <DataProvider>
-        <SearchProvider>{children}</SearchProvider>
-      </DataProvider>
+      <UserProvider>
+        <DataProvider>
+          <SearchProvider>{children}</SearchProvider>
+        </DataProvider>
+      </UserProvider>
     </ApiProvider>
   );
 }
