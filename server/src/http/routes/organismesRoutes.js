@@ -12,7 +12,7 @@ const { arrayOf } = require("../utils/validators");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
 const setUAI = require("../../common/actions/setUAI");
-const { checkApiToken } = require("../middlewares/authMiddleware");
+const { verifyUser } = require("../middlewares/authMiddleware");
 const canEditOrganisme = require("../middlewares/canEditOrganismeMiddleware");
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
@@ -230,7 +230,7 @@ module.exports = () => {
 
   router.put(
     "/api/v1/organismes/:siret/setUAI",
-    checkApiToken(),
+    verifyUser,
     canEditOrganisme(),
     tryCatch(async (req, res) => {
       const user = req.user;
