@@ -17,6 +17,7 @@ module.exports = async () => {
   app.use(logMiddleware());
   app.use(cookieParser(config.auth.cookieSecret));
   require("../common/authLocalStrategy");
+  require("../common/authJwtStrategy");
   app.use(passport.initialize());
   app.use(require("./routes/healthcheckRoutes")());
   app.use(require("./routes/organismesRoutes")());
