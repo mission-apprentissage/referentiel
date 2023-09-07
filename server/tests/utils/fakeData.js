@@ -332,4 +332,18 @@ module.exports = {
       )
     );
   },
+  insertUsers(custom) {
+    return dbCollection("users").insertOne(
+      merge(
+        {},
+        {
+          email: "bonjour@test.fr",
+          type: "region",
+          code: "11",
+          hashedPassword: "0916d135e89b7461905b8eb8d4b393d1bad61421d3e5b742cac2180c31d3f8be", // hash of "test"
+        },
+        custom
+      )
+    );
+  },
 };
