@@ -3,7 +3,7 @@ const importOrganismes = require("../../src/jobs/importOrganismes");
 const server = require("../../src/http/server");
 const axiosist = require("axiosist"); // eslint-disable-line node/no-unpublished-require
 const { compose, transformData } = require("oleoduc");
-const { buildApiToken } = require("../../src/common/utils/jwtUtils");
+const { buildJwtToken } = require("../../src/common/utils/jwtUtils");
 
 const createStream = (content) => {
   const stream = new Readable({
@@ -26,9 +26,9 @@ async function startServer() {
   };
 }
 
-function generateAuthHeader(type, code) {
+function generateAuthHeader(email, type, code) {
   return {
-    Authorization: `Bearer ${buildApiToken(type, code)}`,
+    Authorization: `Bearer ${buildJwtToken(email, type, code)}`,
   };
 }
 
