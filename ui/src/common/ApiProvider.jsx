@@ -57,10 +57,10 @@ export default function ApiProvider({ children }) {
     return json;
   }
 
-  const getHeaders = () => {
+  const getHeaders = (token) => {
     return {
       Accept: "application/json",
-      ...(!auth || auth.sub === "anonymous" ? {} : { Authorization: `Bearer ${auth?.token}` }),
+      ...(!token ? {} : { Authorization: `Bearer ${token}` }),
       "Content-Type": "application/json",
     };
   };
@@ -76,12 +76,12 @@ export default function ApiProvider({ children }) {
     },
     logout,
     httpClient: {
-      _get(path, parameters = {}) {
+      _get(path, parameters = {}, token = null) {
         const params = queryString.stringify(parameters, { skipNull: true });
 
         return fetch(`${path}${params ? `?${params}` : ""}`, {
           method: "GET",
-          headers: getHeaders(),
+          headers: getHeaders(token),
         }).then((res) => handleResponse(path, res));
       },
       _post(path, body) {
@@ -91,10 +91,10 @@ export default function ApiProvider({ children }) {
           body: JSON.stringify(body),
         }).then((res) => handleResponse(path, res));
       },
-      _put(path, body = {}) {
+      _put(path, body = {}, token = null) {
         return fetch(`${path}`, {
           method: "PUT",
-          headers: getHeaders(),
+          headers: getHeaders(token),
           body: JSON.stringify(body),
         }).then((res) => handleResponse(path, res));
       },
