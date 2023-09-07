@@ -53,7 +53,7 @@ function checkApiToken() {
 const passportCallback = (req, res, next) => {
   return (error, user) => {
     if (error || !user) {
-      res.status(401).json({ success: false, message: "Email ou mot de passe incorrect" });
+      res.status(401).json({ statusCode: 401, success: false, message: "Email ou mot de passe incorrect" });
     }
     req.user = user;
     next();
