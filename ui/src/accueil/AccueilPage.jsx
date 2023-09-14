@@ -66,7 +66,7 @@ export default function AccueilPage() {
 
             <GridRow modifiers={"gutters"} className={"fr-mb-6w"}>
               <Col modifiers={"12"}>
-                <h6 id={"construction"}>Construction du référentiel</h6>
+                <h6 id={"construction"}>Construction du référentiel - test edition</h6>
                 <div className={"fr-mt-3w"}>
                   <span className={"fr-text--bold"}>
                     La construction du référentiel national permet de constituer une liste d’organismes avec les
