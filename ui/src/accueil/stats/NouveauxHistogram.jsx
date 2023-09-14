@@ -55,7 +55,7 @@ export default function NouveauxHistogram() {
     <div style={{ height: "500px" }}>
       <Histogram
         title="Entrants sur les 6 derniers mois"
-        yLegend={"Oorganismes"}
+        yLegend={"Organismes"}
         data={last6Months}
         series={["nbOrganismes"]}
         getSerieLabel={() => "Nouveaux organismes"}
