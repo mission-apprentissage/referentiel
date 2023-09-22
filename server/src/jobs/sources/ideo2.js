@@ -1,5 +1,4 @@
 const { compose, transformData, flattenArray, filterData } = require("oleoduc");
-const { isEmpty } = require("lodash");
 const { decodeStream } = require("iconv-lite");
 const { getFromStorage } = require("../../common/utils/ovhUtils");
 const { parseCsv } = require("../../common/utils/csvUtils");
@@ -29,41 +28,15 @@ module.exports = (custom = {}) => {
         }),
         transformData(async (data) => {
           const siretFormateur = data["SIRET_lieu_enseignement"];
-          const siretGestionnaire = data["SIRET_gestionnaire"];
-          const nomLieuEnseignement = data["nom_lieu_enseignement"];
-          const cfaGestionnaire = data["CFA_gestionnaire"];
 
+          /* GAS, 22/9/2023: suppression des relations car
+             le fichier ideo2 est trop ancien. À actualiser
+             après le branchement à l'entrepôt Onisep */
           return [
-            {
-              from: name,
-              selector: siretGestionnaire,
-              relations: [
-                ...(isEmpty(siretFormateur)
-                  ? []
-                  : [
-                      {
-                        type: "responsable->formateur",
-                        siret: siretFormateur,
-                        ...(nomLieuEnseignement ? { label: nomLieuEnseignement } : {}),
-                      },
-                    ]),
-              ],
-            },
             {
               from: name,
               selector: siretFormateur,
               uai_potentiels: [data["UAI_lieu_enseignement"]],
-              relations: [
-                ...(isEmpty(siretGestionnaire)
-                  ? []
-                  : [
-                      {
-                        type: "formateur->responsable",
-                        siret: siretGestionnaire,
-                        ...(cfaGestionnaire ? { label: cfaGestionnaire } : {}),
-                      },
-                    ]),
-              ],
             },
           ];
         }),
