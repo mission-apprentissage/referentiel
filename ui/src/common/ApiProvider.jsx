@@ -25,7 +25,12 @@ export default function ApiProvider({ children }) {
   async function handleResponse(path, response) {
     const statusCode = response.status;
     const json = await response.json();
-    if (statusCode >= 400 && statusCode < 600) {
+    if (
+      statusCode >= 400 &&
+      statusCode < 600 &&
+      path !== "/api/v1/users/login" &&
+      path !== "/api/v1/users/refreshToken"
+    ) {
       if (statusCode === 403) {
         throw new AuthError(json, statusCode);
       } else {

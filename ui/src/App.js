@@ -64,7 +64,7 @@ function App() {
                 <Route path="" element={<ConstructionPage />} />
                 <Route path=":tab" element={<ConstructionPage />} />
               </Route>
-              <Route path="*" element={<Navigate to="/login" />} />
+              <Route path="*" element={<Navigate to="/connexion" />} />
             </Route>
           </Routes>
         </Providers>

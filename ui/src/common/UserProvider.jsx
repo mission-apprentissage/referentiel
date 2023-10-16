@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import jwt from "jsonwebtoken";
 import { ApiContext } from "./ApiProvider.jsx";
 
 const UserContext = React.createContext([{}, () => {}]);
 
-const anonymous = { sub: "anonymous", isAnonymous: true, loading: true };
+let initialState = { loading: true, token: null };
 
 const UserProvider = (props) => {
+  const [user, setUser] = useState(initialState);
   const { httpClient } = useContext(ApiContext);
-  const [user, setUser] = useState(anonymous);
 
-  const verifyUser = useCallback(async () => {
+  const verifyUser = async () => {
     const result = await httpClient._post(`/api/v1/users/refreshToken`);
     if (result.success) {
       const decodedToken = jwt.decode(result.token);
@@ -29,11 +29,11 @@ const UserProvider = (props) => {
       });
     }
     setTimeout(verifyUser, 60 * 5 * 1000);
-  }, [setUser]);
+  };
 
   useEffect(() => {
     verifyUser();
-  }, [verifyUser]);
+  }, []);
 
   return <UserContext.Provider value={[user, setUser]}>{props.children}</UserContext.Provider>;
 };
