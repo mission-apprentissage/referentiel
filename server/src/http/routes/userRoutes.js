@@ -68,5 +68,33 @@ module.exports = () => {
     })
   );
 
+  router.get(
+    "/api/v1/users/logout/",
+    tryCatch(async (req, res) => {
+      const { signedCookies = {} } = req;
+      const { refreshToken } = signedCookies;
+
+      if (!refreshToken) {
+        res.status(401).json({ success: false, message: "Vous n'êtes pas autorisé." });
+      }
+
+      const payload = jwt.verify(refreshToken, config.auth.api.refreshTokenSecret);
+      const userEmail = payload.email;
+
+      const user = await dbCollection("users").findOne({ email: userEmail });
+
+      const tokenIndex = user.refreshToken.findIndex((item) => item.refreshToken === refreshToken);
+
+      if (tokenIndex !== -1) {
+        user.refreshToken.splice(tokenIndex, 1);
+      }
+
+      await dbCollection("users").updateOne({ email: user.email }, { $set: { ...user } });
+
+      res.clearCookie("refreshToken", COOKIE_OPTIONS);
+      res.status(200).json({ success: true });
+    })
+  );
+
   return router;
 };
