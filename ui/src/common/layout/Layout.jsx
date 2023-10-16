@@ -1,11 +1,24 @@
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "../dsfr/elements/Header";
 import { Nav, NavLink } from "../dsfr/elements/Nav";
 import { Footer, FooterLink, FooterList } from "../dsfr/elements/Footer";
-import React, { useContext } from "react";
 import { UserContext } from "../UserProvider";
+import { ApiContext } from "../ApiProvider";
 
 export default function Layout({ children }) {
   const [userContext] = useContext(UserContext);
+  const { httpClient } = useContext(ApiContext);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const result = await httpClient._get(`/api/v1/users/logout`);
+
+    if (result.success) {
+      window.scrollTo(0, 0);
+      navigate("/");
+    }
+  };
 
   return (
     <>
@@ -63,7 +76,7 @@ export default function Layout({ children }) {
                   Se connecter
                 </FooterLink>
               ) : (
-                <FooterLink to={"/deconnexion"} onClick={() => window.scrollTo(0, 0)}>
+                <FooterLink to={"/deconnexion"} onClick={handleLogout}>
                   Se déconnecter
                 </FooterLink>
               )}
