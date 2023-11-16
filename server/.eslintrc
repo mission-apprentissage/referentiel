@@ -14,7 +14,8 @@
     "quote-props": [
       "error",
       "consistent"
-    ]
+    ],
+    "node/no-unpublished-require": "off"
   },
   "env": {
     "node": true,
