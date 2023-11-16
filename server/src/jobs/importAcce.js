@@ -93,6 +93,7 @@ const NATURES = {
   "Institut de rééducation": "241",
   "Etablissement sans formation diplômante": "502",
   "Établissement public à caractère scientifique, culturel et professionnel (EPSCP)": "253",
+  "Institut national polytechnique": "524",
 };
 
 const ETATS = {
