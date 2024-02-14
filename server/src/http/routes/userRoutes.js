@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { verifyUser } = require("../middlewares/authMiddleware");
+const rateLimitMiddleware = require("../middlewares/rateLimiterMiddleware");
 const { buildJwtToken, buildRefreshToken } = require("../../common/utils/jwtUtils");
 const { dbCollection } = require("../../common/db/mongodb");
 const config = require("../../config");
@@ -23,6 +24,7 @@ module.exports = () => {
 
   router.post(
     "/api/v1/users/login/",
+    rateLimitMiddleware,
     verifyUser,
     tryCatch(async (req, res) => {
       const user = req.user;
@@ -42,6 +44,7 @@ module.exports = () => {
 
   router.post(
     "/api/v1/users/refreshToken/",
+    rateLimitMiddleware,
     tryCatch(async (req, res) => {
       const { signedCookies = {} } = req;
       const { refreshToken } = signedCookies;
@@ -70,6 +73,7 @@ module.exports = () => {
 
   router.get(
     "/api/v1/users/logout/",
+    rateLimitMiddleware,
     tryCatch(async (req, res) => {
       const { signedCookies = {} } = req;
       const { refreshToken } = signedCookies;

@@ -14,6 +14,7 @@ const { dbCollection } = require("../../common/db/mongodb");
 const setUAI = require("../../common/actions/setUAI");
 const { verifyUser } = require("../middlewares/authMiddleware");
 const canEditOrganisme = require("../middlewares/canEditOrganismeMiddleware");
+const rateLimiterMiddleware = require("../middlewares/rateLimiterMiddleware");
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
@@ -230,6 +231,7 @@ module.exports = () => {
 
   router.put(
     "/api/v1/organismes/:siret/setUAI",
+    rateLimiterMiddleware,
     verifyUser,
     canEditOrganisme(),
     tryCatch(async (req, res) => {
