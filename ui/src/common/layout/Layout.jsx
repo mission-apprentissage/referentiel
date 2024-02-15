@@ -10,7 +10,7 @@ export default function Layout({ children }) {
   return (
     <>
       <Header
-        title={"Référentiel"}
+        title={"Référentiel UAI-SIRET des OFA-CFA"}
         nav={
           <Nav>
             <NavLink to={"/"}>Accueil</NavLink>
