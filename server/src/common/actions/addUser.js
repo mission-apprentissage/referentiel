@@ -1,6 +1,8 @@
 const crypto = require("crypto");
 const { dbCollection } = require("../../common/db/mongodb");
 const config = require("../../config");
+const { findRegionByCode } = require("../regions");
+const { findAcademieByCode } = require("../academies");
 
 const addUser = async (email, password, type, code) => {
   const salt = config.auth.api.salt;
@@ -11,11 +13,14 @@ const addUser = async (email, password, type, code) => {
     }
     const hashedPassword = encryptedPassword.toString("hex");
 
+    const found = type === "region" ? findRegionByCode(code) : findAcademieByCode(code);
+
     return dbCollection("users").insertOne({
       email,
       hashedPassword,
       type,
       code,
+      nom: found?.nom || "",
     });
   });
 };

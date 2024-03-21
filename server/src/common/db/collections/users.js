@@ -11,6 +11,7 @@ module.exports = {
         refreshToken: array(),
         type: string(),
         code: string(),
+        nom: string(),
       },
       { required: ["email"] }
     );
