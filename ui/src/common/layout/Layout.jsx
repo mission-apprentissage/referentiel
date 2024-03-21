@@ -7,17 +7,19 @@ import { UserContext } from "../UserProvider";
 import { ApiContext } from "../ApiProvider";
 
 export default function Layout({ children }) {
-  const [userContext] = useContext(UserContext);
+  const [userContext, setUserContext] = useContext(UserContext);
   const { httpClient } = useContext(ApiContext);
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    const result = await httpClient._get(`/api/v1/users/logout`);
+  const handleLogout = async (e) => {
+    e.preventDefault();
 
-    if (result.success) {
-      window.scrollTo(0, 0);
-      navigate("/");
+    if (userContext.email) {
+      await httpClient._get(`/api/v1/users/logout`);
     }
+    setUserContext({ token: null, loading: false, isAnonymous: true });
+    window.scrollTo(0, 0);
+    navigate("/");
   };
 
   return (
@@ -76,7 +78,7 @@ export default function Layout({ children }) {
                   Se connecter
                 </FooterLink>
               ) : (
-                <FooterLink to={"/deconnexion"} onClick={handleLogout}>
+                <FooterLink to={"#"} onClick={handleLogout}>
                   Se déconnecter
                 </FooterLink>
               )}
