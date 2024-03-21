@@ -11,15 +11,20 @@ const UserProvider = (props) => {
   const [user, setUser] = useState(anonymous);
 
   const verifyUser = useCallback(async () => {
+    const tokenFromStorage = sessionStorage.getItem("referentiel:token");
+
     const result = await httpClient._post(`/api/v1/users/refreshToken`);
-    if (result.success) {
-      const decodedToken = jwt.decode(result.token);
+
+    if (result.success || tokenFromStorage) {
+      const token = result.token || tokenFromStorage;
+      const decodedToken = jwt.decode(token);
+
       setUser({
         code: decodedToken.code,
         email: decodedToken.email,
         nom: decodedToken.nom,
         type: decodedToken.type,
-        token: result.token,
+        token: token,
         loading: false,
         isAnonymous: false,
       });

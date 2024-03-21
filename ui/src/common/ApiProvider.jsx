@@ -58,10 +58,10 @@ export default function ApiProvider({ children }) {
           headers: getHeaders(token),
         }).then((res) => handleResponse(path, res));
       },
-      _post(path, body) {
+      _post(path, body, token = null) {
         return fetch(`${path}`, {
           method: "POST",
-          headers: getHeaders(),
+          headers: getHeaders(token),
           body: JSON.stringify(body),
         }).then((res) => handleResponse(path, res));
       },

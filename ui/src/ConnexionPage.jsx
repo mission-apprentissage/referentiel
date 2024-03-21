@@ -77,7 +77,7 @@ export default function Connexion() {
                                 <div
                                   className={usernameError ? "fr-input-group fr-input-group--error" : "fr-input-group"}
                                 >
-                                  <label className="fr-label" for="username-1757">
+                                  <label className="fr-label" htmlFor="username-1757">
                                     Adresse email
                                   </label>
                                   <input
@@ -101,7 +101,7 @@ export default function Connexion() {
                                 <div className="fr-password" id="password-1758">
                                   <label
                                     className={passwordError ? "fr-label--error" : "fr-label"}
-                                    for="password-1758-input"
+                                    htmlFor="password-1758-input"
                                   >
                                     Mot de passe
                                   </label>
