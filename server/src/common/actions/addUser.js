@@ -5,9 +5,9 @@ const { findRegionByCode } = require("../regions");
 const { findAcademieByCode } = require("../academies");
 
 const addUser = async (email, password, type, code) => {
-  const salt = config.auth.api.salt;
+  const jwtSecret = config.auth.api.jwtSecret;
 
-  return crypto.pbkdf2(password, salt, 310000, 32, "sha256", async (err, encryptedPassword) => {
+  return crypto.pbkdf2(password, jwtSecret, 310000, 32, "sha256", async (err, encryptedPassword) => {
     if (err) {
       throw new Error("Error while deriving key");
     }
