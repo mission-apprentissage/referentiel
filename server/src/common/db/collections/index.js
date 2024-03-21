@@ -8,4 +8,5 @@ module.exports = {
   communes: require("./communes"),
   logs: require("./logs"),
   migrations: require("./migrations"),
+  users: require("./users"),
 };

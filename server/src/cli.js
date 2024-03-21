@@ -20,6 +20,7 @@ const { exportReseauxAsCsv, exportReseauxAsGraph } = require("./jobs/exportResea
 const { streamString } = require("./common/utils/streamUtils");
 const clearOrganismesReseaux = require("./jobs/clearReseaux.js");
 const modify = require("./jobs/modify");
+const { addUser } = require("./common/actions/addUser");
 
 function asArray(v) {
   return v.split(",");
@@ -234,6 +235,20 @@ cli
       }
 
       return oleoduc(stream, out || writeToStdout());
+    });
+  });
+
+cli
+  .command("createUser")
+  .description("Créer un utilisateur")
+  .argument("<email>", "Email de l'utilisateur")
+  .argument("<password>", "Mot de passe de l'utilisateur")
+  .argument("<type>", "region ou academie")
+  .argument("<code>", "Code de la région ou académie")
+  .action((email, password, type, code) => {
+    runScript(() => {
+      const createdUser = addUser(email, password, type, code);
+      return createdUser;
     });
   });
 

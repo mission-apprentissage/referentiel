@@ -1,9 +1,14 @@
 import React, { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { ApiContext } from "./ApiProvider";
+import { UserContext } from "./UserProvider";
+import Spinner from "./Spinner.jsx";
 
 export default function AuthShield() {
-  const { isAnonymous } = useContext(ApiContext);
+  const [userContext] = useContext(UserContext);
 
-  return isAnonymous() ? <Navigate to={"/login"} replace={true} /> : <Outlet />;
+  const isAuthenticated = userContext?.token;
+
+  if (userContext.loading) return <Spinner />;
+
+  return isAuthenticated ? <Outlet /> : <Navigate to={"/connexion"} replace={true} />;
 }

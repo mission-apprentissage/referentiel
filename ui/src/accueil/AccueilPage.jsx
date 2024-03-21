@@ -11,12 +11,12 @@ import Page from "../common/Page.jsx";
 import { modifications } from "../ModificationsPage.jsx";
 import NouveauxHistogram from "./stats/NouveauxHistogram.jsx";
 import EtatAdministratifPie from "./stats/EtatAdministratifPie.jsx";
-import { ApiContext } from "../common/ApiProvider.jsx";
+import { UserContext } from "../common/UserProvider.jsx";
 const config = require("../config");
 
 export default function AccueilPage() {
   const navigate = useNavigate();
-  const { isAnonymous } = useContext(ApiContext);
+  const [userContext] = useContext(UserContext);
 
   const [{ data: stats }] = useFetch(config.apiUrl + "/stats/couverture", null);
 
@@ -83,7 +83,7 @@ export default function AccueilPage() {
                   </Button>
                 </div>
               </Col>
-              {!isAnonymous() && (
+              {!userContext.isAnonymous && (
                 <>
                   <Col modifiers={"12"} className={"fr-mb-6w"}>
                     <NouveauxHistogram />
