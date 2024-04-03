@@ -5,12 +5,10 @@ const adresses = require("../../common/adresses");
 const { dbCollection } = require("../../common/db/mongodb");
 const { omitNil } = require("../../common/utils/objectUtils");
 const { compact } = require("lodash");
-const { DateTime } = require("luxon");
 const { CATALOG_COMMON_STATUS } = require("../../common/catalogStatuts.js");
 
 function fetchFormations(api, options = {}) {
   const siret = options.siret;
-  const lastYear = `${DateTime.now().minus({ year: 1 }).year}`;
   const query = {
     published: true,
     ...(siret ? { $or: [{ etablissement_formateur_siret: siret }, { etablissement_gestionnaire_siret: siret }] } : {}),
