@@ -107,7 +107,7 @@ export default function ConstructionPage() {
                           Trois natures d'organismes peuvent être observées via le Catalogue des formations en
                           apprentissage :
                         </span>
-                        <div className={"fr-text--bold"}>Les organismes responsables :</div>
+                        <div className={"fr-text--bold"}>Un organisme responsable :</div>
                         <ul>
                           <li>
                             Ne dispense pas de formation mais délègue à des organismes responsable et formateur ou
@@ -123,7 +123,7 @@ export default function ConstructionPage() {
                             critères qualité au sein de l'UFA.
                           </li>
                         </ul>
-                        <div className={"fr-text--bold"}>Les organismes responsables et formateur :</div>
+                        <div className={"fr-text--bold"}>Un organisme responsable et formateur :</div>
                         <ul>
                           <li>
                             Dispense des actions de formation par apprentissage déclaré auprès des services de l'Etat
@@ -138,7 +138,7 @@ export default function ConstructionPage() {
                             critères qualité au sein de l'UFA.
                           </li>
                         </ul>
-                        <div className={"fr-text--bold"}>Les organismes formateurs :</div>
+                        <div className={"fr-text--bold"}>Un organisme formateur :</div>
                         <ul>
                           <li>
                             Dispense des actions de formation par apprentissage déclaré auprès des services de l'Etat

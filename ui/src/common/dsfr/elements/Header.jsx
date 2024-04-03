@@ -2,6 +2,7 @@ import React from "react";
 import { classNames } from "../dsfr";
 import { Button } from "./Button";
 import { useModal } from "../common/useModal";
+import logoONISEP from "./logo_onisep.svg";
 
 function HeaderNavbar({ modals, showMenuButton, showSearchButton }) {
   const { menu, search } = modals;
@@ -65,6 +66,9 @@ export function Header({ title, tagline, links, nav, search, modifiers, classNam
               <div className="fr-header__brand-top">
                 <div className="fr-header__logo">
                   <p className="fr-logo">République Française</p>
+                </div>
+                <div className="fr-header__operator">
+                  <img className="fr-responsive-img" src={logoONISEP} alt="Logo ONISEP" />
                 </div>
                 <HeaderNavbar modals={modals} showMenuButton={!!nav} showSearchButton={!!search} />
               </div>

@@ -7,9 +7,7 @@ const { DateTime } = require("luxon");
 const { omitDeepNil } = require("../common/utils/objectUtils");
 
 function getListePubliqueDesOrganismesDeFormationAsStream() {
-  return fetchStream(
-    "https://www.monactiviteformation.emploi.gouv.fr/mon-activite-formation/public/listePubliqueOF?format=csv"
-  );
+  return fetchStream("https://data.lheo.org/srcdata/dgefp/lpof/lpof.csv");
 }
 
 function parseDate(value) {
