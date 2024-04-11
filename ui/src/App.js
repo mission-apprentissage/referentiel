@@ -5,6 +5,7 @@ import Layout from "./common/layout/Layout";
 import DesignPage from "./DesignPage.jsx";
 import OrganismesPage from "./organismes/OrganismesPage.jsx";
 import LoginPage from "./LoginPage.jsx";
+import ConnexionPage from "./ConnexionPage.jsx";
 import TableauDeBordPage from "./tableau-de-bord/TableauDeBordPage.jsx";
 import ValidationPage from "./tableau-de-bord/ValidationPage.jsx";
 import AuthShield from "./common/AuthShield";
@@ -17,15 +18,18 @@ import SearchProvider from "./common/SearchProvider";
 import ModificationsPage from "./ModificationsPage.jsx";
 import CorrectionsPage from "./CorrectionsPage.jsx";
 import { useScrollToTop } from "./common/hooks/useScrollToTop.js";
+import { UserProvider } from "./common/UserProvider.jsx";
 
 function Providers({ children }) {
   useScrollToTop();
 
   return (
     <ApiProvider>
-      <DataProvider>
-        <SearchProvider>{children}</SearchProvider>
-      </DataProvider>
+      <UserProvider>
+        <DataProvider>
+          <SearchProvider>{children}</SearchProvider>
+        </DataProvider>
+      </UserProvider>
     </ApiProvider>
   );
 }
@@ -39,6 +43,7 @@ function App() {
             <Route element={<Layout children={<Outlet />} />}>
               <Route path="/" element={<AccueilPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/connexion" element={<ConnexionPage />} />
               <Route path="/organismes" element={<OrganismesPage />} />
               <Route path="/organismes/:siret">
                 <Route path="" element={<OrganismePage />} />
@@ -61,7 +66,7 @@ function App() {
                 <Route path="" element={<ConstructionPage />} />
                 <Route path=":tab" element={<ConstructionPage />} />
               </Route>
-              <Route path="*" element={<Navigate to="/login" />} />
+              <Route path="*" element={<Navigate to="/connexion" />} />
             </Route>
           </Routes>
         </Providers>

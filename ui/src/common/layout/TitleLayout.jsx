@@ -5,7 +5,7 @@ import styled from "styled-components";
 import LinkButton from "../dsfr/custom/LinkButton";
 import { ValidationBreadcrumb } from "../../tableau-de-bord/ValidationPage.jsx";
 import { OrganismeBreadcrumb } from "../../organismes/OrganismePage.jsx";
-import { ApiContext } from "../ApiProvider";
+import { UserContext } from "../UserProvider";
 import { Box } from "../Flexbox";
 import useToggle from "../hooks/useToggle";
 
@@ -23,8 +23,8 @@ const Message = styled("div")`
 
 export default function TitleLayout({ title, details, getDetailsMessage, message, back, selector }) {
   const [showDetails, toggleDetails] = useToggle(false);
-  const { auth } = useContext(ApiContext);
-  const authTitle = `${auth.type === "region" ? "Région" : "Académie"} : ${auth.nom}`;
+  const [userContext] = useContext(UserContext);
+  const authTitle = `${userContext.type === "region" ? "Région" : "Académie"} : ${userContext.nom}`;
 
   return (
     <Container>

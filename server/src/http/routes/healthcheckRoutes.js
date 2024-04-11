@@ -3,7 +3,8 @@ const express = require("express");
 const logger = require("../../common/logger");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
-const { checkApiToken } = require("../middlewares/authMiddleware");
+const { verifyUser } = require("../middlewares/authMiddleware");
+const rateLimiterMiddleware = require("../middlewares/rateLimiterMiddleware");
 const { pick } = require("lodash");
 
 module.exports = () => {
@@ -38,7 +39,8 @@ module.exports = () => {
 
   router.get(
     "/api/v1/healthcheck/auth",
-    checkApiToken(),
+    rateLimiterMiddleware,
+    verifyUser,
     tryCatch((req, res) => {
       res.json(pick(req.user, ["code", "type"]));
     })

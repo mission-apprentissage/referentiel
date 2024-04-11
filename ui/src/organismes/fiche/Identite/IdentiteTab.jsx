@@ -11,7 +11,7 @@ import Siret from "../../../common/organismes/Siret.jsx";
 import { DateTime } from "luxon";
 import styled from "styled-components";
 import Adresse from "../../../common/organismes/Adresse.jsx";
-import { ApiContext } from "../../../common/ApiProvider.jsx";
+import { UserContext } from "../../../common/UserProvider.jsx";
 import definitions from "../../../common/definitions.json";
 
 const referentielsMapper = {
@@ -26,8 +26,9 @@ const Meta = styled("div")`
 
 export default function IdentiteTab({ organisme }) {
   const datagouvModal = useModal();
-  const { auth, isAnonymous } = useContext(ApiContext);
-  const showValidator = !isAnonymous() && organisme.adresse && organisme.adresse[auth.type].code === auth.code;
+  const [userContext] = useContext(UserContext);
+  const showValidator =
+    !userContext.isAnonymous && organisme.adresse && organisme.adresse[userContext.type].code === userContext.code;
 
   return (
     <>

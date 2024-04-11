@@ -1,5 +1,4 @@
 const env = require("env-var");
-const uuid = require("uuid");
 
 module.exports = {
   env: env.get("REFERENTIEL_ENV").default("local").asString(),
@@ -28,9 +27,13 @@ module.exports = {
   },
   auth: {
     api: {
-      jwtSecret: env.get("REFERENTIEL_AUTH_API_JWT_SECRET").default(uuid.v4()).asString(),
+      jwtSecret: env.get("REFERENTIEL_AUTH_API_JWT_SECRET").default("abcdef").asString(),
+      refreshTokenSecret: env.get("REFERENTIEL_AUTH_API_RT_SECRET").default("abcdef").asString(),
+      refreshTokenExpiry: env.get("REFERENTIEL_AUTH_REFRESH_TOKEN_EXPIRY").default(2592000).asInt(),
+      salt: env.get("REFERENTIEL_AUTH_API_SALT").default("abcdef").asString(),
       expiresIn: "1y",
     },
+    cookieSecret: env.get("REFERENTIEL_AUTH_COOKIE_SECRET").default("abcdef").asString(),
   },
   sirene: {
     api: {

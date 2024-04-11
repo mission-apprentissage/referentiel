@@ -9,6 +9,7 @@ import { UAICustom } from "./UAICustom.jsx";
 import Alert from "../../../../common/dsfr/elements/Alert.jsx";
 import BlueBox from "../../../../common/BlueBox.jsx";
 import { ApiContext } from "../../../../common/ApiProvider.jsx";
+import { UserContext } from "../../../../common/UserProvider.jsx";
 import { OrganismeContext } from "../../../../common/organismes/OrganismeProvider.jsx";
 const config = require("../../../../config");
 
@@ -46,6 +47,8 @@ const validators = (httpClient) => {
 export function UAISelectorModal({ modal, organisme, action }) {
   const { httpClient } = useContext(ApiContext);
   const { onChange } = useContext(OrganismeContext);
+  const [userContext] = useContext(UserContext);
+
   const hasPotentiels = organisme.uai_potentiels.length > 0;
   const form = useForm({
     initialValues: hasPotentiels ? { uai: organisme.uai || "", custom: "" } : { uai: "custom", custom: "" },
@@ -55,7 +58,7 @@ export function UAISelectorModal({ modal, organisme, action }) {
   function onSubmit(values) {
     const uai = values.uai === "custom" ? values.custom : values.uai;
     return httpClient
-      ._put(config.apiUrl + `/organismes/${organisme.siret}/setUAI`, { uai })
+      ._put(config.apiUrl + `/organismes/${organisme.siret}/setUAI`, { uai }, userContext.token)
       .then((updated) => {
         modal.close();
         form.reset();

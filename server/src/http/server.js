@@ -1,8 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const passport = require("passport");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const logMiddleware = require("./middlewares/logMiddleware");
 const errorMiddleware = require("./middlewares/errorMiddleware");
-const cors = require("cors");
 const config = require("../config");
 
 module.exports = async () => {
@@ -13,6 +15,10 @@ module.exports = async () => {
   }
   app.use(bodyParser.json());
   app.use(logMiddleware());
+  app.use(cookieParser(config.auth.cookieSecret));
+  require("../common/authLocalStrategy");
+  require("../common/authJwtStrategy");
+  app.use(passport.initialize());
   app.use(require("./routes/healthcheckRoutes")());
   app.use(require("./routes/organismesRoutes")());
   app.use(require("./routes/uaisRoutes")());
@@ -20,6 +26,7 @@ module.exports = async () => {
   app.use(require("./routes/dataRoutes")());
   app.use(require("./routes/statsRoutes")());
   app.use(require("./routes/swaggerRoutes")());
+  app.use(require("./routes/userRoutes")());
 
   app.use(errorMiddleware());
   app.use((req, res) => {
