@@ -246,8 +246,8 @@ cli
   .argument("<type>", "region ou academie")
   .argument("<code>", "Code de la région ou académie")
   .action((email, password, type, code) => {
-    runScript(() => {
-      const createdUser = addUser(email, password, type, code);
+    runScript(async () => {
+      const createdUser = await addUser(email, password, type, code);
       return createdUser;
     });
   });
