@@ -1,10 +1,11 @@
 const crypto = require("crypto");
-const { dbCollection } = require("../../common/db/mongodb");
+const { dbCollection, connectToMongodb } = require("../../common/db/mongodb");
 const config = require("../../config");
 const { findRegionByCode } = require("../regions");
 const { findAcademieByCode } = require("../academies");
 
 const addUser = async (email, password, type, code) => {
+  await connectToMongodb();
   const jwtSecret = config.auth.api.jwtSecret;
 
   return crypto.pbkdf2(password, jwtSecret, 310000, 32, "sha256", async (err, encryptedPassword) => {
