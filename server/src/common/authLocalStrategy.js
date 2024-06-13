@@ -10,7 +10,7 @@ passport.use(
       usernameField: "email",
     },
     async (email, password, done) => {
-      const salt = config.auth.api.salt;
+      const salt = config.auth.api.jwtSecret;
       const user = await dbCollection("users").findOne({ email });
 
       if (!user) {
