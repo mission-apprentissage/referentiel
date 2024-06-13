@@ -240,15 +240,14 @@ cli
 
 cli
   .command("createUser")
-  .description("Créer un utilisateur")
   .argument("<email>", "Email de l'utilisateur")
   .argument("<password>", "Mot de passe de l'utilisateur")
   .argument("<type>", "region ou academie")
   .argument("<code>", "Code de la région ou académie")
+  .description("Créer un utilisateur")
   .action((email, password, type, code) => {
-    runScript(async () => {
-      const createdUser = await addUser(email, password, type, code);
-      return createdUser;
+    runScript(() => {
+      return addUser(email, password, type, code);
     });
   });
 
