@@ -1,6 +1,5 @@
 import React from "react";
 import useElementId from "../../hooks/useElementId";
-import { Button } from "./Button";
 
 export const modalSizeModifiers = {
   sm: "md-4",
