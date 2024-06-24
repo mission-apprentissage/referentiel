@@ -12,13 +12,13 @@ export default function Modal({ title, modal, content, footer, size, modifiers, 
 
   return (
     <dialog className={"fr-modal"} id={modal.id} ref={modal.ref} aria-labelledby={contentId} {...rest}>
-      <div class="fr-container fr-container--fluid fr-container-md">
-        <div class="fr-grid-row fr-grid-row--center">
-          <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
-            <div class="fr-modal__body">
-              <div class="fr-modal__header">
+      <div className="fr-container fr-container--fluid fr-container-md">
+        <div className="fr-grid-row fr-grid-row--center">
+          <div className="fr-col-12 fr-col-md-8 fr-col-lg-6">
+            <div className="fr-modal__body">
+              <div className="fr-modal__header">
                 <p
-                  class="fr-link--close fr-link"
+                  className="fr-link--close fr-link"
                   aria-controls="fr-modal-2"
                   onClick={closeModal}
                   style={{ cursor: "pointer" }}
@@ -26,10 +26,10 @@ export default function Modal({ title, modal, content, footer, size, modifiers, 
                   Fermer
                 </p>
               </div>
-              <div class="fr-modal__content">
+              <div className="fr-modal__content">
                 <p>{content}</p>
               </div>
-              <div class="fr-modal__footer">{footer}</div>
+              <div className="fr-modal__footer">{footer}</div>
             </div>
           </div>
         </div>
