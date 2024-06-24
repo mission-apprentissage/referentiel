@@ -38,7 +38,7 @@ module.exports = () => {
       const validationQuery = {
         etat_administratif: "actif",
         qualiopi: true,
-        nature: { $in: ["responsable", "responsable_formateur"] },
+        nature: { $in: ["formateur", "responsable", "responsable_formateur"] },
       };
 
       const stats = await promiseAllProps({
