@@ -90,7 +90,7 @@ export default function Connexion() {
                                     type="email"
                                   />
                                   {usernameError && (
-                                    <p id="text-input-error-desc-error" class="fr-error-text">
+                                    <p id="text-input-error-desc-error" className="fr-error-text">
                                       Ce champ est obligatoire
                                     </p>
                                   )}
@@ -121,7 +121,7 @@ export default function Connexion() {
                                     />
                                   </div>
                                   {passwordError && (
-                                    <p id="text-input-error-desc-error" class="fr-error-text">
+                                    <p id="text-input-error-desc-error" className="fr-error-text">
                                       Ce champ est obligatoire
                                     </p>
                                   )}
