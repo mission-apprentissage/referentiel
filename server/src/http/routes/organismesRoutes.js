@@ -59,6 +59,11 @@ module.exports = () => {
     return query;
   }
 
+  /** Supprime les caractères spéciaux pour une expression régulière */
+  function escapeRegex(input) {
+    return input.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+  }
+
   function buildQuery(params) {
     const {
       sirets,
@@ -111,7 +116,9 @@ module.exports = () => {
           : { "uai_potentiels.uai": { $in: uai_potentiels } }
         : {}),
       ...(hasValue(etat_administratif) ? { etat_administratif } : {}),
-      ...(hasValue(text) ? { $text: { $search: text } } : {}),
+      ...(hasValue(text)
+        ? { $or: [{ $text: { $search: text } }, { siret: { $regex: new RegExp(`^${escapeRegex(text)}\\s*\\d{5}$`) } }] }
+        : {}),
       ...(hasValue(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
       ...(hasValue(qualiopi) ? { qualiopi } : {}),
       ...(hasValue(nouveaux)
