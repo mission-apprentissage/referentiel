@@ -53,8 +53,8 @@ export default function AccueilPage() {
                 <ol>
                   <li>identifiés par un SIRET</li>
                   <li>
-                    trouvés dans la Liste publique des Organismes de Formation (Data.gouv), la base ACCE et le Catalogue
-                    des formations en apprentissage (base des Carif-Oref)
+                    trouvés dans la Liste publique des Organismes de Formation (Data.gouv) et le Catalogue des
+                    formations en apprentissage (base des Carif-Oref)
                   </li>
                   <li>en lien avec des formations en apprentissage à un moment donné</li>
                 </ol>
