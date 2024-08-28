@@ -11,12 +11,12 @@ import Page from "../common/Page.jsx";
 import { modifications } from "../ModificationsPage.jsx";
 import NouveauxHistogram from "./stats/NouveauxHistogram.jsx";
 import EtatAdministratifPie from "./stats/EtatAdministratifPie.jsx";
-import { ApiContext } from "../common/ApiProvider.jsx";
+import { UserContext } from "../common/UserProvider.jsx";
 const config = require("../config");
 
 export default function AccueilPage() {
   const navigate = useNavigate();
-  const { isAnonymous } = useContext(ApiContext);
+  const [userContext] = useContext(UserContext);
 
   const [{ data: stats }] = useFetch(config.apiUrl + "/stats/couverture", null);
 
@@ -53,8 +53,8 @@ export default function AccueilPage() {
                 <ol>
                   <li>identifiés par un SIRET</li>
                   <li>
-                    trouvés dans la Liste publique des Organismes de Formation (Data.gouv), la base ACCE et le Catalogue
-                    des formations en apprentissage (base des Carif-Oref)
+                    trouvés dans la Liste publique des Organismes de Formation (Data.gouv) et le Catalogue des
+                    formations en apprentissage (base des Carif-Oref)
                   </li>
                   <li>en lien avec des formations en apprentissage à un moment donné</li>
                 </ol>
@@ -83,7 +83,7 @@ export default function AccueilPage() {
                   </Button>
                 </div>
               </Col>
-              {!isAnonymous() && (
+              {!userContext.isAnonymous && (
                 <>
                   <Col modifiers={"12"} className={"fr-mb-6w"}>
                     <NouveauxHistogram />

@@ -12,8 +12,9 @@ const { arrayOf } = require("../utils/validators");
 const tryCatch = require("../middlewares/tryCatchMiddleware");
 const { dbCollection } = require("../../common/db/mongodb");
 const setUAI = require("../../common/actions/setUAI");
-const { checkApiToken } = require("../middlewares/authMiddleware");
+const { verifyUser } = require("../middlewares/authMiddleware");
 const canEditOrganisme = require("../middlewares/canEditOrganismeMiddleware");
+const rateLimiterMiddleware = require("../middlewares/rateLimiterMiddleware");
 const { getRegions } = require("../../common/regions");
 const { getAcademies } = require("../../common/academies");
 const { getDepartements } = require("../../common/departements");
@@ -56,6 +57,11 @@ module.exports = () => {
     }
 
     return query;
+  }
+
+  /** Supprime les caractères spéciaux pour une expression régulière */
+  function escapeRegex(input) {
+    return input.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
   }
 
   function buildQuery(params) {
@@ -110,7 +116,9 @@ module.exports = () => {
           : { "uai_potentiels.uai": { $in: uai_potentiels } }
         : {}),
       ...(hasValue(etat_administratif) ? { etat_administratif } : {}),
-      ...(hasValue(text) ? { $text: { $search: text } } : {}),
+      ...(hasValue(text)
+        ? { $or: [{ $text: { $search: text } }, { siret: { $regex: new RegExp(`^${escapeRegex(text)}\\s*\\d{5}$`) } }] }
+        : {}),
       ...(hasValue(anomalies) ? { "_meta.anomalies.0": { $exists: anomalies } } : {}),
       ...(hasValue(qualiopi) ? { qualiopi } : {}),
       ...(hasValue(nouveaux)
@@ -230,7 +238,8 @@ module.exports = () => {
 
   router.put(
     "/api/v1/organismes/:siret/setUAI",
-    checkApiToken(),
+    rateLimiterMiddleware,
+    verifyUser,
     canEditOrganisme(),
     tryCatch(async (req, res) => {
       const user = req.user;

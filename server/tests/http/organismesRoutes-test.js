@@ -1,6 +1,6 @@
 const { strictEqual, deepStrictEqual, ok } = require("assert");
 const iconv = require("iconv-lite");
-const { insertOrganisme } = require("../utils/fakeData");
+const { insertOrganisme, insertUsers } = require("../utils/fakeData");
 const { startServer, generateAuthHeader } = require("../utils/testUtils");
 const { dbCollection } = require("../../src/common/db/mongodb");
 const assert = require("assert");
@@ -1126,12 +1126,14 @@ describe("organismesRoutes", () => {
       },
     });
 
+    await insertUsers();
+
     const response = await httpClient.put(
       "/api/v1/organismes/11111111100001/setUAI",
       { uai: "0751234J" },
       {
         headers: {
-          ...generateAuthHeader("region", "11"),
+          ...generateAuthHeader("bonjour@test.fr", "region", "11"),
         },
       }
     );
@@ -1217,12 +1219,14 @@ describe("organismesRoutes", () => {
       },
     });
 
+    await insertUsers({ type: "academie", code: "01" });
+
     const response = await httpClient.put(
       "/api/v1/organismes/11111111100001/setUAI",
       { uai: "0751234J" },
       {
         headers: {
-          ...generateAuthHeader("academie", "01"),
+          ...generateAuthHeader("bonjour@test.fr", "academie", "01"),
         },
       }
     );
@@ -1242,12 +1246,14 @@ describe("organismesRoutes", () => {
       },
     });
 
+    await insertUsers();
+
     const response = await httpClient.put(
       "/api/v1/organismes/22222222200002/setUAI",
       { uai: "0751234J" },
       {
         headers: {
-          ...generateAuthHeader("region", "11"),
+          ...generateAuthHeader("bonjour@test.fr", "region", "11"),
         },
       }
     );
@@ -1265,12 +1271,14 @@ describe("organismesRoutes", () => {
       },
     });
 
+    await insertUsers();
+
     const response = await httpClient.put(
       "/api/v1/organismes/22222222200002/setUAI",
       { uai: "0751234J" },
       {
         headers: {
-          ...generateAuthHeader("region", "76"),
+          ...generateAuthHeader("bonjour@test.fr", "region", "76"),
         },
       }
     );
@@ -1288,12 +1296,14 @@ describe("organismesRoutes", () => {
       },
     });
 
+    await insertUsers();
+
     const response = await httpClient.put(
       "/api/v1/organismes/22222222200002/setUAI",
       { uai: "0751234J" },
       {
         headers: {
-          ...generateAuthHeader("academie", "11"),
+          ...generateAuthHeader("bonjour@test.fr", "academie", "11"),
         },
       }
     );
