@@ -46,7 +46,7 @@ export default function IdentiteTab({ organisme }) {
       <GridRow>
         <Col modifiers={"12 sm-8"}>
           <Box direction={"column"}>
-            <Field label={"UAI"} value={organisme.uai} tooltip={definitions.organisme}>
+            <Field label={"UAI"} value={organisme.uai} tooltip={definitions.uai}>
               {showValidator && <UAIValidator className="fr-ml-3v" organisme={organisme} />}
             </Field>
             <Field label={"Nature"} value={<Nature organisme={organisme} />} tooltip={definitions.nature} />
