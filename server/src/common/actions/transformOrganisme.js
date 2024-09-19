@@ -25,7 +25,7 @@ function intoCsv(options = {}) {
           "Région": (o) => o?.adresse?.region.nom,
           "Qualiopi": (o) => (o.qualiopi ? "Oui" : "Non"),
           "Réseaux": (o) => o.reseaux.map((r) => r.code).join("|"),
-          "Référentiels": (o) => sanitize(o.referentiels.join("|")),
+          "Référentiels": (o) => sanitize(o.referentiels.sort().join("|")),
           "Nombre de relations": (o) => o.relations.length,
           "Nombre de lieux de formation": (o) => o.lieux_de_formation.length,
           "Date d'import": (o) => DateTime.fromJSDate(o._meta.date_import).toISODate(),
