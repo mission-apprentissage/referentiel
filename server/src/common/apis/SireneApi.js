@@ -68,7 +68,7 @@ class SireneApi extends RateLimitedApi {
         }
 
         logger.debug(`Récupération des établissements`, { cursor, query });
-        const { headers, stream } = await fetchStream(`${SireneApi.baseApiUrl}/entreprises/sirene/V3/siret`, {
+        const { headers, stream } = await fetchStream(`${SireneApi.baseApiUrl}/entreprises/sirene/siret`, {
           raw: true,
           method: "POST",
           headers: {
