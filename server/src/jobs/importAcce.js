@@ -94,6 +94,8 @@ const NATURES = {
   "Etablissement sans formation diplômante": "502",
   "Établissement public à caractère scientifique, culturel et professionnel (EPSCP)": "253",
   "Institut national polytechnique": "524",
+  "Institut national supérieur du professorat et de l'éducation": "568",
+  "Antenne d'Institut national supérieur du professorat et de l'éducation": "569",
 };
 
 const ETATS = {
