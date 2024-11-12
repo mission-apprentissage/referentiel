@@ -39,7 +39,8 @@ const Presentation = styled(({ className }) => {
             <ul>
               <li>sont identifiés par un SIRET en activité ;</li>
               <li>
-                sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide
+                sont trouvés dans la Liste publique des Organisme de Formation ou le Catalogue des formations en
+                apprentissage (RCO) avec une certification Qualiopi valide
               </li>
               <li>ont eu un lien avec des formations en apprentissage à un moment donné ;</li>
             </ul>

@@ -30,7 +30,10 @@ const getDescription = (type, natures) => {
           <li>ne possèdent pas d’UAI ;</li>
           <li>possèdent des UAI potentielles collectées dans différentes sources ;</li>
           <li>sont identifiés par un SIRET en activité ;</li>
-          <li>sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide</li>
+          <li>
+            sont trouvés dans la Liste publique des Organisme de Formation ou le Catalogue des formations en
+            apprentissage (RCO) avec une certification Qualiopi valide
+          </li>
           <li>{natureDetails}</li>
         </ul>
       ),
@@ -42,7 +45,10 @@ const getDescription = (type, natures) => {
           <li>ne possèdent pas d’UAI ;</li>
           <li>ne possèdent pas d’UAI potentielles ;</li>
           <li>sont identifiés par un SIRET en activité ;</li>
-          <li>sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide</li>
+          <li>
+            sont trouvés dans la Liste publique des Organisme de Formation ou le Catalogue des formations en
+            apprentissage (RCO) avec une certification Qualiopi valide
+          </li>
           <li>{natureDetails}</li>
         </ul>
       ),
@@ -53,7 +59,10 @@ const getDescription = (type, natures) => {
         <ul className={"fr-text--sm fr-pl-3w"}>
           <li>possèdent une UAI validée ;</li>
           <li>sont identifiés par un SIRET en activité ;</li>
-          <li>sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide</li>
+          <li>
+            sont trouvés dans la Liste publique des Organisme de Formation ou le Catalogue des formations en
+            apprentissage (RCO) avec une certification Qualiopi valide
+          </li>
           <li>{natureDetails}</li>
         </ul>
       ),
