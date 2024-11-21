@@ -54,6 +54,10 @@ export default function Connexion() {
       {loginError && (
         <Alert modifiers={"error"} title={"Une erreur est survenue"}>
           {loginError}
+          <p>
+            Contacter l’équipe du Référentiel :{" "}
+            <a href="mailto:referentiel-uai-siret@onisep.fr">referentiel-uai-siret@onisep.fr</a>
+          </p>
         </Alert>
       )}
       <main className="fr-pt-md-14v" role="main" id="content">
@@ -63,7 +67,14 @@ export default function Connexion() {
               <div className="fr-container fr-background-alt--grey fr-px-md-0 fr-py-10v fr-py-md-14v">
                 <div className="fr-grid-row fr-grid-row-gutters fr-grid-row--center">
                   <div className="fr-col-12 fr-col-md-9 fr-col-lg-8">
-                    <h1>Connexion au Référentiel</h1>
+                    <h1>Espace de fiabilisation des académies</h1>
+                    <p>
+                      L’espace de fiabilisation des couples UAI-SIRET est réservé aux académies (SSA) et aux référents
+                      mandatés pour faire cette expertise.
+                      <br />
+                      Pour toutes informations :{" "}
+                      <a href="referentiel-uai-siret@onisep.fr">referentiel-uai-siret@onisep.fr</a>
+                    </p>
                     <div>
                       <form id="login-1760" onSubmit={handleLogin}>
                         <fieldset

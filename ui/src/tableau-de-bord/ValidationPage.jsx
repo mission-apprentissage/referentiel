@@ -19,8 +19,8 @@ const getDescription = (type, natures) => {
   const titlePrefix = `Organismes ${natures === "formateur" ? "formateurs" : ""}`;
   const natureDetails =
     natures === "formateur"
-      ? 'ont la nature "formateur" uniquement'
-      : 'ont la nature "responsable" uniquement ou "responsable et formateur"';
+      ? "ont la nature « formateur » uniquement"
+      : "ont la nature « responsable » ou « responsable et formateur » ou « formateur » uniquement";
 
   const mapping = {
     A_VALIDER: {
@@ -30,7 +30,10 @@ const getDescription = (type, natures) => {
           <li>ne possèdent pas d’UAI ;</li>
           <li>possèdent des UAI potentielles collectées dans différentes sources ;</li>
           <li>sont identifiés par un SIRET en activité ;</li>
-          <li>sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide</li>
+          <li>
+            sont trouvés dans la Liste publique des organismes de formation (DGEFP) ou le Catalogue des formations en
+            apprentissage (RCO) avec une certification Qualiopi valide ;
+          </li>
           <li>{natureDetails}</li>
         </ul>
       ),
@@ -42,7 +45,10 @@ const getDescription = (type, natures) => {
           <li>ne possèdent pas d’UAI ;</li>
           <li>ne possèdent pas d’UAI potentielles ;</li>
           <li>sont identifiés par un SIRET en activité ;</li>
-          <li>sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide</li>
+          <li>
+            sont trouvés dans la Liste publique des organismes de formation (DGEFP) ou le Catalogue des formations en
+            apprentissage (RCO) avec une certification Qualiopi valide ;
+          </li>
           <li>{natureDetails}</li>
         </ul>
       ),
@@ -53,7 +59,10 @@ const getDescription = (type, natures) => {
         <ul className={"fr-text--sm fr-pl-3w"}>
           <li>possèdent une UAI validée ;</li>
           <li>sont identifiés par un SIRET en activité ;</li>
-          <li>sont trouvés dans la Liste publique des Organisme de Formation avec une certification Qualiopi valide</li>
+          <li>
+            sont trouvés dans la Liste publique des organismes de formation (DGEFP) ou le Catalogue des formations en
+            apprentissage (RCO) avec une certification Qualiopi valide ;
+          </li>
           <li>{natureDetails}</li>
         </ul>
       ),
@@ -75,7 +84,7 @@ const ValidationTitleLayout = styled(({ type, natures, refine, className }) => {
         details={
           <div>
             <Small as={"div"} className={"fr-text--bold"}>
-              Les organismes affichés dans ces listes :
+              Les organismes affichés dans cette liste :
             </Small>
             {description.critères}
           </div>

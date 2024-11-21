@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../dsfr/elements/Header";
+import { Link } from "../dsfr/elements/Link";
 import { Nav, NavLink } from "../dsfr/elements/Nav";
 import { Footer, FooterLink, FooterList } from "../dsfr/elements/Footer";
 import { UserContext } from "../UserProvider";
@@ -34,6 +35,23 @@ export default function Layout({ children }) {
             <NavLink to={"/construction"}>Construction du référentiel</NavLink>
             <NavLink to={"/corrections"}>Correction et fiabilisation des données</NavLink>
           </Nav>
+        }
+        links={
+          <ul className="fr-btns-group">
+            {userContext.isAnonymous ? (
+              <li>
+                <Link to="/connexion" icons="lock-line" modifiers="icon-left">
+                  Espace de fiabilisation - Académies
+                </Link>
+              </li>
+            ) : (
+              <li>
+                <Link to="#" onClick={handleLogout} icons="logout-box-r-line" modifiers="icon-left">
+                  Se déconnecter
+                </Link>
+              </li>
+            )}
+          </ul>
         }
       />
 
