@@ -19,9 +19,8 @@ const Presentation = styled(({ className }) => {
   return (
     <div className={className}>
       <Highlight>
-        Ce tableau de bord permet de consulter les organismes du référentiel dont les UAI sont à vérifier, à identifier
-        ou validées sur le territoire sélectionné. Une fois tous les organismes validés ou expertisés vous pouvez
-        adresser un mail à referentiel-uai-siret@onisep.fr pour nous informer de la fin de vos travaux.
+        Ce tableau de bord permet de consulter les organismes du Référentiel dont les UAI sont à vérifier, à identifier
+        ou validées sur le territoire sélectionné.
       </Highlight>
 
       <div className={"details fr-mt-2w"}>
@@ -39,8 +38,8 @@ const Presentation = styled(({ className }) => {
             <ul>
               <li>sont identifiés par un SIRET en activité ;</li>
               <li>
-                sont trouvés dans la Liste publique des Organisme de Formation ou le Catalogue des formations en
-                apprentissage (RCO) avec une certification Qualiopi valide
+                sont trouvés dans la Liste publique des organismes de formation (DGEFP) ou le Catalogue des formations
+                en apprentissage (RCO) avec une certification Qualiopi valide ;
               </li>
               <li>ont eu un lien avec des formations en apprentissage à un moment donné ;</li>
             </ul>

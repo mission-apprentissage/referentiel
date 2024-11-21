@@ -55,7 +55,7 @@ export default function Connexion() {
         <Alert modifiers={"error"} title={"Une erreur est survenue"}>
           {loginError}
           <p>
-            Contacter l’équipe du Référentiel:{" "}
+            Contacter l’équipe du Référentiel :{" "}
             <a href="mailto:referentiel-uai-siret@onisep.fr">referentiel-uai-siret@onisep.fr</a>
           </p>
         </Alert>
