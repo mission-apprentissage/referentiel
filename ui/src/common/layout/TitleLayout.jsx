@@ -36,6 +36,7 @@ export default function TitleLayout({ title, details, getDetailsMessage, message
               { path: "/construction", breadcrumb: "Construction du référentiel" },
               { path: "/corrections", breadcrumb: "Correction et fiabilisation des données" },
               { path: "/modifications", breadcrumb: "Journal des modifications" },
+              { path: "/suivi-modifications", breadcrumb: "Tableau de suivi des modifications" },
               { path: "/stats", breadcrumb: "Statistiques" },
               { path: "/organismes", breadcrumb: "Liste des organismes" },
               { path: "/organismes/:siret", breadcrumb: OrganismeBreadcrumb },

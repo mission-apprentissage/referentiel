@@ -1,4 +1,4 @@
-const { object, objectId, string, array } = require("./schemas/jsonSchemaTypes");
+const { object, objectId, string, array, boolean } = require("./schemas/jsonSchemaTypes");
 
 module.exports = {
   name: "users",
@@ -12,6 +12,7 @@ module.exports = {
         type: string(),
         code: string(),
         nom: string(),
+        isAdmin: boolean(),
       },
       { required: ["email"] }
     );

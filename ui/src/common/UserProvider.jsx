@@ -27,6 +27,7 @@ const UserProvider = (props) => {
         token: token,
         loading: false,
         isAnonymous: false,
+        isAdmin: decodedToken.isAdmin,
       });
     } else {
       setUser((oldValues) => {
