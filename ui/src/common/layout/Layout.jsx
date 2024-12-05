@@ -31,6 +31,7 @@ export default function Layout({ children }) {
           <Nav>
             <NavLink to={"/"}>Accueil</NavLink>
             {!userContext.isAnonymous && <NavLink to={"/tableau-de-bord"}>Tableau de bord</NavLink>}
+            {userContext.isAdmin && <NavLink to={"/suivi-modifications"}>Tableau de suivi des modifications</NavLink>}
             <NavLink to={"/organismes"}>Référentiel national</NavLink>
             <NavLink to={"/construction"}>Construction du référentiel</NavLink>
             <NavLink to={"/corrections"}>Correction et fiabilisation des données</NavLink>
