@@ -7,9 +7,10 @@ export default function DepartementsFilter() {
   const data = useContext(DataContext);
   const [userContext] = useContext(UserContext);
 
-  const departements = userContext.isAnonymous
-    ? data.departements
-    : data[`${userContext.type}s`].find((r) => r.code === userContext.code)?.departements || [];
+  const departements =
+    userContext.isAnonymous || userContext.isAdmin
+      ? data?.departements
+      : data[`${userContext.type}s`]?.find((r) => r.code === userContext.code)?.departements || [];
 
   return (
     <Filter

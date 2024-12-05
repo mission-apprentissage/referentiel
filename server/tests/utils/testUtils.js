@@ -26,9 +26,9 @@ async function startServer() {
   };
 }
 
-function generateAuthHeader(email, type, code) {
+function generateAuthHeader(email, type, code, isAdmin = false) {
   return {
-    Authorization: `Bearer ${buildJwtToken(email, type, code)}`,
+    Authorization: `Bearer ${buildJwtToken(email, type, code, isAdmin)}`,
   };
 }
 

@@ -17,6 +17,7 @@ import StatsPage from "./stats/StatsPage.jsx";
 import SearchProvider from "./common/SearchProvider";
 import ModificationsPage from "./ModificationsPage.jsx";
 import CorrectionsPage from "./CorrectionsPage.jsx";
+import SuiviModificationsPage from "./SuiviModificationsPage.jsx";
 import { useScrollToTop } from "./common/hooks/useScrollToTop.js";
 import { UserProvider } from "./common/UserProvider.jsx";
 
@@ -57,6 +58,7 @@ function App() {
                   <Route path="" element={<OrganismePage />} />
                   <Route path=":tab" element={<OrganismePage />} />
                 </Route>
+                <Route path="/suivi-modifications" element={<SuiviModificationsPage />} />
               </Route>
               <Route path="/dsfr" element={<DesignPage />} />
               <Route path="/stats" element={<StatsPage />} />

@@ -27,6 +27,7 @@ module.exports = async () => {
   app.use(require("./routes/statsRoutes")());
   app.use(require("./routes/swaggerRoutes")());
   app.use(require("./routes/userRoutes")());
+  app.use(require("./routes/modificationsRoutes")());
 
   app.use(errorMiddleware());
   app.use((req, res) => {

@@ -29,8 +29,8 @@ module.exports = () => {
     tryCatch(async (req, res) => {
       const user = req.user;
 
-      const token = buildJwtToken(user.email, user.type, user.code);
-      const refreshToken = buildRefreshToken(user.email, user.type, user.code);
+      const token = buildJwtToken(user.email, user.type, user.code, user.isAdmin);
+      const refreshToken = buildRefreshToken(user.email, user.type, user.code, user.isAdmin);
 
       const userRefreshTokens = user.refreshToken || [];
       userRefreshTokens.push(refreshToken);
@@ -59,9 +59,9 @@ module.exports = () => {
       const user = await dbCollection("users").findOne({ email: userEmail });
 
       const tokenIndex = user.refreshToken.findIndex((item) => item.refreshToken === refreshToken);
-      const token = buildJwtToken(user.email, user.type, user.code);
+      const token = buildJwtToken(user.email, user.type, user.code, user.isAdmin);
 
-      const newRefreshToken = buildRefreshToken(user.email, user.type, user.code);
+      const newRefreshToken = buildRefreshToken(user.email, user.type, user.code, user.isAdmin);
       user.refreshToken[tokenIndex] = { refreshToken: newRefreshToken };
 
       await dbCollection("users").updateOne({ email: user.email }, { $set: { ...user } });

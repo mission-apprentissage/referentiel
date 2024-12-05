@@ -26,10 +26,13 @@ passport.use(
     (req, jwt_payload, done) => {
       const code = jwt_payload.sub;
       const type = jwt_payload.type;
+      const email = jwt_payload.email;
+      const isAdmin = jwt_payload.isAdmin;
+
       const found = type === "region" ? findRegionByCode(code) : findAcademieByCode(code);
 
       if (found) {
-        const user = { type, code, departements: found.departements };
+        const user = { type, code, email, isAdmin, departements: found.departements };
         done(null, user);
       } else {
         done(null, false);
@@ -58,8 +61,16 @@ const verifyUser = (req, res, next) => {
   return passport.authenticate(strategy, callback, { session: false })(req, res, next);
 };
 
+const isUserAdmin = (req, res, next) => {
+  if (!req.user || !req.user.isAdmin) {
+    res.status(401).json({ statusCode: 401, success: false, message: "Vous n'êtes pas autorisé" });
+  }
+  next();
+};
+
 module.exports = {
   verifyUser,
   STRATEGIES,
   passportCallback,
+  isUserAdmin,
 };

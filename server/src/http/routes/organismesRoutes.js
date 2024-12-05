@@ -244,13 +244,16 @@ module.exports = () => {
     tryCatch(async (req, res) => {
       const user = req.user;
       const auteur = `${user.type}-${user.code}`;
+      const email = user.email;
+
       const { uai } = await Joi.object({
         uai: Joi.string()
           .pattern(/^[0-9]{7}[A-Z]{1}$/)
           .required(),
       }).validateAsync(req.body, { abortEarly: false });
 
-      await addModification(auteur, req.organisme, { uai });
+      await addModification(auteur, email, req.organisme, { uai });
+
       const updated = await setUAI(req.organisme, uai, auteur);
 
       if (!updated) {

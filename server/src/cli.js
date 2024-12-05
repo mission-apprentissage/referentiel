@@ -244,10 +244,11 @@ cli
   .argument("<password>", "Mot de passe de l'utilisateur")
   .argument("<type>", "region ou academie")
   .argument("<code>", "Code de la région ou académie")
+  .argument("[isAdmin]", "Admin ou non", false)
   .description("Créer un utilisateur")
-  .action((email, password, type, code) => {
+  .action((email, password, type, code, isAdmin = false) => {
     runScript(() => {
-      return addUser(email, password, type, code);
+      return addUser(email, password, type, code, isAdmin);
     });
   });
 
