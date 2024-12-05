@@ -11,6 +11,7 @@ module.exports = {
         siret: string(),
         date: date(),
         auteur: string(),
+        email: string(),
         original: object({}, { additionalProperties: true }),
         changements: object({}, { additionalProperties: true }),
       },
