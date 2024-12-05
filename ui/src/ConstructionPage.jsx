@@ -8,7 +8,6 @@ import definitions from "./common/definitions.json";
 import Page from "./common/Page.jsx";
 import { Link } from "./common/dsfr/elements/Link.jsx";
 import { useNavigate, useParams } from "react-router-dom";
-import ExportButton from "./common/ExportButton.jsx";
 
 function Incoherence({ itemName }) {
   return (
@@ -28,7 +27,7 @@ export default function ConstructionPage() {
 
   return (
     <Page>
-      <TitleLayout title={"Construction du référentiel national"} />
+      <TitleLayout title={"Construction du Référentiel national"} />
       <ContentLayout>
         <WideTabs
           tabs={[
@@ -42,7 +41,7 @@ export default function ConstructionPage() {
                 <TabPanel>
                   <h4>Source et périmètre des données</h4>
                   <p>
-                    La construction du référentiel national permet de constituer une liste d'organismes avec les
+                    La construction du Référentiel national permet de constituer une liste d'organismes avec les
                     informations suivantes :
                   </p>
                   <Table
@@ -59,7 +58,7 @@ export default function ConstructionPage() {
                       <td>Organisme de formation</td>
                       <td>{definitions.organisme}</td>
                       <td colSpan="2">
-                        <span className={"fr-text--bold"}>Les organismes référencés dans le référentiel sont :</span>
+                        <span className={"fr-text--bold"}>Les organismes référencés dans le Référentiel sont :</span>
                         <ul>
                           <li>identifiés par un SIRET ;</li>
                           <li>
@@ -255,12 +254,12 @@ export default function ConstructionPage() {
                 <TabPanel>
                   <h4>Import et compilation des données</h4>
                   <p>
-                    La construction du référentiel se compose deux étapes qui sont exécutées les unes à la suite des
+                    La construction du Référentiel se compose deux étapes qui sont exécutées les unes à la suite des
                     autres
                   </p>
 
                   <h6>Etape 1 : Import des SIRET (SIREN)</h6>
-                  <p>Pour importer les organismes dans le référentiel, trois listes sont utilisées comme référence :</p>
+                  <p>Pour importer les organismes dans le Référentiel, trois listes sont utilisées comme référence :</p>
                   <Table
                     modifiers={"layout-fixed"}
                     thead={
@@ -400,141 +399,6 @@ export default function ConstructionPage() {
                         <i>(dernière mise à jour 10/2022)</i>
                       </td>
                       <td>Mission Apprentissage</td>
-                    </tr>
-                  </Table>
-                </TabPanel>
-              ),
-            },
-            {
-              tab: (
-                <Tab selected={tab === "impact"} onClick={() => navigate("../impact")}>
-                  Impact sur les sources de données entrantes
-                </Tab>
-              ),
-              panel: (
-                <TabPanel>
-                  <h4>Impacts sur les sources de données entrantes une fois le couple UAI-SIRET validé</h4>
-
-                  <h6>Bases sources</h6>
-                  <Table
-                    modifiers={"layout-fixed"}
-                    thead={
-                      <Thead>
-                        <td>Base</td>
-                        <td colSpan="4">Impact</td>
-                      </Thead>
-                    }
-                  >
-                    <tr>
-                      <td>Catalogue</td>
-                      <td colSpan="4">
-                        Le flux direct entre le Référentiel et le Catalogue des formations en apprentissage permet une
-                        mises à jour automatique des données, ainsi{" "}
-                        <span className={"fr-text--bold"}>
-                          dès qu'une UAI est validée dans le Référentiel, sont mises à jour dans le Catalogue des
-                          formations en apprentissage :
-                        </span>
-                        <ul>
-                          <li className={"fr-text--bold"}>
-                            la fiche organisme correspondante (à partir de septembre){" "}
-                          </li>
-                          <li className={"fr-text--bold"}>les formations associées.</li>
-                        </ul>
-                        <div>
-                          Nb: l'annuaire des établissements QUIFORME le RCO devrait se brancher sur le référentiel pour
-                          alimenter les UAI des organismes quand elles sont validées - impact QUIFORME (dev à prévoir)
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>RAMSESE</td>
-                      <td colSpan="4">
-                        Il n'existe pas de liaison entre le Référentiel et RAMSESE qui permette une mise à jour
-                        automatique des données,{" "}
-                        <span className={"fr-text--bold"}>
-                          ainsi pour réaliser les corrections de masse, un rapport est disponible au téléchargement :
-                        </span>
-                        <div>
-                          <ExportButton className={"fr-my-3w"} label={"Télécharger le rapport"} />
-                        </div>
-                        <div>
-                          Il contient pour chaque UAI, si il y a lieu :
-                          <ul>
-                            <li>
-                              la modification du SIRET associé (ou par un changement SIRET ou par un remplacement d'un
-                              SIRET fermé par un SIRET en activité) ;
-                            </li>
-                            <li>la modification de l'adresse de l'organisme ;</li>
-                            <li>la modification dans les lieux de formation rattachés à l'UAI d'un organisme ;</li>
-                            <li>
-                              l'indication sur la nature de l'organisme (responsable, formateur, responsable et
-                              formateur)
-                            </li>
-                            <li>l'association de l'UAI à un lieu de formation plutôt qu'à un organisme.</li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Liste publique des OF</td>
-                      <td colSpan="4">
-                        Les validations d’UAI dans le Référentiel n’impactent pas directement la Liste publique des
-                        organismes de formation étant donné que celle-ci ne référence pas les UAI. Cependant, sera
-                        remonté à la DGEFP la présence de SIRET fermés.
-                      </td>
-                    </tr>
-                  </Table>
-
-                  <h6>Bases d'enrichissement</h6>
-                  <Table
-                    modifiers={"layout-fixed"}
-                    thead={
-                      <Thead>
-                        <td>Base</td>
-                        <td colSpan="4">Impact</td>
-                      </Thead>
-                    }
-                  >
-                    <tr>
-                      <td>DECA</td>
-                      <td colSpan="4">
-                        Il n’existe pas de liaison entre le Référentiel et DECA qui permette une mise à jour automatique
-                        des données, ainsi{" "}
-                        <span className={"fr-text--bold"}>
-                          pour réaliser les corrections de masse, un rapport est disponible au téléchargement :
-                        </span>
-                        <div>
-                          <ExportButton className={"fr-my-3w"} label={"Télécharger le rapport"} />
-                        </div>
-                        <div>
-                          Il contient la liste des UAI dont la nature est uniquement “responsable” afin de pouvoir
-                          supprimer les organismes formateurs de la base.
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>TBA</td>
-                      <td colSpan="4">
-                        Le flux direct entre le Référentiel et le Tableau de bord des formations en apprentissage permet
-                        une mise à jour automatique des données et donc une fiabilisation des données du Tableau de bord
-                        :
-                        <ul>
-                          <li>par récupération des couples SIRET-UAI validés ;</li>
-                          <li>par récupération des lieux de formations rattachés au couple SIRET-UAI.</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>IDEO (Onisep)</td>
-                      <td colSpan="4">
-                        Le flux direct entre le Référentiel et IDEO permet une mise à jour automatique des données et
-                        donc :
-                        <ul>
-                          <li>la correction des couples SIRET-UAI ;</li>
-                          <li>la correction des lieux de formations rattachés au couple SIRET-UAI ;</li>
-                          <li>la création de nouveaux organismes inconnus dans le Catalogue de l’Onisep.</li>
-                        </ul>
-                      </td>
                     </tr>
                   </Table>
                 </TabPanel>

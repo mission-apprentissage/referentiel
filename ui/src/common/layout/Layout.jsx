@@ -32,7 +32,7 @@ export default function Layout({ children }) {
             <NavLink to={"/"}>Accueil</NavLink>
             {!userContext.isAnonymous && <NavLink to={"/tableau-de-bord"}>Tableau de bord</NavLink>}
             <NavLink to={"/organismes"}>Référentiel national</NavLink>
-            <NavLink to={"/construction"}>Construction du référentiel</NavLink>
+            <NavLink to={"/construction"}>Construction du Référentiel</NavLink>
             <NavLink to={"/corrections"}>Correction et fiabilisation des données</NavLink>
           </Nav>
         }
@@ -65,7 +65,7 @@ export default function Layout({ children }) {
               de la transformation publique, la{" "}
               <a href="https://beta.gouv.fr/startups/?incubateur=mission-apprentissage">Mission interministérielle</a>{" "}
               pour l'apprentissage développe plusieurs services destinés à faciliter les entrées en apprentissage. Le
-              référentiel SIRET-UAI facilite l’identification des organismes de formation en apprentissage.
+              Référentiel SIRET-UAI facilite l’identification des organismes de formation en apprentissage.
             </>
           ),
           list: (

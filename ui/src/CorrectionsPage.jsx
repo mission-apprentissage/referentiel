@@ -20,7 +20,7 @@ export default function CorrectionsPage() {
       <ContentLayout>
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
           <Col modifiers={"12"}>
-            <Highlight>Le référentiel est une photographie à l’instant de consultation !</Highlight>
+            <Highlight>Le Référentiel est une photographie à l’instant de consultation !</Highlight>
           </Col>
         </GridRow>
         <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
@@ -134,11 +134,11 @@ export default function CorrectionsPage() {
               </AccordionItem>
               <AccordionItem
                 collapsed={item === "organisme"}
-                label={"Un organisme ne devrait pas être présent dans le référentiel"}
+                label={"Un organisme ne devrait pas être présent dans le Référentiel"}
               >
                 <div>
                   <p className={"fr-mt-3w"}>
-                    Si un organisme ne devrait pas être présent dans le référentiel (par exemple s’il s’agit d’une école
+                    Si un organisme ne devrait pas être présent dans le Référentiel (par exemple s’il s’agit d’une école
                     maternelle ou élémentaire), merci de le signaler à l’adresse mail suivante :
                     referentiel-uai-siret@onisep.fr pour demander le retrait des listes de cet organisme.
                   </p>
