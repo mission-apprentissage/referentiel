@@ -17,7 +17,7 @@ const addUser = async (email, password, type, code) => {
     const found = type === "region" ? findRegionByCode(code) : findAcademieByCode(code);
 
     return dbCollection("users").insertOne({
-      email,
+      email: email?.toLowerCase().trim(),
       hashedPassword,
       type,
       code,
