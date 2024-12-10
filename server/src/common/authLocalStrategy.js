@@ -11,7 +11,7 @@ passport.use(
     },
     async (email, password, done) => {
       const salt = config.auth.api.jwtSecret;
-      const user = await dbCollection("users").findOne({ email });
+      const user = await dbCollection("users").findOne({ email: email?.toLowerCase().trim() });
 
       if (!user) {
         return done(null, false, { message: "Incorrect username or password" });
