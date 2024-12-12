@@ -33,7 +33,7 @@ export default function TitleLayout({ title, details, getDetailsMessage, message
           <FilAriane
             routes={[
               { path: "/", breadcrumb: "Accueil" },
-              { path: "/construction", breadcrumb: "Construction du référentiel" },
+              { path: "/construction", breadcrumb: "Construction du Référentiel" },
               { path: "/corrections", breadcrumb: "Correction et fiabilisation des données" },
               { path: "/modifications", breadcrumb: "Journal des modifications" },
               { path: "/suivi-modifications", breadcrumb: "Tableau de suivi des modifications" },
