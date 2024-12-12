@@ -28,7 +28,7 @@ export default function AccueilPage() {
           <Col modifiers={"sm-3"} className={"xfr-display-none xfr-display-sm-block"}>
             <Summary>
               <a href={"#référentiel"}>Référentiel national</a>
-              <a href={"#construction"}>Construction du référentiel</a>
+              <a href={"#construction"}>Construction du Référentiel</a>
               <a href={"#modifications"}>Journal des modifications</a>
             </Summary>
           </Col>
@@ -47,7 +47,7 @@ export default function AccueilPage() {
                 </h6>
                 {stats && (
                   <div className={"fr-mt-3w fr-text--bold"}>
-                    Les {stats.total} organismes référencés dans le référentiel sont :
+                    Les {stats.total} organismes référencés dans le Référentiel sont :
                   </div>
                 )}
                 <ol>
@@ -59,17 +59,17 @@ export default function AccueilPage() {
                   <li>en lien avec des formations en apprentissage à un moment donné</li>
                 </ol>
                 <Button className={"fr-mt-3w"} onClick={() => navigate("/organismes")}>
-                  Consulter le référentiel national
+                  Consulter le Référentiel national
                 </Button>
               </Col>
             </GridRow>
 
             <GridRow modifiers={"gutters"} className={"fr-mb-6w"}>
               <Col modifiers={"12"}>
-                <h6 id={"construction"}>Construction du référentiel</h6>
+                <h6 id={"construction"}>Construction du Référentiel</h6>
                 <div className={"fr-mt-3w"}>
                   <span className={"fr-text--bold"}>
-                    La construction du référentiel national permet de constituer une liste d’organismes avec les
+                    La construction du Référentiel national permet de constituer une liste d’organismes avec les
                     informations suivantes :
                   </span>
                   UAI, Nature (Responsable ; Responsable et formateur ; Formateur), SIREN, SIRET, Numéro de déclaration

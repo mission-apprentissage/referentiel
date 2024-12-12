@@ -124,7 +124,7 @@ export function RelationsTable({ label, organisme, results }) {
       )}
       {absents.length > 0 && (
         <>
-          <div>Les 2 organismes suivants sont absents du référentiel national</div>
+          <div>Les 2 organismes suivants sont absents du Référentiel national</div>
           <CustomTable
             modifiers={"bordered layout-fixed"}
             thead={

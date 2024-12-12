@@ -65,7 +65,7 @@ export const modifications = [
   <Modifications date={"2022-06-08"}>
     <Modification>
       <p>
-        Ajout de l’onglet "impact sur les sources de données entrantes" dans la page "Construction du référentiel
+        Ajout de l’onglet "impact sur les sources de données entrantes" dans la page "Construction du Référentiel
         national"
       </p>
     </Modification>
