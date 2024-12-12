@@ -34,6 +34,7 @@ export default function Layout({ children }) {
             <NavLink to={"/organismes"}>Référentiel national</NavLink>
             <NavLink to={"/construction"}>Construction du Référentiel</NavLink>
             <NavLink to={"/corrections"}>Correction et fiabilisation des données</NavLink>
+            <NavLink to={"/stats"}>Statistiques</NavLink>
           </Nav>
         }
         links={
@@ -61,11 +62,15 @@ export default function Layout({ children }) {
         content={{
           desc: (
             <>
-              Mandatée par les ministres en charge de l’éducation nationale, de l’enseignement supérieur, du travail et
-              de la transformation publique, la{" "}
-              <a href="https://beta.gouv.fr/startups/?incubateur=mission-apprentissage">Mission interministérielle</a>{" "}
-              pour l'apprentissage développe plusieurs services destinés à faciliter les entrées en apprentissage. Le
-              Référentiel SIRET-UAI facilite l’identification des organismes de formation en apprentissage.
+              Mandaté par le ministère du Travail et de l’Emploi, l'Onisep assure, avec un réseau d'experts des services
+              statistiques académiques, le maintien de ce Référentiel d'organismes de formation dans le but de
+              fiabiliser la circulation des offres de formation en apprentissage vers les outils d'affection et
+              d'inscription en formation initiale du secondaire (Téléservices Affelnet) et du supérieur (Parcoursup) via
+              le{" "}
+              <a href="https://catalogue-apprentissage.intercariforef.org/" target="_blank" rel="noreferrer">
+                Catalogue des formations en apprentissage
+              </a>{" "}
+              du réseau des Carif-Oref.
             </>
           ),
           list: (
@@ -82,24 +87,12 @@ export default function Layout({ children }) {
               <FooterLink as={"a"} href="https://www.data.gouv.fr/fr/" target={"_blank"}>
                 data.gouv.fr
               </FooterLink>
-            </FooterList>
-          ),
-        }}
-        bottom={{
-          list: (
-            <FooterList>
-              <FooterLink to={"/stats"} onClick={() => window.scrollTo(0, 0)}>
-                Statistiques
+              <FooterLink as={"a"} href="https://onisep.fr" target={"_blank"}>
+                Onisep.fr
               </FooterLink>
-              {userContext.isAnonymous ? (
-                <FooterLink to={"/connexion"} onClick={() => window.scrollTo(0, 0)}>
-                  Se connecter
-                </FooterLink>
-              ) : (
-                <FooterLink to={"#"} onClick={handleLogout}>
-                  Se déconnecter
-                </FooterLink>
-              )}
+              <FooterLink as={"a"} href="https://opendata.onisep.fr/" target={"_blank"}>
+                Opendata Onisep.fr
+              </FooterLink>
             </FooterList>
           ),
         }}
