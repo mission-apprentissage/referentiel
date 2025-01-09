@@ -1,10 +1,10 @@
 {
   "organisme": "Un organisme intègre le Référentiel s’il est présent via son SIRET  dans la Liste publique des organismes de formation (data.gouv) et/ou le Catalogue des formations en apprentissage (base des Carif-Oref).",
   "relations": "Les relations entre les organismes sont identifiées via le Catalogue des formations en apprentissage (base des Carif-Oref).",
-  "nature": "La donnée « Nature » est déduite des relations existantes entre les organismes au niveau de l’offre de formation déclarée dans le Catalogue des formations en apprentissage (base des Carif-Oref).",
+  "nature": "La donnée « Nature » désigne la nature de l’organisme de formation qui peut être Responsable / Responsable et formateur / ou Formateur uniquement. Cette donnée est déduite des relations existantes entre les organismes au niveau de l’offre de formation déclarée dans le Catalogue des formations en apprentissage (base des Carif-Oref).",
   "lieu": "La donnée « Lieu de formation » provient du Catalogue des formations en apprentissage (base des Carif-Oref).",
   "uai": "La donnée « UAI » est fiabilisée dès lors que l’UAI a fait l’objet d’une validation par un référent en académie ou par un gestionnaire du site.",
-  "reseau": "La donnée « Réseau » provient des Réseaux qui ont transmis leur liste d’organismes au Tableau de bord de l’Apprentissage.",
+  "reseau": "La donnée « Réseaux » provient des Réseaux qui ont transmis leur liste d’organismes au Tableau de bord de l’Apprentissage.",
   "siren": "La donnée « SIREN » provient de l’INSEE.",
   "siret": "La donnée « SIRET » et l’état administratif de l’organisme « en activité » ou « fermé » proviennent de l’INSEE.",
   "nda": "La donnée « NDA » provient de la Liste publique des organismes de formation.",
