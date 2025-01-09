@@ -7,7 +7,6 @@ import OrganismeList from "../common/organismes/liste/OrganismeList.jsx";
 import Filters from "../common/organismes/filtres/Filters.jsx";
 import TitleLayout from "../common/layout/TitleLayout.jsx";
 import Results from "../common/Results.jsx";
-import WideTabs from "../common/dsfr/custom/WideTabs.jsx";
 import ContentLayout from "../common/layout/ContentLayout.jsx";
 import NatureFilter from "../common/organismes/filtres/NatureFilter.jsx";
 import DatagouvFilter from "../common/organismes/filtres/DatagouvFilter.jsx";
@@ -15,6 +14,8 @@ import DepartementsFilter from "../common/organismes/filtres/DepartementsFilter.
 import UAIFilter from "../common/organismes/filtres/UAIFilter.jsx";
 import Page from "../common/Page.jsx";
 import { useQuery } from "../common/hooks/useQuery.js";
+import AcademiesFilter from "../common/organismes/filtres/AcademiesFilter.jsx";
+import QualiopiFilter from "../common/organismes/filtres/QualiopiFilter.jsx";
 
 export default function OrganismesPage() {
   const { response, search, refine } = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
@@ -27,32 +28,19 @@ export default function OrganismesPage() {
         selector={<AcademieSelector academie={query.academies} onChange={(code) => refine({ academies: code })} />}
       />
       <ContentLayout>
-        <WideTabs
-          tabs={[
-            {
-              tab: <Tab>Liste</Tab>,
-              panel: (
-                <TabPanel>
-                  <Results
-                    search={
-                      <SearchForm
-                        onSubmit={(form) => search({ page: 1, text: form.text, academies: query.academies })}
-                      />
-                    }
-                    filters={
-                      <Filters onChange={(filters) => refine({ ...filters })}>
-                        <DepartementsFilter />
-                        <NatureFilter />
-                        <DatagouvFilter />
-                        <UAIFilter />
-                      </Filters>
-                    }
-                    results={<OrganismeList response={response} />}
-                  />
-                </TabPanel>
-              ),
-            },
-          ]}
+        <Results
+          search={<SearchForm onSubmit={(form) => search({ page: 1, text: form.text, academies: query.academies })} />}
+          filters={
+            <Filters onChange={(filters) => refine({ ...filters })}>
+              <AcademiesFilter />
+              <DepartementsFilter />
+              <NatureFilter />
+              <DatagouvFilter />
+              <QualiopiFilter />
+              <UAIFilter />
+            </Filters>
+          }
+          results={<OrganismeList response={response} />}
         />
       </ContentLayout>
     </Page>
