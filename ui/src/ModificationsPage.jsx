@@ -40,9 +40,60 @@ const Modification = styled(({ titre, children }) => {
 `;
 
 export const modifications = [
-  <Modifications date={"2022-09-15"}>
+  <Modifications date={"2025-01-07"}>
     <Modification>
-      <p>Automatisation de la récupération des UAI valides de la base ACCE PRO</p>
+      <ul>
+        <li>Intégration des nouvelles données Idéo - Onisep</li>
+      </ul>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2024-12-19"}>
+    <Modification>
+      <ul>
+        <li>Lancement de la connexion personnalisée des experts académiques via l'Espace de fiabilisation</li>
+      </ul>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2024-11-14"}>
+    <Modification>
+      <ul>
+        <li>Intégration des nouvelles données DECA</li>
+      </ul>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2024-07-16"}>
+    <Modification>
+      <ul>
+        <li>Possibilité de rechercher par SIREN dans le moteur de recherche</li>
+      </ul>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2024-03-20"}>
+    <Modification>
+      <ul>
+        <li>Fiabilisation des centres AFPA</li>
+      </ul>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2024-02-09"}>
+    <Modification>
+      <ul>
+        <li>Intégration des nouvelles données DECA</li>
+      </ul>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2023-07-17"}>
+    <Modification>
+      <ul>
+        <li>Intégration des nouvelles données DECA</li>
+      </ul>
+    </Modification>
+  </Modifications>,
+  <Modifications date={"2023-03-10"}>
+    <Modification>
+      <ul>
+        <li>Intégration des UAI lieux de formation depuis l’API du catalogue privé des Ministères éducatifs</li>
+      </ul>
     </Modification>
   </Modifications>,
   <Modifications date={"2022-09-06"}>
@@ -64,16 +115,17 @@ export const modifications = [
   </Modifications>,
   <Modifications date={"2022-06-08"}>
     <Modification>
-      <p>
-        Ajout de l’onglet "impact sur les sources de données entrantes" dans la page "Construction du Référentiel
-        national"
-      </p>
+      <ul>
+        <li>
+          Ajout de l’onglet "impact sur les sources de données entrantes" dans la page "Construction du Référentiel
+          national"
+        </li>
+      </ul>
     </Modification>
   </Modifications>,
   <Modifications date={"2022-05-21"}>
     <Modification>
       <ul>
-        <li>Proposition d’UAI valides via un lien vers ACCE PRO</li>
         <li>Correction d’un bug sur les statistiques de couverture</li>
         <li>Ajout d’une recherche des organismes sans académies</li>
         <li>Affichage des départements en fonction du lien de connexion utilisé.</li>
@@ -82,21 +134,27 @@ export const modifications = [
   </Modifications>,
   <Modifications date={"2022-04-04"}>
     <Modification titre={"Ajout de l'export"}>
-      <p>Il est désormais possible d'exporter la liste des organismes.</p>
+      <ul>
+        <li>Il est désormais possible d'exporter la liste des organismes.</li>
+      </ul>
     </Modification>
   </Modifications>,
   <Modifications date={"2022-03-21"}>
     <Modification titre={"Ajout des lieux de formations et des statistiques"}>
-      <p>Il est possible de consulter dans une fiche organisme les lieux de formations.</p>
-      <p>Il également possible de consulter le nombre de nouveaux organismes depuis le tableau de bord.</p>
+      <ul>
+        <li>Il est possible de consulter dans une fiche organisme les lieux de formations.</li>
+        <li>Il également possible de consulter le nombre de nouveaux organismes depuis le tableau de bord.</li>
+      </ul>
     </Modification>
   </Modifications>,
   <Modifications date={"2022-02-18"}>
     <Modification titre={"Ajout des relations entre les organismes"}>
-      <p>
-        Il est à présent possible de consulter dans une fiche organisme les relations qu’il entretient avec d’autres
-        organismes en tant que responsable et/ou formateur.
-      </p>
+      <ul>
+        <li>
+          Il est à présent possible de consulter dans une fiche organisme les relations qu’il entretient avec d’autres
+          organismes en tant que responsable et/ou formateur.
+        </li>
+      </ul>
     </Modification>
   </Modifications>,
 ];

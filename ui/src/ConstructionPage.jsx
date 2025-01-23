@@ -46,8 +46,19 @@ export default function ConstructionPage() {
                     formations en apprentissage…). C’est un agrégat de données où seule l’UAI est modifiable.
                     <br />
                     L’intégration d’un organisme au sein du Référentiel se fait de manière automatique si son SIRET est
-                    présent au sein du Catalogue des formations en apprentissage (base des Carif-Oref) et/ou de la Liste
-                    publique des organismes de formation (data.gouv).
+                    présent au sein du{" "}
+                    <a href="https://catalogue-apprentissage.intercariforef.org/" target="_blank" rel="noreferrer">
+                      Catalogue des formations en apprentissage
+                    </a>{" "}
+                    (base des Carif-Oref) et/ou de la{" "}
+                    <a
+                      href="https://data.gouv.fr/fr/datasets/liste-publique-des-organismes-de-formation-l-6351-7-1-du-code-du-travail/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Liste publique des organismes de formation
+                    </a>{" "}
+                    (data.gouv).
                   </p>
                   <p>
                     Chaque organisme présent dans le Référentiel est décrit par plusieurs attributs qui sont listés
@@ -176,11 +187,11 @@ export default function ConstructionPage() {
                           <ul>
                             <li>validée : l'UAI de cet organisme est fiabilisée</li>
                             <li>
-                              à valider : l'UAI de cet organisme doit être validée pour finaliser son lien avec le SIRET
-                              associé. Des UAI potentielles sont proposées pour aider à la validation.
+                              à vérifier : l'UAI de cet organisme doit être validée pour finaliser son lien avec le
+                              SIRET associé. Des UAI potentielles sont proposées pour aider à la validation.
                             </li>
                             <li>
-                              à renseigner : l'UAI de cet organisme doit être saisie pour finaliser son lien avec le
+                              à identifier : l'UAI de cet organisme doit être saisie pour finaliser son lien avec le
                               SIRET associé.
                             </li>
                           </ul>
@@ -188,7 +199,7 @@ export default function ConstructionPage() {
                       </td>
                     </tr>
                     <tr>
-                      <td>Réseau</td>
+                      <td>Réseaux</td>
                       <td>{definitions.reseau}</td>
                       <td colSpan="2" />
                     </tr>
@@ -292,7 +303,7 @@ export default function ConstructionPage() {
                     couples UAI-SIRET sont exploités par d’autres applicatifs : le Catalogue des formations en
                     apprentissage, le Tableau de bord de l’Apprentissage, ParcourSup et Affelnet.
                     <br />
-                    Pour mémoire l'UAI est utilisée comme clé d'identification des organismes pour l'alimentation des
+                    Pour mémoire, l'UAI est utilisée comme clé d'identification des organismes pour l'alimentation des
                     plateformes éducatives (Parcoursup et Affelnet).
                     <br /> Un couple UAI-SIRET validé garantie la bonne circulation d’une offre de formation en
                     apprentissage jusqu’à ces plateformes.

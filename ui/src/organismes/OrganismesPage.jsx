@@ -16,6 +16,7 @@ import Page from "../common/Page.jsx";
 import { useQuery } from "../common/hooks/useQuery.js";
 import AcademiesFilter from "../common/organismes/filtres/AcademiesFilter.jsx";
 import QualiopiFilter from "../common/organismes/filtres/QualiopiFilter.jsx";
+import SiretFilter from "../common/organismes/filtres/SiretFilter.jsx";
 
 export default function OrganismesPage() {
   const { response, search, refine } = useSearch({ ordre: "desc", page: 1, items_par_page: 25 });
@@ -38,6 +39,7 @@ export default function OrganismesPage() {
               <DatagouvFilter />
               <QualiopiFilter />
               <UAIFilter />
+              <SiretFilter />
             </Filters>
           }
           results={<OrganismeList response={response} />}

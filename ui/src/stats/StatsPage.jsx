@@ -6,12 +6,21 @@ import NaturesStats from "./natures/NaturesStats.jsx";
 import ValidationStats from "./validation/ValidationStats.jsx";
 import QualiopiStats from "./qualiopi/QualiopiStats.jsx";
 import Page from "../common/Page.jsx";
+import { Link } from "../common/dsfr/elements/Link.jsx";
 
 export default function StatsPage() {
   return (
     <Page>
       <TitleLayout title={"Statistiques"} />
       <ContentLayout>
+        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
+          <Col modifiers={"12"}>
+            <p>
+              Pour plus de précisons sur le statut des UAI et la nature des organismes, consultez la page{" "}
+              <Link to="/construction">Construction du Référentiel</Link>.
+            </p>
+          </Col>
+        </GridRow>
         <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
           <Col modifiers={"12"}>
             <h6>Fiabilisation des organismes responsables / responsables et formateurs</h6>
