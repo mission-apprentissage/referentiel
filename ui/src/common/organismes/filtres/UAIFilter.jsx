@@ -8,16 +8,18 @@ export default function UAIFilter() {
     <Filter
       label={
         <Box>
-          <span>UAI validée</span>
+          <span>UAI</span>
           <Tooltip
-            label={"UAI validée"}
-            description={"L’UAI de cet organisme a été validée les utilisateurs du Référentiel"}
+            label={"UAI"}
+            description={
+              "Une UAI est validée dès lors qu’elle a fait l’objet d’une fiabilisation par un référent en académie ou par un administrateur du site."
+            }
           />
         </Box>
       }
       items={[
-        { label: "Oui", paramName: "uais", value: "true" },
-        { label: "Non", paramName: "uais", value: "false" },
+        { label: "Validée", paramName: "uais", value: "true" },
+        { label: "Non validée", paramName: "uais", value: "false" },
       ]}
     />
   );
