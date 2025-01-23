@@ -78,8 +78,8 @@ export default function AccueilPage() {
                     pour dispenser des formations en apprentissage
                   </li>
                   <li>
-                    ils ont une nature : Ils peuvent être responsables / responsables et formateurs ou formateurs
-                    uniquement. Cette nature est déduite dès lors qu’ ils sont liés à de l’offre de formation dans le
+                    ils ont une nature : ils peuvent être responsables / responsables et formateurs ou formateurs
+                    uniquement. Cette nature est déduite dès lors qu’ils sont liés à de l’offre de formation dans le
                     Catalogue des formations apprentissage (réseau des Carif-Oref).
                   </li>
                 </ul>
@@ -94,13 +94,13 @@ export default function AccueilPage() {
                   présents dans le Référentiel, ce qui explique qu’aujourd’hui, {stats?.uaiExistant} organismes ont une
                   UAI validée.
                 </p>
-                <p>
+                <h6>
                   <u>Rôle et usage du Référentiel</u>
-                </p>
+                </h6>
                 <p>
                   Le Référentiel est un des pivots d’enrichissement du Catalogue des formations en apprentissage (réseau
-                  des Carif-Oref). Les UAI fiabilisés dans le Référentiel alimentent chaque jour le Catalogue des
-                  formations en apprentissage. Ces mêmes UAI sont ensuite exploités, via le Catalogue, par les
+                  des Carif-Oref). Les UAI fiabilisées dans le Référentiel alimentent chaque jour le Catalogue des
+                  formations en apprentissage. Ces mêmes UAI sont ensuite exploitées, via le Catalogue, par les
                   Ministères éducatifs dans leurs applicatifs Parcoursup et Affelnet.
                   <br /> Le Tableau de bord de l’Apprentissage (MIA) exploite également les données du Référentiel pour
                   approuver les organismes de formation souhaitant déclarer leurs effectifs. L’ouverture d’un compte sur
@@ -120,9 +120,9 @@ export default function AccueilPage() {
                   </a>
                   . Elles sont librement réutilisables.
                 </p>
-                <p>
+                <h6>
                   <u>Fiabilisation des UAI</u>
-                </p>
+                </h6>
                 <p>
                   L’UAI est la seule donnée modifiable au sein du Référentiel.
                   <br />
@@ -151,13 +151,13 @@ export default function AccueilPage() {
                 <div className={"fr-mt-3w"}>
                   <span className={"fr-text--bold"}>
                     La construction du Référentiel national permet de constituer une liste d’organismes avec les
-                    informations suivantes :
+                    informations suivantes :{" "}
                   </span>
                   UAI, Nature (Responsable ; Responsable et formateur ; Formateur), SIREN, SIRET, Numéro de déclaration
                   d’activité (NDA), Certification Qualiopi, Enseigne, Raison sociale, Réseau, Adresse, Région, Académie.
                   <div className={"fr-mt-3w fr-text--bold"}>
                     À chaque organisme de formation est associé une liste de relations avec d’autres organismes et une
-                    liste de lieux de formations.
+                    liste de lieux de formation.
                   </div>
                   <Button className={"fr-mt-3w"} modifiers={"secondary"} onClick={() => navigate("/construction")}>
                     En savoir plus

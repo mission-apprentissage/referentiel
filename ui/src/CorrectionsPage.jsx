@@ -44,11 +44,10 @@ export default function CorrectionsPage() {
                     <span className={"fr-text--bold fr-pr-1v"}>
                       Si un organisme est de Nature inconnue, c’est qu’il n’y a pas d’offre de formation collectée
                     </span>
-                    Si un organisme est de Nature inconnue, c’est qu’il n’y a pas d’offre de formation collectée par le
-                    Carif-Oref pour cet établissement. Aucune nature n’a pu être déduite. Il faut donc vérifier auprès
-                    du Carif-Oref d’appartenance qu’une modification de la collecte est possible. Si oui, le Carif-Oref
-                    devra alors référencer l’offre de formation des organismes manquants. La collecte de cette offre
-                    permettra de déduire la nature de l’organisme.
+                    par le Carif-Oref pour cet établissement. Aucune nature n’a pu être déduite. Il faut donc vérifier
+                    auprès du Carif-Oref d’appartenance qu’une modification de la collecte est possible. Si oui, le
+                    Carif-Oref devra alors référencer l’offre de formation des organismes manquants. La collecte de
+                    cette offre permettra de déduire la nature de l’organisme.
                   </div>
 
                   <div className={"fr-mt-3w"}>

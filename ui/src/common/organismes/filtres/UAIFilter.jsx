@@ -8,9 +8,9 @@ export default function UAIFilter() {
     <Filter
       label={
         <Box>
-          <span>UAI validée</span>
+          <span>UAI</span>
           <Tooltip
-            label={"UAI validée"}
+            label={"UAI"}
             description={
               "Une UAI est validée dès lors qu’elle a fait l’objet d’une fiabilisation par un référent en académie ou par un administrateur du site."
             }

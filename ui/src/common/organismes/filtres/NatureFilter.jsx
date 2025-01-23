@@ -11,7 +11,7 @@ export default function NatureFilter({ items }) {
           <span>Nature</span>
           <Tooltip
             label={"Nature"}
-            description="Désigne la nature de l’organisme de formation qui peut être Responsable / Responsable et formateur / ou Formateur uniquement. Cette donnée est déduite de la manière dont l’offre de formation est déclarée dans les bases des Carif-Oref."
+            description="Désigne la nature de l’organisme de formation qui peut être Responsable / Responsable et formateur / ou Formateur uniquement. Cette donnée est déduite de la manière dont l’offre de formation est déclarée dans les bases des Carif-Oref. Un organisme de nature inconnue est un organisme non présent dans le Catalogue des formations en apprentissage."
           />
         </>
       }
