@@ -4,9 +4,8 @@ import ContentLayout from "./common/layout/ContentLayout.jsx";
 import Page from "./common/Page.jsx";
 import styled from "styled-components";
 import { Col, GridRow } from "./common/dsfr/fondamentaux/index.js";
-import { Summary } from "./common/dsfr/elements/Summary.jsx";
 import { DateTime } from "luxon";
-import { capitalizeFirstLetter, cloneNodes } from "./common/utils.js";
+import { cloneNodes } from "./common/utils.js";
 
 function formatDate(date, pattern) {
   return DateTime.fromISO(date).setLocale("fr").toLocaleString(pattern);
@@ -170,17 +169,6 @@ export default function ModificationsPage() {
               const date = modification.props.date;
               return { ...modification, key: date, id: date, className: "fr-mb-8w" };
             })}
-          </Col>
-          <Col modifiers={"offset-1 3"}>
-            <Summary>
-              {modifications.map((m) => {
-                return (
-                  <a href={`#${m.props.date}`}>
-                    {capitalizeFirstLetter(formatDate(m.props.date, { month: "long", year: "numeric" }))}
-                  </a>
-                );
-              })}
-            </Summary>
           </Col>
         </GridRow>
       </ContentLayout>

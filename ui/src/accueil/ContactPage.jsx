@@ -15,7 +15,7 @@ export default function ContactPage() {
               <Col modifiers={"12"}>
                 <p>
                   Vous avez des questions, des demandes ou souhaitez plus d’informations ?<br />
-                  Envoyez-nous un email à l’adresse suivante:{" "}
+                  Envoyez-nous un email à l’adresse suivante :{" "}
                   <a href="referentiel-uai-siret@onisep.fr">referentiel-uai-siret@onisep.fr</a>
                 </p>
               </Col>
