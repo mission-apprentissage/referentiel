@@ -65,7 +65,7 @@ export default function Layout({ children }) {
             <>
               Mandaté par le ministère du Travail, l'Onisep assure, avec un réseau d'experts des services statistiques
               académiques, le maintien de ce Référentiel d'organismes de formation dans le but de fiabiliser la
-              circulation des offres de formation en apprentissage vers les outils d'affection et d'inscription en
+              circulation des offres de formation en apprentissage vers les outils d'affectation et d'inscription en
               formation initiale du secondaire (Téléservices Affelnet) et du supérieur (Parcoursup) via le{" "}
               <a href="https://catalogue-apprentissage.intercariforef.org/" target="_blank" rel="noreferrer">
                 Catalogue des formations en apprentissage
@@ -102,12 +102,12 @@ export default function Layout({ children }) {
               <FooterLink to={"/modifications"} onClick={() => window.scrollTo(0, 0)}>
                 Journal des modifications
               </FooterLink>
-              <FooterLink to={"#"} onClick={() => window.scrollTo(0, 0)}>
+              {/* <FooterLink to={"#"} onClick={() => window.scrollTo(0, 0)}>
                 Mentions légales
               </FooterLink>
               <FooterLink to={"#"} onClick={() => window.scrollTo(0, 0)}>
                 Données personnelles
-              </FooterLink>
+              </FooterLink> */}
               <FooterLink to={"/contact"} onClick={() => window.scrollTo(0, 0)}>
                 Contact
               </FooterLink>

@@ -10,7 +10,7 @@ import Page from "../common/Page.jsx";
 import NouveauxHistogram from "./stats/NouveauxHistogram.jsx";
 import EtatAdministratifPie from "./stats/EtatAdministratifPie.jsx";
 import { UserContext } from "../common/UserProvider.jsx";
-import { Link } from "../common/dsfr/elements/Link.jsx";
+
 const config = require("../config");
 
 export default function AccueilPage() {
@@ -37,6 +37,7 @@ export default function AccueilPage() {
                 </p>
                 <ul>
                   <li>
+                    La{" "}
                     <a
                       href={
                         "https://www.data.gouv.fr/fr/datasets/liste-publique-des-organismes-de-formation-l-6351-7-1-du-code-du-travail/"
@@ -44,8 +45,9 @@ export default function AccueilPage() {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      La liste publique des organismes de formation (DGEFP)
-                    </a>
+                      Liste publique des organismes de formation
+                    </a>{" "}
+                    (DGEFP)
                   </li>
                   <li>
                     Et/ou le{" "}
@@ -67,7 +69,7 @@ export default function AccueilPage() {
                 <ul>
                   <li>ils sont identifiés via un SIRET ouvert</li>
                   <li>
-                    ils sont certifiés Qualiopi par le{" "}
+                    ET ils sont certifiés Qualiopi par le{" "}
                     <a
                       href="https://travail-emploi.gouv.fr/qualiopi-marque-de-certification-qualite-des-prestataires-de-formation"
                       target="_blank"
@@ -78,7 +80,7 @@ export default function AccueilPage() {
                     pour dispenser des formations en apprentissage
                   </li>
                   <li>
-                    ils ont une nature : ils peuvent être responsables / responsables et formateurs ou formateurs
+                    ET ils ont une nature : ils peuvent être responsables / responsables et formateurs ou formateurs
                     uniquement. Cette nature est déduite dès lors qu’ils sont liés à de l’offre de formation dans le
                     Catalogue des formations apprentissage (réseau des Carif-Oref).
                   </li>
@@ -98,17 +100,18 @@ export default function AccueilPage() {
                   <u>Rôle et usage du Référentiel</u>
                 </h6>
                 <p>
-                  Le Référentiel est un des pivots d’enrichissement du Catalogue des formations en apprentissage (réseau
-                  des Carif-Oref). Les UAI fiabilisées dans le Référentiel alimentent chaque jour le Catalogue des
-                  formations en apprentissage. Ces mêmes UAI sont ensuite exploitées, via le Catalogue, par les
-                  Ministères éducatifs dans leurs applicatifs Parcoursup et Affelnet.
-                  <br /> Le Tableau de bord de l’Apprentissage (MIA) exploite également les données du Référentiel pour
-                  approuver les organismes de formation souhaitant déclarer leurs effectifs. L’ouverture d’un compte sur
-                  le Tableau de bord est possible uniquement si l’organisme dispose d’un couple UAI-SIRET valide dans le
-                  Référentiel.
-                  <br /> D’autres consommateurs du Référentiel peuvent également être mentionnés comme la Caisse des
-                  dépôts et consignation (CDC) qui appelle les couples SIRET-UAI pour fiabiliser la collecte de la taxe
-                  d’apprentissage ou encore SIRIUS qui exploite les relations entre les organismes.
+                  Le Référentiel est un des pivots d’enrichissement du <b>Catalogue des formations en apprentissage</b>{" "}
+                  (réseau des Carif-Oref). Les UAI fiabilisées dans le Référentiel alimentent chaque jour le Catalogue
+                  des formations en apprentissage. Ces mêmes UAI sont ensuite exploitées, via le Catalogue, par les
+                  Ministères éducatifs dans leurs applicatifs <b>Parcoursup</b> et <b>Affelnet</b>.
+                  <br /> Le <b>Tableau de bord de l’Apprentissage</b> (MIA) exploite également les données du
+                  Référentiel pour approuver les organismes de formation souhaitant déclarer leurs effectifs.
+                  L’ouverture d’un compte sur le Tableau de bord est possible uniquement si l’organisme dispose d’un
+                  couple UAI-SIRET valide dans le Référentiel.
+                  <br /> D’autres consommateurs du Référentiel peuvent également être mentionnés comme la{" "}
+                  <b>Caisse des dépôts et consignation</b> (CDC) qui appelle les couples SIRET-UAI pour fiabiliser la
+                  collecte de la taxe d’apprentissage ou encore <b>SIRIUS</b> qui exploite les relations entre les
+                  organismes.
                   <br />
                   Les données de ce site sont sous{" "}
                   <a
@@ -147,13 +150,15 @@ export default function AccueilPage() {
 
             <GridRow modifiers={"gutters"} className={"fr-mb-6w"}>
               <Col modifiers={"12"}>
-                <h6 id={"construction"}>Construction du Référentiel</h6>
+                <h6 id={"construction"}>
+                  <u>Construction du Référentiel</u>
+                </h6>
                 <div className={"fr-mt-3w"}>
                   <span className={"fr-text--bold"}>
                     La construction du Référentiel national permet de constituer une liste d’organismes avec les
                     informations suivantes :{" "}
                   </span>
-                  UAI, Nature (Responsable ; Responsable et formateur ; Formateur), SIREN, SIRET, Numéro de déclaration
+                  UAI, Nature (Responsable, Responsable et formateur, Formateur), SIREN, SIRET, Numéro de déclaration
                   d’activité (NDA), Certification Qualiopi, Enseigne, Raison sociale, Réseau, Adresse, Région, Académie.
                   <div className={"fr-mt-3w fr-text--bold"}>
                     À chaque organisme de formation est associé une liste de relations avec d’autres organismes et une

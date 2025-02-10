@@ -272,10 +272,10 @@ export default function ConstructionPage() {
                     modifiers={"layout-fixed"}
                     thead={
                       <Thead>
-                        <td>Nom</td>
-                        <td>Données</td>
+                        <td>Nom de la source</td>
+                        <td>Données récupérées</td>
                         <td>Mise à jour</td>
-                        <td>Source</td>
+                        <td>Propriétaire de la source</td>
                       </Thead>
                     }
                   >
@@ -312,10 +312,10 @@ export default function ConstructionPage() {
                     modifiers={"layout-fixed"}
                     thead={
                       <Thead>
-                        <td>Nom</td>
-                        <td colSpan="2">Données</td>
+                        <td>Nom de la source</td>
+                        <td colSpan="2">Données récupérées</td>
                         <td>Mise à jour</td>
-                        <td>Source</td>
+                        <td>Propriétaire de la source</td>
                       </Thead>
                     }
                   >
@@ -326,10 +326,22 @@ export default function ConstructionPage() {
                       <td>RCO</td>
                     </tr>
                     <tr>
+                      <td>Sirene</td>
+                      <td colSpan="2">Raison sociale, Relations, Etat administratif, Adresse, Forme juridique</td>
+                      <td>Automatique journalière</td>
+                      <td>INSEE</td>
+                    </tr>
+                    <tr>
                       <td>Liste publique des organismes de formation (data.gouv)</td>
                       <td colSpan="2">NDA, Qualiopi</td>
                       <td>Automatique journalière</td>
                       <td>DGEFP</td>
+                    </tr>
+                    <tr>
+                      <td>Tableau de bord de l'apprentissage</td>
+                      <td colSpan="2">UAI potentielle, Réseau</td>
+                      <td>Automatique journalière</td>
+                      <td>Mission Apprentissage</td>
                     </tr>
                     <tr>
                       <td>DECA</td>
@@ -357,18 +369,6 @@ export default function ConstructionPage() {
                       <td>DGER</td>
                     </tr>
                     <tr>
-                      <td>Sirene</td>
-                      <td colSpan="2">Raison sociale, Relations, Etat administratif, Adresse, Forme juridique</td>
-                      <td>Automatique journalière</td>
-                      <td>INSEE</td>
-                    </tr>
-                    <tr>
-                      <td>Tableau de bord de l'apprentissage</td>
-                      <td colSpan="2">UAI potentielle, Réseau</td>
-                      <td>Automatique journalière</td>
-                      <td>Mission Apprentissage</td>
-                    </tr>
-                    <tr>
                       <td>Catalogue des Ministères éducatifs (Parcoursup / Affelnet)</td>
                       <td colSpan="2">UAI des lieux de formation</td>
                       <td>Automatique journalière</td>
@@ -380,6 +380,10 @@ export default function ConstructionPage() {
             },
           ]}
         />
+        <p>
+          Pour en savoir plus sur les dates de mises à jour, consultez le{" "}
+          <a href="/modifications">Journal des modifications</a>.
+        </p>
       </ContentLayout>
     </Page>
   );

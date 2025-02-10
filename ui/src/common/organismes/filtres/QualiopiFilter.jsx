@@ -12,7 +12,7 @@ export default function QualiopiFilter() {
           <Tooltip
             label={"Qualiopi"}
             description={
-              "La donnée « Qualiopi » provient de la Liste publique des organismes de formation. Un organisme certifié Qualiopi dans le cadre du Référentiel est habilité à dispenser des formations en apprentissage. La certification Qualiopi est portée par le SIREN + numéro de déclaration d’activité (NDA). Il est possible que des SIRET soient absents de la Liste publique des OF mais héritent de la certification Qualiopi via leur SIREN + NDA de rattachement."
+              "La donnée « Qualiopi » provient de la Liste publique des organismes de formation. Un organisme certifié Qualiopi dans le cadre du Référentiel est habilité à dispenser des formations en apprentissage. La certification Qualiopi est portée par le SIREN + numéro de déclaration d’activité (NDA)."
             }
           />
         </Box>
