@@ -200,7 +200,11 @@ export default function ConstructionPage() {
                     </tr>
                     <tr>
                       <td>Réseaux</td>
-                      <td>{definitions.reseau}</td>
+                      <td>
+                        La donnée « Réseaux » provient des Réseaux qui ont transmis leur liste d’organismes au Tableau
+                        de bord de l’Apprentissage. Si cette donnée est erronée ou manquante,{" "}
+                        <a href="/corrections?item=appartenance">voir la marche à suivre.</a>
+                      </td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
@@ -300,11 +304,12 @@ export default function ConstructionPage() {
                   </p>
                   <p>
                     Une fois que les UAI sont validées par les référents en académie ou les gestionnaires du site, les
-                    couples UAI-SIRET sont exploités par d’autres applicatifs : le Catalogue des formations en
-                    apprentissage, le Tableau de bord de l’Apprentissage, ParcourSup et Affelnet.
+                    couples UAI-SIRET sont exploités par d’autres applicatifs : le{" "}
+                    <b>Catalogue des formations en apprentissage</b>, le <b>Tableau de bord de l’Apprentissage</b>,{" "}
+                    <b>ParcourSup</b> et <b>Affelnet</b>.
                     <br />
                     Pour mémoire, l'UAI est utilisée comme clé d'identification des organismes pour l'alimentation des
-                    plateformes éducatives (Parcoursup et Affelnet).
+                    plateformes éducatives (<b>Parcoursup</b> et <b>Affelnet</b>).
                     <br /> Un couple UAI-SIRET validé garantie la bonne circulation d’une offre de formation en
                     apprentissage jusqu’à ces plateformes.
                   </p>
