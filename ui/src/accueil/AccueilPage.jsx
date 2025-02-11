@@ -59,8 +59,8 @@ export default function AccueilPage() {
                 </ul>
                 <br />
                 <p>
-                  Parmi ces organismes, un{" "}
-                  <span style={{ color: "red" }}>périmètre est identifié comme étant prioritaire</span> pour la
+                  Parmi ces organismes,{" "}
+                  <span style={{ color: "red" }}>un périmètre est identifié comme étant prioritaire</span> pour la
                   fiabilisation des couples UAI-SIRET.
                 </p>
                 <p>
@@ -106,8 +106,8 @@ export default function AccueilPage() {
                   Ministères éducatifs dans leurs applicatifs <b>Parcoursup</b> et <b>Affelnet</b>.
                   <br /> Le <b>Tableau de bord de l’Apprentissage</b> (MIA) exploite également les données du
                   Référentiel pour approuver les organismes de formation souhaitant déclarer leurs effectifs.
-                  L’ouverture d’un compte sur le Tableau de bord est possible uniquement si l’organisme dispose d’un
-                  couple UAI-SIRET valide dans le Référentiel.
+                  L’ouverture d’un compte sur le Tableau de bord de l’Apprentissage est possible uniquement si
+                  l’organisme dispose d’un couple UAI-SIRET valide dans le Référentiel.
                   <br /> D’autres consommateurs du Référentiel peuvent également être mentionnés comme la{" "}
                   <b>Caisse des dépôts et consignation</b> (CDC) qui appelle les couples SIRET-UAI pour fiabiliser la
                   collecte de la taxe d’apprentissage ou encore <b>SIRIUS</b> qui exploite les relations entre les
@@ -137,7 +137,7 @@ export default function AccueilPage() {
                   au sein des services statistiques académiques (SSA) rattachés au niveau national à la Direction de
                   l’évaluation, de la prospective et de la performance (DEPP).
                   <br /> Au sein de leur académie, ces experts sont chargés de l’immatriculation des organismes de
-                  formation et de la gestion du répertoire Ramsese. Ils ont donc une véritable connaissance des
+                  formation et de la gestion du répertoire Ramsese (ACCE). Ils ont donc une véritable connaissance des
                   organismes de formation de leur territoire.
                   <br /> Les gestionnaires du site peuvent également être amenés à fiabiliser des UAI au sein du
                   Référentiel.

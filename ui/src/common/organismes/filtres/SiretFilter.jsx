@@ -11,7 +11,7 @@ export default function SiretFilter() {
           <span>SIRET</span>
           <Tooltip
             label={"SIRET"}
-            description={"L'état administratif de l'organisme de formation provient de l'INSEE"}
+            description={"L'état administratif de l'organisme de formation provient de l'INSEE."}
           />
         </Box>
       }
