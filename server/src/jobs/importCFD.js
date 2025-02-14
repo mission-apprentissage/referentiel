@@ -42,7 +42,7 @@ async function importCsv(csvStream) {
 }
 
 function getCsvExport(name) {
-  return fetchStream(`https://infocentre.pleiade.education.fr/bcn/index.php/export/CSV?n=${name}&separator=%7C`);
+  return fetchStream(`https://bcn.depp.education.fr/bcn/index.php/export/CSV?n=${name}&separator=%7C`);
 }
 
 async function importCFD(options = {}) {

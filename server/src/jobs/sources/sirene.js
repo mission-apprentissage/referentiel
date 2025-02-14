@@ -92,7 +92,7 @@ module.exports = (custom = {}) => {
   return {
     name,
     async stream(options = {}) {
-      const filters = options.filters || {};
+      const filters = options.filters || { _meta: { nouveau: true } };
       const datagouv = createDatagouvSource();
       const allSirets = [...(await getAllSirets()), ...(await datagouv.loadSirets())];
 
