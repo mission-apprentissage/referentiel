@@ -203,7 +203,7 @@ export default function ConstructionPage() {
                       <td>
                         La donnée « Réseaux » provient des Réseaux qui ont transmis leur liste d’organismes au Tableau
                         de bord de l’Apprentissage. Si cette donnée est erronée ou manquante,{" "}
-                        <a href="/corrections?item=appartenance">voir la marche à suivre.</a>
+                        <Incoherence itemName={"appartenance"} />
                       </td>
                       <td colSpan="2" />
                     </tr>
