@@ -37,7 +37,7 @@ export default function IdentiteTab({ organisme }) {
         {organisme.referentiels.includes("datagouv") && organisme.uai_potentiels.length === 0 && (
           <>
             <LinkButton modifiers={"icon-right"} icons={"arrow-right-line"} onClick={() => datagouvModal.open()}>
-              Afficher les données de la Liste publique des Organismes de Formations
+              Afficher les données de la Liste publique des organismes de formation
             </LinkButton>
             {<DatagouvModal modal={datagouvModal} siret={organisme.siret} />}
           </>
@@ -77,7 +77,10 @@ export default function IdentiteTab({ organisme }) {
             Date d’import de l’organisme :{" "}
             {DateTime.fromISO(organisme._meta.date_import).setLocale("fr").toFormat("dd/MM/yyyy")}
           </Meta>
-          <Meta>Source : {organisme.referentiels.map((r) => referentielsMapper[r]).join(", ")}</Meta>
+          <Meta>
+            Source{organisme.referentiels.map((r) => referentielsMapper[r]).length > 1 ? "s" : ""} :{" "}
+            {organisme.referentiels.map((r) => referentielsMapper[r]).join(", ")}
+          </Meta>
         </Col>
       </GridRow>
     </>

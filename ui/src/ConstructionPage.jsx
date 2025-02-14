@@ -8,7 +8,6 @@ import definitions from "./common/definitions.json";
 import Page from "./common/Page.jsx";
 import { Link } from "./common/dsfr/elements/Link.jsx";
 import { useNavigate, useParams } from "react-router-dom";
-import ExportButton from "./common/ExportButton.jsx";
 
 function Incoherence({ itemName }) {
   return (
@@ -28,7 +27,7 @@ export default function ConstructionPage() {
 
   return (
     <Page>
-      <TitleLayout title={"Construction du référentiel national"} />
+      <TitleLayout title={"Construction du Référentiel national"} />
       <ContentLayout>
         <WideTabs
           tabs={[
@@ -42,8 +41,29 @@ export default function ConstructionPage() {
                 <TabPanel>
                   <h4>Source et périmètre des données</h4>
                   <p>
-                    La construction du référentiel national permet de constituer une liste d'organismes avec les
-                    informations suivantes :
+                    Le Référentiel UAI-SIRET est construit avec des données issues de différentes sources que nous
+                    exploitons quotidiennement (base SIRENE, Liste publique des organismes de formation, Catalogue des
+                    formations en apprentissage…). C’est un agrégat de données où seule l’UAI est modifiable.
+                    <br />
+                    L’intégration d’un organisme au sein du Référentiel se fait de manière automatique si son SIRET est
+                    présent au sein du{" "}
+                    <a href="https://catalogue-apprentissage.intercariforef.org/" target="_blank" rel="noreferrer">
+                      Catalogue des formations en apprentissage
+                    </a>{" "}
+                    (base des Carif-Oref) et/ou de la{" "}
+                    <a
+                      href="https://data.gouv.fr/fr/datasets/liste-publique-des-organismes-de-formation-l-6351-7-1-du-code-du-travail/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Liste publique des organismes de formation
+                    </a>{" "}
+                    (data.gouv).
+                  </p>
+                  <p>
+                    Chaque organisme présent dans le Référentiel est décrit par plusieurs attributs qui sont listés
+                    ci-dessous. Pour chaque donnée, la source ainsi que le périmètre sont précisés. Ces données, une
+                    fois compilées, constituent la fiche détaillée de l’organisme au sein du Référentiel.
                   </p>
                   <Table
                     modifiers={"layout-fixed"}
@@ -59,14 +79,13 @@ export default function ConstructionPage() {
                       <td>Organisme de formation</td>
                       <td>{definitions.organisme}</td>
                       <td colSpan="2">
-                        <span className={"fr-text--bold"}>Les organismes référencés dans le référentiel sont :</span>
+                        <span className={"fr-text--bold"}>Les organismes présents dans le Référentiel sont :</span>
                         <ul>
                           <li>identifiés par un SIRET ;</li>
                           <li>
-                            trouvés dans la Liste publique des Organismes de Formation (data.gouv), la base RAMSESE ou
-                            le catalogue des formations en apprentissage (base des Carif-Oref) ;
+                            trouvés dans la Liste publique des organismes de formation (data.gouv) et/ou le Catalogue
+                            des formations en apprentissage (base des Carif-Oref).
                           </li>
-                          <li>en lien avec des formations en apprentissage à un moment donné.</li>
                         </ul>
                       </td>
                     </tr>
@@ -79,7 +98,7 @@ export default function ConstructionPage() {
                       <td colSpan="2">
                         <span className={"fr-text--bold"}>
                           Les relations entre les organismes sont identifiées au niveau de l'offre de formation en
-                          apprentissage collectée par les Carif-Oref.
+                          apprentissage collectée par les Carif-Oref.{" "}
                         </span>
                         En effet, chaque offre de formation est associée à un organisme responsable et un organisme
                         formateur (chacun est connu par son SIRET et son UAI le cas échéant).
@@ -110,8 +129,8 @@ export default function ConstructionPage() {
                         <div className={"fr-text--bold"}>Un organisme responsable :</div>
                         <ul>
                           <li>
-                            Ne dispense pas de formation mais délègue à des organismes responsable et formateur ou
-                            uniquement formateur ;
+                            Ne dispense pas de formation mais délègue à des organismes responsables et formateurs ou
+                            uniquement formateurs ;
                           </li>
                           <li>Est signataire de la convention de formation ;</li>
                           <li>Demande et reçoit les financements de l'OPCO ;</li>
@@ -127,8 +146,9 @@ export default function ConstructionPage() {
                         <ul>
                           <li>
                             Dispense des actions de formation par apprentissage déclaré auprès des services de l'Etat
-                            (n° de déclaration d'activité (NDA)) - Est signataire de la convention de formation ;
+                            (n° de déclaration d'activité (NDA))
                           </li>
+                          <li>Est signataire de la convention de formation ;</li>
                           <li>Demande et reçoit les financements de l'OPCO ;</li>
                           <li>
                             Est responsable auprès de l'administration du respect de ses missions et obligations ;
@@ -142,7 +162,7 @@ export default function ConstructionPage() {
                         <ul>
                           <li>
                             Dispense des actions de formation par apprentissage déclaré auprès des services de l'Etat
-                            (n° de déclaration d'activité (NDA))
+                            (n° de déclaration d'activité (NDA)).
                           </li>
                         </ul>
                       </td>
@@ -154,8 +174,8 @@ export default function ConstructionPage() {
                         <Incoherence itemName={"lieu"} />
                       </td>
                       <td colSpan="2">
-                        Les lieux de formations sont caractérisés par une adresse postale et des coordonnées de
-                        géolocalisation et sont toujours rattachés à un organisme de formation
+                        Les lieux de formation sont caractérisés par une adresse postale et des coordonnées de
+                        géolocalisation et sont toujours rattachés à un organisme de formation.
                       </td>
                     </tr>
                     <tr>
@@ -163,22 +183,28 @@ export default function ConstructionPage() {
                       <td>{definitions.uai}</td>
                       <td colSpan="2">
                         <div>
-                          Les UAI peuvent avoir différents status en fonction de l'état d'avancement de leur validation
-                          :
+                          Les UAI peuvent avoir différents statuts :
                           <ul>
-                            <li>"validée" : l'UAI de cet organisme est validée</li>
+                            <li>validée : l'UAI de cet organisme est fiabilisée</li>
                             <li>
-                              "à valider" : l'UAI de cet organisme doit être validée pour finaliser son lien avec le
-                              SIRET associé - "à renseigner" : l'UAI de cet organisme doit être renseignée pour
-                              finaliser son lien avec le SIRET associé
+                              à vérifier : l'UAI de cet organisme doit être validée pour finaliser son lien avec le
+                              SIRET associé. Des UAI potentielles sont proposées pour aider à la validation.
+                            </li>
+                            <li>
+                              à identifier : l'UAI de cet organisme doit être saisie pour finaliser son lien avec le
+                              SIRET associé.
                             </li>
                           </ul>
                         </div>
                       </td>
                     </tr>
                     <tr>
-                      <td>Réseau</td>
-                      <td>{definitions.reseau}</td>
+                      <td>Réseaux</td>
+                      <td>
+                        La donnée « Réseaux » provient des Réseaux qui ont transmis leur liste d’organismes au Tableau
+                        de bord de l’Apprentissage. Si cette donnée est erronée ou manquante,{" "}
+                        <Incoherence itemName={"appartenance"} />
+                      </td>
                       <td colSpan="2" />
                     </tr>
                     <tr>
@@ -197,7 +223,7 @@ export default function ConstructionPage() {
                       <td colSpan="2" />
                     </tr>
                     <tr>
-                      <td>Certifié qualiopi (oui, non)</td>
+                      <td>Certifié Qualiopi (oui, non)</td>
                       <td>{definitions.qualiopi}</td>
                       <td colSpan="2" />
                     </tr>
@@ -226,21 +252,6 @@ export default function ConstructionPage() {
                       <td>{definitions.academie}</td>
                       <td colSpan="2" />
                     </tr>
-                    <tr>
-                      <td>RNCP</td>
-                      <td>{definitions.rncp}</td>
-                      <td colSpan="2" />
-                    </tr>
-                    <tr>
-                      <td>CFD</td>
-                      <td>{definitions.cfd}</td>
-                      <td colSpan="2" />
-                    </tr>
-                    <tr>
-                      <td>Métadonnées (anomalies)</td>
-                      <td />
-                      <td colSpan="2" />
-                    </tr>
                   </Table>
                 </TabPanel>
               ),
@@ -254,41 +265,35 @@ export default function ConstructionPage() {
               panel: (
                 <TabPanel>
                   <h4>Import et compilation des données</h4>
-                  <p>
-                    La construction du référentiel se compose deux étapes qui sont exécutées les unes à la suite des
-                    autres
-                  </p>
+                  <p>La construction du Référentiel se fait en deux temps.</p>
 
-                  <h6>Etape 1 : Import des SIRET (SIREN)</h6>
-                  <p>Pour importer les organismes dans le référentiel, trois listes sont utilisées comme référence :</p>
+                  <h6>Etape 1 : Import des organismes via le SIRET</h6>
+                  <p>
+                    Pour importer un nouvel organisme dans le Référentiel, deux sources de données sont utilisées comme
+                    référence :
+                  </p>
                   <Table
                     modifiers={"layout-fixed"}
                     thead={
                       <Thead>
-                        <td>Nom</td>
-                        <td>Données</td>
+                        <td>Nom de la source</td>
+                        <td>Données récupérées</td>
                         <td>Mise à jour</td>
-                        <td>Source</td>
+                        <td>Propriétaire de la source</td>
                       </Thead>
                     }
                   >
                     <tr>
                       <td>Liste publique des organismes de formation</td>
                       <td>SIRET, SIREN</td>
-                      <td>Automatique Journalière</td>
+                      <td>Automatique journalière</td>
                       <td>DGEFP</td>
                     </tr>
                     <tr>
-                      <td>SIFA-RAMSESE</td>
+                      <td>Établissements du Catalogue des formations en apprentissage (base des Carif-Oref)</td>
                       <td>SIRET, SIREN</td>
-                      <td>06/2021 (liste désormais indisponible)</td>
-                      <td>DEPP</td>
-                    </tr>
-                    <tr>
-                      <td>Etablissements du catalogue</td>
-                      <td>SIRET, SIREN</td>
-                      <td>Automatique Journalière</td>
-                      <td>Mission Apprentissage</td>
+                      <td>Automatique journalière</td>
+                      <td>Réseau des Carif-Oref - RCO</td>
                     </tr>
                   </Table>
 
@@ -298,243 +303,81 @@ export default function ConstructionPage() {
                     l'étape précédente. Chaque source de données comporte un certain nombre d'informations exploitables.{" "}
                   </p>
                   <p>
-                    Une fois que les UAI sont validées par les utilisateurs, les liens SIRET - UAI peuvent alors servir
-                    de référence dans différentes sources mobilisées (RAMSESE, DECA, Collecte de l'offre de formation
-                    réalisée par les Carif-Oref). Pour mémoire l'UAI est utilisée comme clé d'identification des
-                    organismes pour l'alimentation des plateformes éducatives (Parcoursup & Affelnet).
+                    Une fois que les UAI sont validées par les référents en académie ou les gestionnaires du site, les
+                    couples UAI-SIRET sont exploités par d’autres applicatifs : le{" "}
+                    <b>Catalogue des formations en apprentissage</b>, le <b>Tableau de bord de l’Apprentissage</b>,{" "}
+                    <b>ParcourSup</b> et <b>Affelnet</b>.
+                    <br />
+                    Pour mémoire, l'UAI est utilisée comme clé d'identification des organismes pour l'alimentation des
+                    plateformes éducatives (<b>Parcoursup</b> et <b>Affelnet</b>).
+                    <br /> Un couple UAI-SIRET validé garantie la bonne circulation d’une offre de formation en
+                    apprentissage jusqu’à ces plateformes.
                   </p>
                   <Table
                     modifiers={"layout-fixed"}
                     thead={
                       <Thead>
-                        <td>Nom</td>
-                        <td colSpan="2">Données</td>
+                        <td>Nom de la source</td>
+                        <td colSpan="2">Données récupérées</td>
                         <td>Mise à jour</td>
-                        <td>Source</td>
+                        <td>Propriétaire de la source</td>
                       </Thead>
                     }
                   >
                     <tr>
-                      <td>catalogue</td>
-                      <td colSpan="2">
-                        UAI potentielle, Nature, Relation, Diplômes, Certification, Lieux de formation, Anomalies,
-                        Contacts
-                      </td>
-                      <td>Automatique Journalière</td>
-                      <td>RCO, Mission Apprentissage</td>
+                      <td>Formations du Catalogue des formations en apprentissage (base des Carif-Oref)</td>
+                      <td colSpan="2">Nature, Relations, Diplômes, Certification, Lieux de formation, Contacts</td>
+                      <td>Automatique journalière</td>
+                      <td>RCO</td>
                     </tr>
                     <tr>
-                      <td>datagouv</td>
-                      <td colSpan="2">NDA, Qualiopi</td>
-                      <td>Automatique Journalière</td>
-                      <td>DGEFP</td>
-                    </tr>
-                    <tr>
-                      <td>DECA</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>A la demande</td>
-                      <td>DGEFP</td>
-                    </tr>
-                    <tr>
-                      <td>ideo2</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>
-                        A la demande
-                        <br />
-                        <i>(dernière mise à jour 09/2021)</i>
-                      </td>
-                      <td>Onisep</td>
-                    </tr>
-                    <tr>
-                      <td>onisep</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>
-                        A la demande
-                        <br />
-                        <i>(dernière mise à jour 09/2021)</i>
-                      </td>
-                      <td>Onisep</td>
-                    </tr>
-                    <tr>
-                      <td>onisep-structure</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>
-                        A la demande
-                        <br />
-                        <i>(dernière mise à jour 09/2021)</i>
-                      </td>
-                      <td>Onisep</td>
-                    </tr>
-                    <tr>
-                      <td>refea</td>
-                      <td colSpan="2">UAI potentielle</td>
-                      <td>Automatique Journalière</td>
-                      <td>DGER</td>
-                    </tr>
-                    <tr>
-                      <td>sirene</td>
-                      <td colSpan="2">
-                        Raison sociale, Relations, Etat administratif, Adresse, Forme juridique, Anomalies
-                      </td>
-                      <td>Automatique Journalière</td>
+                      <td>Sirene</td>
+                      <td colSpan="2">Raison sociale, Relations, Etat administratif, Adresse, Forme juridique</td>
+                      <td>Automatique journalière</td>
                       <td>INSEE</td>
                     </tr>
                     <tr>
-                      <td>tableau-de-bord</td>
+                      <td>Liste publique des organismes de formation (data.gouv)</td>
+                      <td colSpan="2">NDA, Qualiopi</td>
+                      <td>Automatique journalière</td>
+                      <td>DGEFP</td>
+                    </tr>
+                    <tr>
+                      <td>Tableau de bord de l'apprentissage</td>
                       <td colSpan="2">UAI potentielle, Réseau</td>
-                      <td>Automatique Journalière</td>
+                      <td>Automatique journalière</td>
                       <td>Mission Apprentissage</td>
                     </tr>
                     <tr>
-                      <td>acce</td>
-                      <td colSpan="2">Contacts</td>
-                      <td>Automatique Journalière</td>
-                      <td>DEPP</td>
+                      <td>DECA</td>
+                      <td colSpan="2">UAI potentielle</td>
+                      <td>
+                        A la demande <br />
+                        Tous les 6 mois environ <i>(dernière mise à jour 11/2024)</i>
+                      </td>
+                      <td>DGEFP</td>
                     </tr>
                     <tr>
-                      <td>voeux-affelnet</td>
-                      <td colSpan="2">Contacts</td>
+                      <td>Onisep / Ideo</td>
+                      <td colSpan="2">UAI potentielle</td>
                       <td>
                         A la demande
                         <br />
-                        <i>(dernière mise à jour 10/2022)</i>
+                        <i>(dernière mise à jour 12/2024)</i>
                       </td>
-                      <td>Mission Apprentissage</td>
-                    </tr>
-                  </Table>
-                </TabPanel>
-              ),
-            },
-            {
-              tab: (
-                <Tab selected={tab === "impact"} onClick={() => navigate("../impact")}>
-                  Impact sur les sources de données entrantes
-                </Tab>
-              ),
-              panel: (
-                <TabPanel>
-                  <h4>Impacts sur les sources de données entrantes une fois le couple UAI-SIRET validé</h4>
-
-                  <h6>Bases sources</h6>
-                  <Table
-                    modifiers={"layout-fixed"}
-                    thead={
-                      <Thead>
-                        <td>Base</td>
-                        <td colSpan="4">Impact</td>
-                      </Thead>
-                    }
-                  >
-                    <tr>
-                      <td>Catalogue</td>
-                      <td colSpan="4">
-                        Le flux direct entre le Référentiel et le Catalogue des formations en apprentissage permet une
-                        mises à jour automatique des données, ainsi{" "}
-                        <span className={"fr-text--bold"}>
-                          dès qu'une UAI est validée dans le Référentiel, sont mises à jour dans le Catalogue des
-                          formations en apprentissage :
-                        </span>
-                        <ul>
-                          <li className={"fr-text--bold"}>
-                            la fiche organisme correspondante (à partir de septembre){" "}
-                          </li>
-                          <li className={"fr-text--bold"}>les formations associées.</li>
-                        </ul>
-                        <div>
-                          Nb: l'annuaire des établissements QUIFORME le RCO devrait se brancher sur le référentiel pour
-                          alimenter les UAI des organismes quand elles sont validées - impact QUIFORME (dev à prévoir)
-                        </div>
-                      </td>
+                      <td>Onisep</td>
                     </tr>
                     <tr>
-                      <td>RAMSESE</td>
-                      <td colSpan="4">
-                        Il n'existe pas de liaison entre le Référentiel et RAMSESE qui permette une mise à jour
-                        automatique des données,{" "}
-                        <span className={"fr-text--bold"}>
-                          ainsi pour réaliser les corrections de masse, un rapport est disponible au téléchargement :
-                        </span>
-                        <div>
-                          <ExportButton className={"fr-my-3w"} label={"Télécharger le rapport"} />
-                        </div>
-                        <div>
-                          Il contient pour chaque UAI, si il y a lieu :
-                          <ul>
-                            <li>
-                              la modification du SIRET associé (ou par un changement SIRET ou par un remplacement d'un
-                              SIRET fermé par un SIRET en activité) ;
-                            </li>
-                            <li>la modification de l'adresse de l'organisme ;</li>
-                            <li>la modification dans les lieux de formation rattachés à l'UAI d'un organisme ;</li>
-                            <li>
-                              l'indication sur la nature de l'organisme (responsable, formateur, responsable et
-                              formateur)
-                            </li>
-                            <li>l'association de l'UAI à un lieu de formation plutôt qu'à un organisme.</li>
-                          </ul>
-                        </div>
-                      </td>
+                      <td>RefEA</td>
+                      <td colSpan="2">UAI potentielle</td>
+                      <td>Automatique journalière</td>
+                      <td>DGER</td>
                     </tr>
                     <tr>
-                      <td>Liste publique des OF</td>
-                      <td colSpan="4">
-                        Les validations d’UAI dans le Référentiel n’impactent pas directement la Liste publique des
-                        organismes de formation étant donné que celle-ci ne référence pas les UAI. Cependant, sera
-                        remonté à la DGEFP la présence de SIRET fermés.
-                      </td>
-                    </tr>
-                  </Table>
-
-                  <h6>Bases d'enrichissement</h6>
-                  <Table
-                    modifiers={"layout-fixed"}
-                    thead={
-                      <Thead>
-                        <td>Base</td>
-                        <td colSpan="4">Impact</td>
-                      </Thead>
-                    }
-                  >
-                    <tr>
-                      <td>DECA</td>
-                      <td colSpan="4">
-                        Il n’existe pas de liaison entre le Référentiel et DECA qui permette une mise à jour automatique
-                        des données, ainsi{" "}
-                        <span className={"fr-text--bold"}>
-                          pour réaliser les corrections de masse, un rapport est disponible au téléchargement :
-                        </span>
-                        <div>
-                          <ExportButton className={"fr-my-3w"} label={"Télécharger le rapport"} />
-                        </div>
-                        <div>
-                          Il contient la liste des UAI dont la nature est uniquement “responsable” afin de pouvoir
-                          supprimer les organismes formateurs de la base.
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>TBA</td>
-                      <td colSpan="4">
-                        Le flux direct entre le Référentiel et le Tableau de bord des formations en apprentissage permet
-                        une mise à jour automatique des données et donc une fiabilisation des données du Tableau de bord
-                        :
-                        <ul>
-                          <li>par récupération des couples SIRET-UAI validés ;</li>
-                          <li>par récupération des lieux de formations rattachés au couple SIRET-UAI.</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>IDEO (Onisep)</td>
-                      <td colSpan="4">
-                        Le flux direct entre le Référentiel et IDEO permet une mise à jour automatique des données et
-                        donc :
-                        <ul>
-                          <li>la correction des couples SIRET-UAI ;</li>
-                          <li>la correction des lieux de formations rattachés au couple SIRET-UAI ;</li>
-                          <li>la création de nouveaux organismes inconnus dans le Catalogue de l’Onisep.</li>
-                        </ul>
-                      </td>
+                      <td>Catalogue des Ministères éducatifs (Parcoursup / Affelnet)</td>
+                      <td colSpan="2">UAI des lieux de formation</td>
+                      <td>Automatique journalière</td>
+                      <td>DNE – Direction du numérique pour l’éducation</td>
                     </tr>
                   </Table>
                 </TabPanel>
@@ -542,6 +385,10 @@ export default function ConstructionPage() {
             },
           ]}
         />
+        <p>
+          Pour en savoir plus sur les dates de mises à jour, consultez le{" "}
+          <a href="/modifications">Journal des modifications</a>.
+        </p>
       </ContentLayout>
     </Page>
   );
