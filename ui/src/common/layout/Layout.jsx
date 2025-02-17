@@ -101,12 +101,12 @@ export default function Layout({ children }) {
               <FooterLink to={"/modifications"} onClick={() => window.scrollTo(0, 0)}>
                 Journal des modifications
               </FooterLink>
-              {/* <FooterLink to={"#"} onClick={() => window.scrollTo(0, 0)}>
+              <FooterLink to={"/mentions-legales"} onClick={() => window.scrollTo(0, 0)}>
                 Mentions légales
               </FooterLink>
-              <FooterLink to={"#"} onClick={() => window.scrollTo(0, 0)}>
+              <FooterLink to={"/donnees-personnelles"} onClick={() => window.scrollTo(0, 0)}>
                 Données personnelles
-              </FooterLink> */}
+              </FooterLink>
               <FooterLink to={"/contact"} onClick={() => window.scrollTo(0, 0)}>
                 Contact
               </FooterLink>
