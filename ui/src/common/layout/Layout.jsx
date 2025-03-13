@@ -11,7 +11,7 @@ export default function Layout({ children }) {
   const [userContext, setUserContext] = useContext(UserContext);
   const { httpClient } = useContext(ApiContext);
   const navigate = useNavigate();
-
+  console.log({ userContext });
   const handleLogout = async (e) => {
     e.preventDefault();
 
