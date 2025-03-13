@@ -26,7 +26,7 @@ class AcceApi extends RateLimitedApi {
   }
 
   static get baseApiUrl() {
-    return "https://dep.adc.education.fr/acce";
+    return "https://acce.depp.education.fr/acce";
   }
 
   async _login() {

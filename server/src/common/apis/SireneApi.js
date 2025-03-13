@@ -2,10 +2,9 @@ const axios = require("axios");
 const queryString = require("query-string");
 const config = require("../../config");
 const RateLimitedApi = require("./RateLimitedApi");
-const { fetchData, fetchStream } = require("../utils/httpUtils.js");
+const { fetchStream } = require("../utils/httpUtils.js");
 const { compose } = require("oleoduc");
 const { streamNestedJsonArray, concatStreams } = require("../utils/streamUtils.js");
-const { encodeToBase64 } = require("../utils/stringUtils.js");
 const logger = require("../logger").child({ context: "SireneApi" });
 
 class SireneApi extends RateLimitedApi {
@@ -17,37 +16,7 @@ class SireneApi extends RateLimitedApi {
   }
 
   static get baseApiUrl() {
-    return "https://api.insee.fr";
-  }
-
-  async login() {
-    const data = await fetchData(`${SireneApi.baseApiUrl}/token`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        "Authorization": `Basic ${encodeToBase64(
-          `${config.sirene.api.consumerKey}:${config.sirene.api.consumerSecret}`
-        )}`,
-      },
-      data: queryString.stringify({
-        grant_type: "client_credentials",
-        validity_period: 3600, //1 heure
-      }),
-    });
-
-    logger.info(`Le token d'authentification a été renouvelé`);
-    this.credentials = {
-      token: data.access_token,
-      timestamp: Date.now(),
-    };
-  }
-
-  isAuthenticated() {
-    return !!this.credentials;
-  }
-
-  isAccessTokenExpired() {
-    return !this.credentials || this.token_timeout < Date.now() - this.credentials.timestamp;
+    return "https://api.insee.fr/api-sirene/3.11";
   }
 
   getNextCursor(headers) {
@@ -57,10 +26,6 @@ class SireneApi extends RateLimitedApi {
 
   streamEtablissements(query, options = {}) {
     return this.execute(async () => {
-      if (!this.isAuthenticated() || this.isAccessTokenExpired()) {
-        await this.login();
-      }
-
       let cursor = "*";
       return concatStreams(async () => {
         if (!cursor) {
@@ -68,12 +33,12 @@ class SireneApi extends RateLimitedApi {
         }
 
         logger.debug(`Récupération des établissements`, { cursor, query });
-        const { headers, stream } = await fetchStream(`${SireneApi.baseApiUrl}/entreprises/sirene/siret`, {
+        const { headers, stream } = await fetchStream(`${SireneApi.baseApiUrl}/siret`, {
           raw: true,
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
-            "Authorization": `Bearer ${this.credentials.token}`,
+            "X-INSEE-Api-Key-Integration": `${config.sirene.api.consumerKey}`,
           },
           data: queryString.stringify({ ...options, q: query, curseur: cursor }),
         });

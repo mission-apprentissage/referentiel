@@ -42,9 +42,13 @@ module.exports = () => {
       };
 
       const stats = await promiseAllProps({
+        organismes: dbCollection("organismes").countDocuments(),
         total: dbCollection("organismes").countDocuments(validationQuery),
         valides: dbCollection("organismes").countDocuments({
           ...validationQuery,
+          uai: { $exists: true },
+        }),
+        uaiExistant: dbCollection("organismes").countDocuments({
           uai: { $exists: true },
         }),
       });

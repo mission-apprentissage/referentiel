@@ -177,44 +177,6 @@ describe("sirene", () => {
       },
     });
   });
-
-  it("Vérifie qu'on gère une erreur lors de la récupération des informations de l'API Sirene", async () => {
-    await insertOrganisme({ siret: "11111111100006" });
-    const source = createSource("sirene");
-    withGeoApiMock();
-    mockSireneApi((client, responses) => {
-      client
-        .post((uri) => uri.includes("token"))
-        .query(() => true)
-        .reply(500, responses.token());
-    });
-
-    const stats = await collectSources(source);
-
-    const found = await dbCollection("organismes").findOne(
-      { siret: "11111111100006" },
-      { projection: { "_meta.anomalies.date_collecte": 0, "_meta.anomalies.date": 0 } }
-    );
-    assert.deepStrictEqual(found._meta.anomalies, [
-      {
-        key: "500",
-        type: "erreur",
-        sources: ["sirene"],
-        details: "[SireneApi] Request failed with status code 500",
-        job: "collect",
-      },
-    ]);
-    assert.deepStrictEqual(stats, {
-      sirene: {
-        total: 1,
-        updated: 0,
-        unknown: 0,
-        anomalies: 1,
-        failed: 0,
-      },
-    });
-  });
-
   it("Vérifie qu'on crée une anomalie quand on ne peut pas trouver l'adresse", async () => {
     await insertOrganisme({ siret: "11111111100006" }, (o) => omit(o, ["adresse"]));
     const source = createSource("sirene");

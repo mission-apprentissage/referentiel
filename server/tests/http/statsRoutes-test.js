@@ -12,7 +12,7 @@ describe("statsRoutes", () => {
     const response = await httpClient.get("/api/v1/stats/couverture");
 
     strictEqual(response.status, 200);
-    deepStrictEqual(response.data, { total: 1, valides: 1 });
+    deepStrictEqual(response.data, { organismes: 2, total: 1, uaiExistant: 1, valides: 1 });
   });
 
   it("Vérifie qu'on peut obtenir les stats des nouveaux organismes", async () => {

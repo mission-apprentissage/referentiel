@@ -20,6 +20,9 @@ import CorrectionsPage from "./CorrectionsPage.jsx";
 import SuiviModificationsPage from "./SuiviModificationsPage.jsx";
 import { useScrollToTop } from "./common/hooks/useScrollToTop.js";
 import { UserProvider } from "./common/UserProvider.jsx";
+import ContactPage from "./accueil/ContactPage.jsx";
+import MentionsLegalesPages from "./MentionsLegalesPage.jsx";
+import DonneesPersonnellesPages from "./DonneesPersonnellesPages.jsx";
 
 function Providers({ children }) {
   useScrollToTop();
@@ -45,6 +48,7 @@ function App() {
               <Route path="/" element={<AccueilPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/connexion" element={<ConnexionPage />} />
+              <Route path="/contact" element={<ContactPage />} />
               <Route path="/organismes" element={<OrganismesPage />} />
               <Route path="/organismes/:siret">
                 <Route path="" element={<OrganismePage />} />
@@ -64,6 +68,8 @@ function App() {
               <Route path="/stats" element={<StatsPage />} />
               <Route path="/corrections" element={<CorrectionsPage />} />
               <Route path="/modifications" element={<ModificationsPage />} />
+              <Route path="/mentions-legales" element={<MentionsLegalesPages />} />
+              <Route path="/donnees-personnelles" element={<DonneesPersonnellesPages />} />
               <Route path="/construction">
                 <Route path="" element={<ConstructionPage />} />
                 <Route path=":tab" element={<ConstructionPage />} />

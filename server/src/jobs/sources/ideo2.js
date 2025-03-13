@@ -9,7 +9,7 @@ module.exports = (custom = {}) => {
   return {
     name,
     async stream() {
-      const input = custom.input || (await getFromStorage("ONISEP-Ideo2-T_Export_complet.csv"));
+      const input = custom.input || (await getFromStorage("ONISEP-Ideo2-T_Export_complet-2.csv"));
       const memory = [];
 
       return compose(

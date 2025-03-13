@@ -38,7 +38,6 @@ module.exports = {
   sirene: {
     api: {
       consumerKey: env.get("REFERENTIEL_SIRENE_API_CONSUMER_KEY").required().asString(),
-      consumerSecret: env.get("REFERENTIEL_SIRENE_API_CONSUMER_SECRET").required().asString(),
     },
   },
   api: {

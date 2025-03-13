@@ -165,4 +165,14 @@ export REACT_APP_REFERENTIEL_API_URL=http://localhost:5001/api/v1
 yarn --cwd ui start
 ```
 
+### Création d'utilisateur
 
+Pour créer un nouvel utilisateur:
+
+```bash
+yarn cli createUser <email> <password> <type> <code>
+```
+
+Type correspond soit à `academie` soit à `region`
+
+Code correspond à l'académie ou la région voulue. Ces codes sont disponibles dans les fichiers `academies.js` et `regions.js`
