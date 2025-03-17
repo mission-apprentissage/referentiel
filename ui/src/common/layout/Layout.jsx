@@ -11,7 +11,7 @@ export default function Layout({ children }) {
   const [userContext, setUserContext] = useContext(UserContext);
   const { httpClient } = useContext(ApiContext);
   const navigate = useNavigate();
-
+  console.log({ userContext });
   const handleLogout = async (e) => {
     e.preventDefault();
 
@@ -31,6 +31,7 @@ export default function Layout({ children }) {
           <Nav>
             <NavLink to={"/"}>Accueil</NavLink>
             {!userContext.isAnonymous && <NavLink to={"/tableau-de-bord"}>Tableau de bord</NavLink>}
+            {userContext.isAdmin && <NavLink to={"/suivi-modifications"}>Tableau de suivi des modifications</NavLink>}
             <NavLink to={"/organismes"}>Référentiel national</NavLink>
             <NavLink to={"/construction"}>Construction du Référentiel</NavLink>
             <NavLink to={"/corrections"}>Correction et fiabilisation des données</NavLink>

@@ -21,7 +21,7 @@ function adaptParamsForAPI(params) {
   }, {});
 }
 
-export function useSearch(defaults, options = {}) {
+export function useSearch(defaults, options = {}, token = null) {
   const { query, setQuery } = useQuery();
   const location = useLocation();
   const { setSearch } = useContext(SearchContext);
@@ -36,16 +36,22 @@ export function useSearch(defaults, options = {}) {
     }
   }, [options.silent, previous, search, setSearch]);
 
-  const url = buildUrl(config.apiUrl + `/organismes`, adaptParamsForAPI(search.params));
-  const [response] = useFetch(url, {
-    organismes: [],
-    pagination: {
-      page: 0,
-      resultats_par_page: 0,
-      nombre_de_page: 0,
-      total: 0,
+  const path = options?.path ? options.path : `/organismes`;
+  const url = buildUrl(config.apiUrl + path, adaptParamsForAPI(search.params));
+  const entity = options?.entity ? options.entity : "organismes";
+  const [response] = useFetch(
+    url,
+    {
+      [entity]: [],
+      pagination: {
+        page: 0,
+        resultats_par_page: 0,
+        nombre_de_page: 0,
+        total: 0,
+      },
     },
-  });
+    token
+  );
 
   return {
     response,

@@ -215,7 +215,8 @@ describe("organismesRoutes", () => {
     await insertOrganisme({ siret: "11111111100006", etat_administratif: "fermé" });
     await insertOrganisme({ etat_administratif: "actif" });
 
-    const response = await httpClient.get("/api/v1/organismes?etat_administratif=fermé");
+    const query = encodeURIComponent("fermé");
+    const response = await httpClient.get(`/api/v1/organismes?etat_administratif=${query}`);
 
     strictEqual(response.status, 200);
     strictEqual(response.data.organismes.length, 1);
@@ -1133,7 +1134,7 @@ describe("organismesRoutes", () => {
       { uai: "0751234J" },
       {
         headers: {
-          ...generateAuthHeader("bonjour@test.fr", "region", "11"),
+          ...generateAuthHeader("bonjour@test.fr", "region", "11", false),
         },
       }
     );
@@ -1206,6 +1207,7 @@ describe("organismesRoutes", () => {
       changements: {
         uai: "0751234J",
       },
+      email: "bonjour@test.fr",
     });
   });
 

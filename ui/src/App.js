@@ -4,7 +4,6 @@ import OrganismePage from "./organismes/OrganismePage.jsx";
 import Layout from "./common/layout/Layout";
 import DesignPage from "./DesignPage.jsx";
 import OrganismesPage from "./organismes/OrganismesPage.jsx";
-import LoginPage from "./LoginPage.jsx";
 import ConnexionPage from "./ConnexionPage.jsx";
 import TableauDeBordPage from "./tableau-de-bord/TableauDeBordPage.jsx";
 import ValidationPage from "./tableau-de-bord/ValidationPage.jsx";
@@ -17,6 +16,7 @@ import StatsPage from "./stats/StatsPage.jsx";
 import SearchProvider from "./common/SearchProvider";
 import ModificationsPage from "./ModificationsPage.jsx";
 import CorrectionsPage from "./CorrectionsPage.jsx";
+import SuiviModificationsPage from "./SuiviModificationsPage.jsx";
 import { useScrollToTop } from "./common/hooks/useScrollToTop.js";
 import { UserProvider } from "./common/UserProvider.jsx";
 import ContactPage from "./accueil/ContactPage.jsx";
@@ -45,7 +45,6 @@ function App() {
           <Routes>
             <Route element={<Layout children={<Outlet />} />}>
               <Route path="/" element={<AccueilPage />} />
-              <Route path="/login" element={<LoginPage />} />
               <Route path="/connexion" element={<ConnexionPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/organismes" element={<OrganismesPage />} />
@@ -61,6 +60,7 @@ function App() {
                   <Route path="" element={<OrganismePage />} />
                   <Route path=":tab" element={<OrganismePage />} />
                 </Route>
+                <Route path="/suivi-modifications" element={<SuiviModificationsPage />} />
               </Route>
               <Route path="/dsfr" element={<DesignPage />} />
               <Route path="/stats" element={<StatsPage />} />
