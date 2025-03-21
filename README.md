@@ -149,7 +149,7 @@ export TABLEAU_DE_BORD_API_KEY=nope
 export TABLEAU_DE_BORD_PUBLIC_URL=nope
 ```
 
-Pour lancer le serveur:
+Pour lancer le serveur :
 
 ```bash
 yarn --cwd server start
