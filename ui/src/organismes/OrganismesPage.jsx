@@ -1,5 +1,4 @@
 import React from "react";
-import { Tab, TabPanel } from "../common/dsfr/elements/Tabs.jsx";
 import AcademieSelector from "../common/organismes/selectors/AcademieSelector.jsx";
 import { useSearch } from "../common/hooks/useSearch.js";
 import SearchForm from "../common/organismes/liste/SearchForm.jsx";
