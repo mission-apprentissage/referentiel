@@ -27,10 +27,10 @@ dataset:
 	docker exec referentiel_server yarn --silent --cwd server cli misc injectDataset
 
 install-server:
-	yarn --cwd server install --frozen-lockfile
+	yarn --cwd server install
 
 install-ui:
-	yarn --cwd ui install --frozen-lockfile
+	yarn --cwd ui install
 
 generate-dotenv:
 	echo "Generating JWT secret..."
