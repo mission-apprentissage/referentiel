@@ -7,7 +7,7 @@ module.exports = {
   async startMongod() {
     mongodHolder = await MongoMemoryServer.create({
       binary: {
-        version: "5.0.2",
+        version: "8.0.5",
       },
     });
     const uri = mongodHolder.getUri();
