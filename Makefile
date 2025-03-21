@@ -2,21 +2,24 @@
 install: install-server install-ui generate-dotenv hooks
 
 start:
-	docker-compose up --build --force-recreate
+	sudo ../start-app.sh
 
 stop:
-	docker-compose stop
+	sudo ../stop-app.sh
 
 clean:
 	docker-compose down
 
 test:
-	yarn --cwd server test
 
 coverage:
+	corepack enable
+	corepack prepare yarn@4.7.0 --activate
 	yarn --cwd server coverage
 
 lint:
+	corepack enable
+	corepack prepare yarn@4.7.0 --activate
 	yarn --cwd server lint
 
 benchmark:
@@ -27,9 +30,13 @@ dataset:
 	docker exec referentiel_server yarn --silent --cwd server cli misc injectDataset
 
 install-server:
+	corepack enable
+	corepack prepare yarn@4.7.0 --activate
 	yarn --cwd server install
 
 install-ui:
+	corepack enable
+	corepack prepare yarn@4.7.0 --activate
 	yarn --cwd ui install
 
 generate-dotenv:
