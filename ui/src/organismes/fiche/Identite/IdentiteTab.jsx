@@ -28,7 +28,8 @@ export default function IdentiteTab({ organisme }) {
   const datagouvModal = useModal();
   const [userContext] = useContext(UserContext);
   const showValidator =
-    !userContext.isAnonymous && organisme.adresse && organisme.adresse[userContext.type].code === userContext.code;
+    (!userContext.isAnonymous && organisme.adresse && organisme.adresse[userContext.type].code === userContext.code) ||
+    userContext.isAdmin;
 
   return (
     <>

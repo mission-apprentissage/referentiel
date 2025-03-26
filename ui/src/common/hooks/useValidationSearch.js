@@ -7,7 +7,7 @@ export function useValidationSearch(type, custom = {}) {
   const [userContext] = useContext(UserContext);
 
   return useSearch({
-    [`${userContext.type}s`]: userContext.code,
+    ...(!userContext.isAdmin ? { [`${userContext.type}s`]: userContext.code } : {}),
     ...getValidationParams(type),
     ...custom,
   });

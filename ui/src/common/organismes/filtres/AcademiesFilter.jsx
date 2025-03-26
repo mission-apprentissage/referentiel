@@ -7,9 +7,10 @@ export default function AcademiesFilter() {
   const data = useContext(DataContext);
   const [userContext] = useContext(UserContext);
 
-  const academies = userContext.isAnonymous
-    ? data.academies
-    : data[`${userContext.type}s`].find((r) => r.code === userContext.code)?.academies || [];
+  const academies =
+    userContext.isAnonymous || userContext.isAdmin
+      ? data.academies
+      : data[`${userContext.type}s`].find((r) => r.code === userContext.code)?.academies || [];
 
   return (
     <Filter
