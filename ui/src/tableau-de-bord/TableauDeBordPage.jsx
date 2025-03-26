@@ -62,17 +62,21 @@ export default function TableauDeBordPage() {
   const [userContext] = useContext(UserContext);
 
   const { query, setQuery } = useQuery();
-  const title = `${userContext.type === "region" ? "Région" : "Académie"} : ${userContext.nom}`;
+  const title = userContext.isAdmin
+    ? "Tous les organismes"
+    : `${userContext.type === "region" ? "Région" : "Académie"} : ${userContext.nom}`;
 
   return (
     <Page>
       <TitleLayout
         title={title}
         selector={
-          <DepartementAuthSelector
-            departement={query.departements}
-            onChange={(code) => setQuery({ ...query, departements: code })}
-          />
+          !userContext.isAdmin && (
+            <DepartementAuthSelector
+              departement={query.departements}
+              onChange={(code) => setQuery({ ...query, departements: code })}
+            />
+          )
         }
       />
       <ContentLayout>
