@@ -8,7 +8,7 @@ module.exports = () => {
     try {
       const organisme = await dbCollection("organismes").findOne({
         siret,
-        [`adresse.${user.type}.code`]: user.code,
+        ...(user.isAdmin ? {} : { [`adresse.${user.type}.code`]: user.code }),
       });
 
       if (!organisme) {
