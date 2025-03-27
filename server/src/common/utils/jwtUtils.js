@@ -16,14 +16,6 @@ function createToken(type, subject, options = {}) {
   });
 }
 
-function buildApiToken(type, code, options = {}) {
-  const found = type === "region" ? findRegionByCode(code) : findAcademieByCode(code);
-  return createToken("api", code, {
-    payload: { code, type, nom: found.nom },
-    ...options,
-  });
-}
-
 function buildJwtToken(email, type, code, isAdmin = false, options = {}) {
   const found = type === "region" ? findRegionByCode(code) : findAcademieByCode(code);
   return createToken("api", code, {
@@ -40,7 +32,6 @@ function buildRefreshToken(email, type, code, isAdmin = false) {
 }
 
 module.exports = {
-  buildApiToken,
   buildJwtToken,
   buildRefreshToken,
 };

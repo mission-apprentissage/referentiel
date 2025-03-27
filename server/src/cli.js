@@ -12,7 +12,6 @@ const build = require("./jobs/build");
 const migrate = require("./jobs/migrate");
 const consolidate = require("./jobs/consolidate");
 const { oleoduc, writeToStdout } = require("oleoduc");
-const generateMagicLinks = require("./jobs/generateMagicLinks");
 const importCommunes = require("./jobs/importCommunes");
 const importAcce = require("./jobs/importAcce");
 const { exportOrganismes } = require("./jobs/exportOrganismes");
@@ -182,21 +181,6 @@ cli
   .action((options) => {
     runScript(() => {
       return migrate(options);
-    });
-  });
-
-cli
-  .command("generateMagicLinks")
-  .description("Génère un token permettant de consulter le site pour une region")
-  .argument("<type>", "region ou academie")
-  .description("Génère un fichier csv avec un lien magique pour chaque région")
-  .option("--url [url]", "L'url de l'environnement cible")
-  .option("--out [out]", "Fichier cible dans lequel sera stocké l'export (defaut: stdout)", createWriteStream)
-  .action((type, { url, out }) => {
-    runScript(() => {
-      const csvStream = generateMagicLinks(type, { url });
-      const output = out || writeToStdout();
-      return oleoduc(csvStream, output);
     });
   });
 
