@@ -1,14 +1,20 @@
+/**
+ *
+ */
+
+import { useContext } from 'react';
+import { isEqual } from 'lodash-es';
+import styled from 'styled-components';
+
 import Fieldset from '../../dsfr/elements/Fieldset';
 import GreyAccordionItem from '../../dsfr/custom/GreyAccordionItem';
-import styled from 'styled-components';
 import { Tag } from '../../dsfr/elements/Tag';
 import SmallCheckbox from '../../dsfr/custom/SmallCheckbox';
-import { useContext } from 'react';
 import { FilterContext } from './Filters';
 import { ariaExpanded } from '../../dsfr/dsfr';
 import { useQuery } from '../../hooks/useQuery';
 import { Box } from '../../Flexbox';
-import { isEqual } from 'lodash-es';
+
 
 const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   return (
@@ -25,12 +31,12 @@ const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   }
 `;
 
-function getParamFromQuery(query, paramName) {
+function getParamFromQuery (query, paramName) {
   const param = query[paramName];
   return param ? param.split(',') : [];
 }
 
-export function Filter({ label, items, expanded = false }) {
+export function Filter ({ label, items, expanded = false }) {
   const { query } = useQuery();
   const { onChange: onFilterChange, register } = useContext(FilterContext);
   items.forEach((item) => register(item.paramName));

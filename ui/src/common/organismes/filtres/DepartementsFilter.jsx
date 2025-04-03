@@ -1,9 +1,16 @@
+/**
+ *
+ */
+
 import { useContext } from 'react';
+
 import { Filter } from './Filter';
 import { DataContext } from '../../DataProvider';
 import { UserContext } from '../../UserProvider';
 
-export default function DepartementsFilter() {
+
+export function DepartementsFilter () {
+
   const data = useContext(DataContext);
   const [userContext] = useContext(UserContext);
 
@@ -12,16 +19,14 @@ export default function DepartementsFilter() {
       ? data?.departements
       : data[`${userContext.type}s`]?.find((r) => r.code === userContext.code)?.departements || [];
 
-  return (
-    <Filter
-      label={'Départements'}
-      items={departements.map((d) => {
-        return {
-          label: d.nom,
-          paramName: 'departements',
-          value: d.code,
-        };
-      })}
-    />
-  );
+  return <Filter
+    label={'Départements'}
+    items={departements.map((d) => {
+      return {
+        label:     d.nom,
+        paramName: 'departements',
+        value:     d.code,
+      };
+    })}
+  />;
 }

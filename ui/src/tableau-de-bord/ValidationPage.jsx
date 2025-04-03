@@ -1,3 +1,7 @@
+/**
+ *
+ */
+
 import OrganismeList from '../common/organismes/liste/OrganismeList';
 import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
 import SearchForm from '../common/organismes/liste/SearchForm';
@@ -7,9 +11,7 @@ import Results from '../common/Results';
 import ContentLayout from '../common/layout/ContentLayout';
 import styled from 'styled-components';
 import { useValidationSearch } from '../common/hooks/useValidationSearch';
-import Filters from '../common/organismes/filtres/Filters';
-import NatureFilter from '../common/organismes/filtres/NatureFilter';
-import AcademiesFilter from '../common/organismes/filtres/AcademiesFilter';
+import { AcademiesFilter, Filters, NatureFilter } from '../common/organismes/filtres';
 import { getNatureLabel } from '../common/enums/natures';
 import Small from '../common/dsfr/custom/Small';
 import Page from '../common/Page';
@@ -23,8 +25,8 @@ const getDescription = (type, natures) => {
       : 'ont la nature « responsable » ou « responsable et formateur » ou « formateur » uniquement';
 
   const mapping = {
-    A_VALIDER: {
-      title: `${titlePrefix} à vérifier`,
+    A_VALIDER:    {
+      title:    `${titlePrefix} à vérifier`,
       critères: (
         <ul className={'fr-text--sm fr-pl-3w'}>
           <li>ne possèdent pas d’UAI ;</li>
@@ -39,7 +41,7 @@ const getDescription = (type, natures) => {
       ),
     },
     A_RENSEIGNER: {
-      title: `${titlePrefix} à identifier`,
+      title:    `${titlePrefix} à identifier`,
       critères: (
         <ul className={'fr-text--sm fr-pl-3w'}>
           <li>ne possèdent pas d’UAI ;</li>
@@ -53,8 +55,8 @@ const getDescription = (type, natures) => {
         </ul>
       ),
     },
-    VALIDE: {
-      title: `${titlePrefix} validés`,
+    VALIDE:       {
+      title:    `${titlePrefix} validés`,
       critères: (
         <ul className={'fr-text--sm fr-pl-3w'}>
           <li>possèdent une UAI validée ;</li>
@@ -102,14 +104,14 @@ const ValidationTitleLayout = styled(({ type, natures, refine, className }) => {
   background: ${(props) => `var(--color-validation-background-${props.type})`};
 `;
 
-export default function ValidationPage() {
+export default function ValidationPage () {
   const { query } = useQuery();
   const { criteria } = useParams();
   const [type, natures = 'responsable,formateur,responsable_formateur'] = criteria.split('|');
   const { response, search, refine } = useValidationSearch(type, {
     ...(natures ? { natures } : {}),
-    ordre: 'desc',
-    page: 1,
+    ordre:          'desc',
+    page:           1,
     items_par_page: 25,
   });
 
@@ -127,8 +129,8 @@ export default function ValidationPage() {
                 items={natures?.split(',').map((nature) => {
                   return {
                     paramName: 'natures',
-                    label: getNatureLabel(nature),
-                    value: nature,
+                    label:     getNatureLabel(nature),
+                    value:     nature,
                   };
                 })}
               />
@@ -142,7 +144,7 @@ export default function ValidationPage() {
   );
 }
 
-export function ValidationBreadcrumb() {
+export function ValidationBreadcrumb () {
   const { criteria } = useParams();
   const [type, natures] = criteria.split('|');
   const description = getDescription(type, natures);

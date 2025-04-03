@@ -1,15 +1,22 @@
-import { Accordion } from '../../dsfr/elements/Accordion';
-import { Box } from '../../Flexbox';
-import LinkButton from '../../dsfr/custom/LinkButton';
+/**
+ *
+ */
+
 import { createContext } from 'react';
 import { uniq } from 'lodash-es';
 
+import { Accordion } from '../../dsfr/elements/Accordion';
+import { Box } from '../../Flexbox';
+import LinkButton from '../../dsfr/custom/LinkButton';
+
+
 export const FilterContext = createContext(null);
 
-export default function Filters({ children, onChange: handleChange }) {
+
+export function Filters ({ children, onChange: handleChange }) {
   let filters = [];
 
-  function onChange(data) {
+  function onChange (data) {
     const withArrayValueAsString = Object.keys(data).reduce((acc, key) => {
       const array = data[key];
       return {
@@ -21,18 +28,18 @@ export default function Filters({ children, onChange: handleChange }) {
     handleChange(withArrayValueAsString);
   }
 
-  function register(paramName) {
+  function register (paramName) {
     filters = uniq([...filters, paramName]);
   }
 
-  function reset() {
+  function reset () {
     onChange(
       filters.reduce((acc, name) => {
         return {
           ...acc,
           [name]: [],
         };
-      }, {})
+      }, {}),
     );
   }
 
