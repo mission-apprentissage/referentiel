@@ -1,4 +1,3 @@
-import React from 'react';
 import TitleLayout from './common/layout/TitleLayout.jsx';
 import ContentLayout from './common/layout/ContentLayout.jsx';
 import { Tab, TabPanel } from './common/dsfr/elements/Tabs.jsx';

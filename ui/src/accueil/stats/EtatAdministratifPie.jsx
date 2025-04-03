@@ -1,4 +1,3 @@
-import React from 'react';
 import { useFetch } from '../../common/hooks/useFetch.js';
 import Pie from '../../common/nivo/Pie.jsx';
 import { getEtatAdministratifColor, getEtatAdministratifLabel } from '../../common/enums/etat_administratif.js';

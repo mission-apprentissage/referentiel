@@ -1,5 +1,4 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux/index.js';
-import React from 'react';
 import TitleLayout from '../common/layout/TitleLayout.jsx';
 import ContentLayout from '../common/layout/ContentLayout.jsx';
 import NaturesStats from './natures/NaturesStats.jsx';

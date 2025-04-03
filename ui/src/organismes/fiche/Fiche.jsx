@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tab, TabPanel } from '../../common/dsfr/elements/Tabs.jsx';
 import IdentiteTab from './Identite/IdentiteTab.jsx';
 import RelationsTab from './relations/RelationsTab.jsx';

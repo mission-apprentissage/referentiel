@@ -4,7 +4,7 @@ import { Box } from '../../../common/Flexbox.jsx';
 import Fieldset from '../../../common/dsfr/elements/Fieldset.jsx';
 import Checkbox from '../../../common/dsfr/elements/Checkbox.jsx';
 import { Thead } from '../../../common/dsfr/elements/Table.jsx';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import NA from '../../../common/organismes/NA.jsx';
 import { Tag } from '../../../common/dsfr/elements/Tag.jsx';
 import Nature from '../../../common/organismes/Nature.jsx';

@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
 import { useSearch } from '../../../common/hooks/useSearch.js';
 import Spinner from '../../../common/Spinner.jsx';
 import { TagButton, TagGroup } from '../../../common/dsfr/elements/Tag.jsx';

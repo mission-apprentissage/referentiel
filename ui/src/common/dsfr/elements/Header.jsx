@@ -1,4 +1,3 @@
-import React from 'react';
 import { classNames } from '../dsfr';
 import { Button } from './Button';
 import { useModal } from '../common/useModal';

@@ -1,4 +1,3 @@
-import React from 'react';
 import useElementId from '../../hooks/useElementId';
 
 export const modalSizeModifiers = {

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 import useOnce from '../../../common/hooks/useOnce.js'; // eslint-disable-line import/no-webpack-loader-syntax
 import bluePin from './map-pin-blue.svg';

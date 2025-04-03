@@ -1,5 +1,4 @@
 import Histogram from '../../common/nivo/Histogram';
-import React from 'react';
 import { openNewTab } from '../../common/utils';
 import {
   getValidationColor,

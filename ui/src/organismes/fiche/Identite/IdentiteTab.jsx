@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Box } from '../../../common/Flexbox.jsx';
 import LinkButton from '../../../common/dsfr/custom/LinkButton.jsx';
 import { useModal } from '../../../common/dsfr/common/useModal.js';

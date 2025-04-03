@@ -1,4 +1,3 @@
-import React from 'react';
 import { ariaDescribedBy, classNames } from '../dsfr';
 import Validation from '../common/Validation';
 import Hint from './Hint';

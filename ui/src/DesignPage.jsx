@@ -1,4 +1,4 @@
-import React, { Children, useState } from 'react';
+import { Children, useState } from 'react';
 import { Accordion, AccordionItem } from './common/dsfr/elements/Accordion.jsx';
 import SearchBar from './common/dsfr/elements/SearchBar.jsx';
 import Alert from './common/dsfr/elements/Alert.jsx';

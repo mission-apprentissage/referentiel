@@ -1,5 +1,4 @@
 import Pie from '../../common/nivo/Pie';
-import React from 'react';
 import { openNewTab } from '../../common/utils';
 import { getNatureColor, getNatureLabel, getNatureParams } from '../../common/enums/natures';
 

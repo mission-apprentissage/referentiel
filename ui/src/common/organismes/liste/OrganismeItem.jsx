@@ -1,6 +1,5 @@
 import { Box } from '../../Flexbox.jsx';
 import styled from 'styled-components';
-import React from 'react';
 import ClickableItem from '../../ClickableItem.jsx';
 import { Tag } from '../../dsfr/elements/Tag.jsx';
 import Nature from '../Nature.jsx';

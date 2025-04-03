@@ -1,4 +1,3 @@
-import React from 'react';
 import { asSiren } from '../utils.js';
 
 export default function Siret({ organisme }) {

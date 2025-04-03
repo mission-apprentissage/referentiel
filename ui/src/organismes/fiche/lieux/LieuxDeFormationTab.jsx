@@ -1,4 +1,3 @@
-import React from 'react';
 import { Col, GridRow } from '../../../common/dsfr/fondamentaux/index.js';
 import LieuxDeFormationMap from './LieuxDeFormationMap.jsx';
 import { Table, Thead } from '../../../common/dsfr/elements/Table.jsx';

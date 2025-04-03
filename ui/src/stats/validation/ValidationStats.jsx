@@ -1,4 +1,3 @@
-import React from 'react';
 import { useFetch } from '../../common/hooks/useFetch';
 import Spinner from '../../common/Spinner';
 import { Col, GridRow } from '../../common/dsfr/fondamentaux';

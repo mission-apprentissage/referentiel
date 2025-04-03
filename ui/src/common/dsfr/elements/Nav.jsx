@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import { Children } from 'react';
 import { buildComponent, classNames } from '../dsfr';
 import { Collapse } from '../common/Collapsable';
 import { useCollapse } from '../common/useCollapse';

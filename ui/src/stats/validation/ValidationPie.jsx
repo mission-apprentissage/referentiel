@@ -1,5 +1,4 @@
 import Pie from '../../common/nivo/Pie';
-import React from 'react';
 import { getValidationColor, getValidationLabel, getValidationParams } from '../../common/enums/validation';
 import { openNewTab } from '../../common/utils';
 

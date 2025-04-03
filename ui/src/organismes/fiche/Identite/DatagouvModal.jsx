@@ -6,7 +6,6 @@ import Spinner from '../../../common/Spinner.jsx';
 import { flattenObject } from '../../../common/utils.js';
 import { Box } from '../../../common/Flexbox.jsx';
 import Field from '../../../common/Field.jsx';
-import React from 'react';
 const config = require('../../../config');
 
 export default function DatagouvModal({ modal, siret }) {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { classNames } from '../dsfr';
 import useElementId from '../../hooks/useElementId';
 

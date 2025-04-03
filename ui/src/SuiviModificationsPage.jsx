@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { DateTime } from 'luxon';
 
 import TitleLayout from './common/layout/TitleLayout.jsx';

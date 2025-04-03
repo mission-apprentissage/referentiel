@@ -1,5 +1,5 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux/index.js';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import ValidationCard from './cards/ValidationCard.jsx';
 import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector.jsx';
 import TitleLayout from '../common/layout/TitleLayout.jsx';

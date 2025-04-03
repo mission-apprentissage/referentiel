@@ -1,4 +1,3 @@
-import React from 'react';
 import OrganismeList from '../common/organismes/liste/OrganismeList.jsx';
 import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector.jsx';
 import SearchForm from '../common/organismes/liste/SearchForm.jsx';

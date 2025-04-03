@@ -1,7 +1,6 @@
 import { Button, ButtonGroup } from '../../../common/dsfr/elements/Button.jsx';
 import Modal, { modalSizeModifiers } from '../../../common/dsfr/elements/Modal.jsx';
 import BlueBox from '../../../common/BlueBox.jsx';
-import React from 'react';
 import { Box } from '../../../common/Flexbox.jsx';
 import Field from '../../../common/Field.jsx';
 import Nature from '../../../common/organismes/Nature.jsx';

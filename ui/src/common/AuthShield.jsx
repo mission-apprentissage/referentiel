@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { UserContext } from './UserProvider';
 import Spinner from './Spinner.jsx';

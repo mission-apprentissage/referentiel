@@ -1,7 +1,6 @@
 import { Filter } from './Filter.jsx';
 import Tooltip from '../../Tooltip.jsx';
 import { Box } from '../../Flexbox.jsx';
-import React from 'react';
 
 export default function DatagouvFilter() {
   return (

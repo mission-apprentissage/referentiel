@@ -1,5 +1,4 @@
 import { Col, GridRow } from './dsfr/fondamentaux';
-import React from 'react';
 import { useModal } from './dsfr/common/useModal';
 import { Button } from './dsfr/elements/Button';
 import styled from 'styled-components';

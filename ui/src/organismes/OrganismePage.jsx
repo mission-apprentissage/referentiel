@@ -1,7 +1,7 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux/index.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import Alert from '../common/dsfr/elements/Alert.jsx';
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import TitleLayout, { Back } from '../common/layout/TitleLayout.jsx';
 import ContentLayout from '../common/layout/ContentLayout.jsx';
 import { useFetch } from '../common/hooks/useFetch.js';

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import { createContext, useState, useEffect, useCallback, useContext } from 'react';
 import jwt from 'jsonwebtoken';
 import { ApiContext } from './ApiProvider.jsx';
 
-const UserContext = React.createContext([{}, () => {}]);
+const UserContext = createContext([{}, () => {}]);
 
 const anonymous = { sub: 'anonymous', isAnonymous: true, loading: true };
 

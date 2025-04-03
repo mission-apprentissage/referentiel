@@ -1,4 +1,3 @@
-import React from 'react';
 import TitleLayout from './common/layout/TitleLayout.jsx';
 import ContentLayout from './common/layout/ContentLayout.jsx';
 import Page from './common/Page.jsx';

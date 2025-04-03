@@ -1,4 +1,3 @@
-import React from 'react';
 import { capitalizeFirstLetter } from '../utils.js';
 import NA from './NA.jsx';
 

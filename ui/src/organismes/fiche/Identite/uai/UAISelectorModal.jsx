@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import Modal from '../../../../common/dsfr/elements/Modal.jsx';
 import { Button, ButtonGroup } from '../../../../common/dsfr/elements/Button.jsx';
 import useForm from '../../../../common/form/useForm.js';

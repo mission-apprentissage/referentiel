@@ -1,4 +1,3 @@
-import React from 'react';
 import { buildListComponent, classNames } from '../dsfr';
 import Hint from './Hint';
 import useElementId from '../../hooks/useElementId';

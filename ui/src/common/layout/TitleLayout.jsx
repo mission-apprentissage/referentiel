@@ -1,5 +1,4 @@
 import { Col, Container, GridRow } from '../dsfr/fondamentaux';
-import React from 'react';
 import styled from 'styled-components';
 import LinkButton from '../dsfr/custom/LinkButton';
 import { Box } from '../Flexbox';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useFetch } from '../../common/hooks/useFetch.js';
 import Histogram from '../../common/nivo/Histogram.jsx';
 const config = require('../../config');

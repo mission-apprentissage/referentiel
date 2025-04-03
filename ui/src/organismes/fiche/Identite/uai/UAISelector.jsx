@@ -1,4 +1,3 @@
-import React from 'react';
 import { useModal } from '../../../../common/dsfr/common/useModal.js';
 import LinkButton from '../../../../common/dsfr/custom/LinkButton.jsx';
 import ValidationTag from '../../../../common/ValidationTag.jsx';

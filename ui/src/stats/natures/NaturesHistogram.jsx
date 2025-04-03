@@ -1,6 +1,5 @@
 import Histogram from '../../common/nivo/Histogram';
 import { getNatureColor, getNatureLabel, getNatureParams, getNatureTypes } from '../../common/enums/natures';
-import React from 'react';
 import { openNewTab } from '../../common/utils';
 
 export function NaturesHistogram({ stats }) {

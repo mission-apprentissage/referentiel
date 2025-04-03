@@ -1,4 +1,3 @@
-import React from 'react';
 import { classNames } from '../dsfr';
 
 export default function Highlight({ modifiers, className, children }) {

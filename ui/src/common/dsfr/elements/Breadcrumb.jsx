@@ -1,5 +1,5 @@
 import { buildComponent } from '../dsfr';
-import React, { Children } from 'react';
+import { Children } from 'react';
 import { Link } from 'react-router-dom';
 import useElementId from '../../hooks/useElementId';
 

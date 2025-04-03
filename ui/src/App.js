@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import OrganismePage from './organismes/OrganismePage.jsx';
 import Layout from './common/layout/Layout';

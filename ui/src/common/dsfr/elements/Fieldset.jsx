@@ -1,5 +1,4 @@
 import { ariaLabelledBy, classNames } from '../dsfr';
-import React from 'react';
 import Validation from '../common/Validation';
 import useElementId from '../../hooks/useElementId';
 

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import OrganismeItem from './OrganismeItem.jsx';
 import ApiPagination from '../../ApiPagination.jsx';
 import { Box } from '../../Flexbox.jsx';
