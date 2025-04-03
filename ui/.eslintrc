@@ -1,8 +1,8 @@
 {
   "root": true,
   "extends": [
-    "react-app",
-    "plugin:prettier/recommended"
+    "react-app"
+    //"plugin:prettier/recommended"
   ],
   "globals": {
     "dsfr": true
