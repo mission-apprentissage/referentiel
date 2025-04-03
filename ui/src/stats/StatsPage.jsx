@@ -1,13 +1,12 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
-import TitleLayout from '../common/layout/TitleLayout';
-import ContentLayout from '../common/layout/ContentLayout';
+import { ContentLayout, TitleLayout } from '../common/layout';
 import NaturesStats from './natures/NaturesStats';
 import ValidationStats from './validation/ValidationStats';
 import QualiopiStats from './qualiopi/QualiopiStats';
 import Page from '../common/Page';
 import { Link } from '../common/dsfr/elements/Link';
 
-export default function StatsPage() {
+export default function StatsPage () {
   return (
     <Page>
       <TitleLayout title={'Statistiques'} />

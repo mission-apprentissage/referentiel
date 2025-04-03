@@ -2,20 +2,21 @@
  *
  */
 
+import { useParams } from 'react-router-dom';  // todo ?
+import styled from 'styled-components';
+
 import OrganismeList from '../common/organismes/liste/OrganismeList';
 import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
 import SearchForm from '../common/organismes/liste/SearchForm';
-import { useParams } from 'react-router-dom';
-import TitleLayout from '../common/layout/TitleLayout';
+import { ContentLayout, TitleLayout } from '../common/layout';
 import Results from '../common/Results';
-import ContentLayout from '../common/layout/ContentLayout';
-import styled from 'styled-components';
 import { useValidationSearch } from '../common/hooks/useValidationSearch';
 import { AcademiesFilter, Filters, NatureFilter } from '../common/organismes/filtres';
 import { getNatureLabel } from '../common/enums/natures';
 import Small from '../common/dsfr/custom/Small';
 import Page from '../common/Page';
 import { useQuery } from '../common/hooks/useQuery';
+
 
 const getDescription = (type, natures) => {
   const titlePrefix = `Organismes ${natures === 'formateur' ? 'formateurs' : ''}`;

@@ -2,8 +2,7 @@ import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Alert from '../common/dsfr/elements/Alert';
 import { useContext, useState } from 'react';
-import TitleLayout, { Back } from '../common/layout/TitleLayout';
-import ContentLayout from '../common/layout/ContentLayout';
+import { Back, ContentLayout, TitleLayout } from '../common/layout';
 import { useFetch } from '../common/hooks/useFetch';
 import Fiche from './fiche/Fiche';
 import RaisonSociale from '../common/organismes/RaisonSociale';
@@ -11,16 +10,17 @@ import OrganismeProvider, { OrganismeContext } from '../common/organismes/Organi
 import { SearchContext } from '../common/SearchProvider';
 import { buildUrl } from '../common/utils';
 import Page from '../common/Page';
+
 const config = require('../config');
 
-export default function OrganismePage() {
+export default function OrganismePage () {
   const { siret } = useParams();
   const { search } = useContext(SearchContext);
   const navigate = useNavigate();
   const [{ data: organisme, loading, error }, setData] = useFetch(config.apiUrl + `/organismes/${siret}`);
   const [message, setMessage] = useState(null);
 
-  function onChange(organisme, options = {}) {
+  function onChange (organisme, options = {}) {
     if (options.message) {
       setMessage(options.message);
       autoCloseMessage();
@@ -28,7 +28,7 @@ export default function OrganismePage() {
     setData(organisme);
   }
 
-  function autoCloseMessage() {
+  function autoCloseMessage () {
     const timeout = setTimeout(() => {
       clearTimeout(timeout);
       setMessage(null);
@@ -71,7 +71,7 @@ export default function OrganismePage() {
   );
 }
 
-export function OrganismeBreadcrumb() {
+export function OrganismeBreadcrumb () {
   const { organisme } = useContext(OrganismeContext);
 
   return <RaisonSociale organisme={organisme} />;

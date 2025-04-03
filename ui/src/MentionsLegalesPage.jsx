@@ -1,10 +1,9 @@
-import TitleLayout from './common/layout/TitleLayout';
-import ContentLayout from './common/layout/ContentLayout';
+import { ContentLayout, TitleLayout } from './common/layout';
 import Page from './common/Page';
 import { Col, GridRow } from './common/dsfr/fondamentaux';
 import { Link } from 'react-router-dom';
 
-export default function MentionsLegalesPages() {
+export default function MentionsLegalesPages () {
   return (
     <Page>
       <TitleLayout title={'Mentions légales'} />

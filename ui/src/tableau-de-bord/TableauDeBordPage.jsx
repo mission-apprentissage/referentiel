@@ -2,8 +2,7 @@ import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useContext } from 'react';
 import ValidationCard from './cards/ValidationCard';
 import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
-import TitleLayout from '../common/layout/TitleLayout';
-import ContentLayout from '../common/layout/ContentLayout';
+import { ContentLayout, TitleLayout } from '../common/layout';
 import { useQuery } from '../common/hooks/useQuery';
 import { UserContext } from '../common/UserProvider';
 import NouveauxCounter from './cards/NouveauxCounter';
@@ -58,7 +57,7 @@ const Presentation = styled(({ className }) => {
   }
 `;
 
-export default function TableauDeBordPage() {
+export default function TableauDeBordPage () {
   const [userContext] = useContext(UserContext);
 
   const { query, setQuery } = useQuery();

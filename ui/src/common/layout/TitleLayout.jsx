@@ -1,8 +1,14 @@
-import { Col, Container, GridRow } from '../dsfr/fondamentaux';
+/**
+ *
+ */
+
 import styled from 'styled-components';
+
+import { Col, Container, GridRow } from '../dsfr/fondamentaux';
 import LinkButton from '../dsfr/custom/LinkButton';
 import { Box } from '../Flexbox';
 import useToggle from '../hooks/useToggle';
+
 
 export function Back({ children, ...rest }) {
   return (
@@ -12,11 +18,14 @@ export function Back({ children, ...rest }) {
   );
 }
 
+
 const Message = styled('div')`
   margin-bottom: 1.5rem;
 `;
 
-export default function TitleLayout({ title, details, getDetailsMessage, message, back, selector }) {
+
+export function TitleLayout({ title, details, getDetailsMessage, message, back, selector }) {
+
   const [showDetails, toggleDetails] = useToggle(false);
 
   return (

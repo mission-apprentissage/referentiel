@@ -1,9 +1,8 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
-import TitleLayout from '../common/layout/TitleLayout';
-import ContentLayout from '../common/layout/ContentLayout';
+import { ContentLayout, TitleLayout } from '../common/layout';
 import Page from '../common/Page';
 
-export default function ContactPage() {
+export default function ContactPage () {
   return (
     <Page>
       <TitleLayout />

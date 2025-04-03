@@ -1,7 +1,6 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useContext } from 'react';
-import TitleLayout from '../common/layout/TitleLayout';
-import ContentLayout from '../common/layout/ContentLayout';
+import { ContentLayout, TitleLayout } from '../common/layout';
 import { Button } from '../common/dsfr/elements/Button';
 import { useNavigate } from 'react-router-dom';
 import { useFetch } from '../common/hooks/useFetch';
@@ -13,7 +12,7 @@ import { UserContext } from '../common/UserProvider';
 
 const config = require('../config');
 
-export default function AccueilPage() {
+export default function AccueilPage () {
   const navigate = useNavigate();
   const [userContext] = useContext(UserContext);
 

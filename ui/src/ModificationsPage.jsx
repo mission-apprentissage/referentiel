@@ -1,16 +1,20 @@
-import TitleLayout from './common/layout/TitleLayout';
-import ContentLayout from './common/layout/ContentLayout';
-import Page from './common/Page';
+/**
+ *
+ */
+
 import styled from 'styled-components';
-import { Col, GridRow } from './common/dsfr/fondamentaux';
 import { DateTime } from 'luxon';
+
+import { ContentLayout, TitleLayout } from './common/layout';
+import Page from './common/Page';
+import { Col, GridRow } from './common/dsfr/fondamentaux';
 import { cloneNodes } from './common/utils';
 
-function formatDate(date, pattern) {
+function formatDate (date, pattern) {
   return DateTime.fromISO(date).setLocale('fr').toLocaleString(pattern);
 }
 
-function Modifications({ id, date, children, className }) {
+function Modifications ({ id, date, children, className }) {
   return (
     <div id={id} className={className}>
       <h4>Le {formatDate(date, DateTime.DATE_FULL)}</h4>
@@ -157,7 +161,7 @@ export const modifications = [
   </Modifications>,
 ];
 
-export default function ModificationsPage() {
+export default function ModificationsPage () {
   return (
     <Page>
       <TitleLayout title={'Journal des modifications'} />

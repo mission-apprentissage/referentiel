@@ -5,9 +5,8 @@ import OrganismeList from '../common/organismes/liste/OrganismeList';
 import {
   AcademiesFilter, DatagouvFilter, DepartementsFilter, Filters, NatureFilter, QualiopiFilter, SiretFilter, UAIFilter
 } from '../common/organismes/filtres';
-import TitleLayout from '../common/layout/TitleLayout';
+import { ContentLayout, TitleLayout } from '../common/layout';
 import Results from '../common/Results';
-import ContentLayout from '../common/layout/ContentLayout';
 import Page from '../common/Page';
 import { useQuery } from '../common/hooks/useQuery';
 

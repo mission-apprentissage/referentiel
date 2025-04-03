@@ -1,9 +1,8 @@
-import TitleLayout from './common/layout/TitleLayout';
-import ContentLayout from './common/layout/ContentLayout';
+import { ContentLayout, TitleLayout } from './common/layout';
 import Page from './common/Page';
 import { Col, GridRow } from './common/dsfr/fondamentaux';
 
-export default function DonneesPersonnellesPages() {
+export default function DonneesPersonnellesPages () {
   return (
     <Page>
       <TitleLayout title={'Données personnelles'} />

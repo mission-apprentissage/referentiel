@@ -1,5 +1,4 @@
-import TitleLayout from './common/layout/TitleLayout';
-import ContentLayout from './common/layout/ContentLayout';
+import { ContentLayout, TitleLayout } from './common/layout';
 import { Tab, TabPanel } from './common/dsfr/elements/Tabs';
 import WideTabs from './common/dsfr/custom/WideTabs';
 import { Table, Thead } from './common/dsfr/elements/Table';
@@ -8,7 +7,7 @@ import Page from './common/Page';
 import { Link } from './common/dsfr/elements/Link';
 import { useNavigate, useParams } from 'react-router-dom';
 
-function Incoherence({ itemName }) {
+function Incoherence ({ itemName }) {
   return (
     <div className={'fr-mt-3w'}>
       Si cette donnée est inconnue ou incorrecte,{' '}
@@ -20,7 +19,7 @@ function Incoherence({ itemName }) {
   );
 }
 
-export default function ConstructionPage() {
+export default function ConstructionPage () {
   const navigate = useNavigate();
   const { tab = 'source' } = useParams();
 

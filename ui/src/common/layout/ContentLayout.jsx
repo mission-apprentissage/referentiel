@@ -1,5 +1,11 @@
+/**
+ *
+ */
+
 import { Container } from '../dsfr/fondamentaux';
 
-export default function ContentLayout({ children }) {
+export function ContentLayout ({ children }) {
+
   return <Container>{children}</Container>;
+
 }

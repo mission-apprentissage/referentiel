@@ -1,5 +1,4 @@
-import TitleLayout from './common/layout/TitleLayout';
-import ContentLayout from './common/layout/ContentLayout';
+import { ContentLayout, TitleLayout } from './common/layout';
 import Page from './common/Page';
 import { Accordion, AccordionItem } from './common/dsfr/elements/Accordion';
 import { Col, GridRow } from './common/dsfr/fondamentaux';
@@ -8,7 +7,7 @@ import Alert from './common/dsfr/elements/Alert';
 import { useSearchParams } from 'react-router-dom';
 import { useScrollToTop } from './common/hooks/useScrollToTop';
 
-export default function CorrectionsPage() {
+export default function CorrectionsPage () {
   const [searchParams] = useSearchParams();
   const item = searchParams.get('item');
   useScrollToTop({ force: true });

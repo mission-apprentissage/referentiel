@@ -1,5 +1,10 @@
+/**
+ *
+ */
+
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { Header } from '../dsfr/elements/Header';
 import { Link } from '../dsfr/elements/Link';
 import { Nav, NavLink } from '../dsfr/elements/Nav';
@@ -7,7 +12,7 @@ import { Footer, FooterLink, FooterList } from '../dsfr/elements/Footer';
 import { UserContext } from '../UserProvider';
 import { ApiContext } from '../ApiProvider';
 
-export default function Layout({ children }) {
+export function Layout ({ children }) {
   const [userContext, setUserContext] = useContext(UserContext);
   const { httpClient } = useContext(ApiContext);
   const navigate = useNavigate();
@@ -62,57 +67,59 @@ export default function Layout({ children }) {
       <Footer
         content={{
           desc: (
-            <>
-              Mandaté par le ministère du Travail, l'Onisep assure, avec un réseau d'experts des services statistiques
-              académiques, le maintien de ce Référentiel d'organismes de formation dans le but de fiabiliser la
-              circulation des offres de formation en apprentissage vers les outils d'affectation et d'inscription en
-              formation initiale du secondaire (Téléservices Affelnet) et du supérieur (Parcoursup) via le{' '}
-              <a href="https://catalogue-apprentissage.intercariforef.org/" target="_blank" rel="noreferrer">
-                Catalogue des formations en apprentissage
-              </a>{' '}
-              du réseau des Carif-Oref.
-            </>
-          ),
+                  <>
+                    Mandaté par le ministère du Travail, l'Onisep assure, avec un réseau d'experts des services
+                    statistiques
+                    académiques, le maintien de ce Référentiel d'organismes de formation dans le but de fiabiliser la
+                    circulation des offres de formation en apprentissage vers les outils d'affectation et d'inscription
+                    en
+                    formation initiale du secondaire (Téléservices Affelnet) et du supérieur (Parcoursup) via le{' '}
+                    <a href="https://catalogue-apprentissage.intercariforef.org/" target="_blank" rel="noreferrer">
+                      Catalogue des formations en apprentissage
+                    </a>{' '}
+                    du réseau des Carif-Oref.
+                  </>
+                ),
           list: (
-            <FooterList>
-              <FooterLink as={'a'} href="https://www.legifrance.gouv.fr/" target={'_blank'}>
-                legifrance.gouv.fr
-              </FooterLink>
-              <FooterLink as={'a'} href="https://www.gouvernement.fr/" target={'_blank'}>
-                gouvernement.fr
-              </FooterLink>
-              <FooterLink as={'a'} href="https://www.service-public.fr" target={'_blank'}>
-                service-public.fr
-              </FooterLink>
-              <FooterLink as={'a'} href="https://www.data.gouv.fr/fr/" target={'_blank'}>
-                data.gouv.fr
-              </FooterLink>
-              <FooterLink as={'a'} href="https://onisep.fr" target={'_blank'}>
-                Onisep.fr
-              </FooterLink>
-              <FooterLink as={'a'} href="https://opendata.onisep.fr/" target={'_blank'}>
-                Opendata Onisep.fr
-              </FooterLink>
-            </FooterList>
-          ),
+                  <FooterList>
+                    <FooterLink as={'a'} href="https://www.legifrance.gouv.fr/" target={'_blank'}>
+                      legifrance.gouv.fr
+                    </FooterLink>
+                    <FooterLink as={'a'} href="https://www.gouvernement.fr/" target={'_blank'}>
+                      gouvernement.fr
+                    </FooterLink>
+                    <FooterLink as={'a'} href="https://www.service-public.fr" target={'_blank'}>
+                      service-public.fr
+                    </FooterLink>
+                    <FooterLink as={'a'} href="https://www.data.gouv.fr/fr/" target={'_blank'}>
+                      data.gouv.fr
+                    </FooterLink>
+                    <FooterLink as={'a'} href="https://onisep.fr" target={'_blank'}>
+                      Onisep.fr
+                    </FooterLink>
+                    <FooterLink as={'a'} href="https://opendata.onisep.fr/" target={'_blank'}>
+                      Opendata Onisep.fr
+                    </FooterLink>
+                  </FooterList>
+                ),
         }}
         bottom={{
           list: (
-            <FooterList>
-              <FooterLink to={'/modifications'} onClick={() => window.scrollTo(0, 0)}>
-                Journal des modifications
-              </FooterLink>
-              <FooterLink to={'/mentions-legales'} onClick={() => window.scrollTo(0, 0)}>
-                Mentions légales
-              </FooterLink>
-              <FooterLink to={'/donnees-personnelles'} onClick={() => window.scrollTo(0, 0)}>
-                Données personnelles
-              </FooterLink>
-              <FooterLink to={'/contact'} onClick={() => window.scrollTo(0, 0)}>
-                Contact
-              </FooterLink>
-            </FooterList>
-          ),
+                  <FooterList>
+                    <FooterLink to={'/modifications'} onClick={() => window.scrollTo(0, 0)}>
+                      Journal des modifications
+                    </FooterLink>
+                    <FooterLink to={'/mentions-legales'} onClick={() => window.scrollTo(0, 0)}>
+                      Mentions légales
+                    </FooterLink>
+                    <FooterLink to={'/donnees-personnelles'} onClick={() => window.scrollTo(0, 0)}>
+                      Données personnelles
+                    </FooterLink>
+                    <FooterLink to={'/contact'} onClick={() => window.scrollTo(0, 0)}>
+                      Contact
+                    </FooterLink>
+                  </FooterList>
+                ),
         }}
       />
     </>
