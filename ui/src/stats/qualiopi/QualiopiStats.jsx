@@ -1,13 +1,19 @@
-import { useFetch } from '../../common/hooks/useFetch';
+/**
+ *
+ */
+
+import { useFetch } from '../../common/hooks';
 import Spinner from '../../common/Spinner';
 import { Col, GridRow } from '../../common/dsfr/fondamentaux';
 import Histogram from '../../common/nivo/Histogram';
 import { getNatureLabel, getNatureParams } from '../../common/enums/natures';
 import { getQualiopiColor, getQualiopiLabel, getQualiopiParams } from '../../common/enums/qualiopi';
 import { openNewTab } from '../../common/utils';
+
+
 const config = require('../../config');
 
-export default function QualiopiStats() {
+export default function QualiopiStats () {
   const [{ data, loading, error }] = useFetch(config.apiUrl + '/stats/qualiopi', []);
 
   if (loading || error) {

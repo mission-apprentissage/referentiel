@@ -1,5 +1,10 @@
+/**
+ *
+ */
+
 import { useEffect } from 'react';
 
-export default function useOnce(callback) {
+
+export function useOnce (callback) {
   useEffect(callback, []);
 }

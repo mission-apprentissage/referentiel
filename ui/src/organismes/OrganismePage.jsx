@@ -1,15 +1,20 @@
+/**
+ *
+ */
+
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Alert from '../common/dsfr/elements/Alert';
 import { useContext, useState } from 'react';
 import { Back, ContentLayout, TitleLayout } from '../common/layout';
-import { useFetch } from '../common/hooks/useFetch';
+import { useFetch } from '../common/hooks';
 import Fiche from './fiche/Fiche';
 import RaisonSociale from '../common/organismes/RaisonSociale';
 import OrganismeProvider, { OrganismeContext } from '../common/organismes/OrganismeProvider';
 import { SearchContext } from '../common/SearchProvider';
 import { buildUrl } from '../common/utils';
 import Page from '../common/Page';
+
 
 const config = require('../config');
 

@@ -1,6 +1,11 @@
+/**
+ *
+ */
+
 import { useEffect, useRef } from 'react';
 
-export default function usePrevious(state) {
+
+export function usePrevious (state) {
   const ref = useRef();
 
   useEffect(() => {

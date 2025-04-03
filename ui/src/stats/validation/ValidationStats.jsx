@@ -1,20 +1,26 @@
-import { useFetch } from '../../common/hooks/useFetch';
+/**
+ *
+ */
+
 import Spinner from '../../common/Spinner';
 import { Col, GridRow } from '../../common/dsfr/fondamentaux';
+import { useFetch } from '../../common/hooks';
+import { buildUrl } from '../../common/utils';
 import { ValidationHistogram } from './ValidationHistogram';
 import { ValidationPie } from './ValidationPie';
-import { buildUrl } from '../../common/utils';
+
+
 const config = require('../../config');
 
-export default function ValidationStats({ natures }) {
+export default function ValidationStats ({ natures }) {
   const [{ data: stats, loading, error }] = useFetch(
     buildUrl(config.apiUrl + '/stats/validation', {
       natures,
     }),
     {
-      national: {},
+      national:  {},
       academies: [],
-    }
+    },
   );
 
   if (loading || error) {

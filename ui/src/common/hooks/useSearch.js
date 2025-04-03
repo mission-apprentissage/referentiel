@@ -1,14 +1,20 @@
+/**
+ *
+ */
+
 import { useFetch } from './useFetch';
 import { buildUrl } from '../utils';
 import { useQuery } from './useQuery';
 import { useContext, useEffect, useMemo } from 'react';
 import { SearchContext } from '../SearchProvider';
 import { useLocation } from 'react-router-dom';
-import usePrevious from './usePrevious';
+import { usePrevious } from './usePrevious';
 import { isEqual, isString } from 'lodash-es';
+
+
 const config = require('../../config');
 
-function adaptParamsForAPI(params) {
+function adaptParamsForAPI (params) {
   return Object.keys(params).reduce((acc, key) => {
     const value = params[key];
     const shouldIgnoreParam =
@@ -21,7 +27,7 @@ function adaptParamsForAPI(params) {
   }, {});
 }
 
-export function useSearch(defaults, options = {}, token = null) {
+export function useSearch (defaults, options = {}, token = null) {
   const { query, setQuery } = useQuery();
   const location = useLocation();
   const { setSearch } = useContext(SearchContext);
@@ -42,15 +48,15 @@ export function useSearch(defaults, options = {}, token = null) {
   const [response] = useFetch(
     url,
     {
-      [entity]: [],
+      [entity]:   [],
       pagination: {
-        page: 0,
+        page:               0,
         resultats_par_page: 0,
-        nombre_de_page: 0,
-        total: 0,
+        nombre_de_page:     0,
+        total:              0,
       },
     },
-    token
+    token,
   );
 
   return {

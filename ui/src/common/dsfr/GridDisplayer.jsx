@@ -1,7 +1,13 @@
+/**
+ *
+ */
+
 import { useEffect, useState } from 'react';
-import { Col, Container, GridRow } from './fondamentaux';
 import styled from 'styled-components';
-import useAllKeysPress from '../hooks/useAllKeysPress';
+
+import { useAllKeysPress } from '../hooks';
+import { Col, Container, GridRow } from './fondamentaux';
+
 
 const GridDisplayer = ({ className, fluid = false, gutters = true }) => {
   const isShorcutPress = useAllKeysPress({ userKeys: ['Alt', 'ArrowDown'] });

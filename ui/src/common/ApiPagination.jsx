@@ -1,15 +1,20 @@
+/**
+ *
+ */
+
 import { FirstPage, LastPage, NextPage, Page, Pagination, PreviousPage } from './dsfr/elements/Pagination';
-import { useQuery } from './hooks/useQuery';
+import { useQuery } from './hooks';
 import { buildUrl } from './utils';
 
-export default function ApiPagination({ pagination }) {
+
+export default function ApiPagination ({ pagination }) {
   const { query } = useQuery();
   const nextPage = pagination.page + 1;
   const previousPage = pagination.page - 1;
 
-  function to(data = {}) {
+  function to (data = {}) {
     return {
-      to: buildUrl(window.location.pathname, { ...query, ...data }),
+      to:      buildUrl(window.location.pathname, { ...query, ...data }),
       onClick: () => window.scrollTo(0, 0),
     };
   }

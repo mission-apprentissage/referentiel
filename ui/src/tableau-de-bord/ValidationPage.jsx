@@ -2,7 +2,7 @@
  *
  */
 
-import { useParams } from 'react-router-dom';  // todo ?
+import { useParams } from 'react-router-dom'; // todo ?
 import styled from 'styled-components';
 
 import OrganismeList from '../common/organismes/liste/OrganismeList';
@@ -10,12 +10,11 @@ import DepartementAuthSelector from '../common/organismes/selectors/DepartementA
 import SearchForm from '../common/organismes/liste/SearchForm';
 import { ContentLayout, TitleLayout } from '../common/layout';
 import Results from '../common/Results';
-import { useValidationSearch } from '../common/hooks/useValidationSearch';
+import { useQuery, useValidationSearch } from '../common/hooks';
 import { AcademiesFilter, Filters, NatureFilter } from '../common/organismes/filtres';
 import { getNatureLabel } from '../common/enums/natures';
 import Small from '../common/dsfr/custom/Small';
 import Page from '../common/Page';
-import { useQuery } from '../common/hooks/useQuery';
 
 
 const getDescription = (type, natures) => {
@@ -29,46 +28,49 @@ const getDescription = (type, natures) => {
     A_VALIDER:    {
       title:    `${titlePrefix} à vérifier`,
       critères: (
-        <ul className={'fr-text--sm fr-pl-3w'}>
-          <li>ne possèdent pas d’UAI ;</li>
-          <li>possèdent des UAI potentielles collectées dans différentes sources ;</li>
-          <li>sont identifiés par un SIRET en activité ;</li>
-          <li>
-            sont trouvés dans la Liste publique des organismes de formation (DGEFP) ou le Catalogue des formations en
-            apprentissage (RCO) avec une certification Qualiopi valide ;
-          </li>
-          <li>{natureDetails}</li>
-        </ul>
-      ),
+                  <ul className={'fr-text--sm fr-pl-3w'}>
+                    <li>ne possèdent pas d’UAI ;</li>
+                    <li>possèdent des UAI potentielles collectées dans différentes sources ;</li>
+                    <li>sont identifiés par un SIRET en activité ;</li>
+                    <li>
+                      sont trouvés dans la Liste publique des organismes de formation (DGEFP) ou le Catalogue des
+                      formations en
+                      apprentissage (RCO) avec une certification Qualiopi valide ;
+                    </li>
+                    <li>{natureDetails}</li>
+                  </ul>
+                ),
     },
     A_RENSEIGNER: {
       title:    `${titlePrefix} à identifier`,
       critères: (
-        <ul className={'fr-text--sm fr-pl-3w'}>
-          <li>ne possèdent pas d’UAI ;</li>
-          <li>ne possèdent pas d’UAI potentielles ;</li>
-          <li>sont identifiés par un SIRET en activité ;</li>
-          <li>
-            sont trouvés dans la Liste publique des organismes de formation (DGEFP) ou le Catalogue des formations en
-            apprentissage (RCO) avec une certification Qualiopi valide ;
-          </li>
-          <li>{natureDetails}</li>
-        </ul>
-      ),
+                  <ul className={'fr-text--sm fr-pl-3w'}>
+                    <li>ne possèdent pas d’UAI ;</li>
+                    <li>ne possèdent pas d’UAI potentielles ;</li>
+                    <li>sont identifiés par un SIRET en activité ;</li>
+                    <li>
+                      sont trouvés dans la Liste publique des organismes de formation (DGEFP) ou le Catalogue des
+                      formations en
+                      apprentissage (RCO) avec une certification Qualiopi valide ;
+                    </li>
+                    <li>{natureDetails}</li>
+                  </ul>
+                ),
     },
     VALIDE:       {
       title:    `${titlePrefix} validés`,
       critères: (
-        <ul className={'fr-text--sm fr-pl-3w'}>
-          <li>possèdent une UAI validée ;</li>
-          <li>sont identifiés par un SIRET en activité ;</li>
-          <li>
-            sont trouvés dans la Liste publique des organismes de formation (DGEFP) ou le Catalogue des formations en
-            apprentissage (RCO) avec une certification Qualiopi valide ;
-          </li>
-          <li>{natureDetails}</li>
-        </ul>
-      ),
+                  <ul className={'fr-text--sm fr-pl-3w'}>
+                    <li>possèdent une UAI validée ;</li>
+                    <li>sont identifiés par un SIRET en activité ;</li>
+                    <li>
+                      sont trouvés dans la Liste publique des organismes de formation (DGEFP) ou le Catalogue des
+                      formations en
+                      apprentissage (RCO) avec une certification Qualiopi valide ;
+                    </li>
+                    <li>{natureDetails}</li>
+                  </ul>
+                ),
     },
   };
 

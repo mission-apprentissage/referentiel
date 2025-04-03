@@ -1,4 +1,5 @@
-import useElementId from '../../hooks/useElementId';
+import { useElementId } from '../../hooks';
+
 
 export const modalSizeModifiers = {
   sm: 'md-4',
@@ -6,7 +7,7 @@ export const modalSizeModifiers = {
   lg: 'md-8',
 };
 
-export default function Modal({ title, modal, content, footer, size, modifiers, className, closeModal, ...rest }) {
+export default function Modal ({ title, modal, content, footer, size, modifiers, className, closeModal, ...rest }) {
   const contentId = useElementId('modal-content');
 
   return (

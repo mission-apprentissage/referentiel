@@ -1,11 +1,17 @@
+/**
+ *
+ */
+
 import { Children } from 'react';
+import { NavLink as RouterNavLink } from 'react-router-dom';
+
 import { buildComponent, classNames } from '../dsfr';
 import { Collapse } from '../common/Collapsable';
 import { useCollapse } from '../common/useCollapse';
-import { NavLink as RouterNavLink } from 'react-router-dom';
-import useElementId from '../../hooks/useElementId';
+import { useElementId } from '../../hooks';
 
-export function Nav({ modifiers, className, children }) {
+
+export function Nav ({ modifiers, className, children }) {
   const clazz = classNames('fr-nav', { modifiers, className });
   const id = useElementId('nav');
 
@@ -26,7 +32,7 @@ export function Nav({ modifiers, className, children }) {
 
 export const NavLink = buildComponent(RouterNavLink, 'fr-nav__link');
 
-export function NavButton({ text, children, ...rest }) {
+export function NavButton ({ text, children, ...rest }) {
   const { collapseId, collapseRef, collapse } = useCollapse();
 
   return (

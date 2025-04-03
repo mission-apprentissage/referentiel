@@ -1,7 +1,12 @@
+/**
+ *
+ */
+
 import { ariaDescribedBy, classNames } from '../dsfr';
 import Validation from '../common/Validation';
 import Hint from './Hint';
-import useElementId from '../../hooks/useElementId';
+import { useElementId } from '../../hooks';
+
 
 export default function Checkbox({ label, hint, validation, modifiers, className, ...rest }) {
   const id = useElementId('checkbox');

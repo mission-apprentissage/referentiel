@@ -1,11 +1,15 @@
+/**
+ *
+ */
+
 import { Link } from '../../common/dsfr/elements/Link';
 import { Box } from '../../common/Flexbox';
 import styled from 'styled-components';
 import ClickableItem from '../../common/ClickableItem';
 import { buildUrl, without } from '../../common/utils';
 import Spinner from '../../common/Spinner';
-import { useValidationSearch } from '../../common/hooks/useValidationSearch';
-import { useQuery } from '../../common/hooks/useQuery';
+import { useQuery, useValidationSearch } from '../../common/hooks';
+
 
 const StyledBox = styled(without(Box, ['type']))`
   padding: 1.5rem;
@@ -30,13 +34,13 @@ const Counter = styled(({ response, className }) => {
   margin-bottom: 0.5rem;
 `;
 
-export default function ValidationCard({ type, natures, label, children, ...rest }) {
+export default function ValidationCard ({ type, natures, label, children, ...rest }) {
   const { query } = useQuery();
   const { response } = useValidationSearch(type, {
     natures,
-    page: 1,
+    page:           1,
     items_par_page: 1,
-    champs: 'siret',
+    champs:         'siret',
   });
 
   return (

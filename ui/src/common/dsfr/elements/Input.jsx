@@ -1,9 +1,14 @@
+/**
+ *
+ */
+
 import { ariaDescribedBy, classNames } from '../dsfr';
 import Validation from '../common/Validation';
 import Hint from './Hint';
-import useElementId from '../../hooks/useElementId';
+import { useElementId } from '../../hooks';
 
-function Input({ label, hint, icons, validation, modifiers, className, ...rest }) {
+
+function Input ({ label, hint, icons, validation, modifiers, className, ...rest }) {
   const id = useElementId('input');
   const clazz = classNames('fr-input-group', { modifiers, className, validation });
   const wrapperClazz = classNames('fr-input-wrap ', { icons });

@@ -1,6 +1,11 @@
+/**
+ *
+ */
+
 import { useRef } from 'react';
+
+import { useOnce } from '../../../common/hooks'; // eslint-disable-line import/no-webpack-loader-syntax
 import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
-import useOnce from '../../../common/hooks/useOnce'; // eslint-disable-line import/no-webpack-loader-syntax
 import bluePin from './map-pin-blue.svg';
 import redPin from './map-pin-red.svg';
 import redBluePin from './map-pin-red-blue.svg';
@@ -8,9 +13,10 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { Box } from '../../../common/Flexbox';
 import Legend from './Legend';
 
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiYmd1ZXJvdXQiLCJhIjoiY2wwamM5bmMyMGI5cDNrcDZzeGE0Y3RuNyJ9.R3_znqXpyJ8_98pEUYQuwQ';
 
-function addSVGImage(map, name, definitions) {
+function addSVGImage (map, name, definitions) {
   return new Promise((resolve) => {
     const img = new Image(definitions.width, definitions.height);
     img.src = definitions.file;
@@ -21,7 +27,7 @@ function addSVGImage(map, name, definitions) {
   });
 }
 
-function adaptGeojson(adresse, props = {}) {
+function adaptGeojson (adresse, props = {}) {
   const geojson = adresse.geojson;
 
   return {
@@ -33,12 +39,12 @@ function adaptGeojson(adresse, props = {}) {
   };
 }
 
-function getCoordinates(geojson) {
+function getCoordinates (geojson) {
   const { geometry } = geojson;
   return geometry.type === 'Polygon' ? geometry.coordinates[0][0] : geometry.coordinates;
 }
 
-function getCenter(organisme) {
+function getCenter (organisme) {
   const adresse = organisme.adresse;
   if (adresse) {
     return getCoordinates(adresse.geojson);
@@ -47,11 +53,11 @@ function getCenter(organisme) {
   return organisme.lieux_de_formation[0].adresse?.geojson.geometry.coordinates;
 }
 
-function degreesToRadians(degrees) {
+function degreesToRadians (degrees) {
   return (degrees * Math.PI) / 180;
 }
 
-function distanceInKmBetweenCoords(coords1, coords2) {
+function distanceInKmBetweenCoords (coords1, coords2) {
   const earthRadiusKm = 6371;
   const dLat = degreesToRadians(coords2[1] - coords1[1]);
   const dLon = degreesToRadians(coords2[0] - coords1[0]);
@@ -64,7 +70,7 @@ function distanceInKmBetweenCoords(coords1, coords2) {
   return earthRadiusKm * c;
 }
 
-function buildSource(organisme) {
+function buildSource (organisme) {
   const features = [];
   let lieux = organisme.lieux_de_formation;
 
@@ -76,24 +82,24 @@ function buildSource(organisme) {
 
     features.push(
       adaptGeojson(organisme.adresse, {
-        label: organisme.enseigne || organisme.raison_sociale,
-        popup: organisme.adresse?.label,
-        icon: organisme.lieux_de_formation.length !== lieux.length ? 'map-pin-red-blue' : 'map-pin-red',
+        label:   organisme.enseigne || organisme.raison_sociale,
+        popup:   organisme.adresse?.label,
+        icon:    organisme.lieux_de_formation.length !== lieux.length ? 'map-pin-red-blue' : 'map-pin-red',
         sortKey: 1,
-      })
+      }),
     );
   }
 
   return {
     type: 'geojson',
     data: {
-      type: 'FeatureCollection',
+      type:     'FeatureCollection',
       features: [
         ...features,
         ...lieux.map((l) => {
           return adaptGeojson(l.adresse, {
-            popup: l.adresse?.label,
-            icon: 'map-pin-blue',
+            popup:   l.adresse?.label,
+            icon:    'map-pin-blue',
             sortKey: 2,
           });
         }),
@@ -102,7 +108,7 @@ function buildSource(organisme) {
   };
 }
 
-function showPopupOnMouseHover(map, layerName) {
+function showPopupOnMouseHover (map, layerName) {
   const popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false });
 
   map.on('mouseenter', layerName, (e) => {
@@ -128,7 +134,7 @@ function showPopupOnMouseHover(map, layerName) {
   });
 }
 
-function getBounds(source) {
+function getBounds (source) {
   const first = source.data.features[0];
   const coords = getCoordinates(first);
   const bounds = new mapboxgl.LngLatBounds(coords, coords);
@@ -138,7 +144,7 @@ function getBounds(source) {
   return bounds;
 }
 
-async function configureMap(map, source) {
+async function configureMap (map, source) {
   await Promise.all([
     addSVGImage(map, 'map-pin-blue', { file: bluePin, width: 30, height: 36 }),
     addSVGImage(map, 'map-pin-red', { file: redPin, width: 30, height: 36 }),
@@ -151,42 +157,42 @@ async function configureMap(map, source) {
     .addControl(new mapboxgl.NavigationControl())
     .addSource('ecosysteme', source)
     .addLayer({
-      id: 'layer-commune',
+      id:     'layer-commune',
       source: 'ecosysteme',
       filter: ['==', '$type', 'Polygon'],
       layout: {},
-      type: 'fill',
-      paint: {
-        'fill-color': '#e1000f',
+      type:   'fill',
+      paint:  {
+        'fill-color':   '#e1000f',
         'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.8, 0.5],
       },
     })
     .addLayer({
-      id: 'layer-points',
-      source: 'ecosysteme',
-      filter: ['==', '$type', 'Point'],
-      type: 'symbol',
+      id:               'layer-points',
+      source:           'ecosysteme',
+      filter:           ['==', '$type', 'Point'],
+      type:             'symbol',
       'symbol-z-order': 'source',
-      layout: {
-        'text-field': ['get', 'label'],
-        'text-offset': [0, 1.25],
-        'text-anchor': 'top',
-        'icon-image': '{icon}',
+      layout:           {
+        'text-field':         ['get', 'label'],
+        'text-offset':        [0, 1.25],
+        'text-anchor':        'top',
+        'icon-image':         '{icon}',
         'icon-allow-overlap': true,
       },
     })
     .fitBounds(getBounds(source), { padding: 200, maxZoom: 12 });
 }
 
-export default function LieuxDeFormationMap({ organisme }) {
+export default function LieuxDeFormationMap ({ organisme }) {
   const mapContainer = useRef(null);
 
   useOnce(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v10',
-      center: getCenter(organisme),
-      zoom: 7,
+      style:     'mapbox://styles/mapbox/light-v10',
+      center:    getCenter(organisme),
+      zoom:      7,
     });
 
     map.on('load', () => {

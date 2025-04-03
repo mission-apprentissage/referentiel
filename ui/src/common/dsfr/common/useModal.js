@@ -1,13 +1,16 @@
 import { createRef } from 'react';
-import useElementId from '../../hooks/useElementId';
+import { useElementId } from '../../hooks';
 
-export function useModal() {
+
+export function useModal () {
   const id = useElementId('modal');
   const ref = createRef();
-  function open() {
+
+  function open () {
     dsfr(ref.current).modal.disclose();
   }
-  function close() {
+
+  function close () {
     dsfr(ref.current).modal.conceal();
   }
 

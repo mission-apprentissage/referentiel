@@ -1,11 +1,17 @@
+/**
+ *
+ */
+
+import { useSearchParams } from 'react-router-dom';
+
 import { ContentLayout, TitleLayout } from './common/layout';
 import Page from './common/Page';
 import { Accordion, AccordionItem } from './common/dsfr/elements/Accordion';
 import { Col, GridRow } from './common/dsfr/fondamentaux';
 import Highlight from './common/dsfr/elements/Highlight';
 import Alert from './common/dsfr/elements/Alert';
-import { useSearchParams } from 'react-router-dom';
-import { useScrollToTop } from './common/hooks/useScrollToTop';
+import { useScrollToTop } from './common/hooks';
+
 
 export default function CorrectionsPage () {
   const [searchParams] = useSearchParams();

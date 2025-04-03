@@ -7,10 +7,10 @@ import styled from 'styled-components';
 import { Col, Container, GridRow } from '../dsfr/fondamentaux';
 import LinkButton from '../dsfr/custom/LinkButton';
 import { Box } from '../Flexbox';
-import useToggle from '../hooks/useToggle';
+import { useToggle } from '../hooks';
 
 
-export function Back({ children, ...rest }) {
+export function Back ({ children, ...rest }) {
   return (
     <LinkButton icons={'arrow-left-line'} className={'fr-mb-3w'} {...rest}>
       {children}
@@ -24,7 +24,7 @@ const Message = styled('div')`
 `;
 
 
-export function TitleLayout({ title, details, getDetailsMessage, message, back, selector }) {
+export function TitleLayout ({ title, details, getDetailsMessage, message, back, selector }) {
 
   const [showDetails, toggleDetails] = useToggle(false);
 

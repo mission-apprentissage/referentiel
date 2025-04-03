@@ -1,3 +1,7 @@
+/**
+ *
+ */
+
 import { BrowserRouter as Router, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import OrganismePage from './organismes/OrganismePage';
 import { Layout } from './common/layout';
@@ -16,13 +20,14 @@ import SearchProvider from './common/SearchProvider';
 import ModificationsPage from './ModificationsPage';
 import CorrectionsPage from './CorrectionsPage';
 import SuiviModificationsPage from './SuiviModificationsPage';
-import { useScrollToTop } from './common/hooks/useScrollToTop';
+import { useScrollToTop } from './common/hooks';
 import { UserProvider } from './common/UserProvider';
 import ContactPage from './accueil/ContactPage';
 import MentionsLegalesPages from './MentionsLegalesPage';
 import DonneesPersonnellesPages from './DonneesPersonnellesPages';
 
-function Providers({ children }) {
+
+function Providers ({ children }) {
   useScrollToTop();
 
   return (
@@ -36,7 +41,7 @@ function Providers({ children }) {
   );
 }
 
-function App() {
+function App () {
   return (
     <div className="App">
       <Router>

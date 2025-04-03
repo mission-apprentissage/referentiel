@@ -1,8 +1,14 @@
-import { useFetch } from '../../common/hooks/useFetch';
+/**
+ *
+ */
+
+import { useFetch } from '../../common/hooks';
 import Histogram from '../../common/nivo/Histogram';
+
+
 const config = require('../../config');
 
-function getLastMonths(nbMonths) {
+function getLastMonths (nbMonths) {
   const names = [
     'Janvier',
     'Février',
@@ -29,25 +35,25 @@ function getLastMonths(nbMonths) {
   return months;
 }
 
-export default function NouveauxHistogram() {
+export default function NouveauxHistogram () {
   const [{ data }] = useFetch(config.apiUrl + '/stats/nouveaux', []);
   const last6Months = getLastMonths(6).map(({ annee, mois, label }) => {
     const found = data.find((e) => e.annee === annee && e.mois === mois);
 
     return {
-      key: `${annee}_${label}`,
+      key:          `${annee}_${label}`,
       nbOrganismes: found?.total || 0,
     };
   });
 
   const customXLegend = {
-    tickSize: 0,
-    tickPadding: 25,
-    tickRotation: -25,
-    legend: '6 derniers mois',
+    tickSize:       0,
+    tickPadding:    25,
+    tickRotation:   -25,
+    legend:         '6 derniers mois',
     legendPosition: 'middle',
-    legendOffset: 100,
-    format: (id) => id.split('_').reverse().join(' '),
+    legendOffset:   100,
+    format:         (id) => id.split('_').reverse().join(' '),
   };
 
   return (

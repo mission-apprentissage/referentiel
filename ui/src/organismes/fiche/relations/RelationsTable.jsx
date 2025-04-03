@@ -1,4 +1,8 @@
-import useToggle from '../../../common/hooks/useToggle';
+/**
+ *
+ */
+
+import { useToggle } from '../../../common/hooks';
 import { asSiren } from '../../../common/utils';
 import { Box } from '../../../common/Flexbox';
 import Fieldset from '../../../common/dsfr/elements/Fieldset';
@@ -16,7 +20,8 @@ import { Button } from '../../../common/dsfr/elements/Button';
 import Adresse from '../../../common/organismes/Adresse';
 import CustomTable from '../../../common/dsfr/custom/CustomTable';
 
-function RelationRow({ organisme, show }) {
+
+function RelationRow ({ organisme, show }) {
   return (
     <tr>
       <td onClick={show} colSpan="2">
@@ -43,7 +48,7 @@ function RelationRow({ organisme, show }) {
   );
 }
 
-function AbsentRow({ relation }) {
+function AbsentRow ({ relation }) {
   return (
     <tr>
       <td colSpan="2">{relation.label}</td>
@@ -60,7 +65,7 @@ function AbsentRow({ relation }) {
   );
 }
 
-export function RelationsTable({ label, organisme, results }) {
+export function RelationsTable ({ label, organisme, results }) {
   const [sirenFilter, toggleSirenFilter] = useToggle(false);
   const [fermésFilter, toggleFermésFilter] = useToggle(false);
   const siren = asSiren(organisme.siret);
@@ -69,7 +74,8 @@ export function RelationsTable({ label, organisme, results }) {
   const memeEntreprise = presents.filter((i) => asSiren(i.organisme.siret) === siren);
   const [selectedOrganisme, setSelectedOrganisme] = useState(null);
   const modal = useModal();
-  function showOrganisme(organisme) {
+
+  function showOrganisme (organisme) {
     setSelectedOrganisme(organisme);
     modal.open();
   }

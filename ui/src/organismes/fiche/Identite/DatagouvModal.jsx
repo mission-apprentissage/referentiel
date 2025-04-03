@@ -1,14 +1,20 @@
+/**
+ *
+ */
+
 import { Button, ButtonGroup } from '../../../common/dsfr/elements/Button';
 import Modal, { modalSizeModifiers } from '../../../common/dsfr/elements/Modal';
 import BlueBox from '../../../common/BlueBox';
-import { useFetch } from '../../../common/hooks/useFetch';
+import { useFetch } from '../../../common/hooks';
 import Spinner from '../../../common/Spinner';
 import { flattenObject } from '../../../common/utils';
 import { Box } from '../../../common/Flexbox';
 import Field from '../../../common/Field';
+
+
 const config = require('../../../config');
 
-export default function DatagouvModal({ modal, siret }) {
+export default function DatagouvModal ({ modal, siret }) {
   const [{ data: organisme, loading, error }] = useFetch(config.apiUrl + `/datagouv/${siret}`, {});
   const flatten = flattenObject(organisme);
   const asShortKey = (key) => key.split('.')[key.split('.').length - 1];

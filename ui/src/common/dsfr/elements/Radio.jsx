@@ -1,8 +1,13 @@
+/**
+ *
+ */
+
 import { classNames } from '../dsfr';
 import Hint from './Hint';
-import useElementId from '../../hooks/useElementId';
+import { useElementId } from '../../hooks';
 
-export default function Radio({ label, hint, modifiers, className, ...rest }) {
+
+export default function Radio ({ label, hint, modifiers, className, ...rest }) {
   const id = useElementId('radio');
   const clazz = classNames('fr-radio-group', { modifiers, className });
 

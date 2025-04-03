@@ -1,6 +1,11 @@
+/**
+ *
+ */
+
 import { ariaLabelledBy, classNames } from '../dsfr';
 import Validation from '../common/Validation';
-import useElementId from '../../hooks/useElementId';
+import { useElementId } from '../../hooks';
+
 
 export default function Fieldset({ legend, validation, modifiers, className, children }) {
   const clazz = classNames('fr-fieldset', { modifiers, className, validation });

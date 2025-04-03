@@ -1,7 +1,12 @@
-import { classNames } from '../dsfr';
-import useElementId from '../../hooks/useElementId';
+/**
+ *
+ */
 
-function SearchBar({ label, placeholder = label, modifiers, className, ...rest }) {
+import { classNames } from '../dsfr';
+import { useElementId } from '../../hooks';
+
+
+function SearchBar ({ label, placeholder = label, modifiers, className, ...rest }) {
   const clazz = classNames('fr-search-bar', { modifiers, className });
   const id = useElementId('search');
   const inputId = useElementId('search-input');

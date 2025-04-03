@@ -1,7 +1,13 @@
-import { buildComponent } from '../dsfr';
+/**
+ *
+ */
+
 import { Children } from 'react';
 import { Link } from 'react-router-dom';
-import useElementId from '../../hooks/useElementId';
+
+import { buildComponent } from '../dsfr';
+import { useElementId } from '../../hooks';
+
 
 export default function Breadcrumb({ children }) {
   const id = useElementId('breadcrumb');

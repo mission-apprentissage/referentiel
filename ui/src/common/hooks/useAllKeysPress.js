@@ -1,13 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 
 /**
  * A custom hook to detect when the user is pressing a specific key or a collection of keys
  * @author Melvyn Phillips (Numel2020)
  * @link https://github.com/Numel2020
- * @param {object} -  User options
+ * @param {object} options  User options
  * @returns {boolean} - TRUE returns a match.
  */
-function useAllKeysPress(options) {
+export function useAllKeysPress (options) {
   // Check that 'options' is an object.
   if (!options || Object.keys(options).length === 0) {
     throw new Error('No object parameter found use: {userKeys: ... } ');
@@ -42,12 +43,12 @@ function useAllKeysPress(options) {
    * @default
    */
   const settings = {
-    type: null,
-    objRef: ref,
+    type:        null,
+    objRef:      ref,
     downHandler: undefined,
-    upHandler: undefined,
-    useEffect: null,
-    output: null,
+    upHandler:   undefined,
+    useEffect:   null,
+    output:      null,
   };
 
   /**
@@ -174,7 +175,7 @@ function useAllKeysPress(options) {
    * Calls React.useEffect to add Event listeners to 'ref'.
    * @constructor
    */
-  function Init() {
+  function Init () {
     useEffect(() => {
       // If 'ref' after initialisation has the property of 'current' then it refers
       // to a referenced element in which case 'element' should refer to THIS.
@@ -208,5 +209,3 @@ function useAllKeysPress(options) {
    */
   return settings.output;
 }
-
-export default useAllKeysPress;

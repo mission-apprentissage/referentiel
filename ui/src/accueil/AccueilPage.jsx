@@ -1,14 +1,19 @@
+/**
+ *
+ */
+
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useContext } from 'react';
 import { ContentLayout, TitleLayout } from '../common/layout';
 import { Button } from '../common/dsfr/elements/Button';
 import { useNavigate } from 'react-router-dom';
-import { useFetch } from '../common/hooks/useFetch';
+import { useFetch } from '../common/hooks';
 import { percentage } from '../common/utils';
 import Page from '../common/Page';
 import NouveauxHistogram from './stats/NouveauxHistogram';
 import EtatAdministratifPie from './stats/EtatAdministratifPie';
 import { UserContext } from '../common/UserProvider';
+
 
 const config = require('../config');
 

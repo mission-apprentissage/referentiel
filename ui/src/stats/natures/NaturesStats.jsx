@@ -1,13 +1,19 @@
-import { useFetch } from '../../common/hooks/useFetch';
+/**
+ *
+ */
+
+import { useFetch } from '../../common/hooks';
 import Spinner from '../../common/Spinner';
 import { Col, GridRow } from '../../common/dsfr/fondamentaux';
 import { NaturesPie } from './NaturesPie';
 import { NaturesHistogram } from './NaturesHistogram';
+
+
 const config = require('../../config');
 
-export default function NaturesStats() {
+export default function NaturesStats () {
   const [{ data: stats, loading, error }] = useFetch(config.apiUrl + '/stats/natures', {
-    national: null,
+    national:  null,
     academies: [],
   });
 

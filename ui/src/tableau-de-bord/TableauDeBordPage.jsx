@@ -1,16 +1,20 @@
+/**
+ *
+ */
+
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useContext } from 'react';
 import ValidationCard from './cards/ValidationCard';
 import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
 import { ContentLayout, TitleLayout } from '../common/layout';
-import { useQuery } from '../common/hooks/useQuery';
+import { useQuery, useToggle } from '../common/hooks';
 import { UserContext } from '../common/UserProvider';
 import NouveauxCounter from './cards/NouveauxCounter';
-import useToggle from '../common/hooks/useToggle';
 import LinkButton from '../common/dsfr/custom/LinkButton';
 import styled from 'styled-components';
 import Page from '../common/Page';
 import Highlight from '../common/dsfr/elements/Highlight';
+
 
 const Presentation = styled(({ className }) => {
   const [showDetails, toggleDetails] = useToggle(false);

@@ -12,7 +12,7 @@ import { Tag } from '../../dsfr/elements/Tag';
 import SmallCheckbox from '../../dsfr/custom/SmallCheckbox';
 import { FilterContext } from './Filters';
 import { ariaExpanded } from '../../dsfr/dsfr';
-import { useQuery } from '../../hooks/useQuery';
+import { useQuery } from '../../hooks';
 import { Box } from '../../Flexbox';
 
 

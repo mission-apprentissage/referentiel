@@ -1,13 +1,18 @@
-import { useValidationSearch } from '../../common/hooks/useValidationSearch';
+/**
+ *
+ */
+
+import { useValidationSearch } from '../../common/hooks';
 import Badge from '../../common/dsfr/elements/Badge';
 
-export default function NouveauxCounter({ type, natures }) {
+
+export default function NouveauxCounter ({ type, natures }) {
   const { response } = useValidationSearch(type, {
     natures,
-    nouveaux: true,
-    page: 1,
+    nouveaux:       true,
+    page:           1,
     items_par_page: 1,
-    champs: 'siret',
+    champs:         'siret',
   });
 
   if (response.loading || response.data.pagination.total === 0) {
