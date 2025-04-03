@@ -5,15 +5,15 @@
 import { useParams } from 'react-router-dom'; // todo ?
 import styled from 'styled-components';
 
-import OrganismeList from '../common/organismes/liste/OrganismeList';
-import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
-import SearchForm from '../common/organismes/liste/SearchForm';
-import { ContentLayout, TitleLayout } from '../common/layout';
-import Results from '../common/Results';
-import { useQuery, useValidationSearch } from '../common/hooks';
-import { AcademiesFilter, Filters, NatureFilter } from '../common/organismes/filtres';
-import { getNatureLabel } from '../common/enums/natures';
 import Small from '../common/dsfr/custom/Small';
+import { getNatureLabel } from '../common/enums/natures';
+import { useQuery, useValidationSearch } from '../common/hooks';
+import { ContentLayout, TitleLayout } from '../common/layout';
+import OrganismeList from '../common/organismes/liste/OrganismeList';
+import SearchForm from '../common/organismes/liste/SearchForm';
+import { AcademiesFilter, Filters, NatureFilter } from '../common/organismes/filtres';
+import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
+import Results from '../common/Results';
 import Page from '../common/Page';
 
 
@@ -137,7 +137,7 @@ export default function ValidationPage () {
                   };
                 })}
               />
-              <AcademiesFilter/>
+              <AcademiesFilter />
             </Filters>
           }
           results={<OrganismeList response={response} />}

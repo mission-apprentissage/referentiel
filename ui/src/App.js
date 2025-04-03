@@ -3,6 +3,7 @@
  */
 
 import { BrowserRouter as Router, Navigate, Outlet, Route, Routes } from 'react-router-dom';
+
 import OrganismePage from './organismes/OrganismePage';
 import { Layout } from './common/layout';
 import DesignPage from './DesignPage';

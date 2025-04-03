@@ -2,18 +2,20 @@
  *
  */
 
-import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useContext } from 'react';
-import ValidationCard from './cards/ValidationCard';
-import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
-import { ContentLayout, TitleLayout } from '../common/layout';
-import { useQuery, useToggle } from '../common/hooks';
-import { UserContext } from '../common/UserProvider';
-import NouveauxCounter from './cards/NouveauxCounter';
-import LinkButton from '../common/dsfr/custom/LinkButton';
 import styled from 'styled-components';
-import Page from '../common/Page';
+
+import LinkButton from '../common/dsfr/custom/LinkButton';
+import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import Highlight from '../common/dsfr/elements/Highlight';
+
+import { useQuery, useToggle } from '../common/hooks';
+import { ContentLayout, TitleLayout } from '../common/layout';
+import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
+import { UserContext } from '../common/UserProvider';
+import ValidationCard from './cards/ValidationCard';
+import NouveauxCounter from './cards/NouveauxCounter';
+import Page from '../common/Page';
 
 
 const Presentation = styled(({ className }) => {
