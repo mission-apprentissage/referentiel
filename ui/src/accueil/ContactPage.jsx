@@ -1,4 +1,4 @@
-import { Col, GridRow } from '../common/dsfr/fondamentaux/index.js';
+import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import TitleLayout from '../common/layout/TitleLayout.jsx';
 import ContentLayout from '../common/layout/ContentLayout.jsx';
 import Page from '../common/Page.jsx';

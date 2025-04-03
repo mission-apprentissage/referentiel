@@ -2,7 +2,7 @@ import TitleLayout from './common/layout/TitleLayout.jsx';
 import ContentLayout from './common/layout/ContentLayout.jsx';
 import Page from './common/Page.jsx';
 import { Accordion, AccordionItem } from './common/dsfr/elements/Accordion.jsx';
-import { Col, GridRow } from './common/dsfr/fondamentaux/index.js';
+import { Col, GridRow } from './common/dsfr/fondamentaux';
 import Highlight from './common/dsfr/elements/Highlight.jsx';
 import Alert from './common/dsfr/elements/Alert.jsx';
 import { useSearchParams } from 'react-router-dom';

@@ -3,7 +3,7 @@ import { Accordion, AccordionItem } from './common/dsfr/elements/Accordion.jsx';
 import SearchBar from './common/dsfr/elements/SearchBar.jsx';
 import Alert from './common/dsfr/elements/Alert.jsx';
 import { Button, ButtonGroup } from './common/dsfr/elements/Button.jsx';
-import { Col, Container, GridRow } from './common/dsfr/fondamentaux/index.js';
+import { Col, Container, GridRow } from './common/dsfr/fondamentaux';
 import styled from 'styled-components';
 import Radio from './common/dsfr/elements/Radio.jsx';
 import Checkbox from './common/dsfr/elements/Checkbox.jsx';

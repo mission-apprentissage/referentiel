@@ -1,4 +1,4 @@
-import { Col, GridRow } from '../common/dsfr/fondamentaux/index.js';
+import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Alert from '../common/dsfr/elements/Alert.jsx';
 import { useContext, useState } from 'react';

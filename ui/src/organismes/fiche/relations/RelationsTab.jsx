@@ -2,7 +2,7 @@ import { useReducer, useState } from 'react';
 import { useSearch } from '../../../common/hooks/useSearch.js';
 import Spinner from '../../../common/Spinner.jsx';
 import { TagButton, TagGroup } from '../../../common/dsfr/elements/Tag.jsx';
-import { Col, GridRow } from '../../../common/dsfr/fondamentaux/index.js';
+import { Col, GridRow } from '../../../common/dsfr/fondamentaux';
 import styled from 'styled-components';
 import { Box } from '../../../common/Flexbox.jsx';
 import { RelationsTable } from './RelationsTable.jsx';

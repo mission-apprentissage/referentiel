@@ -3,7 +3,7 @@ import { Box } from '../../../common/Flexbox.jsx';
 import LinkButton from '../../../common/dsfr/custom/LinkButton.jsx';
 import { useModal } from '../../../common/dsfr/common/useModal.js';
 import DatagouvModal from './DatagouvModal.jsx';
-import { Col, GridRow } from '../../../common/dsfr/fondamentaux/index.js';
+import { Col, GridRow } from '../../../common/dsfr/fondamentaux';
 import Field from '../../../common/Field.jsx';
 import UAIValidator from './uai/UAISelector.jsx';
 import Nature from '../../../common/organismes/Nature.jsx';

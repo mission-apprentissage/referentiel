@@ -1,4 +1,4 @@
-import { Col, GridRow } from '../common/dsfr/fondamentaux/index.js';
+import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useContext } from 'react';
 import TitleLayout from '../common/layout/TitleLayout.jsx';
 import ContentLayout from '../common/layout/ContentLayout.jsx';

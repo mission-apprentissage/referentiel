@@ -1,4 +1,4 @@
-import { Col, GridRow } from '../../../common/dsfr/fondamentaux/index.js';
+import { Col, GridRow } from '../../../common/dsfr/fondamentaux';
 import LieuxDeFormationMap from './LieuxDeFormationMap.jsx';
 import { Table, Thead } from '../../../common/dsfr/elements/Table.jsx';
 import NA from '../../../common/organismes/NA.jsx';
