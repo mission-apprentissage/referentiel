@@ -39,6 +39,7 @@ export default function Connexion() {
           token: result.token,
           loading: false,
           isAnonymous: false,
+          isAdmin: decodedToken.isAdmin,
         });
         navigate("/tableau-de-bord");
       } else {
