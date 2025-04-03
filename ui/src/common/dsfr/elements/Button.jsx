@@ -1,4 +1,4 @@
-import { buildComponent, buildListComponent } from "../dsfr";
+import { buildComponent, buildListComponent } from '../dsfr';
 
-export const ButtonGroup = buildListComponent("ul", "fr-btns-group");
-export const Button = buildComponent("button", "fr-btn");
+export const ButtonGroup = buildListComponent('ul', 'fr-btns-group');
+export const Button = buildComponent('button', 'fr-btn');

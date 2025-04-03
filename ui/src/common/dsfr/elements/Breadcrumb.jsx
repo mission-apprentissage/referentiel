@@ -1,13 +1,13 @@
-import { buildComponent } from "../dsfr";
-import React, { Children } from "react";
-import { Link } from "react-router-dom";
-import useElementId from "../../hooks/useElementId";
+import { buildComponent } from '../dsfr';
+import React, { Children } from 'react';
+import { Link } from 'react-router-dom';
+import useElementId from '../../hooks/useElementId';
 
 export default function Breadcrumb({ children }) {
-  const id = useElementId("breadcrumb");
+  const id = useElementId('breadcrumb');
 
   return (
-    <nav role="navigation" className="fr-breadcrumb" aria-label={"vous êtes ici :"}>
+    <nav role="navigation" className="fr-breadcrumb" aria-label={'vous êtes ici :'}>
       <button className="fr-breadcrumb__button" aria-expanded="false" aria-controls={id}>
         Voir le fil d’Ariane
       </button>
@@ -22,5 +22,5 @@ export default function Breadcrumb({ children }) {
   );
 }
 
-export const BreadcrumbLink = buildComponent(Link, "fr-breadcrumb__link");
-export const BreadcrumbCurrent = buildComponent("a", "fr-breadcrumb__link");
+export const BreadcrumbLink = buildComponent(Link, 'fr-breadcrumb__link');
+export const BreadcrumbCurrent = buildComponent('a', 'fr-breadcrumb__link');

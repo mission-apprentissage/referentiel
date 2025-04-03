@@ -1,6 +1,6 @@
-import { FirstPage, LastPage, NextPage, Page, Pagination, PreviousPage } from "./dsfr/elements/Pagination";
-import { useQuery } from "./hooks/useQuery";
-import { buildUrl } from "./utils";
+import { FirstPage, LastPage, NextPage, Page, Pagination, PreviousPage } from './dsfr/elements/Pagination';
+import { useQuery } from './hooks/useQuery';
+import { buildUrl } from './utils';
 
 export default function ApiPagination({ pagination }) {
   const { query } = useQuery();

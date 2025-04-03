@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { Box } from "../Flexbox";
+import styled from 'styled-components';
+import { Box } from '../Flexbox';
 
-const Color = styled("span")`
+const Color = styled('span')`
   font-size: 13px;
   color: #6a6a6a;
   margin-right: 1rem;

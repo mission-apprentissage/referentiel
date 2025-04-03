@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import Checkbox from "../elements/Checkbox";
+import styled from 'styled-components';
+import Checkbox from '../elements/Checkbox';
 
 const SmallCheckbox = styled(Checkbox)`
   &&& {

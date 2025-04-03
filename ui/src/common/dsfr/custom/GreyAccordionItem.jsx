@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { AccordionItem } from "../elements/Accordion";
+import styled from 'styled-components';
+import { AccordionItem } from '../elements/Accordion';
 
 const GreyAccordionItem = styled(AccordionItem)`
   margin-bottom: 0.5rem;

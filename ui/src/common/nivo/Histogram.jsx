@@ -1,8 +1,8 @@
-import { ResponsiveBar } from "@nivo/bar";
-import { BasicTooltip } from "@nivo/tooltip";
-import { theme } from "./nivo";
-import { Legends } from "./Legends";
-import { percentage } from "../utils.js";
+import { ResponsiveBar } from '@nivo/bar';
+import { BasicTooltip } from '@nivo/tooltip';
+import { theme } from './nivo';
+import { Legends } from './Legends';
+import { percentage } from '../utils.js';
 
 export default function Histogram({
   title,
@@ -11,8 +11,8 @@ export default function Histogram({
   yLegend,
   getSerieLabel,
   getSerieColor,
-  groupBy = "key",
-  height = "500px",
+  groupBy = 'key',
+  height = '500px',
   ...rest
 }) {
   return (
@@ -40,7 +40,7 @@ export default function Histogram({
             tickPadding: 25,
             tickRotation: -25,
             legend: xLegend,
-            legendPosition: "middle",
+            legendPosition: 'middle',
             legendOffset: 100,
           }}
           axisLeft={{
@@ -48,7 +48,7 @@ export default function Histogram({
             tickPadding: 5,
             tickRotation: 0,
             legend: yLegend,
-            legendPosition: "middle",
+            legendPosition: 'middle',
             legendOffset: -75,
           }}
           colors={({ id }) => getSerieColor(id)}

@@ -1,12 +1,12 @@
-import { ariaLabelledBy, classNames } from "../dsfr";
-import React from "react";
-import Validation from "../common/Validation";
-import useElementId from "../../hooks/useElementId";
+import { ariaLabelledBy, classNames } from '../dsfr';
+import React from 'react';
+import Validation from '../common/Validation';
+import useElementId from '../../hooks/useElementId';
 
 export default function Fieldset({ legend, validation, modifiers, className, children }) {
-  const clazz = classNames("fr-fieldset", { modifiers, className, validation });
-  const legendId = useElementId("legend");
-  const validationId = useElementId("validation");
+  const clazz = classNames('fr-fieldset', { modifiers, className, validation });
+  const legendId = useElementId('legend');
+  const validationId = useElementId('validation');
   const aria = validation ? ariaLabelledBy(validationId, legendId) : {};
 
   return (

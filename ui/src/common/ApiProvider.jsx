@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import queryString from "querystring";
+import { createContext } from 'react';
+import queryString from 'querystring';
 
 export const ApiContext = createContext({});
 
@@ -8,7 +8,7 @@ class AuthError extends Error {
     super(`Request rejected with status code ${statusCode}`);
     this.json = json;
     this.statusCode = statusCode;
-    this.prettyMessage = "Identifiant ou mot de passe invalide";
+    this.prettyMessage = 'Identifiant ou mot de passe invalide';
   }
 }
 
@@ -17,7 +17,7 @@ class HTTPError extends Error {
     super(message);
     this.json = json;
     this.statusCode = statusCode;
-    this.prettyMessage = "Une erreur technique est survenue";
+    this.prettyMessage = 'Une erreur technique est survenue';
   }
 }
 
@@ -28,8 +28,8 @@ export default function ApiProvider({ children }) {
     if (
       statusCode >= 400 &&
       statusCode < 600 &&
-      path !== "/api/v1/users/login" &&
-      path !== "/api/v1/users/refreshToken"
+      path !== '/api/v1/users/login' &&
+      path !== '/api/v1/users/refreshToken'
     ) {
       if (statusCode === 403) {
         throw new AuthError(json, statusCode);
@@ -42,9 +42,9 @@ export default function ApiProvider({ children }) {
 
   const getHeaders = (token) => {
     return {
-      Accept: "application/json",
+      Accept: 'application/json',
       ...(!token ? {} : { Authorization: `Bearer ${token}` }),
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     };
   };
 
@@ -53,28 +53,28 @@ export default function ApiProvider({ children }) {
       _get(path, parameters = {}, token = null) {
         const params = queryString.stringify(parameters, { skipNull: true });
 
-        return fetch(`${path}${params ? `?${params}` : ""}`, {
-          method: "GET",
+        return fetch(`${path}${params ? `?${params}` : ''}`, {
+          method: 'GET',
           headers: getHeaders(token),
         }).then((res) => handleResponse(path, res));
       },
       _post(path, body, token = null) {
         return fetch(`${path}`, {
-          method: "POST",
+          method: 'POST',
           headers: getHeaders(token),
           body: JSON.stringify(body),
         }).then((res) => handleResponse(path, res));
       },
       _put(path, body = {}, token = null) {
         return fetch(`${path}`, {
-          method: "PUT",
+          method: 'PUT',
           headers: getHeaders(token),
           body: JSON.stringify(body),
         }).then((res) => handleResponse(path, res));
       },
       _delete(path) {
         return fetch(`${path}`, {
-          method: "DELETE",
+          method: 'DELETE',
           headers: getHeaders(),
         }).then((res) => handleResponse(path, res));
       },

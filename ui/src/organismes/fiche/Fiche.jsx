@@ -1,22 +1,22 @@
-import React from "react";
-import { Tab, TabPanel } from "../../common/dsfr/elements/Tabs.jsx";
-import IdentiteTab from "./Identite/IdentiteTab.jsx";
-import RelationsTab from "./relations/RelationsTab.jsx";
-import WideTabs from "../../common/dsfr/custom/WideTabs.jsx";
-import { useNavigate, useParams } from "react-router-dom";
-import LieuxDeFormationTab from "./lieux/LieuxDeFormationTab.jsx";
+import React from 'react';
+import { Tab, TabPanel } from '../../common/dsfr/elements/Tabs.jsx';
+import IdentiteTab from './Identite/IdentiteTab.jsx';
+import RelationsTab from './relations/RelationsTab.jsx';
+import WideTabs from '../../common/dsfr/custom/WideTabs.jsx';
+import { useNavigate, useParams } from 'react-router-dom';
+import LieuxDeFormationTab from './lieux/LieuxDeFormationTab.jsx';
 
 export default function Fiche({ organisme }) {
   const navigate = useNavigate();
-  const { tab = "identite" } = useParams();
+  const { tab = 'identite' } = useParams();
 
   return (
     <WideTabs
-      className={"fr-mb-3w"}
+      className={'fr-mb-3w'}
       tabs={[
         {
           tab: (
-            <Tab selected={tab === "identite"} onClick={() => navigate("../identite")}>
+            <Tab selected={tab === 'identite'} onClick={() => navigate('../identite')}>
               Identité
             </Tab>
           ),
@@ -30,8 +30,8 @@ export default function Fiche({ organisme }) {
           tab: (
             <Tab
               disabled={organisme.relations.length === 0}
-              selected={tab === "relations"}
-              onClick={() => navigate("../relations")}
+              selected={tab === 'relations'}
+              onClick={() => navigate('../relations')}
             >
               Relations
             </Tab>
@@ -46,8 +46,8 @@ export default function Fiche({ organisme }) {
           tab: (
             <Tab
               disabled={organisme.lieux_de_formation.length === 0}
-              selected={tab === "lieux"}
-              onClick={() => navigate("../lieux")}
+              selected={tab === 'lieux'}
+              onClick={() => navigate('../lieux')}
             >
               Lieux de formation
             </Tab>

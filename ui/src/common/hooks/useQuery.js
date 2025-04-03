@@ -1,5 +1,5 @@
-import { useSearchParams } from "react-router-dom";
-import { fromPairs, isEmpty, isNil, omitBy } from "lodash-es";
+import { useSearchParams } from 'react-router-dom';
+import { fromPairs, isEmpty, isNil, omitBy } from 'lodash-es';
 
 export function useQuery() {
   const [searchParams, setSearchParams] = useSearchParams();

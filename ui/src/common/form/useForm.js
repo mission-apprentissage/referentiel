@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { uniq } from "lodash-es";
+import { useState } from 'react';
+import { uniq } from 'lodash-es';
 
 export default function useForm(options = {}) {
   const schema = options.yup;
@@ -13,7 +13,7 @@ export default function useForm(options = {}) {
     fields = uniq([...fields, name]);
     return {
       name,
-      value: values[name] || "",
+      value: values[name] || '',
       onChange: ({ target: { name, value } }) => {
         setPristine(false);
         setValues({
@@ -36,7 +36,7 @@ export default function useForm(options = {}) {
       return err.inner.reduce((acc, item) => {
         return {
           ...acc,
-          [item.path]: { type: "error", message: item.message },
+          [item.path]: { type: 'error', message: item.message },
         };
       }, {});
     }

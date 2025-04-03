@@ -1,19 +1,19 @@
-import React from "react";
-import TitleLayout from "./common/layout/TitleLayout.jsx";
-import ContentLayout from "./common/layout/ContentLayout.jsx";
-import { Tab, TabPanel } from "./common/dsfr/elements/Tabs.jsx";
-import WideTabs from "./common/dsfr/custom/WideTabs.jsx";
-import { Table, Thead } from "./common/dsfr/elements/Table.jsx";
-import definitions from "./common/definitions.json";
-import Page from "./common/Page.jsx";
-import { Link } from "./common/dsfr/elements/Link.jsx";
-import { useNavigate, useParams } from "react-router-dom";
+import React from 'react';
+import TitleLayout from './common/layout/TitleLayout.jsx';
+import ContentLayout from './common/layout/ContentLayout.jsx';
+import { Tab, TabPanel } from './common/dsfr/elements/Tabs.jsx';
+import WideTabs from './common/dsfr/custom/WideTabs.jsx';
+import { Table, Thead } from './common/dsfr/elements/Table.jsx';
+import definitions from './common/definitions.json';
+import Page from './common/Page.jsx';
+import { Link } from './common/dsfr/elements/Link.jsx';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function Incoherence({ itemName }) {
   return (
-    <div className={"fr-mt-3w"}>
-      Si cette donnée est inconnue ou incorrecte,{" "}
-      <Link to={`/corrections?item=${itemName}`} modifiers={"sm"}>
+    <div className={'fr-mt-3w'}>
+      Si cette donnée est inconnue ou incorrecte,{' '}
+      <Link to={`/corrections?item=${itemName}`} modifiers={'sm'}>
         voir la marche à suivre
       </Link>
       .
@@ -23,17 +23,17 @@ function Incoherence({ itemName }) {
 
 export default function ConstructionPage() {
   const navigate = useNavigate();
-  const { tab = "source" } = useParams();
+  const { tab = 'source' } = useParams();
 
   return (
     <Page>
-      <TitleLayout title={"Construction du Référentiel national"} />
+      <TitleLayout title={'Construction du Référentiel national'} />
       <ContentLayout>
         <WideTabs
           tabs={[
             {
               tab: (
-                <Tab selected={tab === "source"} onClick={() => navigate("../source")}>
+                <Tab selected={tab === 'source'} onClick={() => navigate('../source')}>
                   Source et périmètre des données
                 </Tab>
               ),
@@ -46,18 +46,18 @@ export default function ConstructionPage() {
                     formations en apprentissage…). C’est un agrégat de données où seule l’UAI est modifiable.
                     <br />
                     L’intégration d’un organisme au sein du Référentiel se fait de manière automatique si son SIRET est
-                    présent au sein du{" "}
+                    présent au sein du{' '}
                     <a href="https://catalogue-apprentissage.intercariforef.org/" target="_blank" rel="noreferrer">
                       Catalogue des formations en apprentissage
-                    </a>{" "}
-                    (base des Carif-Oref) et/ou de la{" "}
+                    </a>{' '}
+                    (base des Carif-Oref) et/ou de la{' '}
                     <a
                       href="https://data.gouv.fr/fr/datasets/liste-publique-des-organismes-de-formation-l-6351-7-1-du-code-du-travail/"
                       target="_blank"
                       rel="noreferrer"
                     >
                       Liste publique des organismes de formation
-                    </a>{" "}
+                    </a>{' '}
                     (data.gouv).
                   </p>
                   <p>
@@ -66,7 +66,7 @@ export default function ConstructionPage() {
                     fois compilées, constituent la fiche détaillée de l’organisme au sein du Référentiel.
                   </p>
                   <Table
-                    modifiers={"layout-fixed"}
+                    modifiers={'layout-fixed'}
                     thead={
                       <Thead>
                         <th>Donnée</th>
@@ -79,7 +79,7 @@ export default function ConstructionPage() {
                       <td>Organisme de formation</td>
                       <td>{definitions.organisme}</td>
                       <td colSpan="2">
-                        <span className={"fr-text--bold"}>Les organismes présents dans le Référentiel sont :</span>
+                        <span className={'fr-text--bold'}>Les organismes présents dans le Référentiel sont :</span>
                         <ul>
                           <li>identifiés par un SIRET ;</li>
                           <li>
@@ -93,12 +93,12 @@ export default function ConstructionPage() {
                       <td>Relations entre les organismes</td>
                       <td>
                         {definitions.relations}
-                        <Incoherence itemName={"relations"} />
+                        <Incoherence itemName={'relations'} />
                       </td>
                       <td colSpan="2">
-                        <span className={"fr-text--bold"}>
+                        <span className={'fr-text--bold'}>
                           Les relations entre les organismes sont identifiées au niveau de l'offre de formation en
-                          apprentissage collectée par les Carif-Oref.{" "}
+                          apprentissage collectée par les Carif-Oref.{' '}
                         </span>
                         En effet, chaque offre de formation est associée à un organisme responsable et un organisme
                         formateur (chacun est connu par son SIRET et son UAI le cas échéant).
@@ -119,14 +119,14 @@ export default function ConstructionPage() {
                       <td>Nature de l'organisme</td>
                       <td>
                         {definitions.nature}
-                        <Incoherence itemName={"nature"} />
+                        <Incoherence itemName={'nature'} />
                       </td>
                       <td colSpan="2">
-                        <span className={"fr-text--bold"}>
+                        <span className={'fr-text--bold'}>
                           Trois natures d'organismes peuvent être observées via le Catalogue des formations en
                           apprentissage :
                         </span>
-                        <div className={"fr-text--bold"}>Un organisme responsable :</div>
+                        <div className={'fr-text--bold'}>Un organisme responsable :</div>
                         <ul>
                           <li>
                             Ne dispense pas de formation mais délègue à des organismes responsables et formateurs ou
@@ -142,7 +142,7 @@ export default function ConstructionPage() {
                             critères qualité au sein de l'UFA.
                           </li>
                         </ul>
-                        <div className={"fr-text--bold"}>Un organisme responsable et formateur :</div>
+                        <div className={'fr-text--bold'}>Un organisme responsable et formateur :</div>
                         <ul>
                           <li>
                             Dispense des actions de formation par apprentissage déclaré auprès des services de l'Etat
@@ -158,7 +158,7 @@ export default function ConstructionPage() {
                             critères qualité au sein de l'UFA.
                           </li>
                         </ul>
-                        <div className={"fr-text--bold"}>Un organisme formateur :</div>
+                        <div className={'fr-text--bold'}>Un organisme formateur :</div>
                         <ul>
                           <li>
                             Dispense des actions de formation par apprentissage déclaré auprès des services de l'Etat
@@ -171,7 +171,7 @@ export default function ConstructionPage() {
                       <td>Lieu de formation</td>
                       <td>
                         {definitions.lieu}
-                        <Incoherence itemName={"lieu"} />
+                        <Incoherence itemName={'lieu'} />
                       </td>
                       <td colSpan="2">
                         Les lieux de formation sont caractérisés par une adresse postale et des coordonnées de
@@ -202,8 +202,8 @@ export default function ConstructionPage() {
                       <td>Réseaux</td>
                       <td>
                         La donnée « Réseaux » provient des Réseaux qui ont transmis leur liste d’organismes au Tableau
-                        de bord de l’Apprentissage. Si cette donnée est erronée ou manquante,{" "}
-                        <Incoherence itemName={"appartenance"} />
+                        de bord de l’Apprentissage. Si cette donnée est erronée ou manquante,{' '}
+                        <Incoherence itemName={'appartenance'} />
                       </td>
                       <td colSpan="2" />
                     </tr>
@@ -258,7 +258,7 @@ export default function ConstructionPage() {
             },
             {
               tab: (
-                <Tab selected={tab === "import"} onClick={() => navigate("../import")}>
+                <Tab selected={tab === 'import'} onClick={() => navigate('../import')}>
                   Import et compilation des données
                 </Tab>
               ),
@@ -273,7 +273,7 @@ export default function ConstructionPage() {
                     référence :
                   </p>
                   <Table
-                    modifiers={"layout-fixed"}
+                    modifiers={'layout-fixed'}
                     thead={
                       <Thead>
                         <td>Nom de la source</td>
@@ -300,12 +300,12 @@ export default function ConstructionPage() {
                   <h6>Etape 2 : Compilation des données</h6>
                   <p>
                     La compilation de données permet de rassembler des informations liées aux organismes importés à
-                    l'étape précédente. Chaque source de données comporte un certain nombre d'informations exploitables.{" "}
+                    l'étape précédente. Chaque source de données comporte un certain nombre d'informations exploitables.{' '}
                   </p>
                   <p>
                     Une fois que les UAI sont validées par les référents en académie ou les gestionnaires du site, les
-                    couples UAI-SIRET sont exploités par d’autres applicatifs : le{" "}
-                    <b>Catalogue des formations en apprentissage</b>, le <b>Tableau de bord de l’Apprentissage</b>,{" "}
+                    couples UAI-SIRET sont exploités par d’autres applicatifs : le{' '}
+                    <b>Catalogue des formations en apprentissage</b>, le <b>Tableau de bord de l’Apprentissage</b>,{' '}
                     <b>ParcourSup</b> et <b>Affelnet</b>.
                     <br />
                     Pour mémoire, l'UAI est utilisée comme clé d'identification des organismes pour l'alimentation des
@@ -314,7 +314,7 @@ export default function ConstructionPage() {
                     apprentissage jusqu’à ces plateformes.
                   </p>
                   <Table
-                    modifiers={"layout-fixed"}
+                    modifiers={'layout-fixed'}
                     thead={
                       <Thead>
                         <td>Nom de la source</td>
@@ -386,7 +386,7 @@ export default function ConstructionPage() {
           ]}
         />
         <p>
-          Pour en savoir plus sur les dates de mises à jour, consultez le{" "}
+          Pour en savoir plus sur les dates de mises à jour, consultez le{' '}
           <a href="/modifications">Journal des modifications</a>.
         </p>
       </ContentLayout>

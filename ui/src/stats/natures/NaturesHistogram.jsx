@@ -1,14 +1,14 @@
-import Histogram from "../../common/nivo/Histogram";
-import { getNatureColor, getNatureLabel, getNatureParams, getNatureTypes } from "../../common/enums/natures";
-import React from "react";
-import { openNewTab } from "../../common/utils";
+import Histogram from '../../common/nivo/Histogram';
+import { getNatureColor, getNatureLabel, getNatureParams, getNatureTypes } from '../../common/enums/natures';
+import React from 'react';
+import { openNewTab } from '../../common/utils';
 
 export function NaturesHistogram({ stats }) {
   return (
     <Histogram
       title="Répartition des natures des organisme par académie"
-      xLegend={"Académies"}
-      yLegend={"Nombre d'organismes"}
+      xLegend={'Académies'}
+      yLegend={'Nombre d\'organismes'}
       data={stats.academies}
       series={getNatureTypes()}
       getSerieLabel={(id) => getNatureLabel(id)}

@@ -1,34 +1,34 @@
-import { sortBy } from "lodash-es";
+import { sortBy } from 'lodash-es';
 
 const MAPPER = {
   A_VALIDER: {
-    label: "À vérifier",
-    color: "#FCC63A",
+    label: 'À vérifier',
+    color: '#FCC63A',
     order: 2,
     params: {
-      etat_administratif: "actif",
+      etat_administratif: 'actif',
       qualiopi: true,
       uais: false,
       uai_potentiels: true,
     },
   },
   A_RENSEIGNER: {
-    label: "À identifier",
-    color: "#F99389",
+    label: 'À identifier',
+    color: '#F99389',
     order: 1,
     params: {
-      etat_administratif: "actif",
+      etat_administratif: 'actif',
       qualiopi: true,
       uais: false,
       uai_potentiels: false,
     },
   },
   VALIDE: {
-    label: "Validés",
-    color: "#52CD80",
+    label: 'Validés',
+    color: '#52CD80',
     order: 0,
     params: {
-      etat_administratif: "actif",
+      etat_administratif: 'actif',
       qualiopi: true,
       uais: true,
     },

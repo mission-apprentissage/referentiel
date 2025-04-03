@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import usePrevious from "./usePrevious";
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import usePrevious from './usePrevious';
 
 export function useScrollToTop(options = {}) {
   const location = useLocation();

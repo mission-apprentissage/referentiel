@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-const Tooltip = styled(({ label, description, orientation = "right", className }) => {
+const Tooltip = styled(({ label, description, orientation = 'right', className }) => {
   return (
     <div className={className}>
-      <span className={"icon fr-fi-error-warning-line fr-ml-1w"} />
+      <span className={'icon fr-fi-error-warning-line fr-ml-1w'} />
       <div className={`tooltip-text tooltip-${orientation}`}>
-        <div className={"fr-text--bold fr-mb-3v"}>{label}</div>
+        <div className={'fr-text--bold fr-mb-3v'}>{label}</div>
         <div>{description}</div>
       </div>
     </div>

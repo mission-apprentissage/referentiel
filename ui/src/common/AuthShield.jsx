@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import { UserContext } from "./UserProvider";
-import Spinner from "./Spinner.jsx";
+import React, { useContext } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { UserContext } from './UserProvider';
+import Spinner from './Spinner.jsx';
 
 export default function AuthShield() {
   const [userContext] = useContext(UserContext);
@@ -10,5 +10,5 @@ export default function AuthShield() {
 
   if (userContext.loading) return <Spinner />;
 
-  return isAuthenticated ? <Outlet /> : <Navigate to={"/connexion"} replace={true} />;
+  return isAuthenticated ? <Outlet /> : <Navigate to={'/connexion'} replace={true} />;
 }

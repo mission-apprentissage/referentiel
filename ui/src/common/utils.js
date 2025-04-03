@@ -1,6 +1,6 @@
-import { omit } from "lodash-es";
-import { Children, cloneElement } from "react";
-import queryString from "query-string";
+import { omit } from 'lodash-es';
+import { Children, cloneElement } from 'react';
+import queryString from 'query-string';
 
 export function without(Tag, filter = []) {
   return (props) => <Tag {...omit(props, filter)} />;
@@ -16,8 +16,8 @@ export function cloneNodes(nodes, propsCallback) {
 
 export function flattenObject(obj, parent, res = {}) {
   for (const key in obj) {
-    const propName = parent ? parent + "." + key : key;
-    if (typeof obj[key] == "object" && !Array.isArray(obj[key])) {
+    const propName = parent ? parent + '.' + key : key;
+    if (typeof obj[key] == 'object' && !Array.isArray(obj[key])) {
       flattenObject(obj[key], propName, res);
     } else {
       res[propName] = obj[key];
@@ -36,13 +36,13 @@ export function buildUrl(url, data) {
 }
 
 export function openNewTab(url, params) {
-  window.open(buildUrl(url, params), "_blank");
+  window.open(buildUrl(url, params), '_blank');
 }
 
 export const divide = (dividend, divisor) => {
   if (dividend && divisor !== 0) {
     const value = dividend / divisor;
-    return Number(Math.round(value + "e1") + "e-1");
+    return Number(Math.round(value + 'e1') + 'e-1');
   } else {
     return 0;
   }

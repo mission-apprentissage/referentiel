@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from 'react';
 
 /**
  * A custom hook to detect when the user is pressing a specific key or a collection of keys
@@ -10,7 +10,7 @@ import { useState, useEffect, useRef } from "react";
 function useAllKeysPress(options) {
   // Check that 'options' is an object.
   if (!options || Object.keys(options).length === 0) {
-    throw new Error(`No object parameter found use: {userKeys: ... } `);
+    throw new Error('No object parameter found use: {userKeys: ... } ');
   }
 
   // 'options' properties.
@@ -23,7 +23,7 @@ function useAllKeysPress(options) {
   const [anyKeyPressed, setAnyKeyPressed] = useState([]); // new with arrays
 
   // A reference to determine if a key has been pressed already.
-  const prevKey = useRef("");
+  const prevKey = useRef('');
 
   /**
    * Option Settings.
@@ -61,12 +61,12 @@ function useAllKeysPress(options) {
     if (userKeys) {
       // Check if the Object is a string, if so add the 'singleKey' properties to
       // 'option' object.
-      if (typeof userKeys === "string") {
+      if (typeof userKeys === 'string') {
         settings.output = keyPress;
         settings.downHandler = downHandler;
         settings.upHandler = upHandler;
         settings.useEffect = Init;
-        settings.type = "STRING";
+        settings.type = 'STRING';
       }
       // Check if the Object is an array, if so add the 'multiKeys' properties to
       // 'option' object.
@@ -75,13 +75,13 @@ function useAllKeysPress(options) {
         settings.downHandler = downMultiHandler;
         settings.upHandler = upMultiHandler;
         settings.useEffect = Init;
-        settings.type = "ARRAY";
+        settings.type = 'ARRAY';
       }
       if (Number.isInteger(userKeys)) {
-        throw new Error(`Invalid 'userKeys' property: must be {userKeys:'KEY'} or {userKeys:[KEY, ...]}`);
+        throw new Error('Invalid \'userKeys\' property: must be {userKeys:\'KEY\'} or {userKeys:[KEY, ...]}');
       }
     } else {
-      throw new Error(`Invalid 'userKeys' property: must be {userKeys:'KEY'} or {userKeys:[KEY, ...]}`);
+      throw new Error('Invalid \'userKeys\' property: must be {userKeys:\'KEY\'} or {userKeys:[KEY, ...]}');
     }
 
     return settings;
@@ -110,7 +110,7 @@ function useAllKeysPress(options) {
     if (key === userKeys) {
       setKeyPress(false);
       // reset the value of prevKey
-      prevKey.current = "";
+      prevKey.current = '';
     }
   };
 
@@ -182,12 +182,12 @@ function useAllKeysPress(options) {
       const element = ref.current ? ref.current : ref;
 
       // Add event listeners
-      element.addEventListener("keydown", settings.downHandler);
-      element.addEventListener("keyup", settings.upHandler);
+      element.addEventListener('keydown', settings.downHandler);
+      element.addEventListener('keyup', settings.upHandler);
       //console.log('useAllKeyPress - hookAsMount');
       return () => {
-        element.removeEventListener("keydown", settings.downHandler);
-        element.removeEventListener("keyup", settings.upHandler);
+        element.removeEventListener('keydown', settings.downHandler);
+        element.removeEventListener('keyup', settings.upHandler);
         //console.log('useAllKeyPress - hookAsUnmount');
       };
     }, []); // Empty array ensures that effect is only run on mount and unmount

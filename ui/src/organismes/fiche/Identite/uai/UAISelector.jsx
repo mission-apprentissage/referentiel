@@ -1,19 +1,19 @@
-import React from "react";
-import { useModal } from "../../../../common/dsfr/common/useModal.js";
-import LinkButton from "../../../../common/dsfr/custom/LinkButton.jsx";
-import ValidationTag from "../../../../common/ValidationTag.jsx";
-import { UAISelectorModal } from "./UAISelectorModal.jsx";
-import { Button } from "../../../../common/dsfr/elements/Button.jsx";
+import React from 'react';
+import { useModal } from '../../../../common/dsfr/common/useModal.js';
+import LinkButton from '../../../../common/dsfr/custom/LinkButton.jsx';
+import ValidationTag from '../../../../common/ValidationTag.jsx';
+import { UAISelectorModal } from './UAISelectorModal.jsx';
+import { Button } from '../../../../common/dsfr/elements/Button.jsx';
 
 const actions = {
   A_VALIDER: {
-    actionName: "Choisir l'UAI",
-    label: "à valider",
-    legend: "Quelle UAI souhaitez-vous utiliser pour immatriculer cet organisme de formation ?",
+    actionName: 'Choisir l\'UAI',
+    label: 'à valider',
+    legend: 'Quelle UAI souhaitez-vous utiliser pour immatriculer cet organisme de formation ?',
     ActionButton: function ({ label, onClick, children }) {
       return (
-        <div className={"fr-mt-3w"}>
-          <Button modifiers={"sm icon-left"} icons={"edit-line"} onClick={onClick}>
+        <div className={'fr-mt-3w'}>
+          <Button modifiers={'sm icon-left'} icons={'edit-line'} onClick={onClick}>
             {label}
           </Button>
           {children}
@@ -22,13 +22,13 @@ const actions = {
     },
   },
   A_RENSEIGNER: {
-    actionName: "Renseigner une UAI",
-    label: "à renseigner",
-    legend: "Quelle UAI souhaitez-vous utiliser pour immatriculer cet organisme de formation ?",
+    actionName: 'Renseigner une UAI',
+    label: 'à renseigner',
+    legend: 'Quelle UAI souhaitez-vous utiliser pour immatriculer cet organisme de formation ?',
     ActionButton: function ({ label, onClick, children }) {
       return (
-        <div className={"fr-mt-3w"}>
-          <Button modifiers={"sm icon-left"} icons={"edit-line"} onClick={onClick}>
+        <div className={'fr-mt-3w'}>
+          <Button modifiers={'sm icon-left'} icons={'edit-line'} onClick={onClick}>
             {label}
           </Button>
           {children}
@@ -37,13 +37,13 @@ const actions = {
     },
   },
   VALIDE: {
-    actionName: "Modifier l'UAI",
-    label: "validée",
-    legend: "Par quelle UAI souhaitez-vous remplacer l’UAI validée ?",
+    actionName: 'Modifier l\'UAI',
+    label: 'validée',
+    legend: 'Par quelle UAI souhaitez-vous remplacer l’UAI validée ?',
     ActionButton: function ({ label, onClick, children }) {
       return (
         <>
-          <LinkButton modifiers={"sm icon-left"} icons={"edit-line"} onClick={onClick}>
+          <LinkButton modifiers={'sm icon-left'} icons={'edit-line'} onClick={onClick}>
             {label}
           </LinkButton>
           {children}
@@ -55,7 +55,7 @@ const actions = {
 
 export default function UAIValidator({ organisme, ...rest }) {
   const modal = useModal();
-  const type = organisme.uai ? "VALIDE" : organisme.uai_potentiels.length > 0 ? "A_VALIDER" : "A_RENSEIGNER";
+  const type = organisme.uai ? 'VALIDE' : organisme.uai_potentiels.length > 0 ? 'A_VALIDER' : 'A_RENSEIGNER';
   const action = actions[type];
   const { label, ActionButton } = action;
 

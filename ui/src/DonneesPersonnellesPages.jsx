@@ -1,23 +1,23 @@
-import React from "react";
-import TitleLayout from "./common/layout/TitleLayout.jsx";
-import ContentLayout from "./common/layout/ContentLayout.jsx";
-import Page from "./common/Page.jsx";
-import { Col, GridRow } from "./common/dsfr/fondamentaux/index.js";
+import React from 'react';
+import TitleLayout from './common/layout/TitleLayout.jsx';
+import ContentLayout from './common/layout/ContentLayout.jsx';
+import Page from './common/Page.jsx';
+import { Col, GridRow } from './common/dsfr/fondamentaux/index.js';
 
 export default function DonneesPersonnellesPages() {
   return (
     <Page>
-      <TitleLayout title={"Données personnelles"} />
+      <TitleLayout title={'Données personnelles'} />
       <ContentLayout>
         <GridRow>
-          <Col modifiers={"12"}>
+          <Col modifiers={'12'}>
             <p>
               Vous trouverez ci-dessous la présentation de la gestion des données personnelles sur le présent site,
               conformément à la législation en vigueur. L’Onisep s’engage à traiter vos données à caractère personnel
-              dans le respect de la{" "}
+              dans le respect de la{' '}
               <a href="https://www.cnil.fr/fr/la-loi-informatique-et-libertes" target="_blank" rel="noreferrer">
                 loi n° 78-17 du 6 janvier 1978 modifiée, relative à l'informatique, aux fichiers et aux libertés
-              </a>{" "}
+              </a>{' '}
               et du "
               <a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees" target="_blank" rel="noreferrer">
                 Règlement général sur la protection des données
@@ -116,14 +116,14 @@ export default function DonneesPersonnellesPages() {
             </p>
             <p>
               Pour en savoir plus sur la gestion des données personnelles sur les sites de l’Onisep, n’hésitez pas à
-              consulter notre rubrique{" "}
+              consulter notre rubrique{' '}
               <a href="https://www.onisep.fr/donnees-personnelles" target="_blank" rel="noreferrer">
                 Données personnelles
               </a>
               .
             </p>
             <p>
-              Pour en savoir plus sur vos droits en matière de données personnelles, n’hésitez pas à consulter{" "}
+              Pour en savoir plus sur vos droits en matière de données personnelles, n’hésitez pas à consulter{' '}
               <a
                 href="https://www.cnil.fr/fr/mes-demarches/les-droits-pour-maitriser-vos-donnees-personnelles"
                 target="_blank"

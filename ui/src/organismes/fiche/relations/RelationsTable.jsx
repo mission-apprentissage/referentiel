@@ -1,27 +1,27 @@
-import useToggle from "../../../common/hooks/useToggle.js";
-import { asSiren } from "../../../common/utils.js";
-import { Box } from "../../../common/Flexbox.jsx";
-import Fieldset from "../../../common/dsfr/elements/Fieldset.jsx";
-import Checkbox from "../../../common/dsfr/elements/Checkbox.jsx";
-import { Thead } from "../../../common/dsfr/elements/Table.jsx";
-import React, { useState } from "react";
-import NA from "../../../common/organismes/NA.jsx";
-import { Tag } from "../../../common/dsfr/elements/Tag.jsx";
-import Nature from "../../../common/organismes/Nature.jsx";
-import Siret from "../../../common/organismes/Siret.jsx";
-import { useModal } from "../../../common/dsfr/common/useModal.js";
-import RelationModal from "./RelationModal.jsx";
-import RaisonSociale from "../../../common/organismes/RaisonSociale.jsx";
-import { Button } from "../../../common/dsfr/elements/Button.jsx";
-import Adresse from "../../../common/organismes/Adresse.jsx";
-import CustomTable from "../../../common/dsfr/custom/CustomTable.jsx";
+import useToggle from '../../../common/hooks/useToggle.js';
+import { asSiren } from '../../../common/utils.js';
+import { Box } from '../../../common/Flexbox.jsx';
+import Fieldset from '../../../common/dsfr/elements/Fieldset.jsx';
+import Checkbox from '../../../common/dsfr/elements/Checkbox.jsx';
+import { Thead } from '../../../common/dsfr/elements/Table.jsx';
+import React, { useState } from 'react';
+import NA from '../../../common/organismes/NA.jsx';
+import { Tag } from '../../../common/dsfr/elements/Tag.jsx';
+import Nature from '../../../common/organismes/Nature.jsx';
+import Siret from '../../../common/organismes/Siret.jsx';
+import { useModal } from '../../../common/dsfr/common/useModal.js';
+import RelationModal from './RelationModal.jsx';
+import RaisonSociale from '../../../common/organismes/RaisonSociale.jsx';
+import { Button } from '../../../common/dsfr/elements/Button.jsx';
+import Adresse from '../../../common/organismes/Adresse.jsx';
+import CustomTable from '../../../common/dsfr/custom/CustomTable.jsx';
 
 function RelationRow({ organisme, show }) {
   return (
     <tr>
       <td onClick={show} colSpan="2">
-        <Box direction={"column"}>
-          <RaisonSociale className={"fr-text--bold"} organisme={organisme} />
+        <Box direction={'column'}>
+          <RaisonSociale className={'fr-text--bold'} organisme={organisme} />
           <Adresse organisme={organisme} />
         </Box>
       </td>
@@ -34,8 +34,8 @@ function RelationRow({ organisme, show }) {
       <td onClick={show} colSpan="2">
         <Siret organisme={organisme} />
       </td>
-      <td style={{ textAlign: "right" }}>
-        <Button onClick={show} modifiers={"icon secondary"} icons={"eye-fill"} title="Label bouton">
+      <td style={{ textAlign: 'right' }}>
+        <Button onClick={show} modifiers={'icon secondary'} icons={'eye-fill'} title="Label bouton">
           Label bouton
         </Button>
       </td>
@@ -83,25 +83,25 @@ export function RelationsTable({ label, organisme, results }) {
       <h5>{label} :</h5>
       {presents.length > 0 && (
         <>
-          <Box align={"start"}>
-            <span className={"fr-pt-2w fr-mr-2w"}>Filtres :</span>
-            <Fieldset modifiers={"inline"}>
+          <Box align={'start'}>
+            <span className={'fr-pt-2w fr-mr-2w'}>Filtres :</span>
+            <Fieldset modifiers={'inline'}>
               <Checkbox
-                label={"organismes faisant partie de la même entreprise"}
+                label={'organismes faisant partie de la même entreprise'}
                 disabled={memeEntreprise.length === presents.length || memeEntreprise.length === 0}
                 checked={sirenFilter}
                 onChange={() => toggleSirenFilter()}
               />
               <Checkbox
-                label={"afficher les sirets fermés"}
-                disabled={presents.filter((i) => i.organisme.etat_administratif === "fermé").length === 0}
+                label={'afficher les sirets fermés'}
+                disabled={presents.filter((i) => i.organisme.etat_administratif === 'fermé').length === 0}
                 checked={fermésFilter}
                 onChange={() => toggleFermésFilter()}
               />
             </Fieldset>
           </Box>
           <CustomTable
-            modifiers={"bordered layout-fixed"}
+            modifiers={'bordered layout-fixed'}
             thead={
               <Thead>
                 <th colSpan="2">Raison sociale</th>
@@ -115,7 +115,7 @@ export function RelationsTable({ label, organisme, results }) {
             {presents
               .map((item) => item.organisme)
               .filter((o) => (sirenFilter ? siren === asSiren(o.siret) : true))
-              .filter((o) => (fermésFilter ? true : o.etat_administratif === "actif"))
+              .filter((o) => (fermésFilter ? true : o.etat_administratif === 'actif'))
               .map((o, index) => {
                 return <RelationRow key={index} organisme={o} show={() => showOrganisme(o)} />;
               })}
@@ -126,7 +126,7 @@ export function RelationsTable({ label, organisme, results }) {
         <>
           <div>Les 2 organismes suivants sont absents du Référentiel national</div>
           <CustomTable
-            modifiers={"bordered layout-fixed"}
+            modifiers={'bordered layout-fixed'}
             thead={
               <Thead>
                 <td colSpan="2">Raison sociale</td>

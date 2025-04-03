@@ -1,17 +1,17 @@
-import React from "react";
-import TitleLayout from "./common/layout/TitleLayout.jsx";
-import ContentLayout from "./common/layout/ContentLayout.jsx";
-import Page from "./common/Page.jsx";
-import { Col, GridRow } from "./common/dsfr/fondamentaux/index.js";
-import { Link } from "react-router-dom";
+import React from 'react';
+import TitleLayout from './common/layout/TitleLayout.jsx';
+import ContentLayout from './common/layout/ContentLayout.jsx';
+import Page from './common/Page.jsx';
+import { Col, GridRow } from './common/dsfr/fondamentaux/index.js';
+import { Link } from 'react-router-dom';
 
 export default function MentionsLegalesPages() {
   return (
     <Page>
-      <TitleLayout title={"Mentions légales"} />
+      <TitleLayout title={'Mentions légales'} />
       <ContentLayout>
         <GridRow>
-          <Col modifiers={"12"}>
+          <Col modifiers={'12'}>
             <h6>Identification de l'éditeur</h6>
             <p>
               Office National d'Information Sur les Enseignements et les Professions (Onisep), établissement public à
@@ -62,7 +62,7 @@ export default function MentionsLegalesPages() {
               de l’Onisep.
             </p>
             <p>
-              Pour toute demande d’autorisation de reproduction, veuillez adresser un courriel à l’adresse suivante :{" "}
+              Pour toute demande d’autorisation de reproduction, veuillez adresser un courriel à l’adresse suivante :{' '}
               <a href="mailto:servicejuridique@onisep.fr">servicejuridique@onisep.fr</a>.
             </p>
             <p>
@@ -74,7 +74,7 @@ export default function MentionsLegalesPages() {
             <p>
               L’Onisep produit des informations publiques définies par l’article L. 300-2 du Code des relations entre le
               public et l’administration. Les documents qui ne sont pas grevés de droits de tiers sont mis à disposition
-              gratuitement par l’Onisep sur le site{" "}
+              gratuitement par l’Onisep sur le site{' '}
               <a target="_blank" rel="noreferrer" href="https://opendata.onisep.fr/">
                 https://opendata.onisep.fr
               </a>

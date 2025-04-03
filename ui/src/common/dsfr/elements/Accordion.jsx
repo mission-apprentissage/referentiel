@@ -1,9 +1,9 @@
-import React from "react";
-import { buildComponent } from "../dsfr";
-import { Collapse } from "../common/Collapsable";
-import { useCollapse } from "../common/useCollapse";
+import React from 'react';
+import { buildComponent } from '../dsfr';
+import { Collapse } from '../common/Collapsable';
+import { useCollapse } from '../common/useCollapse';
 
-const Accordion = buildComponent("ul", "fr-accordions-group");
+const Accordion = buildComponent('ul', 'fr-accordions-group');
 
 function AccordionItem({ label, collapsed = false, children, className, ...rest }) {
   const { collapseId, collapseRef, collapse } = useCollapse();

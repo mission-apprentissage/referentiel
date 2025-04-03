@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Table } from "../elements/Table";
+import styled from 'styled-components';
+import { Table } from '../elements/Table';
 
 const CustomTable = styled(Table)`
   &&& {

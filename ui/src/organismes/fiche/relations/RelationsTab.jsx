@@ -1,12 +1,12 @@
-import React, { useReducer, useState } from "react";
-import { useSearch } from "../../../common/hooks/useSearch.js";
-import Spinner from "../../../common/Spinner.jsx";
-import { TagButton, TagGroup } from "../../../common/dsfr/elements/Tag.jsx";
-import { Col, GridRow } from "../../../common/dsfr/fondamentaux/index.js";
-import styled from "styled-components";
-import { Box } from "../../../common/Flexbox.jsx";
-import { RelationsTable } from "./RelationsTable.jsx";
-import { uniq, without } from "lodash-es";
+import React, { useReducer, useState } from 'react';
+import { useSearch } from '../../../common/hooks/useSearch.js';
+import Spinner from '../../../common/Spinner.jsx';
+import { TagButton, TagGroup } from '../../../common/dsfr/elements/Tag.jsx';
+import { Col, GridRow } from '../../../common/dsfr/fondamentaux/index.js';
+import styled from 'styled-components';
+import { Box } from '../../../common/Flexbox.jsx';
+import { RelationsTable } from './RelationsTable.jsx';
+import { uniq, without } from 'lodash-es';
 
 const RelationTagButton = styled(({ label, results, onChange, disabled = false }) => {
   const [pressed, setPressed] = useState(false);
@@ -59,9 +59,9 @@ export default function RelationsTab({ organisme }) {
       });
   }
 
-  const estResponsableDe = buildResults("responsable->formateur");
-  const dispenseDesFormationsPour = buildResults("formateur->responsable");
-  const autres = buildResults("entreprise");
+  const estResponsableDe = buildResults('responsable->formateur');
+  const dispenseDesFormationsPour = buildResults('formateur->responsable');
+  const autres = buildResults('entreprise');
 
   if (loading || error) {
     return <Spinner loading={loading} error={error} />;
@@ -71,56 +71,56 @@ export default function RelationsTab({ organisme }) {
     <>
       <h4>
         <Box>
-          <span className={"fr-mr-1w"}>Relations :</span>
+          <span className={'fr-mr-1w'}>Relations :</span>
           <TagGroup>
             <RelationTagButton
-              label={"Responsable"}
+              label={'Responsable'}
               results={estResponsableDe}
               disabled={estResponsableDe.length === 0}
-              onChange={(pressed) => filter({ name: "responsable", pressed })}
+              onChange={(pressed) => filter({ name: 'responsable', pressed })}
             />
             <RelationTagButton
-              label={"Formateur"}
+              label={'Formateur'}
               results={dispenseDesFormationsPour}
               disabled={dispenseDesFormationsPour.length === 0}
-              onChange={(pressed) => filter({ name: "formateur", pressed })}
+              onChange={(pressed) => filter({ name: 'formateur', pressed })}
             />
             <RelationTagButton
-              label={"Autres relations"}
+              label={'Autres relations'}
               results={autres}
               disabled={autres.length === 0}
-              onChange={(pressed) => filter({ name: "autres", pressed })}
+              onChange={(pressed) => filter({ name: 'autres', pressed })}
             />
           </TagGroup>
         </Box>
       </h4>
-      {((tables.length === 0 && estResponsableDe.length > 0) || tables.includes("responsable")) && (
-        <GridRow className={"fr-mb-6w"}>
+      {((tables.length === 0 && estResponsableDe.length > 0) || tables.includes('responsable')) && (
+        <GridRow className={'fr-mb-6w'}>
           <Col>
             <RelationsTable
-              label={"Cet organisme est responsable des organismes suivants"}
+              label={'Cet organisme est responsable des organismes suivants'}
               organisme={organisme}
               results={estResponsableDe}
             />
           </Col>
         </GridRow>
       )}
-      {((tables.length === 0 && dispenseDesFormationsPour.length > 0) || tables.includes("formateur")) && (
-        <GridRow className={"fr-mb-6w"}>
+      {((tables.length === 0 && dispenseDesFormationsPour.length > 0) || tables.includes('formateur')) && (
+        <GridRow className={'fr-mb-6w'}>
           <Col>
             <RelationsTable
-              label={"Cet organisme dispense des formations pour"}
+              label={'Cet organisme dispense des formations pour'}
               organisme={organisme}
               results={dispenseDesFormationsPour}
             />
           </Col>
         </GridRow>
       )}
-      {((tables.length === 0 && autres.length > 0) || tables.includes("autres")) && (
-        <GridRow className={"fr-mb-6w"}>
+      {((tables.length === 0 && autres.length > 0) || tables.includes('autres')) && (
+        <GridRow className={'fr-mb-6w'}>
           <Col>
             <RelationsTable
-              label={"Autres organismes qui font partie de la même entreprise"}
+              label={'Autres organismes qui font partie de la même entreprise'}
               organisme={organisme}
               results={autres}
             />

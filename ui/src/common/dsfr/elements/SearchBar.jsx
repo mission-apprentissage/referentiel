@@ -1,11 +1,11 @@
-import React from "react";
-import { classNames } from "../dsfr";
-import useElementId from "../../hooks/useElementId";
+import React from 'react';
+import { classNames } from '../dsfr';
+import useElementId from '../../hooks/useElementId';
 
 function SearchBar({ label, placeholder = label, modifiers, className, ...rest }) {
-  const clazz = classNames("fr-search-bar", { modifiers, className });
-  const id = useElementId("search");
-  const inputId = useElementId("search-input");
+  const clazz = classNames('fr-search-bar', { modifiers, className });
+  const id = useElementId('search');
+  const inputId = useElementId('search-input');
 
   return (
     <div className={clazz} id={id} role="search">

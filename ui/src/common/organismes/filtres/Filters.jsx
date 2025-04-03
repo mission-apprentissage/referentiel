@@ -1,8 +1,8 @@
-import { Accordion } from "../../dsfr/elements/Accordion.jsx";
-import { Box } from "../../Flexbox.jsx";
-import LinkButton from "../../dsfr/custom/LinkButton.jsx";
-import { createContext } from "react";
-import { uniq } from "lodash-es";
+import { Accordion } from '../../dsfr/elements/Accordion.jsx';
+import { Box } from '../../Flexbox.jsx';
+import LinkButton from '../../dsfr/custom/LinkButton.jsx';
+import { createContext } from 'react';
+import { uniq } from 'lodash-es';
 
 export const FilterContext = createContext(null);
 
@@ -14,7 +14,7 @@ export default function Filters({ children, onChange: handleChange }) {
       const array = data[key];
       return {
         ...acc,
-        [key]: array.join(","),
+        [key]: array.join(','),
       };
     }, {});
 
@@ -38,8 +38,8 @@ export default function Filters({ children, onChange: handleChange }) {
 
   return (
     <FilterContext.Provider value={{ onChange, register }}>
-      <Box justify={"between"} align={"top"} className={"fr-mb-3v"}>
-        <div className={"fr-text--bold"}>FILTRER</div>
+      <Box justify={'between'} align={'top'} className={'fr-mb-3v'}>
+        <div className={'fr-text--bold'}>FILTRER</div>
         <LinkButton onClick={reset}>réinitialiser</LinkButton>
       </Box>
       <Accordion>{children}</Accordion>

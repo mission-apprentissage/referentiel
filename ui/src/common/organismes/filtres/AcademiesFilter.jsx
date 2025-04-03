@@ -1,7 +1,7 @@
-import { useContext } from "react";
-import { Filter } from "./Filter.jsx";
-import { DataContext } from "../../DataProvider.jsx";
-import { UserContext } from "../../UserProvider.jsx";
+import { useContext } from 'react';
+import { Filter } from './Filter.jsx';
+import { DataContext } from '../../DataProvider.jsx';
+import { UserContext } from '../../UserProvider.jsx';
 
 export default function AcademiesFilter() {
   const data = useContext(DataContext);
@@ -14,11 +14,11 @@ export default function AcademiesFilter() {
 
   return (
     <Filter
-      label={"Académies"}
+      label={'Académies'}
       items={academies.map((d) => {
         return {
           label: d.nom,
-          paramName: "academies",
+          paramName: 'academies',
           value: d.code,
         };
       })}

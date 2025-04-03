@@ -1,14 +1,14 @@
-import React, { forwardRef } from "react";
-import cs from "classnames";
-import "@gouvfr/dsfr/dist/dsfr/dsfr.css";
-import "./custom/xfr.scss";
+import React, { forwardRef } from 'react';
+import cs from 'classnames';
+import '@gouvfr/dsfr/dist/dsfr/dsfr.css';
+import './custom/xfr.scss';
 
 window.dsfr = {
   verbose: true,
-  mode: "manual",
+  mode: 'manual',
 };
-require("@gouvfr/dsfr/dist/dsfr/dsfr.module");
-require("@gouvfr/dsfr/dist/dsfr/dsfr.nomodule");
+require('@gouvfr/dsfr/dist/dsfr/dsfr.module');
+require('@gouvfr/dsfr/dist/dsfr/dsfr.nomodule');
 
 export function buildComponent(componentName, dsfrName, options = {}) {
   return forwardRef((props, ref) => {
@@ -39,12 +39,12 @@ export function buildListComponent(Tag, dsfrName, options = {}) {
   });
 }
 
-export function classNames(baseClassName, { modifiers, icons, className, validation, bemDelimiter = "--" }) {
+export function classNames(baseClassName, { modifiers, icons, className, validation, bemDelimiter = '--' }) {
   return cs(
     baseClassName,
-    modifiers ? modifiers.split(" ").map((m) => `${baseClassName}${bemDelimiter}${m}`) : "",
-    icons ? icons.split(" ").map((iconName) => asIconClassName(iconName)) : "",
-    validation ? `${baseClassName}--${validation.type}` : "",
+    modifiers ? modifiers.split(' ').map((m) => `${baseClassName}${bemDelimiter}${m}`) : '',
+    icons ? icons.split(' ').map((iconName) => asIconClassName(iconName)) : '',
+    validation ? `${baseClassName}--${validation.type}` : '',
     className
   );
 }
@@ -54,23 +54,23 @@ function asIconClassName(name) {
 }
 
 export function ariaLabelledBy(...byIds) {
-  return { "aria-labelledby": byIds.join(" "), role: "group" };
+  return { 'aria-labelledby': byIds.join(' '), role: 'group' };
 }
 
 export function ariaDescribedBy(id) {
-  return { "aria-describedby": id };
+  return { 'aria-describedby': id };
 }
 
 export function ariaExpanded(value) {
-  return { "aria-expanded": value };
+  return { 'aria-expanded': value };
 }
 
 export function collapseElement(el) {
   const height = el.offsetHeight;
-  el.style.setProperty("--collapser", "start-transition");
-  el.style.setProperty("--collapse", -height + "px");
-  el.style.setProperty("max-height", "none");
-  el.style.setProperty("--collapser", "");
+  el.style.setProperty('--collapser', 'start-transition');
+  el.style.setProperty('--collapse', -height + 'px');
+  el.style.setProperty('max-height', 'none');
+  el.style.setProperty('--collapser', '');
 }
 
 export function bootstrapDsfr() {

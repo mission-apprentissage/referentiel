@@ -1,6 +1,6 @@
-import Input from "../../../../common/dsfr/elements/Input.jsx";
-import React from "react";
-import useFormContext from "../../../../common/form/useFormContext.js";
+import Input from '../../../../common/dsfr/elements/Input.jsx';
+import React from 'react';
+import useFormContext from '../../../../common/form/useFormContext.js';
 
 export function UAICustom({ action }) {
   const { registerField, errors } = useFormContext();
@@ -8,7 +8,7 @@ export function UAICustom({ action }) {
   return (
     <>
       <div>{action.legend}</div>
-      <Input {...registerField("custom")} className={"fr-ml-2w"} validation={errors?.custom} />
+      <Input {...registerField('custom')} className={'fr-ml-2w'} validation={errors?.custom} />
     </>
   );
 }

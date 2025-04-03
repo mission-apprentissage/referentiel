@@ -1,26 +1,26 @@
-import React, { useContext } from "react";
-import Modal from "../../../../common/dsfr/elements/Modal.jsx";
-import { Button, ButtonGroup } from "../../../../common/dsfr/elements/Button.jsx";
-import useForm from "../../../../common/form/useForm.js";
-import * as yup from "yup";
-import { Form } from "../../../../common/form/Form.jsx";
-import { UAIPotentielsRadios } from "./UAIPotentielsRadios.jsx";
-import { UAICustom } from "./UAICustom.jsx";
-import Alert from "../../../../common/dsfr/elements/Alert.jsx";
-import BlueBox from "../../../../common/BlueBox.jsx";
-import { ApiContext } from "../../../../common/ApiProvider.jsx";
-import { UserContext } from "../../../../common/UserProvider.jsx";
-import { OrganismeContext } from "../../../../common/organismes/OrganismeProvider.jsx";
-const config = require("../../../../config");
+import React, { useContext } from 'react';
+import Modal from '../../../../common/dsfr/elements/Modal.jsx';
+import { Button, ButtonGroup } from '../../../../common/dsfr/elements/Button.jsx';
+import useForm from '../../../../common/form/useForm.js';
+import * as yup from 'yup';
+import { Form } from '../../../../common/form/Form.jsx';
+import { UAIPotentielsRadios } from './UAIPotentielsRadios.jsx';
+import { UAICustom } from './UAICustom.jsx';
+import Alert from '../../../../common/dsfr/elements/Alert.jsx';
+import BlueBox from '../../../../common/BlueBox.jsx';
+import { ApiContext } from '../../../../common/ApiProvider.jsx';
+import { UserContext } from '../../../../common/UserProvider.jsx';
+import { OrganismeContext } from '../../../../common/organismes/OrganismeProvider.jsx';
+const config = require('../../../../config');
 
 const validators = (httpClient) => {
   return yup.object({
     uai: yup.string(),
-    custom: yup.string().when("uai", {
-      is: (uai) => uai === "custom",
-      then: yup.string().test("is-uai-valide", async (value, { createError, path }) => {
+    custom: yup.string().when('uai', {
+      is: (uai) => uai === 'custom',
+      then: yup.string().test('is-uai-valide', async (value, { createError, path }) => {
         if (!value) {
-          return createError({ message: "Le format de l'UAI n'est pas valide", path });
+          return createError({ message: 'Le format de l\'UAI n\'est pas valide', path });
         }
 
         return httpClient
@@ -28,10 +28,10 @@ const validators = (httpClient) => {
           .then(() => true)
           .catch((e) => {
             if (e.statusCode === 400) {
-              return createError({ message: "Le format de l'UAI n'est pas valide", path });
+              return createError({ message: 'Le format de l\'UAI n\'est pas valide', path });
             } else if (e.statusCode === 404) {
               return createError({
-                message: "Cette UAI n'existe pas dans la base RAMSESE, merci de renseigner une autre UAI",
+                message: 'Cette UAI n\'existe pas dans la base RAMSESE, merci de renseigner une autre UAI',
                 path,
               });
             } else {
@@ -51,12 +51,12 @@ export function UAISelectorModal({ modal, organisme, action }) {
 
   const hasPotentiels = organisme.uai_potentiels.length > 0;
   const form = useForm({
-    initialValues: hasPotentiels ? { uai: organisme.uai || "", custom: "" } : { uai: "custom", custom: "" },
+    initialValues: hasPotentiels ? { uai: organisme.uai || '', custom: '' } : { uai: 'custom', custom: '' },
     yup: validators(httpClient),
   });
 
   function onSubmit(values) {
-    const uai = values.uai === "custom" ? values.custom : values.uai;
+    const uai = values.uai === 'custom' ? values.custom : values.uai;
     return httpClient
       ._put(config.apiUrl + `/organismes/${organisme.siret}/setUAI`, { uai }, userContext.token)
       .then((updated) => {
@@ -64,7 +64,7 @@ export function UAISelectorModal({ modal, organisme, action }) {
         form.reset();
         onChange(updated, {
           message: (
-            <Alert modifiers={"success"}>
+            <Alert modifiers={'success'}>
               <p>L’UAI que vous avez renseignée pour cet organisme a bien été enregistré</p>
             </Alert>
           ),
@@ -78,7 +78,7 @@ export function UAISelectorModal({ modal, organisme, action }) {
   return (
     <Form onSubmit={onSubmit} {...form}>
       <Modal
-        title={"UAI"}
+        title={'UAI'}
         modal={modal}
         closeModal={modal.close}
         content={
@@ -96,11 +96,11 @@ export function UAISelectorModal({ modal, organisme, action }) {
           </>
         }
         footer={
-          <ButtonGroup modifiers={"inline right"}>
-            <Button type={"button"} modifiers={"secondary"} onClick={modal.close}>
+          <ButtonGroup modifiers={'inline right'}>
+            <Button type={'button'} modifiers={'secondary'} onClick={modal.close}>
               Annuler
             </Button>
-            <Button type={"submit"} disabled={form.pristine}>
+            <Button type={'submit'} disabled={form.pristine}>
               Valider
             </Button>
           </ButtonGroup>

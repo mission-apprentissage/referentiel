@@ -1,21 +1,21 @@
-import React, { useContext } from "react";
-import { DateTime } from "luxon";
+import React, { useContext } from 'react';
+import { DateTime } from 'luxon';
 
-import TitleLayout from "./common/layout/TitleLayout.jsx";
-import ContentLayout from "./common/layout/ContentLayout.jsx";
-import Page from "./common/Page.jsx";
-import { UserContext } from "./common/UserProvider.jsx";
-import ApiPagination from "./common/ApiPagination.jsx";
-import { useSearch } from "./common/hooks/useSearch.js";
-import { Box } from "./common/Flexbox.jsx";
+import TitleLayout from './common/layout/TitleLayout.jsx';
+import ContentLayout from './common/layout/ContentLayout.jsx';
+import Page from './common/Page.jsx';
+import { UserContext } from './common/UserProvider.jsx';
+import ApiPagination from './common/ApiPagination.jsx';
+import { useSearch } from './common/hooks/useSearch.js';
+import { Box } from './common/Flexbox.jsx';
 
 function formatDate(date) {
-  return DateTime.fromISO(date).setLocale("fr").toLocaleString({
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
+  return DateTime.fromISO(date).setLocale('fr').toLocaleString({
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
   });
 }
 
@@ -23,8 +23,8 @@ export default function SuiviModificationsPage() {
   const [userContext] = useContext(UserContext);
 
   const { response } = useSearch(
-    { ordre: "desc", page: 1, items_par_page: 25 },
-    { path: "/modifications", entity: "modifications" },
+    { ordre: 'desc', page: 1, items_par_page: 25 },
+    { path: '/modifications', entity: 'modifications' },
     userContext.token
   );
   const pagination = response?.data?.pagination;
@@ -33,7 +33,7 @@ export default function SuiviModificationsPage() {
 
   return (
     <Page>
-      <TitleLayout title={"Suivi des modifications"} />
+      <TitleLayout title={'Suivi des modifications'} />
       <ContentLayout>
         <Box align="center" direction="column" width="100%">
           <div class="fr-table">

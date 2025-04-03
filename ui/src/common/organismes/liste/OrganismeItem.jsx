@@ -1,13 +1,13 @@
-import { Box } from "../../Flexbox.jsx";
-import styled from "styled-components";
-import React from "react";
-import ClickableItem from "../../ClickableItem.jsx";
-import { Tag } from "../../dsfr/elements/Tag.jsx";
-import Nature from "../Nature.jsx";
-import Siret from "../Siret.jsx";
-import RaisonSociale from "../RaisonSociale.jsx";
-import { Link } from "../../dsfr/elements/Link.jsx";
-import Badge from "../../dsfr/elements/Badge.jsx";
+import { Box } from '../../Flexbox.jsx';
+import styled from 'styled-components';
+import React from 'react';
+import ClickableItem from '../../ClickableItem.jsx';
+import { Tag } from '../../dsfr/elements/Tag.jsx';
+import Nature from '../Nature.jsx';
+import Siret from '../Siret.jsx';
+import RaisonSociale from '../RaisonSociale.jsx';
+import { Link } from '../../dsfr/elements/Link.jsx';
+import Badge from '../../dsfr/elements/Badge.jsx';
 
 const CardBox = styled(Box)`
   padding: 1rem 2rem;
@@ -48,7 +48,7 @@ const ValidationTag = styled(({ organisme, ...props }) => {
   }
 
   return (
-    <Tag modifiers="sm icon-left" icons={"checkbox-circle-fill"} {...props}>
+    <Tag modifiers="sm icon-left" icons={'checkbox-circle-fill'} {...props}>
       UAI validée
     </Tag>
   );
@@ -60,36 +60,36 @@ const ValidationTag = styled(({ organisme, ...props }) => {
 
 export default function OrganismeItem({ organisme }) {
   const adresse = !organisme.adresse
-    ? "Adresse inconnue"
-    : organisme.adresse.label || `${organisme.adresse.code_postal || ""} ${organisme.adresse.localite || ""}`;
+    ? 'Adresse inconnue'
+    : organisme.adresse.label || `${organisme.adresse.code_postal || ''} ${organisme.adresse.localite || ''}`;
 
   return (
     <ClickableItem to={organisme.siret}>
-      <CardBox direction={"column"}>
+      <CardBox direction={'column'}>
         {organisme.nature && (
-          <Box justify={"between"} align={"start"} className={"xfr-flex-direction-xs-column xfr-flex-direction-sm-row"}>
+          <Box justify={'between'} align={'start'} className={'xfr-flex-direction-xs-column xfr-flex-direction-sm-row'}>
             <div>
-              <Tag modifiers="sm" className={"fr-mr-1w fr-mb-1w"}>
+              <Tag modifiers="sm" className={'fr-mr-1w fr-mb-1w'}>
                 {<Nature organisme={organisme} />}
               </Tag>
               <ValidationTag organisme={organisme} />
             </div>
-            {organisme._meta.nouveau && <Badge modifiers={"info"}>Nouvel organisme</Badge>}
+            {organisme._meta.nouveau && <Badge modifiers={'info'}>Nouvel organisme</Badge>}
           </Box>
         )}
-        <Nom className={"fr-text--bold"}>
+        <Nom className={'fr-text--bold'}>
           <RaisonSociale organisme={organisme} />
         </Nom>
         <Adresse>{adresse}</Adresse>
         <Identifiants>
-          <div className={"uai"}>UAI : {organisme.uai || "N.A"}</div>
-          <div className={"siret"}>
+          <div className={'uai'}>UAI : {organisme.uai || 'N.A'}</div>
+          <div className={'siret'}>
             <span>SIRET : </span>
             <Siret organisme={organisme} />
           </div>
         </Identifiants>
-        <Box direction={"column"} justify={"between"}>
-          <Link as={"span"} modifiers={"lg icon-right"} icons="arrow-right-line" />
+        <Box direction={'column'} justify={'between'}>
+          <Link as={'span'} modifiers={'lg icon-right'} icons="arrow-right-line" />
         </Box>
       </CardBox>
     </ClickableItem>

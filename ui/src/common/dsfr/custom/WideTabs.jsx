@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Tabs } from "../elements/Tabs";
+import styled from 'styled-components';
+import { Tabs } from '../elements/Tabs';
 
 const WideTabs = styled(Tabs)`
   &&& {

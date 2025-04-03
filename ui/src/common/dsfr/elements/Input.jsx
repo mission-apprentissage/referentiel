@@ -1,15 +1,15 @@
-import React from "react";
-import { ariaDescribedBy, classNames } from "../dsfr";
-import Validation from "../common/Validation";
-import Hint from "./Hint";
-import useElementId from "../../hooks/useElementId";
+import React from 'react';
+import { ariaDescribedBy, classNames } from '../dsfr';
+import Validation from '../common/Validation';
+import Hint from './Hint';
+import useElementId from '../../hooks/useElementId';
 
 function Input({ label, hint, icons, validation, modifiers, className, ...rest }) {
-  const id = useElementId("input");
-  const clazz = classNames("fr-input-group", { modifiers, className, validation });
-  const wrapperClazz = classNames("fr-input-wrap ", { icons });
-  const inputClass = classNames("fr-input", { validation });
-  const validationId = useElementId("validation");
+  const id = useElementId('input');
+  const clazz = classNames('fr-input-group', { modifiers, className, validation });
+  const wrapperClazz = classNames('fr-input-wrap ', { icons });
+  const inputClass = classNames('fr-input', { validation });
+  const validationId = useElementId('validation');
   const aria = validation ? ariaDescribedBy(validationId) : {};
 
   return (

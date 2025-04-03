@@ -1,10 +1,10 @@
-import { ResponsivePie } from "@nivo/pie";
-import { theme } from "./nivo";
-import { BasicTooltip } from "@nivo/tooltip";
-import { Legends } from "./Legends";
-import { Col, GridRow } from "../dsfr/fondamentaux";
-import { cloneElement } from "react";
-import { percentage } from "../utils.js";
+import { ResponsivePie } from '@nivo/pie';
+import { theme } from './nivo';
+import { BasicTooltip } from '@nivo/tooltip';
+import { Legends } from './Legends';
+import { Col, GridRow } from '../dsfr/fondamentaux';
+import { cloneElement } from 'react';
+import { percentage } from '../utils.js';
 
 const buildTotalCentricLayer = (label, total) => {
   return ({ centerX, centerY }) => {
@@ -15,11 +15,11 @@ const buildTotalCentricLayer = (label, total) => {
         textAnchor="middle"
         dominantBaseline="central"
         style={{
-          fontSize: "0.875rem",
-          fill: "rgb(106, 106, 106)",
+          fontSize: '0.875rem',
+          fill: 'rgb(106, 106, 106)',
         }}
       >
-        {total} {label || ""}
+        {total} {label || ''}
       </text>
     );
   };
@@ -32,7 +32,7 @@ export default function Pie({
   getLabel,
   getColor,
   getTooltipLabel,
-  height = "500px",
+  height = '500px',
   ...rest
 }) {
   const total = data.reduce((acc, d) => acc + d.value, 0);
@@ -43,10 +43,10 @@ export default function Pie({
       data={data}
       margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
       innerRadius={0.4}
-      arcLinkLabelsColor={{ from: "color" }}
+      arcLinkLabelsColor={{ from: 'color' }}
       arcLabelsTextColor={{
-        from: "color",
-        modifiers: [["darker", 2]],
+        from: 'color',
+        modifiers: [['darker', 2]],
       }}
       arcLinkLabel={({ id }) => getLabel(id)}
       colors={({ id }) => getColor(id)}
@@ -55,7 +55,7 @@ export default function Pie({
         const v = `${Math.round(percentage(value, total))}% (${value})`;
         return <BasicTooltip id={getLabel(id)} value={v} color={color} enableChip />;
       }}
-      layers={["arcs", "arcLabels", "arcLinkLabels", "legends", buildTotalCentricLayer(label, total)]}
+      layers={['arcs', 'arcLabels', 'arcLinkLabels', 'legends', buildTotalCentricLayer(label, total)]}
       {...rest}
     />
   );
@@ -68,11 +68,11 @@ export default function Pie({
     />
   );
 
-  if (direction === "column") {
+  if (direction === 'column') {
     return (
-      <GridRow modifiers="middle" style={{ backgroundColor: "#f9f8f6" }}>
-        <Col modifiers={"12 offset-sm-2 sm-3"}>{cloneElement(legends, { direction, justify: "between" })}</Col>
-        <Col modifiers={"12 sm-7"}>
+      <GridRow modifiers="middle" style={{ backgroundColor: '#f9f8f6' }}>
+        <Col modifiers={'12 offset-sm-2 sm-3'}>{cloneElement(legends, { direction, justify: 'between' })}</Col>
+        <Col modifiers={'12 sm-7'}>
           <div style={{ height }}>{pie}</div>
         </Col>
       </GridRow>

@@ -1,18 +1,18 @@
-import { useFetch } from "./useFetch";
-import { buildUrl } from "../utils";
-import { useQuery } from "./useQuery";
-import { useContext, useEffect, useMemo } from "react";
-import { SearchContext } from "../SearchProvider";
-import { useLocation } from "react-router-dom";
-import usePrevious from "./usePrevious";
-import { isEqual, isString } from "lodash-es";
-const config = require("../../config");
+import { useFetch } from './useFetch';
+import { buildUrl } from '../utils';
+import { useQuery } from './useQuery';
+import { useContext, useEffect, useMemo } from 'react';
+import { SearchContext } from '../SearchProvider';
+import { useLocation } from 'react-router-dom';
+import usePrevious from './usePrevious';
+import { isEqual, isString } from 'lodash-es';
+const config = require('../../config');
 
 function adaptParamsForAPI(params) {
   return Object.keys(params).reduce((acc, key) => {
     const value = params[key];
     const shouldIgnoreParam =
-      isString(value) && value.includes(",") && value.includes("true") && value.includes("false");
+      isString(value) && value.includes(',') && value.includes('true') && value.includes('false');
 
     return {
       ...acc,
@@ -36,9 +36,9 @@ export function useSearch(defaults, options = {}, token = null) {
     }
   }, [options.silent, previous, search, setSearch]);
 
-  const path = options?.path ? options.path : `/organismes`;
+  const path = options?.path ? options.path : '/organismes';
   const url = buildUrl(config.apiUrl + path, adaptParamsForAPI(search.params));
-  const entity = options?.entity ? options.entity : "organismes";
+  const entity = options?.entity ? options.entity : 'organismes';
   const [response] = useFetch(
     url,
     {

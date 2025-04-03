@@ -1,11 +1,11 @@
-import React from "react";
-import { classNames } from "../dsfr";
-import Hint from "./Hint";
-import useElementId from "../../hooks/useElementId";
+import React from 'react';
+import { classNames } from '../dsfr';
+import Hint from './Hint';
+import useElementId from '../../hooks/useElementId';
 
 export default function Radio({ label, hint, modifiers, className, ...rest }) {
-  const id = useElementId("radio");
-  const clazz = classNames("fr-radio-group", { modifiers, className });
+  const id = useElementId('radio');
+  const clazz = classNames('fr-radio-group', { modifiers, className });
 
   return (
     <div className={clazz}>

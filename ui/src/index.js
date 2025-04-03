@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
-import GridDisplayer from "./common/dsfr/GridDisplayer";
-import { bootstrapDsfr } from "./common/dsfr/dsfr";
+import React, { useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+import GridDisplayer from './common/dsfr/GridDisplayer';
+import { bootstrapDsfr } from './common/dsfr/dsfr';
 
-const container = document.getElementById("root");
+const container = document.getElementById('root');
 const root = createRoot(container);
 
 function Root() {

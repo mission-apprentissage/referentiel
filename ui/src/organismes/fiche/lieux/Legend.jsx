@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
-import { Box } from "../../../common/Flexbox.jsx";
+import React from 'react';
+import styled from 'styled-components';
+import { Box } from '../../../common/Flexbox.jsx';
 
 const Legend = styled(({ children, className }) => {
   return (
-    <Box align={"center"}>
+    <Box align={'center'}>
       <div className={className} />
       {children}
     </Box>
