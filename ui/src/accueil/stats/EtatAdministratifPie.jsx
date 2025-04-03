@@ -5,9 +5,8 @@
 import { useFetch } from '../../common/hooks';
 import Pie from '../../common/nivo/Pie';
 import { getEtatAdministratifColor, getEtatAdministratifLabel } from '../../common/enums/etat_administratif';
+import config from '../../config';
 
-
-const config = require('../../config');
 
 export default function EtatAdministratifPie () {
   const [{ data }] = useFetch(config.apiUrl + '/stats/etat_administratif', []);

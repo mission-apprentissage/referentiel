@@ -1,11 +1,17 @@
-import { useState, useContext } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+/**
+ *
+ */
+
+import { useContext, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
 import { ApiContext } from './common/ApiProvider';
 import { UserContext } from './common/UserProvider';
 import Alert from './common/dsfr/elements/Alert';
 
-export default function Connexion() {
+
+export default function Connexion () {
+
   const { httpClient } = useContext(ApiContext);
   const [userContext, setUserContext] = useContext(UserContext);
   const [usernameError, setUsernameError] = useState(false);
@@ -32,14 +38,14 @@ export default function Connexion() {
       if (result.success && result.token) {
         const decodedToken = jwt.decode(result.token);
         setUserContext({
-          code: decodedToken.code,
-          email: decodedToken.email,
-          nom: decodedToken.nom,
-          type: decodedToken.type,
-          token: result.token,
-          loading: false,
+          code:        decodedToken.code,
+          email:       decodedToken.email,
+          nom:         decodedToken.nom,
+          type:        decodedToken.type,
+          token:       result.token,
+          loading:     false,
           isAnonymous: false,
-          isAdmin: decodedToken.isAdmin,
+          isAdmin:     decodedToken.isAdmin,
         });
         navigate('/tableau-de-bord');
       } else {

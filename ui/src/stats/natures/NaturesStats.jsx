@@ -7,9 +7,8 @@ import Spinner from '../../common/Spinner';
 import { Col, GridRow } from '../../common/dsfr/fondamentaux';
 import { NaturesPie } from './NaturesPie';
 import { NaturesHistogram } from './NaturesHistogram';
+import config from '../../config';
 
-
-const config = require('../../config');
 
 export default function NaturesStats () {
   const [{ data: stats, loading, error }] = useFetch(config.apiUrl + '/stats/natures', {

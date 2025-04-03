@@ -161,7 +161,6 @@ Ici, comme il n'y a pas de "reverse proxy" comme dans la conf Docker, on précis
 
 ```bash
 # export NODE_OPTIONS=--openssl-legacy-provider  # nécessaire sous macOS/Ubuntu22
-export REACT_APP_REFERENTIEL_API_URL=http://localhost:5001/api/v1  
 yarn --cwd ui start
 ```
 

@@ -10,9 +10,8 @@ import Spinner from '../../../common/Spinner';
 import { flattenObject } from '../../../common/utils';
 import { Box } from '../../../common/Flexbox';
 import Field from '../../../common/Field';
+import config from '../../../config';
 
-
-const config = require('../../../config');
 
 export default function DatagouvModal ({ modal, siret }) {
   const [{ data: organisme, loading, error }] = useFetch(config.apiUrl + `/datagouv/${siret}`, {});

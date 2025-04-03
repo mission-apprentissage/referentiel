@@ -13,9 +13,8 @@ import Page from '../common/Page';
 import NouveauxHistogram from './stats/NouveauxHistogram';
 import EtatAdministratifPie from './stats/EtatAdministratifPie';
 import { UserContext } from '../common/UserProvider';
+import config from '../config';
 
-
-const config = require('../config');
 
 export default function AccueilPage () {
   const navigate = useNavigate();

@@ -1,9 +1,14 @@
+/**
+ *
+ */
+
 import DropdownButton from './dsfr/custom/DropdownButton';
 import { Link } from './dsfr/elements/Link';
 import { buildUrl } from './utils';
-const config = require('../config');
+import config from '../config';
 
-function ExportButton({ label = 'Export', params = {}, ...rest }) {
+
+function ExportButton ({ label = 'Export', params = {}, ...rest }) {
   return (
     <DropdownButton
       {...rest}

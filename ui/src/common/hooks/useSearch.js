@@ -10,9 +10,8 @@ import { SearchContext } from '../SearchProvider';
 import { useLocation } from 'react-router-dom';
 import { usePrevious } from './usePrevious';
 import { isEqual, isString } from 'lodash-es';
+import config from '../../config';
 
-
-const config = require('../../config');
 
 function adaptParamsForAPI (params) {
   return Object.keys(params).reduce((acc, key) => {

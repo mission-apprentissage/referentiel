@@ -4,9 +4,8 @@
 
 import { useFetch } from '../../common/hooks';
 import Histogram from '../../common/nivo/Histogram';
+import config from '../../config';
 
-
-const config = require('../../config');
 
 function getLastMonths (nbMonths) {
   const names = [

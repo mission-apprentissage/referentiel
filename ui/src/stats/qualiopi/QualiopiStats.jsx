@@ -9,9 +9,8 @@ import Histogram from '../../common/nivo/Histogram';
 import { getNatureLabel, getNatureParams } from '../../common/enums/natures';
 import { getQualiopiColor, getQualiopiLabel, getQualiopiParams } from '../../common/enums/qualiopi';
 import { openNewTab } from '../../common/utils';
+import config from '../../config';
 
-
-const config = require('../../config');
 
 export default function QualiopiStats () {
   const [{ data, loading, error }] = useFetch(config.apiUrl + '/stats/qualiopi', []);
