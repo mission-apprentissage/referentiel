@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import { Filter } from './Filter.jsx';
-import { DataContext } from '../../DataProvider.jsx';
-import { UserContext } from '../../UserProvider.jsx';
+import { Filter } from './Filter';
+import { DataContext } from '../../DataProvider';
+import { UserContext } from '../../UserProvider';
 
 export default function DepartementsFilter() {
   const data = useContext(DataContext);

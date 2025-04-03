@@ -1,22 +1,22 @@
 import { Children, useState } from 'react';
-import { Accordion, AccordionItem } from './common/dsfr/elements/Accordion.jsx';
-import SearchBar from './common/dsfr/elements/SearchBar.jsx';
-import Alert from './common/dsfr/elements/Alert.jsx';
-import { Button, ButtonGroup } from './common/dsfr/elements/Button.jsx';
+import { Accordion, AccordionItem } from './common/dsfr/elements/Accordion';
+import SearchBar from './common/dsfr/elements/SearchBar';
+import Alert from './common/dsfr/elements/Alert';
+import { Button, ButtonGroup } from './common/dsfr/elements/Button';
 import { Col, Container, GridRow } from './common/dsfr/fondamentaux';
 import styled from 'styled-components';
-import Radio from './common/dsfr/elements/Radio.jsx';
-import Checkbox from './common/dsfr/elements/Checkbox.jsx';
-import Fieldset from './common/dsfr/elements/Fieldset.jsx';
-import { Footer, FooterLink, FooterList } from './common/dsfr/elements/Footer.jsx';
-import Input from './common/dsfr/elements/Input.jsx';
-import Select from './common/dsfr/elements/Select.jsx';
-import { ToggleList, ToggleSwitch } from './common/dsfr/elements/ToggleSwitch.jsx';
-import { Tab, TabPanel, Tabs } from './common/dsfr/elements/Tabs.jsx';
-import { Header } from './common/dsfr/elements/Header.jsx';
-import { Link, LinkGroup } from './common/dsfr/elements/Link.jsx';
-import { Nav, NavButton, NavLink } from './common/dsfr/elements/Nav.jsx';
-import { Table, Thead } from './common/dsfr/elements/Table.jsx';
+import Radio from './common/dsfr/elements/Radio';
+import Checkbox from './common/dsfr/elements/Checkbox';
+import Fieldset from './common/dsfr/elements/Fieldset';
+import { Footer, FooterLink, FooterList } from './common/dsfr/elements/Footer';
+import Input from './common/dsfr/elements/Input';
+import Select from './common/dsfr/elements/Select';
+import { ToggleList, ToggleSwitch } from './common/dsfr/elements/ToggleSwitch';
+import { Tab, TabPanel, Tabs } from './common/dsfr/elements/Tabs';
+import { Header } from './common/dsfr/elements/Header';
+import { Link, LinkGroup } from './common/dsfr/elements/Link';
+import { Nav, NavButton, NavLink } from './common/dsfr/elements/Nav';
+import { Table, Thead } from './common/dsfr/elements/Table';
 
 const Colored = styled.div`
   background-color: ${(props) => props.color};

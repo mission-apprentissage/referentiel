@@ -1,16 +1,16 @@
 import { useContext } from 'react';
-import Modal from '../../../../common/dsfr/elements/Modal.jsx';
-import { Button, ButtonGroup } from '../../../../common/dsfr/elements/Button.jsx';
-import useForm from '../../../../common/form/useForm.js';
+import Modal from '../../../../common/dsfr/elements/Modal';
+import { Button, ButtonGroup } from '../../../../common/dsfr/elements/Button';
+import useForm from '../../../../common/form/useForm';
 import * as yup from 'yup';
-import { Form } from '../../../../common/form/Form.jsx';
-import { UAIPotentielsRadios } from './UAIPotentielsRadios.jsx';
-import { UAICustom } from './UAICustom.jsx';
-import Alert from '../../../../common/dsfr/elements/Alert.jsx';
-import BlueBox from '../../../../common/BlueBox.jsx';
-import { ApiContext } from '../../../../common/ApiProvider.jsx';
-import { UserContext } from '../../../../common/UserProvider.jsx';
-import { OrganismeContext } from '../../../../common/organismes/OrganismeProvider.jsx';
+import { Form } from '../../../../common/form/Form';
+import { UAIPotentielsRadios } from './UAIPotentielsRadios';
+import { UAICustom } from './UAICustom';
+import Alert from '../../../../common/dsfr/elements/Alert';
+import BlueBox from '../../../../common/BlueBox';
+import { ApiContext } from '../../../../common/ApiProvider';
+import { UserContext } from '../../../../common/UserProvider';
+import { OrganismeContext } from '../../../../common/organismes/OrganismeProvider';
 const config = require('../../../../config');
 
 const validators = (httpClient) => {

@@ -1,5 +1,5 @@
-import { useValidationSearch } from '../../common/hooks/useValidationSearch.js';
-import Badge from '../../common/dsfr/elements/Badge.jsx';
+import { useValidationSearch } from '../../common/hooks/useValidationSearch';
+import Badge from '../../common/dsfr/elements/Badge';
 
 export default function NouveauxCounter({ type, natures }) {
   const { response } = useValidationSearch(type, {

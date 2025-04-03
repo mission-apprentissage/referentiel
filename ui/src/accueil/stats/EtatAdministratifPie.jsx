@@ -1,6 +1,6 @@
-import { useFetch } from '../../common/hooks/useFetch.js';
-import Pie from '../../common/nivo/Pie.jsx';
-import { getEtatAdministratifColor, getEtatAdministratifLabel } from '../../common/enums/etat_administratif.js';
+import { useFetch } from '../../common/hooks/useFetch';
+import Pie from '../../common/nivo/Pie';
+import { getEtatAdministratifColor, getEtatAdministratifLabel } from '../../common/enums/etat_administratif';
 const config = require('../../config');
 
 export default function EtatAdministratifPie() {

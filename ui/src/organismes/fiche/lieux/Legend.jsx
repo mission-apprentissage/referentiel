@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Box } from '../../../common/Flexbox.jsx';
+import { Box } from '../../../common/Flexbox';
 
 const Legend = styled(({ children, className }) => {
   return (

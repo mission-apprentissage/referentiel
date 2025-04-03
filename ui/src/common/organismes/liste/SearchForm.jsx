@@ -1,6 +1,6 @@
-import SearchBar from '../../dsfr/elements/SearchBar.jsx';
-import useForm from '../../form/useForm.js';
-import { useQuery } from '../../hooks/useQuery.js';
+import SearchBar from '../../dsfr/elements/SearchBar';
+import useForm from '../../form/useForm';
+import { useQuery } from '../../hooks/useQuery';
 
 export default function SearchForm({ onSubmit }) {
   const { query } = useQuery();

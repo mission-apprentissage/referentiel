@@ -1,9 +1,9 @@
-import { Tab, TabPanel } from '../../common/dsfr/elements/Tabs.jsx';
-import IdentiteTab from './Identite/IdentiteTab.jsx';
-import RelationsTab from './relations/RelationsTab.jsx';
-import WideTabs from '../../common/dsfr/custom/WideTabs.jsx';
+import { Tab, TabPanel } from '../../common/dsfr/elements/Tabs';
+import IdentiteTab from './Identite/IdentiteTab';
+import RelationsTab from './relations/RelationsTab';
+import WideTabs from '../../common/dsfr/custom/WideTabs';
 import { useNavigate, useParams } from 'react-router-dom';
-import LieuxDeFormationTab from './lieux/LieuxDeFormationTab.jsx';
+import LieuxDeFormationTab from './lieux/LieuxDeFormationTab';
 
 export default function Fiche({ organisme }) {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
-import { capitalizeFirstLetter } from '../utils.js';
-import NA from './NA.jsx';
+import { capitalizeFirstLetter } from '../utils';
+import NA from './NA';
 
 export default function Nature({ organisme }) {
   if (!organisme.nature) {

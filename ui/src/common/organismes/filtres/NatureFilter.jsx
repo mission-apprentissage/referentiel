@@ -1,6 +1,6 @@
-import { Filter } from './Filter.jsx';
-import Tooltip from '../../Tooltip.jsx';
-import { getNatureLabel } from '../../enums/natures.js';
+import { Filter } from './Filter';
+import Tooltip from '../../Tooltip';
+import { getNatureLabel } from '../../enums/natures';
 
 export default function NatureFilter({ items }) {
   return (

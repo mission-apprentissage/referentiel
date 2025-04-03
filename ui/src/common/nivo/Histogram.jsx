@@ -2,7 +2,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import { BasicTooltip } from '@nivo/tooltip';
 import { theme } from './nivo';
 import { Legends } from './Legends';
-import { percentage } from '../utils.js';
+import { percentage } from '../utils';
 
 export default function Histogram({
   title,

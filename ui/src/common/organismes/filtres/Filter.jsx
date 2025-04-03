@@ -1,13 +1,13 @@
-import Fieldset from '../../dsfr/elements/Fieldset.jsx';
-import GreyAccordionItem from '../../dsfr/custom/GreyAccordionItem.jsx';
+import Fieldset from '../../dsfr/elements/Fieldset';
+import GreyAccordionItem from '../../dsfr/custom/GreyAccordionItem';
 import styled from 'styled-components';
-import { Tag } from '../../dsfr/elements/Tag.jsx';
-import SmallCheckbox from '../../dsfr/custom/SmallCheckbox.jsx';
+import { Tag } from '../../dsfr/elements/Tag';
+import SmallCheckbox from '../../dsfr/custom/SmallCheckbox';
 import { useContext } from 'react';
-import { FilterContext } from './Filters.jsx';
-import { ariaExpanded } from '../../dsfr/dsfr.js';
-import { useQuery } from '../../hooks/useQuery.js';
-import { Box } from '../../Flexbox.jsx';
+import { FilterContext } from './Filters';
+import { ariaExpanded } from '../../dsfr/dsfr';
+import { useQuery } from '../../hooks/useQuery';
+import { Box } from '../../Flexbox';
 import { isEqual } from 'lodash-es';
 
 const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {

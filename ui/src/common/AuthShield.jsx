@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { UserContext } from './UserProvider';
-import Spinner from './Spinner.jsx';
+import Spinner from './Spinner';
 
 export default function AuthShield() {
   const [userContext] = useContext(UserContext);

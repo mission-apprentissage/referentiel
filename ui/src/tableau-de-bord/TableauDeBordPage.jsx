@@ -1,17 +1,17 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useContext } from 'react';
-import ValidationCard from './cards/ValidationCard.jsx';
-import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector.jsx';
-import TitleLayout from '../common/layout/TitleLayout.jsx';
-import ContentLayout from '../common/layout/ContentLayout.jsx';
-import { useQuery } from '../common/hooks/useQuery.js';
-import { UserContext } from '../common/UserProvider.jsx';
-import NouveauxCounter from './cards/NouveauxCounter.jsx';
-import useToggle from '../common/hooks/useToggle.js';
-import LinkButton from '../common/dsfr/custom/LinkButton.jsx';
+import ValidationCard from './cards/ValidationCard';
+import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
+import TitleLayout from '../common/layout/TitleLayout';
+import ContentLayout from '../common/layout/ContentLayout';
+import { useQuery } from '../common/hooks/useQuery';
+import { UserContext } from '../common/UserProvider';
+import NouveauxCounter from './cards/NouveauxCounter';
+import useToggle from '../common/hooks/useToggle';
+import LinkButton from '../common/dsfr/custom/LinkButton';
 import styled from 'styled-components';
-import Page from '../common/Page.jsx';
-import Highlight from '../common/dsfr/elements/Highlight.jsx';
+import Page from '../common/Page';
+import Highlight from '../common/dsfr/elements/Highlight';
 
 const Presentation = styled(({ className }) => {
   const [showDetails, toggleDetails] = useToggle(false);

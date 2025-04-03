@@ -1,12 +1,12 @@
-import { Box } from '../../Flexbox.jsx';
+import { Box } from '../../Flexbox';
 import styled from 'styled-components';
-import ClickableItem from '../../ClickableItem.jsx';
-import { Tag } from '../../dsfr/elements/Tag.jsx';
-import Nature from '../Nature.jsx';
-import Siret from '../Siret.jsx';
-import RaisonSociale from '../RaisonSociale.jsx';
-import { Link } from '../../dsfr/elements/Link.jsx';
-import Badge from '../../dsfr/elements/Badge.jsx';
+import ClickableItem from '../../ClickableItem';
+import { Tag } from '../../dsfr/elements/Tag';
+import Nature from '../Nature';
+import Siret from '../Siret';
+import RaisonSociale from '../RaisonSociale';
+import { Link } from '../../dsfr/elements/Link';
+import Badge from '../../dsfr/elements/Badge';
 
 const CardBox = styled(Box)`
   padding: 1rem 2rem;

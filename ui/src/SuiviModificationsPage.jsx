@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 import { DateTime } from 'luxon';
 
-import TitleLayout from './common/layout/TitleLayout.jsx';
-import ContentLayout from './common/layout/ContentLayout.jsx';
-import Page from './common/Page.jsx';
-import { UserContext } from './common/UserProvider.jsx';
-import ApiPagination from './common/ApiPagination.jsx';
-import { useSearch } from './common/hooks/useSearch.js';
-import { Box } from './common/Flexbox.jsx';
+import TitleLayout from './common/layout/TitleLayout';
+import ContentLayout from './common/layout/ContentLayout';
+import Page from './common/Page';
+import { UserContext } from './common/UserProvider';
+import ApiPagination from './common/ApiPagination';
+import { useSearch } from './common/hooks/useSearch';
+import { Box } from './common/Flexbox';
 
 function formatDate(date) {
   return DateTime.fromISO(date).setLocale('fr').toLocaleString({

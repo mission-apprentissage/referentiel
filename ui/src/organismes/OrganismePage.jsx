@@ -1,16 +1,16 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useNavigate, useParams } from 'react-router-dom';
-import Alert from '../common/dsfr/elements/Alert.jsx';
+import Alert from '../common/dsfr/elements/Alert';
 import { useContext, useState } from 'react';
-import TitleLayout, { Back } from '../common/layout/TitleLayout.jsx';
-import ContentLayout from '../common/layout/ContentLayout.jsx';
-import { useFetch } from '../common/hooks/useFetch.js';
-import Fiche from './fiche/Fiche.jsx';
-import RaisonSociale from '../common/organismes/RaisonSociale.jsx';
-import OrganismeProvider, { OrganismeContext } from '../common/organismes/OrganismeProvider.jsx';
-import { SearchContext } from '../common/SearchProvider.jsx';
-import { buildUrl } from '../common/utils.js';
-import Page from '../common/Page.jsx';
+import TitleLayout, { Back } from '../common/layout/TitleLayout';
+import ContentLayout from '../common/layout/ContentLayout';
+import { useFetch } from '../common/hooks/useFetch';
+import Fiche from './fiche/Fiche';
+import RaisonSociale from '../common/organismes/RaisonSociale';
+import OrganismeProvider, { OrganismeContext } from '../common/organismes/OrganismeProvider';
+import { SearchContext } from '../common/SearchProvider';
+import { buildUrl } from '../common/utils';
+import Page from '../common/Page';
 const config = require('../config');
 
 export default function OrganismePage() {

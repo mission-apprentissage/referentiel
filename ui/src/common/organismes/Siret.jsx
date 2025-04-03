@@ -1,4 +1,4 @@
-import { asSiren } from '../utils.js';
+import { asSiren } from '../utils';
 
 export default function Siret({ organisme }) {
   return (

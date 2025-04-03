@@ -1,7 +1,7 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
-import TitleLayout from '../common/layout/TitleLayout.jsx';
-import ContentLayout from '../common/layout/ContentLayout.jsx';
-import Page from '../common/Page.jsx';
+import TitleLayout from '../common/layout/TitleLayout';
+import ContentLayout from '../common/layout/ContentLayout';
+import Page from '../common/Page';
 
 export default function ContactPage() {
   return (

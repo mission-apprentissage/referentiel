@@ -1,5 +1,5 @@
-import { useFetch } from '../../common/hooks/useFetch.js';
-import Histogram from '../../common/nivo/Histogram.jsx';
+import { useFetch } from '../../common/hooks/useFetch';
+import Histogram from '../../common/nivo/Histogram';
 const config = require('../../config');
 
 function getLastMonths(nbMonths) {

@@ -1,11 +1,11 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
-import TitleLayout from '../common/layout/TitleLayout.jsx';
-import ContentLayout from '../common/layout/ContentLayout.jsx';
-import NaturesStats from './natures/NaturesStats.jsx';
-import ValidationStats from './validation/ValidationStats.jsx';
-import QualiopiStats from './qualiopi/QualiopiStats.jsx';
-import Page from '../common/Page.jsx';
-import { Link } from '../common/dsfr/elements/Link.jsx';
+import TitleLayout from '../common/layout/TitleLayout';
+import ContentLayout from '../common/layout/ContentLayout';
+import NaturesStats from './natures/NaturesStats';
+import ValidationStats from './validation/ValidationStats';
+import QualiopiStats from './qualiopi/QualiopiStats';
+import Page from '../common/Page';
+import { Link } from '../common/dsfr/elements/Link';
 
 export default function StatsPage() {
   return (

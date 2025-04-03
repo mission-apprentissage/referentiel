@@ -1,11 +1,11 @@
-import TitleLayout from './common/layout/TitleLayout.jsx';
-import ContentLayout from './common/layout/ContentLayout.jsx';
-import { Tab, TabPanel } from './common/dsfr/elements/Tabs.jsx';
-import WideTabs from './common/dsfr/custom/WideTabs.jsx';
-import { Table, Thead } from './common/dsfr/elements/Table.jsx';
+import TitleLayout from './common/layout/TitleLayout';
+import ContentLayout from './common/layout/ContentLayout';
+import { Tab, TabPanel } from './common/dsfr/elements/Tabs';
+import WideTabs from './common/dsfr/custom/WideTabs';
+import { Table, Thead } from './common/dsfr/elements/Table';
 import definitions from './common/definitions.json';
-import Page from './common/Page.jsx';
-import { Link } from './common/dsfr/elements/Link.jsx';
+import Page from './common/Page';
+import { Link } from './common/dsfr/elements/Link';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function Incoherence({ itemName }) {

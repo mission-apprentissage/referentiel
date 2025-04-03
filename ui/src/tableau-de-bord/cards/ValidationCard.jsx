@@ -1,11 +1,11 @@
-import { Link } from '../../common/dsfr/elements/Link.jsx';
-import { Box } from '../../common/Flexbox.jsx';
+import { Link } from '../../common/dsfr/elements/Link';
+import { Box } from '../../common/Flexbox';
 import styled from 'styled-components';
-import ClickableItem from '../../common/ClickableItem.jsx';
-import { buildUrl, without } from '../../common/utils.js';
-import Spinner from '../../common/Spinner.jsx';
-import { useValidationSearch } from '../../common/hooks/useValidationSearch.js';
-import { useQuery } from '../../common/hooks/useQuery.js';
+import ClickableItem from '../../common/ClickableItem';
+import { buildUrl, without } from '../../common/utils';
+import Spinner from '../../common/Spinner';
+import { useValidationSearch } from '../../common/hooks/useValidationSearch';
+import { useQuery } from '../../common/hooks/useQuery';
 
 const StyledBox = styled(without(Box, ['type']))`
   padding: 1.5rem;

@@ -1,12 +1,12 @@
-import TitleLayout from './common/layout/TitleLayout.jsx';
-import ContentLayout from './common/layout/ContentLayout.jsx';
-import Page from './common/Page.jsx';
-import { Accordion, AccordionItem } from './common/dsfr/elements/Accordion.jsx';
+import TitleLayout from './common/layout/TitleLayout';
+import ContentLayout from './common/layout/ContentLayout';
+import Page from './common/Page';
+import { Accordion, AccordionItem } from './common/dsfr/elements/Accordion';
 import { Col, GridRow } from './common/dsfr/fondamentaux';
-import Highlight from './common/dsfr/elements/Highlight.jsx';
-import Alert from './common/dsfr/elements/Alert.jsx';
+import Highlight from './common/dsfr/elements/Highlight';
+import Alert from './common/dsfr/elements/Alert';
 import { useSearchParams } from 'react-router-dom';
-import { useScrollToTop } from './common/hooks/useScrollToTop.js';
+import { useScrollToTop } from './common/hooks/useScrollToTop';
 
 export default function CorrectionsPage() {
   const [searchParams] = useSearchParams();

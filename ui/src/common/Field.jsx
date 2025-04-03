@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import cs from 'classnames';
-import NA from './organismes/NA.jsx';
+import NA from './organismes/NA';
 import { isEmpty } from 'lodash-es';
 import { Box } from './Flexbox';
 import Tooltip from './Tooltip';

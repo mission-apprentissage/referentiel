@@ -1,6 +1,6 @@
-import { Accordion } from '../../dsfr/elements/Accordion.jsx';
-import { Box } from '../../Flexbox.jsx';
-import LinkButton from '../../dsfr/custom/LinkButton.jsx';
+import { Accordion } from '../../dsfr/elements/Accordion';
+import { Box } from '../../Flexbox';
+import LinkButton from '../../dsfr/custom/LinkButton';
 import { createContext } from 'react';
 import { uniq } from 'lodash-es';
 

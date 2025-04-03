@@ -1,8 +1,8 @@
-import Select from '../../dsfr/elements/Select.jsx';
+import Select from '../../dsfr/elements/Select';
 import { useContext, useState } from 'react';
-import { Box, Item } from '../../Flexbox.jsx';
-import { DataContext } from '../../DataProvider.jsx';
-import { UserContext } from '../../UserProvider.jsx';
+import { Box, Item } from '../../Flexbox';
+import { DataContext } from '../../DataProvider';
+import { UserContext } from '../../UserProvider';
 
 export default function DepartementAuthSelector({ departement, onChange }) {
   const data = useContext(DataContext);

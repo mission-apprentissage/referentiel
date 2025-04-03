@@ -1,6 +1,6 @@
-import { Filter } from './Filter.jsx';
-import Tooltip from '../../Tooltip.jsx';
-import { Box } from '../../Flexbox.jsx';
+import { Filter } from './Filter';
+import Tooltip from '../../Tooltip';
+import { Box } from '../../Flexbox';
 
 export default function DatagouvFilter() {
   return (

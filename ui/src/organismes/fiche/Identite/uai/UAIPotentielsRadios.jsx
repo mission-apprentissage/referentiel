@@ -1,7 +1,7 @@
-import Radio from '../../../../common/dsfr/elements/Radio.jsx';
-import Input from '../../../../common/dsfr/elements/Input.jsx';
-import useFormContext from '../../../../common/form/useFormContext.js';
-import Fieldset from '../../../../common/dsfr/elements/Fieldset.jsx';
+import Radio from '../../../../common/dsfr/elements/Radio';
+import Input from '../../../../common/dsfr/elements/Input';
+import useFormContext from '../../../../common/form/useFormContext';
+import Fieldset from '../../../../common/dsfr/elements/Fieldset';
 import { sortBy } from 'lodash-es';
 
 export function UAIPotentielsRadios({ organisme, action }) {

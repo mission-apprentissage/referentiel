@@ -1,10 +1,10 @@
 import { useContext } from 'react';
-import OrganismeItem from './OrganismeItem.jsx';
-import ApiPagination from '../../ApiPagination.jsx';
-import { Box } from '../../Flexbox.jsx';
-import Spinner from '../../Spinner.jsx';
-import { SearchContext } from '../../SearchProvider.jsx';
-import ExportButton from '../../ExportButton.jsx';
+import OrganismeItem from './OrganismeItem';
+import ApiPagination from '../../ApiPagination';
+import { Box } from '../../Flexbox';
+import Spinner from '../../Spinner';
+import { SearchContext } from '../../SearchProvider';
+import ExportButton from '../../ExportButton';
 
 export default function OrganismeList({ response }) {
   const { data, loading, error } = response;

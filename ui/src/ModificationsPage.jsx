@@ -1,10 +1,10 @@
-import TitleLayout from './common/layout/TitleLayout.jsx';
-import ContentLayout from './common/layout/ContentLayout.jsx';
-import Page from './common/Page.jsx';
+import TitleLayout from './common/layout/TitleLayout';
+import ContentLayout from './common/layout/ContentLayout';
+import Page from './common/Page';
 import styled from 'styled-components';
 import { Col, GridRow } from './common/dsfr/fondamentaux';
 import { DateTime } from 'luxon';
-import { cloneNodes } from './common/utils.js';
+import { cloneNodes } from './common/utils';
 
 function formatDate(date, pattern) {
   return DateTime.fromISO(date).setLocale('fr').toLocaleString(pattern);

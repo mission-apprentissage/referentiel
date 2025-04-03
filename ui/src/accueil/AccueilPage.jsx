@@ -1,15 +1,15 @@
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { useContext } from 'react';
-import TitleLayout from '../common/layout/TitleLayout.jsx';
-import ContentLayout from '../common/layout/ContentLayout.jsx';
-import { Button } from '../common/dsfr/elements/Button.jsx';
+import TitleLayout from '../common/layout/TitleLayout';
+import ContentLayout from '../common/layout/ContentLayout';
+import { Button } from '../common/dsfr/elements/Button';
 import { useNavigate } from 'react-router-dom';
-import { useFetch } from '../common/hooks/useFetch.js';
-import { percentage } from '../common/utils.js';
-import Page from '../common/Page.jsx';
-import NouveauxHistogram from './stats/NouveauxHistogram.jsx';
-import EtatAdministratifPie from './stats/EtatAdministratifPie.jsx';
-import { UserContext } from '../common/UserProvider.jsx';
+import { useFetch } from '../common/hooks/useFetch';
+import { percentage } from '../common/utils';
+import Page from '../common/Page';
+import NouveauxHistogram from './stats/NouveauxHistogram';
+import EtatAdministratifPie from './stats/EtatAdministratifPie';
+import { UserContext } from '../common/UserProvider';
 
 const config = require('../config');
 

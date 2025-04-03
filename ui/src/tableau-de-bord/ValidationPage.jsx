@@ -1,19 +1,19 @@
-import OrganismeList from '../common/organismes/liste/OrganismeList.jsx';
-import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector.jsx';
-import SearchForm from '../common/organismes/liste/SearchForm.jsx';
+import OrganismeList from '../common/organismes/liste/OrganismeList';
+import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
+import SearchForm from '../common/organismes/liste/SearchForm';
 import { useParams } from 'react-router-dom';
-import TitleLayout from '../common/layout/TitleLayout.jsx';
-import Results from '../common/Results.jsx';
-import ContentLayout from '../common/layout/ContentLayout.jsx';
+import TitleLayout from '../common/layout/TitleLayout';
+import Results from '../common/Results';
+import ContentLayout from '../common/layout/ContentLayout';
 import styled from 'styled-components';
-import { useValidationSearch } from '../common/hooks/useValidationSearch.js';
-import Filters from '../common/organismes/filtres/Filters.jsx';
-import NatureFilter from '../common/organismes/filtres/NatureFilter.jsx';
-import AcademiesFilter from '../common/organismes/filtres/AcademiesFilter.jsx';
-import { getNatureLabel } from '../common/enums/natures.js';
-import Small from '../common/dsfr/custom/Small.jsx';
-import Page from '../common/Page.jsx';
-import { useQuery } from '../common/hooks/useQuery.js';
+import { useValidationSearch } from '../common/hooks/useValidationSearch';
+import Filters from '../common/organismes/filtres/Filters';
+import NatureFilter from '../common/organismes/filtres/NatureFilter';
+import AcademiesFilter from '../common/organismes/filtres/AcademiesFilter';
+import { getNatureLabel } from '../common/enums/natures';
+import Small from '../common/dsfr/custom/Small';
+import Page from '../common/Page';
+import { useQuery } from '../common/hooks/useQuery';
 
 const getDescription = (type, natures) => {
   const titlePrefix = `Organismes ${natures === 'formateur' ? 'formateurs' : ''}`;

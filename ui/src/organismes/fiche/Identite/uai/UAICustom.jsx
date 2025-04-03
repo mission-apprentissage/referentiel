@@ -1,5 +1,5 @@
-import Input from '../../../../common/dsfr/elements/Input.jsx';
-import useFormContext from '../../../../common/form/useFormContext.js';
+import Input from '../../../../common/dsfr/elements/Input';
+import useFormContext from '../../../../common/form/useFormContext';
 
 export function UAICustom({ action }) {
   const { registerField, errors } = useFormContext();

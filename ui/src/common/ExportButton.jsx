@@ -1,6 +1,6 @@
-import DropdownButton from './dsfr/custom/DropdownButton.jsx';
-import { Link } from './dsfr/elements/Link.jsx';
-import { buildUrl } from './utils.js';
+import DropdownButton from './dsfr/custom/DropdownButton';
+import { Link } from './dsfr/elements/Link';
+import { buildUrl } from './utils';
 const config = require('../config');
 
 function ExportButton({ label = 'Export', params = {}, ...rest }) {

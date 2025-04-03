@@ -4,7 +4,7 @@ import { BasicTooltip } from '@nivo/tooltip';
 import { Legends } from './Legends';
 import { Col, GridRow } from '../dsfr/fondamentaux';
 import { cloneElement } from 'react';
-import { percentage } from '../utils.js';
+import { percentage } from '../utils';
 
 const buildTotalCentricLayer = (label, total) => {
   return ({ centerX, centerY }) => {

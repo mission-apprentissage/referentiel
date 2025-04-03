@@ -1,9 +1,9 @@
 import { useState, useContext } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import jwt from 'jsonwebtoken';
-import { ApiContext } from './common/ApiProvider.jsx';
-import { UserContext } from './common/UserProvider.jsx';
-import Alert from './common/dsfr/elements/Alert.jsx';
+import { ApiContext } from './common/ApiProvider';
+import { UserContext } from './common/UserProvider';
+import Alert from './common/dsfr/elements/Alert';
 
 export default function Connexion() {
   const { httpClient } = useContext(ApiContext);

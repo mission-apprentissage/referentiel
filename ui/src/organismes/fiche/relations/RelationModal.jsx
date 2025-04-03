@@ -1,13 +1,13 @@
-import { Button, ButtonGroup } from '../../../common/dsfr/elements/Button.jsx';
-import Modal, { modalSizeModifiers } from '../../../common/dsfr/elements/Modal.jsx';
-import BlueBox from '../../../common/BlueBox.jsx';
-import { Box } from '../../../common/Flexbox.jsx';
-import Field from '../../../common/Field.jsx';
-import Nature from '../../../common/organismes/Nature.jsx';
-import Siret from '../../../common/organismes/Siret.jsx';
-import RaisonSociale from '../../../common/organismes/RaisonSociale.jsx';
+import { Button, ButtonGroup } from '../../../common/dsfr/elements/Button';
+import Modal, { modalSizeModifiers } from '../../../common/dsfr/elements/Modal';
+import BlueBox from '../../../common/BlueBox';
+import { Box } from '../../../common/Flexbox';
+import Field from '../../../common/Field';
+import Nature from '../../../common/organismes/Nature';
+import Siret from '../../../common/organismes/Siret';
+import RaisonSociale from '../../../common/organismes/RaisonSociale';
 import definitions from '../../../common/definitions.json';
-import LinkButton from '../../../common/dsfr/custom/LinkButton.jsx';
+import LinkButton from '../../../common/dsfr/custom/LinkButton';
 import { useNavigate } from 'react-router-dom';
 
 export default function RelationModal({ modal, organisme }) {

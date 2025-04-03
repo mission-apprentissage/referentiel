@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useCallback, useContext } from 'react';
 import jwt from 'jsonwebtoken';
-import { ApiContext } from './ApiProvider.jsx';
+import { ApiContext } from './ApiProvider';
 
 const UserContext = createContext([{}, () => {}]);
 
