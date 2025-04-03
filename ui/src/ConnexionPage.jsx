@@ -74,7 +74,7 @@ export default function Connexion() {
                       mandatés pour faire cette expertise.
                       <br />
                       Pour toutes informations :{' '}
-                      <a href="referentiel-uai-siret@onisep.fr">referentiel-uai-siret@onisep.fr</a>
+                      <a href="mailto:referentiel-uai-siret@onisep.fr">referentiel-uai-siret@onisep.fr</a>
                     </p>
                     <div>
                       <form id="login-1760" onSubmit={handleLogin}>
