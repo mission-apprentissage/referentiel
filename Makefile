@@ -14,12 +14,12 @@ test:
 
 coverage:
 	corepack enable
-	corepack prepare yarn@4.7.0 --activate
+	corepack prepare yarn@4.8.1 --activate
 	yarn --cwd server coverage
 
 lint:
 	corepack enable
-	corepack prepare yarn@4.7.0 --activate
+	corepack prepare yarn@4.8.1 --activate
 	yarn --cwd server lint
 
 benchmark:
@@ -31,12 +31,12 @@ dataset:
 
 install-server:
 	corepack enable
-	corepack prepare yarn@4.7.0 --activate
+	corepack prepare yarn@4.8.1 --activate
 	yarn --cwd server install
 
 install-ui:
 	corepack enable
-	corepack prepare yarn@4.7.0 --activate
+	corepack prepare yarn@4.8.1 --activate
 	yarn --cwd ui install
 
 generate-dotenv:
