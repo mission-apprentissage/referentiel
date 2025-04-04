@@ -14,7 +14,7 @@
     "@testing-library/user-event": "14.1.1",
     "classnames": "2.3.1",
     "env-var": "7.1.1",
-    "jsonwebtoken": "8.5.1",
+    "jsonwebtoken": "9.0.2",
     "lodash-es": "4.17.21",
     "luxon": "2.3.2",
     "mapbox-gl": "2.8.2",
