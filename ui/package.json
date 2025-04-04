@@ -35,7 +35,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "update-browserslist": "npx browserslist --update-db"
+    "update-browserslist": "npx update-browserslist-db@latest"
   },
   "eslintConfig": {
     "extends": "react-app"
