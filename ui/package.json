@@ -3,6 +3,7 @@
   "name": "ui",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5001",
   "dependencies": {
     "@gouvfr/dsfr": "1.4.1",
     "@nivo/bar": "0.79.1",
