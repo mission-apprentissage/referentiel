@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { useValidationSearch } from "../common/hooks/useValidationSearch.js";
 import Filters from "../common/organismes/filtres/Filters.jsx";
 import NatureFilter from "../common/organismes/filtres/NatureFilter.jsx";
+import AcademiesFilter from "../common/organismes/filtres/AcademiesFilter.jsx";
 import { getNatureLabel } from "../common/enums/natures.js";
 import Small from "../common/dsfr/custom/Small.jsx";
 import Page from "../common/Page.jsx";
@@ -132,6 +133,7 @@ export default function ValidationPage() {
                   };
                 })}
               />
+              <AcademiesFilter/>
             </Filters>
           }
           results={<OrganismeList response={response} />}
