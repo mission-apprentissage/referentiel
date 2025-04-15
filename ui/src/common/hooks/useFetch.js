@@ -1,16 +1,17 @@
-import { useCallback, useContext, useEffect, useReducer } from "react";
-import { ApiContext } from "../ApiProvider";
+import { useCallback, useContext, useEffect, useReducer } from 'react';
+import { ApiContext } from '../ApiProvider';
 
-export function useFetch(url, initialState = {}, token = null) {
+
+export function useFetch (url, initialState = {}, token = null) {
   const { httpClient } = useContext(ApiContext);
 
-  function fetchReducer(state, action) {
+  function fetchReducer (state, action) {
     switch (action.type) {
-      case "error":
+      case 'error':
         return { loading: false, data: state.data, error: action.error };
-      case "loading":
+      case 'loading':
         return { loading: true, data: state.data, error: null };
-      case "data":
+      case 'data':
         return { loading: false, data: action.data, error: null };
       default:
         throw new Error(`Unhandled action type ${action.type}`);
@@ -18,29 +19,30 @@ export function useFetch(url, initialState = {}, token = null) {
   }
 
   const [state, dispatch] = useReducer(fetchReducer, {
-    data: initialState,
+    data:    initialState,
     loading: true,
-    error: null,
+    error:   null,
   });
 
   const _fetch = useCallback(async () => {
     try {
       console.info(`Requesting ${url}`);
-      dispatch({ type: "loading" });
+      dispatch({ type: 'loading' });
       const data = await httpClient._get(url, {}, token);
-      dispatch({ type: "data", data });
+      dispatch({ type: 'data', data });
     } catch (error) {
       console.error(error);
-      dispatch({ type: "error", error });
+      dispatch({ type: 'error', error });
     }
   }, [httpClient, url, token]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchData () {
       return _fetch();
     }
+
     fetchData();
   }, [url, _fetch]);
 
-  return [state, (data) => dispatch({ type: "data", data })];
+  return [state, (data) => dispatch({ type: 'data', data })];
 }
