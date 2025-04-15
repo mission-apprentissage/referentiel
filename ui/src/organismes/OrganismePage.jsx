@@ -14,9 +14,8 @@ import OrganismeProvider, { OrganismeContext } from '../common/organismes/Organi
 import { SearchContext } from '../common/SearchProvider';
 import { buildUrl } from '../common/utils';
 import Page from '../common/Page';
+import config from '../config';
 
-
-const config = require('../config');
 
 export default function OrganismePage () {
   const { siret } = useParams();
