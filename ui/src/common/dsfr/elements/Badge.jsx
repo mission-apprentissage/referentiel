@@ -1,5 +1,6 @@
-import { buildComponent } from "../dsfr";
+import { buildComponent } from '../dsfr';
 
-const Badge = buildComponent("p", "fr-badge");
+
+const Badge = buildComponent('p', 'fr-badge');
 
 export default Badge;

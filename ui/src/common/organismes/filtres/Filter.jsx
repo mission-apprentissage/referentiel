@@ -1,18 +1,24 @@
-import Fieldset from "../../dsfr/elements/Fieldset.jsx";
-import GreyAccordionItem from "../../dsfr/custom/GreyAccordionItem.jsx";
-import styled from "styled-components";
-import { Tag } from "../../dsfr/elements/Tag.jsx";
-import SmallCheckbox from "../../dsfr/custom/SmallCheckbox.jsx";
-import { useContext } from "react";
-import { FilterContext } from "./Filters.jsx";
-import { ariaExpanded } from "../../dsfr/dsfr.js";
-import { useQuery } from "../../hooks/useQuery.js";
-import { Box } from "../../Flexbox.jsx";
-import { isEqual } from "lodash-es";
+/**
+ *
+ */
+
+import { useContext } from 'react';
+import { isEqual } from 'lodash-es';
+import styled from 'styled-components';
+
+import Fieldset from '../../dsfr/elements/Fieldset';
+import GreyAccordionItem from '../../dsfr/custom/GreyAccordionItem';
+import { Tag } from '../../dsfr/elements/Tag';
+import SmallCheckbox from '../../dsfr/custom/SmallCheckbox';
+import { FilterContext } from './Filters';
+import { ariaExpanded } from '../../dsfr/dsfr';
+import { useQuery } from '../../hooks';
+import { Box } from '../../Flexbox';
+
 
 const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   return (
-    <Box align={"baseline"} {...rest}>
+    <Box align={'baseline'} {...rest}>
       {label}
       {nbCheckedElements > 0 && <Tag>{nbCheckedElements}</Tag>}
     </Box>
@@ -25,12 +31,12 @@ const FilterTitle = styled(({ label, nbCheckedElements, ...rest }) => {
   }
 `;
 
-function getParamFromQuery(query, paramName) {
+function getParamFromQuery (query, paramName) {
   const param = query[paramName];
-  return param ? param.split(",") : [];
+  return param ? param.split(',') : [];
 }
 
-export function Filter({ label, items, expanded = false }) {
+export function Filter ({ label, items, expanded = false }) {
   const { query } = useQuery();
   const { onChange: onFilterChange, register } = useContext(FilterContext);
   items.forEach((item) => register(item.paramName));
@@ -50,7 +56,7 @@ export function Filter({ label, items, expanded = false }) {
           return (
             <SmallCheckbox
               key={index}
-              name={"filter"}
+              name={'filter'}
               label={item.label}
               value={item.value}
               checked={isSelected}

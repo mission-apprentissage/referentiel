@@ -1,13 +1,17 @@
-import { Link } from "../../common/dsfr/elements/Link.jsx";
-import { Box } from "../../common/Flexbox.jsx";
-import styled from "styled-components";
-import ClickableItem from "../../common/ClickableItem.jsx";
-import { buildUrl, without } from "../../common/utils.js";
-import Spinner from "../../common/Spinner.jsx";
-import { useValidationSearch } from "../../common/hooks/useValidationSearch.js";
-import { useQuery } from "../../common/hooks/useQuery.js";
+/**
+ *
+ */
 
-const StyledBox = styled(without(Box, ["type"]))`
+import { Link } from '../../common/dsfr/elements/Link';
+import { Box } from '../../common/Flexbox';
+import styled from 'styled-components';
+import ClickableItem from '../../common/ClickableItem';
+import { buildUrl, without } from '../../common/utils';
+import Spinner from '../../common/Spinner';
+import { useQuery, useValidationSearch } from '../../common/hooks';
+
+
+const StyledBox = styled(without(Box, ['type']))`
   padding: 1.5rem;
   min-height: 240px;
 
@@ -30,24 +34,24 @@ const Counter = styled(({ response, className }) => {
   margin-bottom: 0.5rem;
 `;
 
-export default function ValidationCard({ type, natures, label, children, ...rest }) {
+export default function ValidationCard ({ type, natures, label, children, ...rest }) {
   const { query } = useQuery();
   const { response } = useValidationSearch(type, {
     natures,
-    page: 1,
+    page:           1,
     items_par_page: 1,
-    champs: "siret",
+    champs:         'siret',
   });
 
   return (
     <ClickableItem to={buildUrl(`/tableau-de-bord/validation/${type}|${natures}`, query)}>
-      <StyledBox direction={"column"} justify={"between"} type={type} {...rest}>
+      <StyledBox direction={'column'} justify={'between'} type={type} {...rest}>
         <div>
           <Counter response={response} />
-          <div className={"fr-text--bold"}>{label}</div>
+          <div className={'fr-text--bold'}>{label}</div>
         </div>
         {children}
-        <Link as="span" modifiers={"icon-right"} icons="arrow-right-line">
+        <Link as="span" modifiers={'icon-right'} icons="arrow-right-line">
           Voir la liste
         </Link>
       </StyledBox>

@@ -1,16 +1,20 @@
-import React from "react";
-import { useFetch } from "../../common/hooks/useFetch.js";
-import Pie from "../../common/nivo/Pie.jsx";
-import { getEtatAdministratifColor, getEtatAdministratifLabel } from "../../common/enums/etat_administratif.js";
-const config = require("../../config");
+/**
+ *
+ */
 
-export default function EtatAdministratifPie() {
-  const [{ data }] = useFetch(config.apiUrl + `/stats/etat_administratif`, []);
+import { useFetch } from '../../common/hooks';
+import Pie from '../../common/nivo/Pie';
+import { getEtatAdministratifColor, getEtatAdministratifLabel } from '../../common/enums/etat_administratif';
+import config from '../../config';
+
+
+export default function EtatAdministratifPie () {
+  const [{ data }] = useFetch(config.apiUrl + '/stats/etat_administratif', []);
   const stats = Object.keys(data).reduce((acc, key) => {
     return [
       ...acc,
       {
-        id: key,
+        id:    key,
         label: getEtatAdministratifLabel(key),
         value: data[key],
       },

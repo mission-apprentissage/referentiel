@@ -1,11 +1,17 @@
-import { useState, useContext } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
-import jwt from "jsonwebtoken";
-import { ApiContext } from "./common/ApiProvider.jsx";
-import { UserContext } from "./common/UserProvider.jsx";
-import Alert from "./common/dsfr/elements/Alert.jsx";
+/**
+ *
+ */
 
-export default function Connexion() {
+import { useContext, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import jwt from 'jsonwebtoken';
+import { ApiContext } from './common/ApiProvider';
+import { UserContext } from './common/UserProvider';
+import Alert from './common/dsfr/elements/Alert';
+
+
+export default function Connexion () {
+
   const { httpClient } = useContext(ApiContext);
   const [userContext, setUserContext] = useContext(UserContext);
   const [usernameError, setUsernameError] = useState(false);
@@ -20,28 +26,28 @@ export default function Connexion() {
     const username = e.target.username.value;
     const password = e.target.password.value;
 
-    if (username === "") {
+    if (username === '') {
       setUsernameError(true);
     }
-    if (password === "") {
+    if (password === '') {
       setPasswordError(true);
     }
 
     if (!usernameError && !passwordError) {
-      const result = await httpClient._post("/api/v1/users/login", { email: username, password });
+      const result = await httpClient._post('/api/v1/users/login', { email: username, password });
       if (result.success && result.token) {
         const decodedToken = jwt.decode(result.token);
         setUserContext({
-          code: decodedToken.code,
-          email: decodedToken.email,
-          nom: decodedToken.nom,
-          type: decodedToken.type,
-          token: result.token,
-          loading: false,
+          code:        decodedToken.code,
+          email:       decodedToken.email,
+          nom:         decodedToken.nom,
+          type:        decodedToken.type,
+          token:       result.token,
+          loading:     false,
           isAnonymous: false,
-          isAdmin: decodedToken.isAdmin,
+          isAdmin:     decodedToken.isAdmin,
         });
-        navigate("/tableau-de-bord");
+        navigate('/tableau-de-bord');
       } else {
         setLoginError(result.message);
       }
@@ -53,10 +59,10 @@ export default function Connexion() {
   return (
     <>
       {loginError && (
-        <Alert modifiers={"error"} title={"Une erreur est survenue"}>
+        <Alert modifiers={'error'} title={'Une erreur est survenue'}>
           {loginError}
           <p>
-            Contacter l’équipe du Référentiel :{" "}
+            Contacter l’équipe du Référentiel :{' '}
             <a href="mailto:referentiel-uai-siret@onisep.fr">referentiel-uai-siret@onisep.fr</a>
           </p>
         </Alert>
@@ -73,8 +79,8 @@ export default function Connexion() {
                       L’espace de fiabilisation des couples UAI-SIRET est réservé aux académies (SSA) et aux référents
                       mandatés pour faire cette expertise.
                       <br />
-                      Pour toutes informations :{" "}
-                      <a href="referentiel-uai-siret@onisep.fr">referentiel-uai-siret@onisep.fr</a>
+                      Pour toutes informations :{' '}
+                      <a href="mailto:referentiel-uai-siret@onisep.fr">referentiel-uai-siret@onisep.fr</a>
                     </p>
                     <div>
                       <form id="login-1760" onSubmit={handleLogin}>
@@ -87,13 +93,13 @@ export default function Connexion() {
                             <fieldset className="fr-fieldset" id="credentials" aria-labelledby="credentials-messages">
                               <div className="fr-fieldset__element">
                                 <div
-                                  className={usernameError ? "fr-input-group fr-input-group--error" : "fr-input-group"}
+                                  className={usernameError ? 'fr-input-group fr-input-group--error' : 'fr-input-group'}
                                 >
                                   <label className="fr-label" htmlFor="username-1757">
                                     Adresse email
                                   </label>
                                   <input
-                                    className={usernameError ? "fr-input fr-input--error" : "fr-input"}
+                                    className={usernameError ? 'fr-input fr-input--error' : 'fr-input'}
                                     autoComplete="username"
                                     aria-required="true"
                                     aria-describedby="username-1757-messages"
@@ -112,7 +118,7 @@ export default function Connexion() {
                               <div className="fr-fieldset__element">
                                 <div className="fr-password" id="password-1758">
                                   <label
-                                    className={passwordError ? "fr-label--error" : "fr-label"}
+                                    className={passwordError ? 'fr-label--error' : 'fr-label'}
                                     htmlFor="password-1758-input"
                                   >
                                     Mot de passe
@@ -121,8 +127,8 @@ export default function Connexion() {
                                     <input
                                       className={
                                         passwordError
-                                          ? "fr-password__input fr-input fr-input--error"
-                                          : "fr-password__input fr-input"
+                                          ? 'fr-password__input fr-input fr-input--error'
+                                          : 'fr-password__input fr-input'
                                       }
                                       aria-describedby="password-1758-input-messages"
                                       aria-required="true"

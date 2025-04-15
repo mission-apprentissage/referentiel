@@ -1,5 +1,6 @@
-import styled from "styled-components";
-import { Button } from "../elements/Button";
+import styled from 'styled-components';
+import { Button } from '../elements/Button';
+
 
 const LinkButton = styled(Button)`
   &&& {

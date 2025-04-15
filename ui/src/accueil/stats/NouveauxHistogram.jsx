@@ -1,22 +1,26 @@
-import React from "react";
-import { useFetch } from "../../common/hooks/useFetch.js";
-import Histogram from "../../common/nivo/Histogram.jsx";
-const config = require("../../config");
+/**
+ *
+ */
 
-function getLastMonths(nbMonths) {
+import { useFetch } from '../../common/hooks';
+import Histogram from '../../common/nivo/Histogram';
+import config from '../../config';
+
+
+function getLastMonths (nbMonths) {
   const names = [
-    "Janvier",
-    "Février",
-    "Mars",
-    "Avril",
-    "Mai",
-    "Juin",
-    "Juillet",
-    "Août",
-    "Septembre",
-    "Octobre",
-    "Novembre",
-    "Decembre",
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Decembre',
   ];
 
   const today = new Date();
@@ -30,36 +34,36 @@ function getLastMonths(nbMonths) {
   return months;
 }
 
-export default function NouveauxHistogram() {
-  const [{ data }] = useFetch(config.apiUrl + `/stats/nouveaux`, []);
+export default function NouveauxHistogram () {
+  const [{ data }] = useFetch(config.apiUrl + '/stats/nouveaux', []);
   const last6Months = getLastMonths(6).map(({ annee, mois, label }) => {
     const found = data.find((e) => e.annee === annee && e.mois === mois);
 
     return {
-      key: `${annee}_${label}`,
+      key:          `${annee}_${label}`,
       nbOrganismes: found?.total || 0,
     };
   });
 
   const customXLegend = {
-    tickSize: 0,
-    tickPadding: 25,
-    tickRotation: -25,
-    legend: "6 derniers mois",
-    legendPosition: "middle",
-    legendOffset: 100,
-    format: (id) => id.split("_").reverse().join(" "),
+    tickSize:       0,
+    tickPadding:    25,
+    tickRotation:   -25,
+    legend:         '6 derniers mois',
+    legendPosition: 'middle',
+    legendOffset:   100,
+    format:         (id) => id.split('_').reverse().join(' '),
   };
 
   return (
-    <div style={{ height: "500px" }}>
+    <div style={{ height: '500px' }}>
       <Histogram
         title="Entrants sur les 6 derniers mois"
-        yLegend={"Oorganismes"}
+        yLegend={'Oorganismes'}
         data={last6Months}
-        series={["nbOrganismes"]}
-        getSerieLabel={() => "Nouveaux organismes"}
-        getSerieColor={() => "#417DC4"}
+        series={['nbOrganismes']}
+        getSerieLabel={() => 'Nouveaux organismes'}
+        getSerieColor={() => '#417DC4'}
         axisBottom={customXLegend}
       />
     </div>

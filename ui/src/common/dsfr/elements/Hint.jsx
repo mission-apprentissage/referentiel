@@ -1,5 +1,6 @@
-import { buildComponent } from "../dsfr";
+import { buildComponent } from '../dsfr';
 
-const Hint = buildComponent("span", "fr-hint-text");
+
+const Hint = buildComponent('span', 'fr-hint-text');
 
 export default Hint;

@@ -1,12 +1,14 @@
-import styled from "styled-components";
-import { Button } from "../elements/Button";
+import styled from 'styled-components';
+
+import { Button } from '../elements/Button';
+
 
 const FullModal = styled(({ modal, children, ...rest }) => {
   return (
     <div {...rest}>
-      <div id={modal.id} ref={modal.ref} className={"fr-modal"}>
+      <div id={modal.id} ref={modal.ref} className={'fr-modal'}>
         <div className="fr-container fr-container-lg--fluid">
-          <Button modifiers={"close"} aria-controls={modal.id} title="Fermer" onClick={modal.close}>
+          <Button modifiers={'close'} aria-controls={modal.id} title="Fermer" onClick={modal.close}>
             Fermer
           </Button>
           {children}

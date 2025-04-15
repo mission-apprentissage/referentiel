@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { uniq } from "lodash-es";
+import { useState } from 'react';
+import { uniq } from 'lodash-es';
 
-export default function useForm(options = {}) {
+
+export default function useForm (options = {}) {
   const schema = options.yup;
   const [values, setValues] = useState(options.initialValues || {});
   const [submitting, setSubmitting] = useState(false);
@@ -9,11 +10,11 @@ export default function useForm(options = {}) {
   const [errors, setErrors] = useState(null);
   let fields = [];
 
-  function registerField(name) {
+  function registerField (name) {
     fields = uniq([...fields, name]);
     return {
       name,
-      value: values[name] || "",
+      value:    values[name] || '',
       onChange: ({ target: { name, value } }) => {
         setPristine(false);
         setValues({
@@ -24,7 +25,7 @@ export default function useForm(options = {}) {
     };
   }
 
-  async function validate() {
+  async function validate () {
     try {
       await schema.validate(values, { abortEarly: false, recursive: true });
       return null;
@@ -36,13 +37,13 @@ export default function useForm(options = {}) {
       return err.inner.reduce((acc, item) => {
         return {
           ...acc,
-          [item.path]: { type: "error", message: item.message },
+          [item.path]: { type: 'error', message: item.message },
         };
       }, {});
     }
   }
 
-  function registerForm(onSubmit) {
+  function registerForm (onSubmit) {
     return {
       onSubmit: async (e) => {
         e.preventDefault();
@@ -73,7 +74,7 @@ export default function useForm(options = {}) {
     values,
     pristine,
     errors,
-    reset: () => {
+    reset:         () => {
       setValues(options.initialValues || {});
     },
   };

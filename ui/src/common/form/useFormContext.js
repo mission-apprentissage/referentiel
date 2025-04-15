@@ -1,6 +1,7 @@
-import { useContext } from "react";
-import { FormContext } from "./Form";
+import { useContext } from 'react';
+import { FormContext } from './Form';
 
-export default function useFormContext() {
+
+export default function useFormContext () {
   return useContext(FormContext);
 }

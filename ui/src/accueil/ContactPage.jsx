@@ -3,8 +3,7 @@
  */
 
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
-import TitleLayout from '../common/layout/TitleLayout.jsx';
-import ContentLayout from '../common/layout/ContentLayout.jsx';
+import { ContentLayout, TitleLayout } from '../common/layout';
 import Page from '../common/Page.jsx';
 
 

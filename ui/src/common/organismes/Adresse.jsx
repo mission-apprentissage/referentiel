@@ -1,6 +1,4 @@
-import React from "react";
-
-export default function Adresse({ organisme }) {
+export default function Adresse ({ organisme }) {
   const adresse = organisme.adresse;
-  return <span>{adresse?.label || `${adresse?.code_postal || ""} ${adresse?.localite || ""}`}</span>;
+  return <span>{adresse?.label || `${adresse?.code_postal || ''} ${adresse?.localite || ''}`}</span>;
 }

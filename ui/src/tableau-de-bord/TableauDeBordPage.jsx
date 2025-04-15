@@ -1,17 +1,22 @@
-import { Col, GridRow } from "../common/dsfr/fondamentaux/index.js";
-import React, { useContext } from "react";
-import ValidationCard from "./cards/ValidationCard.jsx";
-import DepartementAuthSelector from "../common/organismes/selectors/DepartementAuthSelector.jsx";
-import TitleLayout from "../common/layout/TitleLayout.jsx";
-import ContentLayout from "../common/layout/ContentLayout.jsx";
-import { useQuery } from "../common/hooks/useQuery.js";
-import { UserContext } from "../common/UserProvider.jsx";
-import NouveauxCounter from "./cards/NouveauxCounter.jsx";
-import useToggle from "../common/hooks/useToggle.js";
-import LinkButton from "../common/dsfr/custom/LinkButton.jsx";
-import styled from "styled-components";
-import Page from "../common/Page.jsx";
-import Highlight from "../common/dsfr/elements/Highlight.jsx";
+/**
+ *
+ */
+
+import { useContext } from 'react';
+import styled from 'styled-components';
+
+import LinkButton from '../common/dsfr/custom/LinkButton';
+import { Col, GridRow } from '../common/dsfr/fondamentaux';
+import Highlight from '../common/dsfr/elements/Highlight';
+
+import { useQuery, useToggle } from '../common/hooks';
+import { ContentLayout, TitleLayout } from '../common/layout';
+import DepartementAuthSelector from '../common/organismes/selectors/DepartementAuthSelector';
+import { UserContext } from '../common/UserProvider';
+import ValidationCard from './cards/ValidationCard';
+import NouveauxCounter from './cards/NouveauxCounter';
+import Page from '../common/Page';
+
 
 const Presentation = styled(({ className }) => {
   const [showDetails, toggleDetails] = useToggle(false);
@@ -23,18 +28,18 @@ const Presentation = styled(({ className }) => {
         ou validées sur le territoire sélectionné.
       </Highlight>
 
-      <div className={"details fr-mt-2w"}>
+      <div className={'details fr-mt-2w'}>
         <LinkButton
-          className={"fr-mb-2w"}
-          modifiers={"sm icon-right"}
-          icons={`arrow-${showDetails ? "up" : "down"}-s-line`}
+          className={'fr-mb-2w'}
+          modifiers={'sm icon-right'}
+          icons={`arrow-${showDetails ? 'up' : 'down'}-s-line`}
           onClick={() => toggleDetails()}
         >
           Comment sont sélectionnés les organismes à vérifier ou à identifier
         </LinkButton>
         {showDetails && (
           <>
-            <div className={"fr-text--bold"}>Les organismes :</div>
+            <div className={'fr-text--bold'}>Les organismes :</div>
             <ul>
               <li>sont identifiés par un SIRET en activité ;</li>
               <li>
@@ -58,13 +63,13 @@ const Presentation = styled(({ className }) => {
   }
 `;
 
-export default function TableauDeBordPage() {
+export default function TableauDeBordPage () {
   const [userContext] = useContext(UserContext);
 
   const { query, setQuery } = useQuery();
   const title = userContext.isAdmin
-    ? "Tous les organismes"
-    : `${userContext.type === "region" ? "Région" : "Académie"} : ${userContext.nom}`;
+    ? 'Tous les organismes'
+    : `${userContext.type === 'region' ? 'Région' : 'Académie'} : ${userContext.nom}`;
 
   return (
     <Page>
@@ -80,51 +85,51 @@ export default function TableauDeBordPage() {
         }
       />
       <ContentLayout>
-        <GridRow modifiers={"gutters"} className={"fr-pb-3w"}>
-          <Col modifiers={"12"}>
+        <GridRow modifiers={'gutters'} className={'fr-pb-3w'}>
+          <Col modifiers={'12'}>
             <Presentation />
           </Col>
         </GridRow>
 
-        <GridRow modifiers={"gutters"} className={"fr-mb-3w"}>
-          <Col modifiers={"12 sm-8"}>
-            <GridRow modifiers={"gutters"}>
-              <Col modifiers={"12 sm-6"}>
+        <GridRow modifiers={'gutters'} className={'fr-mb-3w'}>
+          <Col modifiers={'12 sm-8'}>
+            <GridRow modifiers={'gutters'}>
+              <Col modifiers={'12 sm-6'}>
                 <ValidationCard
-                  type={"A_VALIDER"}
-                  natures={"responsable,responsable_formateur"}
-                  label={"Organismes responsables ou responsables et formateurs à vérifier"}
+                  type={'A_VALIDER'}
+                  natures={'responsable,responsable_formateur'}
+                  label={'Organismes responsables ou responsables et formateurs à vérifier'}
                 >
-                  <NouveauxCounter type={"A_VALIDER"} natures={"responsable,responsable_formateur"} />
+                  <NouveauxCounter type={'A_VALIDER'} natures={'responsable,responsable_formateur'} />
                 </ValidationCard>
               </Col>
-              <Col modifiers={"12 sm-6"}>
+              <Col modifiers={'12 sm-6'}>
                 <ValidationCard
-                  type={"A_RENSEIGNER"}
-                  natures={"responsable,responsable_formateur"}
-                  label={"Organismes responsables ou responsables et formateurs à identifier"}
+                  type={'A_RENSEIGNER'}
+                  natures={'responsable,responsable_formateur'}
+                  label={'Organismes responsables ou responsables et formateurs à identifier'}
                 />
               </Col>
-              <Col modifiers={"12 sm-6"}>
-                <ValidationCard type={"A_VALIDER"} natures={"formateur"} label={"Organismes formateurs à vérifier"}>
-                  <NouveauxCounter type={"A_VALIDER"} natures={"formateur"} />
+              <Col modifiers={'12 sm-6'}>
+                <ValidationCard type={'A_VALIDER'} natures={'formateur'} label={'Organismes formateurs à vérifier'}>
+                  <NouveauxCounter type={'A_VALIDER'} natures={'formateur'} />
                 </ValidationCard>
               </Col>
-              <Col modifiers={"12 sm-6"}>
+              <Col modifiers={'12 sm-6'}>
                 <ValidationCard
-                  type={"A_RENSEIGNER"}
-                  natures={"formateur"}
-                  label={"Organismes formateurs à identifier"}
+                  type={'A_RENSEIGNER'}
+                  natures={'formateur'}
+                  label={'Organismes formateurs à identifier'}
                 />
               </Col>
             </GridRow>
           </Col>
-          <Col modifiers={"12 sm-4"}>
+          <Col modifiers={'12 sm-4'}>
             <ValidationCard
-              type={"VALIDE"}
-              label={"Organismes validés"}
-              natures={"responsable,responsable_formateur,formateur"}
-              height={"100%"}
+              type={'VALIDE'}
+              label={'Organismes validés'}
+              natures={'responsable,responsable_formateur,formateur'}
+              height={'100%'}
             />
           </Col>
         </GridRow>

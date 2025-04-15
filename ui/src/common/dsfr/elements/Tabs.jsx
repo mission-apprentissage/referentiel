@@ -1,25 +1,30 @@
-import { classNames } from "../dsfr";
-import { cloneElement, createRef, forwardRef, useState } from "react";
-import useElementId from "../../hooks/useElementId";
-import cs from "classnames";
+/**
+ *
+ */
 
-export function Tabs({ label = "Système d'onglet", tabs, className }) {
-  const clazz = classNames("fr-tabs", { className });
+import { classNames } from '../dsfr';
+import { cloneElement, createRef, forwardRef, useState } from 'react';
+import { useElementId } from '../../hooks';
+import cs from 'classnames';
+
+
+export function Tabs ({ label = 'Système d\'onglet', tabs, className }) {
+  const clazz = classNames('fr-tabs', { className });
   const tabsId = useElementId();
   const [selectedTab, setSelectedTab] = useState(0);
   const items = tabs.map((item, index) => {
     return {
-      tabId: `tab-${index}-${tabsId}`,
-      panelId: `tab-panel-${index}-${tabsId}`,
-      tab: item.tab,
-      panel: item.panel,
-      isSelected: item.tab.props.hasOwnProperty("selected") ? item.tab.props.selected : index === selectedTab,
-      ref: createRef(),
-      key: index,
+      tabId:      `tab-${index}-${tabsId}`,
+      panelId:    `tab-panel-${index}-${tabsId}`,
+      tab:        item.tab,
+      panel:      item.panel,
+      isSelected: item.tab.props.hasOwnProperty('selected') ? item.tab.props.selected : index === selectedTab,
+      ref:        createRef(),
+      key:        index,
     };
   });
 
-  function showTab(index, el) {
+  function showTab (index, el) {
     setSelectedTab(index);
     dsfr(el).tabPanel.disclose();
   }
@@ -32,11 +37,11 @@ export function Tabs({ label = "Système d'onglet", tabs, className }) {
           return (
             <li role="presentation" key={key}>
               {cloneElement(tab, {
-                id: tabId,
-                "aria-controls": panelId,
-                "aria-selected": isSelected,
-                tabIndex: isSelected ? 0 : -1,
-                onClick: (e) => {
+                id:              tabId,
+                'aria-controls': panelId,
+                'aria-selected': isSelected,
+                tabIndex:        isSelected ? 0 : -1,
+                onClick:         (e) => {
                   if (tab.props.onClick) {
                     tab.props.onClick(e);
                   }
@@ -49,9 +54,9 @@ export function Tabs({ label = "Système d'onglet", tabs, className }) {
       </ul>
       {items.map(({ tabId, panelId, panel, isSelected, ref, key }) => {
         return cloneElement(isSelected ? panel : <TabPanel />, {
-          id: panelId,
-          "aria-labelledby": tabId,
-          tabIndex: 0,
+          id:                panelId,
+          'aria-labelledby': tabId,
+          tabIndex:          0,
           ref,
           key,
         });
@@ -60,8 +65,8 @@ export function Tabs({ label = "Système d'onglet", tabs, className }) {
   );
 }
 
-export function Tab({ children, modifiers, className, ...rest }) {
-  const clazz = classNames("fr-tabs__tab", { modifiers, className });
+export function Tab ({ children, modifiers, className, ...rest }) {
+  const clazz = classNames('fr-tabs__tab', { modifiers, className });
 
   return (
     <button className={clazz} role="tab" {...rest}>
@@ -71,7 +76,7 @@ export function Tab({ children, modifiers, className, ...rest }) {
 }
 
 export const TabPanel = forwardRef(({ children, modifiers, className, ...rest }, ref) => {
-  const clazz = classNames("fr-tabs__panel", { modifiers, className: cs(className, "xfr-tabs__panel--fix") });
+  const clazz = classNames('fr-tabs__panel', { modifiers, className: cs(className, 'xfr-tabs__panel--fix') });
 
   return (
     <div className={clazz} role="tabpanel" ref={ref} {...rest}>

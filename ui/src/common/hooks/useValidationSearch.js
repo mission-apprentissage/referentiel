@@ -1,9 +1,16 @@
-import { useSearch } from "./useSearch";
-import { UserContext } from "../UserProvider";
-import { useContext } from "react";
-import { getValidationParams } from "../enums/validation";
+/**
+ *
+ */
 
-export function useValidationSearch(type, custom = {}) {
+import { useContext } from 'react';
+
+import { useSearch } from './useSearch';
+import { UserContext } from '../UserProvider';
+import { getValidationParams } from '../enums/validation';
+
+
+export function useValidationSearch (type, custom = {}) {
+
   const [userContext] = useContext(UserContext);
 
   return useSearch({
