@@ -1,29 +1,29 @@
-import React from "react";
-import { BrowserRouter as Router, Navigate, Outlet, Route, Routes } from "react-router-dom";
-import OrganismePage from "./organismes/OrganismePage.jsx";
-import Layout from "./common/layout/Layout";
-import DesignPage from "./DesignPage.jsx";
-import OrganismesPage from "./organismes/OrganismesPage.jsx";
-import ConnexionPage from "./ConnexionPage.jsx";
-import TableauDeBordPage from "./tableau-de-bord/TableauDeBordPage.jsx";
-import ValidationPage from "./tableau-de-bord/ValidationPage.jsx";
-import AuthShield from "./common/AuthShield";
-import AccueilPage from "./accueil/AccueilPage.jsx";
-import ConstructionPage from "./ConstructionPage.jsx";
-import DataProvider from "./common/DataProvider";
-import ApiProvider from "./common/ApiProvider";
-import StatsPage from "./stats/StatsPage.jsx";
-import SearchProvider from "./common/SearchProvider";
-import ModificationsPage from "./ModificationsPage.jsx";
-import CorrectionsPage from "./CorrectionsPage.jsx";
-import SuiviModificationsPage from "./SuiviModificationsPage.jsx";
-import { useScrollToTop } from "./common/hooks/useScrollToTop.js";
-import { UserProvider } from "./common/UserProvider.jsx";
-import ContactPage from "./accueil/ContactPage.jsx";
-import MentionsLegalesPages from "./MentionsLegalesPage.jsx";
-import DonneesPersonnellesPages from "./DonneesPersonnellesPages.jsx";
+import React from 'react';
+import { BrowserRouter as Router, Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import OrganismePage from './organismes/OrganismePage.jsx';
+import Layout from './common/layout/Layout';
+import DesignPage from './DesignPage.jsx';
+import OrganismesPage from './organismes/OrganismesPage.jsx';
+import ConnexionPage from './ConnexionPage.jsx';
+import TableauDeBordPage from './tableau-de-bord/TableauDeBordPage.jsx';
+import ValidationPage from './tableau-de-bord/ValidationPage.jsx';
+import AuthShield from './common/AuthShield';
+import { AccueilPage, ContactPage } from './accueil';
+import ConstructionPage from './ConstructionPage.jsx';
+import DataProvider from './common/DataProvider';
+import ApiProvider from './common/ApiProvider';
+import StatsPage from './stats/StatsPage.jsx';
+import SearchProvider from './common/SearchProvider';
+import ModificationsPage from './ModificationsPage.jsx';
+import CorrectionsPage from './CorrectionsPage.jsx';
+import SuiviModificationsPage from './SuiviModificationsPage.jsx';
+import { useScrollToTop } from './common/hooks/useScrollToTop.js';
+import { UserProvider } from './common/UserProvider.jsx';
+import MentionsLegalesPages from './MentionsLegalesPage.jsx';
+import DonneesPersonnellesPages from './DonneesPersonnellesPages.jsx';
 
-function Providers({ children }) {
+
+function Providers ({ children }) {
   useScrollToTop();
 
   return (
@@ -37,7 +37,7 @@ function Providers({ children }) {
   );
 }
 
-function App() {
+function App () {
   return (
     <div className="App">
       <Router>
