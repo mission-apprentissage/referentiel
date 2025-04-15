@@ -1,21 +1,21 @@
-import React from "react";
-import { classNames } from "../dsfr";
-import { Button } from "./Button";
-import { useModal } from "../common/useModal";
-import logoONISEP from "./logo_onisep.svg";
+import { classNames } from '../dsfr';
+import { Button } from './Button';
+import { useModal } from '../common/useModal';
+import logoONISEP from './logo_onisep.svg';
 
-function HeaderNavbar({ modals, showMenuButton, showSearchButton }) {
+
+function HeaderNavbar ({ modals, showMenuButton, showSearchButton }) {
   const { menu, search } = modals;
 
   return (
     <div className="fr-header__navbar">
       {showSearchButton && (
-        <Button modifiers={"search"} aria-controls={search.id} onClick={search.open}>
+        <Button modifiers={'search'} aria-controls={search.id} onClick={search.open}>
           Rechercher
         </Button>
       )}
       {showMenuButton && (
-        <Button title={"Menu"} modifiers={"menu"} aria-controls={menu.id} aria-haspopup="menu" onClick={menu.open}>
+        <Button title={'Menu'} modifiers={'menu'} aria-controls={menu.id} aria-haspopup="menu" onClick={menu.open}>
           Menu
         </Button>
       )}
@@ -23,11 +23,11 @@ function HeaderNavbar({ modals, showMenuButton, showSearchButton }) {
   );
 }
 
-function HeaderSearch({ modal, children, ...rest }) {
+function HeaderSearch ({ modal, children, ...rest }) {
   return (
     <div id={modal.id} ref={modal.ref} className="fr-header__search fr-modal" {...rest}>
       <div className="fr-container fr-container-lg--fluid">
-        <Button modifiers={"close"} aria-controls={modal.id} title="Fermer" onClick={modal.close}>
+        <Button modifiers={'close'} aria-controls={modal.id} title="Fermer" onClick={modal.close}>
           Fermer
         </Button>
         {children}
@@ -36,11 +36,11 @@ function HeaderSearch({ modal, children, ...rest }) {
   );
 }
 
-function HeaderMenu({ modal, children, ...rest }) {
+function HeaderMenu ({ modal, children, ...rest }) {
   return (
     <div id={modal.id} ref={modal.ref} className="fr-header__menu fr-modal" {...rest}>
       <div className="fr-container">
-        <Button modifiers={"close"} aria-controls={modal.id} title="Fermer" onClick={modal.close}>
+        <Button modifiers={'close'} aria-controls={modal.id} title="Fermer" onClick={modal.close}>
           Fermer
         </Button>
         <div className="fr-header__menu-links" />
@@ -50,10 +50,10 @@ function HeaderMenu({ modal, children, ...rest }) {
   );
 }
 
-export function Header({ title, tagline, links, nav, search, modifiers, className, ...rest }) {
-  const clazz = classNames("fr-header", { modifiers, className });
+export function Header ({ title, tagline, links, nav, search, modifiers, className, ...rest }) {
+  const clazz = classNames('fr-header', { modifiers, className });
   const modals = {
-    menu: useModal(),
+    menu:   useModal(),
     search: useModal(),
   };
 

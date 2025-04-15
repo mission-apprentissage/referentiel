@@ -161,20 +161,20 @@ Ici, comme il n'y a pas de "reverse proxy" comme dans la conf Docker, on précis
 
 ```bash
 # export NODE_OPTIONS=--openssl-legacy-provider  # nécessaire sous macOS/Ubuntu22
-export REACT_APP_REFERENTIEL_API_URL=http://localhost:5001/api/v1  
 yarn --cwd ui start
 ```
 
 ### Création d'utilisateur
 
-Pour créer un nouvel utilisateur:
+Pour créer un nouvel utilisateur :
 
 ```bash
 yarn cli createUser <email> <password> <type> <code> <isAdmin>
 ```
 
-Type correspond soit à `academie` soit à `region`
+- `type` correspond soit à `academie` soit à `region` ;
 
-Code correspond à l'académie ou la région voulue. Ces codes sont disponibles dans les fichiers `academies.js` et `regions.js`
+- `code` correspond à l'académie ou la région voulue. Les valeurs sont disponibles dans 
+les fichiers `academies.js` et `regions.js` ;
 
-isAdmin est par défault `false`, mettre à `true` pour un compte admin
+- `isAdmin` est par défault `false`, mettre à `true` pour un compte admin.

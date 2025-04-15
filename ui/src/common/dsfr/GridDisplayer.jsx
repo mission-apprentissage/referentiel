@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Col, Container, GridRow } from "./fondamentaux";
-import styled from "styled-components";
-import useAllKeysPress from "../hooks/useAllKeysPress";
+/**
+ *
+ */
+
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
+
+import { useAllKeysPress } from '../hooks';
+import { Col, Container, GridRow } from './fondamentaux';
+
 
 const GridDisplayer = ({ className, fluid = false, gutters = true }) => {
-  const isShorcutPress = useAllKeysPress({ userKeys: ["Alt", "ArrowDown"] });
+  const isShorcutPress = useAllKeysPress({ userKeys: ['Alt', 'ArrowDown'] });
   const [showGrid, setShowGrid] = useState(false);
   useEffect(() => setShowGrid(isShorcutPress), [isShorcutPress]);
 
@@ -14,9 +20,9 @@ const GridDisplayer = ({ className, fluid = false, gutters = true }) => {
 
   return (
     <div className={className}>
-      <Container modifiers={fluid ? "fluid" : ""}>
-        <GridRow modifiers={gutters ? "gutters" : ""}>
-          <Col modifiers={"1"}>
+      <Container modifiers={fluid ? 'fluid' : ''}>
+        <GridRow modifiers={gutters ? 'gutters' : ''}>
+          <Col modifiers={'1'}>
             <div className="xfr-display-block xfr-display-sm-none">
               <span>xs</span>
             </div>
@@ -33,40 +39,40 @@ const GridDisplayer = ({ className, fluid = false, gutters = true }) => {
               <span>xl</span>
             </div>
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
-          <Col modifiers={"1"}>
+          <Col modifiers={'1'}>
             <span />
           </Col>
         </GridRow>

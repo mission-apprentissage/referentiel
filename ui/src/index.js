@@ -1,23 +1,25 @@
-import React, { useEffect } from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
-import GridDisplayer from "./common/dsfr/GridDisplayer";
-import { bootstrapDsfr } from "./common/dsfr/dsfr";
+import { StrictMode, useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
 
-const container = document.getElementById("root");
+import App from './App';
+import GridDisplayer from './common/dsfr/GridDisplayer';
+import { bootstrapDsfr } from './common/dsfr/dsfr';
+import * as serviceWorker from './serviceWorker';
+
+
+const container = document.getElementById('root');
 const root = createRoot(container);
 
-function Root() {
+function Root () {
   useEffect(() => {
     bootstrapDsfr();
   });
 
   return (
-    <React.StrictMode>
+    <StrictMode>
       <GridDisplayer />
       <App />
-    </React.StrictMode>
+    </StrictMode>
   );
 }
 

@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import { Tag } from "./dsfr/elements/Tag";
+import styled from 'styled-components';
+import { Tag } from './dsfr/elements/Tag';
+
 
 const iconMapper = {
-  A_VALIDER: "error-warning-fill",
-  A_RENSEIGNER: "error-warning-fill",
-  VALIDE: "checkbox-circle-fill",
+  A_VALIDER:    'error-warning-fill',
+  A_RENSEIGNER: 'error-warning-fill',
+  VALIDE:       'checkbox-circle-fill',
 };
 
 const ValidationTag = styled(({ type, label, ...props }) => {

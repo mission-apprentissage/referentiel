@@ -1,23 +1,24 @@
-import { omit } from "lodash-es";
-import { Children, cloneElement } from "react";
-import queryString from "query-string";
+import { omit } from 'lodash-es';
+import { Children, cloneElement } from 'react';
+import queryString from 'query-string';
 
-export function without(Tag, filter = []) {
+
+export function without (Tag, filter = []) {
   return (props) => <Tag {...omit(props, filter)} />;
 }
 
-export function capitalizeFirstLetter(string) {
+export function capitalizeFirstLetter (string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function cloneNodes(nodes, propsCallback) {
+export function cloneNodes (nodes, propsCallback) {
   return Children.toArray(nodes).map((node) => cloneElement(node, propsCallback(node)));
 }
 
-export function flattenObject(obj, parent, res = {}) {
+export function flattenObject (obj, parent, res = {}) {
   for (const key in obj) {
-    const propName = parent ? parent + "." + key : key;
-    if (typeof obj[key] == "object" && !Array.isArray(obj[key])) {
+    const propName = parent ? parent + '.' + key : key;
+    if (typeof obj[key] == 'object' && !Array.isArray(obj[key])) {
       flattenObject(obj[key], propName, res);
     } else {
       res[propName] = obj[key];
@@ -26,23 +27,23 @@ export function flattenObject(obj, parent, res = {}) {
   return res;
 }
 
-export function asSiren(siret) {
+export function asSiren (siret) {
   return siret.substring(0, 9);
 }
 
-export function buildUrl(url, data) {
+export function buildUrl (url, data) {
   const params = `${queryString.stringify(data, { skipNull: true, skipEmptyString: true })}`;
   return `${url}?${params}`;
 }
 
-export function openNewTab(url, params) {
-  window.open(buildUrl(url, params), "_blank");
+export function openNewTab (url, params) {
+  window.open(buildUrl(url, params), '_blank');
 }
 
 export const divide = (dividend, divisor) => {
   if (dividend && divisor !== 0) {
     const value = dividend / divisor;
-    return Number(Math.round(value + "e1") + "e-1");
+    return Number(Math.round(value + 'e1') + 'e-1');
   } else {
     return 0;
   }

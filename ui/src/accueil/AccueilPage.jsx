@@ -15,13 +15,12 @@ import { percentage } from '../common/utils.js';
 import Page from '../common/Page.jsx';
 import NouveauxHistogram from './stats/NouveauxHistogram.jsx';
 import EtatAdministratifPie from './stats/EtatAdministratifPie.jsx';
+import config from '../config';
 
-
-const config = require('../config');
 
 export function AccueilPage () {
-  const navigate = useNavigate();
-  const [userContext] = useContext(UserContext);
+
+  const navigate = useNavigate();const [userContext] = useContext(UserContext);
 
   const [{ data: stats }] = useFetch(config.apiUrl + '/stats/couverture', null);
   console.log({ stats });

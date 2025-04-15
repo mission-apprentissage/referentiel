@@ -1,6 +1,12 @@
-import { Container } from "../dsfr/fondamentaux";
-import React from "react";
+/**
+ *
+ */
 
-export default function ContentLayout({ children }) {
+import { Container } from '../dsfr/fondamentaux';
+
+
+export function ContentLayout ({ children }) {
+
   return <Container>{children}</Container>;
+
 }

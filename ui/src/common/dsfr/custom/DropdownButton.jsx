@@ -1,7 +1,13 @@
-import styled from "styled-components";
-import { Button } from "../elements/Button";
-import useToggle from "../../hooks/useToggle";
-import { Box } from "../../Flexbox";
+/**
+ *
+ */
+
+import styled from 'styled-components';
+
+import { Button } from '../elements/Button';
+import { useToggle } from '../../hooks';
+import { Box } from '../../Flexbox';
+
 
 const DropdownButton = styled(({ className, links, children, ...rest }) => {
   const [showContent, toggleShowContent] = useToggle(false);
@@ -12,7 +18,7 @@ const DropdownButton = styled(({ className, links, children, ...rest }) => {
       </Button>
       {showContent && (
         <div className="dropdown-content">
-          <Box direction={"column"}>{links}</Box>
+          <Box direction={'column'}>{links}</Box>
         </div>
       )}
     </div>

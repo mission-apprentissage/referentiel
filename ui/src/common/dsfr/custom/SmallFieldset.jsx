@@ -1,5 +1,7 @@
-import styled from "styled-components";
-import Fieldset from "../elements/Fieldset";
+import styled from 'styled-components';
+
+import Fieldset from '../elements/Fieldset';
+
 
 const SmallFieldset = styled(Fieldset)`
   margin-bottom: 0.5rem;

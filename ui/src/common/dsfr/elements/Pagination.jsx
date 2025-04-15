@@ -1,11 +1,13 @@
-import { classNames } from "../dsfr";
-import cs from "classnames";
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import cs from 'classnames';
 
-export function FirstPage({ modifiers, children, className, ...rest }) {
-  const clazz = classNames(`fr-pagination__link`, {
+import { classNames } from '../dsfr';
+
+
+export function FirstPage ({ modifiers, children, className, ...rest }) {
+  const clazz = classNames('fr-pagination__link', {
     modifiers,
-    className: cs(className, "fr-pagination__link--first"),
+    className: cs(className, 'fr-pagination__link--first'),
   });
   return (
     <li>
@@ -16,10 +18,10 @@ export function FirstPage({ modifiers, children, className, ...rest }) {
   );
 }
 
-export function PreviousPage({ modifiers, children, className, ...rest }) {
-  const clazz = classNames(`fr-pagination__link`, {
+export function PreviousPage ({ modifiers, children, className, ...rest }) {
+  const clazz = classNames('fr-pagination__link', {
     modifiers,
-    className: cs(className, "fr-pagination__link--prev", " fr-pagination__link--lg-label"),
+    className: cs(className, 'fr-pagination__link--prev', ' fr-pagination__link--lg-label'),
   });
   return (
     <li>
@@ -30,10 +32,10 @@ export function PreviousPage({ modifiers, children, className, ...rest }) {
   );
 }
 
-export function NextPage({ modifiers, children, className, ...rest }) {
-  const clazz = classNames(`fr-pagination__link`, {
+export function NextPage ({ modifiers, children, className, ...rest }) {
+  const clazz = classNames('fr-pagination__link', {
     modifiers,
-    className: cs(className, "fr-pagination__link--next", "fr-pagination__link--lg-label"),
+    className: cs(className, 'fr-pagination__link--next', 'fr-pagination__link--lg-label'),
   });
 
   return (
@@ -45,10 +47,10 @@ export function NextPage({ modifiers, children, className, ...rest }) {
   );
 }
 
-export function LastPage({ modifiers, children, className, ...rest }) {
-  const clazz = classNames(`fr-pagination__link`, {
+export function LastPage ({ modifiers, children, className, ...rest }) {
+  const clazz = classNames('fr-pagination__link', {
     modifiers,
-    className: cs(className, "fr-pagination__link--last"),
+    className: cs(className, 'fr-pagination__link--last'),
   });
 
   return (
@@ -60,8 +62,8 @@ export function LastPage({ modifiers, children, className, ...rest }) {
   );
 }
 
-export function Page({ modifiers, children, className, ...rest }) {
-  const clazz = classNames(`fr-pagination__link`, {
+export function Page ({ modifiers, children, className, ...rest }) {
+  const clazz = classNames('fr-pagination__link', {
     modifiers,
     className,
   });
@@ -75,7 +77,7 @@ export function Page({ modifiers, children, className, ...rest }) {
   );
 }
 
-export function Pagination({ children }) {
+export function Pagination ({ children }) {
   return (
     <nav role="navigation" className="fr-pagination" aria-label="Pagination">
       <ul className="fr-pagination__list">{children}</ul>

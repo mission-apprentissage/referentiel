@@ -1,5 +1,10 @@
-import { useEffect } from "react";
+/**
+ *
+ */
 
-export default function useOnce(callback) {
+import { useEffect } from 'react';
+
+
+export function useOnce (callback) {
   useEffect(callback, []);
 }

@@ -1,16 +1,23 @@
-import Select from "../../dsfr/elements/Select.jsx";
-import { useContext, useState } from "react";
-import { Box, Item } from "../../Flexbox.jsx";
-import { DataContext } from "../../DataProvider.jsx";
+/**
+ *
+ */
 
-export default function AcademieSelector({ academie, onChange }) {
+import { useContext, useState } from 'react';
+
+import Select from '../../dsfr/elements/Select';
+import { Box, Item } from '../../Flexbox';
+import { DataContext } from '../../DataProvider';
+
+
+export default function AcademieSelector ({ academie, onChange }) {
+
   const { academies } = useContext(DataContext);
-  const [selected, setSelected] = useState(academie || "");
+  const [selected, setSelected] = useState(academie || '');
 
   return (
-    <Box align={"center"} justify={"start"} style={{ width: "100%" }}>
-      <span className={"fr-mr-2w xfr-display-xs-none xfr-display-sm-block"}>Filtrer : </span>
-      <Item alignSelf={"stretch"} grow={1}>
+    <Box align={'center'} justify={'start'} style={{ width: '100%' }}>
+      <span className={'fr-mr-2w xfr-display-xs-none xfr-display-sm-block'}>Filtrer : </span>
+      <Item alignSelf={'stretch'} grow={1}>
         <Select
           value={selected}
           onChange={(e) => {

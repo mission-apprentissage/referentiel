@@ -1,15 +1,32 @@
 name: CI
 on: [ push ]
+
 jobs:
   test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
 
-      - run: make ci
+    steps:
+
+      - name: Install OpenSSL 1.1 (Required for MongoDB)
+        run: |
+          sudo apt update
+          sudo apt install -y wget
+          wget https://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb
+          sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.24_amd64.deb
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Enable Corepack (for Yarn 4)
+        run: corepack enable
+
+      - name: Run tests
+        run: make ci
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2

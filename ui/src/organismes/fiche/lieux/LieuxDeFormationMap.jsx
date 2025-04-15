@@ -1,16 +1,22 @@
-import React, { useRef } from "react";
-import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import useOnce from "../../../common/hooks/useOnce.js"; // eslint-disable-line import/no-webpack-loader-syntax
-import bluePin from "./map-pin-blue.svg";
-import redPin from "./map-pin-red.svg";
-import redBluePin from "./map-pin-red-blue.svg";
-import "mapbox-gl/dist/mapbox-gl.css";
-import { Box } from "../../../common/Flexbox.jsx";
-import Legend from "./Legend.jsx";
+/**
+ *
+ */
 
-mapboxgl.accessToken = "pk.eyJ1IjoiYmd1ZXJvdXQiLCJhIjoiY2wwamM5bmMyMGI5cDNrcDZzeGE0Y3RuNyJ9.R3_znqXpyJ8_98pEUYQuwQ";
+import { useRef } from 'react';
 
-function addSVGImage(map, name, definitions) {
+import { useOnce } from '../../../common/hooks'; // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
+import bluePin from './map-pin-blue.svg';
+import redPin from './map-pin-red.svg';
+import redBluePin from './map-pin-red-blue.svg';
+import 'mapbox-gl/dist/mapbox-gl.css';
+import { Box } from '../../../common/Flexbox';
+import Legend from './Legend';
+
+
+mapboxgl.accessToken = 'pk.eyJ1IjoiYmd1ZXJvdXQiLCJhIjoiY2wwamM5bmMyMGI5cDNrcDZzeGE0Y3RuNyJ9.R3_znqXpyJ8_98pEUYQuwQ';
+
+function addSVGImage (map, name, definitions) {
   return new Promise((resolve) => {
     const img = new Image(definitions.width, definitions.height);
     img.src = definitions.file;
@@ -21,7 +27,7 @@ function addSVGImage(map, name, definitions) {
   });
 }
 
-function adaptGeojson(adresse, props = {}) {
+function adaptGeojson (adresse, props = {}) {
   const geojson = adresse.geojson;
 
   return {
@@ -33,12 +39,12 @@ function adaptGeojson(adresse, props = {}) {
   };
 }
 
-function getCoordinates(geojson) {
+function getCoordinates (geojson) {
   const { geometry } = geojson;
-  return geometry.type === "Polygon" ? geometry.coordinates[0][0] : geometry.coordinates;
+  return geometry.type === 'Polygon' ? geometry.coordinates[0][0] : geometry.coordinates;
 }
 
-function getCenter(organisme) {
+function getCenter (organisme) {
   const adresse = organisme.adresse;
   if (adresse) {
     return getCoordinates(adresse.geojson);
@@ -47,11 +53,11 @@ function getCenter(organisme) {
   return organisme.lieux_de_formation[0].adresse?.geojson.geometry.coordinates;
 }
 
-function degreesToRadians(degrees) {
+function degreesToRadians (degrees) {
   return (degrees * Math.PI) / 180;
 }
 
-function distanceInKmBetweenCoords(coords1, coords2) {
+function distanceInKmBetweenCoords (coords1, coords2) {
   const earthRadiusKm = 6371;
   const dLat = degreesToRadians(coords2[1] - coords1[1]);
   const dLon = degreesToRadians(coords2[0] - coords1[0]);
@@ -64,7 +70,7 @@ function distanceInKmBetweenCoords(coords1, coords2) {
   return earthRadiusKm * c;
 }
 
-function buildSource(organisme) {
+function buildSource (organisme) {
   const features = [];
   let lieux = organisme.lieux_de_formation;
 
@@ -76,24 +82,24 @@ function buildSource(organisme) {
 
     features.push(
       adaptGeojson(organisme.adresse, {
-        label: organisme.enseigne || organisme.raison_sociale,
-        popup: organisme.adresse?.label,
-        icon: organisme.lieux_de_formation.length !== lieux.length ? "map-pin-red-blue" : "map-pin-red",
+        label:   organisme.enseigne || organisme.raison_sociale,
+        popup:   organisme.adresse?.label,
+        icon:    organisme.lieux_de_formation.length !== lieux.length ? 'map-pin-red-blue' : 'map-pin-red',
         sortKey: 1,
-      })
+      }),
     );
   }
 
   return {
-    type: "geojson",
+    type: 'geojson',
     data: {
-      type: "FeatureCollection",
+      type:     'FeatureCollection',
       features: [
         ...features,
         ...lieux.map((l) => {
           return adaptGeojson(l.adresse, {
-            popup: l.adresse?.label,
-            icon: "map-pin-blue",
+            popup:   l.adresse?.label,
+            icon:    'map-pin-blue',
             sortKey: 2,
           });
         }),
@@ -102,12 +108,12 @@ function buildSource(organisme) {
   };
 }
 
-function showPopupOnMouseHover(map, layerName) {
+function showPopupOnMouseHover (map, layerName) {
   const popup = new mapboxgl.Popup({ offset: 25, closeButton: false, closeOnClick: false });
 
-  map.on("mouseenter", layerName, (e) => {
+  map.on('mouseenter', layerName, (e) => {
     // Change the cursor style as a UI indicator.
-    map.getCanvas().style.cursor = "pointer";
+    map.getCanvas().style.cursor = 'pointer';
 
     // Copy coordinates array.
     const coordinates = e.features[0].geometry.coordinates.slice();
@@ -122,13 +128,13 @@ function showPopupOnMouseHover(map, layerName) {
     popup.setLngLat(coordinates).setText(e.features[0].properties.popup).addTo(map);
   });
 
-  map.on("mouseleave", layerName, () => {
-    map.getCanvas().style.cursor = "";
+  map.on('mouseleave', layerName, () => {
+    map.getCanvas().style.cursor = '';
     popup.remove();
   });
 }
 
-function getBounds(source) {
+function getBounds (source) {
   const first = source.data.features[0];
   const coords = getCoordinates(first);
   const bounds = new mapboxgl.LngLatBounds(coords, coords);
@@ -138,58 +144,58 @@ function getBounds(source) {
   return bounds;
 }
 
-async function configureMap(map, source) {
+async function configureMap (map, source) {
   await Promise.all([
-    addSVGImage(map, "map-pin-blue", { file: bluePin, width: 30, height: 36 }),
-    addSVGImage(map, "map-pin-red", { file: redPin, width: 30, height: 36 }),
-    addSVGImage(map, "map-pin-red-blue", { file: redBluePin, width: 40, height: 41 }),
+    addSVGImage(map, 'map-pin-blue', { file: bluePin, width: 30, height: 36 }),
+    addSVGImage(map, 'map-pin-red', { file: redPin, width: 30, height: 36 }),
+    addSVGImage(map, 'map-pin-red-blue', { file: redBluePin, width: 40, height: 41 }),
   ]);
 
-  showPopupOnMouseHover(map, "layer-points");
+  showPopupOnMouseHover(map, 'layer-points');
 
   map
     .addControl(new mapboxgl.NavigationControl())
-    .addSource("ecosysteme", source)
+    .addSource('ecosysteme', source)
     .addLayer({
-      id: "layer-commune",
-      source: "ecosysteme",
-      filter: ["==", "$type", "Polygon"],
+      id:     'layer-commune',
+      source: 'ecosysteme',
+      filter: ['==', '$type', 'Polygon'],
       layout: {},
-      type: "fill",
-      paint: {
-        "fill-color": "#e1000f",
-        "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0.8, 0.5],
+      type:   'fill',
+      paint:  {
+        'fill-color':   '#e1000f',
+        'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.8, 0.5],
       },
     })
     .addLayer({
-      id: "layer-points",
-      source: "ecosysteme",
-      filter: ["==", "$type", "Point"],
-      type: "symbol",
-      "symbol-z-order": "source",
-      layout: {
-        "text-field": ["get", "label"],
-        "text-offset": [0, 1.25],
-        "text-anchor": "top",
-        "icon-image": "{icon}",
-        "icon-allow-overlap": true,
+      id:               'layer-points',
+      source:           'ecosysteme',
+      filter:           ['==', '$type', 'Point'],
+      type:             'symbol',
+      'symbol-z-order': 'source',
+      layout:           {
+        'text-field':         ['get', 'label'],
+        'text-offset':        [0, 1.25],
+        'text-anchor':        'top',
+        'icon-image':         '{icon}',
+        'icon-allow-overlap': true,
       },
     })
     .fitBounds(getBounds(source), { padding: 200, maxZoom: 12 });
 }
 
-export default function LieuxDeFormationMap({ organisme }) {
+export default function LieuxDeFormationMap ({ organisme }) {
   const mapContainer = useRef(null);
 
   useOnce(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/light-v10",
-      center: getCenter(organisme),
-      zoom: 7,
+      style:     'mapbox://styles/mapbox/light-v10',
+      center:    getCenter(organisme),
+      zoom:      7,
     });
 
-    map.on("load", () => {
+    map.on('load', () => {
       const source = buildSource(organisme);
       return configureMap(map, source);
     });
@@ -197,13 +203,13 @@ export default function LieuxDeFormationMap({ organisme }) {
 
   return (
     <>
-      <Box className={"fr-mb-5v"}>
-        <Legend color={"#E1000F"}>Organisme</Legend>
-        <Legend className={"fr-ml-3w"} color={"#000091"}>
+      <Box className={'fr-mb-5v'}>
+        <Legend color={'#E1000F'}>Organisme</Legend>
+        <Legend className={'fr-ml-3w'} color={'#000091'}>
           Lieux de formation
         </Legend>
       </Box>
-      <div style={{ height: "620px", width: "100%" }} ref={mapContainer} className="map-container" />
+      <div style={{ height: '620px', width: '100%' }} ref={mapContainer} className="map-container" />
     </>
   );
 }
