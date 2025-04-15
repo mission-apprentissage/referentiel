@@ -1,7 +1,6 @@
-import React from 'react';
 import { BrowserRouter as Router, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import OrganismePage from './organismes/OrganismePage.jsx';
-import Layout from './common/layout/Layout';
+import { Layout } from './common/layout';
 import DesignPage from './DesignPage.jsx';
 import OrganismesPage from './organismes/OrganismesPage.jsx';
 import ConnexionPage from './ConnexionPage.jsx';
@@ -17,7 +16,7 @@ import SearchProvider from './common/SearchProvider';
 import ModificationsPage from './ModificationsPage.jsx';
 import CorrectionsPage from './CorrectionsPage.jsx';
 import SuiviModificationsPage from './SuiviModificationsPage.jsx';
-import { useScrollToTop } from './common/hooks/useScrollToTop.js';
+import { useScrollToTop } from './common/hooks';
 import { UserProvider } from './common/UserProvider.jsx';
 import MentionsLegalesPages from './MentionsLegalesPage.jsx';
 import DonneesPersonnellesPages from './DonneesPersonnellesPages.jsx';

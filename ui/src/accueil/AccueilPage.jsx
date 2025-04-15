@@ -8,8 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Col, GridRow } from '../common/dsfr/fondamentaux';
 import { Button } from '../common/dsfr/elements/Button.jsx';
 import { useFetch } from '../common/hooks';
-import TitleLayout from '../common/layout/TitleLayout.jsx';
-import ContentLayout from '../common/layout/ContentLayout.jsx';
+import { ContentLayout, TitleLayout } from '../common/layout';
 import { UserContext } from '../common/UserProvider.jsx';
 import { percentage } from '../common/utils.js';
 import Page from '../common/Page.jsx';
@@ -20,7 +19,8 @@ import config from '../config';
 
 export function AccueilPage () {
 
-  const navigate = useNavigate();const [userContext] = useContext(UserContext);
+  const navigate = useNavigate();
+  const [userContext] = useContext(UserContext);
 
   const [{ data: stats }] = useFetch(config.apiUrl + '/stats/couverture', null);
   console.log({ stats });
@@ -105,7 +105,8 @@ export function AccueilPage () {
                   <u>Rôle et usage du Référentiel</u>
                 </h6>
                 <p>
-                  Le Référentiel est un des pivots d’enrichissement du <b>Catalogue des formations en apprentissage</b>{' '}
+                  Le Référentiel est un des pivots d’enrichissement du <b>Catalogue des formations en
+                  apprentissage</b>{' '}
                   (réseau des Carif-Oref). Les UAI fiabilisées dans le Référentiel alimentent chaque jour le Catalogue
                   des formations en apprentissage. Ces mêmes UAI sont ensuite exploitées, via le Catalogue, par les
                   Ministères éducatifs dans leurs applicatifs <b>Parcoursup</b> et <b>Affelnet</b>.
