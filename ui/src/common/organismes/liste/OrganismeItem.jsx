@@ -1,12 +1,17 @@
-import { Box } from '../../Flexbox';
+/**
+ * Un item d'une liste d'organismes de formation
+ */
+
 import styled from 'styled-components';
-import ClickableItem from '../../ClickableItem';
-import { Tag } from '../../dsfr/elements/Tag';
-import Nature from '../Nature';
-import Siret from '../Siret';
-import RaisonSociale from '../RaisonSociale';
-import { Link } from '../../dsfr/elements/Link';
+
 import Badge from '../../dsfr/elements/Badge';
+import { Link } from '../../dsfr/elements/Link';
+import { Tag } from '../../dsfr/elements/Tag';
+import { Box } from '../../Flexbox';
+import ClickableItem from '../../ClickableItem';
+import Nature from '../Nature';
+import RaisonSociale from '../RaisonSociale';
+import Siret from '../Siret';
 
 
 const CardBox = styled(Box)`
@@ -64,7 +69,7 @@ export default function OrganismeItem ({ organisme }) {
     : organisme.adresse.label || `${organisme.adresse.code_postal || ''} ${organisme.adresse.localite || ''}`;
 
   return (
-    <ClickableItem to={organisme.siret}>
+    <ClickableItem to={`${organisme.siret}/identite`}>
       <CardBox direction={'column'}>
         {organisme.nature && (
           <Box justify={'between'} align={'start'} className={'xfr-flex-direction-xs-column xfr-flex-direction-sm-row'}>

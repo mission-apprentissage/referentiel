@@ -18,6 +18,7 @@ import config from '../config';
 
 
 export default function OrganismePage () {
+
   const { siret } = useParams();
   const { search } = useContext(SearchContext);
   const navigate = useNavigate();

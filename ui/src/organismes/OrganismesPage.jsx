@@ -1,5 +1,5 @@
 /**
- *
+ * Liste d'organismes de formation
  */
 
 import AcademieSelector from '../common/organismes/selectors/AcademieSelector';
@@ -15,32 +15,31 @@ import Page from '../common/Page';
 
 
 export default function OrganismesPage () {
+
   const { response, search, refine } = useSearch({ ordre: 'desc', page: 1, items_par_page: 25 });
   const { query } = useQuery();
 
-  return (
-    <Page>
-      <TitleLayout
-        title={'Référentiel national'}
-        selector={<AcademieSelector academie={query.academies} onChange={(code) => refine({ academies: code })} />}
+  return <Page>
+    <TitleLayout
+      title={'Référentiel national'}
+      selector={<AcademieSelector academie={query.academies} onChange={(code) => refine({ academies: code })} />}
+    />
+    <ContentLayout>
+      <Results
+        search={<SearchForm onSubmit={(form) => search({ page: 1, text: form.text, academies: query.academies })} />}
+        filters={
+          <Filters onChange={(filters) => refine({ ...filters })}>
+            <AcademiesFilter />
+            <DepartementsFilter />
+            <NatureFilter />
+            <DatagouvFilter />
+            <QualiopiFilter />
+            <UAIFilter />
+            <SiretFilter />
+          </Filters>
+        }
+        results={<OrganismeList response={response} />}
       />
-      <ContentLayout>
-        <Results
-          search={<SearchForm onSubmit={(form) => search({ page: 1, text: form.text, academies: query.academies })} />}
-          filters={
-            <Filters onChange={(filters) => refine({ ...filters })}>
-              <AcademiesFilter />
-              <DepartementsFilter />
-              <NatureFilter />
-              <DatagouvFilter />
-              <QualiopiFilter />
-              <UAIFilter />
-              <SiretFilter />
-            </Filters>
-          }
-          results={<OrganismeList response={response} />}
-        />
-      </ContentLayout>
-    </Page>
-  );
+    </ContentLayout>
+  </Page>;
 }
